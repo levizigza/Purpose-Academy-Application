@@ -6,6 +6,18 @@ import { AmbientField, PageMotion } from '../components/Motion'
 import { LoadingScreen, SkipLink } from '../components/Ui'
 import type { Role } from '../data/types'
 
+function BrandLockup({ to, compact = false }: { to: string; compact?: boolean }) {
+  return (
+    <Link to={to} className={`brand-lockup${compact ? ' compact' : ''}`}>
+      <img className="brand-mark" src={BRAND_ASSETS.logoMark} alt="" />
+      <span className="brand-wordmark">
+        <span className="brand-name">{BRAND.name}</span>
+        {!compact && <span className="brand-tagline">{BRAND.place}</span>}
+      </span>
+    </Link>
+  )
+}
+
 export function PublicLayout() {
   const { user, student, logout, loading } = useSession()
   if (loading) return <LoadingScreen label={`Opening ${BRAND.name}…`} />
@@ -15,27 +27,27 @@ export function PublicLayout() {
       <AmbientField />
       <SkipLink />
       <header className="topbar">
-        <Link to="/" className="brand-lockup">
-          <img src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
-        </Link>
-        <nav className="nav-links" aria-label="Website">
-          <NavLink to="/programs">Programs</NavLink>
-          <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
-          <NavLink to="/contact">Help</NavLink>
-          <NavLink to="/privacy">Privacy</NavLink>
-          {user ? (
-            <>
-              <NavLink to={homeForRole(user.role, student?.registration_status)}>Training</NavLink>
-              <button type="button" className="linkish" onClick={logout}>
-                Sign out
-              </button>
-            </>
-          ) : (
-            <NavLink className="btn btn-primary nav-cta" to="/login">
-              {BRAND.secondaryCta}
-            </NavLink>
-          )}
-        </nav>
+        <div className="topbar-inner">
+          <BrandLockup to="/" />
+          <nav className="nav-links" aria-label="Website">
+            <NavLink to="/programs">Programs</NavLink>
+            <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
+            <NavLink to="/contact">Help</NavLink>
+            <NavLink to="/privacy">Privacy</NavLink>
+            {user ? (
+              <>
+                <NavLink to={homeForRole(user.role, student?.registration_status)}>Training</NavLink>
+                <button type="button" className="linkish" onClick={logout}>
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <NavLink className="btn btn-primary nav-cta" to="/login">
+                {BRAND.secondaryCta}
+              </NavLink>
+            )}
+          </nav>
+        </div>
       </header>
       <main id="main-content">
         <PageMotion>
@@ -160,24 +172,24 @@ export function AppLayout({ role }: { role: Role }) {
       <AmbientField variant="app" />
       <SkipLink />
       <header className="topbar">
-        <Link to={home} className="brand-lockup compact">
-          <img src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
-        </Link>
-        <div className="topbar-meta desktop-nav">
-          <span className="badge brand">{roleLabel}</span>
-          <span className="muted user-chip">{user.full_name}</span>
+        <div className="topbar-inner">
+          <BrandLockup to={home} compact />
+          <div className="topbar-meta desktop-nav">
+            <span className="badge brand">{roleLabel}</span>
+            <span className="muted user-chip">{user.full_name}</span>
+          </div>
+          <nav className="nav-links desktop-nav" aria-label="App menu">
+            {pendingStudent ? (
+              <NavLink to="/app/student/registration">Registration status</NavLink>
+            ) : (
+              <DesktopNav role={role} />
+            )}
+            <Link to="/">Website</Link>
+            <button type="button" className="linkish" onClick={logout}>
+              Sign out
+            </button>
+          </nav>
         </div>
-        <nav className="nav-links desktop-nav" aria-label="App menu">
-          {pendingStudent ? (
-            <NavLink to="/app/student/registration">Registration status</NavLink>
-          ) : (
-            <DesktopNav role={role} />
-          )}
-          <Link to="/">Website</Link>
-          <button type="button" className="linkish" onClick={logout}>
-            Sign out
-          </button>
-        </nav>
       </header>
       <main id="main-content" className="shell-main">
         <PageMotion>
@@ -212,14 +224,16 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <AmbientField />
       <SkipLink />
       <header className="topbar">
-        <Link to="/" className="brand-lockup">
-          <img src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
-        </Link>
-        <nav className="nav-links" aria-label="Account">
-          <Link to="/">Website</Link>
-          <Link to="/contact">Help</Link>
-          <Link to="/login">{BRAND.secondaryCta}</Link>
-        </nav>
+        <div className="topbar-inner">
+          <BrandLockup to="/" />
+          <nav className="nav-links" aria-label="Account">
+            <Link to="/">Website</Link>
+            <Link to="/contact">Help</Link>
+            <Link className="btn btn-primary nav-cta" to="/login">
+              {BRAND.secondaryCta}
+            </Link>
+          </nav>
+        </div>
       </header>
       <main id="main-content">
         <PageMotion>{children}</PageMotion>
