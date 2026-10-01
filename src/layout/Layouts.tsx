@@ -29,24 +29,28 @@ export function PublicLayout() {
       <header className="topbar">
         <div className="topbar-inner">
           <BrandLockup to="/" />
-          <nav className="nav-links" aria-label="Website">
-            <NavLink to="/programs">Programs</NavLink>
-            <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
-            <NavLink to="/contact">Help</NavLink>
-            <NavLink to="/privacy">Privacy</NavLink>
-            {user ? (
-              <>
+          <div className="topbar-nav">
+            <nav className="nav-cluster" aria-label="Website">
+              <NavLink to="/programs">Programs</NavLink>
+              <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
+              <NavLink to="/contact">Help</NavLink>
+              <NavLink to="/privacy">Privacy</NavLink>
+              {user && (
                 <NavLink to={homeForRole(user.role, student?.registration_status)}>Training</NavLink>
-                <button type="button" className="linkish" onClick={logout}>
+              )}
+            </nav>
+            <div className="nav-actions">
+              {user ? (
+                <button type="button" className="linkish nav-signout" onClick={logout}>
                   Sign out
                 </button>
-              </>
-            ) : (
-              <NavLink className="btn btn-primary nav-cta" to="/login">
-                {BRAND.secondaryCta}
-              </NavLink>
-            )}
-          </nav>
+              ) : (
+                <NavLink className="btn btn-primary nav-cta" to="/login">
+                  {BRAND.secondaryCta}
+                </NavLink>
+              )}
+            </div>
+          </div>
         </div>
       </header>
       <main id="main-content">
@@ -178,17 +182,21 @@ export function AppLayout({ role }: { role: Role }) {
             <span className="badge brand">{roleLabel}</span>
             <span className="muted user-chip">{user.full_name}</span>
           </div>
-          <nav className="nav-links desktop-nav" aria-label="App menu">
-            {pendingStudent ? (
-              <NavLink to="/app/student/registration">Registration status</NavLink>
-            ) : (
-              <DesktopNav role={role} />
-            )}
-            <Link to="/">Website</Link>
-            <button type="button" className="linkish" onClick={logout}>
-              Sign out
-            </button>
-          </nav>
+          <div className="topbar-nav desktop-nav">
+            <nav className="nav-cluster" aria-label="App menu">
+              {pendingStudent ? (
+                <NavLink to="/app/student/registration">Registration status</NavLink>
+              ) : (
+                <DesktopNav role={role} />
+              )}
+              <NavLink to="/">Website</NavLink>
+            </nav>
+            <div className="nav-actions">
+              <button type="button" className="linkish nav-signout" onClick={logout}>
+                Sign out
+              </button>
+            </div>
+          </div>
         </div>
       </header>
       <main id="main-content" className="shell-main">
@@ -226,13 +234,17 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <header className="topbar">
         <div className="topbar-inner">
           <BrandLockup to="/" />
-          <nav className="nav-links" aria-label="Account">
-            <Link to="/">Website</Link>
-            <Link to="/contact">Help</Link>
-            <Link className="btn btn-primary nav-cta" to="/login">
-              {BRAND.secondaryCta}
-            </Link>
-          </nav>
+          <div className="topbar-nav">
+            <nav className="nav-cluster" aria-label="Account">
+              <Link to="/">Website</Link>
+              <Link to="/contact">Help</Link>
+            </nav>
+            <div className="nav-actions">
+              <Link className="btn btn-primary nav-cta" to="/login">
+                {BRAND.secondaryCta}
+              </Link>
+            </div>
+          </div>
         </div>
       </header>
       <main id="main-content">
