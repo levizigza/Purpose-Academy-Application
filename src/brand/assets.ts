@@ -1,15 +1,16 @@
-/** Public asset URLs that respect Vite/GitHub Pages `base`. */
-export function asset(path: string): string {
-  const clean = path.replace(/^\//, '')
-  const base = import.meta.env.BASE_URL || '/'
-  return `${base}${clean}`
-}
+import logoFull from '../assets/brand/logo-full.jpg'
+import logoMark from '../assets/brand/logo-mark.svg'
+import iconConstruction from '../assets/brand/icon-construction.svg'
+import iconLogistics from '../assets/brand/icon-logistics.svg'
+import iconCommunity from '../assets/brand/icon-community.svg'
+import threshold from '../assets/brand/threshold.svg'
 
+/** Bundled brand URLs — hashed by Vite so GitHub Pages always resolves them. */
 export const BRAND_ASSETS = {
-  logoFull: asset('brand/logo-full.jpg'),
-  logoMark: asset('brand/logo-mark.svg'),
-  iconConstruction: asset('brand/icon-construction.svg'),
-  iconLogistics: asset('brand/icon-logistics.svg'),
-  iconCommunity: asset('brand/icon-community.svg'),
-  threshold: asset('brand/threshold.svg'),
+  logoFull,
+  logoMark,
+  iconConstruction,
+  iconLogistics,
+  iconCommunity,
+  threshold,
 } as const
