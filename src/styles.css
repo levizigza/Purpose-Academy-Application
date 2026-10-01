@@ -1452,14 +1452,6 @@ table.data th {
 
 .brand-lockup:hover .brand-mark {
   transform: scale(1.04);
-}
-
-.brand-lockup:hover img {
-  transform: none;
-  filter: none;
-}
-
-.brand-lockup:hover .brand-mark {
   filter: drop-shadow(0 6px 14px rgba(11, 47, 92, 0.22));
 }
 
