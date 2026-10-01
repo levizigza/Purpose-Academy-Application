@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { AmbientField } from '../components/Motion'
 
@@ -14,7 +15,7 @@ export function SplashPage() {
     <div className="splash">
       <AmbientField variant="hero" />
       <div>
-        <img src="/brand/logo-full.jpg" alt={BRAND.name} style={{ width: 180, height: 'auto' }} />
+        <img src={BRAND_ASSETS.logoFull} alt={BRAND.name} style={{ width: 180, height: 'auto' }} />
         <h1 className="sr-only">{BRAND.name}</h1>
         <p className="muted">{BRAND.theme}</p>
         <Link className="btn btn-ghost" to="/" style={{ marginTop: '1rem' }}>
@@ -29,7 +30,7 @@ export function WelcomePage() {
   return (
     <div className="shell-main" style={{ maxWidth: 720 }}>
       <div className="panel stack auth-card" style={{ width: 'min(100%, 560px)' }}>
-        <img src="/brand/logo-full.jpg" alt="" style={{ width: 160, height: 'auto' }} />
+        <img src={BRAND_ASSETS.logoFull} alt="" style={{ width: 160, height: 'auto' }} />
         <p className="section-kicker">{BRAND.name}</p>
         <h1>Welcome to training</h1>
         <p className="lede">

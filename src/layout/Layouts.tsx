@@ -1,4 +1,5 @@
 import { NavLink, Outlet, Navigate, Link } from 'react-router-dom'
+import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { homeForRole, useSession } from '../auth/Session'
 import { AmbientField, PageMotion } from '../components/Motion'
@@ -15,7 +16,7 @@ export function PublicLayout() {
       <SkipLink />
       <header className="topbar">
         <Link to="/" className="brand-lockup">
-          <img src="/brand/logo-full.jpg" alt={BRAND.name} />
+          <img src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
         </Link>
         <nav className="nav-links" aria-label="Website">
           <NavLink to="/programs">Programs</NavLink>
@@ -160,7 +161,7 @@ export function AppLayout({ role }: { role: Role }) {
       <SkipLink />
       <header className="topbar">
         <Link to={home} className="brand-lockup compact">
-          <img src="/brand/logo-full.jpg" alt={BRAND.name} />
+          <img src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
         </Link>
         <div className="topbar-meta desktop-nav">
           <span className="badge brand">{roleLabel}</span>
@@ -212,7 +213,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <SkipLink />
       <header className="topbar">
         <Link to="/" className="brand-lockup">
-          <img src="/brand/logo-full.jpg" alt={BRAND.name} />
+          <img src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
         </Link>
         <nav className="nav-links" aria-label="Account">
           <Link to="/">Website</Link>

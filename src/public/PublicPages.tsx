@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { HeroMotionLayer, Reveal } from '../components/Motion'
 
@@ -8,7 +9,7 @@ export function HomePage() {
       <section className="hero" aria-label={`${BRAND.name} hero`}>
         <HeroMotionLayer />
         <div className="hero-inner">
-          <img className="hero-logo" src="/brand/logo-full.jpg" alt={BRAND.name} />
+          <img className="hero-logo" src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
           <h1>{BRAND.theme}</h1>
           <p>{BRAND.promise}</p>
           <div className="hero-actions">
@@ -37,17 +38,17 @@ export function HomePage() {
           <h2>Three doors into work</h2>
           <div className="signal-row">
             <Reveal as="article" className="signal construction" delay={120}>
-              <img src="/brand/icon-construction.svg" alt="" />
+              <img src={BRAND_ASSETS.iconConstruction} alt="" />
               <h3>Construction</h3>
               <p>Safety, tools, and practical skill — the live pathway with instructor verification.</p>
             </Reveal>
             <Reveal as="article" className="signal logistics" delay={200}>
-              <img src="/brand/icon-logistics.svg" alt="" />
+              <img src={BRAND_ASSETS.iconLogistics} alt="" />
               <h3>Logistics</h3>
               <p>Warehouse and supply-chain readiness — next after Construction is proven.</p>
             </Reveal>
             <Reveal as="article" className="signal community" delay={280}>
-              <img src="/brand/icon-community.svg" alt="" />
+              <img src={BRAND_ASSETS.iconCommunity} alt="" />
               <h3>Community Support</h3>
               <p>Client care and professional conduct — planned on the same foundation architecture.</p>
             </Reveal>
@@ -91,7 +92,7 @@ export function ProgramsPage() {
       </Reveal>
       <div className="signal-row">
         <Reveal as="article" className="signal construction featured" delay={80}>
-          <img src="/brand/icon-construction.svg" alt="" />
+          <img src={BRAND_ASSETS.iconConstruction} alt="" />
           <h2>Construction</h2>
           <p>
             Safety, tools, materials, drywall, flooring, painting, and blueprint basics — with safety gates and human
@@ -100,13 +101,13 @@ export function ProgramsPage() {
           <span className="badge ok">Active pathway</span>
         </Reveal>
         <Reveal as="article" className="signal logistics muted-signal" delay={160}>
-          <img src="/brand/icon-logistics.svg" alt="" />
+          <img src={BRAND_ASSETS.iconLogistics} alt="" />
           <h2>Warehousing & Logistics</h2>
           <p>Inventory, packing, receiving, and warehouse safety — after Construction is proven.</p>
           <span className="badge">Coming next</span>
         </Reveal>
         <Reveal as="article" className="signal community muted-signal" delay={240}>
-          <img src="/brand/icon-community.svg" alt="" />
+          <img src={BRAND_ASSETS.iconCommunity} alt="" />
           <h2>Community Support</h2>
           <p>Client communication, documentation, and professional conduct — planned pathway.</p>
           <span className="badge">Planned</span>

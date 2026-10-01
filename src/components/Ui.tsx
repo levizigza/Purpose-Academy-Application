@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { AmbientField, Reveal } from './Motion'
 
@@ -15,7 +16,7 @@ export function LoadingScreen({ label = 'Loading…' }: { label?: string }) {
     <div className="splash" role="status" aria-live="polite">
       <AmbientField />
       <div>
-        <img src="/brand/logo-full.jpg" alt="" style={{ width: 140, height: 'auto' }} />
+        <img src={BRAND_ASSETS.logoFull} alt="" style={{ width: 140, height: 'auto' }} />
         <h1 className="sr-only">{BRAND.name}</h1>
         <p className="muted">{label}</p>
       </div>

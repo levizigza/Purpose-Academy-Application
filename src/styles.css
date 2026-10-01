@@ -331,7 +331,7 @@ p {
   background:
     linear-gradient(105deg, rgba(4, 21, 38, 0.55) 0%, rgba(7, 30, 61, 0.28) 42%, rgba(4, 21, 38, 0.72) 100%),
     linear-gradient(180deg, rgba(7, 30, 61, 0.15) 0%, rgba(7, 30, 61, 0.62) 48%, rgba(3, 13, 26, 0.96) 100%),
-    url('/brand/threshold.svg') center/cover no-repeat;
+    var(--asset-threshold) center/cover no-repeat;
   margin: 0 0 3rem;
   animation: fade-rise 0.95s ease both;
 }
@@ -824,7 +824,7 @@ p {
   color: #f5f7fb;
   background:
     linear-gradient(120deg, rgba(4, 21, 38, 0.88) 0%, rgba(11, 47, 92, 0.78) 55%, rgba(7, 30, 61, 0.9) 100%),
-    url('/brand/threshold.svg') center/cover no-repeat;
+    var(--asset-threshold) center/cover no-repeat;
   min-height: 320px;
   display: grid;
   align-items: end;
@@ -892,7 +892,7 @@ p {
   place-items: center;
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--brand-soft) 80%, transparent), color-mix(in srgb, var(--accent-soft) 70%, transparent)),
-    url('/brand/threshold.svg') center/cover;
+    var(--asset-threshold) center/cover;
   font-size: 1.45rem;
   font-weight: 700;
   font-family: var(--display);
@@ -992,7 +992,7 @@ table.data th {
   font-size: 0.95rem;
   background:
     linear-gradient(180deg, rgba(4, 21, 38, 0.92), rgba(3, 13, 26, 0.98)),
-    url('/brand/threshold.svg') center 35%/cover no-repeat;
+    var(--asset-threshold) center 35%/cover no-repeat;
   position: relative;
   overflow: hidden;
 }
@@ -1043,7 +1043,7 @@ table.data th {
   background:
     radial-gradient(ellipse 60% 50% at 50% 28%, rgba(245, 197, 66, 0.28), transparent 65%),
     linear-gradient(180deg, rgba(4, 21, 38, 0.55), rgba(7, 30, 61, 0.88)),
-    url('/brand/threshold.svg') center/cover no-repeat;
+    var(--asset-threshold) center/cover no-repeat;
   color: #f5f7fb;
 }
 
