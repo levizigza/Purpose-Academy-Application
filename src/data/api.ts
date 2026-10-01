@@ -9,6 +9,11 @@ export function setToken(token: string | null) {
   else localStorage.removeItem(TOKEN_KEY)
 }
 
+function apiBase() {
+  const configured = import.meta.env.VITE_API_URL as string | undefined
+  return configured?.replace(/\/$/, '') || ''
+}
+
 export async function api<T>(
   path: string,
   options: RequestInit & { json?: unknown } = {},
@@ -20,7 +25,7 @@ export async function api<T>(
   const token = getToken()
   if (token) headers.set('Authorization', `Bearer ${token}`)
 
-  const res = await fetch(path, {
+  const res = await fetch(`${apiBase()}${path}`, {
     ...options,
     headers,
     body: options.json !== undefined ? JSON.stringify(options.json) : options.body,

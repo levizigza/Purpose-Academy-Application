@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { BRAND } from '../brand/copy'
 import { DEMO_PASSWORDS } from '../data/seed'
+import { isLocalMode } from '../data/store'
 import { homeForRole, useSession } from './Session'
 
 export function LoginPage() {
@@ -45,6 +46,12 @@ export function LoginPage() {
         <p className="section-kicker">{BRAND.name}</p>
         <h1>{BRAND.secondaryCta}</h1>
         <p className="lede">Continue your path into language, safety, and verified skill.</p>
+        {isLocalMode() && (
+          <div className="alert ok">
+            Browser demo mode is on — sign-in and training run in this browser (no server required). Use the demo
+            accounts below, or create a new student account.
+          </div>
+        )}
         <p className="muted">
           Demo accounts available below. Pending learner:{' '}
           <code>pending@purposeacademy.ca</code> / {DEMO_PASSWORDS.pending}

@@ -1,5 +1,23 @@
 import { useEffect, useState } from 'react'
 import { api, getToken, setToken } from './api'
+import {
+  localCompleteLesson,
+  localCreateAnnouncement,
+  localGradeSubmission,
+  localLogin,
+  localMe,
+  localMeta,
+  localObserve,
+  localRecordVocab,
+  localRegister,
+  localReset,
+  localSelectPathway,
+  localSetRegistrationStatus,
+  localSetSafetyGate,
+  localStripDb,
+  localSubmitAssignment,
+  parseLocalToken,
+} from './localBackend'
 import { createSeedDatabase } from './seed'
 import type {
   AppDatabase,
@@ -17,12 +35,25 @@ type Meta = {
   constructionProgress: Record<string, number>
 }
 
+/** GitHub Pages (and any production build without VITE_API_URL) runs fully in-browser. */
+export function isLocalMode() {
+  if (import.meta.env.VITE_API_URL) return false
+  if (import.meta.env.DEV) return false
+  return true
+}
+
 let db: AppDatabase = createSeedDatabase()
 let meta: Meta = { foundationProgress: {}, constructionProgress: {} }
 const listeners = new Set<() => void>()
 
 function notify() {
   listeners.forEach((l) => l())
+}
+
+function syncFromLocal() {
+  db = localStripDb()
+  meta = localMeta()
+  notify()
 }
 
 export function subscribe(listener: () => void) {
@@ -40,7 +71,6 @@ export function getMeta() {
   return meta
 }
 
-/** Subscribe to store updates so role pages re-render after mutations/refresh. */
 export function useDb(): AppDatabase {
   const [, setTick] = useState(0)
   useEffect(() => subscribe(() => setTick((t) => t + 1)), [])
@@ -54,6 +84,10 @@ export function useMeta() {
 }
 
 export async function refreshState() {
+  if (isLocalMode()) {
+    syncFromLocal()
+    return
+  }
   if (!getToken()) {
     db = createSeedDatabase()
     meta = { foundationProgress: {}, constructionProgress: {} }
@@ -67,6 +101,12 @@ export async function refreshState() {
 }
 
 export async function loginRequest(email: string, password: string) {
+  if (isLocalMode()) {
+    const data = localLogin(email, password)
+    setToken(data.token)
+    syncFromLocal()
+    return data
+  }
   const data = await api<{
     token: string
     user: User
@@ -86,6 +126,12 @@ export async function registerRequest(input: {
   emergency_contact: string
   preferred_language: string
 }) {
+  if (isLocalMode()) {
+    const data = localRegister(input)
+    setToken(data.token)
+    syncFromLocal()
+    return data
+  }
   const data = await api<{ token: string; user: User; student: Student }>('/api/auth/register', {
     method: 'POST',
     json: input,
@@ -97,6 +143,20 @@ export async function registerRequest(input: {
 
 export async function fetchMe() {
   if (!getToken()) return null
+  if (isLocalMode()) {
+    const uid = parseLocalToken(getToken())
+    if (!uid) {
+      setToken(null)
+      return null
+    }
+    const data = localMe(uid)
+    if (!data) {
+      setToken(null)
+      return null
+    }
+    syncFromLocal()
+    return data
+  }
   try {
     const data = await api<{ user: User; student: Student | null }>('/api/auth/me')
     await refreshState()
@@ -109,6 +169,10 @@ export async function fetchMe() {
 
 export function logoutLocal() {
   setToken(null)
+  if (isLocalMode()) {
+    syncFromLocal()
+    return
+  }
   db = createSeedDatabase()
   meta = { foundationProgress: {}, constructionProgress: {} }
   notify()
@@ -147,12 +211,23 @@ export function getSafetyGate(studentId: string, gateKey = 'workshop_practical')
   return db.safety_gate_states.find((g) => g.student_id === studentId && g.gate_key === gateKey) ?? null
 }
 
+function requireLocalUid() {
+  const uid = parseLocalToken(getToken())
+  if (!uid) throw new Error('Authentication required')
+  return uid
+}
+
 export async function setRegistrationStatus(
   _adminUid: string,
   studentId: string,
   status: RegistrationStatus,
   reason: string,
 ) {
+  if (isLocalMode()) {
+    localSetRegistrationStatus(studentId, status, reason)
+    syncFromLocal()
+    return
+  }
   await api(`/api/admin/students/${studentId}/status`, {
     method: 'POST',
     json: { status, reason },
@@ -162,6 +237,11 @@ export async function setRegistrationStatus(
 
 export async function completeLesson(studentId: string, lessonId: string, quizScore: number | null) {
   void studentId
+  if (isLocalMode()) {
+    localCompleteLesson(requireLocalUid(), lessonId, quizScore)
+    syncFromLocal()
+    return
+  }
   await api(`/api/student/lessons/${lessonId}/complete`, {
     method: 'POST',
     json: { quizScore },
@@ -176,6 +256,11 @@ export async function recordVocabAttempt(
   correct: boolean,
 ) {
   void studentId
+  if (isLocalMode()) {
+    localRecordVocab(requireLocalUid(), termId, layer, correct)
+    syncFromLocal()
+    return
+  }
   await api('/api/student/vocab', {
     method: 'POST',
     json: { termId, layer, correct },
@@ -185,6 +270,11 @@ export async function recordVocabAttempt(
 
 export async function selectPathway(studentId: string, pathway: Pathway) {
   void studentId
+  if (isLocalMode()) {
+    localSelectPathway(requireLocalUid(), pathway)
+    syncFromLocal()
+    return
+  }
   await api('/api/student/pathway', {
     method: 'POST',
     json: { pathway },
@@ -194,6 +284,15 @@ export async function selectPathway(studentId: string, pathway: Pathway) {
 
 export async function submitAssignment(studentId: string, assignmentId: string, content: string) {
   void studentId
+  if (isLocalMode()) {
+    try {
+      localSubmitAssignment(requireLocalUid(), assignmentId, content)
+      syncFromLocal()
+      return
+    } catch (e) {
+      throw e
+    }
+  }
   await api(`/api/student/assignments/${assignmentId}/submit`, {
     method: 'POST',
     json: { content },
@@ -208,6 +307,11 @@ export async function gradeSubmission(
   feedback: string,
 ) {
   void instructorUid
+  if (isLocalMode()) {
+    localGradeSubmission(submissionId, grade, feedback)
+    syncFromLocal()
+    return
+  }
   await api(`/api/instructor/submissions/${submissionId}/grade`, {
     method: 'POST',
     json: { grade, feedback },
@@ -222,6 +326,11 @@ export async function setSafetyGate(
   reason: string,
   overrideBy: string | null,
 ) {
+  if (isLocalMode()) {
+    localSetSafetyGate(studentId, gateKey, status, reason, overrideBy)
+    syncFromLocal()
+    return
+  }
   void overrideBy
   await api(`/api/instructor/safety/${studentId}`, {
     method: 'POST',
@@ -237,6 +346,11 @@ export async function recordPracticalObservation(input: {
   ratings: Record<string, RubricRating>
   notes: string
 }) {
+  if (isLocalMode()) {
+    const outcome = localObserve(input)
+    syncFromLocal()
+    return outcome
+  }
   void input.assessorUid
   const data = await api<{ outcome: string }>('/api/instructor/observe', {
     method: 'POST',
@@ -256,6 +370,11 @@ export async function createAnnouncement(
   body: string,
   audience: 'all' | 'students' | 'instructors',
 ) {
+  if (isLocalMode()) {
+    localCreateAnnouncement(title, body, audience)
+    syncFromLocal()
+    return
+  }
   await api('/api/admin/announcements', {
     method: 'POST',
     json: { title, body, audience },
@@ -264,11 +383,36 @@ export async function createAnnouncement(
 }
 
 export async function resetDatabase() {
+  if (isLocalMode()) {
+    localReset()
+    syncFromLocal()
+    return
+  }
   await api('/api/admin/reset', { method: 'POST', json: {} })
   await refreshState()
 }
 
 export async function enrichVocab(termId: string) {
+  if (isLocalMode()) {
+    const term = db.vocab_terms.find((t) => t.id === termId)
+    return {
+      term: {
+        english: term?.english ?? 'term',
+        definition: term?.definition ?? '',
+        image_hint: term?.image_hint ?? '',
+      },
+      dictionary: {
+        found: Boolean(term),
+        definition: term?.definition ?? null,
+        phonetic: null,
+        audio: null,
+        examples: [] as string[],
+      },
+      image: { imageUrl: '', source: 'local-demo' },
+      translation: null,
+      sources: ['local-demo'],
+    }
+  }
   return api<{
     term: { english: string; definition: string; image_hint: string }
     dictionary: {
@@ -285,14 +429,34 @@ export async function enrichVocab(termId: string) {
 }
 
 export async function enrichQuote() {
+  if (isLocalMode()) {
+    return {
+      content: 'Practice every day. Small steps build strong skills.',
+      author: 'Purpose Academy',
+      source: 'local-demo',
+    }
+  }
   return api<{ content: string; author: string; source: string }>('/api/enrich/quote')
 }
 
 export async function enrichCalgary() {
+  if (isLocalMode()) {
+    return {
+      place: { displayName: 'Calgary, Alberta', lat: 51.05, lon: -114.07 },
+      current: { temperature_2m: -2, wind_speed_10m: 12 },
+      units: { temperature_2m: '°C', wind_speed_10m: 'km/h' },
+      source: 'local-demo',
+    }
+  }
   return api<{
     place: { displayName: string; lat: number; lon: number }
     current: { temperature_2m: number; wind_speed_10m: number }
     units: { temperature_2m: string; wind_speed_10m: string }
     source: string
   }>('/api/enrich/calgary')
+}
+
+// Hydrate local demo DB on module load in production Pages mode.
+if (typeof window !== 'undefined' && isLocalMode()) {
+  syncFromLocal()
 }
