@@ -4,7 +4,7 @@ import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v13'
+const ENTERED_KEY = 'pa-crossed-threshold-v14'
 
 export function hasEnteredSite() {
   try {
@@ -32,20 +32,56 @@ const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 11500, stage: 'ready' },
 ]
 
-function HammerIcon({ className = '' }: { className?: string }) {
+function EnterHammer({ className = '' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 64 64" aria-hidden>
-      <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={className} viewBox="0 0 120 120" aria-hidden>
+      {/* Handle */}
+      <path
+        d="M58 48 L92 108"
+        stroke="#5c3d12"
+        strokeWidth="14"
+        strokeLinecap="round"
+      />
+      <path
+        d="M58 48 L92 108"
+        stroke="#8b6914"
+        strokeWidth="8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M58 48 L92 108"
+        stroke="#c4a35a"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        opacity="0.55"
+      />
+
+      {/* Hammer head */}
+      <g transform="translate(18 18) rotate(-18)">
+        <rect x="0" y="10" width="58" height="28" rx="4" fill="#c9840e" stroke="#8a5a0a" strokeWidth="2" />
+        <rect x="4" y="14" width="50" height="20" rx="2" fill="#e8a317" />
+        {/* Claw */}
         <path
-          d="M14 22c0-2 1.5-4 4-5l18-6c3-1 6 1 7 4l3 9c1 3-1 6-4 7l-8 3"
+          d="M0 14 C-10 10 -16 18 -14 24 C-12 30 -6 28 0 26 Z"
           fill="#c9840e"
           stroke="#8a5a0a"
-          strokeWidth="2"
+          strokeWidth="1.5"
         />
-        <path d="M28 34 L48 54" stroke="#5c3d12" strokeWidth="7" />
-        <path d="M28 34 L48 54" stroke="#8b6914" strokeWidth="3.5" />
-        <path d="M12 20h22l4 8H16l-4-8z" fill="#e8a317" stroke="#8a5a0a" strokeWidth="1.5" />
-        <path d="M16 18v-3h6v3" stroke="#8a5a0a" strokeWidth="2" />
+        {/* Poll / striking face */}
+        <rect x="54" y="12" width="10" height="24" rx="2" fill="#d99212" stroke="#8a5a0a" strokeWidth="1.5" />
+        {/* ENTER inscribed on the head */}
+        <text
+          x="29"
+          y="29"
+          textAnchor="middle"
+          fill="#0b2f5c"
+          fontFamily="Montserrat, Arial Black, sans-serif"
+          fontSize="11"
+          fontWeight="800"
+          letterSpacing="0.08em"
+        >
+          ENTER
+        </text>
       </g>
     </svg>
   )
@@ -139,8 +175,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
             onClick={enter}
             aria-label="Enter Purpose Academy"
           >
-            <HammerIcon className="threshold-hammer-icon" />
-            <span className="threshold-hammer-label">Enter</span>
+            <EnterHammer className="threshold-hammer-icon" />
           </button>
         )}
       </div>
