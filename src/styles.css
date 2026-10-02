@@ -1267,10 +1267,11 @@ table.data th {
 .threshold {
   position: relative;
   min-height: 100vh;
+  max-height: 100vh;
   display: grid;
   place-items: center;
   overflow: hidden;
-  padding: clamp(1.25rem, 4vw, 2.5rem);
+  padding: clamp(0.75rem, 2.5vh, 1.5rem);
   background: #041526;
   color: #f5f7fb;
   transition: background 2.4s ease;
@@ -1313,34 +1314,35 @@ table.data th {
 .threshold-stage {
   position: relative;
   z-index: 1;
-  width: min(100%, 920px);
-  min-height: min(88vh, 760px);
+  width: min(100%, 720px);
+  min-height: auto;
+  max-height: 100vh;
   display: grid;
   justify-items: center;
   align-content: center;
-  gap: clamp(1rem, 3vh, 2rem);
+  gap: clamp(0.55rem, 1.6vh, 1rem);
+  padding: 0.25rem 0;
 }
 
 .threshold-p {
-  width: min(72vw, 460px);
+  width: min(48vw, 220px);
   transition:
     width 1.6s cubic-bezier(0.22, 1, 0.36, 1),
     transform 1.6s cubic-bezier(0.22, 1, 0.36, 1),
     filter 1.6s ease,
     opacity 0.8s ease;
-  filter: drop-shadow(0 28px 60px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.45));
 }
 
 .threshold-stage-closed .threshold-p,
 .threshold-stage-opening .threshold-p,
 .threshold-stage-open .threshold-p {
-  width: min(82vw, 520px);
+  width: min(62vw, 300px);
 }
 
 .threshold-p.is-settled {
-  /* Stay large on the Enter screen — this IS the animation logo */
-  width: min(58vw, 340px);
-  filter: drop-shadow(0 18px 40px rgba(11, 47, 92, 0.28));
+  width: min(28vw, 128px);
+  filter: drop-shadow(0 10px 20px rgba(11, 47, 92, 0.2));
 }
 
 .threshold-p.is-gone {
@@ -1369,19 +1371,18 @@ table.data th {
 
 .opening-glow,
 .opening-beam,
-.opening-doorway-light,
-.opening-door-frame {
+.opening-doorway-light {
   opacity: 0;
-  transition: opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+  transition: opacity 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
 }
 
 .opening-glow,
 .opening-beam {
-  transform-origin: 250px 220px;
-  transform: scale(0.72);
+  transform-origin: 160px 155px;
+  transform: scale(0.78);
   transition:
-    opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s,
-    transform 3s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+    opacity 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s,
+    transform 2.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
 }
 
 .opening-door-scene.is-opening .opening-glow,
@@ -1393,22 +1394,28 @@ table.data th {
 }
 
 .opening-door-scene.is-opening .opening-doorway-light,
-.opening-door-scene.is-open .opening-doorway-light,
-.opening-door-scene.is-opening .opening-door-frame,
-.opening-door-scene.is-open .opening-door-frame {
+.opening-door-scene.is-open .opening-doorway-light {
   opacity: 1;
 }
 
-.opening-door-leaf {
-  transform-box: fill-box;
-  transform-origin: left center;
-  transform: none;
-  transition: transform 3.6s cubic-bezier(0.12, 0.8, 0.2, 1);
+.opening-door-leaf.is-open-pose {
+  transform-origin: 110px 188px;
+  animation: doorway-swing-in 3.2s cubic-bezier(0.14, 0.82, 0.2, 1) both;
 }
 
-.opening-door-scene.is-opening .opening-door-leaf,
-.opening-door-scene.is-open .opening-door-leaf {
-  transform: translate(-82px, 14px) skewY(24deg) scaleX(0.64);
+.opening-door-scene.is-open .opening-door-leaf.is-open-pose {
+  animation: none;
+}
+
+@keyframes doorway-swing-in {
+  from {
+    opacity: 0.4;
+    transform: translate(24px, -2px) skewY(-3deg) scaleX(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .threshold-pathways {
@@ -1452,12 +1459,12 @@ table.data th {
 }
 
 .threshold-path img {
-  width: clamp(72px, 12vw, 96px);
-  height: clamp(72px, 12vw, 96px);
+  width: clamp(52px, 9vw, 68px);
+  height: clamp(52px, 9vw, 68px);
   object-fit: cover;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
 }
 
 .threshold.is-brand .threshold-path img,
@@ -1503,9 +1510,9 @@ table.data th {
 .threshold-brand-name {
   margin: 0;
   display: grid;
-  gap: 0.05em;
+  gap: 0.02em;
   font-family: var(--display);
-  font-size: clamp(2.6rem, 10vw, 5.5rem);
+  font-size: clamp(1.55rem, 5.5vw, 2.4rem);
   line-height: 0.95;
   letter-spacing: -0.045em;
   text-align: center;
@@ -1737,7 +1744,8 @@ table.data th {
 
   .opening-door-scene.is-opening .opening-door-leaf,
   .opening-door-scene.is-open .opening-door-leaf {
-    transform: translate(-82px, 14px) skewY(24deg) scaleX(0.64);
+    transform: none;
+    animation: none !important;
   }
 
   .threshold-pathways,

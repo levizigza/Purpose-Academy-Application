@@ -5,7 +5,7 @@ import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
 /** Bump whenever the intro changes so everyone sees the new sequence. */
-const ENTERED_KEY = 'pa-crossed-threshold-v7'
+const ENTERED_KEY = 'pa-crossed-threshold-v8'
 
 export function hasEnteredSite() {
   try {
