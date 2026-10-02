@@ -1318,7 +1318,7 @@ table.data th {
   filter: drop-shadow(0 10px 18px rgba(11, 47, 92, 0.2));
 }
 
-/* Doorway P — logo geometry; door path swings from closed stem to open logo pose */
+/* Doorway P — thick logo frame; slow swing to sunshine */
 .doorway {
   width: 100%;
   height: auto;
@@ -1328,7 +1328,7 @@ table.data th {
 
 .doorway-light {
   opacity: 0;
-  transition: opacity 1.8s ease 0.15s;
+  transition: opacity 4.5s ease 0.6s;
 }
 
 .doorway-opening .doorway-light,
@@ -1339,17 +1339,18 @@ table.data th {
 .doorway-leaf {
   fill: #0b2f5c;
   transition:
-    d 2.6s cubic-bezier(0.15, 0.85, 0.25, 1),
-    fill 1s ease;
+    d 5.2s cubic-bezier(0.22, 0.7, 0.25, 1),
+    fill 2s ease;
 }
 
 .doorway-knob {
-  transition: cx 2.6s cubic-bezier(0.15, 0.85, 0.25, 1);
+  transition: cx 5.2s cubic-bezier(0.22, 0.7, 0.25, 1);
 }
 
 .doorway-opening .doorway-leaf,
 .doorway-open .doorway-leaf {
-  d: path('M46 22 L22 38 L18 98 L42 118 Z');
+  /* Open pose — same swing language as the brand mark */
+  d: path('M48 22 L22 40 L18 100 L44 118 Z');
   fill: #163e72;
 }
 

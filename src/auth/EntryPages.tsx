@@ -4,7 +4,7 @@ import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v10'
+const ENTERED_KEY = 'pa-crossed-threshold-v11'
 
 export function hasEnteredSite() {
   try {
@@ -26,10 +26,10 @@ type SplashStage = 'closed' | 'opening' | 'open' | 'assemble' | 'ready'
 
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'closed' },
-  { at: 1200, stage: 'opening' },
-  { at: 4200, stage: 'open' },
-  { at: 5600, stage: 'assemble' },
-  { at: 7800, stage: 'ready' },
+  { at: 1600, stage: 'opening' },
+  { at: 7200, stage: 'open' },
+  { at: 9000, stage: 'assemble' },
+  { at: 11500, stage: 'ready' },
 ]
 
 function HammerIcon({ className = '' }: { className?: string }) {
