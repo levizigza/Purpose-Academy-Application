@@ -1264,7 +1264,12 @@ table.data th {
 }
 
 /* ——— Threshold opening: door swings open in the P ——— */
-.threshold {
+.threshold,
+.threshold-stage-opening,
+.threshold-stage-open,
+.threshold-stage-open.is-brand,
+.threshold.is-brand,
+.threshold.is-ready {
   position: relative;
   min-height: 100vh;
   max-height: 100vh;
@@ -1272,23 +1277,8 @@ table.data th {
   place-items: center;
   overflow: hidden;
   padding: clamp(0.75rem, 2.5vh, 1.5rem);
-  background: #041526;
-  color: #f5f7fb;
-  transition: background 2.2s ease;
-}
-
-.threshold-stage-opening,
-.threshold-stage-open {
-  background:
-    radial-gradient(ellipse 70% 60% at 48% 42%, rgba(255, 246, 200, 0.3), transparent 62%),
-    #041526;
-}
-
-.threshold-stage-open.is-brand,
-.threshold.is-brand,
-.threshold.is-ready {
-  background:
-    radial-gradient(ellipse 90% 70% at 50% 36%, #fff, #f7fafc 55%, #e8eef5 100%);
+  /* Pure white field matching logo-full — door and lockup share one space */
+  background: #ffffff;
   color: #0b2f5c;
 }
 
@@ -1347,8 +1337,8 @@ table.data th {
   object-fit: contain;
   object-position: center;
   opacity: 0;
-  transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1);
-  filter: drop-shadow(0 12px 28px rgba(11, 47, 92, 0.12));
+  transition: opacity 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 12px 28px rgba(11, 47, 92, 0.1));
   z-index: 1;
 }
 
@@ -1394,7 +1384,7 @@ table.data th {
   height: 100%;
   display: block;
   overflow: visible;
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 10px 22px rgba(11, 47, 92, 0.16));
 }
 
 .doorway-prelight {

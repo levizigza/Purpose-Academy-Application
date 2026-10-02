@@ -4,7 +4,7 @@ import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v17'
+const ENTERED_KEY = 'pa-crossed-threshold-v18'
 
 export function hasEnteredSite() {
   try {
@@ -122,6 +122,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   }, [stage, enter])
 
   const doorStage = stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
+  /* Lockup stays in-frame the whole time; CSS ramps opacity from opening → open */
   const logoVisible = stage === 'open' || stage === 'ready'
   const doorVisible = stage === 'closed' || stage === 'opening'
   const showEnter = stage === 'ready'

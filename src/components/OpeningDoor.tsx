@@ -12,19 +12,19 @@ export function OpeningDoorMark({
       <svg className="doorway-frame" viewBox="0 0 128 128" role="presentation">
         <defs>
           <radialGradient id="doorway-preglow" cx="55%" cy="40%" r="50%">
-            <stop offset="0%" stopColor="#FFFFFF" />
-            <stop offset="35%" stopColor="#FFF6C8" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#041526" stopOpacity="0" />
+            <stop offset="0%" stopColor="#FFFDF5" />
+            <stop offset="40%" stopColor="#FFE9A8" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
           </radialGradient>
           <linearGradient id="doorway-prespill" x1="0.5" y1="0" x2="0.3" y2="1">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
-            <stop offset="50%" stopColor="#FFF6C8" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#041526" stopOpacity="0" />
+            <stop offset="0%" stopColor="#FFF8D6" stopOpacity="0.95" />
+            <stop offset="45%" stopColor="#FFE9A8" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="doorway-cavity" x1="0.5" y1="0" x2="0.5" y2="1">
             <stop offset="0%" stopColor="#FFFFFF" />
-            <stop offset="55%" stopColor="#FFF8E0" />
-            <stop offset="100%" stopColor="#F5E0A8" />
+            <stop offset="55%" stopColor="#FFF4C8" />
+            <stop offset="100%" stopColor="#F0D48A" />
           </linearGradient>
         </defs>
 
