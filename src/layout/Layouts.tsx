@@ -8,12 +8,8 @@ import type { Role } from '../data/types'
 
 function BrandLockup({ to, compact = false }: { to: string; compact?: boolean }) {
   return (
-    <Link to={to} className={`brand-lockup${compact ? ' compact' : ''}`}>
-      <img className="brand-mark" src={BRAND_ASSETS.logoMark} alt="" />
-      <span className="brand-wordmark">
-        <span className="brand-name">{BRAND.name}</span>
-        {!compact && <span className="brand-tagline">{BRAND.place}</span>}
-      </span>
+    <Link to={to} className={`brand-lockup brand-lockup-full${compact ? ' compact' : ''}`}>
+      <img className="brand-logo" src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
     </Link>
   )
 }

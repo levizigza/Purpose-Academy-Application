@@ -1,14 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Purpose Academy">
-  <rect width="128" height="128" rx="24" fill="#0B2F5C"/>
   <defs>
-    <radialGradient id="glow" cx="52%" cy="48%" r="42%">
-      <stop offset="0%" stop-color="#FFF6C8"/>
-      <stop offset="55%" stop-color="#F5C542" stop-opacity="0.85"/>
+    <radialGradient id="door-glow" cx="58%" cy="42%" r="48%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="40%" stop-color="#FFF6C8" stop-opacity="0.95"/>
       <stop offset="100%" stop-color="#0B2F5C" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="door-beam" x1="0.55" y1="0.2" x2="0.2" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85"/>
+      <stop offset="55%" stop-color="#DCE8F5" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0B2F5C" stop-opacity="0"/>
+    </linearGradient>
   </defs>
-  <ellipse cx="64" cy="64" rx="36" ry="40" fill="url(#glow)"/>
-  <path d="M34 28h28c18 0 30 11 30 28S80 84 62 84H50v28H34V28zm16 40h12c8 0 14-5 14-12s-6-12-14-12H50v24z" fill="#0B2F5C"/>
-  <path d="M50 28v56" stroke="#F5C542" stroke-width="3" opacity="0.35"/>
-  <path d="M34 28 L22 100" stroke="#163E72" stroke-width="10" stroke-linecap="round"/>
+  <rect width="128" height="128" rx="24" fill="#F7FAFC"/>
+  <ellipse cx="72" cy="58" rx="28" ry="36" fill="url(#door-glow)"/>
+  <polygon points="58,30 82,30 48,118 18,118" fill="url(#door-beam)" opacity="0.7"/>
+  <path d="M46 22 L22 38 L18 98 L42 118 Z" fill="#163E72"/>
+  <circle cx="28" cy="70" r="3.2" fill="#F4F7FB"/>
+  <path fill="#0B2F5C" d="M46 22h34c20 0 34 13 34 32s-14 32-34 32H64v42H46V22zm18 48h16c8 0 14-5 14-12s-6-12-14-12H64v24z"/>
 </svg>

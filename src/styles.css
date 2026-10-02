@@ -262,6 +262,25 @@ p {
   border-radius: 10px;
 }
 
+.brand-lockup-full .brand-logo {
+  display: block;
+  height: 52px;
+  width: auto;
+  max-width: min(240px, 48vw);
+  object-fit: contain;
+  object-position: left center;
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.2rem 0.35rem;
+  box-shadow: 0 6px 16px rgba(4, 21, 38, 0.12);
+}
+
+.brand-lockup-full.compact .brand-logo {
+  height: 44px;
+  max-width: min(200px, 46vw);
+  border-radius: 10px;
+}
+
 .brand-wordmark {
   display: grid;
   gap: 0.05rem;
@@ -1228,7 +1247,7 @@ table.data th {
   color: #f5f7fb;
 }
 
-.splash img {
+.splash img:not(.splash-logo-full) {
   width: min(200px, 70vw);
   height: auto;
   margin: 0 auto 1.1rem;
@@ -1247,6 +1266,152 @@ table.data th {
   background: color-mix(in srgb, #fff 14%, transparent);
   color: #fff;
   border: 1px solid color-mix(in srgb, var(--door-light) 45%, transparent);
+}
+
+.splash-opening {
+  cursor: default;
+}
+
+.splash-opening.is-ready {
+  cursor: pointer;
+}
+
+.splash-stage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  width: min(100%, 420px);
+  min-height: 320px;
+  align-content: center;
+}
+
+.splash-door-wrap {
+  width: min(220px, 58vw);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.splash-door-wrap.is-fading {
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+  position: absolute;
+}
+
+.opening-door-mark {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.4));
+  overflow: visible;
+}
+
+.opening-glow,
+.opening-beam {
+  opacity: 0;
+  transition: opacity 0.75s ease;
+}
+
+.opening-door-mark.is-opening .opening-glow,
+.opening-door-mark.is-opening .opening-beam,
+.opening-door-mark.is-open .opening-glow,
+.opening-door-mark.is-open .opening-beam {
+  opacity: 1;
+}
+
+.opening-door-leaf {
+  transform-box: fill-box;
+  transform-origin: left center;
+  transform: none;
+  transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.opening-door-mark.is-opening .opening-door-leaf,
+.opening-door-mark.is-open .opening-door-leaf {
+  /* Settle into the open-door pose from the full logo */
+  transform: translate(-42px, 10px) skewY(14deg) scaleX(0.72);
+}
+
+.splash-logo-full {
+  width: min(340px, 86vw);
+  height: auto;
+  margin: 0;
+  opacity: 0;
+  transform: scale(0.94);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20px;
+  padding: 1rem 1.1rem;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.35));
+  pointer-events: none;
+}
+
+.splash-logo-full.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.splash-enter {
+  margin: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+  color: color-mix(in srgb, #f4f7fb 88%, #9fb5aa);
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.splash-enter.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  animation: soft-pulse 2.2s ease-in-out infinite;
+}
+
+.splash-enter kbd {
+  display: inline-block;
+  padding: 0.12em 0.45em;
+  margin: 0 0.15em;
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--door-light) 55%, transparent);
+  background: color-mix(in srgb, #fff 12%, transparent);
+  font-family: inherit;
+  font-weight: 700;
+  color: var(--door-light);
+}
+
+.splash-enter-btn {
+  margin-top: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opening-door-leaf,
+  .opening-glow,
+  .opening-beam,
+  .splash-door-wrap,
+  .splash-logo-full,
+  .splash-enter {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .splash-door-wrap {
+    display: none;
+  }
+
+  .splash-logo-full {
+    opacity: 1;
+    transform: none;
+  }
+
+  .splash-enter {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes soft-pulse {
@@ -1524,13 +1689,15 @@ table.data th {
   transform: translateY(-1px);
 }
 
-.brand-lockup .brand-mark {
+.brand-lockup .brand-mark,
+.brand-lockup .brand-logo {
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-.brand-lockup:hover .brand-mark {
+.brand-lockup:hover .brand-mark,
+.brand-lockup:hover .brand-logo {
   transform: scale(1.04);
-  filter: drop-shadow(0 6px 14px rgba(11, 47, 92, 0.22));
+  filter: drop-shadow(0 4px 10px rgba(11, 47, 92, 0.2));
 }
 
 .signal {
