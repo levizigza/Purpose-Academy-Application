@@ -55,17 +55,17 @@ export function OpeningDoorMark({
 
         {!opened ? (
           <g className="opening-door-leaf is-closed">
-            {/* Flush door = solid stem */}
             <rect x="110" y="32" width="44" height="328" fill="#0b2f5c" />
-            {/* Doorknob on free edge */}
             <circle cx="142" cy="188" r="5" fill="#f7fafc" />
           </g>
         ) : (
           <g className={`opening-door-leaf is-open-pose is-${stage}`}>
-            {/* Solid perspective door — logo shape */}
-            <path d="M110 40 L68 72 L56 318 L110 348 Z" fill="#0b2f5c" />
-            {/* White doorknob near the opening edge */}
-            <circle cx="94" cy="188" r="5" fill="#f7fafc" />
+            {/* Stronger perspective like the brand mark — door opens toward the viewer-left */}
+            <path d="M110 38 L52 82 L38 295 L110 350 Z" fill="#0b2f5c" />
+            <path d="M110 38 L52 82 L38 295 L110 350 Z" fill="#163e72" opacity="0.28" />
+            {/* White doorknob on the opening edge */}
+            <circle cx="88" cy="186" r="5.5" fill="#f7fafc" />
+            <circle cx="88" cy="186" r="2" fill="#0b2f5c" opacity="0.3" />
           </g>
         )}
       </svg>
