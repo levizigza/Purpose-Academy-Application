@@ -1321,24 +1321,23 @@ table.data th {
 }
 
 .threshold-p {
-  width: min(72vw, 440px);
+  width: min(72vw, 460px);
   transition:
     width 1.6s cubic-bezier(0.22, 1, 0.36, 1),
     transform 1.6s cubic-bezier(0.22, 1, 0.36, 1),
     filter 1.6s ease,
-    opacity 0.8s ease,
-    max-height 0.8s ease;
+    opacity 0.8s ease;
   filter: drop-shadow(0 28px 60px rgba(0, 0, 0, 0.55));
 }
 
 .threshold-stage-closed .threshold-p,
 .threshold-stage-opening .threshold-p,
 .threshold-stage-open .threshold-p {
-  width: min(78vw, 480px);
+  width: min(82vw, 520px);
 }
 
 .threshold-p.is-settled {
-  width: min(36vw, 200px);
+  width: min(42vw, 240px);
   filter: drop-shadow(0 14px 28px rgba(11, 47, 92, 0.2));
 }
 
@@ -1367,13 +1366,20 @@ table.data th {
 }
 
 .opening-glow,
-.opening-beam {
+.opening-beam,
+.opening-doorway-light,
+.opening-door-frame {
   opacity: 0;
-  transform-origin: 210px 190px;
-  transform: scale(0.65);
+  transition: opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+}
+
+.opening-glow,
+.opening-beam {
+  transform-origin: 250px 220px;
+  transform: scale(0.72);
   transition:
-    opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1) 0.4s,
-    transform 3s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+    opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s,
+    transform 3s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
 }
 
 .opening-door-scene.is-opening .opening-glow,
@@ -1384,19 +1390,11 @@ table.data th {
   transform: scale(1);
 }
 
-.opening-frame-rim,
-.opening-jamb-lit {
-  transition: opacity 2.2s ease 0.5s;
-}
-
-.opening-door-scene.is-opening .opening-frame-rim,
-.opening-door-scene.is-open .opening-frame-rim {
-  opacity: 0.9;
-}
-
-.opening-door-scene.is-opening .opening-jamb-lit,
-.opening-door-scene.is-open .opening-jamb-lit {
-  opacity: 0.55;
+.opening-door-scene.is-opening .opening-doorway-light,
+.opening-door-scene.is-open .opening-doorway-light,
+.opening-door-scene.is-opening .opening-door-frame,
+.opening-door-scene.is-open .opening-door-frame {
+  opacity: 1;
 }
 
 .opening-door-leaf {
@@ -1408,8 +1406,7 @@ table.data th {
 
 .opening-door-scene.is-opening .opening-door-leaf,
 .opening-door-scene.is-open .opening-door-leaf {
-  /* Match logo: door swung open to the left of the doorway */
-  transform: translate(-72px, 18px) skewY(18deg) scaleX(0.5);
+  transform: translate(-82px, 14px) skewY(24deg) scaleX(0.64);
 }
 
 .threshold-pathways {
@@ -1630,7 +1627,7 @@ table.data th {
 
   .opening-door-scene.is-opening .opening-door-leaf,
   .opening-door-scene.is-open .opening-door-leaf {
-    transform: translate(-62px, 16px) skewY(18deg) scaleX(0.52);
+    transform: translate(-82px, 14px) skewY(24deg) scaleX(0.64);
   }
 
   .threshold-pathways,

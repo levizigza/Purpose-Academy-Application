@@ -1,7 +1,7 @@
 /**
- * Large Purpose Academy P — a real doorway letter.
- * Closed: solid P with door flush in the stem.
- * Open: framed doorway, light through the opening, door swung left like the logo.
+ * Purpose Academy doorway P — matches the brand mark.
+ * Closed: solid letter P (door flush in the stem).
+ * Open: crisp lit doorway through the stem, door swung left, soft floor beam.
  */
 export function OpeningDoorMark({
   stage,
@@ -12,120 +12,99 @@ export function OpeningDoorMark({
     <div className={`opening-door-scene is-${stage}`} aria-hidden>
       <svg
         className="opening-door-mark"
-        viewBox="0 0 420 520"
+        viewBox="0 0 520 580"
         role="img"
         aria-label="Purpose Academy doorway"
       >
         <defs>
-          <radialGradient id="pa-door-glow" cx="48%" cy="36%" r="52%">
+          <linearGradient id="pa-inner-light" x1="0.5" y1="0" x2="0.5" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="22%" stopColor="#fff8d6" stopOpacity="1" />
-            <stop offset="55%" stopColor="#f5c542" stopOpacity="0.4" />
+            <stop offset="45%" stopColor="#f7fbff" />
+            <stop offset="100%" stopColor="#e8f0fa" />
+          </linearGradient>
+          <radialGradient id="pa-outer-glow" cx="40%" cy="38%" r="58%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
+            <stop offset="40%" stopColor="#dce8f5" stopOpacity="0.28" />
             <stop offset="100%" stopColor="#041526" stopOpacity="0" />
           </radialGradient>
-          <linearGradient id="pa-door-beam" x1="0.52" y1="0.05" x2="0.2" y2="1">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-            <stop offset="40%" stopColor="#fff6c8" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#f5c542" stopOpacity="0" />
+          <linearGradient id="pa-floor-beam" x1="0.55" y1="0" x2="0.12" y2="1">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.7" />
+            <stop offset="50%" stopColor="#dce8f5" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#0b2f5c" stopOpacity="0" />
           </linearGradient>
-          <linearGradient id="pa-door-panel" x1="0" y1="0" x2="1" y2="0.12">
+          <linearGradient id="pa-door-face" x1="0" y1="0" x2="1" y2="0.15">
             <stop offset="0%" stopColor="#1c528f" />
-            <stop offset="45%" stopColor="#163e72" />
-            <stop offset="100%" stopColor="#0a2a52" />
+            <stop offset="50%" stopColor="#0b2f5c" />
+            <stop offset="100%" stopColor="#071f3f" />
           </linearGradient>
-          <linearGradient id="pa-frame-edge" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#fff6c8" stopOpacity="0.55" />
+          <linearGradient id="pa-p-body" x1="0.25" y1="0" x2="0.85" y2="1">
+            <stop offset="0%" stopColor="#12457a" />
+            <stop offset="100%" stopColor="#0b2f5c" />
           </linearGradient>
-          <filter id="pa-soft-glow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation="6" result="b" />
-            <feMerge>
-              <feMergeNode in="b" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
         </defs>
 
-        {/* Spill of light once the door opens */}
-        <ellipse className="opening-glow" cx="210" cy="190" rx="130" ry="155" fill="url(#pa-door-glow)" />
+        <ellipse className="opening-glow" cx="250" cy="220" rx="190" ry="210" fill="url(#pa-outer-glow)" />
         <polygon
           className="opening-beam"
-          points="175,55 250,55 155,500 35,500"
-          fill="url(#pa-door-beam)"
+          points="210,78 275,78 190,560 60,560"
+          fill="url(#pa-floor-beam)"
         />
 
-        {/* Outer P letterform — stem hollowed into a doorway */}
+        {/* Clean white doorway cavity — logo-like, not yellow */}
+        <rect
+          className="opening-doorway-light"
+          x="188"
+          y="72"
+          width="62"
+          height="428"
+          fill="url(#pa-inner-light)"
+        />
+
         <path
           className="opening-p-body"
-          fill="#0b2f5c"
+          fill="url(#pa-p-body)"
           fillRule="evenodd"
           d="
-            M145 48h120c72 0 118 44 118 112s-46 112-118 112h-58v192H145V48z
-            M207 102h58c34 0 54 20 54 48s-20 48-54 48h-58V102z
-            M145 48h62v416H145z
+            M188 64h138c82 0 136 50 136 128s-54 128-136 128H250v204H188V64z
+            M250 128h76c40 0 64 24 64 54s-24 54-64 54h-76V128z
+            M188 64h62v436H188z
           "
         />
 
-        {/* Real doorway outline inside the stem: lintel, jambs, threshold */}
-        <g className="opening-doorway-frame">
-          {/* Inner light rim — reads as the bright doorway edge in the logo */}
-          <rect
-            className="opening-frame-rim"
-            x="151"
-            y="54"
-            width="50"
-            height="404"
-            rx="3"
-            fill="none"
-            stroke="url(#pa-frame-edge)"
-            strokeWidth="5"
-            opacity="0"
-          />
-          {/* Left jamb */}
-          <rect className="opening-jamb" x="145" y="48" width="10" height="416" fill="#163e72" />
-          {/* Right jamb (inner edge of doorway toward the bowl) */}
-          <rect className="opening-jamb opening-jamb-right" x="197" y="48" width="10" height="416" fill="#163e72" />
-          {/* Lintel / header */}
-          <rect className="opening-lintel" x="145" y="48" width="62" height="14" fill="#0a274c" />
-          <rect className="opening-lintel-lip" x="149" y="58" width="54" height="6" fill="#1a4a82" opacity="0.85" />
-          {/* Threshold / sill */}
-          <rect className="opening-sill" x="145" y="452" width="62" height="12" fill="#0a274c" />
-          <rect className="opening-sill-lip" x="149" y="448" width="54" height="6" fill="#1a4a82" opacity="0.75" />
-          {/* Soft highlight on jambs when open — like light catching the frame */}
-          <rect className="opening-jamb-lit" x="155" y="64" width="4" height="384" fill="#fff6c8" opacity="0" />
-          <rect className="opening-jamb-lit" x="197" y="64" width="4" height="384" fill="#ffffff" opacity="0" />
+        {/* Crisp doorway outline drawn on top — top + right frame like the logo */}
+        <g className="opening-door-frame">
+          <rect x="186" y="64" width="66" height="9" fill="#f4f8fc" />
+          <rect x="245" y="64" width="8" height="436" fill="#ffffff" />
+          <rect x="186" y="64" width="6" height="436" fill="#e8f0fa" opacity="0.85" />
+          <rect x="186" y="492" width="67" height="8" fill="#dce8f5" />
         </g>
 
-        {/* Door leaf — flush closed; swings open left like the brand mark */}
         <g className="opening-door-leaf">
-          <rect x="155" y="64" width="42" height="384" rx="2" fill="url(#pa-door-panel)" />
-          {/* Panel molding — reads as a real door */}
+          <rect x="188" y="64" width="62" height="436" fill="url(#pa-door-face)" />
           <rect
-            x="162"
-            y="78"
-            width="28"
-            height="150"
-            rx="2"
+            x="198"
+            y="88"
+            width="42"
+            height="165"
+            rx="3"
             fill="none"
-            stroke="#0b2f5c"
-            strokeWidth="2.5"
-            opacity="0.45"
+            stroke="#071f3f"
+            strokeWidth="3"
+            opacity="0.35"
           />
           <rect
-            x="162"
-            y="248"
-            width="28"
-            height="170"
-            rx="2"
+            x="198"
+            y="280"
+            width="42"
+            height="185"
+            rx="3"
             fill="none"
-            stroke="#0b2f5c"
-            strokeWidth="2.5"
-            opacity="0.45"
+            stroke="#071f3f"
+            strokeWidth="3"
+            opacity="0.35"
           />
-          <rect x="155" y="64" width="6" height="384" fill="#041526" opacity="0.28" />
-          {/* Knob */}
-          <circle cx="184" cy="250" r="7.5" fill="#f7fafc" filter="url(#pa-soft-glow)" />
-          <circle cx="184" cy="250" r="3" fill="#0b2f5c" opacity="0.4" />
+          <circle cx="230" cy="280" r="9" fill="#f7fafc" />
+          <circle cx="230" cy="280" r="3.5" fill="#0b2f5c" opacity="0.35" />
         </g>
       </svg>
     </div>

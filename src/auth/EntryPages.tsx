@@ -5,7 +5,7 @@ import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
 /** Bump whenever the intro changes so everyone sees the new sequence. */
-const ENTERED_KEY = 'pa-crossed-threshold-v5'
+const ENTERED_KEY = 'pa-crossed-threshold-v6'
 
 export function hasEnteredSite() {
   try {
@@ -78,8 +78,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
 
   const doorStage = stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
   const showPathways = stage === 'pathways' || stage === 'brand' || stage === 'ready'
-  const showBrand = stage === 'brand' // wordmark during brand beat only — not paired with Enter
-  const showMark = stage !== 'ready' // P mark exits when the hammer Enter appears
+  const showBrand = stage === 'brand' || stage === 'ready'
   const showEnter = stage === 'ready'
 
   return (
@@ -87,7 +86,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       className={[
         'threshold',
         `threshold-stage-${stage}`,
-        stage === 'brand' || stage === 'ready' ? 'is-brand' : '',
+        showBrand || showEnter ? 'is-brand' : '',
         showEnter ? 'is-ready' : '',
       ]
         .filter(Boolean)
@@ -101,10 +100,8 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       <div className="threshold-stage">
         <h1 className="sr-only">{BRAND.name}</h1>
 
-        <div
-          className={`threshold-p${stage === 'brand' ? ' is-settled' : ''}${showMark ? '' : ' is-gone'}`}
-          aria-hidden={!showMark}
-        >
+        {/* Keep the open doorway P through Enter — all one composition */}
+        <div className={`threshold-p${showBrand || showEnter ? ' is-settled' : ''}`}>
           <OpeningDoorMark stage={doorStage} />
         </div>
 
