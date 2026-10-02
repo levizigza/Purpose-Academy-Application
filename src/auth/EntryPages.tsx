@@ -4,7 +4,7 @@ import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v15'
+const ENTERED_KEY = 'pa-crossed-threshold-v17'
 
 export function hasEnteredSite() {
   try {
@@ -22,14 +22,14 @@ export function markEnteredSite() {
   }
 }
 
-type SplashStage = 'closed' | 'opening' | 'open' | 'assemble' | 'ready'
+type SplashStage = 'closed' | 'opening' | 'open' | 'ready'
 
+/** Door opens while zoomed on the P, then the camera settles into logo-full. */
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'closed' },
-  { at: 1600, stage: 'opening' },
-  { at: 7200, stage: 'open' },
-  { at: 9000, stage: 'assemble' },
-  { at: 11500, stage: 'ready' },
+  { at: 1200, stage: 'opening' },
+  { at: 5800, stage: 'open' },
+  { at: 8600, stage: 'ready' },
 ]
 
 function EnterHammer({ className = '' }: { className?: string }) {
@@ -122,8 +122,8 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   }, [stage, enter])
 
   const doorStage = stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
-  const showExactLockup = stage === 'assemble' || stage === 'ready'
-  const showDoorAnim = !showExactLockup
+  const logoVisible = stage === 'open' || stage === 'ready'
+  const doorVisible = stage === 'closed' || stage === 'opening'
   const showEnter = stage === 'ready'
 
   return (
@@ -131,7 +131,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       className={[
         'threshold',
         `threshold-stage-${stage}`,
-        showExactLockup ? 'is-brand' : '',
+        logoVisible ? 'is-brand' : '',
         showEnter ? 'is-ready' : '',
       ]
         .filter(Boolean)
@@ -143,21 +143,23 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       <div className="threshold-stage">
         <h1 className="sr-only">{BRAND.name}</h1>
 
-        {showDoorAnim && (
-          <div className="threshold-p">
-            <OpeningDoorMark stage={doorStage} />
+        {/*
+          Fixed lockup frame. Zoom starts on the P (door), then pulls back to logo-full.
+          Door slot is measured to the P ink box in logo-full — only opacity/transform move.
+        */}
+        <div className={`threshold-brand-frame is-${stage}`}>
+          <div className={`threshold-brand-zoom is-${stage}`}>
+            <img
+              className={`threshold-lockup${logoVisible ? ' is-visible' : ''}`}
+              src={BRAND_ASSETS.logoFull}
+              alt={BRAND.name}
+              draggable={false}
+            />
+            <div className={`threshold-door-slot${doorVisible ? ' is-active' : ' is-done'}`}>
+              <OpeningDoorMark stage={doorStage} />
+            </div>
           </div>
-        )}
-
-        {/* Exact official lockup — same file as the brand screenshot */}
-        {showExactLockup && (
-          <img
-            className="threshold-lockup is-visible"
-            src={BRAND_ASSETS.logoFull}
-            alt={BRAND.name}
-            draggable={false}
-          />
-        )}
+        </div>
 
         {showEnter && (
           <button
