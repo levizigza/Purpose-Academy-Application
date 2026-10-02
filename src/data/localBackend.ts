@@ -120,11 +120,55 @@ function upsertLearnerCompetency(
 function loadPersisted(): AppDatabase {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return JSON.parse(raw) as AppDatabase
+    if (raw) {
+      const parsed = JSON.parse(raw) as AppDatabase
+      return repairLocalDb(parsed)
+    }
   } catch {
     /* ignore */
   }
   return createSeedDatabase()
+}
+
+/** Restore demo passwords / missing seed accounts if localStorage got corrupted. */
+function repairLocalDb(db: AppDatabase): AppDatabase {
+  const seed = createSeedDatabase()
+  if (!Array.isArray(db.users) || db.users.length === 0) return seed
+
+  const byEmail = new Map(seed.users.map((u) => [u.email.toLowerCase(), u]))
+  let changed = false
+
+  for (const user of db.users) {
+    const seeded = byEmail.get(user.email.toLowerCase())
+    if (seeded?.password && !user.password) {
+      user.password = seeded.password
+      changed = true
+    }
+  }
+
+  for (const seeded of seed.users) {
+    if (!db.users.some((u) => u.email.toLowerCase() === seeded.email.toLowerCase())) {
+      db.users.push({ ...seeded })
+      changed = true
+      const student = seed.students.find((s) => s.uid === seeded.uid)
+      if (student && !db.students.some((s) => s.uid === seeded.uid)) {
+        db.students.push({ ...student })
+      }
+      const instructor = seed.instructors.find((i) => i.uid === seeded.uid)
+      if (instructor && !db.instructors.some((i) => i.uid === seeded.uid)) {
+        db.instructors.push({ ...instructor })
+      }
+    }
+  }
+
+  if (changed) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(db))
+    } catch {
+      /* ignore */
+    }
+  }
+  return db
 }
 
 function persist(db: AppDatabase) {
@@ -161,6 +205,8 @@ export function parseLocalToken(token: string | null): string | null {
 }
 
 export function localLogin(email: string, password: string) {
+  // Always attempt repair before auth — fixes wiped demo passwords in localStorage.
+  localDb = repairLocalDb(localDb)
   const normalized = email.trim().toLowerCase()
   const user = localDb.users.find((u) => u.email.toLowerCase() === normalized)
   if (!user || user.password !== password) {

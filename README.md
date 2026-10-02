@@ -38,6 +38,28 @@ Useful checks:
 | Instructor | `instructor@purposeacademy.ca` | `instructor123` |
 | Admin | `admin@purposeacademy.ca` | `admin123` |
 
+## Login troubleshooting
+
+1. Run **both** API and web: `npm run dev` (not `dev:web` alone).
+2. Open `http://127.0.0.1:5173/login` — the splash screen no longer blocks sign-in links.
+3. API health: `http://127.0.0.1:8787/api/health`
+4. On GitHub Pages, the site runs in **browser demo mode** (no server). Use the demo accounts, or click **Reset demo data** on the sign-in page if local storage got corrupted.
+5. Smoke tests: `npm run smoke:auth` (API) and `npm run test:e2e` (browser, with `npm run dev` running).
+
+## Scripts
+
+| Command | What it does |
+|---------|----------------|
+| `npm run dev` | API + web together |
+| `npm run dev:api` | API only |
+| `npm run dev:web` | Vite only (needs API for login) |
+| `npm run build` | Typecheck + production web build |
+| `npm run start:api` | Production API start |
+| `npm run smoke:auth` | API auth smoke test |
+| `npm run test:e2e` | Browser login/register/approve E2E |
+| `npm run test:site` | Browser route coverage E2E |
+| `npm run seed --prefix server` | Reseed the JSON database |
+
 ## Public APIs wired in
 
 | API | Use in Purpose Academy |
@@ -60,16 +82,6 @@ Browser (React)  --/api-->  Express API  -->  server/data/purpose-academy.json
 ```
 
 Server data file is created on first boot from the Construction-first curriculum seed.
-
-## Scripts
-
-| Command | What it does |
-|---------|----------------|
-| `npm run dev` | API + web together |
-| `npm run dev:api` | API only |
-| `npm run dev:web` | Vite only (needs API for login) |
-| `npm run build` | Typecheck + production web build |
-| `npm run start:api` | Production API start |
 
 ## Notes
 

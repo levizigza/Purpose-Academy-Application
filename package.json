@@ -4,12 +4,15 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "node ./node_modules/concurrently/dist/bin/concurrently.js -n api,web -c green,cyan \"npm run dev --prefix server\" \"node ./node_modules/vite/bin/vite.js\"",
-    "dev:web": "node ./node_modules/vite/bin/vite.js",
+    "dev": "node ./node_modules/concurrently/dist/bin/concurrently.js -n api,web -c green,cyan \"npm run dev --prefix server\" \"node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173\"",
+    "dev:web": "node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173",
     "dev:api": "npm run dev --prefix server",
     "build": "node ./node_modules/typescript/bin/tsc --noEmit && node ./node_modules/vite/bin/vite.js build",
     "preview": "node ./node_modules/vite/bin/vite.js preview",
-    "start:api": "npm run start --prefix server"
+    "start:api": "npm run start --prefix server",
+    "smoke:auth": "node ./scripts/smoke-auth.mjs",
+    "test:e2e": "node ./scripts/e2e-auth.mjs http://127.0.0.1:5173",
+    "test:site": "node ./scripts/e2e-site.mjs http://127.0.0.1:5173"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.3.0",

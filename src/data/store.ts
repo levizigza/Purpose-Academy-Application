@@ -113,7 +113,12 @@ export async function loginRequest(email: string, password: string) {
     student: Student | null
   }>('/api/auth/login', { method: 'POST', json: { email, password } })
   setToken(data.token)
-  await refreshState()
+  // Auth succeeded — don't fail the whole sign-in if state hydrate blips.
+  try {
+    await refreshState()
+  } catch {
+    /* session is still valid; pages that need state will retry */
+  }
   return data
 }
 
@@ -137,14 +142,21 @@ export async function registerRequest(input: {
     json: input,
   })
   setToken(data.token)
-  await refreshState()
+  try {
+    await refreshState()
+  } catch {
+    /* registration succeeded; hydrate can retry */
+  }
   return data
 }
 
 export async function fetchMe() {
-  if (!getToken()) return null
+  const token = getToken()
+  if (!token) return null
+
+  // Drop tokens that don't belong to the current mode (JWT vs local.*).
   if (isLocalMode()) {
-    const uid = parseLocalToken(getToken())
+    const uid = parseLocalToken(token)
     if (!uid) {
       setToken(null)
       return null
@@ -157,9 +169,17 @@ export async function fetchMe() {
     syncFromLocal()
     return data
   }
+  if (token.startsWith('local.')) {
+    setToken(null)
+    return null
+  }
   try {
     const data = await api<{ user: User; student: Student | null }>('/api/auth/me')
-    await refreshState()
+    try {
+      await refreshState()
+    } catch {
+      /* keep session even if state hydrate fails */
+    }
     return data
   } catch {
     setToken(null)

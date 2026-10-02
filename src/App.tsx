@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { LoginPage, RegisterPage, ForgotPasswordPage } from './auth/AuthPages'
-import { RoleSelectionPage, SplashPage, WelcomePage, hasEnteredSite } from './auth/EntryPages'
+import { RoleSelectionPage, SplashPage, WelcomePage, hasEnteredSite, markEnteredSite } from './auth/EntryPages'
 import { SessionProvider, useSession, homeForRole } from './auth/Session'
 import { AdminCoursesPage, AdminDashboardPage, AdminPrivacyPage, AdminReportsPage, AdminSchedulesPage, AdminStudentsPage } from './admin/AdminPages'
 import {
@@ -43,10 +43,30 @@ function AppHomeRedirect() {
   return <Navigate to={homeForRole(user.role, student?.registration_status)} replace />
 }
 
-function AppRoutes() {
-  const [entered, setEntered] = useState(() => hasEnteredSite())
+/** Auth and legal paths should work even if the splash was skipped or stuck. */
+const SPLASH_BYPASS = new Set([
+  '/login',
+  '/register',
+  '/welcome',
+  '/roles',
+  '/forgot-password',
+  '/privacy',
+  '/contact',
+])
 
-  if (!entered) {
+function AppRoutes() {
+  const location = useLocation()
+  const [entered, setEntered] = useState(() => hasEnteredSite())
+  const bypassSplash = SPLASH_BYPASS.has(location.pathname)
+
+  useEffect(() => {
+    if (bypassSplash && !hasEnteredSite()) {
+      markEnteredSite()
+      setEntered(true)
+    }
+  }, [bypassSplash])
+
+  if (!entered && !bypassSplash) {
     return <SplashPage onEnter={() => setEntered(true)} />
   }
 

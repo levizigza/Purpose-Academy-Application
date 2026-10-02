@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { BRAND } from '../brand/copy'
 import { DEMO_PASSWORDS } from '../data/seed'
-import { isLocalMode } from '../data/store'
+import { isLocalMode, resetDatabase } from '../data/store'
 import { homeForRole, useSession } from './Session'
 
 export function LoginPage() {
@@ -35,9 +35,13 @@ export function LoginPage() {
     e.preventDefault()
     setBusy(true)
     setError(null)
-    const err = await login(email, password)
+    const result = await login(email, password)
     setBusy(false)
-    if (err) setError(err)
+    if (result.error) {
+      setError(result.error)
+      return
+    }
+    if (result.href) navigate(result.href, { replace: true })
   }
 
   return (
@@ -50,7 +54,26 @@ export function LoginPage() {
           <div className="alert ok">
             Browser demo mode is on — sign-in and training run in this browser (no server required). Use the demo
             accounts below, or create a new student account.
+            <div style={{ marginTop: '0.65rem' }}>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={async () => {
+                  await resetDatabase()
+                  setError(null)
+                  setEmail('student@purposeacademy.ca')
+                  setPassword(DEMO_PASSWORDS.student)
+                }}
+              >
+                Reset demo data
+              </button>
+            </div>
           </div>
+        )}
+        {!isLocalMode() && (
+          <p className="muted">
+            Connected to the training API. Use a demo account below, or register a new student.
+          </p>
         )}
         <p className="muted">
           Demo accounts available below. Pending learner:{' '}

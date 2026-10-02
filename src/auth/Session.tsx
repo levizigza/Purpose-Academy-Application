@@ -21,7 +21,7 @@ interface SessionState {
   user: User | null
   student: Student | null
   loading: boolean
-  login: (email: string, password: string) => Promise<string | null>
+  login: (email: string, password: string) => Promise<{ error: string | null; href: string | null }>
   logout: () => void
   register: (input: {
     full_name: string
@@ -75,9 +75,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       const data = await loginRequest(email, password)
       setUser(data.user)
       setStudent(data.student)
-      return null
+      return {
+        error: null,
+        href: homeForRole(data.user.role, data.student?.registration_status),
+      }
     } catch (e) {
-      return e instanceof Error ? e.message : 'Login failed.'
+      return {
+        error: e instanceof Error ? e.message : 'Login failed.',
+        href: null,
+      }
     }
   }, [])
 

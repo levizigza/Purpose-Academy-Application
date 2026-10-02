@@ -43,6 +43,9 @@ registerRoutes(app)
 
 app.use((err, _req, res, _next) => {
   console.error(err)
+  if (err?.type === 'entity.parse.failed' || err instanceof SyntaxError) {
+    return res.status(400).json({ error: 'Request body must be valid JSON.', code: 'INVALID_JSON' })
+  }
   const message = err?.message === 'CORS origin not allowed' ? err.message : 'Internal server error'
   res.status(err?.message === 'CORS origin not allowed' ? 403 : 500).json({ error: message })
 })
