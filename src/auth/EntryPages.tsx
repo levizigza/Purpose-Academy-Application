@@ -5,7 +5,7 @@ import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
 /** Bump whenever the intro changes so everyone sees the new sequence. */
-const ENTERED_KEY = 'pa-crossed-threshold-v3'
+const ENTERED_KEY = 'pa-crossed-threshold-v4'
 
 export function hasEnteredSite() {
   try {
@@ -78,7 +78,8 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
 
   const doorStage = stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
   const showPathways = stage === 'pathways' || stage === 'brand' || stage === 'ready'
-  const showBrand = stage === 'brand' || stage === 'ready'
+  const showBrand = stage === 'brand' // wordmark during brand beat only — not paired with Enter
+  const showMark = stage !== 'ready' // P mark exits when the hammer Enter appears
   const showEnter = stage === 'ready'
 
   return (
@@ -86,7 +87,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       className={[
         'threshold',
         `threshold-stage-${stage}`,
-        showBrand ? 'is-brand' : '',
+        stage === 'brand' || stage === 'ready' ? 'is-brand' : '',
         showEnter ? 'is-ready' : '',
       ]
         .filter(Boolean)
@@ -100,12 +101,13 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       <div className="threshold-stage">
         <h1 className="sr-only">{BRAND.name}</h1>
 
-        {/* Giant P — the whole show until brand takeover */}
-        <div className={`threshold-p${showBrand ? ' is-settled' : ''}`}>
+        <div
+          className={`threshold-p${stage === 'brand' ? ' is-settled' : ''}${showMark ? '' : ' is-gone'}`}
+          aria-hidden={!showMark}
+        >
           <OpeningDoorMark stage={doorStage} />
         </div>
 
-        {/* Full-screen brand reveal */}
         <div className={`threshold-brand${showBrand ? ' is-visible' : ''}`} aria-hidden={!showBrand}>
           <p className="threshold-brand-name">
             <span className="threshold-brand-purpose">Purpose</span>
@@ -114,7 +116,6 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
           <p className="threshold-brand-line">Opening doors to a brighter future</p>
         </div>
 
-        {/* Pathways fly in under the open P */}
         <ul
           className={`threshold-pathways${showPathways ? ' is-visible' : ''}`}
           aria-hidden={!showPathways}
@@ -135,8 +136,33 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
 
         {showEnter && (
           <div className="threshold-enter is-visible">
-            <button type="button" className="btn btn-primary threshold-enter-btn" onClick={enter}>
-              Enter
+            <button
+              type="button"
+              className="threshold-hammer"
+              onClick={enter}
+              aria-label="Enter Purpose Academy"
+              title="Enter"
+            >
+              <svg className="threshold-hammer-icon" viewBox="0 0 64 64" aria-hidden>
+                <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path
+                    d="M14 22c0-2 1.5-4 4-5l18-6c3-1 6 1 7 4l3 9c1 3-1 6-4 7l-8 3"
+                    fill="#c9840e"
+                    stroke="#8a5a0a"
+                    strokeWidth="2"
+                  />
+                  <path d="M28 34 L48 54" stroke="#5c3d12" strokeWidth="7" />
+                  <path d="M28 34 L48 54" stroke="#8b6914" strokeWidth="3.5" />
+                  <path
+                    d="M12 20h22l4 8H16l-4-8z"
+                    fill="#e8a317"
+                    stroke="#8a5a0a"
+                    strokeWidth="1.5"
+                  />
+                  <path d="M16 18v-3h6v3" stroke="#8a5a0a" strokeWidth="2" />
+                </g>
+              </svg>
+              <span className="threshold-hammer-label">Enter</span>
             </button>
             <p className="threshold-enter-hint">
               or press <kbd>Enter</kbd>
