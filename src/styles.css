@@ -1509,23 +1509,24 @@ table.data th {
 
 .threshold-brand-name {
   margin: 0;
-  display: grid;
-  gap: 0.02em;
+  display: block;
   font-family: var(--display);
-  font-size: clamp(1.55rem, 5.5vw, 2.4rem);
-  line-height: 0.95;
-  letter-spacing: -0.045em;
+  font-size: clamp(1.35rem, 4.2vw, 1.85rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   text-align: center;
+  color: #0b2f5c;
+  white-space: nowrap;
 }
 
 .threshold-brand-purpose {
-  font-weight: 800;
+  font-weight: 700;
   color: #0b2f5c;
 }
 
 .threshold-brand-academy {
-  font-weight: 500;
-  color: #163e72;
+  font-weight: 400;
+  color: #0b2f5c;
 }
 
 .threshold-brand-line {

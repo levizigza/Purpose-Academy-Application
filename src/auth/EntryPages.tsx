@@ -154,6 +154,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
         >
           <p className="threshold-brand-name">
             <span className="threshold-brand-purpose">Purpose</span>
+            {' '}
             <span className="threshold-brand-academy">Academy</span>
           </p>
           <p className="threshold-brand-line">Opening doors to a brighter future</p>
