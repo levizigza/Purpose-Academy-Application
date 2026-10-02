@@ -4,7 +4,7 @@ import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v11'
+const ENTERED_KEY = 'pa-crossed-threshold-v12'
 
 export function hasEnteredSite() {
   try {
