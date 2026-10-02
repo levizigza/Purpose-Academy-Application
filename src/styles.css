@@ -1318,7 +1318,7 @@ table.data th {
   filter: drop-shadow(0 10px 18px rgba(11, 47, 92, 0.2));
 }
 
-/* Doorway P — open pose = logo-mark.svg; slow sunshine reveal */
+/* Doorway P — open pose is logo-mark.svg; slow sunshine reveal */
 .doorway {
   width: 100%;
   height: auto;
@@ -1347,7 +1347,7 @@ table.data th {
   transition: cx 5.2s cubic-bezier(0.22, 0.7, 0.25, 1);
 }
 
-/* Exact open door from logo-mark.svg */
+/* Exact open door + knob from logo-mark.svg */
 .doorway-opening .doorway-leaf,
 .doorway-open .doorway-leaf {
   d: path('M46 22 L22 38 L18 98 L42 118 Z');
@@ -1357,6 +1357,16 @@ table.data th {
 .doorway-opening .doorway-knob,
 .doorway-open .doorway-knob {
   cx: 28px;
+}
+
+.doorway-knob-closed {
+  opacity: 1;
+  transition: opacity 1.2s ease 0.4s;
+}
+
+.doorway-opening .doorway-knob-closed,
+.doorway-open .doorway-knob-closed {
+  opacity: 0;
 }
 
 .threshold-pathways {
