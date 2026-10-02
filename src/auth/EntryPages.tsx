@@ -4,7 +4,7 @@ import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v14'
+const ENTERED_KEY = 'pa-crossed-threshold-v15'
 
 export function hasEnteredSite() {
   try {
@@ -122,7 +122,8 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   }, [stage, enter])
 
   const doorStage = stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
-  const showAssemble = stage === 'assemble' || stage === 'ready'
+  const showExactLockup = stage === 'assemble' || stage === 'ready'
+  const showDoorAnim = !showExactLockup
   const showEnter = stage === 'ready'
 
   return (
@@ -130,7 +131,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       className={[
         'threshold',
         `threshold-stage-${stage}`,
-        showAssemble ? 'is-brand' : '',
+        showExactLockup ? 'is-brand' : '',
         showEnter ? 'is-ready' : '',
       ]
         .filter(Boolean)
@@ -142,31 +143,21 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       <div className="threshold-stage">
         <h1 className="sr-only">{BRAND.name}</h1>
 
-        <div className={`threshold-p${showAssemble ? ' is-settled' : ''}`}>
-          <OpeningDoorMark stage={doorStage} />
-        </div>
+        {showDoorAnim && (
+          <div className="threshold-p">
+            <OpeningDoorMark stage={doorStage} />
+          </div>
+        )}
 
-        <div className={`threshold-brand${showAssemble ? ' is-visible' : ''}`} aria-hidden={!showAssemble}>
-          <p className="threshold-brand-name">
-            <span className="threshold-brand-purpose">Purpose</span>{' '}
-            <span className="threshold-brand-academy">Academy</span>
-          </p>
-        </div>
-
-        <ul className={`threshold-pathways${showAssemble ? ' is-visible' : ''}`} aria-hidden={!showAssemble}>
-          <li className="threshold-path threshold-path-a">
-            <img src={BRAND_ASSETS.iconConstruction} alt="" />
-            <span>Construction</span>
-          </li>
-          <li className="threshold-path threshold-path-b">
-            <img src={BRAND_ASSETS.iconLogistics} alt="" />
-            <span>Logistics</span>
-          </li>
-          <li className="threshold-path threshold-path-c">
-            <img src={BRAND_ASSETS.iconCommunity} alt="" />
-            <span>Community Support</span>
-          </li>
-        </ul>
+        {/* Exact official lockup — same file as the brand screenshot */}
+        {showExactLockup && (
+          <img
+            className="threshold-lockup is-visible"
+            src={BRAND_ASSETS.logoFull}
+            alt={BRAND.name}
+            draggable={false}
+          />
+        )}
 
         {showEnter && (
           <button
