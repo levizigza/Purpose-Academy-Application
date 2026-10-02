@@ -5,7 +5,8 @@ import { BRAND } from '../brand/copy'
 import { AmbientField } from '../components/Motion'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
-const ENTERED_KEY = 'pa-crossed-threshold'
+/** Bump when the opening sequence changes so returning visitors see it again. */
+const ENTERED_KEY = 'pa-crossed-threshold-v2'
 
 export function hasEnteredSite() {
   try {
