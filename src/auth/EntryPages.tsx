@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
 /** Bump whenever the intro changes so everyone sees the new sequence. */
-const ENTERED_KEY = 'pa-crossed-threshold-v6'
+const ENTERED_KEY = 'pa-crossed-threshold-v7'
 
 export function hasEnteredSite() {
   try {
@@ -23,14 +23,6 @@ export function markEnteredSite() {
   }
 }
 
-/**
- * Sequence:
- * 1. Giant closed-door P
- * 2. Door opens into the brand open-door P
- * 3. Construction / Logistics / Community Support come in
- * 4. Whole screen becomes Purpose Academy
- * 5. Enter
- */
 type SplashStage = 'closed' | 'opening' | 'open' | 'pathways' | 'brand' | 'ready'
 
 const TIMELINE: { at: number; stage: SplashStage }[] = [
@@ -42,15 +34,50 @@ const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 12500, stage: 'ready' },
 ]
 
+const SMASH_MS = 1400
+
+function HammerIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" aria-hidden>
+      <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <path
+          d="M14 22c0-2 1.5-4 4-5l18-6c3-1 6 1 7 4l3 9c1 3-1 6-4 7l-8 3"
+          fill="#c9840e"
+          stroke="#8a5a0a"
+          strokeWidth="2"
+        />
+        <path d="M28 34 L48 54" stroke="#5c3d12" strokeWidth="7" />
+        <path d="M28 34 L48 54" stroke="#8b6914" strokeWidth="3.5" />
+        <path d="M12 20h22l4 8H16l-4-8z" fill="#e8a317" stroke="#8a5a0a" strokeWidth="1.5" />
+        <path d="M16 18v-3h6v3" stroke="#8a5a0a" strokeWidth="2" />
+      </g>
+    </svg>
+  )
+}
+
 export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   const navigate = useNavigate()
   const [stage, setStage] = useState<SplashStage>('closed')
+  const [smashing, setSmashing] = useState(false)
+  const smashLock = useRef(false)
 
-  const enter = useCallback(() => {
+  const finishEnter = useCallback(() => {
     markEnteredSite()
     if (onEnter) onEnter()
     else navigate('/', { replace: true })
   }, [navigate, onEnter])
+
+  const smashIn = useCallback(() => {
+    if (smashLock.current || stage !== 'ready') return
+    smashLock.current = true
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) {
+      finishEnter()
+      return
+    }
+    setSmashing(true)
+    window.setTimeout(finishEnter, SMASH_MS)
+  }, [stage, finishEnter])
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -65,29 +92,30 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   }, [])
 
   useEffect(() => {
-    if (stage !== 'ready') return
+    if (stage !== 'ready' || smashing) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         e.preventDefault()
-        enter()
+        smashIn()
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [stage, enter])
+  }, [stage, smashing, smashIn])
 
   const doorStage = stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
   const showPathways = stage === 'pathways' || stage === 'brand' || stage === 'ready'
   const showBrand = stage === 'brand' || stage === 'ready'
-  const showEnter = stage === 'ready'
+  const showEnter = stage === 'ready' && !smashing
 
   return (
     <div
       className={[
         'threshold',
         `threshold-stage-${stage}`,
-        showBrand || showEnter ? 'is-brand' : '',
-        showEnter ? 'is-ready' : '',
+        showBrand ? 'is-brand' : '',
+        stage === 'ready' ? 'is-ready' : '',
+        smashing ? 'is-smashing' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -97,15 +125,33 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
     >
       <div className="threshold-glow" aria-hidden />
 
-      <div className="threshold-stage">
+      {/* Giant smash hammer — swings in on Enter */}
+      {smashing && (
+        <div className="threshold-smash-hammer" aria-hidden>
+          <HammerIcon />
+        </div>
+      )}
+
+      <div className={`threshold-stage${smashing ? ' is-shattering' : ''}`}>
         <h1 className="sr-only">{BRAND.name}</h1>
 
-        {/* Keep the open doorway P through Enter — all one composition */}
-        <div className={`threshold-p${showBrand || showEnter ? ' is-settled' : ''}`}>
+        <div
+          className={[
+            'threshold-p',
+            'threshold-shard',
+            'threshold-shard-p',
+            showBrand ? 'is-settled' : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
           <OpeningDoorMark stage={doorStage} />
         </div>
 
-        <div className={`threshold-brand${showBrand ? ' is-visible' : ''}`} aria-hidden={!showBrand}>
+        <div
+          className={`threshold-brand threshold-shard threshold-shard-brand${showBrand ? ' is-visible' : ''}`}
+          aria-hidden={!showBrand}
+        >
           <p className="threshold-brand-name">
             <span className="threshold-brand-purpose">Purpose</span>
             <span className="threshold-brand-academy">Academy</span>
@@ -114,7 +160,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
         </div>
 
         <ul
-          className={`threshold-pathways${showPathways ? ' is-visible' : ''}`}
+          className={`threshold-pathways threshold-shard threshold-shard-paths${showPathways ? ' is-visible' : ''}`}
           aria-hidden={!showPathways}
         >
           <li className="threshold-path threshold-path-a">
@@ -136,34 +182,13 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
             <button
               type="button"
               className="threshold-hammer"
-              onClick={enter}
+              onClick={smashIn}
               aria-label="Enter Purpose Academy"
               title="Enter"
             >
-              <svg className="threshold-hammer-icon" viewBox="0 0 64 64" aria-hidden>
-                <g fill="none" strokeLinecap="round" strokeLinejoin="round">
-                  <path
-                    d="M14 22c0-2 1.5-4 4-5l18-6c3-1 6 1 7 4l3 9c1 3-1 6-4 7l-8 3"
-                    fill="#c9840e"
-                    stroke="#8a5a0a"
-                    strokeWidth="2"
-                  />
-                  <path d="M28 34 L48 54" stroke="#5c3d12" strokeWidth="7" />
-                  <path d="M28 34 L48 54" stroke="#8b6914" strokeWidth="3.5" />
-                  <path
-                    d="M12 20h22l4 8H16l-4-8z"
-                    fill="#e8a317"
-                    stroke="#8a5a0a"
-                    strokeWidth="1.5"
-                  />
-                  <path d="M16 18v-3h6v3" stroke="#8a5a0a" strokeWidth="2" />
-                </g>
-              </svg>
+              <HammerIcon className="threshold-hammer-icon" />
               <span className="threshold-hammer-label">Enter</span>
             </button>
-            <p className="threshold-enter-hint">
-              or press <kbd>Enter</kbd>
-            </p>
           </div>
         )}
       </div>
