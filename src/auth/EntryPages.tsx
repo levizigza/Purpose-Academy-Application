@@ -23,12 +23,29 @@ export function markEnteredSite() {
   }
 }
 
-type DoorStage = 'closed' | 'opening' | 'open'
-type SplashStage = DoorStage | 'logo' | 'ready'
+/** Slow, intentional threshold sequence */
+type SplashStage =
+  | 'hold' // closed P rests
+  | 'opening' // door begins to swing
+  | 'open' // doorway + light revealed
+  | 'wordmark' // name arrives
+  | 'pathways' // three program marks assemble
+  | 'lockup' // full logo settles as one
+  | 'ready' // Enter control
+
+const TIMELINE: { at: number; stage: SplashStage }[] = [
+  { at: 0, stage: 'hold' },
+  { at: 1800, stage: 'opening' },
+  { at: 5200, stage: 'open' },
+  { at: 6800, stage: 'wordmark' },
+  { at: 8600, stage: 'pathways' },
+  { at: 10800, stage: 'lockup' },
+  { at: 12800, stage: 'ready' },
+]
 
 export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   const navigate = useNavigate()
-  const [stage, setStage] = useState<SplashStage>('closed')
+  const [stage, setStage] = useState<SplashStage>('hold')
 
   const enter = useCallback(() => {
     markEnteredSite()
@@ -42,16 +59,10 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       setStage('ready')
       return
     }
-    const t1 = window.setTimeout(() => setStage('opening'), 450)
-    const t2 = window.setTimeout(() => setStage('open'), 1450)
-    const t3 = window.setTimeout(() => setStage('logo'), 2100)
-    const t4 = window.setTimeout(() => setStage('ready'), 2700)
-    return () => {
-      window.clearTimeout(t1)
-      window.clearTimeout(t2)
-      window.clearTimeout(t3)
-      window.clearTimeout(t4)
-    }
+    const timers = TIMELINE.filter((step) => step.at > 0).map((step) =>
+      window.setTimeout(() => setStage(step.stage), step.at),
+    )
+    return () => timers.forEach((id) => window.clearTimeout(id))
   }, [])
 
   useEffect(() => {
@@ -66,40 +77,80 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
     return () => window.removeEventListener('keydown', onKey)
   }, [stage, enter])
 
-  const doorStage: DoorStage = stage === 'logo' || stage === 'ready' ? 'open' : stage
-  const showLogo = stage === 'logo' || stage === 'ready'
-  const showPrompt = stage === 'ready'
+  const doorStage =
+    stage === 'hold' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
+
+  const showMark = stage !== 'lockup' && stage !== 'ready'
+  const showWordmark = stage === 'wordmark' || stage === 'pathways'
+  const showPathways = stage === 'pathways'
+  const showLockup = stage === 'lockup' || stage === 'ready'
+  const showEnter = stage === 'ready'
+  const brighten = stage !== 'hold'
 
   return (
     <div
-      className={`splash splash-opening${showPrompt ? ' is-ready' : ''}`}
+      className={[
+        'splash',
+        'splash-opening',
+        `splash-stage-${stage}`,
+        brighten ? 'is-brightening' : '',
+        showEnter ? 'is-ready' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
       role="dialog"
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}
-      onClick={showPrompt ? enter : undefined}
     >
       <AmbientField variant="hero" />
       <div className="splash-stage">
         <h1 className="sr-only">{BRAND.name}</h1>
 
-        <div className={`splash-door-wrap${showLogo ? ' is-fading' : ''}`} aria-hidden={showLogo}>
+        <div className={`splash-mark-block${showMark ? ' is-visible' : ' is-exiting'}`}>
           <OpeningDoorMark stage={doorStage} />
+          <p
+            className={`splash-meaning${stage === 'open' || stage === 'wordmark' ? ' is-visible' : ''}`}
+            aria-live="polite"
+          >
+            Opening doors to a brighter future
+          </p>
+        </div>
+
+        <div className={`splash-assemble${showWordmark || showPathways ? ' is-visible' : ''}`}>
+          <p className={`splash-wordmark${showWordmark || showPathways ? ' is-visible' : ''}`}>
+            <span className="splash-word-purpose">Purpose</span>{' '}
+            <span className="splash-word-academy">Academy</span>
+          </p>
+          <ul className={`splash-pathways${showPathways ? ' is-visible' : ''}`} aria-hidden={!showPathways}>
+            <li className="splash-pathway splash-pathway-construction">
+              <img src={BRAND_ASSETS.iconConstruction} alt="" />
+              <span>Construction</span>
+            </li>
+            <li className="splash-pathway splash-pathway-logistics">
+              <img src={BRAND_ASSETS.iconLogistics} alt="" />
+              <span>Logistics</span>
+            </li>
+            <li className="splash-pathway splash-pathway-community">
+              <img src={BRAND_ASSETS.iconCommunity} alt="" />
+              <span>Community Support</span>
+            </li>
+          </ul>
         </div>
 
         <img
-          className={`splash-logo-full${showLogo ? ' is-visible' : ''}`}
+          className={`splash-logo-full${showLockup ? ' is-visible' : ''}`}
           src={BRAND_ASSETS.logoFull}
           alt={BRAND.name}
         />
 
-        <p className={`splash-enter${showPrompt ? ' is-visible' : ''}`} aria-live="polite">
-          Press <kbd>Enter</kbd> to continue
-        </p>
-        {showPrompt && (
-          <button type="button" className="btn btn-ghost splash-enter-btn" onClick={enter}>
-            Enter the site
+        <div className={`splash-enter-tools${showEnter ? ' is-visible' : ''}`}>
+          <button type="button" className="btn btn-primary splash-enter-btn" onClick={enter}>
+            Enter
           </button>
-        )}
+          <p className="splash-enter-hint">
+            or press <kbd>Enter</kbd>
+          </p>
+        </div>
       </div>
     </div>
   )
