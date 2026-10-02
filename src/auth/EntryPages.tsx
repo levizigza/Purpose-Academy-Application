@@ -2,11 +2,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
-import { AmbientField } from '../components/Motion'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
-/** Bump when the opening sequence changes so returning visitors see it again. */
-const ENTERED_KEY = 'pa-crossed-threshold-v2'
+/** Bump whenever the intro changes so everyone sees the new sequence. */
+const ENTERED_KEY = 'pa-crossed-threshold-v3'
 
 export function hasEnteredSite() {
   try {
@@ -24,29 +23,28 @@ export function markEnteredSite() {
   }
 }
 
-/** Slow, intentional threshold sequence */
-type SplashStage =
-  | 'hold' // closed P rests
-  | 'opening' // door begins to swing
-  | 'open' // doorway + light revealed
-  | 'wordmark' // name arrives
-  | 'pathways' // three program marks assemble
-  | 'lockup' // full logo settles as one
-  | 'ready' // Enter control
+/**
+ * Sequence:
+ * 1. Giant closed-door P
+ * 2. Door opens into the brand open-door P
+ * 3. Construction / Logistics / Community Support come in
+ * 4. Whole screen becomes Purpose Academy
+ * 5. Enter
+ */
+type SplashStage = 'closed' | 'opening' | 'open' | 'pathways' | 'brand' | 'ready'
 
 const TIMELINE: { at: number; stage: SplashStage }[] = [
-  { at: 0, stage: 'hold' },
-  { at: 1800, stage: 'opening' },
+  { at: 0, stage: 'closed' },
+  { at: 1600, stage: 'opening' },
   { at: 5200, stage: 'open' },
-  { at: 6800, stage: 'wordmark' },
-  { at: 8600, stage: 'pathways' },
-  { at: 10800, stage: 'lockup' },
-  { at: 12800, stage: 'ready' },
+  { at: 7000, stage: 'pathways' },
+  { at: 10000, stage: 'brand' },
+  { at: 12500, stage: 'ready' },
 ]
 
 export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   const navigate = useNavigate()
-  const [stage, setStage] = useState<SplashStage>('hold')
+  const [stage, setStage] = useState<SplashStage>('closed')
 
   const enter = useCallback(() => {
     markEnteredSite()
@@ -60,8 +58,8 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       setStage('ready')
       return
     }
-    const timers = TIMELINE.filter((step) => step.at > 0).map((step) =>
-      window.setTimeout(() => setStage(step.stage), step.at),
+    const timers = TIMELINE.filter((s) => s.at > 0).map((s) =>
+      window.setTimeout(() => setStage(s.stage), s.at),
     )
     return () => timers.forEach((id) => window.clearTimeout(id))
   }, [])
@@ -78,23 +76,17 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
     return () => window.removeEventListener('keydown', onKey)
   }, [stage, enter])
 
-  const doorStage =
-    stage === 'hold' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
-
-  const showMark = stage !== 'lockup' && stage !== 'ready'
-  const showWordmark = stage === 'wordmark' || stage === 'pathways'
-  const showPathways = stage === 'pathways'
-  const showLockup = stage === 'lockup' || stage === 'ready'
+  const doorStage = stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
+  const showPathways = stage === 'pathways' || stage === 'brand' || stage === 'ready'
+  const showBrand = stage === 'brand' || stage === 'ready'
   const showEnter = stage === 'ready'
-  const brighten = stage !== 'hold'
 
   return (
     <div
       className={[
-        'splash',
-        'splash-opening',
-        `splash-stage-${stage}`,
-        brighten ? 'is-brightening' : '',
+        'threshold',
+        `threshold-stage-${stage}`,
+        showBrand ? 'is-brand' : '',
         showEnter ? 'is-ready' : '',
       ]
         .filter(Boolean)
@@ -103,55 +95,54 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}
     >
-      <AmbientField variant="hero" />
-      <div className="splash-stage">
+      <div className="threshold-glow" aria-hidden />
+
+      <div className="threshold-stage">
         <h1 className="sr-only">{BRAND.name}</h1>
 
-        <div className={`splash-mark-block${showMark ? ' is-visible' : ' is-exiting'}`}>
+        {/* Giant P — the whole show until brand takeover */}
+        <div className={`threshold-p${showBrand ? ' is-settled' : ''}`}>
           <OpeningDoorMark stage={doorStage} />
-          <p
-            className={`splash-meaning${stage === 'open' || stage === 'wordmark' ? ' is-visible' : ''}`}
-            aria-live="polite"
-          >
-            Opening doors to a brighter future
-          </p>
         </div>
 
-        <div className={`splash-assemble${showWordmark || showPathways ? ' is-visible' : ''}`}>
-          <p className={`splash-wordmark${showWordmark || showPathways ? ' is-visible' : ''}`}>
-            <span className="splash-word-purpose">Purpose</span>{' '}
-            <span className="splash-word-academy">Academy</span>
+        {/* Full-screen brand reveal */}
+        <div className={`threshold-brand${showBrand ? ' is-visible' : ''}`} aria-hidden={!showBrand}>
+          <p className="threshold-brand-name">
+            <span className="threshold-brand-purpose">Purpose</span>
+            <span className="threshold-brand-academy">Academy</span>
           </p>
-          <ul className={`splash-pathways${showPathways ? ' is-visible' : ''}`} aria-hidden={!showPathways}>
-            <li className="splash-pathway splash-pathway-construction">
-              <img src={BRAND_ASSETS.iconConstruction} alt="" />
-              <span>Construction</span>
-            </li>
-            <li className="splash-pathway splash-pathway-logistics">
-              <img src={BRAND_ASSETS.iconLogistics} alt="" />
-              <span>Logistics</span>
-            </li>
-            <li className="splash-pathway splash-pathway-community">
-              <img src={BRAND_ASSETS.iconCommunity} alt="" />
-              <span>Community Support</span>
-            </li>
-          </ul>
+          <p className="threshold-brand-line">Opening doors to a brighter future</p>
         </div>
 
-        <img
-          className={`splash-logo-full${showLockup ? ' is-visible' : ''}`}
-          src={BRAND_ASSETS.logoFull}
-          alt={BRAND.name}
-        />
+        {/* Pathways fly in under the open P */}
+        <ul
+          className={`threshold-pathways${showPathways ? ' is-visible' : ''}`}
+          aria-hidden={!showPathways}
+        >
+          <li className="threshold-path threshold-path-a">
+            <img src={BRAND_ASSETS.iconConstruction} alt="" />
+            <span>Construction</span>
+          </li>
+          <li className="threshold-path threshold-path-b">
+            <img src={BRAND_ASSETS.iconLogistics} alt="" />
+            <span>Logistics</span>
+          </li>
+          <li className="threshold-path threshold-path-c">
+            <img src={BRAND_ASSETS.iconCommunity} alt="" />
+            <span>Community Support</span>
+          </li>
+        </ul>
 
-        <div className={`splash-enter-tools${showEnter ? ' is-visible' : ''}`}>
-          <button type="button" className="btn btn-primary splash-enter-btn" onClick={enter}>
-            Enter
-          </button>
-          <p className="splash-enter-hint">
-            or press <kbd>Enter</kbd>
-          </p>
-        </div>
+        {showEnter && (
+          <div className="threshold-enter is-visible">
+            <button type="button" className="btn btn-primary threshold-enter-btn" onClick={enter}>
+              Enter
+            </button>
+            <p className="threshold-enter-hint">
+              or press <kbd>Enter</kbd>
+            </p>
+          </div>
+        )}
       </div>
     </div>
   )
