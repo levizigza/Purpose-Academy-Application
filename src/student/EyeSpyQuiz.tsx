@@ -1,0 +1,210 @@
+import { useMemo, useState } from 'react'
+import { ATTEMPT_POLICY, type EyeSpyScene } from './journeyCurriculum'
+import { toolImage } from './toolImages'
+
+type Mode = 'exercise' | 'exam'
+
+function scenesForGroup(all: EyeSpyScene[], group: string) {
+  return all.filter((s) => s.variantGroup === group)
+}
+
+function pickGroups(all: EyeSpyScene[]): string[] {
+  const seen = new Set<string>()
+  const groups: string[] = []
+  for (const s of all) {
+    if (!seen.has(s.variantGroup)) {
+      seen.add(s.variantGroup)
+      groups.push(s.variantGroup)
+    }
+  }
+  return groups
+}
+
+/**
+ * Eye Spy: find the target object in a busy site scene.
+ * Wrong answer loses a point and rotates to another scene variant.
+ * Pass requires 100% (no misses in the run). Exercises unlimited; exams limited.
+ */
+export function EyeSpyQuiz({
+  scenes,
+  mode,
+  onComplete,
+}: {
+  scenes: EyeSpyScene[]
+  mode: Mode
+  onComplete: () => void
+}) {
+  const groups = useMemo(() => pickGroups(scenes), [scenes])
+  const [groupIdx, setGroupIdx] = useState(0)
+  const [variantIdx, setVariantIdx] = useState(0)
+  const [pickedHotspot, setPickedHotspot] = useState<string | null>(null)
+  const [pickedName, setPickedName] = useState<string | null>(null)
+  const [correctCount, setCorrectCount] = useState(0)
+  const [misses, setMisses] = useState(0)
+  const [attempt, setAttempt] = useState(1)
+  const [phase, setPhase] = useState<'play' | 'feedback' | 'summary'>('play')
+  const [lastOk, setLastOk] = useState(false)
+
+  const group = groups[groupIdx]
+  const variants = scenesForGroup(scenes, group)
+  const scene = variants[variantIdx % Math.max(variants.length, 1)]
+  const target = scene.hotspots.find((h) => h.id === scene.targetId)!
+  const nameOptions = useMemo(() => {
+    const opts = [target.answer, ...scene.distractors]
+    return [...opts].sort(() => Math.random() - 0.5)
+  }, [scene.id, target.answer, scene.distractors])
+
+  const maxAttempts = mode === 'exam' ? ATTEMPT_POLICY.examMax : null
+  const need = groups.length
+
+  function resetPick() {
+    setPickedHotspot(null)
+    setPickedName(null)
+  }
+
+  function confirm() {
+    if (!pickedHotspot || !pickedName) return
+    const ok = pickedHotspot === scene.targetId && pickedName === target.answer
+    setLastOk(ok)
+    if (ok) {
+      setCorrectCount((c) => c + 1)
+    } else {
+      setMisses((m) => m + 1)
+      setVariantIdx((v) => v + 1)
+      resetPick()
+    }
+    setPhase('feedback')
+  }
+
+  function nextAfterFeedback() {
+    if (!lastOk) {
+      setPhase('play')
+      return
+    }
+    if (groupIdx + 1 >= need) {
+      setPhase('summary')
+      return
+    }
+    setGroupIdx((i) => i + 1)
+    setVariantIdx(0)
+    resetPick()
+    setPhase('play')
+  }
+
+  function retryRun() {
+    setAttempt((a) => a + 1)
+    setGroupIdx(0)
+    setVariantIdx(0)
+    setCorrectCount(0)
+    setMisses(0)
+    resetPick()
+    setPhase('play')
+  }
+
+  if (phase === 'summary') {
+    const pass = correctCount >= need && misses === 0
+    const examLocked = mode === 'exam' && maxAttempts != null && attempt >= maxAttempts && !pass
+
+    return (
+      <div className="train-quiz-summary eye-spy-summary">
+        <p className="train-score">
+          {correctCount} / {need} found
+          {misses > 0 ? ` · ${misses} miss${misses === 1 ? '' : 'es'} (must be 0 to pass)` : ' · clean run'}
+        </p>
+        <p className="muted">
+          Vocabulary pass requires {ATTEMPT_POLICY.vocabPassPercent}% with no misses. Wrong answers change the scene.
+        </p>
+        {pass ? (
+          <button type="button" className="btn btn-primary" onClick={onComplete}>
+            Continue
+          </button>
+        ) : examLocked ? (
+          <p className="alert warn">
+            Exam attempts used ({maxAttempts}). Review vocabulary, then ask an instructor to unlock a retry.
+          </p>
+        ) : (
+          <button type="button" className="btn btn-primary" onClick={retryRun}>
+            {mode === 'exam' && maxAttempts
+              ? `Retry exam (${attempt + 1}/${maxAttempts})`
+              : 'Try again — aim for a clean 100%'}
+          </button>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="eye-spy">
+      <p className="train-quiz-counter">
+        Scene {groupIdx + 1} of {need}
+        {mode === 'exam' && maxAttempts ? ` · Attempt ${attempt}/${maxAttempts}` : ' · Exercise (unlimited)'}
+      </p>
+      <p className="eye-spy-instruction">{scene.instruction}</p>
+      <p className="eye-spy-scene-title">{scene.title}</p>
+
+      <div className="eye-spy-stage" role="group" aria-label="Site scene — tap the correct tool">
+        <div className="eye-spy-grid" aria-hidden>
+          {Array.from({ length: 12 }).map((_, i) => (
+            <span key={i} className="eye-spy-tile" />
+          ))}
+        </div>
+        {scene.hotspots.map((h) => {
+          const img = toolImage(h.imageKey)
+          const selected = pickedHotspot === h.id
+          return (
+            <button
+              key={`${scene.id}-${h.id}-${variantIdx}`}
+              type="button"
+              className={`eye-spy-hotspot${selected ? ' is-selected' : ''}${phase === 'feedback' && lastOk && h.id === scene.targetId ? ' is-target' : ''}${phase === 'feedback' && !lastOk && selected ? ' is-wrong' : ''}`}
+              style={{ left: `${h.x}%`, top: `${h.y}%`, width: `${h.w}%`, height: `${h.h}%` }}
+              onClick={() => phase === 'play' && setPickedHotspot(h.id)}
+              disabled={phase !== 'play'}
+              aria-label={h.label}
+            >
+              {img ? <img src={img} alt="" /> : <span>{h.label}</span>}
+            </button>
+          )
+        })}
+      </div>
+
+      <p className="eye-spy-prompt">What English name matches the tool you tapped?</p>
+      <div className="train-choice-grid">
+        {nameOptions.map((opt) => (
+          <button
+            key={opt}
+            type="button"
+            className={`train-choice${pickedName === opt ? ' is-correct' : ''}`}
+            disabled={phase !== 'play'}
+            onClick={() => setPickedName(opt)}
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
+
+      {phase === 'play' && (
+        <button
+          type="button"
+          className="btn btn-primary"
+          disabled={!pickedHotspot || !pickedName}
+          onClick={confirm}
+        >
+          Check answer
+        </button>
+      )}
+
+      {phase === 'feedback' && (
+        <>
+          <div className={`alert ${lastOk ? 'ok' : 'warn'}`}>
+            {lastOk
+              ? `Correct — that is the ${target.answer}.`
+              : 'Not yet — you lost a point. The scene changed. Find it again.'}
+          </div>
+          <button type="button" className="btn btn-primary" onClick={nextAfterFeedback}>
+            {lastOk ? (groupIdx + 1 >= need ? 'See results' : 'Next scene') : 'Try the new scene'}
+          </button>
+        </>
+      )}
+    </div>
+  )
+}

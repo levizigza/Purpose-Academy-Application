@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="PPE hard hat glasses gloves boots">
+  <rect width="320" height="240" fill="#f4f7fb"/>
+  <!-- hard hat -->
+  <ellipse cx="78" cy="118" rx="52" ry="14" fill="#e8a317"/>
+  <path d="M38 118 C38 74 56 48 78 48 S118 74 118 118 Z" fill="#f5c542"/>
+  <path d="M78 54 L78 118" stroke="#d4a017" stroke-width="6" stroke-linecap="round"/>
+  <!-- safety glasses -->
+  <rect x="138" y="58" width="40" height="26" rx="8" fill="#9ec4f0" stroke="#0b2f5c" stroke-width="3"/>
+  <rect x="188" y="58" width="40" height="26" rx="8" fill="#9ec4f0" stroke="#0b2f5c" stroke-width="3"/>
+  <path d="M178 71 H188" stroke="#0b2f5c" stroke-width="3"/>
+  <path d="M138 68 H128" stroke="#0b2f5c" stroke-width="3"/>
+  <path d="M228 68 H238" stroke="#0b2f5c" stroke-width="3"/>
+  <!-- gloves -->
+  <path d="M140 118 C140 104 164 100 176 114 L192 152 L158 164 L136 132 Z" fill="#e8a317"/>
+  <path d="M176 114 L186 100 L198 108 L190 128" fill="#f5c542"/>
+  <path d="M168 108 L172 94 L184 100 L178 116" fill="#f5c542"/>
+  <!-- boots -->
+  <path d="M214 132 L268 132 L278 168 L208 168 Z" fill="#3d5168"/>
+  <path d="M208 168 L286 168 L286 182 L204 182 Z" fill="#1f2a36"/>
+  <rect x="248" y="140" width="18" height="20" rx="3" fill="#5b6b7a"/>
+</svg>

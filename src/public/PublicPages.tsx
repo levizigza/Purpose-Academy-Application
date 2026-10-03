@@ -11,7 +11,7 @@ import { markSequenceComplete } from '../gateway/sequenceProgress'
 export function HomePage() {
   return (
     <>
-      <section className="hero" aria-label={`${BRAND.name} hero`}>
+      <section className="hero hero-photo" aria-label={`${BRAND.name} hero`}>
         <HeroMotionLayer />
         <SitePaMark className="hero-pa" />
         <div className="hero-inner hero-inner-split">
@@ -25,42 +25,68 @@ export function HomePage() {
       </section>
 
       <div className="shell-main">
-        <Reveal as="section" className="section" delay={40}>
-          <SequenceBoard />
-        </Reveal>
-
-        <Reveal as="section" className="section">
-          <p className="section-kicker">Who we serve</p>
-          <h2>People ready to belong at work</h2>
-          <p className="lede">
-            {BRAND.audience} {BRAND.name} holds language, workplace talk, and trade readiness in one path —
-            Construction first — so progress feels purposeful, not scattered.
-          </p>
+        <Reveal as="section" className="section serve-split" delay={40}>
+          <div className="serve-copy">
+            <p className="section-kicker">Who we serve</p>
+            <h2>People ready to belong at work</h2>
+            <p className="lede">
+              {BRAND.audience} {BRAND.name} holds language, workplace talk, and trade readiness in one path —
+              Construction first — so progress feels purposeful, not scattered.
+            </p>
+          </div>
+          <figure className="serve-figure">
+            <img
+              src={BRAND_ASSETS.photoLearners}
+              alt="People collaborating at work — the kind of teams Purpose Academy prepares learners to join"
+            />
+            <figcaption>Real workplaces. Clear practice. Instructors who verify skill.</figcaption>
+          </figure>
         </Reveal>
 
         <Reveal as="section" className="section" delay={80}>
           <p className="section-kicker">The path</p>
           <h2>Three doors into work</h2>
+          <p className="lede path-lede">
+            Start with Construction. Logistics and Community Support follow on the same foundation.
+          </p>
           <div className="signal-row">
             <Reveal as="article" className="signal construction" delay={120}>
-              <img src={BRAND_ASSETS.iconConstruction} alt="" />
+              <div className="signal-media">
+                <img
+                  src={BRAND_ASSETS.photoConstruction}
+                  alt="Construction workers collaborating on a job site"
+                />
+                <img className="signal-icon" src={BRAND_ASSETS.iconConstruction} alt="" />
+              </div>
               <h3>Construction</h3>
               <p>Safety, tools, and practical skill — the live pathway with instructor verification.</p>
             </Reveal>
             <Reveal as="article" className="signal logistics" delay={200}>
-              <img src={BRAND_ASSETS.iconLogistics} alt="" />
+              <div className="signal-media">
+                <img
+                  src={BRAND_ASSETS.photoLogistics}
+                  alt="Warehouse aisles ready for logistics training"
+                />
+                <img className="signal-icon" src={BRAND_ASSETS.iconLogistics} alt="" />
+              </div>
               <h3>Logistics</h3>
               <p>Warehouse and supply-chain readiness — next after Construction is proven.</p>
             </Reveal>
             <Reveal as="article" className="signal community" delay={280}>
-              <img src={BRAND_ASSETS.iconCommunity} alt="" />
+              <div className="signal-media">
+                <img
+                  src={BRAND_ASSETS.photoCommunity}
+                  alt="Care professionals supporting people in a community setting"
+                />
+                <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
+              </div>
               <h3>Community Support</h3>
               <p>Client care and professional conduct — planned on the same foundation architecture.</p>
             </Reveal>
           </div>
         </Reveal>
 
-        <Reveal as="section" className="section visual-stage" delay={100}>
+        <Reveal as="section" className="section visual-stage visual-stage-photo" delay={100}>
           <div className="visual-stage-inner">
             <p className="section-kicker on-dark">Honest promise</p>
             <h2>What {BRAND.name} stands for</h2>
@@ -78,6 +104,10 @@ export function HomePage() {
               </Link>
             </div>
           </div>
+        </Reveal>
+
+        <Reveal as="section" className="section section-sequences" delay={40}>
+          <SequenceBoard />
         </Reveal>
       </div>
     </>
@@ -97,7 +127,13 @@ export function ProgramsPage() {
       </Reveal>
       <div className="signal-row">
         <Reveal as="article" className="signal construction featured" delay={80}>
-          <img src={BRAND_ASSETS.iconConstruction} alt="" />
+          <div className="signal-media">
+            <img
+              src={BRAND_ASSETS.photoConstruction}
+              alt="Construction crew working together on site"
+            />
+            <img className="signal-icon" src={BRAND_ASSETS.iconConstruction} alt="" />
+          </div>
           <h2>Construction</h2>
           <p>
             Safety, tools, materials, drywall, flooring, painting, and blueprint basics — with safety gates and human
@@ -106,13 +142,22 @@ export function ProgramsPage() {
           <span className="badge ok">Active pathway</span>
         </Reveal>
         <Reveal as="article" className="signal logistics muted-signal" delay={160}>
-          <img src={BRAND_ASSETS.iconLogistics} alt="" />
+          <div className="signal-media">
+            <img src={BRAND_ASSETS.photoLogistics} alt="Warehouse logistics environment" />
+            <img className="signal-icon" src={BRAND_ASSETS.iconLogistics} alt="" />
+          </div>
           <h2>Warehousing & Logistics</h2>
           <p>Inventory, packing, receiving, and warehouse safety — after Construction is proven.</p>
           <span className="badge">Coming next</span>
         </Reveal>
         <Reveal as="article" className="signal community muted-signal" delay={240}>
-          <img src={BRAND_ASSETS.iconCommunity} alt="" />
+          <div className="signal-media">
+            <img
+              src={BRAND_ASSETS.photoCommunity}
+              alt="Community support and care setting"
+            />
+            <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
+          </div>
           <h2>Community Support</h2>
           <p>Client communication, documentation, and professional conduct — planned pathway.</p>
           <span className="badge">Planned</span>
@@ -138,7 +183,7 @@ export function AdmissionsPage() {
           you are ready.
         </p>
       </Reveal>
-      <Reveal className="visual-stage" delay={100}>
+      <Reveal className="visual-stage visual-stage-photo" delay={100}>
         <div className="visual-stage-inner">
           <ol className="path-steps on-dark">
             <li>Create your student account</li>

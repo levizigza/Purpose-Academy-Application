@@ -9,6 +9,14 @@ document.documentElement.style.setProperty(
   '--asset-threshold',
   `url(${JSON.stringify(BRAND_ASSETS.threshold)})`,
 )
+document.documentElement.style.setProperty(
+  '--asset-hero-work',
+  `url(${JSON.stringify(BRAND_ASSETS.photoHeroWork)})`,
+)
+document.documentElement.style.setProperty(
+  '--asset-calgary',
+  `url(${JSON.stringify(BRAND_ASSETS.photoCalgary)})`,
+)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
