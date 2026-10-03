@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { HeroMotionLayer, Reveal } from '../components/Motion'
+import { SitePaMark } from '../components/SitePaMark'
 import { EnterBox } from '../gateway/EnterBox'
 import { SequenceBoard } from '../gateway/SequenceBoard'
 import { markSequenceComplete } from '../gateway/sequenceProgress'
@@ -12,6 +13,7 @@ export function HomePage() {
     <>
       <section className="hero" aria-label={`${BRAND.name} hero`}>
         <HeroMotionLayer />
+        <SitePaMark className="hero-pa" />
         <div className="hero-inner hero-inner-split">
           <div className="hero-copy">
             <img className="hero-logo" src={BRAND_ASSETS.logoFull} alt={BRAND.name} />

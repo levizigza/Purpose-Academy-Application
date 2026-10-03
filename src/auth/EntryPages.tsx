@@ -4,7 +4,7 @@ import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v19'
+const ENTERED_KEY = 'pa-crossed-threshold-v20'
 
 export function hasEnteredSite() {
   try {
@@ -24,7 +24,7 @@ export function markEnteredSite() {
 
 type SplashStage = 'closed' | 'opening' | 'open' | 'ready'
 
-/** Door opens while zoomed on the PA mark, then the camera settles into logo-full. */
+/** Door opens while zoomed on the P, then the camera settles into logo-full. */
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'closed' },
   { at: 1200, stage: 'opening' },
@@ -145,7 +145,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
         <h1 className="sr-only">{BRAND.name}</h1>
 
         {/*
-          Fixed lockup frame. Zoom starts on PA (door in the P), then pulls back to logo-full.
+          Fixed lockup frame. Zoom starts on the P (door), then pulls back to logo-full.
           Only opacity/transform move — layout size stays fixed.
         */}
         <div className={`threshold-brand-frame is-${stage}`}>

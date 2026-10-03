@@ -5,7 +5,7 @@
       <stop offset="42%" stop-color="#0B2F5C"/>
       <stop offset="100%" stop-color="#041526"/>
     </linearGradient>
-    <radialGradient id="door" cx="28%" cy="40%" r="48%">
+    <radialGradient id="door" cx="30%" cy="38%" r="50%">
       <stop offset="0%" stop-color="#FFF8D6"/>
       <stop offset="28%" stop-color="#F5C542" stop-opacity="0.85"/>
       <stop offset="62%" stop-color="#E8A317" stop-opacity="0.35"/>
@@ -23,15 +23,18 @@
     </linearGradient>
   </defs>
   <rect width="1600" height="900" fill="url(#sky)"/>
-  <ellipse cx="460" cy="340" rx="420" ry="380" fill="url(#door)"/>
-  <!-- PA monogram on the left so it stays visible beside the enter box -->
-  <g transform="translate(180 90) scale(0.92)" fill="#041526" opacity="0.72">
-    <path d="M0 20h170c90 0 150 58 150 145s-60 145-150 145H95v210H0V20zm105 205h65c40 0 64-26 64-60s-24-60-64-60h-65v120z"/>
-    <path d="M360 520 L510 20h85L745 520h-90l-26-95H476l-26 95h-90zm140-170h55L530 170h-4l-26 180z"/>
+  <ellipse cx="480" cy="330" rx="460" ry="390" fill="url(#door)"/>
+  <!-- In-site PA watermark with light through the P -->
+  <g transform="translate(160 80)" opacity="0.78">
+    <ellipse cx="95" cy="200" rx="120" ry="160" fill="#FFF8D6" opacity="0.22"/>
+    <path d="M70 40 L20 80 L10 420 L70 480 Z" fill="#163E72" opacity="0.85"/>
+    <circle cx="36" cy="260" r="10" fill="#F4F7FB" opacity="0.9"/>
+    <path fill="#F4F7FB" fill-rule="evenodd" d="M70 40h210c110 0 190 70 190 175s-80 175-190 175H185v230H70V40zm115 260h95c50 0 80-32 80-75s-30-75-80-75h-95v150z"/>
+    <path fill="#F4F7FB" d="M520 620 L720 40h110L1030 620h-115l-35-125H670l-35 125H520zm185-205h70L740 170h-5l-30 245z"/>
   </g>
-  <path d="M340 100 L220 820" stroke="#F5C542" stroke-width="10" opacity="0.28"/>
-  <path d="M340 100 L460 820" stroke="#FFF6C8" stroke-width="3" opacity="0.2"/>
-  <polygon points="250,100 480,100 680,900 120,900" fill="url(#beam)" opacity="0.4"/>
+  <path d="M360 90 L240 820" stroke="#F5C542" stroke-width="10" opacity="0.28"/>
+  <path d="M360 90 L480 820" stroke="#FFF6C8" stroke-width="3" opacity="0.2"/>
+  <polygon points="250,90 520,90 720,900 120,900" fill="url(#beam)" opacity="0.35"/>
   <path d="M0 620 C220 540 380 600 560 520 C760 430 980 560 1180 500 C1360 450 1500 480 1600 460 L1600 900 L0 900 Z" fill="url(#floor)"/>
   <g opacity="0.22" fill="#9fb8d9">
     <circle cx="1180" cy="160" r="3"/><circle cx="1260" cy="210" r="2"/><circle cx="1340" cy="140" r="2.5"/>

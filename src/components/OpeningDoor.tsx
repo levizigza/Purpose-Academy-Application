@@ -1,5 +1,5 @@
 /**
- * Door overlay — PA mark with light through the P stem.
+ * Door overlay — registered to the P in logo-full via measured slot + viewBox padding.
  * Final art is always the raster lockup; this only covers/reveals it.
  */
 export function OpeningDoorMark({
@@ -9,9 +9,9 @@ export function OpeningDoorMark({
 }) {
   return (
     <div className={`doorway doorway-${stage}`} aria-hidden>
-      <svg className="doorway-frame" viewBox="0 0 200 128" role="presentation">
+      <svg className="doorway-frame" viewBox="0 0 128 128" role="presentation">
         <defs>
-          <radialGradient id="doorway-preglow" cx="38%" cy="40%" r="42%">
+          <radialGradient id="doorway-preglow" cx="55%" cy="40%" r="50%">
             <stop offset="0%" stopColor="#FFFDF5" />
             <stop offset="40%" stopColor="#FFE9A8" stopOpacity="0.9" />
             <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
@@ -29,29 +29,21 @@ export function OpeningDoorMark({
         </defs>
 
         <g className="doorway-prelight">
-          <ellipse cx="58" cy="55" rx="30" ry="40" fill="url(#doorway-preglow)" />
-          <polygon points="36,95 56,95 46,128 0,128" fill="url(#doorway-prespill)" />
-          <rect x="34" y="22" width="18" height="96" fill="url(#doorway-cavity)" />
-          <rect x="49" y="22" width="3" height="96" fill="#FFF8E8" opacity="0.85" />
-          <rect x="34" y="22" width="18" height="3" fill="#FFF8E8" opacity="0.85" />
+          <ellipse cx="70" cy="55" rx="32" ry="40" fill="url(#doorway-preglow)" />
+          <polygon points="48,95 68,95 58,128 8,128" fill="url(#doorway-prespill)" />
+          <rect x="46" y="22" width="18" height="96" fill="url(#doorway-cavity)" />
+          <rect x="61" y="22" width="3" height="96" fill="#FFF8E8" opacity="0.85" />
+          <rect x="46" y="22" width="18" height="3" fill="#FFF8E8" opacity="0.85" />
         </g>
 
-        {/* P — stem is the doorway */}
+        {/* Same P path as logo-mark — stem is the doorway */}
         <path
           fill="#0B2F5C"
           fillRule="evenodd"
           d="
-            M34 22h34c20 0 34 13 34 32s-14 32-34 32H52v42H34V22z
-            M52 70h16c8 0 14-5 14-12s-6-12-14-12H52v24z
-            M34 22h18v96H34z
-          "
-        />
-
-        {/* A — Purpose Academy monogram */}
-        <path
-          fill="#0B2F5C"
-          d="
-            M118 118 L148 22h20L198 118h-20l-6.5-22h-27L138 118h-20zm33.5-40h14L158 48h-1l-6.5 30z
+            M46 22h34c20 0 34 13 34 32s-14 32-34 32H64v42H46V22z
+            M64 70h16c8 0 14-5 14-12s-6-12-14-12H64v24z
+            M46 22h18v96H46z
           "
         />
       </svg>
