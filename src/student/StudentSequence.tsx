@@ -13,11 +13,13 @@ import {
   VOCAB_UNIT,
   BASELINE_QUIZ,
   SAFETY_QUIZ,
-  ENGLISH_QUIZ,
   FINAL_QUIZ,
   TOOL_CATEGORIES,
   SYSTEM_TOPICS,
   COMPUTER_SKILLS,
+  INTEREST_PATHS,
+  WORD_ACTIONS,
+  EYE_SPY_SCENES,
   type SupportLang,
   type QuizItem,
 } from './journeyCurriculum'
@@ -29,6 +31,7 @@ import {
   stopSpeech,
 } from './speech'
 import { toolImage } from './toolImages'
+import { EyeSpyQuiz } from './EyeSpyQuiz'
 
 const JOURNEY_KEY = 'pa-student-journey-step-v1'
 const OBS_KEY = 'pa-student-observation-v1'
@@ -267,6 +270,10 @@ export function StudentSequencePage() {
     (student?.preferred_language as SupportLang) || 'Amharic',
   )
   const [interest, setInterest] = useState<'construction' | 'logistics' | 'community' | null>(null)
+  const [skillChecks, setSkillChecks] = useState<Record<string, boolean>>({})
+  const [actionIdx, setActionIdx] = useState(0)
+  const [actionDone, setActionDone] = useState<Record<string, boolean>>({})
+  const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -288,10 +295,6 @@ export function StudentSequencePage() {
   const [matchIdx, setMatchIdx] = useState(0)
   const [matchAnswer, setMatchAnswer] = useState<string | null>(null)
   const [matchCorrect, setMatchCorrect] = useState(false)
-
-  /* Step 10 sentence building */
-  const [sentIdx, setSentIdx] = useState(0)
-  const [sentWord, setSentWord] = useState('')
 
   /* Step 11 workplace instructions */
   const [instrIdx, setInstrIdx] = useState(0)
@@ -372,7 +375,6 @@ export function StudentSequencePage() {
     setHeardSupport(true)
   }
   function resetMatch() { setMatchIdx(0); setMatchAnswer(null); setMatchCorrect(false) }
-  function resetSent() { setSentIdx(0); setSentWord('') }
   function resetInstr() { setInstrIdx(0); setInstrHeard(false); setInstrAnswer(null); setInstrCorrect(false) }
 
   async function ensureDemoStudent() {
@@ -393,12 +395,13 @@ export function StudentSequencePage() {
         await selectPathway(sid, 'construction')
         await refresh()
       }
-      go(6)
+      go(7)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not save pathway')
-      go(6)
+      go(7)
     }
   }
+
 
   const INSTRUCTIONS: {
     text: string
@@ -414,7 +417,6 @@ export function StudentSequencePage() {
       options: ['Bring the tape measure', 'Bring the hammer', 'Put on a hard hat', 'Start cutting wood'],
       supportHint: {
         Spanish: 'Trae la cinta metrica.',
-        French: 'Apporte le metre ruban.',
         Arabic: 'Ahdir sharit al-qiyas.',
         Hindi: 'Tape measure lao.',
         Amharic: 'Melekiya tape amtu.',
@@ -428,7 +430,6 @@ export function StudentSequencePage() {
       options: ['Pass the level', 'Pass the hammer', 'Open the door', 'Put on boots'],
       supportHint: {
         Spanish: 'Pasame el nivel.',
-        French: 'Passe-moi le niveau.',
         Arabic: 'Nawilni al-mizan.',
         Hindi: 'Level mujhe do.',
         Amharic: 'Dereja melekiyawun situn.',
@@ -442,7 +443,6 @@ export function StudentSequencePage() {
       options: ['Check the wall with the level', 'Check the floor with a hammer', 'Bring the drill', 'Remove your PPE'],
       supportHint: {
         Spanish: 'Revisa la pared con el nivel.',
-        French: 'Verifie le mur avec le niveau.',
         Arabic: 'Ifhas al-jidar bil-mizan.',
         Hindi: 'Level se deewar check karo.',
         Amharic: 'Dereja melekiya bewetakom gidgidawun yaregagtu.',
@@ -465,14 +465,12 @@ export function StudentSequencePage() {
           </div>
           <TeachNote>
             Students learn and practice. Instructors teach and check skills. Admins manage the school.
-            Choosing the right door keeps your path simple.
           </TeachNote>
         </div>
       </StepShell>
     )
   }
 
-  /* ——— Step 2: Registration ——— */
   if (step === 2) {
     async function onRegister(e: FormEvent) {
       e.preventDefault()
@@ -480,7 +478,7 @@ export function StudentSequencePage() {
       const err = await register({
         full_name: regForm.full_name, email: regForm.email, password: regForm.password,
         phone: regForm.phone, address: 'Calgary, AB', emergency_contact: 'Emergency contact',
-        preferred_language: regForm.preferred_language,
+        preferred_language: regForm.preferred_language || supportLang,
       })
       setBusy(false)
       if (err) {
@@ -496,35 +494,26 @@ export function StudentSequencePage() {
     return (
       <StepShell step={2} onBack={() => go(1)}>
         <TeachNote>
-          Write slowly. Short answers are fine. Previous experience helps us place you — it is not a judgment.
+          Write slowly. Short answers are fine. You will choose your mother tongue on the next step for assessments.
         </TeachNote>
         <form className="stack" onSubmit={onRegister}>
           {error && <div className="alert error">{error}</div>}
           <div className="field">
             <label htmlFor="seq-name">Full name</label>
             <input id="seq-name" value={regForm.full_name} onChange={(e) => setRegForm({ ...regForm, full_name: e.target.value })} required placeholder="First and last name" autoComplete="name" />
-            <span className="field-hint">Use the name on your ID if you can.</span>
           </div>
           <div className="field">
             <label htmlFor="seq-email">Email</label>
             <input id="seq-email" type="email" value={regForm.email} onChange={(e) => setRegForm({ ...regForm, email: e.target.value })} required placeholder="you@email.com" autoComplete="email" />
-            <span className="field-hint">We send important updates here.</span>
           </div>
           <div className="field">
             <label htmlFor="seq-phone">Phone</label>
             <input id="seq-phone" type="tel" value={regForm.phone} onChange={(e) => setRegForm({ ...regForm, phone: e.target.value })} required placeholder="403-555-0000" autoComplete="tel" />
           </div>
           <div className="field">
-            <label htmlFor="seq-lang">Preferred language</label>
-            <select id="seq-lang" value={regForm.preferred_language} onChange={(e) => setRegForm({ ...regForm, preferred_language: e.target.value })}>
-              {SUPPORT_LANGUAGES.map((l) => (<option key={l.id} value={l.id}>{l.flag} {l.id}</option>))}
-            </select>
-            <span className="field-hint">We can show meanings in this language while you learn.</span>
-          </div>
-          <div className="field">
             <label htmlFor="seq-exp">Previous experience</label>
             <input id="seq-exp" value={regForm.previous_experience} onChange={(e) => setRegForm({ ...regForm, previous_experience: e.target.value })} placeholder="Example: helper on building sites — or none yet" />
-            <span className="field-hint">&ldquo;None yet&rdquo; is a good answer. Many students start here.</span>
+            <span className="field-hint">&ldquo;None yet&rdquo; is a good answer.</span>
           </div>
           <button className="btn btn-primary" type="submit" disabled={busy}>
             {busy ? 'Saving…' : 'Save and continue'}
@@ -537,79 +526,24 @@ export function StudentSequencePage() {
           }}>
             Continue with demo student account
           </button>
-          <p className="muted">Demo account: <strong>student@purposeacademy.ca</strong> — a real demo login, not a preview skip.</p>
         </form>
       </StepShell>
     )
   }
 
-  /* ——— Step 3: Baseline Assessment (all items) ——— */
+  /* Step 3: Mother tongue for assessment (bridge later removed in English-only steps) */
   if (step === 3) {
     return (
-      <StepShell step={3} onBack={() => go(2)}>
-        <WhyWork>Baseline shows what you already know — so we start in the right place.</WhyWork>
-        <TeachNote>Baseline is not pass/fail. Wrong answers help your instructor know what to teach next.</TeachNote>
-        <QuizRunner items={BASELINE_QUIZ} onComplete={() => go(4)} />
-      </StepShell>
-    )
-  }
-
-  /* ——— Step 4: Career Interest ——— */
-  if (step === 4) {
-    return (
-      <StepShell step={4} onBack={() => go(3)} onNext={interest ? () => go(5) : undefined} nextLabel="Continue with this interest">
-        <WhyWork>Your interest helps us match training to the kind of work you want.</WhyWork>
-        <p><strong>What type of work interests you most?</strong></p>
-        <div className="train-interest-grid">
-          {([
-            { id: 'construction' as const, title: 'Construction', img: BRAND_ASSETS.iconConstruction, line: 'Build Skills, Build Futures.', detail: 'Safety, tools, and building work.' },
-            { id: 'logistics' as const, title: 'Logistics', img: BRAND_ASSETS.iconLogistics, line: 'Move People, Move Opportunities.', detail: 'Warehouse and moving goods — opens after Construction.' },
-            { id: 'community' as const, title: 'Community Support', img: BRAND_ASSETS.iconCommunity, line: 'Stronger People, Stronger Communities.', detail: 'Helping people in community roles — planned next.' },
-          ]).map((item) => (
-            <button key={item.id} type="button" className={`train-interest${interest === item.id ? ' is-selected' : ''}`} onClick={() => setInterest(item.id)}>
-              <img src={item.img} alt="" />
-              <strong>{item.title}</strong>
-              <span>{item.line}</span>
-              <em className="train-interest-detail">{item.detail}</em>
-            </button>
-          ))}
-        </div>
-        {interest && interest !== 'construction' && (
-          <div className="alert warn">
-            You chose {interest === 'logistics' ? 'Logistics' : 'Community Support'}. Today&rsquo;s live
-            pathway is Construction — same learning steps, different job focus later.
-          </div>
-        )}
-        <TeachNote>Tap the path that feels closest to you. Curiosity is enough to begin.</TeachNote>
-      </StepShell>
-    )
-  }
-
-  /* ——— Step 5: Choose Pathway ——— */
-  if (step === 5) {
-    return (
-      <StepShell step={5} onBack={() => go(4)}>
-        {error && <div className="alert error">{error}</div>}
-        <PictureCard emoji="🏗️" label="Construction" sub="Build Skills, Build Futures." caption="This is the open pathway you can prove with an instructor." />
-        <WhyWork>Construction needs people who know safety words, tools, and how to follow short directions.</WhyWork>
-        <div className="train-learn-grid">
-          <LearnCard mark="1" title="Language for work" body="Words you hear on a job site." />
-          <LearnCard mark="2" title="Safety first" body="Protect yourself and others." />
-          <LearnCard mark="3" title="Tools & practice" body="Learn, practise, then prove with an instructor." />
-        </div>
-        <TeachNote>Choosing Construction does not promise a job. It opens a clear path: understand → practise → verified skill → employment support.</TeachNote>
-        <button type="button" className="btn btn-primary" disabled={busy} onClick={async () => { setBusy(true); await finishPathway(); setBusy(false) }}>
-          {busy ? 'Saving…' : 'Yes — I choose Construction'}
-        </button>
-      </StepShell>
-    )
-  }
-
-  /* ——— Step 6: Support Language ——— */
-  if (step === 6) {
-    return (
-      <StepShell step={6} onBack={() => go(5)} onNext={() => { resetVocab(); go(7) }} nextLabel="Use this support language">
-        <WhyWork>When you understand the idea in a familiar language, English words stick faster.</WhyWork>
+      <StepShell
+        step={3}
+        onBack={() => go(2)}
+        onNext={() => {
+          setRegForm((f) => ({ ...f, preferred_language: supportLang }))
+          go(4)
+        }}
+        nextLabel="Use this language for my assessment"
+      >
+        <WhyWork>Early checks use a language you understand. Later site talk is English only.</WhyWork>
         <div className="train-lang-grid">
           {SUPPORT_LANGUAGES.map((l) => (
             <button key={l.id} type="button" className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`} onClick={() => setSupportLang(l.id)}>
@@ -619,50 +553,126 @@ export function StudentSequencePage() {
           ))}
         </div>
         <div className="train-bridge">
-          <p><strong>How the bridge works</strong></p>
+          <p><strong>How language works</strong></p>
           <ol>
-            <li>Early lessons: picture + English + {supportLang}</li>
+            <li>Assessment & early vocab: English + {supportLang}</li>
             <li>Practice: still with help</li>
-            <li>Later: English only — like the worksite</li>
+            <li>Eye Spy & site instructions: English only</li>
           </ol>
         </div>
-        <TeachNote>Support language makes the path clearer. The goal stays the same: safe English at work.</TeachNote>
+        <TeachNote>Choose the mother tongue that helps you most for assessment and early learning.</TeachNote>
       </StepShell>
     )
   }
 
-  /* ——— Step 7: Visual Vocabulary — See / Listen / Understand / Repeat ——— */
+  if (step === 4) {
+    return (
+      <StepShell step={4} onBack={() => go(3)}>
+        <WhyWork>Baseline shows what you already know — so we start in the right place.</WhyWork>
+        <TeachNote>Baseline is not pass/fail. Support language: {supportLang}.</TeachNote>
+        <QuizRunner items={BASELINE_QUIZ} onComplete={() => go(5)} />
+      </StepShell>
+    )
+  }
+
+  /* Step 5: Interest + skills picture assessment */
+  if (step === 5) {
+    const path = INTEREST_PATHS.find((p) => p.id === interest)
+    const skillReady = path ? path.skills.every((s) => skillChecks[s.id]) : false
+    return (
+      <StepShell
+        step={5}
+        onBack={() => go(4)}
+        onNext={interest && skillReady ? () => go(6) : undefined}
+        nextLabel="See my assessment result"
+      >
+        <WhyWork>What you want and what you can already do help place you on a path.</WhyWork>
+        <p><strong>What are you interested in?</strong></p>
+        <div className="train-interest-grid">
+          {INTEREST_PATHS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`train-interest${interest === item.id ? ' is-selected' : ''}`}
+              onClick={() => { setInterest(item.id); setSkillChecks({}) }}
+            >
+              <img
+                src={item.id === 'construction' ? BRAND_ASSETS.iconConstruction : item.id === 'logistics' ? BRAND_ASSETS.iconLogistics : BRAND_ASSETS.iconCommunity}
+                alt=""
+              />
+              <strong>{item.title}</strong>
+              <span>{item.line}</span>
+              <em className="train-interest-detail">{item.detail}</em>
+            </button>
+          ))}
+        </div>
+        {path && (
+          <>
+            <p><strong>What can you do? ({supportLang} help available — answer honestly)</strong></p>
+            <ul className="train-check-list">
+              {path.skills.map((s) => (
+                <CheckItem
+                  key={s.id}
+                  id={`sk-${s.id}`}
+                  title={s.label}
+                  why={`Skill check · weight ${s.weight}`}
+                  checked={!!skillChecks[s.id]}
+                  onChange={() => setSkillChecks((c) => ({ ...c, [s.id]: !c[s.id] }))}
+                />
+              ))}
+            </ul>
+          </>
+        )}
+        <TeachNote>Check every skill box for your chosen interest to continue. Curiosity counts.</TeachNote>
+      </StepShell>
+    )
+  }
+
+  /* Step 6: Result + Construction pathway */
+  if (step === 6) {
+    const title = interest === 'logistics' ? 'Logistics' : interest === 'community' ? 'Community Support' : 'Construction'
+    return (
+      <StepShell step={6} onBack={() => go(5)}>
+        {error && <div className="alert error">{error}</div>}
+        <div className="alert ok">
+          Assessment result: strongest fit right now is <strong>{title}</strong>.
+          Live specialized pathway: <strong>Construction</strong>.
+        </div>
+        <PictureCard emoji="🏗️" label="Construction" sub="Build Skills, Build Futures." caption="Open pathway you can prove with an instructor." />
+        <WhyWork>Construction needs safety words, tools, and short English directions.</WhyWork>
+        <div className="train-learn-grid">
+          <LearnCard mark="1" title="Language for work" body="Words you hear on a job site." />
+          <LearnCard mark="2" title="Safety first" body="Protect yourself and others." />
+          <LearnCard mark="3" title="Tools & practice" body="Learn, practise, then prove with an instructor." />
+        </div>
+        {interest && interest !== 'construction' && (
+          <div className="alert warn">
+            You showed interest in {title}. Today&rsquo;s live path is Construction — same steps, different job focus later.
+          </div>
+        )}
+        <button type="button" className="btn btn-primary" disabled={busy} onClick={async () => { setBusy(true); await finishPathway(); setBusy(false) }}>
+          {busy ? 'Saving…' : 'Continue into Construction vocabulary'}
+        </button>
+      </StepShell>
+    )
+  }
+
+  /* Step 7: Chart-style Visual Vocabulary — See / Listen / Understand / Repeat */
   if (step === 7) {
     const term = VOCAB_UNIT[vocabIdx]
     const gloss = term.gloss[supportLang]
     const beats = [
-      {
-        label: 'See',
-        tip: `Look at the picture. Notice the shape and use. This tool: ${term.definition}`,
-      },
-      {
-        label: 'Listen',
-        tip: `Press Hear English, then Hear ${supportLang}. You must hear both before you continue.`,
-      },
-      {
-        label: 'Understand',
-        tip: `English: ${term.english}. ${supportLang}: ${gloss}. Connect picture → meaning → English word.`,
-      },
-      {
-        label: 'Repeat',
-        tip: `Say “${term.english}” out loud. Play English again to model your voice, then confirm.`,
-      },
+      { label: 'See', tip: `Look at the clear picture. ${term.definition}` },
+      { label: 'Listen', tip: `Hear English, then ${supportLang}. Both required.` },
+      { label: 'Understand', tip: `English: ${term.english}. ${supportLang}: ${gloss}.` },
+      { label: 'Repeat', tip: `Say “${term.english}” out loud, then confirm.` },
     ]
     const listenDone = heardEnglish && heardSupport
     const ready = vocabBeat >= 3 && saidAloud && listenDone
     const isLast = vocabIdx >= VOCAB_UNIT.length - 1
 
     function advanceVocab() {
-      if (isLast) {
-        go(8)
-        resetMatch()
-        return
-      }
+      if (isLast) { go(8); setActionIdx(0); return }
       setVocabIdx((i) => i + 1)
       resetVocabBeatFlags()
     }
@@ -672,194 +682,124 @@ export function StudentSequencePage() {
         step={7}
         onBack={() => go(6)}
         onNext={ready ? advanceVocab : undefined}
-        nextLabel={isLast ? 'Continue to practice' : `Next word (${vocabIdx + 2}/${VOCAB_UNIT.length})`}
+        nextLabel={isLast ? 'Continue to Word → Action' : `Next word (${vocabIdx + 2}/${VOCAB_UNIT.length})`}
         nextDisabled={!ready}
       >
-        <p className="train-vocab-counter">
-          Word {vocabIdx + 1} of {VOCAB_UNIT.length}
-        </p>
-        <PictureCard
-          image={toolImage(term.imageKey)}
-          fit="contain"
-          emoji={term.emoji}
-          label={vocabBeat === 0 ? 'What is this?' : term.english}
-          sub={vocabBeat >= 2 ? `${supportLang}: ${gloss}` : vocabBeat === 0 ? 'Look first — do not rush the word yet.' : 'Listen carefully'}
-          caption="See → Listen → Understand → Repeat"
-        />
+        <p className="train-vocab-counter">Construction Level 1 · Word {vocabIdx + 1} of {VOCAB_UNIT.length}</p>
+        <article className="vocab-chart-card">
+          <header className="vocab-chart-head">
+            <span className="vocab-chart-num">{vocabIdx + 1}</span>
+            <strong className="vocab-chart-en">{term.english}</strong>
+            <ul className="vocab-chart-gloss" aria-label="Translations">
+              {SUPPORT_LANGUAGES.map((l) => (
+                <li key={l.id} className={l.id === supportLang ? 'is-active' : ''}>
+                  <span className="vocab-flag">{l.flag}</span>
+                  <span>{term.gloss[l.id]}</span>
+                </li>
+              ))}
+            </ul>
+          </header>
+          <div className="vocab-chart-media">
+            <PictureCard
+              image={toolImage(term.imageKey)}
+              fit="contain"
+              emoji={term.emoji}
+              label={vocabBeat === 0 ? 'What is this?' : term.english}
+              sub={vocabBeat >= 2 ? `${supportLang}: ${gloss}` : term.definition}
+              caption={term.sentence}
+            />
+          </div>
+        </article>
 
         <div className="train-layers" role="list" aria-label="Learning actions">
           {beats.map((b, i) => (
-            <span
-              key={b.label}
-              role="listitem"
-              className={`${i === vocabBeat ? 'is-current' : ''} ${i < vocabBeat ? 'is-active' : ''}`}
-            >
+            <span key={b.label} role="listitem" className={`${i === vocabBeat ? 'is-current' : ''} ${i < vocabBeat ? 'is-active' : ''}`}>
               {b.label}
             </span>
           ))}
         </div>
         <p className="train-beat-tip">{beats[Math.min(vocabBeat, 3)].tip}</p>
 
-        {/* SEE */}
         {vocabBeat === 0 && (
           <div className="train-action-block">
-            <p className="train-action-label">Action: See</p>
-            <p className="muted">Study the picture. When you can picture this tool on a job site, continue.</p>
-            <button type="button" className="btn btn-primary" onClick={() => setVocabBeat(1)}>
-              I see it — go to Listen
-            </button>
+            <button type="button" className="btn btn-primary" onClick={() => setVocabBeat(1)}>I see it — go to Listen</button>
           </div>
         )}
-
-        {/* LISTEN — bilingual audio required */}
         {vocabBeat === 1 && (
           <div className="train-action-block">
-            <p className="train-action-label">Action: Listen</p>
-            <p className="muted">
-              Hear the English workplace word, then the same idea in {supportLang}.
-            </p>
             <div className="train-audio-row">
-              <button
-                type="button"
-                className={`btn ${heardEnglish ? 'btn-secondary on-light' : 'btn-primary'}`}
-                disabled={speaking !== null}
-                onClick={() => void playEnglish(term.english)}
-              >
-                {speaking === 'en' ? 'Playing English…' : heardEnglish ? 'Hear English again' : 'Hear English'}
+              <button type="button" className={`btn ${heardEnglish ? 'btn-secondary on-light' : 'btn-primary'}`} disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>
+                {speaking === 'en' ? 'Playing…' : heardEnglish ? 'Heard English ✓' : 'Hear English'}
               </button>
-              <button
-                type="button"
-                className={`btn ${heardSupport ? 'btn-secondary on-light' : 'btn-primary'}`}
-                disabled={speaking !== null}
-                onClick={() => void playSupport(gloss)}
-              >
-                {speaking === 'support'
-                  ? `Playing ${supportLang}…`
-                  : heardSupport
-                    ? `Hear ${supportLang} again`
-                    : `Hear ${supportLang}`}
+              <button type="button" className={`btn ${heardSupport ? 'btn-secondary on-light' : 'btn-primary'}`} disabled={speaking !== null} onClick={() => void playSupport(gloss)}>
+                {speaking === 'support' ? 'Playing…' : heardSupport ? `Heard ${supportLang} ✓` : `Hear ${supportLang}`}
               </button>
-              <button
-                type="button"
-                className="btn btn-ghost"
-                disabled={speaking !== null}
-                onClick={() => void playBoth(term.english, gloss)}
-              >
-                {speaking === 'both' ? 'Playing both…' : 'Play both (English → support)'}
-              </button>
+              <button type="button" className="btn btn-ghost" disabled={speaking !== null} onClick={() => void playBoth(term.english, gloss)}>Hear both</button>
             </div>
-            <ul className="train-listen-check" aria-label="Listen checklist">
-              <li className={heardEnglish ? 'is-done' : ''}>English heard{heardEnglish ? ' ✓' : ''}</li>
-              <li className={heardSupport ? 'is-done' : ''}>{supportLang} heard{heardSupport ? ' ✓' : ''}</li>
-            </ul>
-            <button
-              type="button"
-              className="btn btn-primary"
-              disabled={!listenDone || speaking !== null}
-              onClick={() => setVocabBeat(2)}
-            >
-              I heard both — go to Understand
-            </button>
+            <button type="button" className="btn btn-primary" disabled={!listenDone} onClick={() => setVocabBeat(2)}>Continue to Understand</button>
           </div>
         )}
-
-        {/* UNDERSTAND */}
         {vocabBeat === 2 && (
           <div className="train-action-block">
-            <p className="train-action-label">Action: Understand</p>
-            <div className="train-meaning-card">
-              <p>
-                <strong>English:</strong> {term.english}
-              </p>
-              <p>
-                <strong>{supportLang}:</strong> {gloss}
-              </p>
-              <p>
-                <strong>Meaning:</strong> {term.definition}
-              </p>
-              <p className="muted">Work sentence: “{term.sentence}”</p>
-            </div>
-            <div className="train-audio-row">
-              <button
-                type="button"
-                className="btn btn-secondary on-light"
-                disabled={speaking !== null}
-                onClick={() => void playEnglish(term.english)}
-              >
-                Hear English
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary on-light"
-                disabled={speaking !== null}
-                onClick={() => void playSupport(gloss)}
-              >
-                Hear {supportLang}
-              </button>
-              <button
-                type="button"
-                className="btn btn-ghost"
-                disabled={speaking !== null}
-                onClick={() => void playEnglish(term.sentence)}
-              >
-                Hear the work sentence
-              </button>
-            </div>
-            <button type="button" className="btn btn-primary" onClick={() => setVocabBeat(3)}>
-              I understand — go to Repeat
-            </button>
+            <p className="muted">Picture → {supportLang} meaning → English word on the site.</p>
+            <button type="button" className="btn btn-primary" onClick={() => setVocabBeat(3)}>I understand — go to Repeat</button>
           </div>
         )}
-
-        {/* REPEAT */}
         {vocabBeat === 3 && (
           <div className="train-action-block">
-            <p className="train-action-label">Action: Repeat</p>
-            <p className="muted">
-              Play the model, then say <strong>{term.english}</strong> out loud. Your voice is the practice.
-            </p>
             <div className="train-audio-row">
-              <button
-                type="button"
-                className="btn btn-primary"
-                disabled={speaking !== null}
-                onClick={() => void playEnglish(term.english)}
-              >
-                {speaking === 'en' ? 'Playing model…' : 'Play English model'}
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary on-light"
-                disabled={speaking !== null}
-                onClick={() => void playSupport(gloss)}
-              >
-                Hear {supportLang} meaning
-              </button>
+              <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>Play English model</button>
             </div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              disabled={speaking !== null}
-              onClick={() => setSaidAloud(true)}
-            >
-              {saidAloud ? 'Marked — I said it ✓' : 'I said it out loud'}
-            </button>
+            <label className="train-honesty-check">
+              <input type="checkbox" checked={saidAloud} onChange={() => setSaidAloud(!saidAloud)} />
+              <span>I said “{term.english}” out loud.</span>
+            </label>
           </div>
         )}
-
-        <WhyWork>
-          Someone may say “{term.sentence}” You need the sound of the English word and the meaning in your mind.
-        </WhyWork>
-        <TeachNote>
-          Listen is not a label — press the buttons and hear both languages. Support language is a bridge; English is
-          the worksite word.
-        </TeachNote>
       </StepShell>
     )
   }
 
-  /* ——— Step 8: Supported Matching (multiple terms) ——— */
+  /* Step 8: Word → Action */
   if (step === 8) {
+    const item = WORD_ACTIONS[actionIdx]
+    const term = VOCAB_UNIT.find((t) => t.id === item.termId)
+    const isLast = actionIdx >= WORD_ACTIONS.length - 1
+    const seen = !!actionDone[item.id]
+    return (
+      <StepShell
+        step={8}
+        onBack={() => { resetVocab(); go(7) }}
+        onNext={seen ? () => {
+          if (isLast) { resetMatch(); go(9); return }
+          setActionIdx((i) => i + 1)
+        } : undefined}
+        nextLabel={isLast ? 'Continue to supported practice' : 'Next action'}
+      >
+        <WhyWork>Seeing the action helps your brain link the English word to real movement.</WhyWork>
+        <article className="word-action-card">
+          <PictureCard
+            image={toolImage(term?.imageKey)}
+            fit="contain"
+            label={item.title}
+            caption={item.body}
+          />
+          <p className="word-action-cue"><strong>Action cue:</strong> {item.actionCue}</p>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setActionDone((d) => ({ ...d, [item.id]: true }))}
+          >
+            {seen ? 'Watched ✓' : 'I watched the word become an action'}
+          </button>
+        </article>
+        <TeachNote>Assignments here connect classroom words to practical application — like mirror practice.</TeachNote>
+      </StepShell>
+    )
+  }
+
+  /* Step 9: Supported matching */
+  if (step === 9) {
     const term = VOCAB_UNIT[matchIdx]
     const isLast = matchIdx >= VOCAB_UNIT.length - 1
     const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
@@ -867,145 +807,78 @@ export function StudentSequencePage() {
 
     function pickMatch(opt: string) {
       if (matchAnswer) return
-      const isCorrect = opt === term.english
       setMatchAnswer(opt)
-      setMatchCorrect(isCorrect)
+      setMatchCorrect(opt === term.english)
     }
 
     function nextMatch() {
-      if (isLast) { go(9); return }
+      if (isLast) { go(10); return }
       setMatchIdx((i) => i + 1)
       setMatchAnswer(null)
       setMatchCorrect(false)
     }
 
     return (
-      <StepShell step={8} onBack={() => { resetVocab(); go(7) }}>
+      <StepShell step={9} onBack={() => go(8)}>
         <WhyWork>Matching picture to word is homework for your eyes and memory.</WhyWork>
         <p className="train-vocab-counter">Match {matchIdx + 1} of {VOCAB_UNIT.length}</p>
         <PictureCard
           image={toolImage(term.imageKey)}
           fit="contain"
-          emoji={term.emoji}
           label="Match the word to the picture"
-          sub={`${supportLang} help: ${term.gloss[supportLang]}`}
+          sub={`${supportLang}: ${term.gloss[supportLang]}`}
           caption="Still supported — translation and audio are allowed here."
         />
         <div className="train-audio-row">
-          <button
-            type="button"
-            className="btn btn-secondary on-light"
-            disabled={speaking !== null}
-            onClick={() => void playEnglish(term.english)}
-          >
-            Hear English
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary on-light"
-            disabled={speaking !== null}
-            onClick={() => void playSupport(term.gloss[supportLang])}
-          >
-            Hear {supportLang}
-          </button>
+          <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>Hear English</button>
+          <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playSupport(term.gloss[supportLang])}>Hear {supportLang}</button>
         </div>
         <div className="train-choice-grid">
-          {options.map((o) => (
-            <ChoiceButton key={o.id} state={matchAnswer === o.english ? (matchCorrect ? 'correct' : 'wrong') : matchAnswer ? (o.english === term.english ? 'correct' : 'idle') : 'idle'} disabled={!!matchAnswer && o.english !== term.english && o.english !== matchAnswer} onClick={() => pickMatch(o.english)}>
-              {o.english}
+          {options.map((opt) => (
+            <ChoiceButton
+              key={opt.id}
+              state={matchAnswer === opt.english ? (matchCorrect ? 'correct' : 'wrong') : matchAnswer ? (opt.english === term.english ? 'correct' : 'idle') : 'idle'}
+              disabled={!!matchAnswer && opt.english !== matchAnswer && opt.english !== term.english}
+              onClick={() => pickMatch(opt.english)}
+            >
+              {opt.english}
             </ChoiceButton>
           ))}
         </div>
         {matchAnswer && (
           <>
             <div className={`alert ${matchCorrect ? 'ok' : 'warn'}`}>
-              {matchCorrect ? `Yes — ${term.english}: ${term.definition}` : `That was ${matchAnswer}. The correct answer is ${term.english}: ${term.definition}`}
+              {matchCorrect ? 'Yes — picture and word match.' : `The correct word is ${term.english}.`}
             </div>
             <button type="button" className="btn btn-primary" onClick={nextMatch}>
-              {isLast ? 'Continue to English-only' : 'Next match'}
+              {isLast ? 'Continue to English Eye Spy' : 'Next match'}
             </button>
           </>
         )}
-        <TeachNote>If you miss it, read the tip and try again. That is real practice — not failure.</TeachNote>
       </StepShell>
     )
   }
 
-  /* ——— Step 9: English-Only Quiz (all items) ——— */
-  if (step === 9) {
-    return (
-      <StepShell step={9} onBack={() => { resetMatch(); go(8) }}>
-        <div className="train-bridge-banner">English only now — no translation on the buttons.</div>
-        <WhyWork>On many sites, the shared language is English. The picture still helps you.</WhyWork>
-        <QuizRunner items={ENGLISH_QUIZ} onComplete={() => { resetSent(); go(10) }} />
-      </StepShell>
-    )
-  }
-
-  /* ——— Step 10: Simple Sentences (cycle vocab terms) ——— */
+  /* Step 10: English Eye Spy exercise (unlimited) */
   if (step === 10) {
-    const term = VOCAB_UNIT[sentIdx]
-    const answer = sentWord.trim().toLowerCase()
-    const expected = term.english.toLowerCase()
-    const ok = answer === expected
-    const isLast = sentIdx >= VOCAB_UNIT.length - 1
-    const bank = VOCAB_UNIT.map((t) => t.english.toLowerCase())
-
-    function nextSent() {
-      if (isLast) { go(11); resetInstr(); return }
-      setSentIdx((i) => i + 1)
-      setSentWord('')
-    }
-
     return (
-      <StepShell step={10} onBack={() => go(9)}>
-        <WhyWork>Short sentences are how people talk when work is busy.</WhyWork>
-        <p className="train-vocab-counter">Sentence {sentIdx + 1} of {VOCAB_UNIT.length}</p>
-        <PictureCard
-          image={toolImage(term.imageKey)}
-          fit="contain"
-          emoji={term.emoji}
-          label="Finish the sentence"
-          caption={`Hint: ${term.definition}`}
-        />
-        <p className="train-sentence-frame">
-          This is a <span className="train-blank">{sentWord || '______'}</span>.
-        </p>
-        <p className="muted">Tap a word, or type it.</p>
-        <div className="train-word-bank">
-          {bank.map((w) => (
-            <button key={w} type="button" className={`train-bank-chip${answer === w ? ' is-selected' : ''}`} onClick={() => setSentWord(w)}>{w}</button>
-          ))}
-        </div>
-        <div className="field">
-          <label htmlFor="seq-sentence">Or type the English word</label>
-          <input id="seq-sentence" value={sentWord} onChange={(e) => setSentWord(e.target.value)} autoComplete="off" spellCheck={false} />
-        </div>
-        {sentWord && (
-          <div className={`alert ${ok ? 'ok' : 'warn'}`}>
-            {ok ? `Good. "${term.sentence}"` : `Not yet. The word you need is "${term.english}".`}
-          </div>
-        )}
-        {ok && (
-          <button type="button" className="btn btn-primary" onClick={nextSent}>
-            {isLast ? 'Continue to workplace instructions' : 'Next sentence'}
-          </button>
-        )}
-        <TeachNote>Word bank first if you need it. Typing without help comes next.</TeachNote>
+      <StepShell step={10} onBack={() => { resetMatch(); go(9) }}>
+        <WhyWork>On a real site the tool sits among other objects. Prove you can find it.</WhyWork>
+        <TeachNote>Exercise mode: unlimited tries. Pass requires 100% with no misses. Wrong answers change the scene.</TeachNote>
+        <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exercise" onComplete={() => { resetInstr(); go(11) }} />
       </StepShell>
     )
   }
 
-  /* ——— Step 11: Workplace Instructions (multiple) ——— */
+  /* Step 11: Workplace instructions — English only */
   if (step === 11) {
     const instr = INSTRUCTIONS[instrIdx]
     const isLast = instrIdx >= INSTRUCTIONS.length - 1
 
     function pickInstr(opt: string) {
-      if (instrAnswer) return
-      const isCorrect = opt === instr.correct
+      if (instrAnswer || !instrHeard) return
       setInstrAnswer(opt)
-      setInstrCorrect(isCorrect)
+      setInstrCorrect(opt === instr.correct)
     }
 
     function nextInstr() {
@@ -1017,15 +890,15 @@ export function StudentSequencePage() {
     }
 
     return (
-      <StepShell step={11} onBack={() => { resetSent(); go(10) }}>
-        <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe and fast.</WhyWork>
-        <p className="train-vocab-counter">Instruction {instrIdx + 1} of {INSTRUCTIONS.length}</p>
+      <StepShell step={11} onBack={() => go(10)}>
+        <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
+        <p className="train-vocab-counter">Instruction {instrIdx + 1} of {INSTRUCTIONS.length} · English only</p>
         <div className="train-instruction">
           <PictureCard
             image={toolImage(instr.imageKey)}
             fit="contain"
             label="A worker gives a direction"
-            caption="Listen in English (required). Support language is optional help."
+            caption="Listen in English (required). Mother-tongue help is optional only."
           />
           <blockquote>&ldquo;{instr.text}&rdquo;</blockquote>
           <div className="train-audio-row">
@@ -1040,22 +913,27 @@ export function StudentSequencePage() {
                 })()
               }}
             >
-              {speaking === 'en' ? 'Playing English…' : 'Hear English instruction'}
+              {speaking === 'en' ? 'Playing…' : 'Hear English'}
             </button>
             <button
               type="button"
-              className="btn btn-secondary on-light"
+              className="btn btn-ghost"
               disabled={speaking !== null}
               onClick={() => void playSupport(instr.supportHint[supportLang])}
             >
-              {speaking === 'support' ? `Playing ${supportLang}…` : `Hear ${supportLang} help`}
+              Optional {supportLang} hint
             </button>
           </div>
           {!instrHeard && <p className="muted">Hear the English instruction at least once before you answer.</p>}
           <p><strong>What should you do?</strong></p>
           <div className="train-choice-grid">
             {instr.options.map((opt) => (
-              <ChoiceButton key={opt} state={instrAnswer === opt ? (instrCorrect ? 'correct' : 'wrong') : instrAnswer ? (opt === instr.correct ? 'correct' : 'idle') : 'idle'} disabled={!instrHeard || (!!instrAnswer && opt !== instrAnswer && opt !== instr.correct)} onClick={() => pickInstr(opt)}>
+              <ChoiceButton
+                key={opt}
+                state={instrAnswer === opt ? (instrCorrect ? 'correct' : 'wrong') : instrAnswer ? (opt === instr.correct ? 'correct' : 'idle') : 'idle'}
+                disabled={!instrHeard || (!!instrAnswer && opt !== instrAnswer && opt !== instr.correct)}
+                onClick={() => pickInstr(opt)}
+              >
                 {opt}
               </ChoiceButton>
             ))}
@@ -1067,22 +945,41 @@ export function StudentSequencePage() {
               {instrCorrect ? 'Yes. You heard the tool name and the action.' : `Close — the correct action was: "${instr.correct}".`}
             </div>
             <button type="button" className="btn btn-primary" onClick={nextInstr}>
-              {isLast ? 'Continue to computer basics' : 'Next instruction'}
+              {isLast ? 'Continue to site language' : 'Next instruction'}
             </button>
           </>
         )}
-        <TeachNote>If you are unsure at work, repeat the instruction: confirm understanding.</TeachNote>
       </StepShell>
     )
   }
 
-  /* ——— Step 12: Computer Skills Checklist ——— */
+  /* Step 12: Site language — practical phrases */
   if (step === 12) {
+    const phrases = [
+      { en: 'Measure twice, cut once.', why: 'Prevents waste and mistakes.' },
+      { en: 'Hard hats on in the bay.', why: 'Safety rule you will hear daily.' },
+      { en: 'Pass me the level.', why: 'Short tool request between crew members.' },
+      { en: 'Hold the board steady.', why: 'Teamwork on a cut or install.' },
+    ]
+    return (
+      <StepShell step={12} onBack={() => { resetInstr(); go(11) }} onNext={() => go(13)} nextLabel="Continue to digital skills">
+        <WhyWork>These phrases show up on Alberta job sites. Know them cold.</WhyWork>
+        <div className="train-learn-grid">
+          {phrases.map((p) => (
+            <LearnCard key={p.en} title={p.en} body={p.why} />
+          ))}
+        </div>
+        <TeachNote>Say each phrase out loud in English. No translation on the buttons here.</TeachNote>
+      </StepShell>
+    )
+  }
+
+  if (step === 13) {
     const done = COMPUTER_SKILLS.every((s) => compChecks[s.id])
     return (
-      <StepShell step={12} onBack={() => { resetInstr(); go(11) }} onNext={done ? () => go(13) : undefined} nextLabel="Continue to safety training">
-        <WhyWork>Modern jobs ask for simple computer skills — even on a construction path.</WhyWork>
-        <TeachNote>Check only what you can do today. Leaving a box empty is honest — we can teach that skill.</TeachNote>
+      <StepShell step={13} onBack={() => go(12)} onNext={done ? () => go(14) : undefined} nextLabel="Continue to safety">
+        <WhyWork>This may be someone’s first computer. Every skill here is practical for Canadian training.</WhyWork>
+        <TeachNote>Check only what you can do today. Empty boxes are honest — we can teach those skills.</TeachNote>
         <ul className="train-check-list">
           {COMPUTER_SKILLS.map((s) => (
             <CheckItem key={s.id} id={`pc-${s.id}`} title={s.title} why={s.why} checked={!!compChecks[s.id]} onChange={() => setCompChecks((c) => ({ ...c, [s.id]: !c[s.id] }))} />
@@ -1092,25 +989,21 @@ export function StudentSequencePage() {
     )
   }
 
-  /* ——— Step 13: Safety Quiz (gated) ——— */
-  if (step === 13) {
+  if (step === 14) {
     return (
-      <StepShell step={13} onBack={() => go(12)}>
-        <PictureCard emoji="⚠️" label="Safety is a gate" caption="You must answer correctly to continue. This is not optional." />
+      <StepShell step={14} onBack={() => go(13)}>
+        <PictureCard emoji="!" label="Safety is a gate" caption="Alberta / Canada site safety in simple English with clear imagery." />
         <WhyWork>Safe workers protect themselves, their team, and their future on site.</WhyWork>
-        <TeachNote>Safety must pass before practical stations unlock. Review carefully.</TeachNote>
-        <QuizRunner items={SAFETY_QUIZ} onComplete={() => go(14)} gated />
+        <QuizRunner items={SAFETY_QUIZ} onComplete={() => go(15)} gated />
       </StepShell>
     )
   }
 
-  /* ——— Step 14: Tool Categories (interactive cards) ——— */
-  if (step === 14) {
+  if (step === 15) {
     const allSeen = TOOL_CATEGORIES.every((c) => toolSeen[c.title])
     return (
-      <StepShell step={14} onBack={() => go(13)} onNext={allSeen ? () => go(15) : undefined} nextLabel="Continue to construction systems">
-        <PictureCard emoji="🧰" label="Tools, Materials & Equipment" caption="Tap each category to learn about it." />
-        <WhyWork>If you can name it and know its job, you are safer when someone asks for it.</WhyWork>
+      <StepShell step={15} onBack={() => go(14)} onNext={allSeen ? () => go(16) : undefined} nextLabel="Continue to systems">
+        <PictureCard emoji="T" label="Tools & Equipment" caption="Tap each category. Know the name before you use it." />
         <div className="train-card-grid">
           {TOOL_CATEGORIES.map((cat) => (
             <button key={cat.title} type="button" className={`train-topic-card${toolSeen[cat.title] ? ' is-seen' : ''}`} onClick={() => setToolSeen((s) => ({ ...s, [cat.title]: true }))}>
@@ -1120,18 +1013,15 @@ export function StudentSequencePage() {
             </button>
           ))}
         </div>
-        <TeachNote>Knowing the name is step one. Safe use is checked later by an instructor.</TeachNote>
       </StepShell>
     )
   }
 
-  /* ——— Step 15: System Topics (interactive cards) ——— */
-  if (step === 15) {
+  if (step === 16) {
     const allSeen = SYSTEM_TOPICS.every((t) => sysSeen[t.title])
     return (
-      <StepShell step={15} onBack={() => go(14)} onNext={allSeen ? () => go(16) : undefined} nextLabel="Continue to hands-on training">
-        <PictureCard emoji="🪵" label="Construction Systems & Skills" caption="Tap each topic to learn about it." />
-        <WhyWork>When you know the systems, site talk makes more sense.</WhyWork>
+      <StepShell step={16} onBack={() => go(15)} onNext={allSeen ? () => go(17) : undefined} nextLabel="Continue to observation">
+        <PictureCard emoji="S" label="Construction Systems" caption="Your role fits the whole build — not one task alone." />
         <div className="train-card-grid">
           {SYSTEM_TOPICS.map((topic) => (
             <button key={topic.title} type="button" className={`train-topic-card${sysSeen[topic.title] ? ' is-seen' : ''}`} onClick={() => setSysSeen((s) => ({ ...s, [topic.title]: true }))}>
@@ -1141,28 +1031,24 @@ export function StudentSequencePage() {
             </button>
           ))}
         </div>
-        <TeachNote>Big picture before deep practice.</TeachNote>
       </StepShell>
     )
   }
 
-  /* ——— Step 16: Practical Observation Request Form ——— */
-  if (step === 16) {
+  if (step === 17) {
     function saveObs(e: FormEvent) {
       e.preventDefault()
       try { sessionStorage.setItem(OBS_KEY, JSON.stringify(obsForm)) } catch { /* */ }
-      go(17)
+      go(18)
     }
     return (
-      <StepShell step={16} onBack={() => go(15)}>
-        <PictureCard emoji="🤝" label="Hands-on with your instructor" caption="The app prepares you. People verify you." />
+      <StepShell step={17} onBack={() => go(16)}>
+        <PictureCard emoji="I" label="Instructor observation" caption="Learned → Practised → Competent under real observation." />
         <div className="train-learn-grid">
-          <LearnCard mark="L" title="Learned" body="You studied the idea in the app or class." />
-          <LearnCard mark="P" title="Practised" body="You tried the skill with supervision." />
-          <LearnCard mark="C" title="Competent" body="An authorized instructor confirmed you meet the standard." />
+          <LearnCard mark="L" title="Learned" body="Studied in the app or class." />
+          <LearnCard mark="P" title="Practised" body="Tried with supervision." />
+          <LearnCard mark="C" title="Competent" body="Authorized instructor confirmed the standard." />
         </div>
-        <WhyWork>Employers care about what you can do safely — not only what you clicked online.</WhyWork>
-        <TeachNote>A video watched or quiz passed is not automatic practical competency.</TeachNote>
         <form className="stack" onSubmit={saveObs}>
           <h3>Request instructor observation</h3>
           <div className="field">
@@ -1175,7 +1061,7 @@ export function StudentSequencePage() {
           </div>
           <div className="field">
             <label htmlFor="obs-notes">Notes for instructor</label>
-            <textarea id="obs-notes" value={obsForm.notes} onChange={(e) => setObsForm({ ...obsForm, notes: e.target.value })} rows={3} placeholder="Anything the instructor should know" />
+            <textarea id="obs-notes" value={obsForm.notes} onChange={(e) => setObsForm({ ...obsForm, notes: e.target.value })} rows={3} />
           </div>
           <button className="btn btn-primary" type="submit">Save request and continue</button>
         </form>
@@ -1183,82 +1069,79 @@ export function StudentSequencePage() {
     )
   }
 
-  /* ——— Step 17: On-site Daily Log ——— */
-  if (step === 17) {
+  if (step === 18) {
     function saveLog(e: FormEvent) {
       e.preventDefault()
       try { sessionStorage.setItem(LOG_KEY, JSON.stringify(logForm)) } catch { /* */ }
-      go(18)
+      setFinalPhase('eyespy')
+      go(19)
     }
     return (
-      <StepShell step={17} onBack={() => go(16)}>
-        <PictureCard emoji="🏗️" label="On-site training" caption="Real site. Real tasks. Real feedback." />
-        <div className="train-learn-grid">
-          <LearnCard title="Daily log" body="Write what you did. Short notes are fine." />
-          <LearnCard title="Tasks completed" body="Track work you finished under supervision." />
-          <LearnCard title="Supervisor feedback" body="Listen. Ask what to improve next time." />
-        </div>
-        <WhyWork>On-site hours turn classroom words into muscle memory and confidence.</WhyWork>
-        <TeachNote>Ask questions early. Supervisors prefer a clear question to an unsafe guess.</TeachNote>
+      <StepShell step={18} onBack={() => go(17)}>
+        <PictureCard emoji="O" label="On-site training" caption="Real workplace feedback from supervised site work." />
         <form className="stack" onSubmit={saveLog}>
-          <h3>Daily log entry</h3>
+          <h3>Daily log + supervisor feedback</h3>
           <div className="field">
             <label htmlFor="log-date">Date</label>
             <input id="log-date" type="date" value={logForm.date} onChange={(e) => setLogForm({ ...logForm, date: e.target.value })} required />
           </div>
           <div className="field">
             <label htmlFor="log-tasks">Tasks completed today</label>
-            <textarea id="log-tasks" value={logForm.tasks} onChange={(e) => setLogForm({ ...logForm, tasks: e.target.value })} required rows={3} placeholder="What did you work on today?" />
+            <textarea id="log-tasks" value={logForm.tasks} onChange={(e) => setLogForm({ ...logForm, tasks: e.target.value })} required rows={3} />
           </div>
           <div className="field">
-            <label htmlFor="log-sup">Supervisor note</label>
-            <textarea id="log-sup" value={logForm.supervisor} onChange={(e) => setLogForm({ ...logForm, supervisor: e.target.value })} rows={2} placeholder="Any feedback from your supervisor" />
+            <label htmlFor="log-sup">Supervisor / workplace feedback</label>
+            <textarea id="log-sup" value={logForm.supervisor} onChange={(e) => setLogForm({ ...logForm, supervisor: e.target.value })} rows={2} placeholder="What did the site say to improve?" />
           </div>
-          <button className="btn btn-primary" type="submit">Save log and continue</button>
+          <button className="btn btn-primary" type="submit">Save log and continue to final exam</button>
         </form>
       </StepShell>
     )
   }
 
-  /* ——— Step 18: Final Quiz (all items + score) ——— */
-  if (step === 18) {
-    return (
-      <StepShell step={18} onBack={() => go(17)}>
-        <PictureCard emoji="📋" label="Final Assessment" caption="Safety, knowledge, language, and practical readiness." />
-        <WhyWork>Separate checks — not one blurry score for everything.</WhyWork>
-        <TeachNote>Prepare calmly. Review your weak spots. Ask your instructor for a practice run if you need one.</TeachNote>
-        <QuizRunner items={FINAL_QUIZ} onComplete={() => go(19)} />
-      </StepShell>
-    )
-  }
-
-  /* ——— Step 19: Skills Passport + Honesty Box ——— */
+  /* Step 19: Final Eye Spy exam (2–3 attempts) + written + certificate */
   if (step === 19) {
+    if (finalPhase === 'eyespy') {
+      return (
+        <StepShell step={19} onBack={() => go(18)}>
+          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode — up to 3 attempts. 100% required. Scenes change on misses." />
+          <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => setFinalPhase('written')} />
+        </StepShell>
+      )
+    }
+    if (finalPhase === 'written') {
+      return (
+        <StepShell step={19} onBack={() => setFinalPhase('eyespy')}>
+          <PictureCard emoji="W" label="Written & knowledge check" caption="Safety, measurement, language, and framing knowledge." />
+          <QuizRunner items={FINAL_QUIZ} onComplete={() => setFinalPhase('certificate')} />
+        </StepShell>
+      )
+    }
     return (
-      <StepShell step={19} onBack={() => go(18)} onNext={honestyChecked ? () => go(20) : undefined} nextLabel="Continue to employment connection" nextDisabled={!honestyChecked}>
+      <StepShell
+        step={19}
+        onBack={() => setFinalPhase('written')}
+        onNext={honestyChecked ? () => go(20) : undefined}
+        nextLabel="Continue to employment"
+        nextDisabled={!honestyChecked}
+      >
         <div className="train-passport">
-          <PictureCard emoji="🎓" label="Purpose Academy Program Credential" caption="Your Skills Passport collects verified evidence." />
+          <PictureCard emoji="C" label="Purpose Academy Program Credential" caption="You passed the exam mix. Your Skills Passport collects verified evidence." />
           <ul className="list-plain">
-            <li>✓ Program learning completed</li>
-            <li>✓ Competencies with dates and assessor role</li>
-            <li>✓ Digital Skills Passport you can share</li>
+            <li>Vocabulary Eye Spy passed at 100%</li>
+            <li>Written / knowledge check complete</li>
+            <li>Digital Skills Passport you can share</li>
           </ul>
-          <div className="train-honesty">
-            <p><strong>Shows:</strong> what you learned, practised, and proved.</p>
-            <p><strong>Does not mean:</strong> Red Seal, a guaranteed job, or a third-party safety ticket unless that ticket was earned separately.</p>
-          </div>
           <label className="train-honesty-check">
             <input type="checkbox" checked={honestyChecked} onChange={() => setHonestyChecked(!honestyChecked)} />
             <span>I understand what this credential shows and does not show.</span>
           </label>
           <Link className="btn btn-ghost" to="/app/student/skills">View Skills Passport →</Link>
         </div>
-        <TeachNote>Honesty builds trust with employers. Clear evidence beats big promises.</TeachNote>
       </StepShell>
     )
   }
 
-  /* ——— Step 20: Employment Connection ——— */
   function handleComplete(e: FormEvent) {
     e.preventDefault()
     try { sessionStorage.setItem(EMP_KEY, JSON.stringify(empForm)) } catch { /* */ }
@@ -1271,13 +1154,16 @@ export function StudentSequencePage() {
 
   return (
     <StepShell step={20} onBack={() => go(19)}>
-      <PictureCard emoji="🤝" label="Employment Connection" caption="Training should lead toward opportunity — with follow-up, not a dead end." />
+      <PictureCard emoji="H" label="Employment Connection" caption="See hiring partners and enter work with support." />
       {!sequenceMarked ? (
         <form className="stack" onSubmit={handleComplete}>
+          <div className="alert ok">
+            Partner focus: construction employers who understand this pathway.
+          </div>
           <h3>Employment readiness</h3>
           <div className="field">
-            <label htmlFor="emp-goal">Resume goal</label>
-            <textarea id="emp-goal" value={empForm.resume_goal} onChange={(e) => setEmpForm({ ...empForm, resume_goal: e.target.value })} required rows={3} placeholder="What job are you aiming for?" />
+            <label htmlFor="emp-goal">Target construction role</label>
+            <textarea id="emp-goal" value={empForm.resume_goal} onChange={(e) => setEmpForm({ ...empForm, resume_goal: e.target.value })} required rows={3} placeholder="e.g. Construction helper / framing crew" />
           </div>
           <div className="field">
             <label htmlFor="emp-avail">Availability</label>
@@ -1288,25 +1174,21 @@ export function StudentSequencePage() {
       ) : (
         <>
           <div className="alert ok">
-            Student training path complete. Your progress is marked on{' '}
+            Student training path complete. Progress is marked on{' '}
             <Link className="inline-link" to="/sequences">All sequences</Link>.
           </div>
           <div className="train-learn-grid">
-            <LearnCard title="Resume support" body="Show your skills in clear, short English." />
-            <LearnCard title="Employer matching" body="Connect with partners who understand this pathway." />
-            <LearnCard title="Job placement help" body="Practice interviews and next steps." />
-            <LearnCard title="30 / 90 / 180 day follow-up" body="We check how you are doing after you start work." />
+            <LearnCard title="Hiring partner match" body="Connect with construction companies hiring from this pathway." />
+            <LearnCard title="Resume & interview" body="Show skills in clear, short English." />
+            <LearnCard title="30 / 90 / 180 day follow-up" body="Support after you start work — not a dead end." />
           </div>
-          <WhyWork>Keeping a job matters as much as getting one. Follow-up is part of the design.</WhyWork>
           <div className="hero-actions">
             <Link className="btn btn-primary" to="/app/student">Go to my dashboard</Link>
-            <Link className="btn btn-secondary on-light" to="/sequences">See all sequences</Link>
             <button type="button" className="btn btn-ghost" onClick={() => { saveStep(1); go(1) }}>Restart training path</button>
           </div>
         </>
       )}
       <p className="train-motto">Learn · Practice · Improve · Achieve</p>
-      <TeachNote>You finished the guided training path. Your progress is saved.</TeachNote>
     </StepShell>
   )
 }

@@ -276,7 +276,6 @@ export function RegisterPage() {
             <option>Spanish</option>
             <option>Arabic</option>
             <option>Tagalog</option>
-            <option>French</option>
             <option>English only</option>
           </select>
         </div>

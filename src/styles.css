@@ -4225,6 +4225,167 @@ table.data th {
   background: var(--train-surface-2, #0f2438);
 }
 
+/* Chart-style vocabulary card (aligned to visual vocabulary reference) */
+.vocab-chart-card {
+  border: 1px solid var(--train-line, rgba(255, 255, 255, 0.12));
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--train-surface-2, #0f2438);
+  margin-bottom: 0.75rem;
+}
+
+.vocab-chart-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 0.75rem;
+  padding: 0.85rem 1rem;
+  background: linear-gradient(90deg, #1a4f8a, #0f2438);
+  align-items: center;
+}
+
+.vocab-chart-num {
+  grid-row: 1 / span 2;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #e8a317;
+  color: #0b1c2c;
+  font-weight: 800;
+}
+
+.vocab-chart-en {
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.vocab-chart-gloss {
+  grid-column: 2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.vocab-chart-gloss .is-active {
+  color: #f5c542;
+  font-weight: 700;
+}
+
+.vocab-flag {
+  display: inline-block;
+  min-width: 1.4rem;
+  margin-right: 0.2rem;
+  opacity: 0.9;
+}
+
+.vocab-chart-media .train-picture {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.word-action-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.word-action-cue {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid #e8a317;
+  background: rgba(232, 163, 23, 0.08);
+}
+
+/* Eye Spy site scene */
+.eye-spy {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.eye-spy-instruction {
+  margin: 0;
+  font-weight: 600;
+  color: #fff;
+}
+
+.eye-spy-scene-title {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--train-text-muted, rgba(255, 255, 255, 0.65));
+}
+
+.eye-spy-stage {
+  position: relative;
+  min-height: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--train-line, rgba(255, 255, 255, 0.12));
+  background:
+    linear-gradient(160deg, rgba(15, 36, 56, 0.92), rgba(26, 79, 138, 0.55)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0,
+      rgba(255, 255, 255, 0.03) 12px,
+      transparent 12px,
+      transparent 24px
+    );
+}
+
+.eye-spy-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.eye-spy-tile {
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.eye-spy-hotspot {
+  position: absolute;
+  padding: 0.25rem;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: rgba(244, 247, 251, 0.92);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.eye-spy-hotspot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.eye-spy-hotspot.is-selected {
+  border-color: #e8a317;
+  transform: scale(1.03);
+}
+
+.eye-spy-hotspot.is-target {
+  border-color: #3da86c;
+}
+
+.eye-spy-hotspot.is-wrong {
+  border-color: #c45c5c;
+}
+
+.eye-spy-prompt {
+  margin: 0.25rem 0 0;
+  font-weight: 600;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .train-panel,
   .train-layers span {
@@ -4232,4 +4393,5 @@ table.data th {
     transition: none !important;
   }
   .train-dots li { transition: none; }
+  .eye-spy-hotspot { transition: none; }
 }

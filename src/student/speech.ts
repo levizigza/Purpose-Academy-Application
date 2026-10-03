@@ -3,7 +3,6 @@ import type { SupportLang } from './journeyCurriculum'
 /** BCP-47 tags for Web Speech API voices. */
 export const SUPPORT_LANG_CODE: Record<SupportLang, string> = {
   Spanish: 'es-ES',
-  French: 'fr-FR',
   Arabic: 'ar-SA',
   Hindi: 'hi-IN',
   Amharic: 'am-ET',
@@ -16,7 +15,6 @@ const FALLBACK_LANG: Partial<Record<SupportLang, string>> = {
   Arabic: 'ar',
   Hindi: 'hi',
   Spanish: 'es',
-  French: 'fr',
 }
 
 let voicesReady: Promise<SpeechSynthesisVoice[]> | null = null
@@ -38,96 +36,68 @@ function loadVoices(): Promise<SpeechSynthesisVoice[]> {
         resolve(syn.getVoices())
       }
       syn.addEventListener('voiceschanged', done)
-      // Some browsers never fire voiceschanged
-      window.setTimeout(() => resolve(syn.getVoices()), 600)
+      setTimeout(() => resolve(syn.getVoices()), 500)
     })
   }
   return voicesReady
 }
 
-function pickVoice(voices: SpeechSynthesisVoice[], lang: string): SpeechSynthesisVoice | null {
-  const base = lang.split('-')[0].toLowerCase()
-  return (
-    voices.find((v) => v.lang.toLowerCase() === lang.toLowerCase()) ||
-    voices.find((v) => v.lang.toLowerCase().startsWith(base)) ||
-    null
-  )
+function pickVoice(voices: SpeechSynthesisVoice[], lang: string): SpeechSynthesisVoice | undefined {
+  const exact = voices.find((v) => v.lang === lang)
+  if (exact) return exact
+  const prefix = lang.split('-')[0]
+  return voices.find((v) => v.lang.toLowerCase().startsWith(prefix))
 }
 
-export type SpeakOptions = {
-  rate?: number
-  pitch?: number
-}
-
-/** Cancel any queued speech. */
 export function stopSpeech() {
-  try {
-    window.speechSynthesis?.cancel()
-  } catch {
-    /* ignore */
+  if (typeof window !== 'undefined' && window.speechSynthesis) {
+    window.speechSynthesis.cancel()
   }
 }
 
-/** Speak text in a specific language. Returns when utterance ends (or fails). */
-export async function speakText(
-  text: string,
-  lang: string,
-  options: SpeakOptions = {},
-): Promise<boolean> {
-  const clean = text.trim()
-  if (!clean || typeof window === 'undefined' || !window.speechSynthesis) return false
+export function primeSpeech() {
+  void loadVoices()
+}
 
-  const voices = await loadVoices()
+function speak(text: string, lang: string): Promise<boolean> {
   return new Promise((resolve) => {
-    try {
-      const utter = new SpeechSynthesisUtterance(clean)
-      utter.lang = lang
-      utter.rate = options.rate ?? 0.88
-      utter.pitch = options.pitch ?? 1
-      const voice = pickVoice(voices, lang)
-      if (voice) utter.voice = voice
-      utter.onend = () => resolve(true)
-      utter.onerror = () => resolve(false)
-      window.speechSynthesis.speak(utter)
-    } catch {
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
       resolve(false)
+      return
     }
+    void loadVoices().then((voices) => {
+      stopSpeech()
+      const u = new SpeechSynthesisUtterance(text)
+      u.lang = lang
+      const voice = pickVoice(voices, lang)
+      if (voice) u.voice = voice
+      u.onend = () => resolve(true)
+      u.onerror = () => resolve(false)
+      window.speechSynthesis.speak(u)
+    })
   })
 }
 
 export async function speakEnglish(text: string): Promise<boolean> {
-  return speakText(text, 'en-CA', { rate: 0.86 })
+  return speak(text, 'en-US')
 }
 
 export async function speakSupport(text: string, lang: SupportLang): Promise<boolean> {
   const primary = SUPPORT_LANG_CODE[lang]
-  const ok = await speakText(text, primary, { rate: 0.88 })
+  const ok = await speak(text, primary)
   if (ok) return true
   const fallback = FALLBACK_LANG[lang]
-  if (fallback && fallback !== primary) {
-    return speakText(text, fallback, { rate: 0.88 })
-  }
-  // Last resort: still speak so the learner hears something
-  return speakText(text, 'en-CA', { rate: 0.9 })
+  if (fallback) return speak(text, fallback)
+  return false
 }
 
-/** English first, short pause, then support-language meaning. */
 export async function speakBilingual(
   english: string,
   supportText: string,
   lang: SupportLang,
-): Promise<void> {
-  stopSpeech()
-  await speakEnglish(english)
-  await wait(320)
-  await speakSupport(supportText, lang)
-}
-
-function wait(ms: number) {
-  return new Promise((r) => window.setTimeout(r, ms))
-}
-
-/** Warm voices on first student interaction. */
-export function primeSpeech() {
-  void loadVoices()
+): Promise<boolean> {
+  const a = await speakEnglish(english)
+  await new Promise((r) => setTimeout(r, 280))
+  const b = await speakSupport(supportText, lang)
+  return a && b
 }
