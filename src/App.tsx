@@ -4,6 +4,7 @@ import { LoginPage, RegisterPage, ForgotPasswordPage } from './auth/AuthPages'
 import { RoleSelectionPage, SplashPage, WelcomePage, hasEnteredSite, markEnteredSite } from './auth/EntryPages'
 import { SessionProvider, useSession, homeForRole } from './auth/Session'
 import { AdminCoursesPage, AdminDashboardPage, AdminPrivacyPage, AdminReportsPage, AdminSchedulesPage, AdminStudentsPage } from './admin/AdminPages'
+import { AdminPracticeFeedbackPage } from './admin/AdminPracticeFeedbackPage'
 import {
   InstructorAssignmentsPage,
   InstructorDashboardPage,
@@ -250,6 +251,7 @@ function AppRoutes() {
         <Route path="courses" element={<AdminCoursesPage />} />
         <Route path="schedules" element={<AdminSchedulesPage />} />
         <Route path="reports" element={<AdminReportsPage />} />
+        <Route path="feedback" element={<AdminPracticeFeedbackPage />} />
         <Route path="privacy" element={<AdminPrivacyPage />} />
       </Route>
 

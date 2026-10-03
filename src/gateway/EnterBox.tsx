@@ -6,6 +6,12 @@ import {
   type SequenceId,
 } from './sequenceProgress'
 import { playFoley, unlockFoley } from '../audio/foley'
+import {
+  getPracticeName,
+  PRACTICE_REVIEWERS,
+  PRACTICE_TRAY_HELP,
+  startPracticeMode,
+} from '../practice/PracticeMode'
 
 type ToolKind = 'screwdriver' | 'hammer' | 'tape' | 'level' | 'wrench' | 'latch'
 
@@ -15,6 +21,7 @@ type Entry = {
   tone: string
   tool: ToolKind
   completeIds: SequenceId[]
+  practice?: boolean
 } & ({ to: string; placeholder?: false } | { to?: undefined; placeholder: true })
 
 const ENTRIES: Entry[] = [
@@ -36,11 +43,12 @@ const ENTRIES: Entry[] = [
   },
   {
     to: '/journey',
-    label: 'Training Path (Developer)',
-    help: 'Full site preview — no registration',
+    label: 'Practice Mode',
+    help: PRACTICE_TRAY_HELP,
     tone: 'journey',
     tool: 'wrench',
     completeIds: ['student'],
+    practice: true,
   },
   {
     to: '/enter/admin',
@@ -137,6 +145,63 @@ function ignoreEmptyLink(e: MouseEvent<HTMLAnchorElement>) {
   e.preventDefault()
 }
 
+function PracticeNameGate({
+  onCancel,
+  onReady,
+}: {
+  onCancel: () => void
+  onReady: (name: string) => void
+}) {
+  const [name, setName] = useState(() => getPracticeName())
+  return (
+    <div className="practice-gate" role="dialog" aria-modal="true" aria-label="Practice mode name">
+      <div className="practice-gate-card site-crate">
+        <p className="section-kicker">Practice Mode</p>
+        <h2>Who is reviewing?</h2>
+        <p className="lede">
+          For Chu Chu, Yonas, Kinfe, Saba &amp; Levi — walk the full site without registration, catch issues, and send
+          feedback so we can fix things.
+        </p>
+        <div className="practice-name-grid">
+          {PRACTICE_REVIEWERS.map((r) => (
+            <button
+              key={r}
+              type="button"
+              className={`btn btn-secondary on-light${name === r ? ' is-picked' : ''}`}
+              onClick={() => setName(r)}
+            >
+              {r}
+            </button>
+          ))}
+        </div>
+        <div className="field">
+          <label htmlFor="practice-gate-name">Name</label>
+          <input
+            id="practice-gate-name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Your name"
+            autoComplete="nickname"
+          />
+        </div>
+        <div className="hero-actions">
+          <button
+            type="button"
+            className="btn btn-primary"
+            disabled={!name.trim()}
+            onClick={() => onReady(name.trim())}
+          >
+            Enter Practice Mode
+          </button>
+          <button type="button" className="btn btn-ghost" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /** Metal toolbox entry panel — trays pull out, then fly to fill the page. */
 export function EnterBox() {
   const navigate = useNavigate()
@@ -145,6 +210,7 @@ export function EnterBox() {
   const [openTray, setOpenTray] = useState<string | null>(null)
   const [flying, setFlying] = useState(false)
   const [flyLabel, setFlyLabel] = useState('')
+  const [practiceGate, setPracticeGate] = useState(false)
 
   useEffect(() => subscribeSequenceProgress(() => setTick((t) => t + 1)), [])
 
@@ -165,6 +231,17 @@ export function EnterBox() {
         document.documentElement.classList.remove('pa-page-wipe')
       }, 420)
     }, reduce ? 100 : 920)
+  }
+
+  function beginPractice(name: string) {
+    startPracticeMode(name)
+    setPracticeGate(false)
+    setOpenTray('Practice Mode')
+    void unlockFoley().then(() => {
+      playFoley('latch')
+      playFoley('metal')
+    })
+    window.setTimeout(() => launchTo('/journey', 'Practice Mode'), 380)
   }
 
   return (
@@ -207,7 +284,9 @@ export function EnterBox() {
               const isOpen = openTray === item.label
               const className = `toolbox-slot toolbox-slot-${item.tone}${
                 done ? ' is-complete' : partial ? ' is-partial' : ''
-              }${item.placeholder ? ' is-placeholder' : ''}${isOpen ? ' is-open' : ''}`
+              }${item.placeholder ? ' is-placeholder' : ''}${isOpen ? ' is-open' : ''}${
+                item.practice ? ' is-practice' : ''
+              }`
               const style = { animationDelay: `${0.14 + i * 0.07}s` }
               const help = item.placeholder
                 ? item.help
@@ -218,6 +297,12 @@ export function EnterBox() {
                     : item.help
               const inner: ReactNode = (
                 <>
+                  {item.practice && (
+                    <span className="practice-point" aria-hidden>
+                      <span className="practice-point-arrow">➜</span>
+                      <span className="practice-point-label">Reviewers</span>
+                    </span>
+                  )}
                   <span className="toolbox-etch" aria-hidden>
                     <ToolEtch kind={item.tool} />
                     {done && <span className="toolbox-check">✓</span>}
@@ -255,16 +340,18 @@ export function EnterBox() {
                   className={className}
                   style={style}
                   onClick={() => {
+                    if (item.practice) {
+                      void unlockFoley().then(() => playFoley('metal'))
+                      setPracticeGate(true)
+                      return
+                    }
                     setOpenTray(item.label)
                     void unlockFoley().then(() => {
                       playFoley('latch')
                       playFoley(item.tool === 'wrench' ? 'metal' : 'wood')
                     })
-                    if (item.to === '/journey') {
-                      try { sessionStorage.setItem('pa-student-journey-step-v1', '1') } catch { /* */ }
-                    }
                     window.setTimeout(() => {
-                      launchTo(item.to, item.label)
+                      launchTo(item.to!, item.label)
                     }, 380)
                   }}
                 >
@@ -279,6 +366,10 @@ export function EnterBox() {
           <span /><span />
         </div>
       </aside>
+
+      {practiceGate && (
+        <PracticeNameGate onCancel={() => setPracticeGate(false)} onReady={beginPractice} />
+      )}
 
       {flying && (
         <div className="toolbox-flyout" role="status" aria-live="polite">

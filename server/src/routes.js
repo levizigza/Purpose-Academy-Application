@@ -737,4 +737,44 @@ export function registerRoutes(app) {
     const db = resetDb()
     res.json({ ok: true, users: db.users.length })
   })
+
+  /** Practice Mode reviewer feedback — public submit, admin read. */
+  app.post('/api/practice/feedback', (req, res) => {
+    const authorGuard = guardUserText(req.body?.author || '', { field: 'Name', maxLen: 80 })
+    const bodyGuard = guardUserText(req.body?.body || '', { field: 'Feedback', maxLen: 4000 })
+    const pageGuard = guardUserText(req.body?.page || '', { field: 'Page', maxLen: 200 })
+    const titleGuard = guardUserText(req.body?.pageTitle || pageGuard.value || 'Page', {
+      field: 'Page title',
+      maxLen: 160,
+      allowEmpty: true,
+    })
+    if (!authorGuard.ok) return res.status(400).json({ error: authorGuard.error, code: authorGuard.code })
+    if (!bodyGuard.ok) return res.status(400).json({ error: bodyGuard.error, code: bodyGuard.code })
+    if (!pageGuard.ok) return res.status(400).json({ error: pageGuard.error, code: pageGuard.code })
+    const kind = req.body?.kind === 'quiz' ? 'quiz' : 'page'
+    const clientId = sanitizeText(req.body?.clientId || '', { maxLen: 80 })
+    withDb((db) => {
+      if (!Array.isArray(db.practice_feedback)) db.practice_feedback = []
+      const entry = {
+        id: clientId || id('pf'),
+        author: authorGuard.value,
+        page: pageGuard.value,
+        pageTitle: titleGuard.value || pageGuard.value,
+        body: bodyGuard.value,
+        kind,
+        created_at: now(),
+      }
+      const existing = db.practice_feedback.findIndex((f) => f.id === entry.id)
+      if (existing >= 0) db.practice_feedback[existing] = entry
+      else db.practice_feedback.unshift(entry)
+      if (db.practice_feedback.length > 2000) db.practice_feedback.length = 2000
+      res.status(201).json({ feedback: entry })
+    })
+  })
+
+  app.get('/api/practice/feedback', authRequired, requireRole('admin'), (_req, res) => {
+    const db = loadDb()
+    const feedback = Array.isArray(db.practice_feedback) ? db.practice_feedback : []
+    res.json({ feedback })
+  })
 }

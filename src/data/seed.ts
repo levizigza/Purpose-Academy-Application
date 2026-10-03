@@ -714,6 +714,7 @@ export function createSeedDatabase(): AppDatabase {
       },
     ],
     audit_events: [],
+    practice_feedback: [],
     schedules: [
       {
         id: 'sch-1',

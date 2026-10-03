@@ -5325,8 +5325,10 @@ table.data th {
     #0b2f5c 0 10px,
     #e8a317 10px 20px
   );
+  background-size: 28px 10px;
   opacity: 0.92;
   pointer-events: none;
+  animation: caution-crawl 8s linear infinite;
 }
 
 .site-crate::after {
@@ -5429,6 +5431,284 @@ html.pa-page-wipe .hero-inner {
   }
 }
 
+/* ——— Practice Mode + reviewer feedback ——— */
+.toolbox-slot.is-practice {
+  position: relative;
+  outline: 2px solid rgba(232, 163, 23, 0.85);
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 1px rgba(232, 163, 23, 0.35),
+    0 12px 28px rgba(232, 163, 23, 0.22);
+}
+
+.practice-point {
+  position: absolute;
+  left: -0.35rem;
+  top: 50%;
+  transform: translate(-100%, -50%);
+  display: grid;
+  justify-items: end;
+  gap: 0.15rem;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.practice-point-arrow {
+  font-size: 1.55rem;
+  color: #e8a317;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
+  animation: practice-point-bob 1.1s ease-in-out infinite;
+}
+
+.practice-point-label {
+  font-family: var(--display);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffe08a;
+  background: rgba(7, 30, 61, 0.88);
+  border: 1px solid rgba(232, 163, 23, 0.55);
+  border-radius: 999px;
+  padding: 0.18rem 0.45rem;
+}
+
+@keyframes practice-point-bob {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+
+@media (max-width: 720px) {
+  .practice-point {
+    left: auto;
+    right: 0.45rem;
+    top: -0.65rem;
+    transform: none;
+    justify-items: center;
+  }
+  .practice-point-arrow {
+    transform: rotate(90deg);
+    animation: practice-point-bob-mobile 1.1s ease-in-out infinite;
+  }
+}
+
+@keyframes practice-point-bob-mobile {
+  0%, 100% { transform: rotate(90deg) translateX(0); }
+  50% { transform: rotate(90deg) translateX(5px); }
+}
+
+.practice-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(4, 21, 38, 0.62);
+  backdrop-filter: blur(3px);
+  animation: toolbox-veil 0.3s ease both;
+}
+
+.practice-gate-card {
+  width: min(100%, 520px);
+  padding: 1.35rem 1.4rem 1.5rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.practice-name-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 0.45rem;
+}
+
+.practice-name-grid .btn.is-picked,
+.btn.is-picked {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--brand-deep);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.practice-banner {
+  margin: 0.75rem auto 0;
+  width: min(100% - 1.5rem, var(--max));
+  padding: 0.55rem 0.9rem;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #7a4e00, #0b2f5c);
+  color: #fff8e8;
+  font-family: var(--display);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(7, 30, 61, 0.22);
+}
+
+.shell.is-train .practice-banner {
+  width: min(100% - 1rem, 720px);
+}
+
+.practice-dock {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 80;
+  width: min(calc(100vw - 1.5rem), 340px);
+}
+
+.practice-dock-tab {
+  margin-left: auto;
+  display: block;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #e8a317, #f5c542);
+  color: #041526;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(232, 163, 23, 0.4);
+}
+
+.practice-dock-panel {
+  padding: 1rem 1.05rem 1.15rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.practice-dock-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.practice-dock-lede,
+.practice-dock-prompt {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.practice-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.practice-filter-row label {
+  display: grid;
+  gap: 0.25rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.practice-filter-row select {
+  min-width: 10rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+
+.practice-feedback-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
+  align-items: baseline;
+}
+
+/* ——— Site-wide motion contrast (live accents vs calm copy) ——— */
+.section-kicker {
+  position: relative;
+}
+
+.section-kicker::after {
+  content: '';
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-left: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: middle;
+  animation: motion-dot 1.8s ease-in-out infinite;
+}
+
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.28), transparent 70%);
+  transform: translateX(-120%);
+  animation: motion-sheen 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.signal-icon {
+  animation: motion-float 3.4s ease-in-out infinite;
+}
+
+.hero-actions .btn-primary {
+  animation: motion-soft-pulse 3.2s ease-in-out infinite;
+}
+
+.motion-bob {
+  animation: motion-bob 2.2s ease-in-out infinite;
+}
+
+.motion-soft-pulse {
+  animation: motion-soft-pulse 3.2s ease-in-out infinite;
+}
+
+.topbar .brand-lockup img {
+  animation: none;
+}
+
+.panel,
+.site-crate,
+.audience-card,
+.team-card,
+.pillar {
+  /* calm static surfaces — motion lives in accents only */
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+@keyframes motion-dot {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes motion-sheen {
+  0%, 70%, 100% { transform: translateX(-120%); }
+  85% { transform: translateX(120%); }
+}
+
+@keyframes caution-crawl {
+  from { background-position: 0 0; }
+  to { background-position: 56px 0; }
+}
+
+@keyframes motion-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes motion-soft-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.06); }
+}
+
+@keyframes motion-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .path-icon-bounce,
   .path-icon-drive,
@@ -5438,7 +5718,16 @@ html.pa-page-wipe .hero-inner {
   .page-motion-smooth,
   .toolbox-flyout-chest,
   .doorway-open .doorway-leaf,
-  .doorway-open .doorway-prelight {
+  .doorway-open .doorway-prelight,
+  .practice-point-arrow,
+  .practice-banner,
+  .motion-bob,
+  .motion-soft-pulse,
+  .section-kicker::after,
+  .btn-primary::after,
+  .site-crate::before,
+  .signal-icon,
+  .hero-actions .btn-primary {
     animation: none !important;
   }
 

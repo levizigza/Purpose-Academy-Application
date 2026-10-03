@@ -4,6 +4,7 @@ import { BRAND } from '../brand/copy'
 import { homeForRole, useSession } from '../auth/Session'
 import { AmbientField, PageMotion } from '../components/Motion'
 import { LoadingScreen, SkipLink } from '../components/Ui'
+import { PracticeFeedbackDock, PracticeModeBanner } from '../practice/PracticeFeedbackDock'
 import type { Role } from '../data/types'
 
 function BrandLockup({ to, compact = false }: { to: string; compact?: boolean }) {
@@ -55,9 +56,11 @@ export function PublicLayout() {
       </header>
       <main id="main-content">
         <PageMotion>
+          <PracticeModeBanner />
           <Outlet />
         </PageMotion>
       </main>
+      <PracticeFeedbackDock />
       <footer className="footer">
         <div className="footer-inner">
           <div>
@@ -116,6 +119,7 @@ function DesktopNav({ role }: { role: Role }) {
       <NavLink to="/app/admin/courses">Courses</NavLink>
       <NavLink to="/app/admin/schedules">Schedule</NavLink>
       <NavLink to="/app/admin/reports">Reports</NavLink>
+      <NavLink to="/app/admin/feedback">Feedback</NavLink>
       <NavLink to="/app/admin/privacy">Security</NavLink>
     </>
   )
@@ -155,6 +159,7 @@ function MobileNav({ role }: { role: Role }) {
       <NavLink to="/app/admin/students">Approve</NavLink>
       <NavLink to="/app/admin/courses">Courses</NavLink>
       <NavLink to="/app/admin/reports">Reports</NavLink>
+      <NavLink to="/app/admin/feedback">Notes</NavLink>
     </>
   )
 }
@@ -202,9 +207,11 @@ export function AppLayout({ role }: { role: Role }) {
       </header>
       <main id="main-content" className="shell-main">
         <PageMotion>
+          <PracticeModeBanner />
           <Outlet />
         </PageMotion>
       </main>
+      <PracticeFeedbackDock />
       {!pendingStudent && (
         <nav className="bottom-nav" aria-label="Main">
           <MobileNav role={role} />
@@ -249,8 +256,12 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       <main id="main-content">
-        <PageMotion>{children}</PageMotion>
+        <PageMotion>
+          <PracticeModeBanner />
+          {children}
+        </PageMotion>
       </main>
+      <PracticeFeedbackDock />
     </div>
   )
 }

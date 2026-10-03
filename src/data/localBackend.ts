@@ -161,6 +161,11 @@ function repairLocalDb(db: AppDatabase): AppDatabase {
     }
   }
 
+  if (!Array.isArray(db.practice_feedback)) {
+    db.practice_feedback = []
+    changed = true
+  }
+
   if (changed) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(db))

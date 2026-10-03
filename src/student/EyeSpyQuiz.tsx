@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ATTEMPT_POLICY, type EyeSpyScene } from './journeyCurriculum'
 import { toolImage } from './toolImages'
 import { playFoley } from '../audio/foley'
@@ -57,6 +57,17 @@ export function EyeSpyQuiz({
 
   const maxAttempts = mode === 'exam' ? ATTEMPT_POLICY.examMax : null
   const need = groups.length
+
+  useEffect(() => {
+    window.dispatchEvent(new Event('pa-quiz-start'))
+    return () => {
+      window.dispatchEvent(new Event('pa-quiz-end'))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (phase === 'summary') window.dispatchEvent(new Event('pa-quiz-complete'))
+  }, [phase])
 
   function resetPick() {
     setPickedHotspot(null)

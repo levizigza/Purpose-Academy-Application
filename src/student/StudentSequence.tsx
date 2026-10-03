@@ -211,6 +211,17 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
   const [gateBlocked, setGateBlocked] = useState(false)
   const item = items[idx]
 
+  useEffect(() => {
+    window.dispatchEvent(new Event('pa-quiz-start'))
+    return () => {
+      window.dispatchEvent(new Event('pa-quiz-end'))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (done) window.dispatchEvent(new Event('pa-quiz-complete'))
+  }, [done])
+
   function pick(opt: string) {
     if (answered) return
     const isCorrect = opt === item.answer

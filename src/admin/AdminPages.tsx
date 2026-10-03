@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useSession } from '../auth/Session'
 import { RegistrationStatusLabel } from '../components/Ui'
 import {
@@ -38,6 +39,15 @@ export function AdminDashboardPage() {
             {db.courses.filter((c) => c.active).length}
           </p>
         </div>
+      </div>
+      <div className="panel site-plan stack">
+        <h2>Practice feedback inbox</h2>
+        <p className="muted" style={{ margin: 0 }}>
+          Notes from Chu Chu, Yonas, Kinfe, Saba &amp; Levi while reviewing the full site in Practice Mode.
+        </p>
+        <Link className="btn btn-primary" to="/app/admin/feedback">
+          Open practice feedback
+        </Link>
       </div>
       <div className="panel stack">
         <h2>Recent audit events</h2>

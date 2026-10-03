@@ -244,6 +244,16 @@ export interface ScheduleItem {
   instructor_uid: string
 }
 
+export interface PracticeFeedback {
+  id: string
+  author: string
+  page: string
+  pageTitle: string
+  body: string
+  kind: 'page' | 'quiz'
+  created_at: string
+}
+
 export interface AppDatabase {
   users: User[]
   students: Student[]
@@ -266,4 +276,5 @@ export interface AppDatabase {
   announcements: Announcement[]
   audit_events: AuditEvent[]
   schedules: ScheduleItem[]
+  practice_feedback: PracticeFeedback[]
 }

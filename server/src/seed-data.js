@@ -712,6 +712,7 @@ export function createSeedDatabase() {
       },
     ],
     audit_events: [],
+    practice_feedback: [],
     schedules: [
       {
         id: 'sch-1',
