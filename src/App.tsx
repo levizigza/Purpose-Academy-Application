@@ -19,13 +19,22 @@ import {
   StudentCoursesPage,
 } from './learning/LearningPages'
 import {
+  AdminContactSequencePage,
+  AdminEnterPage,
+  AdminGuestSequencePage,
+  InstructorEnterPage,
+  StudentEnterPage,
+} from './gateway/GatewayPages'
+import {
   AdmissionsPage,
   ContactPage,
   HomePage,
   PrivacyNoticePage,
   ProgramsPage,
+  SequencesPage,
 } from './public/PublicPages'
 import { SkillsPassportPage } from './skills/SkillsPassportPage'
+import { StudentSequencePage } from './student/StudentSequence'
 import {
   StudentAssignmentsPage,
   StudentProgressPage,
@@ -52,12 +61,20 @@ const SPLASH_BYPASS = new Set([
   '/forgot-password',
   '/privacy',
   '/contact',
+  '/enter/student',
+  '/enter/admin',
+  '/enter/admin/contact',
+  '/enter/admin/guest',
+  '/enter/instructor',
+  '/journey',
+  '/sequences',
 ])
 
 function AppRoutes() {
   const location = useLocation()
   const [entered, setEntered] = useState(() => hasEnteredSite())
-  const bypassSplash = SPLASH_BYPASS.has(location.pathname)
+  const bypassSplash =
+    SPLASH_BYPASS.has(location.pathname) || location.pathname.startsWith('/enter/')
 
   useEffect(() => {
     if (bypassSplash && !hasEnteredSite()) {
@@ -119,7 +136,14 @@ function AppRoutes() {
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/admissions" element={<AdmissionsPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/sequences" element={<SequencesPage />} />
         <Route path="/privacy" element={<PrivacyNoticePage />} />
+        <Route path="/enter/student" element={<StudentEnterPage />} />
+        <Route path="/enter/admin" element={<AdminEnterPage />} />
+        <Route path="/enter/admin/contact" element={<AdminContactSequencePage />} />
+        <Route path="/enter/admin/guest" element={<AdminGuestSequencePage />} />
+        <Route path="/enter/instructor" element={<InstructorEnterPage />} />
+        <Route path="/journey" element={<StudentSequencePage />} />
       </Route>
 
       <Route path="/app" element={<AppHomeRedirect />} />

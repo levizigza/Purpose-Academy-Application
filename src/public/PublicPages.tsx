@@ -1,29 +1,32 @@
+import { FormEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { HeroMotionLayer, Reveal } from '../components/Motion'
+import { EnterBox } from '../gateway/EnterBox'
+import { SequenceBoard } from '../gateway/SequenceBoard'
+import { markSequenceComplete } from '../gateway/sequenceProgress'
 
 export function HomePage() {
   return (
     <>
       <section className="hero" aria-label={`${BRAND.name} hero`}>
         <HeroMotionLayer />
-        <div className="hero-inner">
-          <img className="hero-logo" src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
-          <h1>{BRAND.theme}</h1>
-          <p>{BRAND.promise}</p>
-          <div className="hero-actions">
-            <Link className="btn btn-primary" to={BRAND.primaryCtaTo}>
-              {BRAND.primaryCta}
-            </Link>
-            <Link className="btn btn-secondary" to={BRAND.secondaryCtaTo}>
-              {BRAND.secondaryCta}
-            </Link>
+        <div className="hero-inner hero-inner-split">
+          <div className="hero-copy">
+            <img className="hero-logo" src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
+            <h1>{BRAND.theme}</h1>
+            <p>{BRAND.promise}</p>
           </div>
+          <EnterBox />
         </div>
       </section>
 
       <div className="shell-main">
+        <Reveal as="section" className="section" delay={40}>
+          <SequenceBoard />
+        </Reveal>
+
         <Reveal as="section" className="section">
           <p className="section-kicker">Who we serve</p>
           <h2>People ready to belong at work</h2>
@@ -157,6 +160,16 @@ export function AdmissionsPage() {
 }
 
 export function ContactPage() {
+  const [name, setName] = useState('')
+  const [message, setMessage] = useState('')
+  const [sent, setSent] = useState(false)
+
+  function onSubmit(e: FormEvent) {
+    e.preventDefault()
+    markSequenceComplete('contact', { detail: name.trim() || 'Visitor' })
+    setSent(true)
+  }
+
   return (
     <div className="shell-main stack">
       <Reveal as="header" className="page-header stack">
@@ -172,18 +185,78 @@ export function ContactPage() {
         </p>
         <p>
           Email{' '}
-          <a className="inline-link" href={`mailto:${BRAND.contactEmail}`}>
+          <a
+            className="inline-link"
+            href={`mailto:${BRAND.contactEmail}`}
+            onClick={() => markSequenceComplete('contact', { detail: 'mailto' })}
+          >
             {BRAND.contactEmail}
           </a>
         </p>
+        {sent ? (
+          <div className="alert ok">
+            Thank you{name ? `, ${name}` : ''}. Your note was recorded. It now shows as complete on the site
+            sequences board.
+          </div>
+        ) : (
+          <form className="stack" onSubmit={onSubmit} style={{ maxWidth: 480 }}>
+            <div className="field">
+              <label htmlFor="contact-name">Your name</label>
+              <input
+                id="contact-name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                autoComplete="name"
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="contact-msg">Your question</label>
+              <textarea
+                id="contact-msg"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+                rows={3}
+              />
+            </div>
+            <button className="btn btn-primary" type="submit">
+              Send message
+            </button>
+          </form>
+        )}
         <div className="hero-actions">
-          <Link className="btn btn-primary" to={BRAND.trainingTo}>
-            {BRAND.trainingLabel}
+          <Link className="btn btn-secondary" to="/sequences">
+            See all sequences
           </Link>
           <Link className="btn btn-ghost" to={BRAND.joinTo}>
             {BRAND.primaryCta}
           </Link>
         </div>
+      </Reveal>
+    </div>
+  )
+}
+
+export function SequencesPage() {
+  return (
+    <div className="shell-main stack">
+      <Reveal as="header" className="page-header stack">
+        <p className="section-kicker">Site map of doors</p>
+        <h1>Every sequence on this site</h1>
+        <p className="lede">
+          Open any path below. When you finish one, it is marked complete here and on the home page — so you can see
+          them all in one place. The Purpose Academy Application link is reserved for the future app and does not go
+          anywhere yet.
+        </p>
+      </Reveal>
+      <Reveal delay={80}>
+        <SequenceBoard />
+      </Reveal>
+      <Reveal delay={120}>
+        <Link className="btn btn-ghost" to="/">
+          Back to home
+        </Link>
       </Reveal>
     </div>
   )

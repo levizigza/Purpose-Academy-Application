@@ -29,6 +29,7 @@ export function PublicLayout() {
             <nav className="nav-cluster" aria-label="Website">
               <NavLink to="/programs">Programs</NavLink>
               <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
+              <NavLink to="/sequences">Sequences</NavLink>
               <NavLink to="/contact">Help</NavLink>
               <NavLink to="/privacy">Privacy</NavLink>
               {user && (
@@ -63,6 +64,7 @@ export function PublicLayout() {
             </p>
           </div>
           <div className="nav-links">
+            <Link to="/sequences">Sequences</Link>
             <Link to="/privacy">Privacy</Link>
             <Link to={BRAND.joinTo}>{BRAND.joinLabel}</Link>
             <Link to="/login">{BRAND.secondaryCta}</Link>
