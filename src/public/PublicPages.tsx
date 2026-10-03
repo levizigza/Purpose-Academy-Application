@@ -193,7 +193,7 @@ export function ProgramsPage() {
         </p>
       </Reveal>
 
-      <Reveal as="article" className="school-program-feature" delay={60}>
+      <Reveal as="article" className="school-program-feature site-crate" delay={60}>
         <div className="school-program-copy">
           <span className="badge ok">Flagship program</span>
           <h2>Construction Foundations</h2>

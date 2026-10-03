@@ -6,7 +6,7 @@ import { OpeningDoorMark } from '../components/OpeningDoor'
 import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v21'
+const ENTERED_KEY = 'pa-crossed-threshold-v22'
 
 export function hasEnteredSite() {
   try {
@@ -75,6 +75,7 @@ function PathwayStage({ active }: { active: boolean }) {
       <article className="threshold-path path-logistics">
         <div className="threshold-path-art">
           <img src={BRAND_ASSETS.iconLogistics} alt="" className="path-icon-drive" />
+          <span className="path-drive-dust" aria-hidden />
         </div>
         <strong>Logistics</strong>
         <span>Moving goods, moving careers</span>
@@ -82,6 +83,11 @@ function PathwayStage({ active }: { active: boolean }) {
       <article className="threshold-path path-community">
         <div className="threshold-path-art">
           <img src={BRAND_ASSETS.iconCommunity} alt="" className="path-icon-talk" />
+          <span className="path-talk-dots" aria-hidden>
+            <span />
+            <span />
+            <span />
+          </span>
         </div>
         <strong>Community</strong>
         <span>People supporting people</span>

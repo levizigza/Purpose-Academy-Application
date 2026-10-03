@@ -46,7 +46,7 @@ export function LoginPage() {
 
   return (
     <div className="shell-main">
-      <form className="panel auth-card stack" onSubmit={onSubmit}>
+      <form className="panel auth-card stack site-plan" onSubmit={onSubmit}>
         <p className="section-kicker">{BRAND.name}</p>
         <h1>{BRAND.secondaryCta}</h1>
         <p className="lede">Enter your email and password to continue.</p>
@@ -147,7 +147,7 @@ export function ForgotPasswordPage() {
 
   return (
     <div className="shell-main">
-      <form className="panel auth-card stack" onSubmit={onSubmit} style={{ width: 'min(100%, 560px)' }}>
+      <form className="panel auth-card stack site-plan" onSubmit={onSubmit} style={{ width: 'min(100%, 560px)' }}>
         <p className="section-kicker">{BRAND.name}</p>
         <h1>Forgot password</h1>
         <p className="lede">
@@ -231,7 +231,7 @@ export function RegisterPage() {
 
   return (
     <div className="shell-main">
-      <form className="panel auth-card stack" onSubmit={onSubmit} style={{ width: 'min(100%, 560px)' }}>
+      <form className="panel auth-card stack site-plan" onSubmit={onSubmit} style={{ width: 'min(100%, 560px)' }}>
         <p className="section-kicker">{BRAND.joinLabel}</p>
         <h1>Create your student account</h1>
         <p className="lede">An admin must approve your registration before training unlocks.</p>

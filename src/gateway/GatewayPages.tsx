@@ -72,7 +72,7 @@ export function AdminEnterPage() {
       </Reveal>
 
       <div className="enter-choice-grid">
-        <Reveal as="article" className="panel stack enter-choice" delay={60}>
+        <Reveal as="article" className="panel stack enter-choice site-plan" delay={60}>
           <span className="enter-choice-num" aria-hidden>
             1
           </span>
@@ -82,7 +82,7 @@ export function AdminEnterPage() {
             Contact Admin
           </Link>
         </Reveal>
-        <Reveal as="article" className="panel stack enter-choice" delay={140}>
+        <Reveal as="article" className="panel stack enter-choice site-plan" delay={140}>
           <span className="enter-choice-num" aria-hidden>
             2
           </span>
@@ -124,7 +124,7 @@ export function AdminContactSequencePage() {
         <h1>Contact Admin</h1>
         <p className="lede">Write a short note. We will reply by email.</p>
       </Reveal>
-      <Reveal className="panel auth-card stack" delay={80}>
+      <Reveal className="panel auth-card stack site-plan" delay={80}>
         {sent ? (
           <>
             <div className="alert ok">Thank you, {name || 'friend'}. Your message was saved for the admin team.</div>
@@ -197,7 +197,7 @@ export function AdminGuestSequencePage() {
         <h1>Employed / Guest request</h1>
         <p className="lede">Tell us who you are and what you need. Keep it simple.</p>
       </Reveal>
-      <Reveal className="panel auth-card stack" delay={80}>
+      <Reveal className="panel auth-card stack site-plan" delay={80}>
         {sent ? (
           <>
             <div className="alert ok">Request received. An admin will review it soon.</div>
@@ -288,7 +288,7 @@ export function InstructorEnterPage() {
         <h1>Enter with your ID</h1>
         <p className="lede">Type your instructor ID number. It takes you into teaching tools.</p>
       </Reveal>
-      <Reveal className="panel auth-card stack" delay={80}>
+      <Reveal className="panel auth-card stack site-plan" delay={80}>
         <form className="stack" onSubmit={onSubmit}>
           {error && <div className="alert error">{error}</div>}
           <div className="field">
