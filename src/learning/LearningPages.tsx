@@ -12,6 +12,8 @@ import {
   vocabMasteryPercent,
 } from '../data/store'
 import type { LanguageLayer, VocabTerm } from '../data/types'
+import { speakBilingual, speakEnglish, speakSupport, stopSpeech } from '../student/speech'
+import type { SupportLang } from '../student/journeyCurriculum'
 
 const LAYERS: { id: LanguageLayer; label: string; help: string }[] = [
   { id: 'see_hear', label: 'See & hear', help: 'Picture + English word' },
@@ -21,6 +23,19 @@ const LAYERS: { id: LanguageLayer; label: string; help: string }[] = [
   { id: 'sentence', label: 'Sentence', help: 'Use in a workplace phrase' },
   { id: 'instruction', label: 'Instruction', help: 'Follow a short direction' },
 ]
+
+const SUPPORT_LANGS = new Set([
+  'Spanish',
+  'French',
+  'Arabic',
+  'Hindi',
+  'Amharic',
+  'Tigrinya',
+])
+
+function asSupportLang(value: string): SupportLang {
+  return (SUPPORT_LANGS.has(value) ? value : 'Spanish') as SupportLang
+}
 
 function VocabPractice({
   terms,
@@ -147,27 +162,56 @@ function VocabPractice({
       {layer.id === 'see_hear' && (
         <>
           <h3>{term.english}</h3>
-          <button
-            type="button"
-            className="btn btn-ghost"
-            onClick={async () => {
-              if (enrich?.audio) {
-                new Audio(enrich.audio).play().catch(() => {
-                  const utter = new SpeechSynthesisUtterance(term.english)
-                  utter.lang = 'en-CA'
-                  window.speechSynthesis?.speak(utter)
-                })
-              } else {
-                const utter = new SpeechSynthesisUtterance(term.english)
-                utter.lang = 'en-CA'
-                window.speechSynthesis?.speak(utter)
-              }
-              await recordVocabAttempt(studentId, term.id, 'see_hear', true)
-              setFeedback('Heard and viewed.')
-            }}
-          >
-            Play English audio
-          </button>
+          <div className="hero-actions">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={async () => {
+                stopSpeech()
+                if (enrich?.audio) {
+                  try {
+                    await new Audio(enrich.audio).play()
+                  } catch {
+                    await speakEnglish(term.english)
+                  }
+                } else {
+                  await speakEnglish(term.english)
+                }
+                await recordVocabAttempt(studentId, term.id, 'see_hear', true)
+                setFeedback('English audio played.')
+              }}
+            >
+              Hear English
+            </button>
+            {!englishOnly && (
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={async () => {
+                  const supportText = enrich?.translation || term.support_meaning || term.english
+                  await speakSupport(supportText, asSupportLang(supportLanguage))
+                  await recordVocabAttempt(studentId, term.id, 'see_hear', true)
+                  setFeedback(`${supportLanguage} audio played.`)
+                }}
+              >
+                Hear {supportLanguage}
+              </button>
+            )}
+            {!englishOnly && (
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={async () => {
+                  const supportText = enrich?.translation || term.support_meaning || term.english
+                  await speakBilingual(term.english, supportText, asSupportLang(supportLanguage))
+                  await recordVocabAttempt(studentId, term.id, 'see_hear', true)
+                  setFeedback('Heard English, then support language.')
+                }}
+              >
+                Play both
+              </button>
+            )}
+          </div>
         </>
       )}
 
@@ -181,16 +225,39 @@ function VocabPractice({
               <em>{enrich?.translation || term.support_meaning}</em>
             </p>
           )}
-          <button
-            type="button"
-            className="btn btn-ghost"
-            onClick={async () => {
-              await recordVocabAttempt(studentId, term.id, 'understand', true)
-              setFeedback('Meaning marked understood.')
-            }}
-          >
-            I understand
-          </button>
+          <div className="hero-actions">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => void speakEnglish(term.english)}
+            >
+              Hear English
+            </button>
+            {!englishOnly && (
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() =>
+                  void speakSupport(
+                    enrich?.translation || term.support_meaning || term.english,
+                    asSupportLang(supportLanguage),
+                  )
+                }
+              >
+                Hear {supportLanguage}
+              </button>
+            )}
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={async () => {
+                await recordVocabAttempt(studentId, term.id, 'understand', true)
+                setFeedback('Meaning marked understood.')
+              }}
+            >
+              I understand
+            </button>
+          </div>
         </>
       )}
 

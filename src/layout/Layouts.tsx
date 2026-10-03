@@ -1,4 +1,4 @@
-import { NavLink, Outlet, Navigate, Link } from 'react-router-dom'
+import { NavLink, Outlet, Navigate, Link, useLocation } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { homeForRole, useSession } from '../auth/Session'
@@ -16,10 +16,13 @@ function BrandLockup({ to, compact = false }: { to: string; compact?: boolean })
 
 export function PublicLayout() {
   const { user, student, logout, loading } = useSession()
+  const { pathname } = useLocation()
   if (loading) return <LoadingScreen label={`Opening ${BRAND.name}…`} />
 
+  const isTrain = pathname === '/journey' || pathname === '/enter/student'
+
   return (
-    <div className="shell">
+    <div className={`shell${isTrain ? ' is-train' : ''}`}>
       <AmbientField />
       <SkipLink />
       <header className="topbar">

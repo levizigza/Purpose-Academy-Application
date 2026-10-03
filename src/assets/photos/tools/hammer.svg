@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Hammer">
+  <rect width="320" height="240" fill="#f4f7fb"/>
+  <!-- handle -->
+  <rect x="148" y="70" width="24" height="140" rx="8" fill="#8b5a2b"/>
+  <rect x="152" y="78" width="8" height="120" rx="3" fill="#c48a4a" opacity="0.55"/>
+  <!-- head -->
+  <rect x="96" y="54" width="128" height="42" rx="6" fill="#5b6b7a"/>
+  <rect x="96" y="54" width="128" height="14" rx="4" fill="#8a98a6"/>
+  <!-- claw -->
+  <path d="M96 60 L70 42 L66 54 L96 78 Z" fill="#5b6b7a"/>
+  <path d="M96 78 L70 96 L66 84 L96 66 Z" fill="#4a5764"/>
+  <!-- face -->
+  <rect x="208" y="58" width="28" height="34" rx="4" fill="#3f4b57"/>
+</svg>

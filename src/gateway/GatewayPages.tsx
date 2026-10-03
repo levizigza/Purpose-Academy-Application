@@ -4,9 +4,9 @@ import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { Reveal } from '../components/Motion'
 import { DEMO_PASSWORDS } from '../data/seed'
-import { startDevPreview } from '../dev/DevPreview'
 import { useSession } from '../auth/Session'
 import { markSequenceComplete } from './sequenceProgress'
+import { JOURNEY_STEPS } from '../student/journeyCurriculum'
 
 const INSTRUCTOR_IDS: Record<string, string> = {
   'INS-001': 'instructor@purposeacademy.ca',
@@ -17,35 +17,19 @@ const INSTRUCTOR_IDS: Record<string, string> = {
 export function StudentEnterPage() {
   const navigate = useNavigate()
   const { user, student } = useSession()
-  const [devName, setDevName] = useState('')
-
-  function startDeveloperPreview(e: FormEvent) {
-    e.preventDefault()
-    startDevPreview(devName)
-    navigate('/journey')
-  }
 
   return (
-    <div className="shell-main stack enter-flow">
-      <Reveal as="header" className="page-header stack">
-        <p className="section-kicker">Student</p>
-        <h1>Your path to work</h1>
-        <p className="lede">
-          Simple steps. Pictures and words. We walk with you from login to a job connection.
+    <div className="shell-main stack enter-flow train-welcome">
+      <Reveal as="header" className="train-welcome-header stack">
+        <img src={BRAND_ASSETS.logoMark} alt="" className="train-welcome-mark" />
+        <p className="train-kicker">Student Training Path</p>
+        <h1 className="train-welcome-title">Your path to work</h1>
+        <p className="train-welcome-lede">
+          20 clear steps. Pictures and words. From login to a job connection — we walk with you.
         </p>
       </Reveal>
 
-      <Reveal className="panel stack journey-intro" delay={80}>
-        <img src={BRAND_ASSETS.iconConstruction} alt="" className="journey-intro-icon" />
-        <h2>20 clear steps</h2>
-        <ol className="journey-preview">
-          <li>Login</li>
-          <li>Registration</li>
-          <li>Baseline check</li>
-          <li>Career interest</li>
-          <li>Choose pathway</li>
-          <li>…then learn, practice, and earn your Skills Passport</li>
-        </ol>
+      <Reveal className="train-welcome-cta" delay={80}>
         <div className="hero-actions">
           {user?.role === 'student' && student?.registration_status === 'approved' ? (
             <button type="button" className="btn btn-primary" onClick={() => navigate('/journey')}>
@@ -53,39 +37,26 @@ export function StudentEnterPage() {
             </button>
           ) : (
             <button type="button" className="btn btn-primary" onClick={() => navigate('/journey')}>
-              Begin as a student
+              Begin training
             </button>
           )}
-          <Link className="btn btn-secondary" to="/login?role=student">
+          <Link className="btn btn-secondary on-light" to="/login?role=student">
             I already have an account
           </Link>
         </div>
       </Reveal>
 
-      {/* TEMPORARY — delete with src/dev/DevPreview.ts when finished reviewing */}
-      <Reveal className="panel stack dev-preview-panel" delay={140}>
-        <p className="section-kicker">Developer only · temporary</p>
-        <h2>Quick preview (no email)</h2>
-        <p className="lede">
-          Enter your full name and walk the whole 20-step student sequence. No account, no password.
-          Remove this later.
-        </p>
-        <form className="stack" onSubmit={startDeveloperPreview}>
-          <div className="field">
-            <label htmlFor="dev-preview-name">Full name</label>
-            <input
-              id="dev-preview-name"
-              value={devName}
-              onChange={(e) => setDevName(e.target.value)}
-              required
-              placeholder="Your full name"
-              autoComplete="name"
-            />
-          </div>
-          <button className="btn btn-primary" type="submit">
-            Enter sequence preview
-          </button>
-        </form>
+      <Reveal className="train-step-list" delay={140}>
+        <h2 className="train-step-list-heading">All 20 training steps</h2>
+        <ol className="train-step-roster">
+          {JOURNEY_STEPS.map((s) => (
+            <li key={s.n}>
+              <span className="train-step-num">{s.n}</span>
+              <span className="train-step-name">{s.title}</span>
+              <span className="train-step-desc">{s.help}</span>
+            </li>
+          ))}
+        </ol>
       </Reveal>
     </div>
   )

@@ -19,7 +19,7 @@ const ENTRIES: Entry[] = [
     to: '/contact',
     label: 'Contact Us',
     help: 'Ask a question',
-    mark: '1',
+    mark: '01',
     tone: 'contact',
     completeIds: ['contact'],
   },
@@ -27,7 +27,7 @@ const ENTRIES: Entry[] = [
     to: '/enter/student',
     label: 'Student',
     help: 'Start learning',
-    mark: '2',
+    mark: '02',
     tone: 'student',
     completeIds: ['student'],
   },
@@ -35,7 +35,7 @@ const ENTRIES: Entry[] = [
     to: '/enter/admin',
     label: 'Admin',
     help: 'Manage the school',
-    mark: '3',
+    mark: '03',
     tone: 'admin',
     completeIds: ['admin-contact', 'admin-guest'],
   },
@@ -43,15 +43,15 @@ const ENTRIES: Entry[] = [
     to: '/enter/instructor',
     label: 'Instructor',
     help: 'Teach and check skills',
-    mark: '4',
+    mark: '04',
     tone: 'instructor',
     completeIds: ['instructor'],
   },
   {
     placeholder: true,
     label: 'Purpose Academy Application',
-    help: 'Coming soon — link reserved',
-    mark: '5',
+    help: 'Reserved for the full application',
+    mark: '05',
     tone: 'app',
     completeIds: [],
   },
@@ -61,16 +61,17 @@ function ignoreEmptyLink(e: MouseEvent<HTMLAnchorElement>) {
   e.preventDefault()
 }
 
-/** Clickable entry panel beside the brand theme — one clear door per role. */
+/** Entry panel beside the brand theme — glass door list in the hero atmosphere. */
 export function EnterBox() {
   const [, setTick] = useState(0)
   useEffect(() => subscribeSequenceProgress(() => setTick((t) => t + 1)), [])
 
   return (
     <aside className="enter-box" aria-label="Enter Purpose Academy">
+      <div className="enter-box-glow" aria-hidden />
       <p className="enter-box-kicker">Enter here</p>
       <h2 className="enter-box-title">Choose your door</h2>
-      <p className="enter-box-lede">Tap one. We will guide you.</p>
+      <p className="enter-box-lede">One clear path. Tap to begin.</p>
       <nav className="enter-box-nav" aria-label="Site entry">
         {ENTRIES.map((item, i) => {
           const done =
@@ -81,7 +82,7 @@ export function EnterBox() {
           const className = `enter-box-link enter-box-link-${item.tone}${
             done ? ' is-complete' : partial ? ' is-partial' : ''
           }${item.placeholder ? ' is-placeholder' : ''}`
-          const style = { animationDelay: `${0.12 + i * 0.08}s` }
+          const style = { animationDelay: `${0.14 + i * 0.07}s` }
           const inner = (
             <>
               <span className="enter-box-icon" aria-hidden>
@@ -100,7 +101,7 @@ export function EnterBox() {
                 </span>
               </span>
               <span className="enter-box-arrow" aria-hidden>
-                {item.placeholder ? '—' : '→'}
+                {item.placeholder ? '·' : '→'}
               </span>
             </>
           )
@@ -129,7 +130,7 @@ export function EnterBox() {
         })}
       </nav>
       <Link className="enter-box-all" to="/sequences">
-        See all sequences on this site →
+        See all sequences
       </Link>
     </aside>
   )

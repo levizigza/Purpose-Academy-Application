@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Hand saw">
+  <rect width="320" height="240" fill="#f4f7fb"/>
+  <!-- handle grip -->
+  <path d="M36 92 C36 72 52 62 78 62 L108 62 L108 168 L78 168 C52 168 36 156 36 136 Z" fill="#6b3e1a"/>
+  <path d="M48 88 C48 78 58 74 72 74 L92 74 L92 156 L72 156 C58 156 48 150 48 140 Z" fill="#a56a34"/>
+  <ellipse cx="70" cy="116" rx="14" ry="22" fill="#f4f7fb"/>
+  <!-- blade -->
+  <path d="M108 78 L292 78 L292 118 L108 118 Z" fill="#b8c2cc"/>
+  <path d="M108 78 L292 78 L292 92 L108 92 Z" fill="#d7dee6"/>
+  <!-- teeth -->
+  <path d="M120 118 L132 142 L144 118 L156 142 L168 118 L180 142 L192 118 L204 142 L216 118 L228 142 L240 118 L252 142 L264 118 L276 142 L288 118 L292 118 L292 142 L120 142 Z" fill="#5b6b7a"/>
+  <!-- rivets -->
+  <circle cx="118" cy="98" r="4" fill="#3d5168"/>
+  <circle cx="118" cy="112" r="4" fill="#3d5168"/>
+</svg>
