@@ -4,6 +4,8 @@ import { useSession } from '../auth/Session'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { Reveal } from '../components/Motion'
+import { FoleyToggle, StepTransition } from '../components/CrewLoading'
+import { playFoley, unlockFoley } from '../audio/foley'
 import { DEMO_PASSWORDS } from '../data/seed'
 import { markSequenceComplete } from '../gateway/sequenceProgress'
 import { selectPathway } from '../data/store'
@@ -108,7 +110,7 @@ function quizObjectImage(item: QuizItem): string | undefined {
 }
 
 function ChoiceButton({ children, onClick, state, disabled }: {
-  children: ReactNode; onClick: () => void; state?: 'correct' | 'wrong' | 'idle'; disabled?: boolean
+  children: ReactNode; onClick: () => void; state?: 'correct' | 'wrong' | 'idle' | 'selected'; disabled?: boolean
 }) {
   return (
     <button type="button" className={`train-choice${state && state !== 'idle' ? ` is-${state}` : ''}`} onClick={onClick} disabled={disabled}>
@@ -141,19 +143,29 @@ function CheckItem({ id, title, why, checked, onChange }: {
 
 /* ─── Step shell — SiteWise-inspired training chrome ─── */
 
-function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled }: {
+function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg }: {
   step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
+  transitioning?: boolean; transitionMsg?: string
 }) {
   const meta = JOURNEY_STEPS[step - 1]
   const pct = Math.round((step / 20) * 100)
 
   return (
     <div className="shell-main train-shell">
+      <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
       <header className="train-header">
-        <p className="train-kicker">Step {step} of 20 · Student Training Path</p>
+        <div className="train-header-top">
+          <p className="train-kicker">Step {step} of 20 · Student path</p>
+          <div className="train-sound-slot">
+            <FoleyToggle />
+          </div>
+        </div>
         <h1 className="train-title">{meta.title}</h1>
-        <p className="train-help">{meta.help}</p>
-        <p className="train-purpose">{meta.purpose}</p>
+        <p className="train-simple-line">{meta.help}</p>
+        <details className="train-why-details">
+          <summary>Why this step?</summary>
+          <p className="train-purpose">{meta.purpose}</p>
+        </details>
         <div className="train-progress" aria-label={`Progress ${pct}%`}>
           <span style={{ width: `${pct}%` }} />
         </div>
@@ -170,7 +182,19 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 
       <div className="train-actions">
         {onBack && <button type="button" className="btn btn-ghost" onClick={onBack}>Back</button>}
-        {onNext && <button type="button" className="btn btn-primary" onClick={onNext} disabled={nextDisabled}>{nextLabel}</button>}
+        {onNext && (
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              playFoley('wood')
+              onNext()
+            }}
+            disabled={nextDisabled}
+          >
+            {nextLabel}
+          </button>
+        )}
       </div>
     </div>
   )
@@ -192,6 +216,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
     const isCorrect = opt === item.answer
     setAnswered(opt)
     setCorrect(isCorrect)
+    playFoley(isCorrect ? 'correct' : 'wrong')
     if (isCorrect) setScore((s) => s + 1)
     if (gated && !isCorrect) setGateBlocked(true)
   }
@@ -276,10 +301,17 @@ export function StudentSequencePage() {
   const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [transitioning, setTransitioning] = useState(false)
+  const [transitionMsg, setTransitionMsg] = useState('Moving to the next station…')
+  const [empDone, setEmpDone] = useState(() => {
+    try { return !!sessionStorage.getItem(EMP_KEY) } catch { return false }
+  })
+  const [phraseHeard, setPhraseHeard] = useState<Record<string, boolean>>({})
+  const [phraseSaid, setPhraseSaid] = useState<Record<string, boolean>>({})
 
   /* Step 2 registration form */
   const [regForm, setRegForm] = useState({
-    full_name: '', email: '', phone: '', password: 'student123',
+    full_name: '', email: '', phone: '', password: '', confirm: '',
     preferred_language: 'Amharic', previous_experience: '',
   })
 
@@ -291,10 +323,15 @@ export function StudentSequencePage() {
   const [saidAloud, setSaidAloud] = useState(false)
   const [speaking, setSpeaking] = useState<'en' | 'support' | 'both' | null>(null)
 
-  /* Step 8 supported matching */
+  /* Step 9 supported matching */
   const [matchIdx, setMatchIdx] = useState(0)
   const [matchAnswer, setMatchAnswer] = useState<string | null>(null)
   const [matchCorrect, setMatchCorrect] = useState(false)
+  const [matchOptions, setMatchOptions] = useState(() => {
+    const term = VOCAB_UNIT[0]
+    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
+    return [term, ...distractors].sort(() => Math.random() - 0.5)
+  })
 
   /* Step 11 workplace instructions */
   const [instrIdx, setInstrIdx] = useState(0)
@@ -302,19 +339,19 @@ export function StudentSequencePage() {
   const [instrAnswer, setInstrAnswer] = useState<string | null>(null)
   const [instrCorrect, setInstrCorrect] = useState(false)
 
-  /* Step 12 computer skills */
+  /* Step 13 computer skills */
   const [compChecks, setCompChecks] = useState<Record<string, boolean>>({})
 
-  /* Step 14 tool categories */
+  /* Step 15 tool categories */
   const [toolSeen, setToolSeen] = useState<Record<string, boolean>>({})
 
-  /* Step 15 system topics */
+  /* Step 16 system topics */
   const [sysSeen, setSysSeen] = useState<Record<string, boolean>>({})
 
-  /* Step 16 observation form */
+  /* Step 17 observation form */
   const [obsForm, setObsForm] = useState({ skill: '', station: '', notes: '' })
 
-  /* Step 17 daily log */
+  /* Step 18 daily log */
   const [logForm, setLogForm] = useState({ date: '', tasks: '', supervisor: '' })
 
   /* Step 19 honesty */
@@ -328,12 +365,35 @@ export function StudentSequencePage() {
   useEffect(() => { primeSpeech() }, [])
   useEffect(() => () => { stopSpeech() }, [])
 
-  function go(next: number) {
+  function go(next: number, message?: string) {
     stopSpeech()
     setError(null)
     setSpeaking(null)
-    setStep(Math.min(20, Math.max(1, next)))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    const target = Math.min(20, Math.max(1, next))
+    if (target === step) {
+      setStep(target)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    setTransitionMsg(message || `Moving to step ${target}…`)
+    setTransitioning(true)
+    void unlockFoley().then(() => {
+      playFoley('ambient-start')
+      playFoley('hammer')
+    })
+    window.setTimeout(() => {
+      setStep(target)
+      setTransitioning(false)
+      playFoley('ambient-stop')
+      playFoley('whoosh')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 900)
+  }
+
+  function Shell(props: {
+    step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
+  }) {
+    return <StepShell {...props} transitioning={transitioning} transitionMsg={transitionMsg} />
   }
 
   function resetVocabBeatFlags() {
@@ -374,8 +434,21 @@ export function StudentSequencePage() {
     setHeardEnglish(true)
     setHeardSupport(true)
   }
-  function resetMatch() { setMatchIdx(0); setMatchAnswer(null); setMatchCorrect(false) }
+  function resetMatch() {
+    setMatchIdx(0)
+    setMatchAnswer(null)
+    setMatchCorrect(false)
+    const term = VOCAB_UNIT[0]
+    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
+    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+  }
   function resetInstr() { setInstrIdx(0); setInstrHeard(false); setInstrAnswer(null); setInstrCorrect(false) }
+
+  function shuffleMatchOptions(idx: number) {
+    const term = VOCAB_UNIT[idx]
+    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
+    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+  }
 
   async function ensureDemoStudent() {
     if (user?.role === 'student' && student?.registration_status === 'approved') return true
@@ -391,14 +464,14 @@ export function StudentSequencePage() {
     if (!ok) return
     try {
       const sid = student?.id
-      if (sid && student?.foundation_complete) {
+      if (sid) {
         await selectPathway(sid, 'construction')
         await refresh()
       }
-      go(7)
+      go(7, 'Opening Construction vocabulary…')
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not save pathway')
-      go(7)
+      go(7, 'Opening Construction vocabulary…')
     }
   }
 
@@ -425,9 +498,9 @@ export function StudentSequencePage() {
     },
     {
       text: 'Pass me the level.',
-      correct: 'Pass the level',
+      correct: 'Pass me the level',
       imageKey: 'level',
-      options: ['Pass the level', 'Pass the hammer', 'Open the door', 'Put on boots'],
+      options: ['Pass me the level', 'Pass the hammer', 'Open the door', 'Put on boots'],
       supportHint: {
         Spanish: 'Pasame el nivel.',
         Arabic: 'Nawilni al-mizan.',
@@ -453,27 +526,36 @@ export function StudentSequencePage() {
 
   if (step === 1) {
     return (
-      <StepShell step={1} onBack={() => navigate('/enter/student')} onNext={() => go(2)} nextLabel="I am a Student — continue">
+      <Shell step={1} onBack={() => navigate('/enter/student')} onNext={() => go(2, 'Opening registration…')} nextLabel="I am a new student — continue">
         <div className="train-login">
           <img src={BRAND_ASSETS.logoMark} alt="" className="train-login-mark" />
           <p className="train-brand">{BRAND.name}</p>
           <p className="train-welcome">Welcome. Take a breath. We will go one step at a time.</p>
           <div className="train-role-stack">
-            <button type="button" className="train-role student" onClick={() => go(2)}>Student Login</button>
-            <Link className="train-role instructor" to="/enter/instructor">Instructor Login</Link>
-            <Link className="train-role admin" to="/enter/admin">Admin Login</Link>
+            <button type="button" className="train-role student" onClick={() => go(2, 'Opening registration…')}>I am a new student</button>
+            <Link className="train-role instructor" to="/login?role=student">I already have an account</Link>
+            <Link className="train-role instructor" to="/enter/instructor">Instructor</Link>
+            <Link className="train-role admin" to="/enter/admin">Admin</Link>
           </div>
           <TeachNote>
             Students learn and practice. Instructors teach and check skills. Admins manage the school.
           </TeachNote>
         </div>
-      </StepShell>
+      </Shell>
     )
   }
 
   if (step === 2) {
     async function onRegister(e: FormEvent) {
       e.preventDefault()
+      if (regForm.password.length < 8) {
+        setError('Password needs at least 8 characters.')
+        return
+      }
+      if (regForm.password !== regForm.confirm) {
+        setError('Passwords do not match. Type the same password twice.')
+        return
+      }
       setBusy(true); setError(null)
       const err = await register({
         full_name: regForm.full_name, email: regForm.email, password: regForm.password,
@@ -484,17 +566,17 @@ export function StudentSequencePage() {
       if (err) {
         if (/exists/i.test(err)) {
           const result = await login(regForm.email, regForm.password)
-          if (!result.error) { await refresh(); go(3); return }
+          if (!result.error) { await refresh(); go(3, 'Opening language choice…'); return }
         }
         setError(err); return
       }
-      go(3)
+      go(3, 'Opening language choice…')
     }
 
     return (
-      <StepShell step={2} onBack={() => go(1)}>
+      <Shell step={2} onBack={() => go(1)}>
         <TeachNote>
-          Write slowly. Short answers are fine. You will choose your mother tongue on the next step for assessments.
+          Write slowly. Short answers are fine. You will choose your mother tongue on the next step.
         </TeachNote>
         <form className="stack" onSubmit={onRegister}>
           {error && <div className="alert error">{error}</div>}
@@ -511,6 +593,14 @@ export function StudentSequencePage() {
             <input id="seq-phone" type="tel" value={regForm.phone} onChange={(e) => setRegForm({ ...regForm, phone: e.target.value })} required placeholder="403-555-0000" autoComplete="tel" />
           </div>
           <div className="field">
+            <label htmlFor="seq-password">Password</label>
+            <input id="seq-password" type="password" value={regForm.password} onChange={(e) => setRegForm({ ...regForm, password: e.target.value })} required minLength={8} placeholder="At least 8 characters" autoComplete="new-password" />
+          </div>
+          <div className="field">
+            <label htmlFor="seq-confirm">Confirm password</label>
+            <input id="seq-confirm" type="password" value={regForm.confirm} onChange={(e) => setRegForm({ ...regForm, confirm: e.target.value })} required minLength={8} placeholder="Type password again" autoComplete="new-password" />
+          </div>
+          <div className="field">
             <label htmlFor="seq-exp">Previous experience</label>
             <input id="seq-exp" value={regForm.previous_experience} onChange={(e) => setRegForm({ ...regForm, previous_experience: e.target.value })} placeholder="Example: helper on building sites — or none yet" />
             <span className="field-hint">&ldquo;None yet&rdquo; is a good answer.</span>
@@ -520,21 +610,21 @@ export function StudentSequencePage() {
           </button>
           <button type="button" className="btn btn-secondary on-light" disabled={busy} onClick={async () => {
             setBusy(true); setError(null)
-            try { const ok = await ensureDemoStudent(); if (ok) go(3) }
+            try { const ok = await ensureDemoStudent(); if (ok) go(3, 'Opening language choice…') }
             catch (e) { setError(e instanceof Error ? e.message : 'Could not sign in.') }
             finally { setBusy(false) }
           }}>
             Continue with demo student account
           </button>
         </form>
-      </StepShell>
+      </Shell>
     )
   }
 
   /* Step 3: Mother tongue for assessment (bridge later removed in English-only steps) */
   if (step === 3) {
     return (
-      <StepShell
+      <Shell
         step={3}
         onBack={() => go(2)}
         onNext={() => {
@@ -557,34 +647,34 @@ export function StudentSequencePage() {
           <ol>
             <li>Assessment & early vocab: English + {supportLang}</li>
             <li>Practice: still with help</li>
-            <li>Eye Spy & site instructions: English only</li>
+            <li>Eye Spy: English only</li>
+            <li>Site instructions: English required; mother tongue optional once</li>
           </ol>
         </div>
         <TeachNote>Choose the mother tongue that helps you most for assessment and early learning.</TeachNote>
-      </StepShell>
+      </Shell>
     )
   }
 
   if (step === 4) {
     return (
-      <StepShell step={4} onBack={() => go(3)}>
+      <Shell step={4} onBack={() => go(3)}>
         <WhyWork>Baseline shows what you already know — so we start in the right place.</WhyWork>
         <TeachNote>Baseline is not pass/fail. Support language: {supportLang}.</TeachNote>
         <QuizRunner items={BASELINE_QUIZ} onComplete={() => go(5)} />
-      </StepShell>
+      </Shell>
     )
   }
 
   /* Step 5: Interest + skills picture assessment */
   if (step === 5) {
     const path = INTEREST_PATHS.find((p) => p.id === interest)
-    const skillReady = path ? path.skills.every((s) => skillChecks[s.id]) : false
     return (
-      <StepShell
+      <Shell
         step={5}
         onBack={() => go(4)}
-        onNext={interest && skillReady ? () => go(6) : undefined}
-        nextLabel="See my assessment result"
+        onNext={interest ? () => go(6, 'Opening your result…') : undefined}
+        nextLabel="See my path result"
       >
         <WhyWork>What you want and what you can already do help place you on a path.</WhyWork>
         <p><strong>What are you interested in?</strong></p>
@@ -608,14 +698,14 @@ export function StudentSequencePage() {
         </div>
         {path && (
           <>
-            <p><strong>What can you do? ({supportLang} help available — answer honestly)</strong></p>
+            <p><strong>What can you do? (optional — answer honestly)</strong></p>
             <ul className="train-check-list">
               {path.skills.map((s) => (
                 <CheckItem
                   key={s.id}
                   id={`sk-${s.id}`}
                   title={s.label}
-                  why={`Skill check · weight ${s.weight}`}
+                  why="Check only if this is true for you."
                   checked={!!skillChecks[s.id]}
                   onChange={() => setSkillChecks((c) => ({ ...c, [s.id]: !c[s.id] }))}
                 />
@@ -623,8 +713,8 @@ export function StudentSequencePage() {
             </ul>
           </>
         )}
-        <TeachNote>Check every skill box for your chosen interest to continue. Curiosity counts.</TeachNote>
-      </StepShell>
+        <TeachNote>Choose an interest to continue. Empty skill boxes are honest — we can teach those.</TeachNote>
+      </Shell>
     )
   }
 
@@ -632,13 +722,12 @@ export function StudentSequencePage() {
   if (step === 6) {
     const title = interest === 'logistics' ? 'Logistics' : interest === 'community' ? 'Community Support' : 'Construction'
     return (
-      <StepShell step={6} onBack={() => go(5)}>
+      <Shell step={6} onBack={() => go(5)}>
         {error && <div className="alert error">{error}</div>}
         <div className="alert ok">
-          Assessment result: strongest fit right now is <strong>{title}</strong>.
-          Live specialized pathway: <strong>Construction</strong>.
+          You chose <strong>{title}</strong>. Today&rsquo;s open program is <strong>Construction</strong>.
         </div>
-        <PictureCard emoji="🏗️" label="Construction" sub="Build Skills, Build Futures." caption="Open pathway you can prove with an instructor." />
+        <PictureCard emoji="C" label="Construction" sub="Build Skills, Build Futures." caption="Open pathway you can prove with an instructor." />
         <WhyWork>Construction needs safety words, tools, and short English directions.</WhyWork>
         <div className="train-learn-grid">
           <LearnCard mark="1" title="Language for work" body="Words you hear on a job site." />
@@ -653,7 +742,7 @@ export function StudentSequencePage() {
         <button type="button" className="btn btn-primary" disabled={busy} onClick={async () => { setBusy(true); await finishPathway(); setBusy(false) }}>
           {busy ? 'Saving…' : 'Continue into Construction vocabulary'}
         </button>
-      </StepShell>
+      </Shell>
     )
   }
 
@@ -678,7 +767,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <StepShell
+      <Shell
         step={7}
         onBack={() => go(6)}
         onNext={ready ? advanceVocab : undefined}
@@ -756,7 +845,7 @@ export function StudentSequencePage() {
             </label>
           </div>
         )}
-      </StepShell>
+      </Shell>
     )
   }
 
@@ -767,7 +856,7 @@ export function StudentSequencePage() {
     const isLast = actionIdx >= WORD_ACTIONS.length - 1
     const seen = !!actionDone[item.id]
     return (
-      <StepShell
+      <Shell
         step={8}
         onBack={() => { resetVocab(); go(7) }}
         onNext={seen ? () => {
@@ -790,11 +879,11 @@ export function StudentSequencePage() {
             className="btn btn-primary"
             onClick={() => setActionDone((d) => ({ ...d, [item.id]: true }))}
           >
-            {seen ? 'Watched ✓' : 'I watched the word become an action'}
+            {seen ? 'Watched ✓' : 'I studied this action'}
           </button>
         </article>
-        <TeachNote>Assignments here connect classroom words to practical application — like mirror practice.</TeachNote>
-      </StepShell>
+        <TeachNote>Connect the English word to a real job-site action.</TeachNote>
+      </Shell>
     )
   }
 
@@ -802,25 +891,32 @@ export function StudentSequencePage() {
   if (step === 9) {
     const term = VOCAB_UNIT[matchIdx]
     const isLast = matchIdx >= VOCAB_UNIT.length - 1
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    const options = [term, ...distractors].sort(() => Math.random() - 0.5)
 
     function pickMatch(opt: string) {
       if (matchAnswer) return
+      const ok = opt === term.english
       setMatchAnswer(opt)
-      setMatchCorrect(opt === term.english)
+      setMatchCorrect(ok)
+      playFoley(ok ? 'correct' : 'wrong')
     }
 
     function nextMatch() {
-      if (isLast) { go(10); return }
-      setMatchIdx((i) => i + 1)
+      if (!matchCorrect) {
+        setMatchAnswer(null)
+        setMatchCorrect(false)
+        return
+      }
+      if (isLast) { go(10, 'Opening English Eye Spy…'); return }
+      const next = matchIdx + 1
+      setMatchIdx(next)
       setMatchAnswer(null)
       setMatchCorrect(false)
+      shuffleMatchOptions(next)
     }
 
     return (
-      <StepShell step={9} onBack={() => go(8)}>
-        <WhyWork>Matching picture to word is homework for your eyes and memory.</WhyWork>
+      <Shell step={9} onBack={() => go(8)}>
+        <WhyWork>Matching picture to word is practice for your eyes and memory.</WhyWork>
         <p className="train-vocab-counter">Match {matchIdx + 1} of {VOCAB_UNIT.length}</p>
         <PictureCard
           image={toolImage(term.imageKey)}
@@ -834,7 +930,7 @@ export function StudentSequencePage() {
           <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playSupport(term.gloss[supportLang])}>Hear {supportLang}</button>
         </div>
         <div className="train-choice-grid">
-          {options.map((opt) => (
+          {matchOptions.map((opt) => (
             <ChoiceButton
               key={opt.id}
               state={matchAnswer === opt.english ? (matchCorrect ? 'correct' : 'wrong') : matchAnswer ? (opt.english === term.english ? 'correct' : 'idle') : 'idle'}
@@ -848,25 +944,27 @@ export function StudentSequencePage() {
         {matchAnswer && (
           <>
             <div className={`alert ${matchCorrect ? 'ok' : 'warn'}`}>
-              {matchCorrect ? 'Yes — picture and word match.' : `The correct word is ${term.english}.`}
+              {matchCorrect ? 'Yes — picture and word match.' : `Not yet. The correct word is ${term.english}. Try again.`}
             </div>
             <button type="button" className="btn btn-primary" onClick={nextMatch}>
-              {isLast ? 'Continue to English Eye Spy' : 'Next match'}
+              {matchCorrect
+                ? (isLast ? 'Continue to English Eye Spy' : 'Next match')
+                : 'Try again'}
             </button>
           </>
         )}
-      </StepShell>
+      </Shell>
     )
   }
 
   /* Step 10: English Eye Spy exercise (unlimited) */
   if (step === 10) {
     return (
-      <StepShell step={10} onBack={() => { resetMatch(); go(9) }}>
+      <Shell step={10} onBack={() => { resetMatch(); go(9) }}>
         <WhyWork>On a real site the tool sits among other objects. Prove you can find it.</WhyWork>
         <TeachNote>Exercise mode: unlimited tries. Pass requires 100% with no misses. Wrong answers change the scene.</TeachNote>
         <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exercise" onComplete={() => { resetInstr(); go(11) }} />
-      </StepShell>
+      </Shell>
     )
   }
 
@@ -877,12 +975,19 @@ export function StudentSequencePage() {
 
     function pickInstr(opt: string) {
       if (instrAnswer || !instrHeard) return
+      const ok = opt === instr.correct
       setInstrAnswer(opt)
-      setInstrCorrect(opt === instr.correct)
+      setInstrCorrect(ok)
+      playFoley(ok ? 'correct' : 'wrong')
     }
 
     function nextInstr() {
-      if (isLast) { go(12); return }
+      if (!instrCorrect) {
+        setInstrAnswer(null)
+        setInstrCorrect(false)
+        return
+      }
+      if (isLast) { go(12, 'Opening site language…'); return }
       setInstrIdx((i) => i + 1)
       setInstrHeard(false)
       setInstrAnswer(null)
@@ -890,7 +995,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <StepShell step={11} onBack={() => go(10)}>
+      <Shell step={11} onBack={() => go(10)}>
         <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
         <p className="train-vocab-counter">Instruction {instrIdx + 1} of {INSTRUCTIONS.length} · English only</p>
         <div className="train-instruction">
@@ -942,42 +1047,75 @@ export function StudentSequencePage() {
         {instrAnswer && (
           <>
             <div className={`alert ${instrCorrect ? 'ok' : 'warn'}`}>
-              {instrCorrect ? 'Yes. You heard the tool name and the action.' : `Close — the correct action was: "${instr.correct}".`}
+              {instrCorrect ? 'Yes. You heard the tool name and the action.' : `Not yet. The correct action was: "${instr.correct}". Try again.`}
             </div>
             <button type="button" className="btn btn-primary" onClick={nextInstr}>
-              {isLast ? 'Continue to site language' : 'Next instruction'}
+              {instrCorrect
+                ? (isLast ? 'Continue to site language' : 'Next instruction')
+                : 'Try again'}
             </button>
           </>
         )}
-      </StepShell>
+      </Shell>
     )
   }
 
   /* Step 12: Site language — practical phrases */
   if (step === 12) {
     const phrases = [
-      { en: 'Measure twice, cut once.', why: 'Prevents waste and mistakes.' },
-      { en: 'Hard hats on in the bay.', why: 'Safety rule you will hear daily.' },
-      { en: 'Pass me the level.', why: 'Short tool request between crew members.' },
+      { en: 'Measure twice, cut once.', why: 'Stops waste and mistakes.' },
+      { en: 'Hard hats on in the bay.', why: 'Safety rule you will hear every day.' },
+      { en: 'Pass me the level.', why: 'Short tool request between workers.' },
       { en: 'Hold the board steady.', why: 'Teamwork on a cut or install.' },
     ]
+    const allReady = phrases.every((p) => phraseHeard[p.en] && phraseSaid[p.en])
     return (
-      <StepShell step={12} onBack={() => { resetInstr(); go(11) }} onNext={() => go(13)} nextLabel="Continue to digital skills">
-        <WhyWork>These phrases show up on Alberta job sites. Know them cold.</WhyWork>
-        <div className="train-learn-grid">
+      <Shell
+        step={12}
+        onBack={() => { resetInstr(); go(11) }}
+        onNext={allReady ? () => go(13, 'Opening digital skills…') : undefined}
+        nextLabel="Continue to digital skills"
+      >
+        <WhyWork>These phrases show up on Alberta job sites. Know these words well.</WhyWork>
+        <div className="phrase-practice">
           {phrases.map((p) => (
-            <LearnCard key={p.en} title={p.en} body={p.why} />
+            <div key={p.en} className="phrase-practice-item">
+              <strong>{p.en}</strong>
+              <p className="muted">{p.why}</p>
+              <div className="train-audio-row">
+                <button
+                  type="button"
+                  className={`btn ${phraseHeard[p.en] ? 'btn-secondary on-light' : 'btn-primary'}`}
+                  disabled={speaking !== null}
+                  onClick={() => {
+                    void (async () => {
+                      await playEnglish(p.en)
+                      setPhraseHeard((h) => ({ ...h, [p.en]: true }))
+                    })()
+                  }}
+                >
+                  {phraseHeard[p.en] ? 'Heard ✓' : 'Hear English'}
+                </button>
+              </div>
+              <label className="train-honesty-check">
+                <input
+                  type="checkbox"
+                  checked={!!phraseSaid[p.en]}
+                  onChange={() => setPhraseSaid((s) => ({ ...s, [p.en]: !s[p.en] }))}
+                />
+                <span>I said this phrase out loud.</span>
+              </label>
+            </div>
           ))}
         </div>
-        <TeachNote>Say each phrase out loud in English. No translation on the buttons here.</TeachNote>
-      </StepShell>
+        <TeachNote>Hear each phrase. Say it out loud. Then continue.</TeachNote>
+      </Shell>
     )
   }
 
   if (step === 13) {
-    const done = COMPUTER_SKILLS.every((s) => compChecks[s.id])
     return (
-      <StepShell step={13} onBack={() => go(12)} onNext={done ? () => go(14) : undefined} nextLabel="Continue to safety">
+      <Shell step={13} onBack={() => go(12)} onNext={() => go(14, 'Opening safety…')} nextLabel="Continue to safety">
         <WhyWork>This may be someone’s first computer. Every skill here is practical for Canadian training.</WhyWork>
         <TeachNote>Check only what you can do today. Empty boxes are honest — we can teach those skills.</TeachNote>
         <ul className="train-check-list">
@@ -985,24 +1123,24 @@ export function StudentSequencePage() {
             <CheckItem key={s.id} id={`pc-${s.id}`} title={s.title} why={s.why} checked={!!compChecks[s.id]} onChange={() => setCompChecks((c) => ({ ...c, [s.id]: !c[s.id] }))} />
           ))}
         </ul>
-      </StepShell>
+      </Shell>
     )
   }
 
   if (step === 14) {
     return (
-      <StepShell step={14} onBack={() => go(13)}>
+      <Shell step={14} onBack={() => go(13)}>
         <PictureCard emoji="!" label="Safety is a gate" caption="Alberta / Canada site safety in simple English with clear imagery." />
         <WhyWork>Safe workers protect themselves, their team, and their future on site.</WhyWork>
         <QuizRunner items={SAFETY_QUIZ} onComplete={() => go(15)} gated />
-      </StepShell>
+      </Shell>
     )
   }
 
   if (step === 15) {
     const allSeen = TOOL_CATEGORIES.every((c) => toolSeen[c.title])
     return (
-      <StepShell step={15} onBack={() => go(14)} onNext={allSeen ? () => go(16) : undefined} nextLabel="Continue to systems">
+      <Shell step={15} onBack={() => go(14)} onNext={allSeen ? () => go(16) : undefined} nextLabel="Continue to systems">
         <PictureCard emoji="T" label="Tools & Equipment" caption="Tap each category. Know the name before you use it." />
         <div className="train-card-grid">
           {TOOL_CATEGORIES.map((cat) => (
@@ -1013,14 +1151,14 @@ export function StudentSequencePage() {
             </button>
           ))}
         </div>
-      </StepShell>
+      </Shell>
     )
   }
 
   if (step === 16) {
     const allSeen = SYSTEM_TOPICS.every((t) => sysSeen[t.title])
     return (
-      <StepShell step={16} onBack={() => go(15)} onNext={allSeen ? () => go(17) : undefined} nextLabel="Continue to observation">
+      <Shell step={16} onBack={() => go(15)} onNext={allSeen ? () => go(17) : undefined} nextLabel="Continue to observation">
         <PictureCard emoji="S" label="Construction Systems" caption="Your role fits the whole build — not one task alone." />
         <div className="train-card-grid">
           {SYSTEM_TOPICS.map((topic) => (
@@ -1031,7 +1169,7 @@ export function StudentSequencePage() {
             </button>
           ))}
         </div>
-      </StepShell>
+      </Shell>
     )
   }
 
@@ -1042,7 +1180,7 @@ export function StudentSequencePage() {
       go(18)
     }
     return (
-      <StepShell step={17} onBack={() => go(16)}>
+      <Shell step={17} onBack={() => go(16)}>
         <PictureCard emoji="I" label="Instructor observation" caption="Learned → Practised → Competent under real observation." />
         <div className="train-learn-grid">
           <LearnCard mark="L" title="Learned" body="Studied in the app or class." />
@@ -1050,22 +1188,35 @@ export function StudentSequencePage() {
           <LearnCard mark="C" title="Competent" body="Authorized instructor confirmed the standard." />
         </div>
         <form className="stack" onSubmit={saveObs}>
-          <h3>Request instructor observation</h3>
+          <h3>Ask an instructor to watch a skill</h3>
           <div className="field">
             <label htmlFor="obs-skill">Skill to observe</label>
-            <input id="obs-skill" value={obsForm.skill} onChange={(e) => setObsForm({ ...obsForm, skill: e.target.value })} required placeholder="e.g. Tape measure use" />
+            <select id="obs-skill" value={obsForm.skill} onChange={(e) => setObsForm({ ...obsForm, skill: e.target.value })} required>
+              <option value="">Choose a skill…</option>
+              {VOCAB_UNIT.map((t) => (
+                <option key={t.id} value={t.english}>{t.english}</option>
+              ))}
+              <option value="Safety gear check">Safety gear check</option>
+              <option value="Follow a short instruction">Follow a short instruction</option>
+            </select>
           </div>
           <div className="field">
-            <label htmlFor="obs-station">Station / location</label>
-            <input id="obs-station" value={obsForm.station} onChange={(e) => setObsForm({ ...obsForm, station: e.target.value })} required placeholder="e.g. Workshop bay 2" />
+            <label htmlFor="obs-station">Where?</label>
+            <select id="obs-station" value={obsForm.station} onChange={(e) => setObsForm({ ...obsForm, station: e.target.value })} required>
+              <option value="">Choose a place…</option>
+              <option value="Workshop bay 1">Workshop bay 1</option>
+              <option value="Workshop bay 2">Workshop bay 2</option>
+              <option value="Classroom">Classroom</option>
+              <option value="Job site">Job site</option>
+            </select>
           </div>
           <div className="field">
-            <label htmlFor="obs-notes">Notes for instructor</label>
-            <textarea id="obs-notes" value={obsForm.notes} onChange={(e) => setObsForm({ ...obsForm, notes: e.target.value })} rows={3} />
+            <label htmlFor="obs-notes">Notes for instructor (optional)</label>
+            <textarea id="obs-notes" value={obsForm.notes} onChange={(e) => setObsForm({ ...obsForm, notes: e.target.value })} rows={3} placeholder="Ask instructor to help write if needed." />
           </div>
           <button className="btn btn-primary" type="submit">Save request and continue</button>
         </form>
-      </StepShell>
+      </Shell>
     )
   }
 
@@ -1077,7 +1228,7 @@ export function StudentSequencePage() {
       go(19)
     }
     return (
-      <StepShell step={18} onBack={() => go(17)}>
+      <Shell step={18} onBack={() => go(17)}>
         <PictureCard emoji="O" label="On-site training" caption="Real workplace feedback from supervised site work." />
         <form className="stack" onSubmit={saveLog}>
           <h3>Daily log + supervisor feedback</h3>
@@ -1095,38 +1246,38 @@ export function StudentSequencePage() {
           </div>
           <button className="btn btn-primary" type="submit">Save log and continue to final exam</button>
         </form>
-      </StepShell>
+      </Shell>
     )
   }
 
-  /* Step 19: Final Eye Spy exam (2–3 attempts) + written + certificate */
+  /* Step 19: Final Eye Spy exam (up to 3 attempts) + written + certificate */
   if (step === 19) {
     if (finalPhase === 'eyespy') {
       return (
-        <StepShell step={19} onBack={() => go(18)}>
-          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode — up to 3 attempts. 100% required. Scenes change on misses." />
+        <Shell step={19} onBack={() => go(18)}>
+          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode — up to 3 tries. 100% required. Scenes change on misses." />
           <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => setFinalPhase('written')} />
-        </StepShell>
+        </Shell>
       )
     }
     if (finalPhase === 'written') {
       return (
-        <StepShell step={19} onBack={() => setFinalPhase('eyespy')}>
-          <PictureCard emoji="W" label="Written & knowledge check" caption="Safety, measurement, language, and framing knowledge." />
-          <QuizRunner items={FINAL_QUIZ} onComplete={() => setFinalPhase('certificate')} />
-        </StepShell>
+        <Shell step={19} onBack={() => setFinalPhase('eyespy')}>
+          <PictureCard emoji="W" label="Written & knowledge check" caption="Safety, measurement, language, and tools. Perfect score required." />
+          <QuizRunner items={FINAL_QUIZ} onComplete={() => setFinalPhase('certificate')} gated />
+        </Shell>
       )
     }
     return (
-      <StepShell
+      <Shell
         step={19}
         onBack={() => setFinalPhase('written')}
-        onNext={honestyChecked ? () => go(20) : undefined}
+        onNext={honestyChecked ? () => go(20, 'Opening employment…') : undefined}
         nextLabel="Continue to employment"
         nextDisabled={!honestyChecked}
       >
         <div className="train-passport">
-          <PictureCard emoji="C" label="Purpose Academy Program Credential" caption="You passed the exam mix. Your Skills Passport collects verified evidence." />
+          <PictureCard emoji="C" label="Purpose Academy Program Certificate" caption="You passed the exam mix. Your Skills Passport collects verified evidence." />
           <ul className="list-plain">
             <li>Vocabulary Eye Spy passed at 100%</li>
             <li>Written / knowledge check complete</li>
@@ -1134,11 +1285,11 @@ export function StudentSequencePage() {
           </ul>
           <label className="train-honesty-check">
             <input type="checkbox" checked={honestyChecked} onChange={() => setHonestyChecked(!honestyChecked)} />
-            <span>I understand what this credential shows and does not show.</span>
+            <span>I understand what this certificate shows and does not show.</span>
           </label>
           <Link className="btn btn-ghost" to="/app/student/skills">View Skills Passport →</Link>
         </div>
-      </StepShell>
+      </Shell>
     )
   }
 
@@ -1146,16 +1297,14 @@ export function StudentSequencePage() {
     e.preventDefault()
     try { sessionStorage.setItem(EMP_KEY, JSON.stringify(empForm)) } catch { /* */ }
     markSequenceComplete('student', { detail: user?.full_name || 'Student' })
+    playFoley('metal')
+    setEmpDone(true)
   }
 
-  const sequenceMarked = (() => {
-    try { return !!sessionStorage.getItem(EMP_KEY) } catch { return false }
-  })()
-
   return (
-    <StepShell step={20} onBack={() => go(19)}>
+    <Shell step={20} onBack={() => go(19)}>
       <PictureCard emoji="H" label="Employment Connection" caption="See hiring partners and enter work with support." />
-      {!sequenceMarked ? (
+      {!empDone ? (
         <form className="stack" onSubmit={handleComplete}>
           <div className="alert ok">
             Partner focus: construction employers who understand this pathway.
@@ -1175,7 +1324,7 @@ export function StudentSequencePage() {
         <>
           <div className="alert ok">
             Student training path complete. Progress is marked on{' '}
-            <Link className="inline-link" to="/sequences">All sequences</Link>.
+            <Link className="inline-link" to="/sequences">All paths</Link>.
           </div>
           <div className="train-learn-grid">
             <LearnCard title="Hiring partner match" body="Connect with construction companies hiring from this pathway." />
@@ -1184,11 +1333,11 @@ export function StudentSequencePage() {
           </div>
           <div className="hero-actions">
             <Link className="btn btn-primary" to="/app/student">Go to my dashboard</Link>
-            <button type="button" className="btn btn-ghost" onClick={() => { saveStep(1); go(1) }}>Restart training path</button>
+            <button type="button" className="btn btn-ghost" onClick={() => { saveStep(1); setEmpDone(false); go(1) }}>Restart training path</button>
           </div>
         </>
       )}
       <p className="train-motto">Learn · Practice · Improve · Achieve</p>
-    </StepShell>
+    </Shell>
   )
 }

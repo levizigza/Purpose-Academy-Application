@@ -64,6 +64,8 @@ const NAME_TO_KEY: Record<string, ToolImageKey> = {
   level: 'level',
   ppe: 'ppe',
   'personal protective equipment': 'ppe',
+  'safety gear (ppe)': 'ppe',
+  'safety gear': 'ppe',
   'safety check': 'safety-check',
 }
 

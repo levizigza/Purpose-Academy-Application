@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
-import { BRAND_ASSETS } from '../brand/assets'
-import { BRAND } from '../brand/copy'
-import { AmbientField, Reveal } from './Motion'
+import { Reveal } from './Motion'
+import { CrewLoadingScreen } from './CrewLoading'
 
 export function SkipLink() {
   return (
@@ -11,17 +10,9 @@ export function SkipLink() {
   )
 }
 
-export function LoadingScreen({ label = 'Loading…' }: { label?: string }) {
-  return (
-    <div className="splash" role="status" aria-live="polite">
-      <AmbientField />
-      <div>
-        <img src={BRAND_ASSETS.logoFull} alt="" style={{ width: 140, height: 'auto' }} />
-        <h1 className="sr-only">{BRAND.name}</h1>
-        <p className="muted">{label}</p>
-      </div>
-    </div>
-  )
+/** Session restore / route gate — SiteWise-style construction crew. */
+export function LoadingScreen({ label = 'Opening your training…' }: { label?: string }) {
+  return <CrewLoadingScreen label={label} withSound />
 }
 
 export function PageHeader({
@@ -59,8 +50,8 @@ export function StatusLabel({ status }: { status: string }) {
     submitted: { label: 'Sent — waiting for review', tone: 'brand' },
     graded: { label: 'Graded', tone: 'ok' },
     PASS: { label: 'Safety cleared', tone: 'ok' },
-    BLOCKED: { label: 'Safety blocked', tone: 'warn' },
-    EXPIRED: { label: 'Safety expired', tone: 'danger' },
+    BLOCKED: { label: 'Safety not passed yet — review and try again', tone: 'warn' },
+    EXPIRED: { label: 'Safety check expired', tone: 'danger' },
     MANUAL_REVIEW: { label: 'Needs instructor review', tone: 'warn' },
     learned: { label: 'Learned', tone: 'brand' },
     practised: { label: 'Practised', tone: 'brand' },

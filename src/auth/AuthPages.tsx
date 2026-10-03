@@ -49,36 +49,7 @@ export function LoginPage() {
       <form className="panel auth-card stack" onSubmit={onSubmit}>
         <p className="section-kicker">{BRAND.name}</p>
         <h1>{BRAND.secondaryCta}</h1>
-        <p className="lede">Continue your path into language, safety, and verified skill.</p>
-        {isLocalMode() && (
-          <div className="alert ok">
-            Browser demo mode is on — sign-in and training run in this browser (no server required). Use the demo
-            accounts below, or create a new student account.
-            <div style={{ marginTop: '0.65rem' }}>
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={async () => {
-                  await resetDatabase()
-                  setError(null)
-                  setEmail('student@purposeacademy.ca')
-                  setPassword(DEMO_PASSWORDS.student)
-                }}
-              >
-                Reset demo data
-              </button>
-            </div>
-          </div>
-        )}
-        {!isLocalMode() && (
-          <p className="muted">
-            Connected to the training API. Use a demo account below, or register a new student.
-          </p>
-        )}
-        <p className="muted">
-          Demo accounts available below. Pending learner:{' '}
-          <code>pending@purposeacademy.ca</code> / {DEMO_PASSWORDS.pending}
-        </p>
+        <p className="lede">Enter your email and password to continue.</p>
         {error && <div className="alert error">{error}</div>}
         <div className="field">
           <label htmlFor="email">Email</label>
@@ -105,35 +76,57 @@ export function LoginPage() {
         <button className="btn btn-primary" type="submit" disabled={busy}>
           {busy ? 'Signing in…' : BRAND.secondaryCta}
         </button>
-        <div className="role-pick" style={{ marginTop: '0.5rem' }}>
-          <button
-            type="button"
-            onClick={() => {
-              setEmail('student@purposeacademy.ca')
-              setPassword(DEMO_PASSWORDS.student)
-            }}
-          >
-            Fill learner demo
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setEmail('instructor@purposeacademy.ca')
-              setPassword(DEMO_PASSWORDS.instructor)
-            }}
-          >
-            Fill instructor demo
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setEmail('admin@purposeacademy.ca')
-              setPassword(DEMO_PASSWORDS.admin)
-            }}
-          >
-            Fill admin demo
-          </button>
-        </div>
+        <details className="auth-demo-details">
+          <summary>Demo accounts (for testing)</summary>
+          {isLocalMode() && (
+            <div className="alert ok" style={{ marginTop: '0.65rem' }}>
+              Browser demo mode — training runs in this browser.
+              <div style={{ marginTop: '0.65rem' }}>
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={async () => {
+                    await resetDatabase()
+                    setError(null)
+                    setEmail('student@purposeacademy.ca')
+                    setPassword(DEMO_PASSWORDS.student)
+                  }}
+                >
+                  Reset demo data
+                </button>
+              </div>
+            </div>
+          )}
+          <div className="role-pick" style={{ marginTop: '0.5rem' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('student@purposeacademy.ca')
+                setPassword(DEMO_PASSWORDS.student)
+              }}
+            >
+              Fill learner demo
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('instructor@purposeacademy.ca')
+                setPassword(DEMO_PASSWORDS.instructor)
+              }}
+            >
+              Fill instructor demo
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('admin@purposeacademy.ca')
+                setPassword(DEMO_PASSWORDS.admin)
+              }}
+            >
+              Fill admin demo
+            </button>
+          </div>
+        </details>
         <p className="muted">
           <Link to="/forgot-password">Forgot password?</Link> · <Link to="/register">Create a student account</Link> ·{' '}
           <Link to="/roles">Choose role</Link> · <Link to="/welcome">Back</Link>
@@ -277,7 +270,6 @@ export function RegisterPage() {
             <option>Arabic</option>
             <option>Hindi</option>
             <option>Tigrinya</option>
-            <option>English only</option>
           </select>
         </div>
         <button className="btn btn-primary" type="submit" disabled={busy}>

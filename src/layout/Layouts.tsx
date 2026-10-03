@@ -32,7 +32,7 @@ export function PublicLayout() {
             <nav className="nav-cluster" aria-label="Website">
               <NavLink to="/programs">Programs</NavLink>
               <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
-              <NavLink to="/sequences">Sequences</NavLink>
+              <NavLink to="/sequences">All paths</NavLink>
               <NavLink to="/contact">Help</NavLink>
               <NavLink to="/privacy">Privacy</NavLink>
               {user && (
@@ -67,7 +67,7 @@ export function PublicLayout() {
             </p>
           </div>
           <div className="nav-links">
-            <Link to="/sequences">Sequences</Link>
+            <Link to="/sequences">All paths</Link>
             <Link to="/privacy">Privacy</Link>
             <Link to={BRAND.joinTo}>{BRAND.joinLabel}</Link>
             <Link to="/login">{BRAND.secondaryCta}</Link>
@@ -85,12 +85,11 @@ function DesktopNav({ role }: { role: Role }) {
         <NavLink to="/app/student" end>
           Home
         </NavLink>
-        <NavLink to="/app/student/foundation">Foundation</NavLink>
-        <NavLink to="/app/student/courses">Courses</NavLink>
-        <NavLink to="/app/student/assignments">Assignments</NavLink>
-        <NavLink to="/app/student/progress">Progress</NavLink>
-        <NavLink to="/app/student/skills">Skills Passport</NavLink>
-        <NavLink to="/app/student/profile">Profile</NavLink>
+        <NavLink to="/journey">Guided path</NavLink>
+        <NavLink to="/app/student/courses">Learn</NavLink>
+        <NavLink to="/app/student/assignments">Tasks</NavLink>
+        <NavLink to="/app/student/skills">My skills</NavLink>
+        <NavLink to="/app/student/profile">More</NavLink>
       </>
     )
   }
@@ -128,9 +127,9 @@ function MobileNav({ role }: { role: Role }) {
         <NavLink to="/app/student" end>
           Home
         </NavLink>
+        <NavLink to="/journey">Path</NavLink>
         <NavLink to="/app/student/courses">Learn</NavLink>
         <NavLink to="/app/student/assignments">Tasks</NavLink>
-        <NavLink to="/app/student/skills">Skills</NavLink>
         <NavLink to="/app/student/profile">More</NavLink>
       </>
     )

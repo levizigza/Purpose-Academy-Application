@@ -391,12 +391,11 @@ export function localSelectPathway(uid: string, pathway: Pathway) {
   mutate((db) => {
     const student = db.students.find((s) => s.uid === uid)
     if (!student) throw new Error('Student not found')
-    if (!student.foundation_complete) {
-      throw new Error('Complete foundation learning before selecting a program.')
-    }
     if (pathway !== 'construction') {
       throw new Error('Only the Construction pathway is open in this pilot.')
     }
+    // Guided journey is the foundation path for this pilot — selecting Construction completes it.
+    student.foundation_complete = true
     student.pathway = pathway
     student.program_id = 'course-construction'
     if (!db.enrollments.some((e) => e.student_id === student.id && e.course_id === 'course-construction')) {

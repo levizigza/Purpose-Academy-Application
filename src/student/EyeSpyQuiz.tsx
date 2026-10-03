@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ATTEMPT_POLICY, type EyeSpyScene } from './journeyCurriculum'
 import { toolImage } from './toolImages'
+import { playFoley } from '../audio/foley'
 
 type Mode = 'exercise' | 'exam'
 
@@ -22,8 +23,8 @@ function pickGroups(all: EyeSpyScene[]): string[] {
 
 /**
  * Eye Spy: find the target object in a busy site scene.
- * Wrong answer loses a point and rotates to another scene variant.
- * Pass requires 100% (no misses in the run). Exercises unlimited; exams limited.
+ * Wrong answer loses a point; scene rotates AFTER feedback.
+ * Pass requires 100% (no misses). Exercises unlimited; exams limited.
  */
 export function EyeSpyQuiz({
   scenes,
@@ -68,16 +69,19 @@ export function EyeSpyQuiz({
     setLastOk(ok)
     if (ok) {
       setCorrectCount((c) => c + 1)
+      playFoley('correct')
     } else {
       setMisses((m) => m + 1)
-      setVariantIdx((v) => v + 1)
-      resetPick()
+      playFoley('wrong')
+      // Keep the current scene + picks visible during feedback; rotate on continue.
     }
     setPhase('feedback')
   }
 
   function nextAfterFeedback() {
     if (!lastOk) {
+      setVariantIdx((v) => v + 1)
+      resetPick()
       setPhase('play')
       return
     }
@@ -112,7 +116,7 @@ export function EyeSpyQuiz({
           {misses > 0 ? ` · ${misses} miss${misses === 1 ? '' : 'es'} (must be 0 to pass)` : ' · clean run'}
         </p>
         <p className="muted">
-          Vocabulary pass requires {ATTEMPT_POLICY.vocabPassPercent}% with no misses. Wrong answers change the scene.
+          You must find every tool with no mistakes. Wrong answers change the scene.
         </p>
         {pass ? (
           <button type="button" className="btn btn-primary" onClick={onComplete}>
@@ -120,13 +124,13 @@ export function EyeSpyQuiz({
           </button>
         ) : examLocked ? (
           <p className="alert warn">
-            Exam attempts used ({maxAttempts}). Review vocabulary, then ask an instructor to unlock a retry.
+            Exam tries used ({maxAttempts}). Review the words, then ask an instructor for another try.
           </p>
         ) : (
           <button type="button" className="btn btn-primary" onClick={retryRun}>
             {mode === 'exam' && maxAttempts
-              ? `Retry exam (${attempt + 1}/${maxAttempts})`
-              : 'Try again — aim for a clean 100%'}
+              ? `Try exam again (${attempt + 1} of ${maxAttempts})`
+              : 'Try again — find every tool with no mistakes'}
           </button>
         )}
       </div>
@@ -137,7 +141,7 @@ export function EyeSpyQuiz({
     <div className="eye-spy">
       <p className="train-quiz-counter">
         Scene {groupIdx + 1} of {need}
-        {mode === 'exam' && maxAttempts ? ` · Attempt ${attempt}/${maxAttempts}` : ' · Exercise (unlimited)'}
+        {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice (unlimited tries)'}
       </p>
       <p className="eye-spy-instruction">{scene.instruction}</p>
       <p className="eye-spy-scene-title">{scene.title}</p>
@@ -148,18 +152,18 @@ export function EyeSpyQuiz({
             <span key={i} className="eye-spy-tile" />
           ))}
         </div>
-        {scene.hotspots.map((h) => {
+        {scene.hotspots.map((h, index) => {
           const img = toolImage(h.imageKey)
           const selected = pickedHotspot === h.id
           return (
             <button
               key={`${scene.id}-${h.id}-${variantIdx}`}
               type="button"
-              className={`eye-spy-hotspot${selected ? ' is-selected' : ''}${phase === 'feedback' && lastOk && h.id === scene.targetId ? ' is-target' : ''}${phase === 'feedback' && !lastOk && selected ? ' is-wrong' : ''}`}
+              className={`eye-spy-hotspot${selected ? ' is-selected' : ''}${phase === 'feedback' && lastOk && h.id === scene.targetId ? ' is-target' : ''}${phase === 'feedback' && !lastOk && selected ? ' is-wrong' : ''}${phase === 'feedback' && !lastOk && h.id === scene.targetId ? ' is-target' : ''}`}
               style={{ left: `${h.x}%`, top: `${h.y}%`, width: `${h.w}%`, height: `${h.h}%` }}
               onClick={() => phase === 'play' && setPickedHotspot(h.id)}
               disabled={phase !== 'play'}
-              aria-label={h.label}
+              aria-label={`Tool spot ${index + 1}`}
             >
               {img ? <img src={img} alt="" /> : <span>{h.label}</span>}
             </button>
@@ -169,17 +173,25 @@ export function EyeSpyQuiz({
 
       <p className="eye-spy-prompt">What English name matches the tool you tapped?</p>
       <div className="train-choice-grid">
-        {nameOptions.map((opt) => (
-          <button
-            key={opt}
-            type="button"
-            className={`train-choice${pickedName === opt ? ' is-correct' : ''}`}
-            disabled={phase !== 'play'}
-            onClick={() => setPickedName(opt)}
-          >
-            {opt}
-          </button>
-        ))}
+        {nameOptions.map((opt) => {
+          let cls = 'train-choice'
+          if (phase === 'play' && pickedName === opt) cls += ' is-selected'
+          if (phase === 'feedback') {
+            if (opt === target.answer) cls += ' is-correct'
+            else if (pickedName === opt) cls += ' is-wrong'
+          }
+          return (
+            <button
+              key={opt}
+              type="button"
+              className={cls}
+              disabled={phase !== 'play'}
+              onClick={() => setPickedName(opt)}
+            >
+              {opt}
+            </button>
+          )
+        })}
       </div>
 
       {phase === 'play' && (
@@ -197,8 +209,8 @@ export function EyeSpyQuiz({
         <>
           <div className={`alert ${lastOk ? 'ok' : 'warn'}`}>
             {lastOk
-              ? `Correct — that is the ${target.answer}.`
-              : 'Not yet — you lost a point. The scene changed. Find it again.'}
+              ? `Yes — that is the ${target.answer}.`
+              : `Not yet. The correct tool is the ${target.answer}. Next try uses a new scene.`}
           </div>
           <button type="button" className="btn btn-primary" onClick={nextAfterFeedback}>
             {lastOk ? (groupIdx + 1 >= need ? 'See results' : 'Next scene') : 'Try the new scene'}

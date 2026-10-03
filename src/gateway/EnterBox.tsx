@@ -5,6 +5,7 @@ import {
   subscribeSequenceProgress,
   type SequenceId,
 } from './sequenceProgress'
+import { playFoley, unlockFoley } from '../audio/foley'
 
 type Entry = {
   label: string
@@ -126,9 +127,9 @@ export function EnterBox() {
         <span className="toolbox-handle-bar" />
       </div>
       <div className="toolbox-lid">
-        <p className="toolbox-kicker">Tool chest</p>
-        <h2 className="toolbox-title">Open a tray</h2>
-        <p className="toolbox-lede">Each path is a tool. Pick one and begin.</p>
+        <p className="toolbox-kicker">Choose how to enter</p>
+        <h2 className="toolbox-title">Start here</h2>
+        <p className="toolbox-lede">Pick Student to begin learning. Other doors are for staff.</p>
       </div>
       <nav className="toolbox-tray" aria-label="Site entry">
         {ENTRIES.map((item, i) => {
@@ -144,7 +145,7 @@ export function EnterBox() {
           const help = item.placeholder
             ? item.help
             : done
-              ? 'Completed — open again'
+              ? 'Done — open again'
               : partial
                 ? 'Partly done — continue'
                 : item.help
@@ -164,6 +165,10 @@ export function EnterBox() {
             </>
           )
 
+          function onOpen() {
+            void unlockFoley().then(() => playFoley(item.tool === 'latch' ? 'latch' : 'wood'))
+          }
+
           if (item.placeholder) {
             return (
               <a
@@ -172,7 +177,7 @@ export function EnterBox() {
                 href=""
                 onClick={ignoreEmptyLink}
                 aria-disabled="true"
-                title="Reserved for the future Purpose Academy Application"
+                title="Coming soon"
                 style={style}
               >
                 {inner}
@@ -181,14 +186,20 @@ export function EnterBox() {
           }
 
           return (
-            <Link key={item.to} className={className} to={item.to} style={style}>
+            <Link
+              key={item.to}
+              className={className}
+              to={item.to}
+              style={style}
+              onClick={onOpen}
+            >
               {inner}
             </Link>
           )
         })}
       </nav>
       <Link className="toolbox-foot" to="/sequences">
-        See all sequences on this site →
+        See all paths on this site →
       </Link>
     </aside>
   )

@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
+import { FoleyToggle } from '../components/CrewLoading'
+import { playFoley, unlockFoley } from '../audio/foley'
 
 const ENTERED_KEY = 'pa-crossed-threshold-v20'
 
@@ -93,6 +95,10 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
 
   const enter = useCallback(() => {
     markEnteredSite()
+    void unlockFoley().then(() => {
+      playFoley('hammer')
+      playFoley('whoosh')
+    })
     if (onEnter) onEnter()
     else navigate('/', { replace: true })
   }, [navigate, onEnter])
@@ -171,6 +177,11 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
           >
             <EnterHammer className="threshold-hammer-icon" />
           </button>
+        )}
+        {showEnter && (
+          <div className="threshold-foley">
+            <FoleyToggle />
+          </div>
         )}
       </div>
     </div>

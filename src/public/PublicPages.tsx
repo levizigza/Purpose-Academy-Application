@@ -81,7 +81,7 @@ export function HomePage() {
                 <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
               </div>
               <h3>Community Support</h3>
-              <p>Client care and professional conduct — planned on the same foundation architecture.</p>
+              <p>Client care and professional conduct — planned with the same learning steps.</p>
             </Reveal>
           </div>
         </Reveal>
@@ -121,8 +121,7 @@ export function ProgramsPage() {
         <p className="section-kicker">Programs</p>
         <h1>Build toward work you can prove</h1>
         <p className="lede">
-          Construction is the live pathway. Logistics and Community Support reuse the same foundation-to-verification
-          architecture.
+          Construction is the live pathway. Logistics and Community Support use the same learning steps as Construction.
         </p>
       </Reveal>
       <div className="signal-row">

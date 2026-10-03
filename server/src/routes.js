@@ -518,8 +518,8 @@ export function registerRoutes(app) {
         const gate = requireApprovedStudent(db, req.user.uid)
         if (!gate.ok) throw Object.assign(new Error(gate.error), { status: gate.status, code: gate.code })
         const student = gate.student
-        if (!student?.foundation_complete) throw new Error('Complete foundation learning before selecting a program.')
         if (pathway !== 'construction') throw new Error('Only the Construction pathway is open in this pilot.')
+        student.foundation_complete = true
         student.pathway = pathway
         student.program_id = 'course-construction'
         if (!db.enrollments.some((e) => e.student_id === student.id && e.course_id === 'course-construction')) {

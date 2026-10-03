@@ -1,48 +1,37 @@
 # UX / UI honest review
 
-Product: **Purpose Academy** (formerly working title Purpose Academy)  
-Review date: 2026-09-28  
+Product: **Purpose Academy**  
+Review date: 2026-10-03 (crew loading + foley + Level-4 progression pass)  
 Audience: newcomers and workforce learners (plain language, low digital familiarity), plus instructors and admins.
 
 ## Verdict
 
-The product flow matches the plan (register → approve → foundation → Construction → assignments → skills). After this pass, **navigability is clearer**, especially for students on phones. It is usable for a Construction pilot demo. It is **not** yet production-polished accessibility or content-complete for all pathways.
+The guided student path now matches the intended curriculum order and Level-4 English constraints more honestly. Construction-crew loading screens and measured site foley give the SiteWise-style presence the product asked for. Remaining gaps are mostly content depth (real action video) and full WCAG validation with learners.
 
-## What was wrong (honest)
+## What this pass fixed
 
-1. **Too many bottom-nav links** — six student tabs crowded small screens.
-2. **Jargon labels** — “Assess”, “Skills”, “Admissions” were unclear for some learners.
-3. **Next action competed with weather/quotes** — Home did not put the learning CTA first loudly enough.
-4. **Raw status words** — “pending”, “BLOCKED” are system speak, not human speak.
-5. **Auth screens had no site chrome** — easy to feel lost with no way back to the website/help.
-6. **Blank wait while session loaded** — looked broken.
-7. **Splash forced a delay** — friction without value.
-8. **Security story was invisible** — admins had no clear privacy/security screen copy after going full-stack.
+1. **Construction-crew loading** — session restore and step transitions use an animated three-person crew (hammer / plank / directing), not a blank logo wait.
+2. **Construction foley** — procedural Web Audio (hammer, wood, saw, metal ting, ambient bed); mute remembered; unlocks on Enter hammer / Sound on; never required.
+3. **Honest gates** — Interest skills and Digital skills no longer force every box checked; practice + instructions require a correct answer before advancing; final written quiz is perfect-score gated.
+4. **Level-4 language** — shorter step chrome (help first, purpose in “Why?”), PPE taught as “Safety gear (PPE)”, removed idiom (“know them cold”), fixed “Pass me the level” option match, replaced untaught “stud” exam item with saw picture check.
+5. **Eye Spy** — feedback stays on the current scene before rotation; selection styling fixed; aria labels no longer reveal answers; more Level-1 targets (tape, saw).
+6. **Registration** — real password fields; employment completion UI updates after submit; pathway save no longer requires prior foundation flag.
+7. **Nav / entry** — “All paths”, Guided path in student nav, Enter box plain language, login demos collapsed.
 
-## What we fixed
+## Remaining gaps (honest)
 
-- Mobile nav: **Home / Learn / Tasks / Skills / More** (student)
-- Plain-language nav and status labels (`StatusLabel`)
-- **Your next step** card first on student Home
-- Skip link, focus rings, larger tap targets (48px)
-- Auth shell with Website / Help / Sign in
-- Loading screen during session restore
-- Splash can be skipped; defaults toward the public site
-- Profile “More” page links foundation, program, progress, help
-- Admin Security & privacy page documents controls
-
-## Remaining gaps (honest, not yet built)
-
+- Word → Action still uses still photos, not video clips
 - Full WCAG audit with screen-reader users
 - Offline / poor-connectivity recovery UI
-- Multilingual UI chrome (support language is content-only today)
-- Instructor tablet observation optimized one-thumb layout
+- Multilingual UI chrome (support language is content-only)
 - Logistics / Community pathways still locked by design
 
 ## Usability checklist (pilot)
 
-- [ ] New student can register without staff coaching on buttons
-- [ ] Pending student understands they must wait
-- [ ] Approved student always sees one obvious next lesson
-- [ ] Instructor can find grading and observation in under two taps
-- [ ] Admin can approve a student from Overview → Approve students
+- [x] New student can register with their own password
+- [x] Interest / digital honesty does not block progress
+- [x] Practice and instructions require correct answers
+- [x] Eye Spy + final written quiz enforce pass standards
+- [x] Loading screens show construction crew + optional site sound
+- [ ] New student can register without staff coaching on buttons (field-test)
+- [ ] Approved student always sees one obvious next lesson (field-test)
