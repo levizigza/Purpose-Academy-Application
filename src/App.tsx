@@ -27,11 +27,12 @@ import {
 } from './gateway/GatewayPages'
 import {
   AdmissionsPage,
+  AboutPage,
   ContactPage,
+  GivePage,
   HomePage,
   PrivacyNoticePage,
   ProgramsPage,
-  SequencesPage,
 } from './public/PublicPages'
 import { SkillsPassportPage } from './skills/SkillsPassportPage'
 import { StudentSequencePage } from './student/StudentSequence'
@@ -67,7 +68,8 @@ const SPLASH_BYPASS = new Set([
   '/enter/admin/guest',
   '/enter/instructor',
   '/journey',
-  '/sequences',
+  '/about',
+  '/give',
 ])
 
 function AppRoutes() {
@@ -135,8 +137,10 @@ function AppRoutes() {
         <Route path="/" element={<HomePage />} />
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/admissions" element={<AdmissionsPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/give" element={<GivePage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/sequences" element={<SequencesPage />} />
+        <Route path="/sequences" element={<Navigate to="/" replace />} />
         <Route path="/privacy" element={<PrivacyNoticePage />} />
         <Route path="/enter/student" element={<StudentEnterPage />} />
         <Route path="/enter/admin" element={<AdminEnterPage />} />

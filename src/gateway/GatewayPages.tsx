@@ -120,7 +120,7 @@ export function AdminContactSequencePage() {
   return (
     <div className="shell-main stack enter-flow">
       <Reveal as="header" className="page-header stack">
-        <p className="section-kicker">Admin · Sequence 1</p>
+        <p className="section-kicker">Admin</p>
         <h1>Contact Admin</h1>
         <p className="lede">Write a short note. We will reply by email.</p>
       </Reveal>
@@ -129,8 +129,8 @@ export function AdminContactSequencePage() {
           <>
             <div className="alert ok">Thank you, {name || 'friend'}. Your message was saved for the admin team.</div>
             <div className="hero-actions">
-              <Link className="btn btn-primary" to="/sequences">
-                See all sequences
+              <Link className="btn btn-primary" to="/about">
+                About the school
               </Link>
               <Link className="btn btn-secondary" to="/">
                 Back home
@@ -193,7 +193,7 @@ export function AdminGuestSequencePage() {
   return (
     <div className="shell-main stack enter-flow">
       <Reveal as="header" className="page-header stack">
-        <p className="section-kicker">Admin · Sequence 2</p>
+        <p className="section-kicker">Admin</p>
         <h1>Employed / Guest request</h1>
         <p className="lede">Tell us who you are and what you need. Keep it simple.</p>
       </Reveal>
@@ -202,8 +202,8 @@ export function AdminGuestSequencePage() {
           <>
             <div className="alert ok">Request received. An admin will review it soon.</div>
             <div className="hero-actions">
-              <Link className="btn btn-primary" to="/sequences">
-                See all sequences
+              <Link className="btn btn-primary" to="/about">
+                About the school
               </Link>
               <Link className="btn btn-secondary" to="/">
                 Back home

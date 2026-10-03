@@ -32,11 +32,11 @@ export function PublicLayout() {
             <nav className="nav-cluster" aria-label="Website">
               <NavLink to="/programs">Programs</NavLink>
               <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
-              <NavLink to="/sequences">All paths</NavLink>
-              <NavLink to="/contact">Help</NavLink>
-              <NavLink to="/privacy">Privacy</NavLink>
+              <NavLink to="/about">About</NavLink>
+              <NavLink to="/give">Give</NavLink>
+              <NavLink to="/contact">Contact</NavLink>
               {user && (
-                <NavLink to={homeForRole(user.role, student?.registration_status)}>Training</NavLink>
+                <NavLink to={homeForRole(user.role, student?.registration_status)}>Portal</NavLink>
               )}
             </nav>
             <div className="nav-actions">
@@ -63,13 +63,14 @@ export function PublicLayout() {
           <div>
             <strong>{BRAND.name}</strong>
             <p className="muted" style={{ margin: 0 }}>
-              {BRAND.place} — {BRAND.theme.toLowerCase()}. Instructors verify practical skill.
+              Construction school in {BRAND.place}. {BRAND.tagline}
             </p>
           </div>
           <div className="nav-links">
-            <Link to="/sequences">All paths</Link>
-            <Link to="/privacy">Privacy</Link>
-            <Link to={BRAND.joinTo}>{BRAND.joinLabel}</Link>
+            <Link to="/about">About</Link>
+            <Link to="/programs">Programs</Link>
+            <Link to="/give">Give</Link>
+            <Link to="/contact">Contact</Link>
             <Link to="/login">{BRAND.secondaryCta}</Link>
           </div>
         </div>

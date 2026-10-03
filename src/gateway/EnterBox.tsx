@@ -36,8 +36,8 @@ const ENTRIES: Entry[] = [
   },
   {
     to: '/journey',
-    label: 'Student Sequence',
-    help: 'Full path — start to finish',
+    label: 'Training Path',
+    help: 'Full foundations journey',
     tone: 'journey',
     tool: 'wrench',
     completeIds: ['student'],

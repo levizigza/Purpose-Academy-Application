@@ -4949,3 +4949,124 @@ table.data th {
   margin: 0;
 }
 
+
+
+/* ——— School marketing (construction academy) ——— */
+.hero-school-kicker {
+  margin: 0 0 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #f5c542;
+}
+
+.hero-tagline {
+  margin: 0.65rem 0 1rem;
+  font-weight: 700;
+  color: #f5c542;
+  letter-spacing: 0.02em;
+}
+
+.pillar-grid,
+.audience-grid,
+.team-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.pillar-grid,
+.audience-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.team-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 860px) {
+  .pillar-grid,
+  .audience-grid,
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pillar,
+.audience-card,
+.team-card {
+  padding: 1.15rem 1.2rem;
+  border-radius: 14px;
+  border: 1px solid var(--line, #d5dde8);
+  background: color-mix(in srgb, #fff 88%, #e8eef6);
+}
+
+.pillar h3,
+.audience-card h3,
+.team-card h3 {
+  margin: 0 0 0.35rem;
+  font-family: var(--display);
+}
+
+.school-bullets {
+  margin: 0.75rem 0 1.1rem;
+  padding-left: 1.15rem;
+  color: var(--ink-soft, #445266);
+}
+
+.school-bullets li + li {
+  margin-top: 0.35rem;
+}
+
+.school-program-feature {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.25rem;
+  border-radius: 18px;
+  border: 1px solid var(--line, #d5dde8);
+  background: #fff;
+}
+
+@media (max-width: 860px) {
+  .school-program-feature {
+    grid-template-columns: 1fr;
+  }
+}
+
+.school-program-media img {
+  width: 100%;
+  height: min(320px, 50vw);
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
+
+.team-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 0.65rem;
+  font-weight: 800;
+  color: #0b2f5c;
+  background: linear-gradient(145deg, #f5c542, #e8a317);
+}
+
+.team-role {
+  margin: 0 0 0.45rem;
+  font-weight: 700;
+  color: var(--brand, #0b2f5c);
+}
+
+.audience-band .audience-card .btn {
+  margin-top: 0.75rem;
+}
+
+.signal.featured {
+  box-shadow: 0 16px 40px rgba(7, 30, 61, 0.12);
+  border-color: color-mix(in srgb, var(--brand, #0b2f5c) 28%, transparent);
+}

@@ -1323,8 +1323,7 @@ export function StudentSequencePage() {
       ) : (
         <>
           <div className="alert ok">
-            Student training path complete. Progress is marked on{' '}
-            <Link className="inline-link" to="/sequences">All paths</Link>.
+            Student training path complete. Your Skills Passport and dashboard are ready.
           </div>
           <div className="train-learn-grid">
             <LearnCard title="Hiring partner match" body="Connect with construction companies hiring from this pathway." />

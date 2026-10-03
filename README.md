@@ -1,11 +1,13 @@
-# Purpose Academy — Full-stack Learning App & Website
+# Purpose Academy — Construction School
 
-Fresh Purpose Academy platform:
+Calgary construction school platform:
 
+- **Foundations + apprenticeship pathway** for construction learners
 - **Frontend:** Vite + React + TypeScript
-- **Backend:** Express (Node) + persistent JSON database (free OSS)
+- **Backend:** Express (Node) + persistent JSON database
 - **Auth:** JWT + bcrypt password hashes
-- **Enrichments:** free APIs from [public-apis](https://github.com/public-apis/public-apis)
+
+Public site structure (inspired by Alberta trade schools such as SAIT): Programs · Admissions · About · Give · Contact.
 
 ## Security & UX
 
