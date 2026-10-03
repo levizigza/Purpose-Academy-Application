@@ -57,11 +57,11 @@ export function Reveal({
   )
 }
 
-/** Remounts on route change so each page enters with motion. */
+/** Remounts on route change so each page enters with a smooth site transition. */
 export function PageMotion({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
   return (
-    <div key={pathname} className="page-motion">
+    <div key={pathname} className="page-motion page-motion-smooth">
       {children}
     </div>
   )

@@ -36,8 +36,8 @@ const ENTRIES: Entry[] = [
   },
   {
     to: '/journey',
-    label: 'Training Path',
-    help: 'Full foundations journey',
+    label: 'Training Path (Developer)',
+    help: 'Full site preview — no registration',
     tone: 'journey',
     tool: 'wrench',
     completeIds: ['student'],
@@ -152,14 +152,19 @@ export function EnterBox() {
     if (flying) return
     void unlockFoley().then(() => {
       playFoley('latch')
-      playFoley('whoosh')
+      window.setTimeout(() => playFoley('whoosh'), 180)
+      window.setTimeout(() => playFoley('wood'), 420)
     })
     setFlyLabel(label)
     setFlying(true)
+    document.documentElement.classList.add('pa-page-wipe')
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     window.setTimeout(() => {
       navigate(to)
-    }, reduce ? 120 : 780)
+      window.setTimeout(() => {
+        document.documentElement.classList.remove('pa-page-wipe')
+      }, 420)
+    }, reduce ? 100 : 920)
   }
 
   return (
@@ -251,13 +256,16 @@ export function EnterBox() {
                   style={style}
                   onClick={() => {
                     setOpenTray(item.label)
-                    void unlockFoley().then(() => playFoley(item.tool === 'wrench' ? 'metal' : 'wood'))
+                    void unlockFoley().then(() => {
+                      playFoley('latch')
+                      playFoley(item.tool === 'wrench' ? 'metal' : 'wood')
+                    })
                     if (item.to === '/journey') {
                       try { sessionStorage.setItem('pa-student-journey-step-v1', '1') } catch { /* */ }
                     }
                     window.setTimeout(() => {
                       launchTo(item.to, item.label)
-                    }, 320)
+                    }, 380)
                   }}
                 >
                   {inner}

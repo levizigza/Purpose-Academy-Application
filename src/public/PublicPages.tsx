@@ -42,15 +42,15 @@ export function HomePage() {
             practice — then guide learners into apprenticeship with employers and Alberta trade pathways.
           </p>
           <div className="pillar-grid">
-            <article className="pillar">
+            <article className="pillar site-crate">
               <h3>Foundations</h3>
               <p>Classroom and shop basics: safety gear, tools, measurement, and short workplace English.</p>
             </article>
-            <article className="pillar">
+            <article className="pillar site-crate">
               <h3>Hands-on practice</h3>
               <p>Instructors watch you work. You practise until the skill is real — not just a quiz score.</p>
             </article>
-            <article className="pillar">
+            <article className="pillar site-crate">
               <h3>Apprenticeship path</h3>
               <p>We prepare you for registered apprenticeship and connect you with hiring partners in Alberta.</p>
             </article>
@@ -133,21 +133,21 @@ export function HomePage() {
           <p className="section-kicker">Join the school</p>
           <h2>Students, instructors, and donors</h2>
           <div className="audience-grid">
-            <article className="audience-card">
+            <article className="audience-card site-crate">
               <h3>Students</h3>
               <p>Apply for Construction Foundations. Learn with support. Move toward apprenticeship.</p>
               <Link className="btn btn-primary" to="/admissions">
                 Apply now
               </Link>
             </article>
-            <article className="audience-card">
+            <article className="audience-card site-crate">
               <h3>Instructors</h3>
               <p>Teach shop skills, observe competency, and mentor the next crew of tradespeople.</p>
               <Link className="btn btn-secondary on-light" to="/enter/instructor">
                 Instructor portal
               </Link>
             </article>
-            <article className="audience-card">
+            <article className="audience-card site-crate">
               <h3>Donors & partners</h3>
               <p>Fund tools, bursaries, and placements so more Calgarians can enter the trades.</p>
               <Link className="btn btn-secondary on-light" to="/give">
@@ -332,7 +332,7 @@ export function AboutPage() {
         <p className="lede path-lede">The team that builds the school and teaches the trade.</p>
         <div className="team-grid">
           {SCHOOL_TEAM.map((person) => (
-            <article key={person.name} className="team-card">
+            <article key={person.name} className="team-card site-crate">
               <div className="team-avatar" aria-hidden>
                 {person.name
                   .split(' ')

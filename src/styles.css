@@ -10,11 +10,11 @@
 :root {
   /* Official Purpose Academy palette â€” navy doorway + pathway accents */
   --ink: #071e3d;
-  --ink-soft: #3d5168;
+  --ink-soft: #2f4156;
   --paper: #f3f6fb;
   --paper-2: #e4ebf5;
   --panel: #ffffff;
-  --line: #c2cedd;
+  --line: #aebccd;
   --brand: #0b2f5c;
   --brand-deep: #041526;
   --brand-soft: #e6eef8;
@@ -1621,10 +1621,151 @@ table.data th {
   transform: translateY(-50%);
 }
 
-.threshold-pathways,
+.threshold-pathways {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: min(92vw, 560px);
+  margin-top: 0.35rem;
+  opacity: 0;
+  transform: translateY(18px);
+  pointer-events: none;
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.threshold-pathways.is-live {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
 .threshold-brand,
 .threshold-p {
   display: none;
+}
+
+.threshold-school-name {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0b2f5c;
+  animation: fade-rise 0.7s ease 0.15s both;
+}
+
+.threshold-door-stage {
+  position: relative;
+  width: min(52vw, 280px);
+  aspect-ratio: 1 / 1;
+  margin: 0.35rem 0 0.5rem;
+}
+
+.threshold-door-zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 42%;
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.threshold-door-zoom.is-closed { transform: scale(1.55); }
+.threshold-door-zoom.is-opening { transform: scale(1.25); }
+.threshold-door-zoom.is-pathways,
+.threshold-door-zoom.is-ready { transform: scale(0.72) translateY(-18%); }
+
+.threshold-door-stage .threshold-door-slot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  overflow: visible;
+  opacity: 1;
+}
+
+.threshold-door-slot.is-open-stay {
+  opacity: 1 !important;
+  pointer-events: none;
+}
+
+.threshold-path {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  padding: 0.85rem 0.65rem;
+  border-radius: 14px;
+  border: 1px solid rgba(11, 47, 92, 0.14);
+  background: linear-gradient(180deg, #fff, #f3f7fc);
+  box-shadow: 0 10px 28px rgba(11, 47, 92, 0.1);
+  text-align: center;
+}
+
+.threshold-path strong {
+  font-family: var(--display);
+  font-size: 0.95rem;
+  color: #041526;
+}
+
+.threshold-path span {
+  font-size: 0.78rem;
+  color: #2f4156;
+  line-height: 1.35;
+}
+
+.threshold-path-art {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+}
+
+.threshold-path-art img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.path-icon-bounce {
+  animation: path-hat-bounce 1.15s ease-in-out infinite;
+  transform-origin: 50% 80%;
+}
+
+.path-icon-drive {
+  animation: path-drive 2.2s ease-in-out infinite;
+}
+
+.path-icon-talk {
+  animation: path-talk 1.6s ease-in-out infinite;
+}
+
+@keyframes path-hat-bounce {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  40% { transform: translateY(-10px) rotate(6deg); }
+  60% { transform: translateY(-4px) rotate(-2deg); }
+}
+
+@keyframes path-drive {
+  0%, 100% { transform: translateX(-8px); }
+  50% { transform: translateX(8px); }
+}
+
+@keyframes path-talk {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.08) translateY(-2px); }
+  70% { transform: scale(0.98); }
+}
+
+.threshold-path.path-construction { border-top: 3px solid var(--path-construction); }
+.threshold-path.path-logistics { border-top: 3px solid var(--path-logistics); }
+.threshold-path.path-community { border-top: 3px solid var(--path-community); }
+
+@media (max-width: 640px) {
+  .threshold-pathways {
+    grid-template-columns: 1fr;
+    width: min(88vw, 320px);
+  }
 }
 
 .threshold-hammer {
@@ -5055,4 +5196,13 @@ table.data th {
 .signal.featured {
   box-shadow: 0 16px 40px rgba(7, 30, 61, 0.12);
   border-color: color-mix(in srgb, var(--brand, #0b2f5c) 28%, transparent);
+}
+ (prefers-reduced-motion: reduce) {
+  .path-icon-bounce,
+  .path-icon-drive,
+  .path-icon-talk,
+  .page-motion-smooth,
+  .toolbox-flyout-chest {
+    animation: none !important;
+  }
 }
