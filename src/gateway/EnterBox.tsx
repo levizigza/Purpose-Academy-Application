@@ -1,5 +1,5 @@
-import { useEffect, useState, type MouseEvent, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   isSequenceComplete,
   subscribeSequenceProgress,
@@ -7,11 +7,13 @@ import {
 } from './sequenceProgress'
 import { playFoley, unlockFoley } from '../audio/foley'
 
+type ToolKind = 'screwdriver' | 'hammer' | 'tape' | 'level' | 'wrench' | 'latch'
+
 type Entry = {
   label: string
   help: string
   tone: string
-  tool: 'screwdriver' | 'hammer' | 'tape' | 'level' | 'latch'
+  tool: ToolKind
   completeIds: SequenceId[]
 } & ({ to: string; placeholder?: false } | { to?: undefined; placeholder: true })
 
@@ -30,6 +32,14 @@ const ENTRIES: Entry[] = [
     help: 'Start learning',
     tone: 'student',
     tool: 'hammer',
+    completeIds: ['student'],
+  },
+  {
+    to: '/journey',
+    label: 'Student Sequence',
+    help: 'Full path — start to finish',
+    tone: 'journey',
+    tool: 'wrench',
     completeIds: ['student'],
   },
   {
@@ -58,7 +68,7 @@ const ENTRIES: Entry[] = [
   },
 ]
 
-function ToolEtch({ kind }: { kind: Entry['tool'] }) {
+function ToolEtch({ kind }: { kind: ToolKind }) {
   const common = {
     viewBox: '0 0 48 48',
     className: 'toolbox-tool-svg',
@@ -103,6 +113,17 @@ function ToolEtch({ kind }: { kind: Entry['tool'] }) {
       </svg>
     )
   }
+  if (kind === 'wrench') {
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M34 8c-4 0-7 2.4-8.2 5.8L14 25.6l-3.2-3.2-3.6 3.6 8.8 8.8 3.6-3.6-3-3L29 16.4c3.2.2 6.2-1.6 7.6-4.6L32 14l-2-2 4.2-4z"
+        />
+        <rect x="10" y="30" width="8" height="12" rx="1.5" transform="rotate(-35 14 36)" fill="currentColor" opacity="0.9" />
+      </svg>
+    )
+  }
   return (
     <svg {...common}>
       <rect x="12" y="18" width="24" height="18" rx="2" fill="currentColor" />
@@ -116,91 +137,153 @@ function ignoreEmptyLink(e: MouseEvent<HTMLAnchorElement>) {
   e.preventDefault()
 }
 
-/** Metal toolbox entry panel — each path etched as a tool in the tray. */
+/** Metal toolbox entry panel — trays pull out, then fly to fill the page. */
 export function EnterBox() {
+  const navigate = useNavigate()
+  const boxRef = useRef<HTMLElement>(null)
   const [, setTick] = useState(0)
+  const [openTray, setOpenTray] = useState<string | null>(null)
+  const [flying, setFlying] = useState(false)
+  const [flyLabel, setFlyLabel] = useState('')
+
   useEffect(() => subscribeSequenceProgress(() => setTick((t) => t + 1)), [])
 
+  function launchTo(to: string, label: string) {
+    if (flying) return
+    void unlockFoley().then(() => {
+      playFoley('latch')
+      playFoley('whoosh')
+    })
+    setFlyLabel(label)
+    setFlying(true)
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.setTimeout(() => {
+      navigate(to)
+    }, reduce ? 120 : 780)
+  }
+
   return (
-    <aside className="toolbox" aria-label="Purpose Academy toolbox — choose your path">
-      <div className="toolbox-handle" aria-hidden>
-        <span className="toolbox-handle-bar" />
-      </div>
-      <div className="toolbox-lid">
-        <p className="toolbox-kicker">Choose how to enter</p>
-        <h2 className="toolbox-title">Start here</h2>
-        <p className="toolbox-lede">Pick Student to begin learning. Other doors are for staff.</p>
-      </div>
-      <nav className="toolbox-tray" aria-label="Site entry">
-        {ENTRIES.map((item, i) => {
-          const done =
-            item.completeIds.length > 0 &&
-            item.completeIds.every((id) => isSequenceComplete(id))
-          const partial =
-            !done && item.completeIds.some((id) => isSequenceComplete(id))
-          const className = `toolbox-slot toolbox-slot-${item.tone}${
-            done ? ' is-complete' : partial ? ' is-partial' : ''
-          }${item.placeholder ? ' is-placeholder' : ''}`
-          const style = { animationDelay: `${0.14 + i * 0.07}s` }
-          const help = item.placeholder
-            ? item.help
-            : done
-              ? 'Done — open again'
-              : partial
-                ? 'Partly done — continue'
-                : item.help
-          const inner: ReactNode = (
-            <>
-              <span className="toolbox-etch" aria-hidden>
-                <ToolEtch kind={item.tool} />
-                {done && <span className="toolbox-check">✓</span>}
-              </span>
-              <span className="toolbox-text">
-                <strong>{item.label}</strong>
-                <span>{help}</span>
-              </span>
-              <span className="toolbox-pull" aria-hidden>
-                {item.placeholder ? '·' : '→'}
-              </span>
-            </>
-          )
+    <>
+      <aside
+        ref={boxRef}
+        className={`toolbox${flying ? ' is-flying' : ''}`}
+        aria-label="Purpose Academy tool chest — choose your path"
+      >
+        <div className="toolbox-rim" aria-hidden />
+        <div className="toolbox-handle" aria-hidden>
+          <span className="toolbox-handle-cap left" />
+          <span className="toolbox-handle-bar" />
+          <span className="toolbox-handle-cap right" />
+        </div>
+        <div className="toolbox-lid">
+          <div className="toolbox-badge" aria-hidden>
+            PA
+          </div>
+          <p className="toolbox-kicker">Tool chest</p>
+          <h2 className="toolbox-title">Open a tray</h2>
+          <p className="toolbox-lede">Each tray is a door. Pull one and step in.</p>
+          <div className="toolbox-latches" aria-hidden>
+            <span />
+            <span />
+          </div>
+        </div>
 
-          function onOpen() {
-            void unlockFoley().then(() => playFoley(item.tool === 'latch' ? 'latch' : 'wood'))
-          }
+        <div className="toolbox-body">
+          <div className="toolbox-rivets" aria-hidden>
+            <span /><span /><span /><span />
+          </div>
+          <nav className="toolbox-tray" aria-label="Site entry">
+            {ENTRIES.map((item, i) => {
+              const done =
+                item.completeIds.length > 0 &&
+                item.completeIds.every((id) => isSequenceComplete(id))
+              const partial =
+                !done && item.completeIds.some((id) => isSequenceComplete(id))
+              const isOpen = openTray === item.label
+              const className = `toolbox-slot toolbox-slot-${item.tone}${
+                done ? ' is-complete' : partial ? ' is-partial' : ''
+              }${item.placeholder ? ' is-placeholder' : ''}${isOpen ? ' is-open' : ''}`
+              const style = { animationDelay: `${0.14 + i * 0.07}s` }
+              const help = item.placeholder
+                ? item.help
+                : done
+                  ? 'Done — open again'
+                  : partial
+                    ? 'Partly done — continue'
+                    : item.help
+              const inner: ReactNode = (
+                <>
+                  <span className="toolbox-etch" aria-hidden>
+                    <ToolEtch kind={item.tool} />
+                    {done && <span className="toolbox-check">✓</span>}
+                  </span>
+                  <span className="toolbox-text">
+                    <strong>{item.label}</strong>
+                    <span>{help}</span>
+                  </span>
+                  <span className="toolbox-pull" aria-hidden>
+                    {item.placeholder ? '·' : isOpen ? '↗' : '⟶'}
+                  </span>
+                </>
+              )
 
-          if (item.placeholder) {
-            return (
-              <a
-                key={item.label}
-                className={className}
-                href=""
-                onClick={ignoreEmptyLink}
-                aria-disabled="true"
-                title="Coming soon"
-                style={style}
-              >
-                {inner}
-              </a>
-            )
-          }
+              if (item.placeholder) {
+                return (
+                  <a
+                    key={item.label}
+                    className={className}
+                    href=""
+                    onClick={ignoreEmptyLink}
+                    aria-disabled="true"
+                    title="Coming soon"
+                    style={style}
+                  >
+                    {inner}
+                  </a>
+                )
+              }
 
-          return (
-            <Link
-              key={item.to}
-              className={className}
-              to={item.to}
-              style={style}
-              onClick={onOpen}
-            >
-              {inner}
-            </Link>
-          )
-        })}
-      </nav>
-      <Link className="toolbox-foot" to="/sequences">
-        See all paths on this site →
-      </Link>
-    </aside>
+              return (
+                <button
+                  key={item.to}
+                  type="button"
+                  className={className}
+                  style={style}
+                  onClick={() => {
+                    setOpenTray(item.label)
+                    void unlockFoley().then(() => playFoley(item.tool === 'wrench' ? 'metal' : 'wood'))
+                    if (item.to === '/journey') {
+                      try { sessionStorage.setItem('pa-student-journey-step-v1', '1') } catch { /* */ }
+                    }
+                    window.setTimeout(() => {
+                      launchTo(item.to, item.label)
+                    }, 320)
+                  }}
+                >
+                  {inner}
+                </button>
+              )
+            })}
+          </nav>
+        </div>
+
+        <div className="toolbox-feet" aria-hidden>
+          <span /><span />
+        </div>
+      </aside>
+
+      {flying && (
+        <div className="toolbox-flyout" role="status" aria-live="polite">
+          <div className="toolbox-flyout-chest">
+            <div className="toolbox-flyout-lid">
+              <p className="toolbox-kicker">Tool chest</p>
+              <h2 className="toolbox-title">{flyLabel}</h2>
+              <p className="toolbox-lede">Tray opening — stepping onto the path…</p>
+            </div>
+            <div className="toolbox-flyout-tray" />
+          </div>
+        </div>
+      )}
+    </>
   )
 }

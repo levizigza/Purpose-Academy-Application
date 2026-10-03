@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { HeroMotionLayer, Reveal } from '../components/Motion'
+import { SitePaMark } from '../components/SitePaMark'
 import { EnterBox } from '../gateway/EnterBox'
 import { SequenceBoard } from '../gateway/SequenceBoard'
 import { markSequenceComplete } from '../gateway/sequenceProgress'
@@ -12,8 +13,10 @@ export function HomePage() {
     <>
       <section className="hero hero-photo" aria-label={`${BRAND.name} hero`}>
         <HeroMotionLayer />
-        {/* Deep watermark only — never a bright PA over the copy */}
-        <div className="hero-pa-watermark" aria-hidden />
+        {/* Background PA with doorway light — sits with construction photo, not over copy */}
+        <div className="hero-pa-back" aria-hidden>
+          <SitePaMark className="hero-pa-mark" />
+        </div>
         <div className="hero-inner hero-inner-split">
           <div className="hero-copy">
             <img className="hero-logo" src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
