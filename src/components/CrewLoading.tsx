@@ -99,7 +99,7 @@ export function ConstructionCrew({ compact = false }: { compact?: boolean }) {
   )
 }
 
-export function FoleyToggle({ className = '' }: { className?: string }) {
+export function FoleyToggle({ className = '', compact = false }: { className?: string; compact?: boolean }) {
   const [muted, setMuted] = useState(isFoleyMuted)
 
   useEffect(() => subscribeFoley(() => setMuted(isFoleyMuted())), [])
@@ -107,7 +107,7 @@ export function FoleyToggle({ className = '' }: { className?: string }) {
   return (
     <button
       type="button"
-      className={`foley-toggle${muted ? ' is-muted' : ''} ${className}`.trim()}
+      className={`foley-toggle${muted ? ' is-muted' : ''}${compact ? ' is-compact' : ''} ${className}`.trim()}
       aria-pressed={!muted}
       aria-label={muted ? 'Turn construction sounds on' : 'Turn construction sounds off'}
       onClick={() => {
@@ -141,7 +141,7 @@ export function FoleyToggle({ className = '' }: { className?: string }) {
           </svg>
         )}
       </span>
-      <span>{muted ? 'Sounds off' : 'Site sounds'}</span>
+      {!compact && <span>{muted ? 'Sounds off' : 'Site sounds'}</span>}
     </button>
   )
 }

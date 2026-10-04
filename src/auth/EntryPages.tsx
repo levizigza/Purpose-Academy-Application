@@ -6,7 +6,7 @@ import { OpeningDoorMark } from '../components/OpeningDoor'
 import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v22'
+const ENTERED_KEY = 'pa-crossed-threshold-v23'
 
 export function hasEnteredSite() {
   try {
@@ -26,38 +26,38 @@ export function markEnteredSite() {
 
 type SplashStage = 'closed' | 'opening' | 'pathways' | 'ready'
 
-/** Door opens, then living pathway icons arrive — no logo settle / loading wait. */
+/** Big P opens, settles as center fold; accents arrive after. */
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'closed' },
   { at: 700, stage: 'opening' },
-  { at: 2200, stage: 'pathways' },
-  { at: 3400, stage: 'ready' },
+  { at: 2000, stage: 'pathways' },
+  { at: 3000, stage: 'ready' },
 ]
 
+/** Flat hammer — ENTER on the handle, small accent CTA. */
 function EnterHammer({ className = '' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 120 120" aria-hidden>
-      <path d="M58 48 L92 108" stroke="#5c3d12" strokeWidth="14" strokeLinecap="round" />
-      <path d="M58 48 L92 108" stroke="#8b6914" strokeWidth="8" strokeLinecap="round" />
-      <path d="M58 48 L92 108" stroke="#c4a35a" strokeWidth="2.5" strokeLinecap="round" opacity="0.55" />
-      <g transform="translate(18 18) rotate(-18)">
-        <rect x="0" y="10" width="58" height="28" rx="4" fill="#c9840e" stroke="#8a5a0a" strokeWidth="2" />
-        <rect x="4" y="14" width="50" height="20" rx="2" fill="#e8a317" />
-        <path d="M0 14 C-10 10 -16 18 -14 24 C-12 30 -6 28 0 26 Z" fill="#c9840e" stroke="#8a5a0a" strokeWidth="1.5" />
-        <rect x="54" y="12" width="10" height="24" rx="2" fill="#d99212" stroke="#8a5a0a" strokeWidth="1.5" />
-        <text
-          x="29"
-          y="29"
-          textAnchor="middle"
-          fill="#0b2f5c"
-          fontFamily="Montserrat, Arial Black, sans-serif"
-          fontSize="11"
-          fontWeight="800"
-          letterSpacing="0.08em"
-        >
-          ENTER
-        </text>
-      </g>
+    <svg className={className} viewBox="0 0 160 48" aria-hidden>
+      {/* Head */}
+      <rect x="2" y="10" width="36" height="28" rx="3" fill="#c9840e" stroke="#8a5a0a" strokeWidth="1.5" />
+      <rect x="5" y="13" width="30" height="22" rx="2" fill="#e8a317" />
+      <path d="M2 14 C-4 12 -8 18 -6 24 C-4 30 0 28 2 26 Z" fill="#c9840e" stroke="#8a5a0a" strokeWidth="1.2" />
+      {/* Handle */}
+      <path d="M36 24 H148" stroke="#5c3d12" strokeWidth="12" strokeLinecap="round" />
+      <path d="M36 24 H148" stroke="#8b6914" strokeWidth="7" strokeLinecap="round" />
+      <path d="M36 24 H148" stroke="#c4a35a" strokeWidth="2" strokeLinecap="round" opacity="0.55" />
+      <text
+        x="92"
+        y="27.5"
+        textAnchor="middle"
+        fill="#0b2f5c"
+        fontFamily="Montserrat, Arial Black, sans-serif"
+        fontSize="11"
+        fontWeight="800"
+        letterSpacing="0.14em"
+      >
+        ENTER
+      </text>
     </svg>
   )
 }
@@ -70,7 +70,6 @@ function PathwayStage({ active }: { active: boolean }) {
           <img src={BRAND_ASSETS.iconConstruction} alt="" className="path-icon-bounce" />
         </div>
         <strong>Construction</strong>
-        <span>Hard hat on — foundations first</span>
       </article>
       <article className="threshold-path path-logistics">
         <div className="threshold-path-art">
@@ -78,7 +77,6 @@ function PathwayStage({ active }: { active: boolean }) {
           <span className="path-drive-dust" aria-hidden />
         </div>
         <strong>Logistics</strong>
-        <span>Moving goods, moving careers</span>
       </article>
       <article className="threshold-path path-community">
         <div className="threshold-path-art">
@@ -90,7 +88,6 @@ function PathwayStage({ active }: { active: boolean }) {
           </span>
         </div>
         <strong>Community</strong>
-        <span>People supporting people</span>
       </article>
     </div>
   )
@@ -158,10 +155,9 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       aria-label={`${BRAND.name} opening`}
     >
       <div className="threshold-stage">
-        <h1 className="sr-only">{BRAND.name}</h1>
         <p className="threshold-school-name">{BRAND.name}</p>
 
-        <div className={`threshold-door-stage is-${stage}`}>
+        <div className={`threshold-door-stage is-${stage}`} aria-hidden>
           <div className={`threshold-door-zoom is-${stage}`}>
             <div className={`threshold-door-slot${showDoor ? ' is-active' : ' is-open-stay'}`}>
               <OpeningDoorMark stage={doorStage} />
@@ -183,7 +179,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
         )}
         {showEnter && (
           <div className="threshold-foley">
-            <FoleyToggle />
+            <FoleyToggle compact />
           </div>
         )}
       </div>
