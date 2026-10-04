@@ -191,6 +191,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
     : `Step ${step} of 20 · Unit ${unit.id}: ${unit.label}`
   const whyLabel = motherTongue
     ? ({
+        English: 'Why this step?',
         Spanish: '¿Por qué este paso?',
         Arabic: 'لماذا هذه الخطوة؟',
         Hindi: 'यह कदम क्यों?',
@@ -200,6 +201,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
     : 'Why this step?'
   const backLabel = motherTongue
     ? ({
+        English: 'Back',
         Spanish: 'Atrás',
         Arabic: 'رجوع',
         Hindi: 'पीछे',
@@ -707,7 +709,8 @@ export function StudentSequencePage() {
   async function playSupport(text: string, lang: SupportLang = supportLang) {
     setSpeaking('support')
     stopSpeech()
-    await speakSupport(text, lang)
+    if (lang === 'English') await speakEnglish(text)
+    else await speakSupport(text, lang)
     setSpeaking(null)
   }
 
@@ -719,11 +722,16 @@ export function StudentSequencePage() {
     setVocabHeard((h) => ({ ...h, [term.id]: true }))
   }
 
-  async function playVocabLang(term: (typeof VOCAB_UNIT)[number], lang: SupportLang) {
+  async function playVocabLang(term: (typeof VOCAB_UNIT)[number], lang: Exclude<SupportLang, 'English'>) {
     setVocabSpeakingId(term.id)
     stopSpeech()
     await speakSupport(term.gloss[lang], lang)
     setVocabSpeakingId(null)
+  }
+
+  function termGloss(term: (typeof VOCAB_UNIT)[number], lang: SupportLang = supportLang) {
+    if (lang === 'English') return term.english
+    return term.gloss[lang]
   }
   function resetMatch() {
     setMatchIdx(0)
@@ -784,6 +792,7 @@ export function StudentSequencePage() {
       imageKey: 'tape-measure',
       options: ['Bring the tape measure', 'Bring the hammer', 'Put on a hard hat', 'Start cutting wood'],
       supportHint: {
+        English: 'Bring the tape measure.',
         Spanish: 'Trae la cinta metrica.',
         Arabic: 'Ahdir sharit al-qiyas.',
         Hindi: 'Tape measure lao.',
@@ -797,6 +806,7 @@ export function StudentSequencePage() {
       imageKey: 'level',
       options: ['Pass me the level', 'Pass the hammer', 'Open the door', 'Put on boots'],
       supportHint: {
+        English: 'Pass me the level.',
         Spanish: 'Pasame el nivel.',
         Arabic: 'Nawilni al-mizan.',
         Hindi: 'Level mujhe do.',
@@ -810,6 +820,7 @@ export function StudentSequencePage() {
       imageKey: 'level',
       options: ['Check the wall with the level', 'Check the floor with a hammer', 'Bring the drill', 'Remove your PPE'],
       supportHint: {
+        English: 'Check the wall with the level.',
         Spanish: 'Revisa la pared con el nivel.',
         Arabic: 'Ifhas al-jidar bil-mizan.',
         Hindi: 'Level se deewar check karo.',
@@ -961,7 +972,19 @@ export function StudentSequencePage() {
                 type="button"
                 className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`}
                 onClick={() => setSupportLang(l.id)}
-                lang={l.id === 'Arabic' ? 'ar' : l.id === 'Hindi' ? 'hi' : l.id === 'Amharic' ? 'am' : l.id === 'Tigrinya' ? 'ti' : 'es'}
+                lang={
+                  l.id === 'English'
+                    ? 'en'
+                    : l.id === 'Arabic'
+                      ? 'ar'
+                      : l.id === 'Hindi'
+                        ? 'hi'
+                        : l.id === 'Amharic'
+                          ? 'am'
+                          : l.id === 'Tigrinya'
+                            ? 'ti'
+                            : 'es'
+                }
               >
                 <span aria-hidden>{l.flag}</span>
                 <strong>{assessT(LANG_NATIVE, l.id)}</strong>
@@ -1193,12 +1216,14 @@ export function StudentSequencePage() {
           image={toolImage(term.imageKey)}
           fit="contain"
           label="Match the word to the picture"
-          sub={`${supportLang}: ${term.gloss[supportLang]}`}
+          sub={supportLang === 'English' ? 'English word' : `${supportLang}: ${termGloss(term)}`}
           caption="Still supported — translation and audio are allowed here."
         />
         <div className="train-audio-row">
           <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>Hear English</button>
-          <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playSupport(term.gloss[supportLang])}>Hear {supportLang}</button>
+          {supportLang !== 'English' && (
+            <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playSupport(termGloss(term))}>Hear {supportLang}</button>
+          )}
         </div>
         <div className="train-choice-grid">
           {matchOptions.map((opt) => (
@@ -1294,14 +1319,16 @@ export function StudentSequencePage() {
             >
               {speaking === 'en' ? 'Playing…' : 'Hear English'}
             </button>
-            <button
-              type="button"
-              className="btn btn-ghost"
-              disabled={speaking !== null}
-              onClick={() => void playSupport(instr.supportHint[supportLang])}
-            >
-              Optional {supportLang} hint
-            </button>
+            {supportLang !== 'English' && (
+              <button
+                type="button"
+                className="btn btn-ghost"
+                disabled={speaking !== null}
+                onClick={() => void playSupport(instr.supportHint[supportLang])}
+              >
+                Optional {supportLang} hint
+              </button>
+            )}
           </div>
           {!instrHeard && <p className="muted">Hear the English instruction at least once before you answer.</p>}
           <p><strong>What should you do?</strong></p>

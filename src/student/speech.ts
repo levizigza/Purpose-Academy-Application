@@ -2,6 +2,7 @@ import type { SupportLang } from './journeyCurriculum'
 
 /** BCP-47 tags for Web Speech API voices. */
 export const SUPPORT_LANG_CODE: Record<SupportLang, string> = {
+  English: 'en-US',
   Spanish: 'es-ES',
   Arabic: 'ar-SA',
   Hindi: 'hi-IN',
@@ -10,6 +11,7 @@ export const SUPPORT_LANG_CODE: Record<SupportLang, string> = {
 }
 
 const FALLBACK_LANG: Partial<Record<SupportLang, string>> = {
+  English: 'en',
   Amharic: 'am',
   Tigrinya: 'am', // closest common fallback when ti voices are missing
   Arabic: 'ar',

@@ -25,6 +25,7 @@ const LAYERS: { id: LanguageLayer; label: string; help: string }[] = [
 ]
 
 const SUPPORT_LANGS = new Set([
+  'English',
   'Spanish',
   'Arabic',
   'Hindi',

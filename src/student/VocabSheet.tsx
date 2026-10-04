@@ -1,15 +1,9 @@
-import type { SupportLang, VocabTerm } from './journeyCurriculum'
-import { SUPPORT_LANGUAGES } from './journeyCurriculum'
+import type { HomeLang, SupportLang, VocabTerm } from './journeyCurriculum'
+import { HOME_LANGUAGES, SUPPORT_LANGUAGES } from './journeyCurriculum'
 import { toolImage } from './toolImages'
 
 /** Worksheet language order (matches Purpose Academy visual vocabulary sheets). No French. */
-export const VOCAB_SHEET_LANGS: SupportLang[] = [
-  'Amharic',
-  'Tigrinya',
-  'Arabic',
-  'Spanish',
-  'Hindi',
-]
+export const VOCAB_SHEET_LANGS: HomeLang[] = HOME_LANGUAGES
 
 const FLAG: Record<SupportLang, string> = Object.fromEntries(
   SUPPORT_LANGUAGES.map((l) => [l.id, l.flag]),
@@ -34,7 +28,7 @@ type CardProps = {
   speaking: boolean
   heardEnglish: boolean
   onPlayEnglish: () => void
-  onPlayLang: (lang: SupportLang) => void
+  onPlayLang: (lang: HomeLang) => void
 }
 
 /**
@@ -122,7 +116,7 @@ type DeckProps = {
   heard: Record<string, boolean>
   onIndexChange: (index: number) => void
   onPlayEnglish: (term: VocabTerm) => void
-  onPlayLang: (term: VocabTerm, lang: SupportLang) => void
+  onPlayLang: (term: VocabTerm, lang: HomeLang) => void
 }
 
 /**

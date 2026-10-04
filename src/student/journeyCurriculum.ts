@@ -5,7 +5,7 @@
  * English Eye Spy → Instructions → Site language → Digital → Safety →
  * Tools → Systems → Observation → On-site → Final exam/certificate → Employment
  *
- * Support languages: Spanish, Arabic, Hindi, Amharic, Tigrinya (no French).
+ * Support languages: English, Spanish, Arabic, Hindi, Amharic, Tigrinya (no French).
  */
 
 export const JOURNEY_STEPS = [
@@ -47,15 +47,21 @@ export function unitForStep(step: number) {
   return LEARNING_UNITS.find((u) => u.id === id) || LEARNING_UNITS[0]
 }
 
-export type SupportLang = 'Spanish' | 'Arabic' | 'Hindi' | 'Amharic' | 'Tigrinya'
+export type SupportLang = 'English' | 'Spanish' | 'Arabic' | 'Hindi' | 'Amharic' | 'Tigrinya'
 
 export const SUPPORT_LANGUAGES: { id: SupportLang; flag: string }[] = [
+  { id: 'English', flag: 'EN' },
   { id: 'Spanish', flag: 'ES' },
   { id: 'Arabic', flag: 'AR' },
   { id: 'Hindi', flag: 'HI' },
   { id: 'Amharic', flag: 'AM' },
   { id: 'Tigrinya', flag: 'TI' },
 ]
+
+/** Home languages shown on vocabulary cards (English is the word title itself). */
+export type HomeLang = Exclude<SupportLang, 'English'>
+
+export const HOME_LANGUAGES: HomeLang[] = ['Spanish', 'Arabic', 'Hindi', 'Amharic', 'Tigrinya']
 
 export type VocabTerm = {
   id: string
@@ -65,7 +71,7 @@ export type VocabTerm = {
   imageKey: string
   definition: string
   sentence: string
-  gloss: Record<SupportLang, string>
+  gloss: Record<HomeLang, string>
 }
 
 /**

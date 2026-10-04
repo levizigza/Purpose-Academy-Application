@@ -265,6 +265,7 @@ export function RegisterPage() {
             value={form.preferred_language}
             onChange={(e) => setForm({ ...form, preferred_language: e.target.value })}
           >
+            <option>English</option>
             <option>Amharic</option>
             <option>Spanish</option>
             <option>Arabic</option>
