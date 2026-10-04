@@ -6525,7 +6525,7 @@ html.pa-page-wipe .hero-inner {
   padding: 0.85rem 0.85rem 0.85rem 1rem;
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  transform: rotate(180deg);
+  transform: none;
   font-family: var(--display);
   font-weight: 800;
   letter-spacing: 0.08em;
