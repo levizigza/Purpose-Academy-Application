@@ -1849,6 +1849,17 @@ table.data th {
 .threshold-pathways.is-live .path-logistics { animation-delay: 0.15s; }
 .threshold-pathways.is-live .path-community { animation-delay: 0.25s; }
 
+@keyframes threshold-path-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .threshold-path strong {
   font-family: var(--display);
   font-size: 0.78rem;
