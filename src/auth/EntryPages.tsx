@@ -50,7 +50,7 @@ const MIRROR_SHARDS: { clip: string; dx: string; dy: string; rot: string; delay:
   { clip: 'polygon(30% 46%, 52% 40%, 56% 72%, 34% 76%)', dx: '0vw', dy: '48vh', rot: '-4deg', delay: '180ms' },
 ]
 
-/** Large sledgehammer — ENTER along the shaft. */
+/** Large sledgehammer — ENTER on the head. */
 function EnterHammer({ className = '' }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 110 280" aria-hidden>
@@ -85,6 +85,20 @@ function EnterHammer({ className = '' }: { className?: string }) {
       <rect x="88" y="18" width="14" height="38" rx="2.5" fill="url(#sledge-steel)" stroke="#4a5562" strokeWidth="1" />
       <rect x="10" y="24" width="4" height="26" rx="1" fill="#ffffff" opacity="0.35" />
       <rect x="96" y="24" width="4" height="26" rx="1" fill="#ffffff" opacity="0.28" />
+      <text
+        className="threshold-enter-word"
+        x="55"
+        y="41"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill="#041526"
+        fontFamily="Montserrat, Arial Black, sans-serif"
+        fontSize="15"
+        fontWeight="800"
+        letterSpacing="0.22em"
+      >
+        ENTER
+      </text>
       <rect x="44" y="62" width="22" height="14" rx="2" fill="url(#sledge-band)" stroke="#4a5562" strokeWidth="1" />
       <path d="M55 70 V248" stroke="url(#sledge-shaft)" strokeWidth="18" strokeLinecap="round" />
       <path d="M55 74 V244" stroke="#e4c988" strokeWidth="2.2" strokeLinecap="round" opacity="0.28" />
@@ -94,20 +108,6 @@ function EnterHammer({ className = '' }: { className?: string }) {
       <rect x="46" y="188" width="18" height="5" rx="1.5" fill="#5c3d12" opacity="0.45" />
       <ellipse cx="55" cy="254" rx="11" ry="7" fill="#3d280c" />
       <ellipse cx="55" cy="252" rx="8" ry="4" fill="#8b6914" opacity="0.55" />
-      <text
-        className="threshold-enter-word"
-        x="55"
-        y="148"
-        textAnchor="middle"
-        fill="#f5c542"
-        fontFamily="Montserrat, Arial Black, sans-serif"
-        fontSize="18"
-        fontWeight="800"
-        letterSpacing="0.32em"
-        transform="rotate(90 55 148)"
-      >
-        ENTER
-      </text>
     </svg>
   )
 }

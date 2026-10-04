@@ -2106,8 +2106,8 @@ table.data th {
 .threshold-hammer-icon .threshold-enter-word {
   animation: enter-flash 1.15s ease-in-out infinite;
   paint-order: stroke fill;
-  stroke: rgba(11, 47, 92, 0.55);
-  stroke-width: 0.6px;
+  stroke: rgba(255, 248, 210, 0.35);
+  stroke-width: 0.45px;
 }
 
 .threshold-hammer.is-smashing {
@@ -2258,19 +2258,19 @@ table.data th {
 @keyframes enter-flash {
   0%,
   100% {
-    fill: #f5c542;
+    fill: #041526;
     opacity: 1;
-    filter: drop-shadow(0 0 0 rgba(245, 197, 66, 0));
+    filter: drop-shadow(0 0 0 rgba(255, 248, 210, 0));
   }
   45% {
-    fill: #fff6d0;
-    opacity: 1;
-    filter: drop-shadow(0 0 6px rgba(245, 197, 66, 0.95));
-  }
-  55% {
     fill: #ffffff;
     opacity: 1;
-    filter: drop-shadow(0 0 10px rgba(255, 248, 210, 0.9));
+    filter: drop-shadow(0 0 5px rgba(255, 248, 210, 0.95));
+  }
+  55% {
+    fill: #fff6d0;
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(245, 197, 66, 0.9));
   }
 }
 
@@ -2350,7 +2350,7 @@ table.data th {
 
   .threshold-hammer-icon .threshold-enter-word {
     animation: none;
-    fill: #f5c542;
+    fill: #041526;
   }
 }
 
