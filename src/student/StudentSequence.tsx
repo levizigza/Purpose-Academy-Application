@@ -26,13 +26,13 @@ import {
 } from './journeyCurriculum'
 import {
   primeSpeech,
-  speakBilingual,
   speakEnglish,
   speakSupport,
   stopSpeech,
 } from './speech'
 import { toolImage } from './toolImages'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
+import { VocabSheet } from './VocabSheet'
 import {
   hasPracticeFeedbackAck,
   isPracticeMode,
@@ -458,12 +458,9 @@ export function StudentSequencePage() {
     preferred_language: 'Amharic', previous_experience: '',
   })
 
-  /* Step 7 vocab cycle — See / Listen / Understand / Repeat */
-  const [vocabIdx, setVocabIdx] = useState(0)
-  const [vocabBeat, setVocabBeat] = useState(0) // 0 See, 1 Listen, 2 Understand, 3 Repeat
-  const [heardEnglish, setHeardEnglish] = useState(false)
-  const [heardSupport, setHeardSupport] = useState(false)
-  const [saidAloud, setSaidAloud] = useState(false)
+  /* Step 7 visual vocabulary sheet — English + home languages + audio */
+  const [vocabHeard, setVocabHeard] = useState<Record<string, boolean>>({})
+  const [vocabSpeakingId, setVocabSpeakingId] = useState<string | null>(null)
   const [speaking, setSpeaking] = useState<'en' | 'support' | 'both' | null>(null)
 
   /* Step 9 supported matching */
@@ -621,18 +618,11 @@ export function StudentSequencePage() {
     )
   }
 
-  function resetVocabBeatFlags() {
-    setVocabBeat(0)
-    setHeardEnglish(false)
-    setHeardSupport(false)
-    setSaidAloud(false)
+  function resetVocab() {
+    setVocabHeard({})
+    setVocabSpeakingId(null)
     setSpeaking(null)
     stopSpeech()
-  }
-
-  function resetVocab() {
-    setVocabIdx(0)
-    resetVocabBeatFlags()
   }
 
   async function playEnglish(text: string) {
@@ -640,24 +630,29 @@ export function StudentSequencePage() {
     stopSpeech()
     await speakEnglish(text)
     setSpeaking(null)
-    setHeardEnglish(true)
   }
 
-  async function playSupport(text: string) {
+  async function playSupport(text: string, lang: SupportLang = supportLang) {
     setSpeaking('support')
     stopSpeech()
-    await speakSupport(text, supportLang)
+    await speakSupport(text, lang)
     setSpeaking(null)
-    setHeardSupport(true)
   }
 
-  async function playBoth(english: string, supportText: string) {
-    setSpeaking('both')
+  async function playVocabEnglish(term: (typeof VOCAB_UNIT)[number]) {
+    setVocabSpeakingId(term.id)
     stopSpeech()
-    await speakBilingual(english, supportText, supportLang)
-    setSpeaking(null)
-    setHeardEnglish(true)
-    setHeardSupport(true)
+    await speakEnglish(term.english)
+    setVocabSpeakingId(null)
+    setVocabHeard((h) => ({ ...h, [term.id]: true }))
+  }
+
+  async function playVocabLang(term: (typeof VOCAB_UNIT)[number], lang: SupportLang) {
+    setVocabSpeakingId(term.id)
+    stopSpeech()
+    await speakSupport(term.gloss[lang], lang)
+    setVocabSpeakingId(null)
+    setVocabHeard((h) => ({ ...h, [term.id]: true }))
   }
   function resetMatch() {
     setMatchIdx(0)
@@ -1007,105 +1002,34 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 7: Chart-style Visual Vocabulary — See / Listen / Understand / Repeat */
+  /* Step 7: Visual Vocabulary sheet — picture + all languages + audio */
   if (step === 7) {
-    const term = VOCAB_UNIT[vocabIdx]
-    const gloss = term.gloss[supportLang]
-    const beats = [
-      { label: 'See', tip: `Look at the clear picture. ${term.definition}` },
-      { label: 'Listen', tip: `Hear English, then ${supportLang}. Both required.` },
-      { label: 'Understand', tip: `English: ${term.english}. ${supportLang}: ${gloss}.` },
-      { label: 'Repeat', tip: `Say “${term.english}” out loud, then confirm.` },
-    ]
-    const listenDone = heardEnglish && heardSupport
-    const ready = vocabBeat >= 3 && saidAloud && listenDone
-    const isLast = vocabIdx >= VOCAB_UNIT.length - 1
-
-    function advanceVocab() {
-      if (isLast) { go(8); setActionIdx(0); return }
-      setVocabIdx((i) => i + 1)
-      resetVocabBeatFlags()
-    }
+    const heardCount = VOCAB_UNIT.filter((t) => vocabHeard[t.id]).length
+    const ready = heardCount >= VOCAB_UNIT.length
 
     return (
       <Shell
         step={7}
         onBack={() => go(6)}
-        onNext={ready ? advanceVocab : undefined}
-        nextLabel={isLast ? 'Continue to Word → Action' : `Next word (${vocabIdx + 2}/${VOCAB_UNIT.length})`}
+        onNext={ready ? () => { setActionIdx(0); go(8) } : undefined}
+        nextLabel="Continue to Word → Action"
         nextDisabled={!ready}
       >
-        <p className="train-vocab-counter">Construction Level 1 · Word {vocabIdx + 1} of {VOCAB_UNIT.length}</p>
-        <article className="vocab-chart-card">
-          <header className="vocab-chart-head">
-            <span className="vocab-chart-num">{vocabIdx + 1}</span>
-            <strong className="vocab-chart-en">{term.english}</strong>
-            <ul className="vocab-chart-gloss" aria-label="Translations">
-              {SUPPORT_LANGUAGES.map((l) => (
-                <li key={l.id} className={l.id === supportLang ? 'is-active' : ''}>
-                  <span className="vocab-flag">{l.flag}</span>
-                  <span>{term.gloss[l.id]}</span>
-                </li>
-              ))}
-            </ul>
-          </header>
-          <div className="vocab-chart-media">
-            <PictureCard
-              image={toolImage(term.imageKey)}
-              fit="contain"
-              emoji={term.emoji}
-              label={vocabBeat === 0 ? 'What is this?' : term.english}
-              sub={vocabBeat >= 2 ? `${supportLang}: ${gloss}` : term.definition}
-              caption={term.sentence}
-            />
-          </div>
-        </article>
-
-        <div className="train-layers" role="list" aria-label="Learning actions">
-          {beats.map((b, i) => (
-            <span key={b.label} role="listitem" className={`${i === vocabBeat ? 'is-current' : ''} ${i < vocabBeat ? 'is-active' : ''}`}>
-              {b.label}
-            </span>
-          ))}
-        </div>
-        <p className="train-beat-tip">{beats[Math.min(vocabBeat, 3)].tip}</p>
-
-        {vocabBeat === 0 && (
-          <div className="train-action-block">
-            <button type="button" className="btn btn-primary" onClick={() => setVocabBeat(1)}>I see it — go to Listen</button>
-          </div>
-        )}
-        {vocabBeat === 1 && (
-          <div className="train-action-block">
-            <div className="train-audio-row">
-              <button type="button" className={`btn ${heardEnglish ? 'btn-secondary on-light' : 'btn-primary'}`} disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>
-                {speaking === 'en' ? 'Playing…' : heardEnglish ? 'Heard English ✓' : 'Hear English'}
-              </button>
-              <button type="button" className={`btn ${heardSupport ? 'btn-secondary on-light' : 'btn-primary'}`} disabled={speaking !== null} onClick={() => void playSupport(gloss)}>
-                {speaking === 'support' ? 'Playing…' : heardSupport ? `Heard ${supportLang} ✓` : `Hear ${supportLang}`}
-              </button>
-              <button type="button" className="btn btn-ghost" disabled={speaking !== null} onClick={() => void playBoth(term.english, gloss)}>Hear both</button>
-            </div>
-            <button type="button" className="btn btn-primary" disabled={!listenDone} onClick={() => setVocabBeat(2)}>Continue to Understand</button>
-          </div>
-        )}
-        {vocabBeat === 2 && (
-          <div className="train-action-block">
-            <p className="muted">Picture → {supportLang} meaning → English word on the site.</p>
-            <button type="button" className="btn btn-primary" onClick={() => setVocabBeat(3)}>I understand — go to Repeat</button>
-          </div>
-        )}
-        {vocabBeat === 3 && (
-          <div className="train-action-block">
-            <div className="train-audio-row">
-              <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>Play English model</button>
-            </div>
-            <label className="train-honesty-check">
-              <input type="checkbox" checked={saidAloud} onChange={() => setSaidAloud(!saidAloud)} />
-              <span>I said “{term.english}” out loud.</span>
-            </label>
-          </div>
-        )}
+        <VocabSheet
+          terms={VOCAB_UNIT}
+          supportLang={supportLang}
+          speakingId={vocabSpeakingId}
+          heard={vocabHeard}
+          onPlayEnglish={(term) => void playVocabEnglish(term)}
+          onPlayLang={(term, lang) => void playVocabLang(term, lang)}
+        />
+        <p className="train-vocab-counter">
+          Listened to {heardCount} of {VOCAB_UNIT.length} words
+          {ready ? ' · Ready to continue' : ' — tap Listen on each card'}
+        </p>
+        <TeachNote>
+          This is not English-only. Read your language next to the picture, then hear the English word.
+        </TeachNote>
       </Shell>
     )
   }

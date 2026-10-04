@@ -15,7 +15,7 @@ export const JOURNEY_STEPS = [
   { n: 4, title: 'Baseline Check', help: 'Show what you already know — tools and safety.', purpose: 'We place you correctly. This is not a pass or fail test.' },
   { n: 5, title: 'Interest & Skills', help: 'What do you want, and what can you already do?', purpose: 'Pictures and short checks point you to a career path.' },
   { n: 6, title: 'Your Result', help: 'See your path for today.', purpose: 'Construction is open now. Other paths come next.' },
-  { n: 7, title: 'Visual Vocabulary', help: 'See · Listen · Understand · Repeat', purpose: 'Clear picture first. Mother tongue helps. English word last.' },
+  { n: 7, title: 'Visual Vocabulary', help: 'See the picture · read your language · hear English', purpose: 'English word with home-language glosses and audio — not English-only.' },
   { n: 8, title: 'Word → Action', help: 'See the word become a real site action.', purpose: 'Link English words to real movement.' },
   { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.' },
   { n: 10, title: 'English Eye Spy', help: 'Find the real tool in a site scene — English only.', purpose: 'Prove you know the object among other tools.' },
