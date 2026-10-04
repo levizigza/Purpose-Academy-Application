@@ -350,7 +350,7 @@ export function AboutPage() {
         </div>
         <figure className="serve-figure">
           <img src={BRAND_ASSETS.photoCalgary} alt="Downtown Calgary skyline along the Bow River, home of Purpose Academy" />
-          <figcaption>{BRAND.place}, where our learners live, train, and work.</figcaption>
+          <figcaption>{BRAND.place}</figcaption>
         </figure>
       </Reveal>
 
