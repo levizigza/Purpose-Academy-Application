@@ -4677,13 +4677,14 @@ table.data th {
 }
 
 .train-login-mark {
-  width: min(220px, 70vw);
+  width: min(200px, 58vw);
   height: auto;
   border-radius: 0;
   background: transparent;
   padding: 0;
   box-shadow: none;
   margin-bottom: 0.15rem;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
 }
 
 .train-brand {
@@ -4982,13 +4983,14 @@ table.data th {
 }
 
 .train-welcome-mark {
-  width: min(240px, 72vw);
+  width: min(220px, 64vw);
   height: auto;
   border-radius: 0;
   background: transparent;
   padding: 0;
   box-shadow: none;
   margin-bottom: 0.25rem;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
 }
 
 .train-welcome-title {

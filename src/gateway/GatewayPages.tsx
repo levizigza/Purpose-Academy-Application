@@ -21,7 +21,7 @@ export function StudentEnterPage() {
   return (
     <div className="shell-main stack enter-flow train-welcome">
       <Reveal as="header" className="train-welcome-header stack">
-        <img src={BRAND_ASSETS.logoFull} alt="" className="train-welcome-mark" />
+        <img src={BRAND_ASSETS.logoPOpen} alt="" className="train-welcome-mark" />
         <p className="train-kicker">Student training path</p>
         <h1 className="train-welcome-title">Your path to work</h1>
         <p className="train-welcome-lede">

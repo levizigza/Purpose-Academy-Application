@@ -542,7 +542,7 @@ export function StudentSequencePage() {
     return (
       <Shell step={1} onBack={() => navigate('/enter/student')} onNext={() => go(2, 'Opening registration…')} nextLabel="Continue as a new student">
         <div className="train-login">
-          <img src={BRAND_ASSETS.logoFull} alt="" className="train-login-mark" />
+          <img src={BRAND_ASSETS.logoPOpen} alt="" className="train-login-mark" />
           <p className="train-login-lede">
             You are starting the Purpose Academy student path. Registration comes next, then language support,
             then tools, safety, and practice — one clear station at a time.
