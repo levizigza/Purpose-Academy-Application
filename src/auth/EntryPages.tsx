@@ -6,7 +6,7 @@ import { OpeningDoorMark } from '../components/OpeningDoor'
 import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v25'
+const ENTERED_KEY = 'pa-crossed-threshold-v26'
 
 export function hasEnteredSite() {
   try {
