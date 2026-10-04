@@ -1,6 +1,6 @@
 /** Practice mode — full-site preview for reviewers (no registration). */
 
-export const PRACTICE_REVIEWERS = ['Chu Chu', 'Yonas', 'Kinfe', 'Saba', 'Levi'] as const
+export const PRACTICE_REVIEWERS = ['ChuChu', 'Yonas', 'Kinfe', 'Saba', 'Levi'] as const
 export type PracticeReviewer = (typeof PRACTICE_REVIEWERS)[number] | string
 
 /** First training step after skipping registration (Language). */
@@ -178,4 +178,4 @@ export function shouldHidePracticeFeedback(pathname: string, journeyStep?: numbe
 }
 
 export const PRACTICE_TRAY_HELP =
-  'For Chu Chu, Yonas, Kinfe, Saba & Levi — pick your name, skip registration, review the full site, and send feedback.'
+  'For ChuChu, Yonas, Kinfe, Saba & Levi — pick your name, skip registration, review the full site, and send feedback.'

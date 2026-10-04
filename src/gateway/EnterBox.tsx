@@ -160,7 +160,7 @@ function PracticeNameGate({
         <p className="section-kicker">Practice Mode</p>
         <h2>Who is reviewing?</h2>
         <p className="lede">
-          For Chu Chu, Yonas, Kinfe, Saba &amp; Levi — walk the full site without registration, catch issues, and send
+          For ChuChu, Yonas, Kinfe, Saba &amp; Levi — walk the full site without registration, catch issues, and send
           feedback so we can fix things.
         </p>
         <div className="practice-name-grid">

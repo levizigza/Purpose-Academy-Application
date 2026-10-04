@@ -1,6 +1,6 @@
-# Purpose Academy — Construction School
+# Purpose Academy — Trades School
 
-Calgary construction school platform:
+Calgary trades school platform:
 
 - **Foundations + apprenticeship pathway** for construction learners
 - **Frontend:** Vite + React + TypeScript

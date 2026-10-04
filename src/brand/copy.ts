@@ -1,13 +1,13 @@
-/** Shared brand vocabulary — Purpose Academy as a Calgary construction school. */
+/** Shared brand vocabulary — Purpose Academy as a Calgary trades school. */
 export const BRAND = {
   name: 'Purpose Academy',
   place: 'Calgary, Alberta',
   /** Hero-level school identity */
-  theme: 'Build your future in construction',
+  theme: 'Build your future in the trades',
   promise:
-    'A Calgary construction school for foundations, language for the job site, and a clear path into apprenticeship.',
+    'A Calgary trades school for foundations, language for the job site, and a clear path into apprenticeship.',
   audience:
-    'Newcomers, career changers, and job seekers who want hands-on construction training with real instructors.',
+    'Newcomers, career changers, and job seekers who want hands-on trades training with real instructors.',
   primaryCta: 'Apply now',
   primaryCtaTo: '/admissions',
   secondaryCta: 'Sign in',
@@ -34,7 +34,7 @@ export const SCHOOL_TEAM = [
     focus: 'Details will be added as Purpose Academy grows.',
   },
   {
-    name: 'Chuchu Asemelash',
+    name: 'ChuChu Asemelash',
     role: 'Role forthcoming',
     focus: 'Details will be added as Purpose Academy grows.',
   },

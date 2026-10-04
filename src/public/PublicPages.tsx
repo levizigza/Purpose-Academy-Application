@@ -19,7 +19,7 @@ export function HomePage() {
         <div className="hero-inner hero-inner-split">
           <div className="hero-copy">
             <img className="hero-logo" src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
-            <p className="hero-school-kicker">{BRAND.place} construction school</p>
+            <p className="hero-school-kicker">{BRAND.place} trades school</p>
             <h1>{BRAND.theme}</h1>
             <p>{BRAND.promise}</p>
             <p className="hero-tagline">{BRAND.tagline}</p>
@@ -165,7 +165,7 @@ export function HomePage() {
             <p className="section-kicker on-dark">Our promise</p>
             <h2>Foundations that lead to apprenticeship</h2>
             <p className="lede on-dark">
-              {BRAND.name} is a construction school in {BRAND.place}. We provide foundation training, practical
+              {BRAND.name} is a trades school in {BRAND.place}. We provide foundation training, practical
               instruction, and a supported path into apprenticeship — with employers and Alberta trade systems in view
               from day one.
             </p>
@@ -303,7 +303,7 @@ export function AboutPage() {
     <div className="shell-main stack">
       <Reveal as="header" className="page-header stack" delay={0}>
         <p className="section-kicker">About</p>
-        <h1>A construction school rooted in Calgary</h1>
+        <h1>A trades school rooted in Calgary</h1>
         <p className="lede">
           {BRAND.name} exists so people can learn foundations, practise with real instructors, and step into
           apprenticeship — not as a side project, but as a school built for the trades.
@@ -319,7 +319,7 @@ export function AboutPage() {
             apprenticeship.
           </p>
           <p>
-            Today {BRAND.name} operates as a construction school in {BRAND.place}. Construction Foundations is our
+            Today {BRAND.name} operates as a trades school in {BRAND.place}. Construction Foundations is our
             open program. Instructors verify skill. Partners help learners move into work and apprenticeship.
           </p>
         </div>
@@ -447,7 +447,7 @@ export function ContactPage() {
         <p>
           <strong>{BRAND.name}</strong>
           <br />
-          Construction school · {BRAND.place}, Canada
+          Trades school · {BRAND.place}, Canada
         </p>
         <p>
           Email{' '}

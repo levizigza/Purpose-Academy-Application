@@ -90,7 +90,7 @@ export function PublicLayout() {
           <div>
             <strong>{BRAND.name}</strong>
             <p className="muted" style={{ margin: 0 }}>
-              Construction school in {BRAND.place}. {BRAND.tagline}
+              Trades school in {BRAND.place}. {BRAND.tagline}
             </p>
           </div>
           <div className="nav-links">

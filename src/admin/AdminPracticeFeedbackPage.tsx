@@ -66,7 +66,7 @@ export function AdminPracticeFeedbackPage() {
         <p className="section-kicker">Practice Mode</p>
         <h1>Reviewer feedback</h1>
         <p className="lede">
-          Notes from Chu Chu, Yonas, Kinfe, Saba, Levi (and other reviewers) while walking the full site without
+          Notes from ChuChu, Yonas, Kinfe, Saba, Levi (and other reviewers) while walking the full site without
           registration. Use this inbox to decide what to fix next.
         </p>
       </div>
