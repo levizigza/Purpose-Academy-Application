@@ -21,31 +21,31 @@ export const BRAND = {
   tagline: 'Foundations. Practice. Apprenticeship.',
 } as const
 
-/** About page — founding team (roles and bios TBD). */
+/** About page — founding team (roles and bios forthcoming). */
 export const SCHOOL_TEAM = [
   {
     name: 'Saba Teklu',
-    role: 'Position TBD',
-    focus: 'Bio and details will be added later.',
+    role: 'Role forthcoming',
+    focus: 'Details will be added as Purpose Academy grows.',
   },
   {
     name: 'Kinfe Desta',
-    role: 'Position TBD',
-    focus: 'Bio and details will be added later.',
+    role: 'Role forthcoming',
+    focus: 'Details will be added as Purpose Academy grows.',
   },
   {
     name: 'Chuchu Asemelash',
-    role: 'Position TBD',
-    focus: 'Bio and details will be added later.',
+    role: 'Role forthcoming',
+    focus: 'Details will be added as Purpose Academy grows.',
   },
   {
     name: 'Yonas Tesfagabr',
-    role: 'Position TBD',
-    focus: 'Bio and details will be added later.',
+    role: 'Role forthcoming',
+    focus: 'Details will be added as Purpose Academy grows.',
   },
   {
     name: 'Levi Zigza',
-    role: 'Position TBD',
-    focus: 'Bio and details will be added later.',
+    role: 'Role forthcoming',
+    focus: 'Details will be added as Purpose Academy grows.',
   },
 ] as const

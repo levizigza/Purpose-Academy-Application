@@ -5697,8 +5697,7 @@ table.data th {
 }
 
 .pillar-grid,
-.audience-grid,
-.team-grid {
+.audience-grid {
   display: grid;
   gap: 1rem;
   margin-top: 1.25rem;
@@ -5709,21 +5708,15 @@ table.data th {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.team-grid {
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-}
-
 @media (max-width: 860px) {
   .pillar-grid,
-  .audience-grid,
-  .team-grid {
+  .audience-grid {
     grid-template-columns: 1fr;
   }
 }
 
 .pillar,
-.audience-card,
-.team-card {
+.audience-card {
   padding: 1.15rem 1.2rem;
   border-radius: 14px;
   border: 1px solid var(--line, #d5dde8);
@@ -5731,61 +5724,90 @@ table.data th {
 }
 
 .pillar h3,
-.audience-card h3,
-.team-card h3 {
+.audience-card h3 {
   margin: 0 0 0.35rem;
   font-family: var(--display);
 }
 
-.team-card {
-  display: grid;
-  gap: 0.9rem;
-  align-content: start;
+/* About team — vertical stack, one person per row */
+.team-section {
+  max-width: 42rem;
+}
+
+.team-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 1.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--line, #d5dde8) 85%, transparent);
+}
+
+.team-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.85rem 0.35rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--line, #d5dde8) 85%, transparent);
+  text-align: center;
+  background: transparent;
+}
+
+.team-profile:last-child {
+  border-bottom: 0;
 }
 
 .team-photo {
   position: relative;
-  aspect-ratio: 1 / 1;
-  width: 100%;
-  max-width: 180px;
+  aspect-ratio: 3 / 4;
+  width: min(100%, 220px);
   margin-inline: auto;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   background:
-    linear-gradient(160deg, rgba(11, 47, 92, 0.08), rgba(232, 163, 23, 0.12)),
+    linear-gradient(165deg, rgba(11, 47, 92, 0.1), rgba(232, 163, 23, 0.14)),
     #e8eef6;
   border: 1px solid rgba(11, 47, 92, 0.12);
   display: grid;
   place-items: center;
+  box-shadow: 0 14px 32px rgba(7, 30, 61, 0.1);
 }
 
 .team-photo-placeholder {
   font-family: var(--display);
   font-weight: 800;
-  font-size: 2rem;
+  font-size: clamp(2rem, 4vw, 2.6rem);
   letter-spacing: 0.04em;
   color: #0b2f5c;
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
 .team-photo-label {
   position: absolute;
-  left: 0.55rem;
-  bottom: 0.55rem;
+  left: 0.65rem;
+  bottom: 0.65rem;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #0b2f5c;
-  background: rgba(255, 255, 255, 0.82);
-  padding: 0.2rem 0.4rem;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 0.22rem 0.45rem;
   border-radius: 6px;
 }
 
 .team-info {
   display: grid;
-  gap: 0.25rem;
-  text-align: center;
+  gap: 0.35rem;
+  max-width: 28rem;
+}
+
+.team-info h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 2.8vw, 1.7rem);
+  letter-spacing: 0.01em;
+  color: #0b2f5c;
 }
 
 .team-avatar {
@@ -5803,15 +5825,38 @@ table.data th {
 .team-role {
   margin: 0;
   font-weight: 700;
-  color: var(--brand, #0b2f5c);
-  font-size: 0.92rem;
+  color: color-mix(in srgb, #0b2f5c 78%, #7a4e00);
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .team-bio {
-  margin: 0.15rem 0 0;
+  margin: 0.2rem 0 0;
   color: var(--ink-soft, #445266);
-  font-size: 0.95rem;
-  line-height: 1.45;
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+/* Legacy alias if referenced elsewhere */
+.team-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 1.75rem;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.85rem 0.35rem;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--line, #d5dde8) 85%, transparent);
+  background: transparent;
+  text-align: center;
 }
 
 .school-bullets {
@@ -6647,8 +6692,7 @@ video {
   .grid-2,
   .grid-3,
   .pillar-grid,
-  .audience-grid,
-  .team-grid {
+  .audience-grid {
     grid-template-columns: 1fr;
   }
 
