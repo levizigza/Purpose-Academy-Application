@@ -21,26 +21,31 @@ export const BRAND = {
   tagline: 'Foundations. Practice. Apprenticeship.',
 } as const
 
-/** About page — founding team and instructors (update with live bios as they land). */
+/** About page — founding team (roles and bios TBD). */
 export const SCHOOL_TEAM = [
   {
-    role: 'Founder & Executive Director',
+    name: 'Saba Teklu',
+    role: 'Position TBD',
+    focus: 'Bio and details will be added later.',
+  },
+  {
+    name: 'Kinfe Desta',
+    role: 'Position TBD',
+    focus: 'Bio and details will be added later.',
+  },
+  {
+    name: 'Chuchu Asemelash',
+    role: 'Position TBD',
+    focus: 'Bio and details will be added later.',
+  },
+  {
+    name: 'Yonas Tesfagabr',
+    role: 'Position TBD',
+    focus: 'Bio and details will be added later.',
+  },
+  {
     name: 'Levi Zigza',
-    focus: 'School vision, community partnerships, and student success in Calgary.',
-  },
-  {
-    role: 'Construction Program Lead',
-    name: 'Jordan Hale',
-    focus: 'Shop instruction, safety standards, and apprenticeship readiness.',
-  },
-  {
-    role: 'Language & Workplace Readiness',
-    name: 'Amira Bekele',
-    focus: 'Site English, mother-tongue support, and workplace communication.',
-  },
-  {
-    role: 'Industry & Employer Partnerships',
-    name: 'Marcus Chen',
-    focus: 'Hiring partners, work placements, and apprenticeship introductions.',
+    role: 'Position TBD',
+    focus: 'Bio and details will be added later.',
   },
 ] as const

@@ -5681,7 +5681,7 @@ table.data th {
 }
 
 .team-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
 
 @media (max-width: 860px) {
@@ -5706,6 +5706,83 @@ table.data th {
 .team-card h3 {
   margin: 0 0 0.35rem;
   font-family: var(--display);
+}
+
+.team-card {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+
+.team-photo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 180px;
+  margin-inline: auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background:
+    linear-gradient(160deg, rgba(11, 47, 92, 0.08), rgba(232, 163, 23, 0.12)),
+    #e8eef6;
+  border: 1px solid rgba(11, 47, 92, 0.12);
+  display: grid;
+  place-items: center;
+}
+
+.team-photo-placeholder {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 2rem;
+  letter-spacing: 0.04em;
+  color: #0b2f5c;
+  opacity: 0.55;
+}
+
+.team-photo-label {
+  position: absolute;
+  left: 0.55rem;
+  bottom: 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0b2f5c;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+}
+
+.team-info {
+  display: grid;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.team-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 0.65rem;
+  font-weight: 800;
+  color: #0b2f5c;
+  background: linear-gradient(145deg, #f5c542, #e8a317);
+}
+
+.team-role {
+  margin: 0;
+  font-weight: 700;
+  color: var(--brand, #0b2f5c);
+  font-size: 0.92rem;
+}
+
+.team-bio {
+  margin: 0.15rem 0 0;
+  color: var(--ink-soft, #445266);
+  font-size: 0.95rem;
+  line-height: 1.45;
 }
 
 .school-bullets {
@@ -5741,24 +5818,6 @@ table.data th {
   object-fit: cover;
   border-radius: 14px;
   display: block;
-}
-
-.team-avatar {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  margin-bottom: 0.65rem;
-  font-weight: 800;
-  color: #0b2f5c;
-  background: linear-gradient(145deg, #f5c542, #e8a317);
-}
-
-.team-role {
-  margin: 0 0 0.45rem;
-  font-weight: 700;
-  color: var(--brand, #0b2f5c);
 }
 
 .audience-band .audience-card .btn {

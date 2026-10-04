@@ -331,22 +331,28 @@ export function AboutPage() {
 
       <Reveal as="section" className="section" delay={100}>
         <p className="section-kicker">People</p>
-        <h2>Founders & instructors</h2>
-        <p className="lede path-lede">The team that builds the school and teaches the trade.</p>
+        <h2>Our team</h2>
+        <p className="lede path-lede">The people building Purpose Academy. Roles and bios will be filled in soon.</p>
         <div className="team-grid">
-          {SCHOOL_TEAM.map((person) => (
-            <article key={person.name} className="team-card site-crate">
-              <div className="team-avatar" aria-hidden>
-                {person.name
-                  .split(' ')
-                  .map((p) => p[0])
-                  .join('')}
-              </div>
-              <h3>{person.name}</h3>
-              <p className="team-role">{person.role}</p>
-              <p>{person.focus}</p>
-            </article>
-          ))}
+          {SCHOOL_TEAM.map((person) => {
+            const initials = person.name
+              .split(' ')
+              .map((p) => p[0])
+              .join('')
+            return (
+              <article key={person.name} className="team-card site-crate">
+                <div className="team-photo" aria-hidden>
+                  <span className="team-photo-placeholder">{initials}</span>
+                  <span className="team-photo-label">Photo TBD</span>
+                </div>
+                <div className="team-info">
+                  <h3>{person.name}</h3>
+                  <p className="team-role">{person.role}</p>
+                  <p className="team-bio">{person.focus}</p>
+                </div>
+              </article>
+            )
+          })}
         </div>
       </Reveal>
 
