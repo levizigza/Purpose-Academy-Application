@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { SupportLang } from './journeyCurriculum'
 import {
   ASSESSMENT_COPY,
@@ -26,23 +26,41 @@ type InterestProps = {
 }
 
 /** Part 1 — RIASEC-style activity ratings, one question at a time, mother tongue only. */
-export function CareerInterestAssessment({ lang, answers, onChange, onComplete, onBack }: InterestProps) {
+export function CareerInterestAssessment({ lang, onComplete, onBack }: InterestProps) {
   const items = CAREER_INTEREST_ITEMS
   const [idx, setIdx] = useState(0)
+  const [local, setLocal] = useState<Record<string, LikertValue>>({})
+  const localRef = useRef(local)
+  localRef.current = local
   const item = items[Math.min(idx, items.length - 1)]
-  const current = answers[item.id]
+  const current = local[item.id]
+
+  function select(value: LikertValue) {
+    setLocal((prev) => {
+      const next = { ...prev, [item.id]: value }
+      localRef.current = next
+      return next
+    })
+    setIdx((i) => {
+      if (i >= items.length - 1) {
+        queueMicrotask(() => onComplete({ ...localRef.current, [item.id]: value }))
+        return i
+      }
+      return i + 1
+    })
+  }
 
   function goNext() {
-    if (!current) return
-    if (idx < items.length - 1) {
-      setIdx(idx + 1)
+    if (!local[item.id]) return
+    if (idx >= items.length - 1) {
+      onComplete(localRef.current)
       return
     }
-    onComplete(answers)
+    setIdx((i) => i + 1)
   }
 
   return (
-    <div className="career-assess">
+    <div className="career-assess" data-assess-idx={idx}>
       <header className="career-assess-head">
         <p className="career-assess-kicker">{t(ASSESSMENT_COPY.introTitle, lang)}</p>
         <h2 className="career-assess-title">{t(ASSESSMENT_COPY.part1Hint, lang)}</h2>
@@ -64,7 +82,7 @@ export function CareerInterestAssessment({ lang, answers, onChange, onComplete, 
               role="radio"
               aria-checked={current === opt.value}
               className={`career-likert-btn tone-${opt.value}${current === opt.value ? ' is-selected' : ''}`}
-              onClick={() => onChange(item.id, opt.value)}
+              onClick={() => select(opt.value)}
             >
               <span className="career-likert-num">{opt.value}</span>
               <span className="career-likert-label">{opt.label[lang]}</span>
@@ -80,7 +98,7 @@ export function CareerInterestAssessment({ lang, answers, onChange, onComplete, 
           </button>
         )}
         {idx > 0 && (
-          <button type="button" className="btn btn-ghost" onClick={() => setIdx(idx - 1)}>
+          <button type="button" className="btn btn-ghost" onClick={() => setIdx((i) => Math.max(0, i - 1))}>
             ←
           </button>
         )}
@@ -101,23 +119,41 @@ type StyleProps = {
 }
 
 /** Part 2 — work-style forced choices in mother tongue. */
-export function CareerStyleAssessment({ lang, answers, onChange, onComplete, onBack }: StyleProps) {
+export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) {
   const items = CAREER_STYLE_ITEMS
   const [idx, setIdx] = useState(0)
+  const [local, setLocal] = useState<Record<string, string>>({})
+  const localRef = useRef(local)
+  localRef.current = local
   const item = items[Math.min(idx, items.length - 1)]
-  const current = answers[item.id]
+  const current = local[item.id]
+
+  function pick(optionId: string) {
+    setLocal((prev) => {
+      const next = { ...prev, [item.id]: optionId }
+      localRef.current = next
+      return next
+    })
+    setIdx((i) => {
+      if (i >= items.length - 1) {
+        queueMicrotask(() => onComplete({ ...localRef.current, [item.id]: optionId }))
+        return i
+      }
+      return i + 1
+    })
+  }
 
   function goNext() {
-    if (!current) return
-    if (idx < items.length - 1) {
-      setIdx(idx + 1)
+    if (!local[item.id]) return
+    if (idx >= items.length - 1) {
+      onComplete(localRef.current)
       return
     }
-    onComplete(answers)
+    setIdx((i) => i + 1)
   }
 
   return (
-    <div className="career-assess">
+    <div className="career-assess" data-assess-idx={idx}>
       <header className="career-assess-head">
         <p className="career-assess-kicker">{t(ASSESSMENT_COPY.introTitle, lang)}</p>
         <h2 className="career-assess-title">{t(ASSESSMENT_COPY.part2Title, lang)}</h2>
@@ -138,7 +174,7 @@ export function CareerStyleAssessment({ lang, answers, onChange, onComplete, onB
               key={opt.id}
               type="button"
               className={`career-choice${current === opt.id ? ' is-selected' : ''}`}
-              onClick={() => onChange(item.id, opt.id)}
+              onClick={() => pick(opt.id)}
             >
               {opt.label[lang]}
             </button>
@@ -148,7 +184,7 @@ export function CareerStyleAssessment({ lang, answers, onChange, onComplete, onB
 
       <div className="career-assess-actions">
         {idx > 0 ? (
-          <button type="button" className="btn btn-ghost" onClick={() => setIdx(idx - 1)}>
+          <button type="button" className="btn btn-ghost" onClick={() => setIdx((i) => Math.max(0, i - 1))}>
             ←
           </button>
         ) : (
