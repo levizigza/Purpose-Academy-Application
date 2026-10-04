@@ -33,6 +33,17 @@ export function PublicLayout() {
       <header className="topbar">
         <div className="topbar-inner">
           <BrandLockup to="/" dark={isTrain} />
+          <div className="topbar-nav">
+            <nav className="nav-cluster" aria-label="Website">
+              <NavLink to="/programs">Programs</NavLink>
+              <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
+              <NavLink to="/about">About</NavLink>
+              <NavLink to="/give">Give</NavLink>
+              <NavLink to="/contact">Contact</NavLink>
+              {user && (
+                <NavLink to={homeForRole(user.role, student?.registration_status)}>Portal</NavLink>
+              )}
+            </nav>
             <div className="nav-actions">
               {user ? (
                 <button type="button" className="linkish nav-signout" onClick={logout}>
