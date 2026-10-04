@@ -506,9 +506,10 @@ export function StudentSequencePage() {
     preferred_language: 'Amharic', previous_experience: '',
   })
 
-  /* Step 7 visual vocabulary sheet — English + home languages + audio */
+  /* Step 7 visual vocabulary — one picture at a time through the full set */
   const [vocabHeard, setVocabHeard] = useState<Record<string, boolean>>({})
   const [vocabSpeakingId, setVocabSpeakingId] = useState<string | null>(null)
+  const [vocabIdx, setVocabIdx] = useState(0)
   const [speaking, setSpeaking] = useState<'en' | 'support' | 'both' | null>(null)
 
   /* Step 9 supported matching */
@@ -674,6 +675,7 @@ export function StudentSequencePage() {
   function resetVocab() {
     setVocabHeard({})
     setVocabSpeakingId(null)
+    setVocabIdx(0)
     setSpeaking(null)
     stopSpeech()
   }
@@ -1031,7 +1033,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 7: Visual Vocabulary sheet — picture + all languages + audio */
+  /* Step 7: Visual Vocabulary — one picture/word at a time through the full set */
   if (step === 7) {
     const heardCount = VOCAB_UNIT.filter((t) => vocabHeard[t.id]).length
     const ready = heardCount >= VOCAB_UNIT.length
@@ -1046,18 +1048,22 @@ export function StudentSequencePage() {
       >
         <VocabSheet
           terms={VOCAB_UNIT}
+          index={vocabIdx}
           supportLang={supportLang}
           speakingId={vocabSpeakingId}
           heard={vocabHeard}
+          onIndexChange={setVocabIdx}
+          onSeen={(termId) => setVocabHeard((h) => ({ ...h, [termId]: true }))}
           onPlayEnglish={(term) => void playVocabEnglish(term)}
           onPlayLang={(term, lang) => void playVocabLang(term, lang)}
         />
         <p className="train-vocab-counter">
-          Listened to {heardCount} of {VOCAB_UNIT.length} words
-          {ready ? ' · Ready to continue' : ' — tap Listen on each card'}
+          {ready
+            ? `All ${VOCAB_UNIT.length} words done · Ready to continue`
+            : `Seen ${heardCount} of ${VOCAB_UNIT.length} words — keep going one by one`}
         </p>
         <TeachNote>
-          This is not English-only. Read your language next to the picture, then hear the English word.
+          One clear picture per word. Read your language, hear English, then move to the next word until you finish the set.
         </TeachNote>
       </Shell>
     )

@@ -28,6 +28,7 @@ function SpeakerIcon() {
 
 type CardProps = {
   index: number
+  total: number
   term: VocabTerm
   supportLang: SupportLang
   speaking: boolean
@@ -36,9 +37,14 @@ type CardProps = {
   onPlayLang: (lang: SupportLang) => void
 }
 
-/** One worksheet-style visual vocabulary card: English + translations + audio. */
+/**
+ * Singular visual-vocabulary card template:
+ * English word · clear object photo · home-language glosses with audio.
+ * Used one word at a time — not as a full worksheet grid.
+ */
 export function VocabSheetCard({
   index,
+  total,
   term,
   supportLang,
   speaking,
@@ -48,7 +54,7 @@ export function VocabSheetCard({
 }: CardProps) {
   const img = toolImage(term.imageKey)
   return (
-    <article className={`vocab-sheet-card${heard ? ' is-heard' : ''}`}>
+    <article className={`vocab-sheet-card vocab-sheet-card-focus${heard ? ' is-heard' : ''}`}>
       <header className="vocab-sheet-card-head">
         <span className={`vocab-sheet-num tone-${(index % 4) + 1}`}>{index}</span>
         <strong className="vocab-sheet-en">{term.english}</strong>
@@ -65,10 +71,14 @@ export function VocabSheetCard({
         </button>
       </header>
 
-      <div className="vocab-sheet-body">
-        <figure className="vocab-sheet-photo">
+      <p className="vocab-sheet-progress" aria-live="polite">
+        Word {index} of {total}
+      </p>
+
+      <div className="vocab-sheet-body vocab-sheet-body-focus">
+        <figure className="vocab-sheet-photo vocab-sheet-photo-focus">
           {img ? (
-            <img src={img} alt="" />
+            <img src={img} alt={term.english} />
           ) : (
             <span className="vocab-sheet-fallback" aria-hidden>
               {term.emoji}
@@ -103,51 +113,88 @@ export function VocabSheetCard({
   )
 }
 
-type SheetProps = {
+type DeckProps = {
   terms: VocabTerm[]
+  index: number
   supportLang: SupportLang
   speakingId: string | null
   heard: Record<string, boolean>
+  onIndexChange: (index: number) => void
   onPlayEnglish: (term: VocabTerm) => void
   onPlayLang: (term: VocabTerm, lang: SupportLang) => void
+  onSeen: (termId: string) => void
 }
 
-/** Full visual vocabulary sheet — English word with home-language glosses + audio. */
+/**
+ * One-by-one vocabulary deck: same singular card template, every word in sequence.
+ * Learners must move through the full set before the journey continues.
+ */
 export function VocabSheet({
   terms,
+  index,
   supportLang,
   speakingId,
   heard,
+  onIndexChange,
   onPlayEnglish,
   onPlayLang,
-}: SheetProps) {
+  onSeen,
+}: DeckProps) {
+  const idx = Math.min(Math.max(0, index), Math.max(0, terms.length - 1))
+  const term = terms[idx]
+  const atEnd = idx >= terms.length - 1
+  const seenCount = terms.filter((t) => heard[t.id]).length
+  const allSeen = seenCount >= terms.length
+
+  function goPrev() {
+    onIndexChange(Math.max(0, idx - 1))
+  }
+
+  function goNext() {
+    onSeen(term.id)
+    if (!atEnd) onIndexChange(idx + 1)
+  }
+
   return (
-    <section className="vocab-sheet" aria-label="Visual vocabulary sheet">
+    <section className="vocab-sheet vocab-sheet-deck" aria-label="Visual vocabulary">
       <header className="vocab-sheet-banner">
         <div>
           <p className="vocab-sheet-brand">Purpose Academy</p>
           <h2 className="vocab-sheet-title">Construction Visual Vocabulary</h2>
         </div>
         <p className="vocab-sheet-badge">
-          Words 1–{terms.length} · English + home languages · No French
+          {seenCount}/{terms.length} words · one picture at a time
         </p>
       </header>
       <p className="vocab-sheet-lede">
-        See the picture. Read your language. Hear the English word. Tap any translation to listen.
+        See the picture. Read your language. Hear the English word. Go through every word — one by one.
       </p>
-      <div className="vocab-sheet-grid">
-        {terms.map((term, i) => (
-          <VocabSheetCard
-            key={term.id}
-            index={i + 1}
-            term={term}
-            supportLang={supportLang}
-            speaking={speakingId === term.id}
-            heard={!!heard[term.id]}
-            onPlayEnglish={() => onPlayEnglish(term)}
-            onPlayLang={(lang) => onPlayLang(term, lang)}
-          />
-        ))}
+
+      <VocabSheetCard
+        key={term.id}
+        index={idx + 1}
+        total={terms.length}
+        term={term}
+        supportLang={supportLang}
+        speaking={speakingId === term.id}
+        heard={!!heard[term.id]}
+        onPlayEnglish={() => {
+          onSeen(term.id)
+          onPlayEnglish(term)
+        }}
+        onPlayLang={(lang) => {
+          onSeen(term.id)
+          onPlayLang(term, lang)
+        }}
+      />
+
+      <div className="vocab-sheet-nav">
+        <button type="button" className="btn btn-ghost" disabled={idx === 0} onClick={goPrev}>
+          ← Previous word
+        </button>
+        <button type="button" className="btn btn-primary" onClick={goNext}>
+          {atEnd ? (allSeen || heard[term.id] ? 'All words done ✓' : 'Mark this word done') : 'Next word →'}
+        </button>
       </div>
     </section>
   )
