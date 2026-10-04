@@ -61,9 +61,13 @@ export function PublicLayout() {
                 <button type="button" className="linkish nav-signout" onClick={logout}>
                   Sign out
                 </button>
-              ) : practice ? (
+              ) : practice && pathname !== '/journey' ? (
                 <NavLink className="btn btn-primary nav-cta" to="/journey">
                   Continue training
+                </NavLink>
+              ) : practice ? (
+                <NavLink className="btn btn-secondary nav-cta" to="/">
+                  Review website
                 </NavLink>
               ) : (
                 <NavLink className="btn btn-primary nav-cta" to="/login">

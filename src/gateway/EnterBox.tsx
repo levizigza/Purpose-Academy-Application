@@ -8,6 +8,7 @@ import {
 import { playFoley, unlockFoley } from '../audio/foley'
 import {
   getPracticeName,
+  isPracticeMode,
   PRACTICE_REVIEWERS,
   PRACTICE_TRAY_HELP,
   startPracticeMode,
@@ -225,12 +226,15 @@ export function EnterBox() {
     setFlying(true)
     document.documentElement.classList.add('pa-page-wipe')
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const delay = reduce ? 100 : 920
     window.setTimeout(() => {
       navigate(to)
       window.setTimeout(() => {
         document.documentElement.classList.remove('pa-page-wipe')
+        setFlying(false)
+        setOpenTray(null)
       }, 420)
-    }, reduce ? 100 : 920)
+    }, delay)
   }
 
   function beginPractice(name: string) {
@@ -241,8 +245,8 @@ export function EnterBox() {
       playFoley('latch')
       playFoley('metal')
     })
-    /* Land on the live site — registration is skipped inside the training path */
-    window.setTimeout(() => launchTo('/', 'Practice Mode'), 380)
+    /* Skip registration and open the real training path */
+    window.setTimeout(() => launchTo('/journey', 'Practice Mode'), 380)
   }
 
   return (
@@ -277,6 +281,7 @@ export function EnterBox() {
           </div>
           <nav className="toolbox-tray" aria-label="Site entry">
             {ENTRIES.map((item, i) => {
+              if (item.practice && isPracticeMode()) return null
               const done =
                 item.completeIds.length > 0 &&
                 item.completeIds.every((id) => isSequenceComplete(id))

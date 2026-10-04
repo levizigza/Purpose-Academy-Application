@@ -282,7 +282,11 @@ export function PracticeModeBanner() {
         Practice mode{name ? ` · ${name}` : ''} — registration skipped. Use the feedback chat on the side as you
         review.
       </span>
-      {!onJourney && (
+      {onJourney ? (
+        <Link className="practice-banner-cta" to="/">
+          Review website
+        </Link>
+      ) : (
         <Link className="practice-banner-cta" to="/journey">
           Continue training path
         </Link>

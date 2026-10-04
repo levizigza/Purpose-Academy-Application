@@ -218,9 +218,11 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
           <span style={{ width: `${pct}%` }} />
         </div>
         <ol className="train-dots" aria-label="Step progress">
-          {JOURNEY_STEPS.map((s) => (
-            <li key={s.n} className={s.n === step ? 'is-current' : s.n < step ? 'is-done' : ''} title={s.title} />
-          ))}
+          {JOURNEY_STEPS.map((s) => {
+            const skipped = isPracticeMode() && s.n < PRACTICE_ENTRY_STEP
+            const cls = s.n === step ? 'is-current' : skipped ? 'is-skipped' : s.n < step ? 'is-done' : ''
+            return <li key={s.n} className={cls} title={skipped ? `${s.title} (skipped in practice)` : s.title} />
+          })}
         </ol>
       </header>
 
