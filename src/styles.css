@@ -1981,11 +1981,11 @@ table.data th {
   }
 
   .threshold-hammer {
-    right: clamp(2.4rem, 12vw, 7rem);
+    right: clamp(3.2rem, 16vw, 9rem);
   }
 
   .threshold-hammer-icon {
-    width: clamp(6rem, 28vw, 7.6rem);
+    width: clamp(6.2rem, 30vw, 8rem);
   }
 }
 
@@ -2063,9 +2063,9 @@ table.data th {
 
 .threshold-hammer {
   position: fixed;
-  /* Keep the sledge in the composition — inset from the edge toward the doorway */
-  right: clamp(3.5rem, 16vw, 11rem);
-  top: 50%;
+  /* Sit beside the doorway P — clearly in view, not parked on the rim */
+  right: clamp(5.5rem, 24vw, 17rem);
+  top: 48%;
   z-index: 12;
   display: grid;
   place-items: center;
@@ -2079,7 +2079,7 @@ table.data th {
   box-shadow: none;
   cursor: pointer;
   opacity: 0;
-  transform: translateY(-50%) translateX(12px) rotate(6deg);
+  transform: translateY(-50%) translateX(12px) rotate(5deg);
   transition: transform 0.28s ease, filter 0.28s ease;
   filter: drop-shadow(0 14px 28px rgba(90, 55, 8, 0.45));
 }
@@ -2328,11 +2328,11 @@ table.data th {
 
 @media (max-width: 640px) {
   .threshold-hammer {
-    right: clamp(1.6rem, 10vw, 4.5rem);
+    right: clamp(2rem, 12vw, 5.5rem);
   }
 
   .threshold-hammer-icon {
-    width: clamp(5.2rem, 24vw, 6.6rem);
+    width: clamp(5.6rem, 26vw, 7rem);
   }
 }
 
