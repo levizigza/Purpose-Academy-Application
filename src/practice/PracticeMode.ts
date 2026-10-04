@@ -50,12 +50,21 @@ export function resetPracticeProgress() {
     sessionStorage.removeItem('pa-student-observation-v1')
     sessionStorage.removeItem('pa-student-daily-log-v1')
     sessionStorage.removeItem('pa-student-employment-v1')
+    sessionStorage.removeItem('pa-learning-mastery-v1')
     sessionStorage.setItem('pa-student-journey-step-v1', String(PRACTICE_ENTRY_STEP))
     window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: PRACTICE_ENTRY_STEP } }))
     window.dispatchEvent(new Event('pa-practice-restarted'))
+    window.dispatchEvent(new Event('pa-mastery-changed'))
   } catch {
     /* ignore */
   }
+}
+
+/** Ask for reviewer feedback only at unit boundaries so learning stays continuous. */
+export const PRACTICE_FEEDBACK_STEPS = new Set([6, 8, 12, 16, 19, 20])
+
+export function shouldAskPracticeFeedback(step: number) {
+  return PRACTICE_FEEDBACK_STEPS.has(step)
 }
 
 export function startPracticeMode(fullName: string) {
@@ -178,4 +187,4 @@ export function shouldHidePracticeFeedback(pathname: string, journeyStep?: numbe
 }
 
 export const PRACTICE_TRAY_HELP =
-  'For ChuChu, Yonas, Kinfe, Saba & Levi — pick your name, skip registration, review the full site, and send feedback.'
+  'Full school learning path for reviewers — same units, mastery, and checks learners will use. Pick your name, skip registration, learn through every station, leave feedback at unit ends.'

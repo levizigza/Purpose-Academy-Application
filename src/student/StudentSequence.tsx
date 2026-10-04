@@ -16,11 +16,17 @@ import {
   FINAL_QUIZ,
   TOOL_CATEGORIES,
   SYSTEM_TOPICS,
-  COMPUTER_SKILLS,
   SITE_PHRASES,
   WORD_ACTIONS,
   EYE_SPY_SCENES,
+  UNIT_GOALS,
+  WORKPLACE_INSTRUCTIONS,
+  DIGITAL_PRACTICE,
+  OBSERVATION_SCENARIOS,
+  SITE_DECISIONS,
+  EMPLOYMENT_PREP,
   unitForStep,
+  isUnitEntryStep,
   type SupportLang,
   type QuizItem,
 } from './journeyCurriculum'
@@ -52,6 +58,12 @@ import {
 import { toolImage } from './toolImages'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { VocabSheet } from './VocabSheet'
+import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
+import {
+  markSkillOpened,
+  recordSkillAttempt,
+  SKILL_BY_STEP,
+} from './learningMastery'
 import {
   hasPracticeFeedbackAck,
   isPracticeMode,
@@ -60,6 +72,7 @@ import {
   PRACTICE_ENTRY_STEP,
   practiceFeedbackKey,
   resetPracticeProgress,
+  shouldAskPracticeFeedback,
 } from '../practice/PracticeMode'
 
 const JOURNEY_KEY = 'pa-student-journey-step-v1'
@@ -158,19 +171,6 @@ function LearnCard({ title, body, mark }: { title: string; body: string; mark?: 
   )
 }
 
-function CheckItem({ id, title, why, checked, onChange }: {
-  id: string; title: string; why: string; checked: boolean; onChange: () => void
-}) {
-  return (
-    <li>
-      <label className="train-check-rich" htmlFor={id}>
-        <input id={id} type="checkbox" checked={checked} onChange={onChange} />
-        <span><strong>{title}</strong><em>{why}</em></span>
-      </label>
-    </li>
-  )
-}
-
 /* ─── Step shell — SiteWise-inspired training chrome ─── */
 
 function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang }: {
@@ -212,7 +212,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 
   function handleNext() {
     if (!onNext) return
-    if (!isPracticeMode()) {
+    if (!isPracticeMode() || !shouldAskPracticeFeedback(step)) {
       playFoley('wood')
       onNext()
       return
@@ -223,7 +223,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       onNext()
       return
     }
-    /* Scroll the step so reviewers can skim, then ask about feedback at the bottom. */
+    /* Scroll the step so reviewers can skim, then ask about feedback at unit boundaries. */
     const panel = document.querySelector('.train-panel')
     const actions = document.querySelector('.train-actions')
     const target = (actions as HTMLElement | null) || (panel as HTMLElement | null)
@@ -283,9 +283,17 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             return <li key={s.n} className={cls} title={skipped ? `${s.title} (skipped in practice)` : s.title} />
           })}
         </ol>
+        <LearningPathMap currentStep={step} practice={isPracticeMode()} compact />
       </header>
 
       <Reveal className="train-panel" delay={40}>
+        {isUnitEntryStep(step) && UNIT_GOALS[unit.id] && (
+          <UnitIntroCard
+            unitId={unit.id}
+            goal={UNIT_GOALS[unit.id].goal}
+            outcomes={UNIT_GOALS[unit.id].outcomes}
+          />
+        )}
         {children}
       </Reveal>
 
@@ -367,6 +375,16 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
       playFoley('wood')
       onComplete()
       return
+    }
+    try {
+      const step = Number(sessionStorage.getItem(JOURNEY_KEY) || '0')
+      if (!shouldAskPracticeFeedback(step)) {
+        playFoley('wood')
+        onComplete()
+        return
+      }
+    } catch {
+      /* fall through */
     }
     const key = currentStepKey()
     if (hasPracticeFeedbackAck(key)) {
@@ -543,8 +561,11 @@ export function StudentSequencePage() {
   const [instrAnswer, setInstrAnswer] = useState<string | null>(null)
   const [instrCorrect, setInstrCorrect] = useState(false)
 
-  /* Step 13 computer skills */
-  const [compChecks, setCompChecks] = useState<Record<string, boolean>>({})
+  /* Step 13 digital practice */
+  const [digIdx, setDigIdx] = useState(0)
+  const [digAnswer, setDigAnswer] = useState<string | null>(null)
+  const [digCorrect, setDigCorrect] = useState(false)
+  const [digTyped, setDigTyped] = useState('')
 
   /* Step 15 tool categories */
   const [toolIdx, setToolIdx] = useState(0)
@@ -556,22 +577,36 @@ export function StudentSequencePage() {
   const [sysAnswer, setSysAnswer] = useState<string | null>(null)
   const [sysCorrect, setSysCorrect] = useState(false)
 
-  /* Step 17 observation form */
-  const [obsForm, setObsForm] = useState({ skill: '', station: '', notes: '' })
+  /* Step 17 observation scenarios */
+  const [obsIdx, setObsIdx] = useState(0)
+  const [obsPicked, setObsPicked] = useState<string[]>([])
+  const [obsChecked, setObsChecked] = useState(false)
+  const [obsCorrect, setObsCorrect] = useState(false)
 
-  /* Step 18 daily log */
+  /* Step 18 site decisions */
+  const [siteIdx, setSiteIdx] = useState(0)
+  const [siteAnswer, setSiteAnswer] = useState<string | null>(null)
+  const [siteCorrect, setSiteCorrect] = useState(false)
   const [logForm, setLogForm] = useState({ date: '', tasks: '', supervisor: '' })
 
   /* Step 19 honesty */
   const [honestyChecked, setHonestyChecked] = useState(false)
 
-  /* Step 20 employment */
+  /* Step 20 employment prep */
+  const [empIdx, setEmpIdx] = useState(0)
+  const [empAnswer, setEmpAnswer] = useState<string | null>(null)
+  const [empCorrect, setEmpCorrect] = useState(false)
   const [empForm, setEmpForm] = useState({ resume_goal: '', availability: '' })
+  const [empQuizDone, setEmpQuizDone] = useState(false)
 
   useEffect(() => { saveStep(step) }, [step])
   useEffect(() => { if (student?.preferred_language) setSupportLang(student.preferred_language as SupportLang) }, [student?.preferred_language])
   useEffect(() => { primeSpeech() }, [])
   useEffect(() => () => { stopSpeech() }, [])
+  useEffect(() => {
+    const skill = SKILL_BY_STEP[step]
+    if (skill) markSkillOpened(skill)
+  }, [step])
 
   /* Practice mode skips registration entirely */
   useEffect(() => {
@@ -587,9 +622,23 @@ export function StudentSequencePage() {
     const onRestart = () => {
       if (!isPracticeMode()) return
       setEmpDone(false)
-      setObsForm({ skill: '', station: '', notes: '' })
+      setEmpQuizDone(false)
+      setObsIdx(0)
+      setObsPicked([])
+      setObsChecked(false)
+      setObsCorrect(false)
+      setSiteIdx(0)
+      setSiteAnswer(null)
+      setSiteCorrect(false)
+      setDigIdx(0)
+      setDigAnswer(null)
+      setDigCorrect(false)
+      setDigTyped('')
       setLogForm({ date: '', tasks: '', supervisor: '' })
       setEmpForm({ resume_goal: '', availability: '' })
+      setEmpIdx(0)
+      setEmpAnswer(null)
+      setEmpCorrect(false)
       setError(null)
       setTransitioning(false)
       setStep(PRACTICE_ENTRY_STEP)
@@ -625,9 +674,9 @@ export function StudentSequencePage() {
     }, 900)
   }
 
-  /** Practice mode: ask for feedback before leaving the current step via in-panel Continues. */
+  /** Practice mode: ask for feedback at unit boundaries before leaving via in-panel Continues. */
   function requestPracticeAdvance(advance: () => void) {
-    if (!isPracticeMode()) {
+    if (!isPracticeMode() || !shouldAskPracticeFeedback(step)) {
       advance()
       return
     }
@@ -779,56 +828,6 @@ export function StudentSequencePage() {
   }
 
 
-  const INSTRUCTIONS: {
-    text: string
-    correct: string
-    options: string[]
-    imageKey: string
-    supportHint: Record<SupportLang, string>
-  }[] = [
-    {
-      text: 'Bring the tape measure.',
-      correct: 'Bring the tape measure',
-      imageKey: 'tape-measure',
-      options: ['Bring the tape measure', 'Bring the hammer', 'Put on a hard hat', 'Start cutting wood'],
-      supportHint: {
-        English: 'Bring the tape measure.',
-        Spanish: 'Trae la cinta metrica.',
-        Arabic: 'Ahdir sharit al-qiyas.',
-        Hindi: 'Tape measure lao.',
-        Amharic: 'Melekiya tape amtu.',
-        Tigrinya: 'Melekiya tape amtsu.',
-      },
-    },
-    {
-      text: 'Pass me the level.',
-      correct: 'Pass me the level',
-      imageKey: 'level',
-      options: ['Pass me the level', 'Pass the hammer', 'Open the door', 'Put on boots'],
-      supportHint: {
-        English: 'Pass me the level.',
-        Spanish: 'Pasame el nivel.',
-        Arabic: 'Nawilni al-mizan.',
-        Hindi: 'Level mujhe do.',
-        Amharic: 'Dereja melekiyawun situn.',
-        Tigrinya: 'Dereja melekiya habuni.',
-      },
-    },
-    {
-      text: 'Check the wall with the level.',
-      correct: 'Check the wall with the level',
-      imageKey: 'level',
-      options: ['Check the wall with the level', 'Check the floor with a hammer', 'Bring the drill', 'Remove your PPE'],
-      supportHint: {
-        English: 'Check the wall with the level.',
-        Spanish: 'Revisa la pared con el nivel.',
-        Arabic: 'Ifhas al-jidar bil-mizan.',
-        Hindi: 'Level se deewar check karo.',
-        Amharic: 'Dereja melekiya bewetakom gidgidawun yaregagtu.',
-        Tigrinya: 'Bdereja melekiya n mendek aregagtsu.',
-      },
-    },
-  ]
 
   if (step === 1) {
     if (isPracticeMode()) {
@@ -1119,6 +1118,7 @@ export function StudentSequencePage() {
       const ok = opt === term?.english
       setActionAnswer(opt)
       setActionCorrect(ok)
+      recordSkillAttempt('word-action', ok)
       playFoley(ok ? 'correct' : 'wrong')
     }
 
@@ -1189,6 +1189,7 @@ export function StudentSequencePage() {
       const ok = opt === term.english
       setMatchAnswer(opt)
       setMatchCorrect(ok)
+      recordSkillAttempt('matching', ok)
       playFoley(ok ? 'correct' : 'wrong')
     }
 
@@ -1266,14 +1267,15 @@ export function StudentSequencePage() {
 
   /* Step 11: Workplace instructions — English only */
   if (step === 11) {
-    const instr = INSTRUCTIONS[instrIdx]
-    const isLast = instrIdx >= INSTRUCTIONS.length - 1
+    const instr = WORKPLACE_INSTRUCTIONS[instrIdx]
+    const isLast = instrIdx >= WORKPLACE_INSTRUCTIONS.length - 1
 
     function pickInstr(opt: string) {
       if (instrAnswer || !instrHeard) return
       const ok = opt === instr.correct
       setInstrAnswer(opt)
       setInstrCorrect(ok)
+      recordSkillAttempt('instructions', ok)
       playFoley(ok ? 'correct' : 'wrong')
     }
 
@@ -1296,7 +1298,7 @@ export function StudentSequencePage() {
     return (
       <Shell step={11} onBack={() => go(10)}>
         <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
-        <p className="train-vocab-counter">Instruction {instrIdx + 1} of {INSTRUCTIONS.length} · English only</p>
+        <p className="train-vocab-counter">Instruction {instrIdx + 1} of {WORKPLACE_INSTRUCTIONS.length} · English only</p>
         <div className="train-instruction">
           <PictureCard
             image={toolImage(instr.imageKey)}
@@ -1371,6 +1373,7 @@ export function StudentSequencePage() {
       const ok = opt === phrase.answer
       setPhraseAnswer(opt)
       setPhraseCorrect(ok)
+      recordSkillAttempt('site-phrases', ok)
       playFoley(ok ? 'correct' : 'wrong')
     }
 
@@ -1439,14 +1442,96 @@ export function StudentSequencePage() {
   }
 
   if (step === 13) {
+    const item = DIGITAL_PRACTICE[digIdx]
+    const isLast = digIdx >= DIGITAL_PRACTICE.length - 1
+    const isType = 'kind' in item && item.kind === 'type'
+
+    function pickDig(opt: string) {
+      if (digAnswer) return
+      const ok = opt.toLowerCase() === item.answer.toLowerCase()
+      setDigAnswer(opt)
+      setDigCorrect(ok)
+      recordSkillAttempt('digital', ok)
+      playFoley(ok ? 'correct' : 'wrong')
+    }
+
+    function submitTyped(e: FormEvent) {
+      e.preventDefault()
+      pickDig(digTyped.trim())
+    }
+
+    function nextDig() {
+      if (!digCorrect) {
+        setDigAnswer(null)
+        setDigCorrect(false)
+        setDigTyped('')
+        return
+      }
+      if (isLast) {
+        go(14, 'Opening safety…')
+        return
+      }
+      setDigIdx((i) => i + 1)
+      setDigAnswer(null)
+      setDigCorrect(false)
+      setDigTyped('')
+    }
+
     return (
-      <Shell step={13} onBack={() => go(12)} onNext={() => go(14, 'Opening safety…')} nextLabel="Continue to safety">
-        <p className="train-checkin-note">Check-in only — not graded. Empty boxes are honest.</p>
-        <ul className="train-check-list">
-          {COMPUTER_SKILLS.map((s) => (
-            <CheckItem key={s.id} id={`pc-${s.id}`} title={s.title} why={s.why} checked={!!compChecks[s.id]} onChange={() => setCompChecks((c) => ({ ...c, [s.id]: !c[s.id] }))} />
-          ))}
-        </ul>
+      <Shell step={13} onBack={() => go(12)}>
+        <WhyWork>Many learners are new to computers. Practice the exact clicks and typing school work needs.</WhyWork>
+        <TeachNote>Each card is a real micro-task: learn → try → feedback → next. Empty honesty is fine — wrong answers teach.</TeachNote>
+        <p className="train-vocab-counter">Digital skill {digIdx + 1} of {DIGITAL_PRACTICE.length}</p>
+        <article className="topic-lesson-card">
+          <h3>{item.title}</h3>
+          <p>{item.teach}</p>
+          <p className="train-check-prompt">{item.prompt}</p>
+          {isType ? (
+            <form className="stack" onSubmit={submitTyped}>
+              <div className="field">
+                <label htmlFor="dig-type">Type your answer</label>
+                <input
+                  id="dig-type"
+                  value={digTyped}
+                  onChange={(e) => setDigTyped(e.target.value)}
+                  disabled={!!digAnswer}
+                  autoComplete="off"
+                  required
+                />
+              </div>
+              {!digAnswer && (
+                <button type="submit" className="btn btn-primary" disabled={!digTyped.trim()}>
+                  Check spelling
+                </button>
+              )}
+            </form>
+          ) : (
+            <div className="train-choice-grid">
+              {(item.options || []).map((opt) => (
+                <ChoiceButton
+                  key={opt}
+                  state={digAnswer === opt ? (digCorrect ? 'correct' : 'wrong') : digAnswer ? (opt === item.answer ? 'correct' : 'idle') : 'idle'}
+                  disabled={!!digAnswer && opt !== digAnswer && opt !== item.answer}
+                  onClick={() => pickDig(opt)}
+                >
+                  {opt}
+                </ChoiceButton>
+              ))}
+            </div>
+          )}
+          {digAnswer && (
+            <>
+              <div className={`alert ${digCorrect ? 'ok' : 'warn'}`}>
+                {digCorrect ? item.teachCorrect : item.teachWrong}
+              </div>
+              <button type="button" className="btn btn-primary" onClick={nextDig}>
+                {digCorrect
+                  ? (isLast ? 'Continue to safety' : 'Next digital skill')
+                  : 'Try again'}
+              </button>
+            </>
+          )}
+        </article>
       </Shell>
     )
   }
@@ -1468,6 +1553,7 @@ export function StudentSequencePage() {
       const ok = opt === cat.answer
       setToolAnswer(opt)
       setToolCorrect(ok)
+      recordSkillAttempt('tools', ok)
       playFoley(ok ? 'correct' : 'wrong')
     }
 
@@ -1535,6 +1621,7 @@ export function StudentSequencePage() {
       const ok = opt === topic.answer
       setSysAnswer(opt)
       setSysCorrect(ok)
+      recordSkillAttempt('systems', ok)
       playFoley(ok ? 'correct' : 'wrong')
     }
 
@@ -1591,78 +1678,194 @@ export function StudentSequencePage() {
   }
 
   if (step === 17) {
-    function saveObs(e: FormEvent) {
-      e.preventDefault()
-      try { sessionStorage.setItem(OBS_KEY, JSON.stringify(obsForm)) } catch { /* */ }
-      go(18)
+    const scenario = OBSERVATION_SCENARIOS[obsIdx]
+    const isLast = obsIdx >= OBSERVATION_SCENARIOS.length - 1
+    const ordered = [...scenario.steps].sort((a, b) => a.correctOrder - b.correctOrder)
+
+    function toggleObsStep(id: string) {
+      if (obsChecked) return
+      setObsPicked((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
     }
+
+    function checkObsOrder() {
+      const expected = ordered.map((s) => s.id)
+      const ok = obsPicked.length === expected.length && obsPicked.every((id, i) => id === expected[i])
+      setObsChecked(true)
+      setObsCorrect(ok)
+      recordSkillAttempt('observation', ok)
+      playFoley(ok ? 'correct' : 'wrong')
+      try {
+        sessionStorage.setItem(OBS_KEY, JSON.stringify({ scenario: scenario.id, picked: obsPicked, ok }))
+      } catch { /* */ }
+    }
+
+    function nextObs() {
+      if (!obsCorrect) {
+        setObsPicked([])
+        setObsChecked(false)
+        setObsCorrect(false)
+        return
+      }
+      if (isLast) {
+        go(18, 'Opening on-site decisions…')
+        return
+      }
+      setObsIdx((i) => i + 1)
+      setObsPicked([])
+      setObsChecked(false)
+      setObsCorrect(false)
+    }
+
     return (
       <Shell step={17} onBack={() => go(16)}>
-        <PictureCard emoji="I" label="Instructor observation" caption="Learned → Practised → Competent under real observation." />
+        <WhyWork>Before a real instructor watches you, rehearse the competent order of a skill.</WhyWork>
         <div className="train-learn-grid">
           <LearnCard mark="L" title="Learned" body="Studied in the app or class." />
           <LearnCard mark="P" title="Practised" body="Tried with supervision." />
           <LearnCard mark="C" title="Competent" body="Authorized instructor confirmed the standard." />
         </div>
-        <form className="stack" onSubmit={saveObs}>
-          <h3>Ask an instructor to watch a skill</h3>
-          <div className="field">
-            <label htmlFor="obs-skill">Skill to observe</label>
-            <select id="obs-skill" value={obsForm.skill} onChange={(e) => setObsForm({ ...obsForm, skill: e.target.value })} required>
-              <option value="">Choose a skill…</option>
-              {VOCAB_UNIT.map((t) => (
-                <option key={t.id} value={t.english}>{t.english}</option>
-              ))}
-              <option value="Safety gear check">Safety gear check</option>
-              <option value="Follow a short instruction">Follow a short instruction</option>
-            </select>
+        <p className="train-vocab-counter">Observation drill {obsIdx + 1} of {OBSERVATION_SCENARIOS.length}</p>
+        <article className="topic-lesson-card">
+          <h3>{scenario.title}</h3>
+          <p><strong>Situation:</strong> {scenario.situation}</p>
+          <p className="muted">Skill focus: {scenario.skill}</p>
+          <p className="train-check-prompt">Tap the steps in the correct order (1 → {scenario.steps.length}).</p>
+          <div className="train-choice-grid">
+            {scenario.steps.map((s) => {
+              const pickedAt = obsPicked.indexOf(s.id)
+              return (
+                <ChoiceButton
+                  key={s.id}
+                  state={
+                    obsChecked
+                      ? (pickedAt === s.correctOrder - 1 ? 'correct' : pickedAt >= 0 ? 'wrong' : 'idle')
+                      : pickedAt >= 0
+                        ? 'correct'
+                        : 'idle'
+                  }
+                  disabled={obsChecked}
+                  onClick={() => toggleObsStep(s.id)}
+                >
+                  {pickedAt >= 0 ? `${pickedAt + 1}. ${s.label}` : s.label}
+                </ChoiceButton>
+              )
+            })}
           </div>
-          <div className="field">
-            <label htmlFor="obs-station">Where?</label>
-            <select id="obs-station" value={obsForm.station} onChange={(e) => setObsForm({ ...obsForm, station: e.target.value })} required>
-              <option value="">Choose a place…</option>
-              <option value="Workshop bay 1">Workshop bay 1</option>
-              <option value="Workshop bay 2">Workshop bay 2</option>
-              <option value="Classroom">Classroom</option>
-              <option value="Job site">Job site</option>
-            </select>
-          </div>
-          <div className="field">
-            <label htmlFor="obs-notes">Notes for instructor (optional)</label>
-            <textarea id="obs-notes" value={obsForm.notes} onChange={(e) => setObsForm({ ...obsForm, notes: e.target.value })} rows={3} placeholder="Ask instructor to help write if needed." />
-          </div>
-          <button className="btn btn-primary" type="submit">Save request and continue</button>
-        </form>
+          {!obsChecked && (
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={obsPicked.length !== scenario.steps.length}
+              onClick={checkObsOrder}
+            >
+              Check my order
+            </button>
+          )}
+          {obsChecked && (
+            <>
+              <div className={`alert ${obsCorrect ? 'ok' : 'warn'}`}>
+                {obsCorrect ? scenario.passNote : `Not yet. Correct order: ${ordered.map((s) => s.label).join(' → ')}`}
+              </div>
+              <button type="button" className="btn btn-primary" onClick={nextObs}>
+                {obsCorrect
+                  ? (isLast ? 'Continue to on-site training' : 'Next observation drill')
+                  : 'Try again'}
+              </button>
+            </>
+          )}
+        </article>
       </Shell>
     )
   }
 
   if (step === 18) {
-    function saveLog(e: FormEvent) {
-      e.preventDefault()
-      try { sessionStorage.setItem(LOG_KEY, JSON.stringify(logForm)) } catch { /* */ }
-      setFinalPhase('eyespy')
-      go(19)
+    const item = SITE_DECISIONS[siteIdx]
+    const isLast = siteIdx >= SITE_DECISIONS.length - 1
+
+    function pickSite(opt: string) {
+      if (siteAnswer) return
+      const ok = opt === item.answer
+      setSiteAnswer(opt)
+      setSiteCorrect(ok)
+      recordSkillAttempt('site-log', ok)
+      playFoley(ok ? 'correct' : 'wrong')
     }
+
+    function nextSite() {
+      if (!siteCorrect) {
+        setSiteAnswer(null)
+        setSiteCorrect(false)
+        return
+      }
+      if (isLast) {
+        try {
+          sessionStorage.setItem(LOG_KEY, JSON.stringify({
+            date: logForm.date || new Date().toISOString().slice(0, 10),
+            tasks: logForm.tasks || 'Completed site decision practice',
+            supervisor: logForm.supervisor || 'Practice supervisor',
+            decisions: SITE_DECISIONS.length,
+          }))
+        } catch { /* */ }
+        setFinalPhase('eyespy')
+        go(19, 'Opening final exam…')
+        return
+      }
+      setSiteIdx((i) => i + 1)
+      setSiteAnswer(null)
+      setSiteCorrect(false)
+    }
+
     return (
       <Shell step={18} onBack={() => go(17)}>
-        <PictureCard emoji="O" label="On-site training" caption="Real workplace feedback from supervised site work." />
-        <form className="stack" onSubmit={saveLog}>
-          <h3>Daily log + supervisor feedback</h3>
-          <div className="field">
-            <label htmlFor="log-date">Date</label>
-            <input id="log-date" type="date" value={logForm.date} onChange={(e) => setLogForm({ ...logForm, date: e.target.value })} required />
+        <WhyWork>On-site days need judgment and a clear log — practice both before the exam.</WhyWork>
+        <p className="train-vocab-counter">Site decision {siteIdx + 1} of {SITE_DECISIONS.length}</p>
+        <article className="topic-lesson-card">
+          <h3>{item.title}</h3>
+          <p><strong>Scene:</strong> {item.scene}</p>
+          <p className="train-check-prompt">{item.prompt}</p>
+          <div className="train-choice-grid">
+            {item.options.map((opt) => (
+              <ChoiceButton
+                key={opt}
+                state={siteAnswer === opt ? (siteCorrect ? 'correct' : 'wrong') : siteAnswer ? (opt === item.answer ? 'correct' : 'idle') : 'idle'}
+                disabled={!!siteAnswer && opt !== siteAnswer && opt !== item.answer}
+                onClick={() => pickSite(opt)}
+              >
+                {opt}
+              </ChoiceButton>
+            ))}
           </div>
-          <div className="field">
-            <label htmlFor="log-tasks">Tasks completed today</label>
-            <textarea id="log-tasks" value={logForm.tasks} onChange={(e) => setLogForm({ ...logForm, tasks: e.target.value })} required rows={3} />
+          {siteAnswer && (
+            <>
+              <div className={`alert ${siteCorrect ? 'ok' : 'warn'}`}>
+                {siteCorrect ? item.teachCorrect : item.teachWrong}
+              </div>
+              <button type="button" className="btn btn-primary" onClick={nextSite}>
+                {siteCorrect
+                  ? (isLast ? 'Continue to final exam' : 'Next site decision')
+                  : 'Try again'}
+              </button>
+            </>
+          )}
+        </article>
+        {isLast && siteCorrect && (
+          <div className="stack" style={{ marginTop: '1rem' }}>
+            <h3>Quick daily log</h3>
+            <p className="muted">Capture the habit employers expect — date, tasks, supervisor.</p>
+            <div className="field">
+              <label htmlFor="log-date">Date</label>
+              <input id="log-date" type="date" value={logForm.date} onChange={(e) => setLogForm({ ...logForm, date: e.target.value })} />
+            </div>
+            <div className="field">
+              <label htmlFor="log-tasks">Tasks today</label>
+              <textarea id="log-tasks" value={logForm.tasks} onChange={(e) => setLogForm({ ...logForm, tasks: e.target.value })} rows={2} placeholder="e.g. Measured boards, helped cut three pieces" />
+            </div>
+            <div className="field">
+              <label htmlFor="log-sup">Supervisor</label>
+              <input id="log-sup" value={logForm.supervisor} onChange={(e) => setLogForm({ ...logForm, supervisor: e.target.value })} placeholder="e.g. Jordan" />
+            </div>
           </div>
-          <div className="field">
-            <label htmlFor="log-sup">Supervisor / workplace feedback</label>
-            <textarea id="log-sup" value={logForm.supervisor} onChange={(e) => setLogForm({ ...logForm, supervisor: e.target.value })} rows={2} placeholder="What did the site say to improve?" />
-          </div>
-          <button className="btn btn-primary" type="submit">Save log and continue to final exam</button>
-        </form>
+        )}
       </Shell>
     )
   }
@@ -1673,7 +1876,7 @@ export function StudentSequencePage() {
       return (
         <Shell step={19} onBack={() => go(18)}>
           <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode — up to 3 tries. 100% required. Scenes change on misses." />
-          <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => setFinalPhase('written')} />
+          <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('written') }} />
         </Shell>
       )
     }
@@ -1681,7 +1884,7 @@ export function StudentSequencePage() {
       return (
         <Shell step={19} onBack={() => setFinalPhase('eyespy')}>
           <PictureCard emoji="W" label="Written & knowledge check" caption="Safety, measurement, language, and tools. Perfect score required." />
-          <QuizRunner items={FINAL_QUIZ} onComplete={() => setFinalPhase('certificate')} gated />
+          <QuizRunner items={FINAL_QUIZ} onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('certificate') }} gated />
         </Shell>
       )
     }
@@ -1712,14 +1915,78 @@ export function StudentSequencePage() {
 
   function handleComplete(e: FormEvent) {
     e.preventDefault()
-    try { sessionStorage.setItem(EMP_KEY, JSON.stringify(empForm)) } catch { /* */ }
+    try { sessionStorage.setItem(EMP_KEY, JSON.stringify({ ...empForm, prepDone: true })) } catch { /* */ }
     markSequenceComplete('student', { detail: user?.full_name || 'Student' })
+    recordSkillAttempt('employment', true)
     playFoley('metal')
     setEmpDone(true)
   }
 
+  if (!empQuizDone) {
+    const item = EMPLOYMENT_PREP[empIdx]
+    const isLast = empIdx >= EMPLOYMENT_PREP.length - 1
+
+    function pickEmp(opt: string) {
+      if (empAnswer) return
+      const ok = opt === item.answer
+      setEmpAnswer(opt)
+      setEmpCorrect(ok)
+      recordSkillAttempt('employment', ok)
+      playFoley(ok ? 'correct' : 'wrong')
+    }
+
+    function nextEmp() {
+      if (!empCorrect) {
+        setEmpAnswer(null)
+        setEmpCorrect(false)
+        return
+      }
+      if (isLast) {
+        setEmpQuizDone(true)
+        return
+      }
+      setEmpIdx((i) => i + 1)
+      setEmpAnswer(null)
+      setEmpCorrect(false)
+    }
+
+    return (
+      <Shell step={20} onBack={() => go(19)}>
+        <WhyWork>Employment connection starts with clear interview answers — then partner matching.</WhyWork>
+        <p className="train-vocab-counter">Interview prep {empIdx + 1} of {EMPLOYMENT_PREP.length}</p>
+        <article className="topic-lesson-card">
+          <p className="train-check-prompt">{item.prompt}</p>
+          <div className="train-choice-grid">
+            {item.options.map((opt) => (
+              <ChoiceButton
+                key={opt}
+                state={empAnswer === opt ? (empCorrect ? 'correct' : 'wrong') : empAnswer ? (opt === item.answer ? 'correct' : 'idle') : 'idle'}
+                disabled={!!empAnswer && opt !== empAnswer && opt !== item.answer}
+                onClick={() => pickEmp(opt)}
+              >
+                {opt}
+              </ChoiceButton>
+            ))}
+          </div>
+          {empAnswer && (
+            <>
+              <div className={`alert ${empCorrect ? 'ok' : 'warn'}`}>
+                {empCorrect ? item.teachCorrect : item.teachWrong}
+              </div>
+              <button type="button" className="btn btn-primary" onClick={nextEmp}>
+                {empCorrect
+                  ? (isLast ? 'Continue to partner setup' : 'Next interview question')
+                  : 'Try again'}
+              </button>
+            </>
+          )}
+        </article>
+      </Shell>
+    )
+  }
+
   return (
-    <Shell step={20} onBack={() => go(19)}>
+    <Shell step={20} onBack={() => { setEmpQuizDone(false); go(19) }}>
       <PictureCard emoji="H" label="Employment Connection" caption="See hiring partners and enter work with support." />
       {!empDone ? (
         <form className="stack" onSubmit={handleComplete}>
@@ -1756,12 +2023,14 @@ export function StudentSequencePage() {
                 if (isPracticeMode()) {
                   resetPracticeProgress()
                   setEmpDone(false)
+                  setEmpQuizDone(false)
                   setStep(PRACTICE_ENTRY_STEP)
                   go(PRACTICE_ENTRY_STEP)
                   return
                 }
                 saveStep(1)
                 setEmpDone(false)
+                setEmpQuizDone(false)
                 go(1)
               }}
             >

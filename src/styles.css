@@ -4623,6 +4623,212 @@ table.data th {
   color: rgba(244, 247, 251, 0.7);
 }
 
+/* ─── Learning path map (Duolingo-style linear units) ─── */
+.learning-path-map {
+  margin: 0.85rem 0 0.4rem;
+  padding: 0.85rem 0.9rem;
+  border-radius: 16px;
+  background: rgba(8, 22, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.learning-path-map.is-compact {
+  padding: 0.65rem 0.75rem;
+}
+
+.lp-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 0.65rem;
+}
+
+.lp-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--train-amber);
+  font-weight: 800;
+}
+
+.lp-title {
+  margin: 0.15rem 0 0;
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.lp-mastery {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(244, 247, 251, 0.75);
+}
+
+.lp-mastery strong {
+  color: #f5c542;
+}
+
+.lp-units {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.lp-unit {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem 0.7rem;
+  align-items: start;
+  padding: 0.45rem 0.5rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  opacity: 0.55;
+}
+
+.lp-unit.is-current {
+  opacity: 1;
+  background: rgba(245, 197, 66, 0.1);
+  border-color: rgba(245, 197, 66, 0.35);
+}
+
+.lp-unit.is-done {
+  opacity: 0.9;
+}
+
+.lp-unit-badge {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 0.78rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.lp-unit.is-done .lp-unit-badge {
+  background: rgba(76, 175, 80, 0.35);
+  color: #b9f6ca;
+}
+
+.lp-unit.is-current .lp-unit-badge {
+  background: var(--train-amber);
+  color: #0b2f5c;
+}
+
+.lp-unit-copy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.65rem;
+  align-items: baseline;
+}
+
+.lp-unit-copy strong {
+  color: #fff;
+}
+
+.lp-unit-copy span,
+.lp-unit-copy em {
+  font-size: 0.78rem;
+  color: rgba(244, 247, 251, 0.65);
+  font-style: normal;
+}
+
+.lp-lessons {
+  list-style: none;
+  margin: 0;
+  padding: 0.2rem 0 0;
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.lp-lesson {
+  display: grid;
+  grid-template-columns: 0.7rem 1fr;
+  gap: 0.55rem;
+  align-items: start;
+  padding: 0.25rem 0.15rem;
+}
+
+.lp-lesson strong {
+  display: block;
+  color: #f4f7fb;
+  font-size: 0.86rem;
+}
+
+.lp-lesson span {
+  font-size: 0.74rem;
+  color: rgba(244, 247, 251, 0.6);
+}
+
+.lp-node {
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-top: 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.lp-node.is-attempted { background: #90caf9; }
+.lp-node.is-familiar { background: #81d4fa; }
+.lp-node.is-proficient { background: #ffd54f; }
+.lp-node.is-mastered { background: #66bb6a; }
+.lp-node.is-locked { background: rgba(255, 255, 255, 0.18); }
+
+.lp-lesson.is-current strong {
+  color: #f5c542;
+}
+
+.unit-intro-card {
+  margin: 0 0 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(26, 79, 138, 0.35), rgba(15, 36, 56, 0.92));
+  border: 1px solid rgba(245, 197, 66, 0.28);
+}
+
+.unit-intro-kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--train-amber);
+  font-weight: 800;
+}
+
+.unit-intro-card h3 {
+  margin: 0.35rem 0 0.45rem;
+  color: #fff;
+}
+
+.unit-intro-goal {
+  margin: 0 0 0.65rem;
+  color: rgba(244, 247, 251, 0.9);
+}
+
+.unit-intro-outcomes {
+  margin: 0 0 0.7rem;
+  padding-left: 1.1rem;
+  color: rgba(244, 247, 251, 0.82);
+}
+
+.unit-intro-outcomes li {
+  margin: 0.2rem 0;
+}
+
+.unit-intro-method {
+  margin: 0;
+  font-size: 0.86rem;
+  color: rgba(245, 197, 66, 0.92);
+  font-weight: 650;
+}
+
 .train-check-prompt {
   margin: 0.75rem 0 0.45rem;
   font-weight: 800;

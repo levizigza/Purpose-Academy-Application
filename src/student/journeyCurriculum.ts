@@ -21,14 +21,14 @@ export const JOURNEY_STEPS = [
   { n: 10, title: 'English Eye Spy', help: 'Find the real tool in a site scene — English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
   { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   { n: 12, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
-  { n: 13, title: 'Digital Skills', help: 'Honest check-in — not a graded quiz.', purpose: 'This may be someone’s first computer — keep every step practical.', unit: 5 },
+  { n: 13, title: 'Digital Skills', help: 'Practice real computer tasks — click, type, forms, uploads.', purpose: 'This may be someone’s first computer — every step is a hands-on micro-lesson.', unit: 5 },
   { n: 14, title: 'Safety Training', help: 'Safety words with clear pictures — required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 5 },
   { n: 15, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 5 },
   { n: 16, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 5 },
-  { n: 17, title: 'Instructor Observation', help: 'Ask an instructor to check a skill.', purpose: 'Learned → Practised → Competent under real observation.', unit: 6 },
-  { n: 18, title: 'On-Site Training', help: 'Log site work and supervisor feedback.', purpose: 'Daily notes, tasks, and site feedback.', unit: 6 },
+  { n: 17, title: 'Instructor Observation', help: 'Rehearse competent skill order before a real instructor check.', purpose: 'Learned → Practised → Competent under real observation.', unit: 6 },
+  { n: 18, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Daily judgment, notes, and site feedback.', unit: 6 },
   { n: 19, title: 'Final Exam & Certificate', help: 'Written + practical checks. Pass to open your certificate.', purpose: 'Eye Spy needs 100%. Exam tries are limited.', unit: 6 },
-  { n: 20, title: 'Employment Connection', help: 'See hiring partners and enter work with support.', purpose: 'Start work with follow-up support.', unit: 6 },
+  { n: 20, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 6 },
 ] as const
 
 /** Path units — structured learning path on the existing train template. */
@@ -41,10 +41,64 @@ export const LEARNING_UNITS = [
   { id: 6, label: 'Work ready', range: '17–20' },
 ] as const
 
+/** Unit goals — shown at the start of each learning unit (Duolingo/Khan clarity). */
+export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = {
+  1: {
+    goal: 'Enter the school as a student and open your learning account.',
+    outcomes: ['Choose the student door', 'Complete registration'],
+  },
+  2: {
+    goal: 'Discover the pathway that fits how you like to work.',
+    outcomes: [
+      'Choose a support language',
+      'Complete a professional career assessment',
+      'See your Construction / Logistics / Community fit',
+    ],
+  },
+  3: {
+    goal: 'Learn the Level-1 tool words you will hear on a Calgary job site.',
+    outcomes: [
+      'See each tool and hear English',
+      'Connect the English word to the real action',
+    ],
+  },
+  4: {
+    goal: 'Use English with support, then prove you can find and follow job-site language.',
+    outcomes: [
+      'Match pictures to English words',
+      'Find tools in a busy scene',
+      'Follow short workplace instructions',
+      'Understand common site phrases',
+    ],
+  },
+  5: {
+    goal: 'Build the digital, safety, tool, and systems foundations every site expects.',
+    outcomes: [
+      'Practice school computer tasks',
+      'Pass required safety checks',
+      'Name tool groups and building systems',
+    ],
+  },
+  6: {
+    goal: 'Show ready-for-work habits: observation, site notes, exam, and employment next steps.',
+    outcomes: [
+      'Prepare for instructor observation',
+      'Log a site day correctly',
+      'Pass the final checks',
+      'Connect with hiring partners',
+    ],
+  },
+}
+
 export function unitForStep(step: number) {
   const meta = JOURNEY_STEPS[step - 1]
   const id = meta?.unit ?? 1
   return LEARNING_UNITS.find((u) => u.id === id) || LEARNING_UNITS[0]
+}
+
+/** First step number of each learning unit — used for unit intro cards. */
+export function isUnitEntryStep(step: number) {
+  return JOURNEY_STEPS.some((s) => s.n === step && JOURNEY_STEPS.find((x) => x.unit === s.unit)?.n === step)
 }
 
 export type SupportLang = 'English' | 'Spanish' | 'Arabic' | 'Hindi' | 'Amharic' | 'Tigrinya'
@@ -691,6 +745,30 @@ export const SITE_PHRASES = [
     answer: 'Keep the board still',
     options: ['Keep the board still', 'Throw the board away', 'Leave the bay', 'Turn off the lights'],
   },
+  {
+    en: 'Eyes and ears on the saw.',
+    why: 'Full attention during a cut.',
+    prompt: 'What does this phrase mean?',
+    answer: 'Pay full attention while the saw is running',
+    options: [
+      'Pay full attention while the saw is running',
+      'Remove your hard hat',
+      'Talk on the phone during the cut',
+      'Stand behind the blade',
+    ],
+  },
+  {
+    en: 'Clean as you go.',
+    why: 'Keeps the bay safe and ready for the next task.',
+    prompt: 'What should you do during work?',
+    answer: 'Clear scrap and tools as you work',
+    options: [
+      'Clear scrap and tools as you work',
+      'Leave every offcut on the floor',
+      'Hide damaged tools',
+      'Skip cleanup forever',
+    ],
+  },
 ]
 
 export const COMPUTER_SKILLS = [
@@ -699,6 +777,326 @@ export const COMPUTER_SKILLS = [
   { id: 'upload', title: 'Upload a photo or file', why: 'Evidence and assignments need uploads.' },
   { id: 'video', title: 'Play a short training video', why: 'Lessons include watch-and-check moments.' },
   { id: 'form', title: 'Complete an online form', why: 'Registration, logs, and quizzes are forms.' },
+]
+
+/**
+ * Interactive digital mini-lessons — learners DO a computer task, not just check a box.
+ * Pattern: prompt → action → immediate feedback (Khan/Duolingo micro-loop).
+ */
+export const DIGITAL_PRACTICE = [
+  {
+    id: 'click',
+    title: 'Click the right button',
+    teach: 'On school pages, yellow primary buttons move you forward.',
+    prompt: 'Which button continues to the next lesson?',
+    options: ['Continue', 'Delete account', 'Mute forever', 'Skip safety'],
+    answer: 'Continue',
+    teachCorrect: 'Yes — Continue moves you to the next station.',
+    teachWrong: 'Look for Continue / Apply / Next — those advance your path.',
+  },
+  {
+    id: 'type',
+    title: 'Type a short answer',
+    teach: 'Many lessons ask you to type a word carefully.',
+    prompt: 'Type the English tool name for this: a tool that drives nails.',
+    answer: 'hammer',
+    kind: 'type' as const,
+    teachCorrect: 'Correct spelling: Hammer.',
+    teachWrong: 'The tool that drives nails is the hammer.',
+  },
+  {
+    id: 'form',
+    title: 'Complete a form field',
+    teach: 'Forms need required fields before you can submit.',
+    prompt: 'Which field must be filled before you can submit?',
+    options: ['Your full name', 'Favorite color (optional)', 'A blank note', 'Nothing'],
+    answer: 'Your full name',
+    teachCorrect: 'Required fields — usually marked — must be completed.',
+    teachWrong: 'Required fields like your name must be filled before submit.',
+  },
+  {
+    id: 'upload',
+    title: 'Choose evidence to upload',
+    teach: 'Instructors may ask for a photo of your work.',
+    prompt: 'What is good evidence to upload?',
+    options: [
+      'A clear photo of your safety gear check',
+      'A blurry selfie with no context',
+      'Someone else’s certificate',
+      'A password list',
+    ],
+    answer: 'A clear photo of your safety gear check',
+    teachCorrect: 'Clear, relevant evidence of YOUR work is what instructors need.',
+    teachWrong: 'Upload clear photos of your own work — never passwords or other people’s files.',
+  },
+  {
+    id: 'video',
+    title: 'Watch-and-check habit',
+    teach: 'Training videos pause for a check question.',
+    prompt: 'After a short training clip, what should you do?',
+    options: [
+      'Answer the check question',
+      'Close the browser',
+      'Skip every question',
+      'Share your password',
+    ],
+    answer: 'Answer the check question',
+    teachCorrect: 'Watch, then answer — that is how learning sticks.',
+    teachWrong: 'Stay with the lesson and answer the check after the clip.',
+  },
+]
+
+/** Workplace instructions — hear English, prove meaning. */
+export const WORKPLACE_INSTRUCTIONS = [
+  {
+    text: 'Bring the tape measure.',
+    correct: 'Bring the tape measure',
+    imageKey: 'tape-measure',
+    options: ['Bring the tape measure', 'Bring the hammer', 'Put on a hard hat', 'Start cutting wood'],
+    supportHint: {
+      English: 'Bring the tape measure.',
+      Spanish: 'Trae la cinta metrica.',
+      Arabic: 'Ahdir sharit al-qiyas.',
+      Hindi: 'Tape measure lao.',
+      Amharic: 'Melekiya tape amtu.',
+      Tigrinya: 'Melekiya tape amtsu.',
+    },
+  },
+  {
+    text: 'Pass me the level.',
+    correct: 'Pass me the level',
+    imageKey: 'level',
+    options: ['Pass me the level', 'Pass the hammer', 'Open the door', 'Put on boots'],
+    supportHint: {
+      English: 'Pass me the level.',
+      Spanish: 'Pasame el nivel.',
+      Arabic: 'Nawilni al-mizan.',
+      Hindi: 'Level mujhe do.',
+      Amharic: 'Dereja melekiyawun situn.',
+      Tigrinya: 'Dereja melekiya habuni.',
+    },
+  },
+  {
+    text: 'Check the wall with the level.',
+    correct: 'Check the wall with the level',
+    imageKey: 'level',
+    options: ['Check the wall with the level', 'Check the floor with a hammer', 'Bring the drill', 'Remove your PPE'],
+    supportHint: {
+      English: 'Check the wall with the level.',
+      Spanish: 'Revisa la pared con el nivel.',
+      Arabic: 'Ifhas al-jidar bil-mizan.',
+      Hindi: 'Level se deewar check karo.',
+      Amharic: 'Dereja melekiya bewetakom gidgidawun yaregagtu.',
+      Tigrinya: 'Bdereja melekiya n mendek aregagtsu.',
+    },
+  },
+  {
+    text: 'Put on your hard hat before you enter.',
+    correct: 'Put on your hard hat before you enter',
+    imageKey: 'hard-hat',
+    options: [
+      'Put on your hard hat before you enter',
+      'Leave your hard hat in the truck',
+      'Start the saw first',
+      'Remove all safety gear',
+    ],
+    supportHint: {
+      English: 'Put on your hard hat before you enter.',
+      Spanish: 'Ponte el casco antes de entrar.',
+      Arabic: 'Irtiadi al-khudha qabla al-dukhul.',
+      Hindi: 'Andar jane se pehle hard hat pehno.',
+      Amharic: 'Ke megebat befit yeras mekelakiya asdigu.',
+      Tigrinya: 'Qidmi meAtat nay ris mekelakeli asdugu.',
+    },
+  },
+  {
+    text: 'Keep hands clear of the saw.',
+    correct: 'Keep hands clear of the saw',
+    imageKey: 'saw',
+    options: [
+      'Keep hands clear of the saw',
+      'Hold the blade while it spins',
+      'Remove eye protection',
+      'Stand on the board',
+    ],
+    supportHint: {
+      English: 'Keep hands clear of the saw.',
+      Spanish: 'Mantén las manos lejos de la sierra.',
+      Arabic: 'Abqi yadayk baida an al-minshar.',
+      Hindi: 'Saw se haath door rakho.',
+      Amharic: 'Ejochachen ke megeremya ruq yadrigu.',
+      Tigrinya: 'Edikum kab megeremya rahuq yegberu.',
+    },
+  },
+  {
+    text: 'Wear your safety gear before work.',
+    correct: 'Wear your safety gear before work',
+    imageKey: 'ppe',
+    options: [
+      'Wear your safety gear before work',
+      'Wear safety gear only at lunch',
+      'Skip gear if it is hot',
+      'Share one hard hat with a friend',
+    ],
+    supportHint: {
+      English: 'Wear your safety gear before work.',
+      Spanish: 'Usa tu equipo de proteccion antes de trabajar.',
+      Arabic: 'Irtiadi muaddat al-himaya qabla al-amal.',
+      Hindi: 'Kaam se pehle safety gear pehno.',
+      Amharic: 'Sera ke mejemer befit yegil mekelakiya asdigu.',
+      Tigrinya: 'Qidmi serah nay wilqe mekelakeli asdugu.',
+    },
+  },
+]
+
+/** Instructor observation — competency checklist learners rehearse before a real check. */
+export const OBSERVATION_SCENARIOS = [
+  {
+    id: 'ppe-entry',
+    title: 'Safety gear before entry',
+    situation: 'Your instructor asks you to enter Workshop Bay 1 ready for work.',
+    skill: 'Safety gear check',
+    steps: [
+      { id: 'hat', label: 'Hard hat on and fitted', correctOrder: 1 },
+      { id: 'eyes', label: 'Eye protection on', correctOrder: 2 },
+      { id: 'hands', label: 'Gloves ready for the task', correctOrder: 3 },
+      { id: 'enter', label: 'Enter the bay only after gear is on', correctOrder: 4 },
+    ],
+    passNote: 'Competent means gear is correct BEFORE you cross the line — every time.',
+  },
+  {
+    id: 'measure',
+    title: 'Measure before you cut',
+    situation: 'Your instructor watches you prepare a board for a cut.',
+    skill: 'Tape measure',
+    steps: [
+      { id: 'hook', label: 'Hook the tape firmly on the end', correctOrder: 1 },
+      { id: 'read', label: 'Read the measurement carefully', correctOrder: 2 },
+      { id: 'mark', label: 'Mark the cut line once', correctOrder: 3 },
+      { id: 'check', label: 'Measure a second time before cutting', correctOrder: 4 },
+    ],
+    passNote: 'Measure twice, cut once — that is the competent standard.',
+  },
+  {
+    id: 'level-wall',
+    title: 'Check a wall with a level',
+    situation: 'Your instructor asks you to show that a wall section is true.',
+    skill: 'Level',
+    steps: [
+      { id: 'place', label: 'Press the level flat on the surface', correctOrder: 1 },
+      { id: 'bubble', label: 'Watch the bubble settle', correctOrder: 2 },
+      { id: 'read', label: 'Confirm the bubble is centered', correctOrder: 3 },
+      { id: 'report', label: 'Tell the instructor if it is true or needs adjustment', correctOrder: 4 },
+    ],
+    passNote: 'Competent workers can place, read, and report the level clearly.',
+  },
+]
+
+/** On-site decision scenarios — real judgment practice, not an empty log form. */
+export const SITE_DECISIONS = [
+  {
+    id: 'hazard',
+    title: 'Morning hazard',
+    scene: 'You arrive on site. A loose board sticks out into the walkway.',
+    prompt: 'What should you do first?',
+    options: [
+      'Report it / make the area safe',
+      'Ignore it and start cutting',
+      'Kick the board aside without telling anyone',
+      'Film a video for social media',
+    ],
+    answer: 'Report it / make the area safe',
+    teachCorrect: 'See something unsafe → speak up and make it safe. People before production.',
+    teachWrong: 'Hazards get reported and controlled first — never ignored.',
+  },
+  {
+    id: 'instruction',
+    title: 'Supervisor direction',
+    scene: 'Your supervisor says: “Bring the level to bay two.”',
+    prompt: 'What do you do?',
+    options: [
+      'Bring the level to bay two',
+      'Bring the hammer to bay one',
+      'Take a break first',
+      'Ask someone else to guess',
+    ],
+    answer: 'Bring the level to bay two',
+    teachCorrect: 'Listen fully, then do exactly what was asked.',
+    teachWrong: 'Follow the short English instruction: bring the level to bay two.',
+  },
+  {
+    id: 'ppe',
+    title: 'Missing gear',
+    scene: 'You left your hard hat in the truck. The bay is ready.',
+    prompt: 'Best next step?',
+    options: [
+      'Get your hard hat before entering',
+      'Enter quickly without it',
+      'Borrow a damaged hat that does not fit',
+      'Wait until someone notices',
+    ],
+    answer: 'Get your hard hat before entering',
+    teachCorrect: 'No hard hat → no entry. Fix gear first.',
+    teachWrong: 'Never enter the bay without required safety gear.',
+  },
+  {
+    id: 'log',
+    title: 'End-of-day note',
+    scene: 'You finished measuring and helping cut three boards. Your supervisor was Jordan.',
+    prompt: 'What belongs in today’s site log?',
+    options: [
+      'Date, tasks you did, and supervisor name',
+      'Only your lunch order',
+      'Someone else’s private phone number',
+      'Nothing — logs are optional forever',
+    ],
+    answer: 'Date, tasks you did, and supervisor name',
+    teachCorrect: 'Clear daily notes help instructors and employers trust your hours.',
+    teachWrong: 'A good log has the date, real tasks, and who supervised you.',
+  },
+]
+
+/** Employment readiness — interview and partner-prep checks. */
+export const EMPLOYMENT_PREP = [
+  {
+    id: 'intro',
+    prompt: 'An employer asks: “Why Purpose Academy?” Best answer?',
+    options: [
+      'I learned foundations, safety, and site English with instructors who checked my skills',
+      'I watched a few videos once',
+      'I do not need safety training',
+      'I only want a paycheck with no learning',
+    ],
+    answer: 'I learned foundations, safety, and site English with instructors who checked my skills',
+    teachCorrect: 'Connect your training to safety, language, and verified skill.',
+    teachWrong: 'Employers want proof of foundations — not shortcuts.',
+  },
+  {
+    id: 'safety',
+    prompt: 'Interview question: “What do you put on before entering a bay?”',
+    options: [
+      'Hard hat and required safety gear (PPE)',
+      'Headphones only',
+      'Nothing special',
+      'Dress shoes',
+    ],
+    answer: 'Hard hat and required safety gear (PPE)',
+    teachCorrect: 'Lead with safety — it shows you are site-ready.',
+    teachWrong: 'Always name hard hat / PPE before entry.',
+  },
+  {
+    id: 'team',
+    prompt: 'A partner says: “Pass me the level.” You should…',
+    options: [
+      'Hand them the level safely',
+      'Throw the tool',
+      'Ignore the request',
+      'Leave the site',
+    ],
+    answer: 'Hand them the level safely',
+    teachCorrect: 'Short site talk + safe tool passing = good teammate.',
+    teachWrong: 'Pass tools hand-to-hand — never throw.',
+  },
 ]
 
 /** Attempt policy: exercises unlimited; exams limited. */
