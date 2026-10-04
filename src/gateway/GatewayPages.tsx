@@ -21,11 +21,11 @@ export function StudentEnterPage() {
   return (
     <div className="shell-main stack enter-flow train-welcome">
       <Reveal as="header" className="train-welcome-header stack">
-        <img src={BRAND_ASSETS.logoMark} alt="" className="train-welcome-mark" />
-        <p className="train-kicker">Student Training Path</p>
+        <img src={BRAND_ASSETS.logoFull} alt="" className="train-welcome-mark" />
+        <p className="train-kicker">Student training path</p>
         <h1 className="train-welcome-title">Your path to work</h1>
         <p className="train-welcome-lede">
-          20 clear steps. Pictures and words. From login to a job connection — we walk with you.
+          Twenty clear stations — from registration to a job connection — with pictures, words, and practice.
         </p>
       </Reveal>
 

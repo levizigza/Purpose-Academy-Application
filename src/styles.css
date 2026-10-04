@@ -3971,37 +3971,42 @@ table.data th {
 
 :root {
   --train-display: 'Barlow Condensed', 'Montserrat', sans-serif;
-  --train-bg: #0e1a2a;
-  --train-bg-2: #152238;
-  --train-surface: #1b2d45;
-  --train-surface-2: #223654;
-  --train-line: #2e4464;
-  --train-text: #d4dde8;
-  --train-text-muted: #8a9ab0;
+  --train-body: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --train-bg: #0b121c;
+  --train-bg-2: #101a28;
+  --train-surface: #152234;
+  --train-surface-2: #1a2a3f;
+  --train-line: #2a3d56;
+  --train-text: #e6edf5;
+  --train-text-muted: #9aabc0;
   --train-amber: #e8a317;
-  --train-amber-soft: rgba(232, 163, 23, 0.14);
+  --train-amber-soft: rgba(232, 163, 23, 0.12);
   --train-amber-bright: #f5c542;
-  --train-ok: #4caf50;
-  --train-danger: #ef5350;
+  --train-ok: #5fa86a;
+  --train-danger: #d86a66;
 }
 
 /* ─ is-train: modify the public shell wrapper ─ */
 
 .shell.is-train {
   background:
-    var(--texture),
-    linear-gradient(180deg, var(--train-bg) 0%, #0b1522 100%);
+    radial-gradient(ellipse 50% 40% at 85% 8%, rgba(232, 163, 23, 0.07), transparent 55%),
+    radial-gradient(ellipse 40% 35% at 10% 90%, rgba(47, 107, 176, 0.08), transparent 50%),
+    linear-gradient(180deg, var(--train-bg) 0%, #070d14 100%);
   color: var(--train-text);
+  font-family: var(--train-body);
 }
 
 .shell.is-train .topbar {
-  background: linear-gradient(180deg, var(--train-bg) 0%, var(--train-bg-2) 100%);
+  background: rgba(11, 18, 28, 0.92);
   border-bottom-color: var(--train-line);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: none;
+  backdrop-filter: blur(10px);
 }
 
 .shell.is-train .topbar::before {
   background: linear-gradient(90deg, var(--brand-deep), var(--train-amber), var(--brand));
+  height: 2px;
 }
 
 .shell.is-train .nav-cluster {
@@ -4021,7 +4026,7 @@ table.data th {
 .shell.is-train .nav-cluster a.active {
   color: #fff;
   background: var(--train-surface);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
 }
 
 .shell.is-train .footer {
@@ -4031,17 +4036,18 @@ table.data th {
 }
 
 .shell.is-train .brand-lockup-full .brand-logo {
-  background: var(--train-surface);
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
 }
 
 /* ─ Training shell layout ─ */
 
 .train-shell {
-  max-width: 780px;
+  max-width: 720px;
   display: grid;
-  gap: 1.25rem;
+  gap: 1.1rem;
 }
 
 .train-header {
@@ -4053,22 +4059,38 @@ table.data th {
   margin: 0.15rem 0;
 }
 
+.train-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .train-kicker {
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  font-size: 0.7rem;
   font-weight: 700;
   font-family: var(--train-display);
   color: var(--train-amber);
-  margin-bottom: 0.35rem;
+  margin: 0;
 }
 
 .train-title {
   font-family: var(--train-display);
   font-weight: 700;
-  font-size: clamp(1.5rem, 3.2vw, 2.2rem);
-  letter-spacing: -0.02em;
+  font-size: clamp(1.65rem, 3.4vw, 2.35rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: #fff;
+  line-height: 1.05;
+}
+
+.train-simple-line {
+  margin: 0.35rem 0 0;
+  color: var(--train-text-muted);
+  font-size: 1.02rem;
+  max-width: 42rem;
 }
 
 .train-help {
@@ -4088,12 +4110,12 @@ table.data th {
 /* Amber progress bar */
 
 .train-progress {
-  margin: 0.75rem 0 0.45rem;
-  height: 10px;
+  margin: 0.9rem 0 0.5rem;
+  height: 6px;
   border-radius: 999px;
-  background: var(--train-surface);
+  background: rgba(255, 255, 255, 0.06);
   overflow: hidden;
-  border: 1px solid var(--train-line);
+  border: 0;
 }
 
 .train-progress > span {
@@ -4126,11 +4148,11 @@ table.data th {
 }
 
 .train-dots li {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.38rem;
+  height: 0.38rem;
   border-radius: 50%;
-  background: var(--train-line);
-  transition: background 0.3s ease, transform 0.3s ease;
+  background: rgba(255, 255, 255, 0.14);
+  transition: background 0.25s ease, transform 0.25s ease;
 }
 
 .train-dots li.is-done {
@@ -4139,18 +4161,18 @@ table.data th {
 
 .train-dots li.is-current {
   background: var(--train-amber);
-  transform: scale(1.35);
-  box-shadow: 0 0 6px rgba(232, 163, 23, 0.55);
+  transform: scale(1.15);
+  box-shadow: none;
 }
 
 /* Training panel */
 
 .train-panel {
-  background: var(--train-surface);
-  border: 1px solid var(--train-line);
-  border-radius: 14px;
-  padding: 1.35rem 1.45rem;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  background: rgba(21, 34, 52, 0.88);
+  border: 1px solid rgba(42, 61, 86, 0.85);
+  border-radius: 12px;
+  padding: 1.4rem 1.35rem;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
   display: grid;
   gap: 1rem;
   animation: train-fade-rise 0.55s ease both;
@@ -4158,7 +4180,7 @@ table.data th {
 
 .train-panel:hover {
   transform: none;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
 }
 
 @keyframes train-fade-rise {
@@ -4172,7 +4194,41 @@ table.data th {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.shell.is-train .train-actions .btn-primary,
+.shell.is-train .train-next {
+  background: var(--train-amber);
+  color: #10140c;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--train-display);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: none;
+}
+
+.shell.is-train .train-actions .btn-primary:hover,
+.shell.is-train .train-next:hover {
+  background: var(--train-amber-bright);
+  filter: none;
+}
+
+.shell.is-train .train-actions .btn-ghost,
+.shell.is-train .train-back {
+  border-radius: 999px;
+  border-color: var(--train-line);
+  color: var(--train-text-muted);
+  background: transparent;
+}
+
+.shell.is-train .train-actions .btn-ghost:hover,
+.shell.is-train .train-back:hover {
+  border-color: var(--train-amber);
+  color: #fff;
 }
 
 /* ─ Pedagogical components ─ */
@@ -4180,9 +4236,9 @@ table.data th {
 .train-teach {
   margin: 0.25rem 0 0;
   padding: 0.85rem 1rem;
-  border-radius: 12px;
-  background: var(--train-amber-soft);
-  border: 1px solid rgba(232, 163, 23, 0.25);
+  border-radius: 10px;
+  background: rgba(232, 163, 23, 0.08);
+  border: 1px solid rgba(232, 163, 23, 0.2);
 }
 
 .train-teach-label {
@@ -4268,18 +4324,18 @@ table.data th {
 
 .train-choice {
   border: 1px solid var(--train-line);
-  background: var(--train-surface-2);
-  border-radius: 12px;
+  background: rgba(26, 42, 63, 0.7);
+  border-radius: 10px;
   padding: 0.8rem 1rem;
   font: inherit;
   cursor: pointer;
   text-align: left;
   color: var(--train-text);
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .train-choice:hover {
-  transform: translateY(-2px);
+  transform: none;
   border-color: var(--train-amber);
   background: rgba(232, 163, 23, 0.08);
 }
@@ -4614,38 +4670,38 @@ table.data th {
 /* Login / role doors */
 
 .train-login {
-  text-align: center;
+  text-align: left;
   display: grid;
-  gap: 0.75rem;
-  justify-items: center;
+  gap: 1rem;
+  justify-items: stretch;
 }
 
 .train-login-mark {
-  width: min(140px, 50vw);
+  width: min(220px, 70vw);
   height: auto;
-  border-radius: 14px;
-  background: var(--train-surface-2);
-  padding: 0.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  margin-bottom: 0.15rem;
 }
 
 .train-brand {
-  margin: 0;
-  font-family: var(--train-display);
-  font-weight: 800;
-  color: var(--train-amber);
-  font-size: 1.3rem;
-  letter-spacing: 0.02em;
+  display: none;
 }
 
-.train-welcome-text {
+.train-welcome,
+.train-welcome-text,
+.train-login-lede {
   margin: 0;
-  color: var(--train-text-muted);
-  max-width: 32ch;
+  color: var(--train-text);
+  max-width: 46ch;
+  font-size: 1.02rem;
+  line-height: 1.55;
 }
 
 .train-role-stack {
-  width: min(100%, 320px);
+  width: min(100%, 360px);
   display: grid;
   gap: 0.55rem;
 }
@@ -4654,24 +4710,66 @@ table.data th {
   display: block;
   text-align: center;
   text-decoration: none;
-  padding: 0.85rem 1rem;
-  border-radius: 10px;
+  padding: 0.82rem 1.1rem;
+  border-radius: 999px;
   font-weight: 700;
   font-family: var(--train-display);
-  border: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
   cursor: pointer;
-  color: #fff;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  color: #10140c;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .train-role:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.08);
+  transform: translateY(-1px);
 }
 
-.train-role.student { background: #1f6fd1; }
-.train-role.instructor { background: #3f7d24; }
-.train-role.admin { background: #9b1c1c; }
+.train-role.student {
+  background: var(--train-amber);
+  color: #10140c;
+}
+
+.train-role.student:hover {
+  background: var(--train-amber-bright);
+}
+
+.train-role.secondary,
+.train-role.instructor,
+.train-role.admin {
+  background: transparent;
+  color: var(--train-text);
+  border-color: var(--train-line);
+}
+
+.train-role.secondary:hover,
+.train-role.instructor:hover,
+.train-role.admin:hover {
+  border-color: var(--train-amber);
+  color: #fff;
+}
+
+.train-role-alt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+  color: var(--train-text-muted);
+  font-size: 0.9rem;
+}
+
+.train-role-alt a {
+  color: var(--train-text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.train-role-alt a:hover {
+  color: var(--train-amber-bright);
+  border-bottom-color: rgba(245, 197, 66, 0.45);
+}
 
 /* Instruction blockquote */
 
@@ -4877,40 +4975,62 @@ table.data th {
 }
 
 .train-welcome-header {
-  text-align: center;
+  text-align: left;
   display: grid;
-  justify-items: center;
-  gap: 0.5rem;
+  justify-items: start;
+  gap: 0.55rem;
 }
 
 .train-welcome-mark {
-  width: min(100px, 30vw);
+  width: min(240px, 72vw);
   height: auto;
-  border-radius: 14px;
-  background: var(--train-surface-2);
-  padding: 0.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  margin-bottom: 0.25rem;
 }
 
 .train-welcome-title {
   font-family: var(--train-display);
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-  font-weight: 800;
+  font-size: clamp(1.75rem, 3.8vw, 2.55rem);
+  font-weight: 700;
   color: #fff;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   margin: 0;
+  line-height: 1.05;
 }
 
 .train-welcome-lede {
   font-size: 1.05rem;
-  color: var(--train-text-muted);
-  max-width: 40ch;
+  color: var(--train-text);
+  max-width: 44ch;
   margin: 0;
+  line-height: 1.55;
 }
 
 .train-welcome-cta {
   display: grid;
-  justify-items: center;
+  justify-items: start;
+}
+
+.shell.is-train .train-welcome-cta .btn-primary {
+  background: var(--train-amber);
+  color: #10140c;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--train-display);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.shell.is-train .train-welcome-cta .btn-secondary {
+  border-radius: 999px;
+  border-color: var(--train-line);
+  color: var(--train-text);
+  background: transparent;
 }
 
 /* Step roster (list of all 20 steps) */
@@ -5480,7 +5600,7 @@ table.data th {
 
 .train-header-top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
 }
@@ -5490,18 +5610,12 @@ table.data th {
 }
 
 .train-sound-slot .foley-toggle {
-  background: rgba(14, 26, 42, 0.85);
+  background: rgba(11, 18, 28, 0.85);
 }
 
 .train-choice.is-selected {
   border-color: #e8a317;
   box-shadow: 0 0 0 1px rgba(232, 163, 23, 0.35);
-}
-
-.train-simple-line {
-  margin: 0 0 0.75rem;
-  font-size: 1.02rem;
-  color: var(--train-text, #d4dde8);
 }
 
 .phrase-practice {

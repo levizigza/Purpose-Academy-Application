@@ -2,7 +2,6 @@ import { FormEvent, useEffect, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSession } from '../auth/Session'
 import { BRAND_ASSETS } from '../brand/assets'
-import { BRAND } from '../brand/copy'
 import { Reveal } from '../components/Motion'
 import { FoleyToggle, StepTransition } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
@@ -155,9 +154,9 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
       <header className="train-header">
         <div className="train-header-top">
-          <p className="train-kicker">Step {step} of 20 · Student path</p>
+          <p className="train-kicker">Step {step} of 20</p>
           <div className="train-sound-slot">
-            <FoleyToggle />
+            <FoleyToggle compact />
           </div>
         </div>
         <h1 className="train-title">{meta.title}</h1>
@@ -181,11 +180,15 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       </Reveal>
 
       <div className="train-actions">
-        {onBack && <button type="button" className="btn btn-ghost" onClick={onBack}>Back</button>}
+        {onBack && (
+          <button type="button" className="btn btn-ghost train-back" onClick={onBack}>
+            Back
+          </button>
+        )}
         {onNext && (
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary train-next"
             onClick={() => {
               playFoley('wood')
               onNext()
@@ -537,16 +540,25 @@ export function StudentSequencePage() {
 
   if (step === 1) {
     return (
-      <Shell step={1} onBack={() => navigate('/enter/student')} onNext={() => go(2, 'Opening registration…')} nextLabel="I am a new student — continue">
+      <Shell step={1} onBack={() => navigate('/enter/student')} onNext={() => go(2, 'Opening registration…')} nextLabel="Continue as a new student">
         <div className="train-login">
-          <img src={BRAND_ASSETS.logoMark} alt="" className="train-login-mark" />
-          <p className="train-brand">{BRAND.name}</p>
-          <p className="train-welcome">Welcome. Take a breath. We will go one step at a time.</p>
+          <img src={BRAND_ASSETS.logoFull} alt="" className="train-login-mark" />
+          <p className="train-login-lede">
+            You are starting the Purpose Academy student path. Registration comes next, then language support,
+            then tools, safety, and practice — one clear station at a time.
+          </p>
           <div className="train-role-stack">
-            <button type="button" className="train-role student" onClick={() => go(2, 'Opening registration…')}>I am a new student</button>
-            <Link className="train-role instructor" to="/login?role=student">I already have an account</Link>
-            <Link className="train-role instructor" to="/enter/instructor">Instructor</Link>
-            <Link className="train-role admin" to="/enter/admin">Admin</Link>
+            <button type="button" className="train-role student" onClick={() => go(2, 'Opening registration…')}>
+              Continue as a new student
+            </button>
+            <Link className="train-role secondary" to="/login?role=student">
+              I already have an account
+            </Link>
+          </div>
+          <div className="train-role-alt">
+            <Link to="/enter/instructor">Instructor door</Link>
+            <span aria-hidden>·</span>
+            <Link to="/enter/admin">Admin door</Link>
           </div>
           <TeachNote>
             Students learn and practice. Instructors teach and check skills. Admins manage the school.
