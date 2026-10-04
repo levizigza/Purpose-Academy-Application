@@ -208,7 +208,7 @@ export function StudentHomePage() {
         <div className="panel quiet">
           <p style={{ marginBottom: '0.35rem' }}>“{quote.content}”</p>
           <p className="muted" style={{ margin: 0 }}>
-            — {quote.author}
+            {quote.author}
           </p>
         </div>
       )}

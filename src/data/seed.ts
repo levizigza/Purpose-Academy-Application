@@ -110,7 +110,7 @@ export function createSeedDatabase(): AppDatabase {
         id: 'course-logistics',
         title: 'Warehousing and Logistics',
         category: 'logistics',
-        description: 'Future pathway - reuses the same learning architecture after Construction is validated.',
+        description: 'Future pathway that reuses the same learning architecture after Construction is validated.',
         duration: 'TBD',
         skills: ['Warehouse safety', 'Inventory', 'Packing', 'Receiving'],
         active: false,
@@ -119,7 +119,7 @@ export function createSeedDatabase(): AppDatabase {
         id: 'course-community',
         title: 'Community Support',
         category: 'community',
-        description: 'Future pathway - community service and client-support readiness.',
+        description: 'Future pathway for community service and client-support readiness.',
         duration: 'TBD',
         skills: ['Client communication', 'Documentation', 'Professional conduct'],
         active: false,
@@ -241,7 +241,7 @@ export function createSeedDatabase(): AppDatabase {
         order: 1,
         lesson_type: 'language',
         content:
-          'See the picture, hear the English word, read the meaning in your support language, then practice recognition and recall. Support language is a temporary bridge - not the destination.',
+          'See the picture, hear the English word, read the meaning in your support language, then practice recognition and recall. Support language is a temporary bridge, not the destination.',
         vocabulary_ids: ['v-hammer', 'v-drill', 'v-stud', 'v-level', 'v-ppe'],
         quiz: [
           {
@@ -279,7 +279,7 @@ export function createSeedDatabase(): AppDatabase {
         lesson_type: 'safety',
         safety_critical: true,
         content:
-          'Wear required PPE before entering a practical station. You have stop-work authority if something looks unsafe. Completing this lesson unlocks the safety gate for workshop practice - practical competency still requires instructor observation.',
+          'Wear required PPE before entering a practical station. You have stop-work authority if something looks unsafe. Completing this lesson unlocks the safety gate for workshop practice. Practical competency still requires instructor observation.',
         vocabulary_ids: ['v-ppe', 'v-hazard', 'v-safe'],
         quiz: [
           {
