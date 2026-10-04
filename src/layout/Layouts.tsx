@@ -1,4 +1,5 @@
 import { NavLink, Outlet, Navigate, Link, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { homeForRole, useSession } from '../auth/Session'
@@ -23,10 +24,18 @@ function BrandLockup({ to, compact = false, dark = false }: { to: string; compac
 export function PublicLayout() {
   const { user, student, logout, loading } = useSession()
   const { pathname } = useLocation()
+  const [practice, setPractice] = useState(() => isPracticeMode())
+
+  useEffect(() => {
+    const sync = () => setPractice(isPracticeMode())
+    sync()
+    window.addEventListener('pa-practice-started', sync)
+    return () => window.removeEventListener('pa-practice-started', sync)
+  }, [pathname])
+
   if (loading) return <LoadingScreen label={`Opening ${BRAND.name}…`} />
 
   const isTrain = pathname === '/journey' || pathname === '/enter/student'
-  const practice = isPracticeMode()
 
   return (
     <div className={`shell${isTrain ? ' is-train' : ''}`}>

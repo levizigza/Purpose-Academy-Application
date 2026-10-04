@@ -106,17 +106,23 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
     }
     const onOpen = () => setOpen(true)
     const onStep = () => setJourneyTick((n) => n + 1)
+    const onStarted = () => {
+      setName(getPracticeName())
+      setJourneyTick((n) => n + 1)
+    }
     window.addEventListener('pa-quiz-complete', onQuiz)
     window.addEventListener('pa-quiz-start', onQuizStart)
     window.addEventListener('pa-quiz-end', onQuizEnd)
     window.addEventListener('pa-practice-open-chat', onOpen)
     window.addEventListener('pa-journey-step', onStep)
+    window.addEventListener('pa-practice-started', onStarted)
     return () => {
       window.removeEventListener('pa-quiz-complete', onQuiz)
       window.removeEventListener('pa-quiz-start', onQuizStart)
       window.removeEventListener('pa-quiz-end', onQuizEnd)
       window.removeEventListener('pa-practice-open-chat', onOpen)
       window.removeEventListener('pa-journey-step', onStep)
+      window.removeEventListener('pa-practice-started', onStarted)
     }
   }, [])
 
@@ -255,8 +261,20 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
 
 export function PracticeModeBanner() {
   const { pathname } = useLocation()
-  const name = getPracticeName()
-  if (!isPracticeMode()) return null
+  const [name, setName] = useState(() => getPracticeName())
+  const [active, setActive] = useState(() => isPracticeMode())
+
+  useEffect(() => {
+    const sync = () => {
+      setName(getPracticeName())
+      setActive(isPracticeMode())
+    }
+    sync()
+    window.addEventListener('pa-practice-started', sync)
+    return () => window.removeEventListener('pa-practice-started', sync)
+  }, [pathname])
+
+  if (!active) return null
   const onJourney = pathname === '/journey'
   return (
     <div className="practice-banner motion-soft-pulse" role="status">

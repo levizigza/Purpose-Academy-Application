@@ -50,6 +50,7 @@ export function startPracticeMode(fullName: string) {
     if (name) sessionStorage.setItem(NAME_KEY, name)
     /* Skip registration — land on language / real training process */
     sessionStorage.setItem('pa-student-journey-step-v1', String(PRACTICE_ENTRY_STEP))
+    window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
   } catch {
     /* ignore */
   }
@@ -61,6 +62,7 @@ export function setPracticeName(fullName: string) {
   try {
     sessionStorage.setItem(NAME_KEY, name)
     sessionStorage.setItem(FLAG_KEY, '1')
+    window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
   } catch {
     /* ignore */
   }
