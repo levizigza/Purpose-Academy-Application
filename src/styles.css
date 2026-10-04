@@ -1696,6 +1696,21 @@ table.data th {
   animation: door-idle-sway 3.4s ease-in-out infinite;
 }
 
+/* Settled opening: P stays static — motion lives in the accents */
+.threshold.is-ready .doorway-open .doorway-leaf,
+.threshold.is-pathways .doorway-open .doorway-leaf,
+.threshold.is-smashing .doorway-open .doorway-leaf {
+  animation: none;
+  transform: rotateY(-78deg);
+}
+
+.threshold.is-ready .doorway-open .doorway-prelight,
+.threshold.is-pathways .doorway-open .doorway-prelight,
+.threshold.is-smashing .doorway-open .doorway-prelight {
+  animation: none;
+  opacity: 1;
+}
+
 .doorway-open .doorway-prelight {
   animation: door-glow-pulse 2.8s ease-in-out infinite;
 }
@@ -1950,6 +1965,29 @@ table.data th {
   .threshold-door-stage {
     width: min(64vw, 280px);
   }
+
+  .threshold-hammer {
+    right: max(0.35rem, env(safe-area-inset-right));
+  }
+
+  .threshold-hammer-icon {
+    width: clamp(5.8rem, 34vw, 7.2rem);
+  }
+}
+
+@media (max-height: 620px) {
+  .threshold-door-stage {
+    width: min(36vh, 200px);
+  }
+
+  .threshold-path-art {
+    width: 24px;
+    height: 24px;
+  }
+
+  .threshold-hammer-icon {
+    width: clamp(5.2rem, 18vh, 6.5rem);
+  }
 }
 
 /* Short phones — keep P as center fold; accents stay tiny */
@@ -1977,17 +2015,6 @@ table.data th {
   }
 }
 
-@media (max-height: 620px) {
-  .threshold-door-stage {
-    width: min(36vh, 200px);
-  }
-
-  .threshold-path-art {
-    width: 24px;
-    height: 24px;
-  }
-}
-
 @media (max-width: 420px) and (max-height: 740px) {
   .threshold-pathways {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1997,11 +2024,15 @@ table.data th {
 }
 
 .threshold-hammer {
+  position: fixed;
+  right: max(1.1rem, env(safe-area-inset-right));
+  top: 50%;
+  z-index: 6;
   display: grid;
   place-items: center;
   width: auto;
-  margin-top: 0.35rem;
-  padding: 0.25rem 0.4rem;
+  margin: 0;
+  padding: 0.35rem 0.45rem;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -2009,28 +2040,33 @@ table.data th {
   box-shadow: none;
   cursor: pointer;
   opacity: 0;
-  transform: translateY(8px);
-  transition: transform 0.25s ease, filter 0.25s ease;
-  filter: drop-shadow(0 6px 12px rgba(201, 132, 14, 0.35));
+  transform: translateY(-50%) translateX(18px) rotate(-18deg);
+  transition: transform 0.28s ease, filter 0.28s ease;
+  filter: drop-shadow(0 8px 16px rgba(201, 132, 14, 0.4));
 }
 
 .threshold-hammer.is-visible {
-  animation: threshold-path-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+  animation: hammer-side-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
 }
 
-.threshold-hammer:hover {
-  transform: translateY(-2px);
-  filter: drop-shadow(0 10px 16px rgba(201, 132, 14, 0.45));
+.threshold-hammer:hover:not(:disabled) {
+  transform: translateY(-50%) translateX(4px) rotate(-12deg);
+  filter: drop-shadow(0 12px 18px rgba(201, 132, 14, 0.5));
 }
 
-.threshold-hammer:active {
-  transform: translateY(1px) scale(0.98);
+.threshold-hammer:active:not(:disabled) {
+  transform: translateY(-50%) translateX(0) rotate(-8deg) scale(0.98);
 }
 
 .threshold-hammer-icon {
-  width: clamp(7.5rem, 28vw, 9.5rem);
+  width: clamp(7.2rem, 22vw, 9rem);
   height: auto;
   display: block;
+}
+
+.threshold-hammer.is-smashing {
+  animation: hammer-smash 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  pointer-events: none;
 }
 
 .foley-toggle.is-compact {
@@ -2044,6 +2080,176 @@ table.data th {
   bottom: max(0.85rem, env(safe-area-inset-bottom));
   right: max(0.85rem, env(safe-area-inset-right));
   z-index: 5;
+}
+
+/* Smash: cracks, impact flash, shards flying off */
+.threshold-smash {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.threshold-cracks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.threshold-cracks .crack {
+  fill: none;
+  stroke: rgba(11, 47, 92, 0.72);
+  stroke-width: 0.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: crack-draw 0.38s ease-out 0.18s forwards;
+  filter: drop-shadow(0 0 0.4px rgba(11, 47, 92, 0.35));
+}
+
+.threshold-cracks .crack-b { animation-delay: 0.22s; }
+.threshold-cracks .crack-c { animation-delay: 0.26s; }
+.threshold-cracks .crack-d { animation-delay: 0.28s; }
+.threshold-cracks .crack-e { animation-delay: 0.2s; }
+.threshold-cracks .crack-f { animation-delay: 0.24s; }
+.threshold-cracks .crack-g { animation-delay: 0.3s; }
+.threshold-cracks .crack-h { animation-delay: 0.32s; }
+
+.threshold-impact {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 18vmin;
+  height: 18vmin;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.2);
+  background: radial-gradient(circle, rgba(245, 197, 66, 0.55), transparent 70%);
+  opacity: 0;
+  animation: smash-impact 0.45s ease-out 0.16s forwards;
+}
+
+.threshold-shards {
+  position: absolute;
+  inset: 0;
+}
+
+.threshold-shards .shard {
+  position: absolute;
+  background: linear-gradient(145deg, #ffffff, #eef2f7);
+  box-shadow:
+    inset 0 0 0 1px rgba(11, 47, 92, 0.14),
+    0 8px 20px rgba(11, 47, 92, 0.12);
+  opacity: 0;
+  animation: shard-burst 0.78s cubic-bezier(0.22, 0.8, 0.25, 1) 0.36s forwards;
+}
+
+.threshold-shards .s1 {
+  left: 0; top: 0; width: 42%; height: 38%;
+  clip-path: polygon(0 0, 100% 0, 70% 100%, 0 85%);
+  --dx: -18vw; --dy: -16vh; --rot: -18deg;
+}
+.threshold-shards .s2 {
+  left: 38%; top: 0; width: 36%; height: 42%;
+  clip-path: polygon(10% 0, 100% 0, 100% 70%, 0 100%);
+  --dx: 8vw; --dy: -22vh; --rot: 12deg;
+}
+.threshold-shards .s3 {
+  right: 0; top: 0; width: 34%; height: 48%;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 18% 70%);
+  --dx: 22vw; --dy: -10vh; --rot: 22deg;
+}
+.threshold-shards .s4 {
+  left: 0; top: 32%; width: 40%; height: 40%;
+  clip-path: polygon(0 10%, 100% 0, 80% 100%, 0 100%);
+  --dx: -26vw; --dy: 6vh; --rot: -28deg;
+}
+.threshold-shards .s5 {
+  left: 34%; top: 34%; width: 38%; height: 36%;
+  clip-path: polygon(20% 0, 100% 15%, 70% 100%, 0 80%);
+  --dx: 4vw; --dy: 18vh; --rot: 8deg;
+  animation-delay: 0.4s;
+}
+.threshold-shards .s6 {
+  right: 0; top: 38%; width: 36%; height: 40%;
+  clip-path: polygon(0 0, 100% 20%, 100% 100%, 10% 100%);
+  --dx: 28vw; --dy: 12vh; --rot: 30deg;
+}
+.threshold-shards .s7 {
+  left: 0; bottom: 0; width: 48%; height: 36%;
+  clip-path: polygon(0 0, 100% 20%, 90% 100%, 0 100%);
+  --dx: -14vw; --dy: 24vh; --rot: -14deg;
+}
+.threshold-shards .s8 {
+  right: 0; bottom: 0; width: 56%; height: 34%;
+  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+  --dx: 16vw; --dy: 26vh; --rot: 16deg;
+}
+
+.threshold.is-smashing .threshold-stage {
+  animation: stage-crack-hold 0.4s ease-out forwards;
+}
+
+.threshold.is-smashing .threshold-pathways,
+.threshold.is-smashing .threshold-school-name {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+@keyframes hammer-side-in {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(40px) rotate(-28deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) rotate(-18deg);
+  }
+}
+
+@keyframes hammer-smash {
+  0% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) rotate(-18deg);
+  }
+  35% {
+    transform: translateY(-55%) translateX(-8vw) rotate(-42deg);
+  }
+  55% {
+    transform: translate(-42vw, -8%) rotate(-8deg) scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-48vw, 6%) rotate(12deg) scale(0.9);
+  }
+}
+
+@keyframes crack-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes smash-impact {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.15); }
+  40% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.6); }
+}
+
+@keyframes shard-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot));
+  }
+}
+
+@keyframes stage-crack-hold {
+  0%, 55% { opacity: 1; filter: none; }
+  100% { opacity: 0; filter: blur(1px); }
 }
 
 @keyframes threshold-path-in {
@@ -2072,7 +2278,12 @@ table.data th {
   .threshold-lockup.is-visible,
   .threshold-hammer.is-visible {
     opacity: 1;
-    transform: none;
+    transform: translateY(-50%) rotate(-18deg);
+  }
+
+  .threshold-hammer.is-smashing,
+  .threshold-smash {
+    display: none;
   }
 
   .threshold-door-slot.is-done {

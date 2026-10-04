@@ -6,7 +6,7 @@ import { OpeningDoorMark } from '../components/OpeningDoor'
 import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v23'
+const ENTERED_KEY = 'pa-crossed-threshold-v24'
 
 export function hasEnteredSite() {
   try {
@@ -24,9 +24,9 @@ export function markEnteredSite() {
   }
 }
 
-type SplashStage = 'closed' | 'opening' | 'pathways' | 'ready'
+type SplashStage = 'closed' | 'opening' | 'pathways' | 'ready' | 'smashing'
 
-/** Big P opens, settles as center fold; accents arrive after. */
+/** Big P opens and settles static; accents arrive after. */
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'closed' },
   { at: 700, stage: 'opening' },
@@ -34,15 +34,13 @@ const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 3000, stage: 'ready' },
 ]
 
-/** Flat hammer — ENTER on the handle, small accent CTA. */
+/** Flat hammer — ENTER on the handle. */
 function EnterHammer({ className = '' }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 160 48" aria-hidden>
-      {/* Head */}
       <rect x="2" y="10" width="36" height="28" rx="3" fill="#c9840e" stroke="#8a5a0a" strokeWidth="1.5" />
       <rect x="5" y="13" width="30" height="22" rx="2" fill="#e8a317" />
       <path d="M2 14 C-4 12 -8 18 -6 24 C-4 30 0 28 2 26 Z" fill="#c9840e" stroke="#8a5a0a" strokeWidth="1.2" />
-      {/* Handle */}
       <path d="M36 24 H148" stroke="#5c3d12" strokeWidth="12" strokeLinecap="round" />
       <path d="M36 24 H148" stroke="#8b6914" strokeWidth="7" strokeLinecap="round" />
       <path d="M36 24 H148" stroke="#c4a35a" strokeWidth="2" strokeLinecap="round" opacity="0.55" />
@@ -93,19 +91,59 @@ function PathwayStage({ active }: { active: boolean }) {
   )
 }
 
+function SmashCracks() {
+  return (
+    <div className="threshold-smash" aria-hidden>
+      <svg className="threshold-cracks" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path className="crack crack-a" d="M48 42 L38 28 L22 18" />
+        <path className="crack crack-b" d="M52 44 L68 30 L82 22" />
+        <path className="crack crack-c" d="M50 48 L42 62 L28 78" />
+        <path className="crack crack-d" d="M52 50 L64 66 L78 84" />
+        <path className="crack crack-e" d="M50 46 L50 18" />
+        <path className="crack crack-f" d="M50 50 L50 88" />
+        <path className="crack crack-g" d="M46 46 L18 52" />
+        <path className="crack crack-h" d="M54 46 L86 48" />
+      </svg>
+      <div className="threshold-shards">
+        <span className="shard s1" />
+        <span className="shard s2" />
+        <span className="shard s3" />
+        <span className="shard s4" />
+        <span className="shard s5" />
+        <span className="shard s6" />
+        <span className="shard s7" />
+        <span className="shard s8" />
+      </div>
+      <div className="threshold-impact" />
+    </div>
+  )
+}
+
 export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   const navigate = useNavigate()
   const [stage, setStage] = useState<SplashStage>('closed')
 
-  const enter = useCallback(() => {
+  const finishEnter = useCallback(() => {
     markEnteredSite()
-    void unlockFoley().then(() => {
-      playFoley('hammer')
-      playFoley('whoosh')
-    })
     if (onEnter) onEnter()
     else navigate('/', { replace: true })
   }, [navigate, onEnter])
+
+  const enter = useCallback(() => {
+    if (stage === 'smashing') return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    void unlockFoley().then(() => {
+      playFoley('hammer')
+      window.setTimeout(() => playFoley('wood'), 120)
+      window.setTimeout(() => playFoley('whoosh'), 280)
+    })
+    if (reduce) {
+      finishEnter()
+      return
+    }
+    setStage('smashing')
+    window.setTimeout(finishEnter, 1100)
+  }, [stage, finishEnter])
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -115,7 +153,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
     }
     const timers = TIMELINE.filter((s) => s.at > 0).map((s) =>
       window.setTimeout(() => {
-        setStage(s.stage)
+        setStage((prev) => (prev === 'smashing' ? prev : s.stage))
         if (s.stage === 'opening') void unlockFoley().then(() => playFoley('wood'))
         if (s.stage === 'pathways') void unlockFoley().then(() => playFoley('metal'))
       }, s.at),
@@ -137,8 +175,9 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
 
   const doorStage = stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
   const showDoor = stage === 'closed' || stage === 'opening'
-  const showPathways = stage === 'pathways' || stage === 'ready'
-  const showEnter = stage === 'ready'
+  const showPathways = stage === 'pathways' || stage === 'ready' || stage === 'smashing'
+  const showEnter = stage === 'ready' || stage === 'smashing'
+  const isSmashing = stage === 'smashing'
 
   return (
     <div
@@ -147,6 +186,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
         `threshold-stage-${stage}`,
         showPathways ? 'is-pathways' : '',
         showEnter ? 'is-ready' : '',
+        isSmashing ? 'is-smashing' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -158,31 +198,35 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
         <p className="threshold-school-name">{BRAND.name}</p>
 
         <div className={`threshold-door-stage is-${stage}`} aria-hidden>
-          <div className={`threshold-door-zoom is-${stage}`}>
+          <div className={`threshold-door-zoom is-${stage === 'smashing' ? 'ready' : stage}`}>
             <div className={`threshold-door-slot${showDoor ? ' is-active' : ' is-open-stay'}`}>
               <OpeningDoorMark stage={doorStage} />
             </div>
           </div>
         </div>
 
-        <PathwayStage active={showPathways} />
-
-        {showEnter && (
-          <button
-            type="button"
-            className="threshold-hammer is-visible"
-            onClick={enter}
-            aria-label="Enter Purpose Academy"
-          >
-            <EnterHammer className="threshold-hammer-icon" />
-          </button>
-        )}
-        {showEnter && (
-          <div className="threshold-foley">
-            <FoleyToggle compact />
-          </div>
-        )}
+        <PathwayStage active={showPathways && !isSmashing} />
       </div>
+
+      {showEnter && (
+        <button
+          type="button"
+          className={`threshold-hammer is-visible${isSmashing ? ' is-smashing' : ''}`}
+          onClick={enter}
+          aria-label="Enter Purpose Academy"
+          disabled={isSmashing}
+        >
+          <EnterHammer className="threshold-hammer-icon" />
+        </button>
+      )}
+
+      {showEnter && !isSmashing && (
+        <div className="threshold-foley">
+          <FoleyToggle compact />
+        </div>
+      )}
+
+      {isSmashing && <SmashCracks />}
     </div>
   )
 }
