@@ -1286,7 +1286,7 @@ p {
 .visual-stage-photo {
   background:
     linear-gradient(115deg, rgba(4, 21, 38, 0.86) 0%, rgba(11, 47, 92, 0.72) 48%, rgba(3, 13, 26, 0.9) 100%),
-    var(--asset-calgary, var(--asset-threshold)) center 40%/cover no-repeat;
+    var(--asset-apprenticeship, var(--asset-threshold)) center 62%/cover no-repeat;
   min-height: 360px;
 }
 

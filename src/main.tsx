@@ -17,6 +17,10 @@ document.documentElement.style.setProperty(
   '--asset-calgary',
   `url(${JSON.stringify(BRAND_ASSETS.photoCalgary)})`,
 )
+document.documentElement.style.setProperty(
+  '--asset-apprenticeship',
+  `url(${JSON.stringify(BRAND_ASSETS.photoApprenticeship)})`,
+)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

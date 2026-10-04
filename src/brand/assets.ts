@@ -11,6 +11,7 @@ import photoLogistics from '../assets/photos/path-logistics.jpg'
 import photoCommunity from '../assets/photos/path-community.jpg'
 import photoLearners from '../assets/photos/serve-learners.jpg'
 import photoCalgary from '../assets/photos/calgary-skyline.jpg'
+import photoApprenticeship from '../assets/photos/stage-apprenticeship.jpg'
 
 /** Bundled brand URLs — hashed by Vite so GitHub Pages always resolves them. */
 export const BRAND_ASSETS = {
@@ -27,4 +28,5 @@ export const BRAND_ASSETS = {
   photoCommunity,
   photoLearners,
   photoCalgary,
+  photoApprenticeship,
 } as const

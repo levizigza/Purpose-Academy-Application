@@ -77,9 +77,9 @@ export function HomePage() {
           <figure className="serve-figure">
             <img
               src={BRAND_ASSETS.photoLearners}
-              alt="Learners preparing for skilled work with Purpose Academy"
+              alt="Construction crew working together on a job site"
             />
-            <figcaption>Shop practice. Site language. Instructors who teach for the trade.</figcaption>
+            <figcaption>On the job site — the work this school prepares you for.</figcaption>
           </figure>
         </Reveal>
 
@@ -324,7 +324,7 @@ export function AboutPage() {
           </p>
         </div>
         <figure className="serve-figure">
-          <img src={BRAND_ASSETS.photoCalgary} alt="Calgary skyline — home of Purpose Academy" />
+          <img src={BRAND_ASSETS.photoCalgary} alt="Downtown Calgary skyline along the Bow River — home of Purpose Academy" />
           <figcaption>{BRAND.place} — where our learners live, train, and work.</figcaption>
         </figure>
       </Reveal>
