@@ -1,7 +1,7 @@
 ﻿/**
  * Student journey — Purpose Academy sequence:
- * Login → Register → Language → Baseline → Interest/Skills → Result →
- * Vocab (See/Listen/Understand/Repeat) → Word→Action → Supported practice →
+ * Login → Register → Language → Career Assessment → Work Style → Profile →
+ * Vocab → Word→Action → Supported practice →
  * English Eye Spy → Instructions → Site language → Digital → Safety →
  * Tools → Systems → Observation → On-site → Final exam/certificate → Employment
  *
@@ -11,10 +11,10 @@
 export const JOURNEY_STEPS = [
   { n: 1, title: 'Start as Student', help: 'Begin your learning path.', purpose: 'Students, instructors, and admins use different doors.' },
   { n: 2, title: 'Registration', help: 'Tell us who you are so we can support you.', purpose: 'Your profile opens learning after approval.' },
-  { n: 3, title: 'Your Language', help: 'Choose your mother tongue for early help.', purpose: 'Early checks use a language you know. Later steps are English only.' },
-  { n: 4, title: 'Baseline Check', help: 'Show what you already know — tools and safety.', purpose: 'We place you correctly. This is not a pass or fail test.' },
-  { n: 5, title: 'Interest & Skills', help: 'What do you want, and what can you already do?', purpose: 'Pictures and short checks point you to a career path.' },
-  { n: 6, title: 'Your Result', help: 'See your path for today.', purpose: 'Construction is open now. Other paths come next.' },
+  { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the career assessment.', purpose: 'The full assessment runs in a language you understand. Later job-site steps use English.' },
+  { n: 4, title: 'Career Assessment', help: 'Rate work activities in your language.', purpose: 'A professional interest inventory — not a pass/fail quiz.' },
+  { n: 5, title: 'Work Style', help: 'How you like to work — in your language.', purpose: 'Work-style choices refine your pathway fit.' },
+  { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction is open now.' },
   { n: 7, title: 'Visual Vocabulary', help: 'See the picture · read your language · hear English', purpose: 'English word with home-language glosses and audio — not English-only.' },
   { n: 8, title: 'Word → Action', help: 'See the word become a real site action.', purpose: 'Link English words to real movement.' },
   { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.' },

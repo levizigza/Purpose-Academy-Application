@@ -7091,3 +7091,268 @@ video {
     animation: none !important;
   }
 }
+
+
+/* ── Career pathway assessment (RIASEC-style, mother tongue) ── */
+.career-assess,
+.career-result {
+  display: grid;
+  gap: 1rem;
+}
+
+.career-assess-head,
+.career-result-head {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.career-assess-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f5c542;
+  font-weight: 800;
+}
+
+.career-assess-title,
+.career-result-title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.2rem, 2.6vw, 1.55rem);
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.career-assess-lede,
+.career-result-lead,
+.career-result-summary {
+  margin: 0;
+  color: rgba(244, 247, 251, 0.84);
+  line-height: 1.45;
+}
+
+.career-assess-progress {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(245, 197, 66, 0.95);
+}
+
+.career-assess-bar {
+  height: 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.career-assess-bar > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #e8a317, #f5c542);
+  border-radius: inherit;
+  transition: width 0.25s ease;
+}
+
+.career-assess-card {
+  padding: 1.1rem 1.15rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(165deg, rgba(26, 79, 138, 0.35), rgba(15, 36, 56, 0.92));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+}
+
+.career-assess-prompt {
+  margin: 0 0 1rem;
+  font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.35;
+}
+
+.career-likert {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.career-likert-btn {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem;
+  align-items: center;
+  text-align: left;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #e8eef6;
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+}
+
+.career-likert-btn:hover,
+.career-likert-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  outline: 2px solid #f5c542;
+  outline-offset: 1px;
+}
+
+.career-likert-btn.is-selected {
+  border-color: #f5c542;
+  background: rgba(245, 197, 66, 0.16);
+  transform: translateY(-1px);
+}
+
+.career-likert-num {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  background: #0b2f5c;
+  color: #f5c542;
+}
+
+.career-likert-btn.is-selected .career-likert-num {
+  background: #f5c542;
+  color: #041526;
+}
+
+.career-likert-label {
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.career-choice-stack {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.career-choice {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #e8eef6;
+  font: inherit;
+  font-weight: 650;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.career-choice:hover,
+.career-choice:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  outline: 2px solid #f5c542;
+  outline-offset: 1px;
+}
+
+.career-choice.is-selected {
+  border-color: #f5c542;
+  background: rgba(245, 197, 66, 0.16);
+}
+
+.career-assess-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.career-result-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(245, 197, 66, 0.18);
+  border: 1px solid rgba(245, 197, 66, 0.45);
+  color: #f5c542;
+  font-weight: 800;
+  font-size: 0.86rem;
+  width: fit-content;
+}
+
+.career-profile {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  background: rgba(15, 36, 56, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.career-profile-row {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1.1fr) 1fr auto;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.career-profile-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(244, 247, 251, 0.78);
+}
+
+.career-profile-row.is-top .career-profile-label {
+  color: #f5c542;
+}
+
+.career-profile-track {
+  height: 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.career-profile-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1a4f8a, #f5c542);
+}
+
+.career-profile-pct {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgba(244, 247, 251, 0.7);
+  min-width: 2.6rem;
+  text-align: right;
+}
+
+.career-strengths {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.career-strengths li {
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  border-left: 3px solid #e8a317;
+  background: rgba(232, 163, 23, 0.08);
+  color: #e8eef6;
+  font-weight: 650;
+}
+
+@media (max-width: 560px) {
+  .career-profile-row {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .career-profile-track {
+    grid-column: 1 / -1;
+  }
+}
+
+.train-shell .career-assess-actions .btn-ghost {
+  min-width: 2.6rem;
+}

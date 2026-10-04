@@ -12,18 +12,33 @@ import {
   JOURNEY_STEPS,
   SUPPORT_LANGUAGES,
   VOCAB_UNIT,
-  BASELINE_QUIZ,
   SAFETY_QUIZ,
   FINAL_QUIZ,
   TOOL_CATEGORIES,
   SYSTEM_TOPICS,
   COMPUTER_SKILLS,
-  INTEREST_PATHS,
   WORD_ACTIONS,
   EYE_SPY_SCENES,
   type SupportLang,
   type QuizItem,
 } from './journeyCurriculum'
+import {
+  CareerAssessmentResult,
+  CareerInterestAssessment,
+  CareerStyleAssessment,
+} from './CareerAssessment'
+import {
+  combinePathwayScores,
+  pathwayFromRiasec,
+  rankedRiasec,
+  scoreInterestAnswers,
+  scoreStyleAnswers,
+  topPathway,
+  type LikertValue,
+  type PathwayId,
+  ASSESSMENT_COPY,
+  t as assessT,
+} from './careerAssessment'
 import {
   primeSpeech,
   speakEnglish,
@@ -435,8 +450,10 @@ export function StudentSequencePage() {
   const [supportLang, setSupportLang] = useState<SupportLang>(
     (student?.preferred_language as SupportLang) || 'Amharic',
   )
-  const [interest, setInterest] = useState<'construction' | 'logistics' | 'community' | null>(null)
-  const [skillChecks, setSkillChecks] = useState<Record<string, boolean>>({})
+  const [interest, setInterest] = useState<PathwayId | null>(null)
+  const [careerInterestAnswers, setCareerInterestAnswers] = useState<Record<string, LikertValue>>({})
+  const [careerStyleAnswers, setCareerStyleAnswers] = useState<Record<string, string>>({})
+  const [riasecScores, setRiasecScores] = useState(() => scoreInterestAnswers({}))
   const [actionIdx, setActionIdx] = useState(0)
   const [actionDone, setActionDone] = useState<Record<string, boolean>>({})
   const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
@@ -868,7 +885,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 3: Mother tongue for assessment (bridge later removed in English-only steps) */
+  /* Step 3: Mother tongue — assessment runs fully in this language */
   if (step === 3) {
     return (
       <Shell
@@ -878,9 +895,12 @@ export function StudentSequencePage() {
           setRegForm((f) => ({ ...f, preferred_language: supportLang }))
           go(4)
         }}
-        nextLabel="Use this language for my assessment"
+        nextLabel={assessT(ASSESSMENT_COPY.next, supportLang)}
       >
-        <WhyWork>Early checks use a language you understand. Later site talk is English only.</WhyWork>
+        <WhyWork>
+          The career assessment is in your language — not English — so you can answer clearly. Job-site English comes
+          later.
+        </WhyWork>
         <div className="train-lang-grid">
           {SUPPORT_LANGUAGES.map((l) => (
             <button key={l.id} type="button" className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`} onClick={() => setSupportLang(l.id)}>
@@ -890,114 +910,86 @@ export function StudentSequencePage() {
           ))}
         </div>
         <div className="train-bridge">
-          <p><strong>How language works</strong></p>
+          <p><strong>{assessT(ASSESSMENT_COPY.introTitle, supportLang)}</strong></p>
+          <p>{assessT(ASSESSMENT_COPY.introBody, supportLang)}</p>
           <ol>
-            <li>Assessment & early vocab: English + {supportLang}</li>
-            <li>Practice: still with help</li>
-            <li>Eye Spy: English only</li>
-            <li>Site instructions: English required; mother tongue optional once</li>
+            <li>{assessT(ASSESSMENT_COPY.introTitle, supportLang)} → {supportLang}</li>
+            <li>Vocabulary & practice: {supportLang} + English</li>
+            <li>Eye Spy & site instructions: English</li>
           </ol>
         </div>
-        <TeachNote>Choose the mother tongue that helps you most for assessment and early learning.</TeachNote>
+        <TeachNote>Pick the mother tongue you understand best for the assessment.</TeachNote>
       </Shell>
     )
   }
 
   if (step === 4) {
     return (
-      <Shell step={4} onBack={() => go(3)}>
-        <WhyWork>Baseline shows what you already know — so we start in the right place.</WhyWork>
-        <TeachNote>Baseline is not pass/fail. Support language: {supportLang}.</TeachNote>
-        <QuizRunner items={BASELINE_QUIZ} onComplete={() => go(5)} />
+      <Shell step={4}>
+        <CareerInterestAssessment
+          lang={supportLang}
+          answers={careerInterestAnswers}
+          onChange={(id, value) => setCareerInterestAnswers((a) => ({ ...a, [id]: value }))}
+          onBack={() => go(3)}
+          onComplete={(finalAnswers) => {
+            setCareerInterestAnswers(finalAnswers)
+            setRiasecScores(scoreInterestAnswers(finalAnswers))
+            go(5)
+          }}
+        />
       </Shell>
     )
   }
 
-  /* Step 5: Interest + skills picture assessment */
+  /* Step 5: Work-style fit (mother tongue) */
   if (step === 5) {
-    const path = INTEREST_PATHS.find((p) => p.id === interest)
     return (
-      <Shell
-        step={5}
-        onBack={() => go(4)}
-        onNext={interest ? () => go(6, 'Opening your result…') : undefined}
-        nextLabel="See my path result"
-      >
-        <WhyWork>What you want and what you can already do help place you on a path.</WhyWork>
-        <p><strong>What are you interested in?</strong></p>
-        <div className="train-interest-grid">
-          {INTEREST_PATHS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`train-interest${interest === item.id ? ' is-selected' : ''}`}
-              onClick={() => { setInterest(item.id); setSkillChecks({}) }}
-            >
-              <img
-                src={item.id === 'construction' ? BRAND_ASSETS.iconConstruction : item.id === 'logistics' ? BRAND_ASSETS.iconLogistics : BRAND_ASSETS.iconCommunity}
-                alt=""
-              />
-              <strong>{item.title}</strong>
-              <span>{item.line}</span>
-              <em className="train-interest-detail">{item.detail}</em>
-            </button>
-          ))}
-        </div>
-        {path && (
-          <>
-            <p><strong>What can you do? (optional — answer honestly)</strong></p>
-            <ul className="train-check-list">
-              {path.skills.map((s) => (
-                <CheckItem
-                  key={s.id}
-                  id={`sk-${s.id}`}
-                  title={s.label}
-                  why="Check only if this is true for you."
-                  checked={!!skillChecks[s.id]}
-                  onChange={() => setSkillChecks((c) => ({ ...c, [s.id]: !c[s.id] }))}
-                />
-              ))}
-            </ul>
-          </>
-        )}
-        <TeachNote>Choose an interest to continue. Empty skill boxes are honest — we can teach those.</TeachNote>
+      <Shell step={5}>
+        <CareerStyleAssessment
+          lang={supportLang}
+          answers={careerStyleAnswers}
+          onChange={(id, optionId) => setCareerStyleAnswers((a) => ({ ...a, [id]: optionId }))}
+          onBack={() => go(4)}
+          onComplete={(finalStyle) => {
+            setCareerStyleAnswers(finalStyle)
+            const interestPct = scoreInterestAnswers(careerInterestAnswers)
+            setRiasecScores(interestPct)
+            const combined = combinePathwayScores(pathwayFromRiasec(interestPct), scoreStyleAnswers(finalStyle))
+            setInterest(topPathway(combined))
+            go(6, assessT(ASSESSMENT_COPY.seeResults, supportLang))
+          }}
+        />
       </Shell>
     )
   }
 
-  /* Step 6: Result + Construction pathway */
+  /* Step 6: Career profile result (mother tongue) */
   if (step === 6) {
-    const title = interest === 'logistics' ? 'Logistics' : interest === 'community' ? 'Community Support' : 'Construction'
+    const pathway = interest || 'construction'
+    const ranked = rankedRiasec(riasecScores)
+    const pathwayScores = combinePathwayScores(
+      pathwayFromRiasec(riasecScores),
+      scoreStyleAnswers(careerStyleAnswers),
+    )
     return (
-      <Shell
-        step={6}
-        onBack={() => go(5)}
-        onNext={() => {
-          void (async () => {
-            setBusy(true)
-            await finishPathway()
-            setBusy(false)
-          })()
-        }}
-        nextLabel={busy ? 'Saving…' : 'Continue into Construction vocabulary'}
-        nextDisabled={busy}
-      >
-        {error && <div className="alert error">{error}</div>}
-        <div className="alert ok">
-          You chose <strong>{title}</strong>. Today&rsquo;s open program is <strong>Construction</strong>.
-        </div>
-        <PictureCard emoji="C" label="Construction" sub="Build Skills, Build Futures." caption="Open pathway you can prove with an instructor." />
-        <WhyWork>Construction needs safety words, tools, and short English directions.</WhyWork>
-        <div className="train-learn-grid">
-          <LearnCard mark="1" title="Language for work" body="Words you hear on a job site." />
-          <LearnCard mark="2" title="Safety first" body="Protect yourself and others." />
-          <LearnCard mark="3" title="Tools & practice" body="Learn, practise, then prove with an instructor." />
-        </div>
-        {interest && interest !== 'construction' && (
-          <div className="alert warn">
-            You showed interest in {title}. Today&rsquo;s live path is Construction — same steps, different job focus later.
-          </div>
-        )}
+      <Shell step={6}>
+        <CareerAssessmentResult
+          lang={supportLang}
+          pathway={pathway}
+          riasec={riasecScores}
+          pathwayScores={pathwayScores}
+          ranked={ranked}
+          busy={busy}
+          error={error}
+          onBack={() => go(5)}
+          onContinue={() => {
+            void (async () => {
+              setBusy(true)
+              await finishPathway()
+              setBusy(false)
+            })()
+          }}
+        />
       </Shell>
     )
   }
