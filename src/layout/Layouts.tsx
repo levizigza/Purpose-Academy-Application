@@ -7,10 +7,14 @@ import { LoadingScreen, SkipLink } from '../components/Ui'
 import { PracticeFeedbackDock, PracticeModeBanner } from '../practice/PracticeFeedbackDock'
 import type { Role } from '../data/types'
 
-function BrandLockup({ to, compact = false }: { to: string; compact?: boolean }) {
+function BrandLockup({ to, compact = false, dark = false }: { to: string; compact?: boolean; dark?: boolean }) {
   return (
-    <Link to={to} className={`brand-lockup brand-lockup-full${compact ? ' compact' : ''}`}>
-      <img className="brand-logo" src={BRAND_ASSETS.logoFull} alt={BRAND.name} />
+    <Link to={to} className={`brand-lockup brand-lockup-full${compact ? ' compact' : ''}${dark ? ' on-dark' : ''}`}>
+      <img
+        className="brand-logo"
+        src={dark ? BRAND_ASSETS.logoPOpen : BRAND_ASSETS.logoFull}
+        alt={BRAND.name}
+      />
     </Link>
   )
 }
@@ -28,18 +32,7 @@ export function PublicLayout() {
       <SkipLink />
       <header className="topbar">
         <div className="topbar-inner">
-          <BrandLockup to="/" />
-          <div className="topbar-nav">
-            <nav className="nav-cluster" aria-label="Website">
-              <NavLink to="/programs">Programs</NavLink>
-              <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
-              <NavLink to="/about">About</NavLink>
-              <NavLink to="/give">Give</NavLink>
-              <NavLink to="/contact">Contact</NavLink>
-              {user && (
-                <NavLink to={homeForRole(user.role, student?.registration_status)}>Portal</NavLink>
-              )}
-            </nav>
+          <BrandLockup to="/" dark={isTrain} />
             <div className="nav-actions">
               {user ? (
                 <button type="button" className="linkish nav-signout" onClick={logout}>

@@ -4042,6 +4042,12 @@ table.data th {
   padding: 0;
 }
 
+.shell.is-train .brand-lockup-full.on-dark .brand-logo {
+  width: auto;
+  height: 46px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
+}
+
 /* ─ Training shell layout ─ */
 
 .train-shell {
