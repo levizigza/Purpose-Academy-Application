@@ -7278,6 +7278,55 @@ video {
   width: fit-content;
 }
 
+.career-code {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(26, 79, 138, 0.45), rgba(15, 36, 56, 0.92));
+  border: 1px solid rgba(245, 197, 66, 0.28);
+}
+
+.career-code-label,
+.career-section-title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(245, 197, 66, 0.92);
+}
+
+.career-code-value {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 2.7rem);
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: #f4f7fb;
+  line-height: 1;
+}
+
+.career-code-hint {
+  margin: 0;
+  font-size: 0.88rem;
+  color: rgba(232, 238, 246, 0.78);
+  line-height: 1.45;
+}
+
+.career-code-areas {
+  margin: 0.35rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.career-code-areas li {
+  font-size: 0.9rem;
+  color: #e8eef6;
+}
+
+.career-fit,
 .career-profile {
   display: grid;
   gap: 0.55rem;
@@ -7285,6 +7334,10 @@ video {
   border-radius: 14px;
   background: rgba(15, 36, 56, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.career-section-title {
+  margin-bottom: 0.15rem;
 }
 
 .career-profile-row {

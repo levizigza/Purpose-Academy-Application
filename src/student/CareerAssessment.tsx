@@ -7,6 +7,9 @@ import {
   LIKERT_OPTIONS,
   PATHWAY_RESULT,
   RIASEC_LABELS,
+  hollandCode,
+  pathwayFitPercent,
+  rankedPathways,
   type AssessmentScores,
   type LikertValue,
   type PathwayId,
@@ -25,24 +28,17 @@ type InterestProps = {
 /** Part 1 — RIASEC-style activity ratings, one question at a time, mother tongue only. */
 export function CareerInterestAssessment({ lang, answers, onChange, onComplete, onBack }: InterestProps) {
   const items = CAREER_INTEREST_ITEMS
-  const firstUnanswered = items.findIndex((i) => !answers[i.id])
-  const [idx, setIdx] = useState(firstUnanswered >= 0 ? firstUnanswered : 0)
-  const [local, setLocal] = useState(answers)
-  const item = items[idx]
-  const current = local[item.id]
+  const [idx, setIdx] = useState(0)
+  const item = items[Math.min(idx, items.length - 1)]
+  const current = answers[item.id]
 
   function goNext() {
+    if (!current) return
     if (idx < items.length - 1) {
       setIdx(idx + 1)
       return
     }
-    onComplete(local)
-  }
-
-  function select(value: LikertValue) {
-    const next = { ...local, [item.id]: value }
-    setLocal(next)
-    onChange(item.id, value)
+    onComplete(answers)
   }
 
   return (
@@ -68,7 +64,7 @@ export function CareerInterestAssessment({ lang, answers, onChange, onComplete, 
               role="radio"
               aria-checked={current === opt.value}
               className={`career-likert-btn tone-${opt.value}${current === opt.value ? ' is-selected' : ''}`}
-              onClick={() => select(opt.value)}
+              onClick={() => onChange(item.id, opt.value)}
             >
               <span className="career-likert-num">{opt.value}</span>
               <span className="career-likert-label">{opt.label[lang]}</span>
@@ -88,13 +84,8 @@ export function CareerInterestAssessment({ lang, answers, onChange, onComplete, 
             ←
           </button>
         )}
-        <button
-          type="button"
-          className="btn btn-primary"
-          disabled={!current}
-          onClick={goNext}
-        >
-          {idx >= items.length - 1 ? t(ASSESSMENT_COPY.next, lang) : t(ASSESSMENT_COPY.next, lang)}
+        <button type="button" className="btn btn-primary" disabled={!current} onClick={goNext}>
+          {t(ASSESSMENT_COPY.next, lang)}
         </button>
       </div>
     </div>
@@ -112,24 +103,17 @@ type StyleProps = {
 /** Part 2 — work-style forced choices in mother tongue. */
 export function CareerStyleAssessment({ lang, answers, onChange, onComplete, onBack }: StyleProps) {
   const items = CAREER_STYLE_ITEMS
-  const firstUnanswered = items.findIndex((i) => !answers[i.id])
-  const [idx, setIdx] = useState(firstUnanswered >= 0 ? firstUnanswered : 0)
-  const [local, setLocal] = useState(answers)
-  const item = items[idx]
-  const current = local[item.id]
+  const [idx, setIdx] = useState(0)
+  const item = items[Math.min(idx, items.length - 1)]
+  const current = answers[item.id]
 
   function goNext() {
+    if (!current) return
     if (idx < items.length - 1) {
       setIdx(idx + 1)
       return
     }
-    onComplete(local)
-  }
-
-  function pick(optionId: string) {
-    const next = { ...local, [item.id]: optionId }
-    setLocal(next)
-    onChange(item.id, optionId)
+    onComplete(answers)
   }
 
   return (
@@ -154,7 +138,7 @@ export function CareerStyleAssessment({ lang, answers, onChange, onComplete, onB
               key={opt.id}
               type="button"
               className={`career-choice${current === opt.id ? ' is-selected' : ''}`}
-              onClick={() => pick(opt.id)}
+              onClick={() => onChange(item.id, opt.id)}
             >
               {opt.label[lang]}
             </button>
@@ -199,6 +183,7 @@ export function CareerAssessmentResult({
   lang,
   pathway,
   riasec,
+  pathwayScores,
   ranked,
   busy,
   error,
@@ -207,6 +192,9 @@ export function CareerAssessmentResult({
 }: ResultProps) {
   const result = PATHWAY_RESULT[pathway]
   const top3 = ranked.slice(0, 3)
+  const code = hollandCode(riasec)
+  const fit = pathwayFitPercent(pathwayScores)
+  const pathwayOrder = rankedPathways(pathwayScores)
 
   return (
     <div className="career-result">
@@ -216,11 +204,40 @@ export function CareerAssessmentResult({
         <p className="career-result-lead">{t(ASSESSMENT_COPY.resultLead, lang)}</p>
       </header>
 
+      <section className="career-code" aria-label={t(ASSESSMENT_COPY.yourCode, lang)}>
+        <p className="career-code-label">{t(ASSESSMENT_COPY.yourCode, lang)}</p>
+        <p className="career-code-value" aria-live="polite">
+          {code}
+        </p>
+        <p className="career-code-hint">{t(ASSESSMENT_COPY.codeHint, lang)}</p>
+        <ul className="career-code-areas">
+          {top3.map((area) => (
+            <li key={area}>
+              <strong>{area}</strong> — {t(RIASEC_LABELS[area], lang)}
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <p className="career-result-summary">{t(result.summary, lang)}</p>
 
       <div className="career-result-badge">{t(ASSESSMENT_COPY.openNow, lang)}</div>
 
-      <section className="career-profile" aria-label={t(ASSESSMENT_COPY.resultTitle, lang)}>
+      <section className="career-fit" aria-label={t(ASSESSMENT_COPY.pathwayFit, lang)}>
+        <h3 className="career-section-title">{t(ASSESSMENT_COPY.pathwayFit, lang)}</h3>
+        {pathwayOrder.map((id) => (
+          <div key={id} className={`career-profile-row${id === pathway ? ' is-top' : ''}`}>
+            <span className="career-profile-label">{t(PATHWAY_RESULT[id].title, lang)}</span>
+            <div className="career-profile-track">
+              <span style={{ width: `${fit[id]}%` }} />
+            </div>
+            <span className="career-profile-pct">{fit[id]}%</span>
+          </div>
+        ))}
+      </section>
+
+      <section className="career-profile" aria-label={t(ASSESSMENT_COPY.profileAreas, lang)}>
+        <h3 className="career-section-title">{t(ASSESSMENT_COPY.profileAreas, lang)}</h3>
         {(Object.keys(riasec) as (keyof AssessmentScores)[]).map((area) => (
           <div key={area} className={`career-profile-row${top3.includes(area) ? ' is-top' : ''}`}>
             <span className="career-profile-label">{t(RIASEC_LABELS[area], lang)}</span>
@@ -232,11 +249,14 @@ export function CareerAssessmentResult({
         ))}
       </section>
 
-      <ul className="career-strengths">
-        {result.strengths.map((s, i) => (
-          <li key={i}>{t(s, lang)}</li>
-        ))}
-      </ul>
+      <section aria-label={t(ASSESSMENT_COPY.strengthsTitle, lang)}>
+        <h3 className="career-section-title">{t(ASSESSMENT_COPY.strengthsTitle, lang)}</h3>
+        <ul className="career-strengths">
+          {result.strengths.map((s, i) => (
+            <li key={i}>{t(s, lang)}</li>
+          ))}
+        </ul>
+      </section>
 
       {error && <div className="alert error">{error}</div>}
 

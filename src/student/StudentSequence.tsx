@@ -37,6 +37,8 @@ import {
   type LikertValue,
   type PathwayId,
   ASSESSMENT_COPY,
+  ASSESSMENT_SHELL,
+  LANG_NATIVE,
   t as assessT,
 } from './careerAssessment'
 import {
@@ -169,13 +171,39 @@ function CheckItem({ id, title, why, checked, onChange }: {
 
 /* ─── Step shell — SiteWise-inspired training chrome ─── */
 
-function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg }: {
+function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang }: {
   step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
-  transitioning?: boolean; transitionMsg?: string
+  transitioning?: boolean; transitionMsg?: string; supportLang?: SupportLang
 }) {
-  const meta = JOURNEY_STEPS[step - 1]
+  const base = JOURNEY_STEPS[step - 1]
+  const motherTongue = supportLang && step >= 3 && step <= 6
+  const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 6] : null
+  const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
+  const help = shellCopy ? assessT(shellCopy.help, supportLang!) : base.help
+  const purpose = shellCopy ? assessT(shellCopy.purpose, supportLang!) : base.purpose
   const pct = Math.round((step / 20) * 100)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
+  const stepKicker = motherTongue
+    ? `${assessT(ASSESSMENT_COPY.stepOf, supportLang!)} ${step} ${assessT(ASSESSMENT_COPY.ofTotal, supportLang!)} 20`
+    : `Step ${step} of 20`
+  const whyLabel = motherTongue
+    ? ({
+        Spanish: '¿Por qué este paso?',
+        Arabic: 'لماذا هذه الخطوة؟',
+        Hindi: 'यह कदम क्यों?',
+        Amharic: 'ይህ ደረጃ ለምን?',
+        Tigrinya: 'ስለምንታይ እዚ ደረጃ?',
+      } satisfies Record<SupportLang, string>)[supportLang!]
+    : 'Why this step?'
+  const backLabel = motherTongue
+    ? ({
+        Spanish: 'Atrás',
+        Arabic: 'رجوع',
+        Hindi: 'पीछे',
+        Amharic: 'ተመለስ',
+        Tigrinya: 'ተመለስ',
+      } satisfies Record<SupportLang, string>)[supportLang!]
+    : 'Back'
 
   function handleNext() {
     if (!onNext) return
@@ -219,16 +247,19 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
       <header className="train-header">
         <div className="train-header-top">
-          <p className="train-kicker">Step {step} of 20{isPracticeMode() ? ' · Practice' : ''}</p>
+          <p className="train-kicker">
+            {stepKicker}
+            {isPracticeMode() ? ' · Practice' : ''}
+          </p>
           <div className="train-sound-slot">
             <FoleyToggle compact />
           </div>
         </div>
-        <h1 className="train-title">{meta.title}</h1>
-        <p className="train-simple-line">{meta.help}</p>
+        <h1 className="train-title">{title}</h1>
+        <p className="train-simple-line">{help}</p>
         <details className="train-why-details">
-          <summary>Why this step?</summary>
-          <p className="train-purpose">{meta.purpose}</p>
+          <summary>{whyLabel}</summary>
+          <p className="train-purpose">{purpose}</p>
         </details>
         <div className="train-progress" aria-label={`Progress ${pct}%`}>
           <span style={{ width: `${pct}%` }} />
@@ -249,7 +280,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       <div className="train-actions">
         {onBack && (
           <button type="button" className="btn btn-ghost train-back" onClick={onBack}>
-            Back
+            {backLabel}
           </button>
         )}
         {onNext && (
@@ -611,7 +642,12 @@ export function StudentSequencePage() {
   }) {
     return (
       <>
-        <StepShell {...props} transitioning={transitioning} transitionMsg={transitionMsg} />
+        <StepShell
+          {...props}
+          transitioning={transitioning}
+          transitionMsg={transitionMsg}
+          supportLang={props.step >= 3 && props.step <= 6 ? supportLang : undefined}
+        />
         {practiceAdvancePrompt && (
           <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">
             <div className="practice-next-gate-card">
@@ -897,28 +933,29 @@ export function StudentSequencePage() {
         }}
         nextLabel={assessT(ASSESSMENT_COPY.next, supportLang)}
       >
-        <WhyWork>
-          The career assessment is in your language — not English — so you can answer clearly. Job-site English comes
-          later.
-        </WhyWork>
-        <div className="train-lang-grid">
-          {SUPPORT_LANGUAGES.map((l) => (
-            <button key={l.id} type="button" className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`} onClick={() => setSupportLang(l.id)}>
-              <span aria-hidden>{l.flag}</span>
-              <strong>{l.id}</strong>
-            </button>
-          ))}
+        <div className="train-lang-pick">
+          <h2 className="career-assess-title">{assessT(ASSESSMENT_COPY.langPickTitle, supportLang)}</h2>
+          <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickBody, supportLang)}</p>
+          <div className="train-lang-grid">
+            {SUPPORT_LANGUAGES.map((l) => (
+              <button
+                key={l.id}
+                type="button"
+                className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`}
+                onClick={() => setSupportLang(l.id)}
+                lang={l.id === 'Arabic' ? 'ar' : l.id === 'Hindi' ? 'hi' : l.id === 'Amharic' ? 'am' : l.id === 'Tigrinya' ? 'ti' : 'es'}
+              >
+                <span aria-hidden>{l.flag}</span>
+                <strong>{assessT(LANG_NATIVE, l.id)}</strong>
+              </button>
+            ))}
+          </div>
+          <div className="train-bridge">
+            <p><strong>{assessT(ASSESSMENT_COPY.introTitle, supportLang)}</strong></p>
+            <p>{assessT(ASSESSMENT_COPY.introBody, supportLang)}</p>
+          </div>
+          <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickHint, supportLang)}</p>
         </div>
-        <div className="train-bridge">
-          <p><strong>{assessT(ASSESSMENT_COPY.introTitle, supportLang)}</strong></p>
-          <p>{assessT(ASSESSMENT_COPY.introBody, supportLang)}</p>
-          <ol>
-            <li>{assessT(ASSESSMENT_COPY.introTitle, supportLang)} → {supportLang}</li>
-            <li>Vocabulary & practice: {supportLang} + English</li>
-            <li>Eye Spy & site instructions: English</li>
-          </ol>
-        </div>
-        <TeachNote>Pick the mother tongue you understand best for the assessment.</TeachNote>
       </Shell>
     )
   }

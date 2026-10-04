@@ -173,6 +173,184 @@ export const ASSESSMENT_COPY = {
     Amharic: 'ወደ የግንባታ ቃላት ቀጥል',
     Tigrinya: 'ናብ ናይ ህንጻ ቃላት ቀጽል',
   } satisfies LangText,
+  yourCode: {
+    Spanish: 'Tu código de intereses',
+    Arabic: 'رمز اهتماماتك',
+    Hindi: 'आपका रुचि कोड',
+    Amharic: 'የፍላጎት ኮድዎ',
+    Tigrinya: 'ናይ ፍቓድ ኮድካ',
+  } satisfies LangText,
+  codeHint: {
+    Spanish: 'Como en evaluaciones profesionales (Holland / RIASEC): tus tres áreas más fuertes.',
+    Arabic: 'كما في التقييمات المهنية (Holland / RIASEC): أقوى ثلاث مجالات لديك.',
+    Hindi: 'पेशेवर मूल्यांकनों की तरह (Holland / RIASEC): आपकी तीन सबसे मज़बूत रुचियाँ।',
+    Amharic: 'እንደ ሙያዊ ግምገማዎች (Holland / RIASEC)፡ ሦስቱ ጠንካራ ፍላጎቶችዎ።',
+    Tigrinya: 'ከም ናይ ሞያ ግምገማታት (Holland / RIASEC)፡ ሰለስተ ዝሓየሉ ፍቓዳትካ።',
+  } satisfies LangText,
+  pathwayFit: {
+    Spanish: 'Ajuste a los caminos de Purpose Academy',
+    Arabic: 'مدى ملاءمتك لمسارات Purpose Academy',
+    Hindi: 'Purpose Academy मार्गों से मेल',
+    Amharic: 'ከ Purpose Academy መንገዶች ጋር መስማማት',
+    Tigrinya: 'ምስ Purpose Academy መንገድታት ምስማማዕ',
+  } satisfies LangText,
+  profileAreas: {
+    Spanish: 'Tu perfil de intereses',
+    Arabic: 'ملف اهتماماتك',
+    Hindi: 'आपकी रुचि प्रोफ़ाइल',
+    Amharic: 'የፍላጎት መገለጫዎ',
+    Tigrinya: 'ናይ ፍቓድ መግለጺኻ',
+  } satisfies LangText,
+  langPickTitle: {
+    Spanish: 'Elige tu idioma',
+    Arabic: 'اختر لغتك',
+    Hindi: 'अपनी भाषा चुनें',
+    Amharic: 'ቋንቋዎን ይምረጡ',
+    Tigrinya: 'ቋንቋኻ ምረጽ',
+  } satisfies LangText,
+  langPickBody: {
+    Spanish: 'Toda la evaluación de carrera está en este idioma — no en inglés — para que puedas responder con claridad.',
+    Arabic: 'تقييم المسار المهني بالكامل بهذه اللغة — وليس بالإنجليزية — حتى تجيب بوضوح.',
+    Hindi: 'पूरा कैरियर आकलन इसी भाषा में है — अंग्रेज़ी में नहीं — ताकि आप साफ़ जवाब दे सकें।',
+    Amharic: 'ሙሉ የሙያ ግምገማ በዚህ ቋንቋ ነው — በእንግሊዝኛ አይደለም — በግልጽ መልስ እንዲችሉ።',
+    Tigrinya: 'ምሉእ ናይ ሞያ ግምገማ ብዚ ቋንቋ እዩ — ብእንግሊዝኛ ኣይኮነን — ብንጹር ክትምልስ።',
+  } satisfies LangText,
+  langPickHint: {
+    Spanish: 'Elige el idioma que mejor entiendes para la evaluación.',
+    Arabic: 'اختر اللغة التي تفهمها أفضل للتقييم.',
+    Hindi: 'आकलन के लिए वह भाषा चुनें जो आप सबसे अच्छी समझते हैं।',
+    Amharic: 'ለግምገማ በደንብ የሚገባዎትን ቋንቋ ይምረጡ።',
+    Tigrinya: 'ንግምገማ ዝበለጸ ዝርድኣካ ቋንቋ ምረጽ።',
+  } satisfies LangText,
+  stepOf: {
+    Spanish: 'Paso',
+    Arabic: 'الخطوة',
+    Hindi: 'कदम',
+    Amharic: 'ደረጃ',
+    Tigrinya: 'ደረጃ',
+  } satisfies LangText,
+  ofTotal: {
+    Spanish: 'de',
+    Arabic: 'من',
+    Hindi: 'में से',
+    Amharic: 'ከ',
+    Tigrinya: 'ካብ',
+  } satisfies LangText,
+  strengthsTitle: {
+    Spanish: 'Por qué encaja contigo',
+    Arabic: 'لماذا يناسبك هذا',
+    Hindi: 'यह आपसे क्यों मेल खाता है',
+    Amharic: 'ለምን ከእርስዎ ጋር ይስማማል',
+    Tigrinya: 'ስለምንታይ ምስካ ዝሰማማዕ',
+  } satisfies LangText,
+}
+
+/** Native language names for the language picker (not English labels). */
+export const LANG_NATIVE: LangText = {
+  Spanish: 'Español',
+  Arabic: 'العربية',
+  Hindi: 'हिन्दी',
+  Amharic: 'አማርኛ',
+  Tigrinya: 'ትግርኛ',
+}
+
+/** Shell chrome for assessment steps — mother tongue only. */
+export const ASSESSMENT_SHELL: Record<
+  3 | 4 | 5 | 6,
+  { title: LangText; help: LangText; purpose: LangText }
+> = {
+  3: {
+    title: {
+      Spanish: 'Tu idioma',
+      Arabic: 'لغتك',
+      Hindi: 'आपकी भाषा',
+      Amharic: 'ቋንቋዎ',
+      Tigrinya: 'ቋንቋኻ',
+    },
+    help: {
+      Spanish: 'Elige tu lengua materna para la evaluación de carrera.',
+      Arabic: 'اختر لغتك الأم لتقييم المسار المهني.',
+      Hindi: 'कैरियर आकलन के लिए अपनी मातृभाषा चुनें।',
+      Amharic: 'ለሙያ ግምገማ እናት ቋንቋዎን ይምረጡ።',
+      Tigrinya: 'ንናይ ሞያ ግምገማ ናይ ኣደ ቋንቋኻ ምረጽ።',
+    },
+    purpose: {
+      Spanish: 'La evaluación completa corre en un idioma que entiendes. El inglés del sitio viene después.',
+      Arabic: 'التقييم الكامل بلغة تفهمها. إنجليزية موقع العمل تأتي لاحقاً.',
+      Hindi: 'पूरा आकलन उस भाषा में है जो आप समझते हैं। साइट की अंग्रेज़ी बाद में आएगी।',
+      Amharic: 'ሙሉ ግምገማ በሚገባዎት ቋንቋ ነው። የቦታ እንግሊዝኛ በኋላ ይመጣል።',
+      Tigrinya: 'ምሉእ ግምገማ ብዝርድኣካ ቋንቋ እዩ። ናይ ቦታ እንግሊዝኛ ድሕሪኡ ክመጽእ እዩ።',
+    },
+  },
+  4: {
+    title: {
+      Spanish: 'Evaluación de intereses',
+      Arabic: 'تقييم الاهتمامات',
+      Hindi: 'रुचि आकलन',
+      Amharic: 'የፍላጎት ግምገማ',
+      Tigrinya: 'ናይ ፍቓድ ግምገማ',
+    },
+    help: {
+      Spanish: 'Valora actividades de trabajo. No hay respuestas correctas o incorrectas.',
+      Arabic: 'قيّم أنشطة العمل. لا توجد إجابات صحيحة أو خاطئة.',
+      Hindi: 'काम की गतिविधियाँ रेट करें। सही या गलत जवाब नहीं हैं।',
+      Amharic: 'የሥራ እንቅስቃሴዎችን ደረጃ ይስጡ። ትክክል ወይም ስህተት የለም።',
+      Tigrinya: 'ናይ ስራሕ ንጥፈታት ደረጃ ሃብ። ቅኑዕ ወይ ጌጋ የለን።',
+    },
+    purpose: {
+      Spanish: 'Inventario profesional de intereses (modelo Holland / RIASEC) — no un examen de aprobado/reprobado.',
+      Arabic: 'جرد مهني للاهتمامات (نموذج Holland / RIASEC) — وليس اختبار نجاح/رسوب.',
+      Hindi: 'पेशेवर रुचि सूची (Holland / RIASEC) — पास/फेल परीक्षा नहीं।',
+      Amharic: 'ሙያዊ የፍላጎት ዝርዝር (Holland / RIASEC) — ማለፍ/መውደቅ ፈተና አይደለም።',
+      Tigrinya: 'ናይ ሞያ ፍቓድ ዝርዝር (Holland / RIASEC) — ምሕላፍ/ምውዳቕ ፈተና ኣይኮነን።',
+    },
+  },
+  5: {
+    title: {
+      Spanish: 'Estilo de trabajo',
+      Arabic: 'أسلوب العمل',
+      Hindi: 'काम करने का अंदाज़',
+      Amharic: 'የሥራ ዘይቤ',
+      Tigrinya: 'ናይ ስራሕ ቅዲ',
+    },
+    help: {
+      Spanish: 'Cómo te gusta trabajar — elige lo que más se parece a ti.',
+      Arabic: 'كيف تحب أن تعمل — اختر الأقرب إليك.',
+      Hindi: 'आप कैसे काम करना पसंद करते हैं — जो आपसे मिलता हो चुनें।',
+      Amharic: 'እንዴት መሥራት ይወዳሉ — ከእርስዎ ጋር የሚመሳሰለውን ይምረጡ።',
+      Tigrinya: 'ከመይ ጌርካ ክትሰርሕ ትፈቱ — ምስካ ዝመሳሰል ምረጽ።',
+    },
+    purpose: {
+      Spanish: 'Estas preferencias afinan qué camino de Purpose Academy te conviene.',
+      Arabic: 'هذه التفضيلات توضّح أي مسار في Purpose Academy يناسبك.',
+      Hindi: 'ये पसंदें बताती हैं कि Purpose Academy का कौन सा रास्ता आपके लिए सही है।',
+      Amharic: 'እነዚህ ምርጫዎች የትኛው Purpose Academy መንገድ እንደሚስማማ ያጠናክራሉ።',
+      Tigrinya: 'እዞም ምርጫታት ኣየናይ Purpose Academy መንገዲ ዝሰማማዕካ የጽንዑ።',
+    },
+  },
+  6: {
+    title: {
+      Spanish: 'Tu perfil de carrera',
+      Arabic: 'ملفّك المهني',
+      Hindi: 'आपका कैरियर प्रोफ़ाइल',
+      Amharic: 'የእርስዎ የሙያ መገለጫ',
+      Tigrinya: 'ናይ ሞያ መግለጺኻ',
+    },
+    help: {
+      Spanish: 'El camino que mejor encaja con tus respuestas.',
+      Arabic: 'المسار الأنسب لإجاباتك.',
+      Hindi: 'आपके जवाबों से सबसे अच्छा मेल खाने वाला रास्ता।',
+      Amharic: 'ከመልሶችዎ ጋር የሚስማማው መንገድ።',
+      Tigrinya: 'ምስ መልስታትካ ዝሰማማዕ መንገዲ።',
+    },
+    purpose: {
+      Spanish: 'Perfil de intereses → camino recomendado. Construcción está abierto hoy.',
+      Arabic: 'ملف الاهتمامات → المسار الموصى به. البناء مفتوح اليوم.',
+      Hindi: 'रुचि प्रोफ़ाइल → सुझाया गया मार्ग। निर्माण आज खुला है।',
+      Amharic: 'የፍላጎት መገለጫ → የሚመከር መንገድ። ግንባታ ዛሬ ክፍት ነው።',
+      Tigrinya: 'ናይ ፍቓድ መግለጺ → ዝምከር መንገዲ። ህንጻ ሎሚ ክፉት እዩ።',
+    },
+  },
 }
 
 /** Part 1 — work-activity interest items (RIASEC), school/trade adapted. */
@@ -373,6 +551,138 @@ export const CAREER_INTEREST_ITEMS: AssessmentItem[] = [
       Hindi: 'गोदाम या वर्कशॉप को साफ़, लेबल वाला और व्यवस्थित रखना',
       Amharic: 'መጋዘን ወይም አውደ ጥናት ንጹህ፣ መለያ ያለው እና ሥርዓት ያለው ማድረግ',
       Tigrinya: 'መኽዘን ወይ ኣውደ ጥናት ንጹህ፣ ምልክት ዘለዎን ስርዓት ዘለዎን ምግባር',
+    },
+  },
+  {
+    id: 'r4',
+    area: 'R',
+    text: {
+      Spanish: 'Instalar paneles, puertas o materiales de construcción',
+      Arabic: 'تركيب ألواح أو أبواب أو مواد بناء',
+      Hindi: 'पैनल, दरवाज़े या निर्माण सामग्री लगाना',
+      Amharic: 'ፓነሎችን፣ በሮችን ወይም የግንባታ ቁሳቁሶችን መትከል',
+      Tigrinya: 'ፓነላት፣ ማዕጾታት ወይ ናይ ህንጻ ኣቕሑ ምትካል',
+    },
+  },
+  {
+    id: 'i4',
+    area: 'I',
+    text: {
+      Spanish: 'Leer planos o diagramas para entender un trabajo',
+      Arabic: 'قراءة المخططات أو الرسوم لفهم مهمة',
+      Hindi: 'काम समझने के लिए नक्शा या डायग्राम पढ़ना',
+      Amharic: 'ሥራ ለመረዳት ፕላን ወይም ሥዕላዊ መግለጫ ማንበብ',
+      Tigrinya: 'ስራሕ ንምርዳእ ፕላን ወይ ስእላዊ መግለጺ ምንባብ',
+    },
+  },
+  {
+    id: 'a4',
+    area: 'A',
+    text: {
+      Spanish: 'Elegir colores, acabados o diseño para un espacio',
+      Arabic: 'اختيار الألوان أو التشطيبات أو التصميم لمكان',
+      Hindi: 'किसी जगह के लिए रंग, फिनिश या डिज़ाइन चुनना',
+      Amharic: 'ለአንድ ቦታ ቀለሞችን፣ ማጠናቀቂያዎችን ወይም ንድፍ መምረጥ',
+      Tigrinya: 'ንሓደ ቦታ ሕብርታት፣ መዛዘሚታት ወይ ንድፊ ምረጽ',
+    },
+  },
+  {
+    id: 's4',
+    area: 'S',
+    text: {
+      Spanish: 'Dar la bienvenida a personas nuevas y explicarles qué hacer',
+      Arabic: 'الترحيب بالأشخاص الجدد وشرح ما يجب فعله',
+      Hindi: 'नए लोगों का स्वागत करना और समझाना कि क्या करना है',
+      Amharic: 'አዲስ ሰዎችን መቀበል እና ምን ማድረግ እንዳለባቸው ማብራራት',
+      Tigrinya: 'ሓደሽቲ ሰባት ምቕባልን እንታይ ክገብሩ ምብራህን',
+    },
+  },
+  {
+    id: 'e4',
+    area: 'E',
+    text: {
+      Spanish: 'Organizar un equipo pequeño para terminar un trabajo a tiempo',
+      Arabic: 'تنظيم فريق صغير لإنهاء عمل في الموعد',
+      Hindi: 'काम समय पर खत्म करने के लिए छोटी टीम व्यवस्थित करना',
+      Amharic: 'ሥራ በጊዜ ለመጨረስ ትንሽ ቡድን ማደራጀት',
+      Tigrinya: 'ስራሕ ብግዜ ንምውዳእ ንእሽቶ ጋንታ ምውዳብ',
+    },
+  },
+  {
+    id: 'c4',
+    area: 'C',
+    text: {
+      Spanish: 'Llevar un registro claro de materiales, horas o entregas',
+      Arabic: 'الاحتفاظ بسجل واضح للمواد أو الساعات أو التسليمات',
+      Hindi: 'सामग्री, घंटे या डिलीवरी का साफ़ रिकॉर्ड रखना',
+      Amharic: 'የቁሳቁስ፣ ሰዓቶች ወይም አቅርቦቶች ግልጽ መዝገብ መያዝ',
+      Tigrinya: 'ናይ ኣቕሑ፣ ሰዓታት ወይ ኣቀራርባ ንጹር መዝገብ ምሓዝ',
+    },
+  },
+  {
+    id: 'r5',
+    area: 'R',
+    text: {
+      Spanish: 'Trabajar al aire libre en un sitio de construcción',
+      Arabic: 'العمل في الهواء الطلق في موقع بناء',
+      Hindi: 'निर्माण स्थल पर बाहर काम करना',
+      Amharic: 'በግንባታ ቦታ ክፍት አየር ላይ መሥራት',
+      Tigrinya: 'ኣብ ናይ ህንጻ ቦታ ኣብ ክፉት ኣየር ምስራሕ',
+    },
+  },
+  {
+    id: 'i5',
+    area: 'I',
+    text: {
+      Spanish: 'Probar una idea nueva para ver si resuelve un problema',
+      Arabic: 'تجربة فكرة جديدة لمعرفة إن كانت تحل مشكلة',
+      Hindi: 'यह देखने के लिए नया विचार आज़माना कि समस्या हल होती है या नहीं',
+      Amharic: 'ችግር ይፈታ እንደሆነ ለማየት አዲስ ሀሳብ መሞከር',
+      Tigrinya: 'ጸገም ከምዝፈትሕ ንምርኣይ ሓድሽ ሓሳብ ምፍታን',
+    },
+  },
+  {
+    id: 'a5',
+    area: 'A',
+    text: {
+      Spanish: 'Hacer un dibujo o maqueta que muestre cómo quedará el trabajo',
+      Arabic: 'عمل رسم أو نموذج يوضح كيف سيبدو العمل',
+      Hindi: 'काम कैसा दिखेगा यह दिखाने के लिए ड्रॉइंग या मॉडल बनाना',
+      Amharic: 'ሥራው እንዴት እንደሚመስል የሚያሳይ ሥዕል ወይም ሞዴል ማድረግ',
+      Tigrinya: 'ስራሕ ከመይ ከምዝመስል ዘርኢ ስእሊ ወይ ሞዴል ምግባር',
+    },
+  },
+  {
+    id: 's5',
+    area: 'S',
+    text: {
+      Spanish: 'Ayudar a alguien que está aprendiendo un oficio nuevo',
+      Arabic: 'مساعدة شخص يتعلّم مهنة جديدة',
+      Hindi: 'नया हुनर सीख रहे व्यक्ति की मदद करना',
+      Amharic: 'አዲስ ሙያ የሚማር ሰውን መርዳት',
+      Tigrinya: 'ሓድሽ ሞያ ዝመሃር ሰብ ምሕጋዝ',
+    },
+  },
+  {
+    id: 'e5',
+    area: 'E',
+    text: {
+      Spanish: 'Hablar con clientes o supervisores sobre el progreso del trabajo',
+      Arabic: 'التحدث مع العملاء أو المشرفين عن تقدّم العمل',
+      Hindi: 'काम की प्रगति के बारे में ग्राहकों या सुपरवाइज़र से बात करना',
+      Amharic: 'ስለ ሥራው ሂደት ከደንበኞች ወይም ተቆጣጣሪዎች ጋር መነጋገር',
+      Tigrinya: 'ብዛዕባ ስራሕ ምዕባለ ምስ ዓማዊል ወይ ተቖጻጸርቲ ምዝራብ',
+    },
+  },
+  {
+    id: 'c5',
+    area: 'C',
+    text: {
+      Spanish: 'Seguir una lista de verificación paso a paso sin saltar pasos',
+      Arabic: 'اتباع قائمة تحقق خطوة بخطوة دون تخطّي خطوات',
+      Hindi: 'कदम छोड़ए बिना चेकलिस्ट का पालन करना',
+      Amharic: 'ደረጃ ሳይዘለሉ የማረጋገጫ ዝርዝርን ደረጃ በደረጃ መከተል',
+      Tigrinya: 'ደረጃታት ከይዘለልካ ዝርዝር መረጋገጺ ብደረጃ ምኽታል',
     },
   },
 ]
@@ -716,15 +1026,15 @@ export const PATHWAY_RESULT: Record<
     },
     summary: {
       Spanish:
-        'Tus respuestas muestran fuerza en trabajo práctico, herramientas, medición y oficios de sitio. Construction Foundations es tu mejor comienzo.',
+        'Tus respuestas muestran fuerza en trabajo práctico, herramientas, medición y oficios de sitio. Fundamentos de Construcción es tu mejor comienzo.',
       Arabic:
         'تُظهر إجاباتك قوة في العمل العملي والأدوات والقياس ومهن الموقع. أسس البناء هي أفضل بداية لك.',
       Hindi:
-        'आपके जवाब व्यावहारिक काम, औज़ार, माप और साइट के हुनर में मज़बूती दिखाते हैं। Construction Foundations आपके लिए सबसे अच्छी शुरुआत है।',
+        'आपके जवाब व्यावहारिक काम, औज़ार, माप और साइट के हुनर में मज़बूती दिखाते हैं। निर्माण की बुनियाद आपके लिए सबसे अच्छी शुरुआत है।',
       Amharic:
-        'መልሶችዎ በተግባራዊ ሥራ፣ መሣሪያዎች፣ መለኪያ እና የቦታ ሙያ ጥንካሬ ያሳያሉ። Construction Foundations የእርስዎ ምርጥ መጀመሪያ ነው።',
+        'መልሶችዎ በተግባራዊ ሥራ፣ መሣሪያዎች፣ መለኪያ እና የቦታ ሙያ ጥንካሬ ያሳያሉ። የግንባታ መሠረቶች የእርስዎ ምርጥ መጀመሪያ ነው።',
       Tigrinya:
-        'መልስታትካ ኣብ ተግባራዊ ስራሕ፣ መሳርሒታት፣ መለክዒን ናይ ቦታ ሞያን ሓይሊ የርኢ። Construction Foundations ዝበለጸ ጅማሮኻ እዩ።',
+        'መልስታትካ ኣብ ተግባራዊ ስራሕ፣ መሳርሒታት፣ መለክዒን ናይ ቦታ ሞያን ሓይሊ የርኢ። ናይ ህንጻ መሰረታት ዝበለጸ ጅማሮኻ እዩ።',
     },
     strengths: [
       {
@@ -753,15 +1063,15 @@ export const PATHWAY_RESULT: Record<
     },
     summary: {
       Spanish:
-        'Tus respuestas destacan organización, movimiento de materiales y sistemas ordenados. Hoy empiezas con Construction Foundations; logística abre después con el mismo estándar.',
+        'Tus respuestas destacan organización, movimiento de materiales y sistemas ordenados. Hoy empiezas con Fundamentos de Construcción; logística abre después con el mismo estándar.',
       Arabic:
         'تُبرز إجاباتك التنظيم وحركة المواد والأنظمة المرتبة. اليوم تبدأ بأسس البناء؛ اللوجستيات تُفتح لاحقاً بنفس المعيار.',
       Hindi:
-        'आपके जवाब संगठन, सामग्री की आवाजाही और व्यवस्थित सिस्टम दिखाते हैं। आज Construction Foundations से शुरू करें; लॉजिस्टिक्स बाद में उसी मानक से खुलेगा।',
+        'आपके जवाब संगठन, सामग्री की आवाजाही और व्यवस्थित सिस्टम दिखाते हैं। आज निर्माण की बुनियाद से शुरू करें; लॉजिस्टिक्स बाद में उसी मानक से खुलेगा।',
       Amharic:
-        'መልሶችዎ ድርጅት፣ የቁሳቁስ እንቅስቃሴ እና ሥርዓታማ ስርዓቶችን ያሳያሉ። ዛሬ Construction Foundations ይጀምሩ፤ ሎጂስቲክስ በኋላ በተመሳሳይ ደረጃ ይከፈታል።',
+        'መልሶችዎ ድርጅት፣ የቁሳቁስ እንቅስቃሴ እና ሥርዓታማ ስርዓቶችን ያሳያሉ። ዛሬ የግንባታ መሠረቶች ይጀምሩ፤ ሎጂስቲክስ በኋላ በተመሳሳይ ደረጃ ይከፈታል።',
       Tigrinya:
-        'መልስታትካ ውደባ፣ ናይ ኣቕሑ ምንቅስቓስን ስርዓታዊ ስርዓታትን የርኢ። ሎሚ Construction Foundations ጀምር፤ ሎጂስቲክስ ድሕሪኡ ብተመሳሳሊ መለክዒ ክኽፈት እዩ።',
+        'መልስታትካ ውደባ፣ ናይ ኣቕሑ ምንቅስቓስን ስርዓታዊ ስርዓታትን የርኢ። ሎሚ ናይ ህንጻ መሰረታት ጀምር፤ ሎጂስቲክስ ድሕሪኡ ብተመሳሳሊ መለክዒ ክኽፈት እዩ።',
     },
     strengths: [
       {
@@ -783,15 +1093,15 @@ export const PATHWAY_RESULT: Record<
     },
     summary: {
       Spanish:
-        'Tus respuestas destacan ayudar personas con paciencia y respeto. Hoy el programa abierto es Construction Foundations; la vía comunitaria viene después.',
+        'Tus respuestas destacan ayudar personas con paciencia y respeto. Hoy el programa abierto es Fundamentos de Construcción; la vía comunitaria viene después.',
       Arabic:
         'تُبرز إجاباتك مساعدة الناس بالصبر والاحترام. البرنامج المفتوح اليوم هو أسس البناء؛ مسار المجتمع يأتي لاحقاً.',
       Hindi:
-        'आपके जवाब धैर्य और सम्मान से लोगों की मदद दिखाते हैं। आज खुला कार्यक्रम Construction Foundations है; सामुदायिक मार्ग बाद में आएगा।',
+        'आपके जवाब धैर्य और सम्मान से लोगों की मदद दिखाते हैं। आज खुला कार्यक्रम निर्माण की बुनियाद है; सामुदायिक मार्ग बाद में आएगा।',
       Amharic:
-        'መልሶችዎ ሰዎችን በትዕግስትና ክብር መርዳትን ያሳያሉ። ዛሬ ክፍት ፕሮግራም Construction Foundations ነው፤ የማህበረሰብ መንገድ በኋላ ይመጣል።',
+        'መልሶችዎ ሰዎችን በትዕግስትና ክብር መርዳትን ያሳያሉ። ዛሬ ክፍት ፕሮግራም የግንባታ መሠረቶች ነው፤ የማህበረሰብ መንገድ በኋላ ይመጣል።',
       Tigrinya:
-        'መልስታትካ ሰባት ብትዕግስትን ክብርን ምሕጋዝ የርኢ። ሎሚ ክፉት ፕሮግራም Construction Foundations እዩ፤ ናይ ማሕበረሰብ መንገዲ ድሕሪኡ ክመጽእ እዩ።',
+        'መልስታትካ ሰባት ብትዕግስትን ክብርን ምሕጋዝ የርኢ። ሎሚ ክፉት ፕሮግራም ናይ ህንጻ መሰረታት እዩ፤ ናይ ማሕበረሰብ መንገዲ ድሕሪኡ ክመጽእ እዩ።',
     },
     strengths: [
       {
@@ -867,6 +1177,26 @@ export function rankedRiasec(scores: AssessmentScores): RiasecArea[] {
   return (Object.entries(scores) as [RiasecArea, number][])
     .sort((a, b) => b[1] - a[1])
     .map(([k]) => k)
+}
+
+/** Holland-style three-letter interest code from ranked RIASEC scores. */
+export function hollandCode(scores: AssessmentScores): string {
+  return rankedRiasec(scores).slice(0, 3).join('')
+}
+
+export function rankedPathways(scores: PathwayScores): PathwayId[] {
+  return (Object.entries(scores) as [PathwayId, number][])
+    .sort((a, b) => b[1] - a[1])
+    .map(([k]) => k)
+}
+
+export function pathwayFitPercent(scores: PathwayScores): PathwayScores {
+  const max = Math.max(1, ...Object.values(scores))
+  return {
+    construction: Math.round((scores.construction / max) * 100),
+    logistics: Math.round((scores.logistics / max) * 100),
+    community: Math.round((scores.community / max) * 100),
+  }
 }
 
 export function t(table: LangText, lang: SupportLang): string {
