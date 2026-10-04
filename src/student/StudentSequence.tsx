@@ -20,11 +20,14 @@ import {
   WORD_ACTIONS,
   EYE_SPY_SCENES,
   UNIT_GOALS,
+  LEARNING_UNITS,
   WORKPLACE_INSTRUCTIONS,
   DIGITAL_PRACTICE,
   OBSERVATION_SCENARIOS,
   SITE_DECISIONS,
   EMPLOYMENT_PREP,
+  MATCH_PRACTICE_ROUNDS,
+  UNIT_CHECKPOINTS,
   unitForStep,
   isUnitEntryStep,
   type SupportLang,
@@ -59,7 +62,11 @@ import { toolImage } from './toolImages'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { VocabSheet } from './VocabSheet'
 import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
+import { PracticeHub, PracticeStatsStrip } from './PracticeHub'
 import {
+  advanceBlockedReason,
+  canAdvanceFromStep,
+  markLessonCompleted,
   markSkillOpened,
   recordSkillAttempt,
   SKILL_BY_STEP,
@@ -173,9 +180,11 @@ function LearnCard({ title, body, mark }: { title: string; body: string; mark?: 
 
 /* ─── Step shell — SiteWise-inspired training chrome ─── */
 
-function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang }: {
+function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, onOpenHub, onJumpLesson }: {
   step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
   transitioning?: boolean; transitionMsg?: string; supportLang?: SupportLang
+  onOpenHub?: () => void
+  onJumpLesson?: (n: number) => void
 }) {
   const base = JOURNEY_STEPS[step - 1]
   const motherTongue = supportLang && step >= 3 && step <= 6
@@ -186,6 +195,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const unit = unitForStep(step)
   const pct = Math.round((step / 20) * 100)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
+  const practice = isPracticeMode()
+  const masteryBlocked = practice ? advanceBlockedReason(step) : null
   const stepKicker = motherTongue
     ? `${assessT(ASSESSMENT_COPY.stepOf, supportLang!)} ${step} ${assessT(ASSESSMENT_COPY.ofTotal, supportLang!)} 20`
     : `Step ${step} of 20 · Unit ${unit.id}: ${unit.label}`
@@ -212,14 +223,20 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 
   function handleNext() {
     if (!onNext) return
-    if (!isPracticeMode() || !shouldAskPracticeFeedback(step)) {
+    if (practice && masteryBlocked) {
+      playFoley('wrong')
+      return
+    }
+    if (!practice || !shouldAskPracticeFeedback(step)) {
       playFoley('wood')
+      markLessonCompleted(step)
       onNext()
       return
     }
     const key = practiceFeedbackKey('/journey', step)
     if (hasPracticeFeedbackAck(key)) {
       playFoley('wood')
+      markLessonCompleted(step)
       onNext()
       return
     }
@@ -239,6 +256,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
     markPracticeFeedbackAck(practiceFeedbackKey('/journey', step))
     setFeedbackPrompt(false)
     playFoley('wood')
+    markLessonCompleted(step)
     onNext?.()
   }
 
@@ -254,14 +272,20 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         <div className="train-header-top">
           <p className="train-kicker">
             {stepKicker}
-            {isPracticeMode() ? ' · Practice' : ''}
+            {practice ? ' · Practice' : ''}
           </p>
           <div className="train-sound-slot">
+            {practice && onOpenHub && (
+              <button type="button" className="btn btn-ghost train-hub-btn" onClick={onOpenHub}>
+                Path home
+              </button>
+            )}
             <FoleyToggle compact />
           </div>
         </div>
         <h1 className="train-title">{title}</h1>
         <p className="train-simple-line">{help}</p>
+        {practice && <PracticeStatsStrip step={step} />}
         {!motherTongue && (
           <p className="train-unit-pill" aria-label={`Learning unit ${unit.id}`}>
             <span>Unit {unit.id}</span>
@@ -278,12 +302,18 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         </div>
         <ol className="train-dots" aria-label="Step progress">
           {JOURNEY_STEPS.map((s) => {
-            const skipped = isPracticeMode() && s.n < PRACTICE_ENTRY_STEP
+            const skipped = practice && s.n < PRACTICE_ENTRY_STEP
             const cls = s.n === step ? 'is-current' : skipped ? 'is-skipped' : s.n < step ? 'is-done' : ''
             return <li key={s.n} className={cls} title={skipped ? `${s.title} (skipped in practice)` : s.title} />
           })}
         </ol>
-        <LearningPathMap currentStep={step} practice={isPracticeMode()} compact />
+        <LearningPathMap
+          currentStep={step}
+          practice={practice}
+          compact={!practice}
+          onOpenHub={onOpenHub}
+          onSelectLesson={practice ? onJumpLesson : undefined}
+        />
       </header>
 
       <Reveal className="train-panel" delay={40}>
@@ -308,17 +338,23 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             type="button"
             className="btn btn-primary train-next"
             onClick={handleNext}
-            disabled={nextDisabled}
+            disabled={nextDisabled || Boolean(masteryBlocked)}
+            title={masteryBlocked || undefined}
           >
             {nextLabel}
           </button>
         )}
       </div>
+      {masteryBlocked && (
+        <p className="train-mastery-gate" role="status">
+          {masteryBlocked} Keep answering until this lesson is Familiar.
+        </p>
+      )}
 
       {feedbackPrompt && (
         <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">
           <div className="practice-next-gate-card">
-            <h3>Did you leave feedback on this step?</h3>
+            <h3>Did you leave feedback on this unit?</h3>
             <p>
               Scroll the page and use the feedback chat on the side if something felt unclear. Confirm when you are
               ready to move on.
@@ -417,6 +453,13 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
     playFoley(isCorrect ? 'correct' : 'wrong')
     if (isCorrect) setScore((s) => s + 1)
     if (gated && !isCorrect) setGateBlocked(true)
+    try {
+      const step = Number(sessionStorage.getItem(JOURNEY_KEY) || '0')
+      const skill = SKILL_BY_STEP[step]
+      if (skill) recordSkillAttempt(skill, isCorrect)
+    } catch {
+      /* ignore */
+    }
   }
 
   function next() {
@@ -525,6 +568,11 @@ export function StudentSequencePage() {
   const [transitionMsg, setTransitionMsg] = useState('Moving to the next station…')
   const [practiceAdvancePrompt, setPracticeAdvancePrompt] = useState(false)
   const practiceAdvanceRef = useRef<(() => void) | null>(null)
+  const [practiceView, setPracticeView] = useState<'hub' | 'lesson'>(() =>
+    isPracticeMode() ? 'hub' : 'lesson',
+  )
+  const [checkpointUnit, setCheckpointUnit] = useState<number | null>(null)
+  const [matchRound, setMatchRound] = useState(1)
   const [empDone, setEmpDone] = useState(() => {
     try { return !!sessionStorage.getItem(EMP_KEY) } catch { return false }
   })
@@ -641,21 +689,34 @@ export function StudentSequencePage() {
       setEmpCorrect(false)
       setError(null)
       setTransitioning(false)
+      setMatchRound(1)
+      setCheckpointUnit(null)
+      setPracticeView('hub')
       setStep(PRACTICE_ENTRY_STEP)
       saveStep(PRACTICE_ENTRY_STEP)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
+    const onStarted = () => {
+      if (!isPracticeMode()) return
+      setPracticeView('hub')
+    }
     window.addEventListener('pa-practice-restarted', onRestart)
-    return () => window.removeEventListener('pa-practice-restarted', onRestart)
+    window.addEventListener('pa-practice-started', onStarted)
+    return () => {
+      window.removeEventListener('pa-practice-restarted', onRestart)
+      window.removeEventListener('pa-practice-started', onStarted)
+    }
   }, [])
 
   function go(next: number, message?: string) {
     stopSpeech()
     setError(null)
     setSpeaking(null)
+    setCheckpointUnit(null)
     const target = Math.min(20, Math.max(1, next))
     if (target === step) {
       setStep(target)
+      setPracticeView('lesson')
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
@@ -667,6 +728,7 @@ export function StudentSequencePage() {
     })
     window.setTimeout(() => {
       setStep(target)
+      setPracticeView('lesson')
       setTransitioning(false)
       playFoley('ambient-stop')
       playFoley('whoosh')
@@ -674,10 +736,32 @@ export function StudentSequencePage() {
     }, 900)
   }
 
+  /** After finishing a unit's last lesson, run the unit checkpoint in Practice Mode. */
+  function advanceWithOptionalCheckpoint(fromStep: number, nextStep: number, message?: string) {
+    const unit = unitForStep(fromStep)
+    const unitSteps = JOURNEY_STEPS.filter((s) => s.unit === unit.id).map((s) => s.n)
+    const isUnitEnd = unitSteps[unitSteps.length - 1] === fromStep
+    const items = UNIT_CHECKPOINTS[unit.id]
+    if (isPracticeMode() && isUnitEnd && items?.length && nextStep > fromStep) {
+      markLessonCompleted(fromStep)
+      setCheckpointUnit(unit.id)
+      return
+    }
+    go(nextStep, message)
+  }
+
   /** Practice mode: ask for feedback at unit boundaries before leaving via in-panel Continues. */
   function requestPracticeAdvance(advance: () => void) {
     if (!isPracticeMode() || !shouldAskPracticeFeedback(step)) {
+      if (isPracticeMode() && !canAdvanceFromStep(step)) {
+        playFoley('wrong')
+        return
+      }
       advance()
+      return
+    }
+    if (!canAdvanceFromStep(step)) {
+      playFoley('wrong')
       return
     }
     const key = practiceFeedbackKey('/journey', step)
@@ -716,11 +800,13 @@ export function StudentSequencePage() {
           transitioning={transitioning}
           transitionMsg={transitionMsg}
           supportLang={props.step >= 3 && props.step <= 6 ? supportLang : undefined}
+          onOpenHub={isPracticeMode() ? () => setPracticeView('hub') : undefined}
+          onJumpLesson={(n) => go(n, `Opening step ${n}…`)}
         />
         {practiceAdvancePrompt && (
           <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">
             <div className="practice-next-gate-card">
-              <h3>Did you leave feedback on this step?</h3>
+              <h3>Did you leave feedback on this unit?</h3>
               <p>
                 Scroll the page and use the feedback chat on the side if something felt unclear. Confirm when you are
                 ready to move on.
@@ -737,6 +823,51 @@ export function StudentSequencePage() {
           </div>
         )}
       </>
+    )
+  }
+
+  if (isPracticeMode() && practiceView === 'hub') {
+    return (
+      <PracticeHub
+        currentStep={step}
+        onContinue={() => {
+          setPracticeView('lesson')
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }}
+        onOpenLesson={(n) => go(n, `Opening step ${n}…`)}
+      />
+    )
+  }
+
+  if (isPracticeMode() && checkpointUnit && UNIT_CHECKPOINTS[checkpointUnit]) {
+    const items = UNIT_CHECKPOINTS[checkpointUnit]
+    const unit = LEARNING_UNITS.find((u) => u.id === checkpointUnit) || LEARNING_UNITS[0]
+    const nextStep = Math.min(20, (JOURNEY_STEPS.filter((s) => s.unit === checkpointUnit).map((s) => s.n).pop() || checkpointUnit) + 1)
+    return (
+      <Shell
+        step={step}
+        onBack={() => setCheckpointUnit(null)}
+        nextLabel="Back to lesson"
+        onNext={() => setCheckpointUnit(null)}
+      >
+        <div className="unit-checkpoint">
+          <p className="section-kicker">Unit checkpoint</p>
+          <h2>
+            Unit {unit.id}: {unit.label} review
+          </h2>
+          <p className="lede">Prove the unit stuck. Pass this review, then unlock the next unit.</p>
+          <QuizRunner
+            items={items}
+            gated
+            onComplete={() => {
+              recordSkillAttempt('unit-checkpoint', true, 20)
+              markLessonCompleted(step)
+              setCheckpointUnit(null)
+              go(nextStep, `Opening unit ${unitForStep(nextStep).label}…`)
+            }}
+          />
+        </div>
+      </Shell>
     )
   }
 
@@ -769,6 +900,7 @@ export function StudentSequencePage() {
     await speakEnglish(term.english)
     setVocabSpeakingId(null)
     setVocabHeard((h) => ({ ...h, [term.id]: true }))
+    recordSkillAttempt('vocab', true, 8)
   }
 
   async function playVocabLang(term: (typeof VOCAB_UNIT)[number], lang: Exclude<SupportLang, 'English'>) {
@@ -784,6 +916,7 @@ export function StudentSequencePage() {
   }
   function resetMatch() {
     setMatchIdx(0)
+    setMatchRound(1)
     setMatchAnswer(null)
     setMatchCorrect(false)
     const term = VOCAB_UNIT[0]
@@ -1129,8 +1262,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        resetMatch()
-        go(9)
+        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(8, 9, 'Opening supported practice…'))
         return
       }
       setActionIdx((i) => i + 1)
@@ -1183,6 +1315,7 @@ export function StudentSequencePage() {
   if (step === 9) {
     const term = VOCAB_UNIT[matchIdx]
     const isLast = matchIdx >= VOCAB_UNIT.length - 1
+    const roundsNeeded = isPracticeMode() ? MATCH_PRACTICE_ROUNDS : 1
 
     function pickMatch(opt: string) {
       if (matchAnswer) return
@@ -1200,6 +1333,15 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
+        if (matchRound < roundsNeeded) {
+          setMatchRound((r) => r + 1)
+          setMatchIdx(0)
+          setMatchAnswer(null)
+          setMatchCorrect(false)
+          shuffleMatchOptions(0)
+          playFoley('whoosh')
+          return
+        }
         requestPracticeAdvance(() => go(10, 'Opening English Eye Spy…'))
         return
       }
@@ -1212,7 +1354,9 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={9} onBack={() => go(8)}>
-        <p className="train-vocab-counter">Match {matchIdx + 1} of {VOCAB_UNIT.length}</p>
+        <p className="train-vocab-counter">
+          Round {matchRound} of {roundsNeeded} · Match {matchIdx + 1} of {VOCAB_UNIT.length}
+        </p>
         <PictureCard
           image={toolImage(term.imageKey)}
           fit="contain"
@@ -1384,7 +1528,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        go(13, 'Opening digital skills…')
+        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(12, 13, 'Opening digital skills…'))
         return
       }
       setPhraseIdx((i) => i + 1)
@@ -1632,7 +1776,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        go(17)
+        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(16, 17, 'Opening instructor observation…'))
         return
       }
       setSysIdx((i) => i + 1)

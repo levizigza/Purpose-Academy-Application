@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { JOURNEY_STEPS, LEARNING_UNITS, unitForStep } from './journeyCurriculum'
 import {
   getMasteryLevel,
+  getPlatformStats,
   masteryLabel,
   SKILL_BY_STEP,
   unitMasteryPercent,
@@ -12,6 +13,8 @@ type Props = {
   currentStep: number
   practice?: boolean
   compact?: boolean
+  onSelectLesson?: (step: number) => void
+  onOpenHub?: () => void
 }
 
 function levelClass(level: MasteryLevel) {
@@ -22,7 +25,7 @@ function levelClass(level: MasteryLevel) {
  * Duolingo-style linear learning path.
  * Shows units as stations and lessons as a clear “you are here” trail.
  */
-export function LearningPathMap({ currentStep, practice, compact }: Props) {
+export function LearningPathMap({ currentStep, practice, compact, onSelectLesson, onOpenHub }: Props) {
   const [, bump] = useState(0)
   useEffect(() => {
     const sync = () => bump((n) => n + 1)
@@ -31,9 +34,10 @@ export function LearningPathMap({ currentStep, practice, compact }: Props) {
   }, [])
 
   const currentUnit = unitForStep(currentStep)
+  const stats = getPlatformStats()
 
   return (
-    <section className={`learning-path-map${compact ? ' is-compact' : ''}`} aria-label="Learning path">
+    <section className={`learning-path-map${compact ? ' is-compact' : ''}${practice ? ' is-practice' : ''}`} aria-label="Learning path">
       <header className="lp-head">
         <div>
           <p className="lp-kicker">{practice ? 'Practice run · full school path' : 'Your learning path'}</p>
@@ -41,9 +45,21 @@ export function LearningPathMap({ currentStep, practice, compact }: Props) {
             Unit {currentUnit.id}: {currentUnit.label}
           </h2>
         </div>
-        <p className="lp-mastery" aria-label="Unit mastery">
-          Unit mastery <strong>{unitMasteryPercent(stepsInUnit(currentUnit.id))}%</strong>
-        </p>
+        <div className="lp-head-meta">
+          <p className="lp-mastery" aria-label="Unit mastery">
+            Unit mastery <strong>{unitMasteryPercent(stepsInUnit(currentUnit.id))}%</strong>
+          </p>
+          {practice && (
+            <p className="lp-xp" aria-label="XP and streak">
+              <strong>{stats.xp}</strong> XP · <strong>{stats.dayStreak}</strong> day streak
+            </p>
+          )}
+          {practice && onOpenHub && (
+            <button type="button" className="lp-hub-btn" onClick={onOpenHub}>
+              Full path home
+            </button>
+          )}
+        </div>
       </header>
 
       <ol className="lp-units">
@@ -64,7 +80,7 @@ export function LearningPathMap({ currentStep, practice, compact }: Props) {
                 <span>Steps {unit.range}</span>
                 {state !== 'locked' && <em>{pct}% mastery</em>}
               </div>
-              {!compact && state === 'current' && (
+              {(!compact || state === 'current') && state !== 'locked' && (
                 <ol className="lp-lessons">
                   {steps.map((n) => {
                     const meta = JOURNEY_STEPS[n - 1]
@@ -72,8 +88,9 @@ export function LearningPathMap({ currentStep, practice, compact }: Props) {
                     const level = skill ? getMasteryLevel(skill) : 'locked'
                     const lessonState =
                       n === currentStep ? 'current' : n < currentStep ? 'done' : 'upcoming'
-                    return (
-                      <li key={n} className={`lp-lesson is-${lessonState}`}>
+                    const clickable = Boolean(onSelectLesson) && n <= currentStep
+                    const inner = (
+                      <>
                         <span className={levelClass(n < currentStep ? (level === 'locked' ? 'attempted' : level) : n === currentStep ? 'attempted' : 'locked')} />
                         <div>
                           <strong>
@@ -87,6 +104,17 @@ export function LearningPathMap({ currentStep, practice, compact }: Props) {
                                 : 'Up next'}
                           </span>
                         </div>
+                      </>
+                    )
+                    return (
+                      <li key={n} className={`lp-lesson is-${lessonState}`}>
+                        {clickable ? (
+                          <button type="button" className="lp-lesson-btn" onClick={() => onSelectLesson?.(n)}>
+                            {inner}
+                          </button>
+                        ) : (
+                          inner
+                        )}
                       </li>
                     )
                   })}

@@ -51,6 +51,7 @@ export function resetPracticeProgress() {
     sessionStorage.removeItem('pa-student-daily-log-v1')
     sessionStorage.removeItem('pa-student-employment-v1')
     sessionStorage.removeItem('pa-learning-mastery-v1')
+    sessionStorage.removeItem('pa-learning-stats-v1')
     sessionStorage.setItem('pa-student-journey-step-v1', String(PRACTICE_ENTRY_STEP))
     window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: PRACTICE_ENTRY_STEP } }))
     window.dispatchEvent(new Event('pa-practice-restarted'))
@@ -187,4 +188,4 @@ export function shouldHidePracticeFeedback(pathname: string, journeyStep?: numbe
 }
 
 export const PRACTICE_TRAY_HELP =
-  'Full school learning path for reviewers. Same units, mastery, and checks learners will use. Pick your name, skip registration, learn through every station, and leave feedback at unit ends.'
+  'Full school learning platform for reviewers. Path home, XP, mastery gates, unit checkpoints, and the same drills learners use. Pick your name, skip registration, learn every station, and leave feedback at unit ends.'

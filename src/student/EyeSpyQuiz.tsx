@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { ATTEMPT_POLICY, type EyeSpyScene } from './journeyCurriculum'
 import { toolImage } from './toolImages'
 import { playFoley } from '../audio/foley'
+import { recordSkillAttempt } from './learningMastery'
 import {
   hasPracticeFeedbackAck,
   isPracticeMode,
@@ -86,6 +87,7 @@ export function EyeSpyQuiz({
     if (!pickedHotspot || !pickedName) return
     const ok = pickedHotspot === scene.targetId && pickedName === target.answer
     setLastOk(ok)
+    recordSkillAttempt(mode === 'exam' ? 'final-exam' : 'eye-spy', ok, ok ? 15 : 0)
     if (ok) {
       setCorrectCount((c) => c + 1)
       playFoley('correct')
