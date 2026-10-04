@@ -12,10 +12,10 @@ import {
 
 const CREW_LINES = [
   'Crew is setting up your lesson…',
-  'Hard hats on — almost ready…',
+  'Hard hats on. Almost ready…',
   'Laying out tools on the bench…',
   'Checking the bay for your next step…',
-  'Measuring twice — loading once…',
+  'Measuring twice. Loading once…',
 ]
 
 /** Animated SiteWise-style construction crew for loading / transitions. */

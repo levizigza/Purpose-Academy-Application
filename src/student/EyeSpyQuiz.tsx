@@ -187,7 +187,7 @@ export function EyeSpyQuiz({
           <button type="button" className="btn btn-primary" onClick={retryRun}>
             {mode === 'exam' && maxAttempts
               ? `Try exam again (${attempt + 1} of ${maxAttempts})`
-              : 'Try again — find every tool with no mistakes'}
+              : 'Try again. Find every tool with no mistakes'}
           </button>
         )}
         {feedbackPrompt && (
@@ -200,10 +200,10 @@ export function EyeSpyQuiz({
               </p>
               <div className="practice-next-gate-actions">
                 <button type="button" className="btn btn-primary" onClick={confirmFeedbackYes}>
-                  Yes — continue
+                  Yes, continue
                 </button>
                 <button type="button" className="btn btn-ghost" onClick={confirmFeedbackNo}>
-                  Not yet — open chat
+                  Not yet. Open chat
                 </button>
               </div>
             </div>
@@ -222,7 +222,7 @@ export function EyeSpyQuiz({
       <p className="eye-spy-instruction">{scene.instruction}</p>
       <p className="eye-spy-scene-title">{scene.title}</p>
 
-      <div className="eye-spy-stage" role="group" aria-label="Site scene — tap the correct tool">
+      <div className="eye-spy-stage" role="group" aria-label="Site scene. Tap the correct tool">
         <div className="eye-spy-grid" aria-hidden>
           {Array.from({ length: 12 }).map((_, i) => (
             <span key={i} className="eye-spy-tile" />
@@ -285,7 +285,7 @@ export function EyeSpyQuiz({
         <>
           <div className={`alert ${lastOk ? 'ok' : 'warn'}`}>
             {lastOk
-              ? `Yes — that is the ${target.answer}.`
+              ? `Yes. That is the ${target.answer}.`
               : `Not yet. The correct tool is the ${target.answer}. Next try uses a new scene.`}
           </div>
           <button type="button" className="btn btn-primary" onClick={nextAfterFeedback}>

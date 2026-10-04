@@ -12,7 +12,7 @@ export function HomePage() {
     <>
       <section className="hero hero-photo" aria-label={`${BRAND.name} hero`}>
         <HeroMotionLayer />
-        {/* Deep-background PA — faded, behind copy + toolbox, sits with the construction photo */}
+        {/* Deep-background PA. faded, behind copy + toolbox, sits with the construction photo */}
         <div className="hero-pa-back" aria-hidden>
           <SitePaMark className="hero-pa-mark" />
         </div>
@@ -41,8 +41,8 @@ export function HomePage() {
           <p className="section-kicker">Why {BRAND.name}</p>
           <h2>A real school for real site work</h2>
           <p className="lede path-lede">
-            We teach construction foundations in Calgary — language for the job site, safety, tools, and supervised
-            practice — then guide learners into apprenticeship with employers and Alberta trade pathways.
+            We teach construction foundations in Calgary: language for the job site, safety, tools, and supervised
+            practice. Then we guide learners into apprenticeship with employers and Alberta trade pathways.
           </p>
           <div className="pillar-grid">
             <article className="pillar site-crate">
@@ -51,7 +51,7 @@ export function HomePage() {
             </article>
             <article className="pillar site-crate">
               <h3>Hands-on practice</h3>
-              <p>Instructors watch you work. You practise until the skill is real — not just a quiz score.</p>
+              <p>Instructors watch you work. You practise until the skill is real, not just a quiz score.</p>
             </article>
             <article className="pillar site-crate">
               <h3>Apprenticeship path</h3>
@@ -79,13 +79,13 @@ export function HomePage() {
               src={BRAND_ASSETS.photoLearners}
               alt="Construction crew working together on a job site"
             />
-            <figcaption>On the job site — the work this school prepares you for.</figcaption>
+            <figcaption>On the job site experience</figcaption>
           </figure>
         </Reveal>
 
         <Reveal as="section" className="section" delay={80}>
           <p className="section-kicker">Programs</p>
-          <h2>Construction first — then more trades pathways</h2>
+          <h2>Construction first, then more trades pathways</h2>
           <p className="lede path-lede">
             Our flagship program builds construction foundations and apprenticeship readiness. Related pathways follow
             the same school model.
@@ -101,7 +101,7 @@ export function HomePage() {
               </div>
               <h3>Construction Foundations</h3>
               <p>
-                Safety, tools, materials, framing awareness, and site English — with instructor verification and an
+                Safety, tools, materials, framing awareness, and site English, with instructor verification and an
                 apprenticeship pathway.
               </p>
               <span className="badge ok">Enrolling now</span>
@@ -112,12 +112,12 @@ export function HomePage() {
                 <img className="signal-icon" src={BRAND_ASSETS.iconLogistics} alt="" />
               </div>
               <h3>Warehousing & Logistics</h3>
-              <p>Next program track after Construction is established — same school standard.</p>
+              <p>Next program track after Construction is established. Same school standard.</p>
               <span className="badge">Coming next</span>
             </Reveal>
             <Reveal as="article" className="signal community" delay={220}>
               <div className="signal-media">
-                <img src={BRAND_ASSETS.photoCommunity} alt="Construction site community support — workers talking on the job" />
+                <img src={BRAND_ASSETS.photoCommunity} alt="Workers talking on a construction site" />
                 <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
               </div>
               <h3>Community Support</h3>
@@ -166,7 +166,7 @@ export function HomePage() {
             <h2>Foundations that lead to apprenticeship</h2>
             <p className="lede on-dark">
               {BRAND.name} is a trades school in {BRAND.place}. We provide foundation training, practical
-              instruction, and a supported path into apprenticeship — with employers and Alberta trade systems in view
+              instruction, and a supported path into apprenticeship, with employers and Alberta trade systems in view
               from day one.
             </p>
             <div className="hero-actions">
@@ -215,7 +215,7 @@ export function ProgramsPage() {
           </Link>
         </div>
         <figure className="school-program-media">
-          <img src={BRAND_ASSETS.photoConstruction} alt="Apartment building — Construction Foundations at Purpose Academy" />
+          <img src={BRAND_ASSETS.photoConstruction} alt="Apartment building for Construction Foundations at Purpose Academy" />
         </figure>
       </Reveal>
 
@@ -226,12 +226,12 @@ export function ProgramsPage() {
             <img className="signal-icon" src={BRAND_ASSETS.iconLogistics} alt="" />
           </div>
           <h2>Warehousing & Logistics</h2>
-          <p>Future school track — same foundation-to-practice standard after Construction is proven.</p>
+          <p>Future school track with the same foundation-to-practice standard after Construction is proven.</p>
           <span className="badge">Coming next</span>
         </Reveal>
         <Reveal as="article" className="signal community muted-signal" delay={180}>
           <div className="signal-media">
-            <img src={BRAND_ASSETS.photoCommunity} alt="Community support on a construction site — mentoring and teamwork" />
+            <img src={BRAND_ASSETS.photoCommunity} alt="Community support on a construction site" />
             <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
           </div>
           <h2>Community Support</h2>
@@ -250,7 +250,7 @@ export function AdmissionsPage() {
         <p className="section-kicker">{BRAND.joinLabel}</p>
         <h1>How to join {BRAND.name}</h1>
         <p className="lede">
-          Clear steps from application to foundations to apprenticeship readiness — built for newcomers and first-time
+          Clear steps from application to foundations to apprenticeship readiness, built for newcomers and first-time
           trades learners in {BRAND.place}.
         </p>
       </Reveal>
@@ -259,7 +259,7 @@ export function AdmissionsPage() {
         <div className="visual-stage-inner">
           <ol className="path-steps on-dark">
             <li>Create your student account</li>
-            <li>Complete registration — admin confirms your place</li>
+            <li>Complete registration. Admin confirms your place</li>
             <li>Start Construction Foundations (language, safety, tools)</li>
             <li>Practise with instructors and earn verified skills</li>
             <li>Enter apprenticeship readiness and employer connection</li>
@@ -306,7 +306,7 @@ export function AboutPage() {
         <h1>A trades school rooted in Calgary</h1>
         <p className="lede">
           {BRAND.name} exists so people can learn foundations, practise with real instructors, and step into
-          apprenticeship — not as a side project, but as a school built for the trades.
+          apprenticeship. Not as a side project, but as a school built for the trades.
         </p>
       </Reveal>
 
@@ -324,8 +324,8 @@ export function AboutPage() {
           </p>
         </div>
         <figure className="serve-figure">
-          <img src={BRAND_ASSETS.photoCalgary} alt="Downtown Calgary skyline along the Bow River — home of Purpose Academy" />
-          <figcaption>{BRAND.place} — where our learners live, train, and work.</figcaption>
+          <img src={BRAND_ASSETS.photoCalgary} alt="Downtown Calgary skyline along the Bow River, home of Purpose Academy" />
+          <figcaption>{BRAND.place}, where our learners live, train, and work.</figcaption>
         </figure>
       </Reveal>
 
@@ -333,7 +333,7 @@ export function AboutPage() {
         <p className="section-kicker">People</p>
         <h2>Our team</h2>
         <p className="lede path-lede">
-          The people building Purpose Academy — names first; roles and photos will follow as the school grows.
+          The people building Purpose Academy. Names first; roles and photos will follow as the school grows.
         </p>
         <div className="team-stack" role="list">
           {SCHOOL_TEAM.map((person) => {
@@ -440,7 +440,7 @@ export function ContactPage() {
         <p className="section-kicker">Contact</p>
         <h1>Talk with {BRAND.name}</h1>
         <p className="lede">
-          Admissions, instructor interest, donor questions, or employer partnerships — we are based in {BRAND.place}.
+          Admissions, instructor interest, donor questions, or employer partnerships. We are based in {BRAND.place}.
         </p>
       </Reveal>
       <Reveal className="band stack" delay={100}>
@@ -511,7 +511,7 @@ export function PrivacyNoticePage() {
         <p className="section-kicker">Privacy</p>
         <h1>How we treat your information</h1>
         <p className="lede">
-          {BRAND.name} collects only what admissions, learning, and skill evidence need — so trust stays part of the
+          {BRAND.name} collects only what admissions, learning, and skill evidence need, so trust stays part of the
           school.
         </p>
       </Reveal>
@@ -522,8 +522,8 @@ export function PrivacyNoticePage() {
           retention limits, and secure processing.
         </p>
         <p>
-          We keep identity for access, progress for instruction, and competency evidence for your Skills Passport —
-          nothing beyond training and apprenticeship readiness.
+          We keep identity for access, progress for instruction, and competency evidence for your Skills Passport.
+          Nothing beyond training and apprenticeship readiness.
         </p>
         <Link className="btn btn-ghost" to="/">
           Back to {BRAND.name}

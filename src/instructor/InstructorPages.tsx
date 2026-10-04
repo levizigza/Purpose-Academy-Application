@@ -24,7 +24,7 @@ export function InstructorDashboardPage() {
       <div>
         <p className="section-kicker">Instructor</p>
         <h1>Today</h1>
-        <p>Help learners move from practice to verified skill — grading, safety, and observation first.</p>
+        <p>Help learners move from practice to verified skill: grading, safety, and observation first.</p>
       </div>
       <div className="grid-3">
         <div className="panel stack">
@@ -260,7 +260,7 @@ export function InstructorObservePage() {
       </p>
       {gate && (
         <div className={`alert ${gate.status === 'PASS' ? 'ok' : 'warn'}`}>
-          Safety gate for selected learner: <strong>{gate.status}</strong> — {gate.reason}
+          Safety gate for selected learner: <strong>{gate.status}</strong>. {gate.reason}
           {gate.status !== 'PASS' && (
             <p style={{ margin: '0.5rem 0 0' }}>
               Set the gate to PASS on Safety gates before you can finalize an observation.

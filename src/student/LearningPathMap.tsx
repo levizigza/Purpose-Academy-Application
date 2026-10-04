@@ -126,7 +126,7 @@ export function UnitIntroCard({
         ))}
       </ul>
       <p className="unit-intro-method">
-        Pattern: learn → try → get feedback → retry until solid. Then move forward.
+        Pattern: learn, try, get feedback, retry until solid. Then move forward.
       </p>
     </article>
   )

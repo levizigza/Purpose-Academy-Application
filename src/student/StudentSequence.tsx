@@ -325,10 +325,10 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             </p>
             <div className="practice-next-gate-actions">
               <button type="button" className="btn btn-primary" onClick={confirmFeedbackYes}>
-                Yes — continue
+                Yes, continue
               </button>
               <button type="button" className="btn btn-ghost" onClick={confirmFeedbackNo}>
-                Not yet — open chat
+                Not yet. Open chat
               </button>
             </div>
           </div>
@@ -452,10 +452,10 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
               </p>
               <div className="practice-next-gate-actions">
                 <button type="button" className="btn btn-primary" onClick={confirmFeedbackYes}>
-                  Yes — continue
+                  Yes, continue
                 </button>
                 <button type="button" className="btn btn-ghost" onClick={confirmFeedbackNo}>
-                  Not yet — open chat
+                  Not yet. Open chat
                 </button>
               </div>
             </div>
@@ -727,10 +727,10 @@ export function StudentSequencePage() {
               </p>
               <div className="practice-next-gate-actions">
                 <button type="button" className="btn btn-primary" onClick={confirmPracticeAdvanceYes}>
-                  Yes — continue
+                  Yes, continue
                 </button>
                 <button type="button" className="btn btn-ghost" onClick={confirmPracticeAdvanceNo}>
-                  Not yet — open chat
+                  Not yet. Open chat
                 </button>
               </div>
             </div>
@@ -843,7 +843,7 @@ export function StudentSequencePage() {
           <img src={BRAND_ASSETS.logoPOpen} alt="" className="train-login-mark" />
           <p className="train-login-lede">
             You are starting the Purpose Academy student path. Registration comes next, then language support,
-            then tools, safety, and practice — one clear station at a time.
+            then tools, safety, and practice, one clear station at a time.
           </p>
           <div className="train-role-stack">
             <button type="button" className="train-role student" onClick={() => go(2, 'Opening registration…')}>
@@ -930,7 +930,7 @@ export function StudentSequencePage() {
           </div>
           <div className="field">
             <label htmlFor="seq-exp">Previous experience</label>
-            <input id="seq-exp" value={regForm.previous_experience} onChange={(e) => setRegForm({ ...regForm, previous_experience: e.target.value })} placeholder="Example: helper on building sites — or none yet" />
+            <input id="seq-exp" value={regForm.previous_experience} onChange={(e) => setRegForm({ ...regForm, previous_experience: e.target.value })} placeholder="Example: helper on building sites, or none yet" />
             <span className="field-hint">&ldquo;None yet&rdquo; is a good answer.</span>
           </div>
           <button className="btn btn-primary" type="submit" disabled={busy}>
@@ -1165,7 +1165,7 @@ export function StudentSequencePage() {
           {actionAnswer && (
             <>
               <div className={`alert ${actionCorrect ? 'ok' : 'warn'}`}>
-                {actionCorrect ? 'Yes — word and action match.' : `Not yet. This action uses the ${term?.english}.`}
+                {actionCorrect ? 'Yes. Word and action match.' : `Not yet. This action uses the ${term?.english}.`}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextAction}>
                 {actionCorrect
@@ -1218,7 +1218,7 @@ export function StudentSequencePage() {
           fit="contain"
           label="Match the word to the picture"
           sub={supportLang === 'English' ? 'English word' : `${supportLang}: ${termGloss(term)}`}
-          caption="Still supported — translation and audio are allowed here."
+          caption="Still supported. Translation and audio are allowed here."
         />
         <div className="train-audio-row">
           <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>Hear English</button>
@@ -1241,7 +1241,7 @@ export function StudentSequencePage() {
         {matchAnswer && (
           <>
             <div className={`alert ${matchCorrect ? 'ok' : 'warn'}`}>
-              {matchCorrect ? 'Yes — picture and word match.' : `Not yet. The correct word is ${term.english}. Try again.`}
+              {matchCorrect ? 'Yes. Picture and word match.' : `Not yet. The correct word is ${term.english}. Try again.`}
             </div>
             <button type="button" className="btn btn-primary" onClick={nextMatch}>
               {matchCorrect
@@ -1427,7 +1427,7 @@ export function StudentSequencePage() {
           {phraseAnswer && (
             <>
               <div className={`alert ${phraseCorrect ? 'ok' : 'warn'}`}>
-                {phraseCorrect ? `Yes — ${phrase.why}` : `Not yet. ${phrase.why}`}
+                {phraseCorrect ? `Yes. ${phrase.why}` : `Not yet. ${phrase.why}`}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextPhrase}>
                 {phraseCorrect
@@ -1480,7 +1480,7 @@ export function StudentSequencePage() {
     return (
       <Shell step={13} onBack={() => go(12)}>
         <WhyWork>Many learners are new to computers. Practice the exact clicks and typing school work needs.</WhyWork>
-        <TeachNote>Each card is a real micro-task: learn → try → feedback → next. Empty honesty is fine — wrong answers teach.</TeachNote>
+        <TeachNote>Each card is a real micro-task: learn → try → feedback → next. Empty honesty is fine. Wrong answers teach.</TeachNote>
         <p className="train-vocab-counter">Digital skill {digIdx + 1} of {DIGITAL_PRACTICE.length}</p>
         <article className="topic-lesson-card">
           <h3>{item.title}</h3>
@@ -1817,7 +1817,7 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={18} onBack={() => go(17)}>
-        <WhyWork>On-site days need judgment and a clear log — practice both before the exam.</WhyWork>
+        <WhyWork>On-site days need judgment and a clear log. Practice both before the exam.</WhyWork>
         <p className="train-vocab-counter">Site decision {siteIdx + 1} of {SITE_DECISIONS.length}</p>
         <article className="topic-lesson-card">
           <h3>{item.title}</h3>
@@ -1851,7 +1851,7 @@ export function StudentSequencePage() {
         {isLast && siteCorrect && (
           <div className="stack" style={{ marginTop: '1rem' }}>
             <h3>Quick daily log</h3>
-            <p className="muted">Capture the habit employers expect — date, tasks, supervisor.</p>
+            <p className="muted">Capture the habit employers expect: date, tasks, supervisor.</p>
             <div className="field">
               <label htmlFor="log-date">Date</label>
               <input id="log-date" type="date" value={logForm.date} onChange={(e) => setLogForm({ ...logForm, date: e.target.value })} />
@@ -1875,7 +1875,7 @@ export function StudentSequencePage() {
     if (finalPhase === 'eyespy') {
       return (
         <Shell step={19} onBack={() => go(18)}>
-          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode — up to 3 tries. 100% required. Scenes change on misses." />
+          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Scenes change on misses." />
           <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('written') }} />
         </Shell>
       )
@@ -1952,7 +1952,7 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={20} onBack={() => go(19)}>
-        <WhyWork>Employment connection starts with clear interview answers — then partner matching.</WhyWork>
+        <WhyWork>Employment connection starts with clear interview answers, then partner matching.</WhyWork>
         <p className="train-vocab-counter">Interview prep {empIdx + 1} of {EMPLOYMENT_PREP.length}</p>
         <article className="topic-lesson-card">
           <p className="train-check-prompt">{item.prompt}</p>
@@ -2012,7 +2012,7 @@ export function StudentSequencePage() {
           <div className="train-learn-grid">
             <LearnCard title="Hiring partner match" body="Connect with construction companies hiring from this pathway." />
             <LearnCard title="Resume & interview" body="Show skills in clear, short English." />
-            <LearnCard title="30 / 90 / 180 day follow-up" body="Support after you start work — not a dead end." />
+            <LearnCard title="30 / 90 / 180 day follow-up" body="Support after you start work, not a dead end." />
           </div>
           <div className="hero-actions">
             <Link className="btn btn-primary" to="/app/student">Go to my dashboard</Link>

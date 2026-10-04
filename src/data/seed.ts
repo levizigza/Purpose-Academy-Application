@@ -101,7 +101,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Construction Workforce Readiness',
         category: 'construction',
         description:
-          'Construction foundations: safety, tools, materials, site English, and instructor-verified skill — with a clear path into apprenticeship.',
+          'Construction foundations: safety, tools, materials, site English, and instructor-verified skill, with a clear path into apprenticeship.',
         duration: '12-16 weeks',
         skills: ['Site safety', 'Hand & power tools', 'Drywall', 'Flooring', 'Painting', 'Blueprint basics'],
         active: true,

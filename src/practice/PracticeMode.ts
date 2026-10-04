@@ -187,4 +187,4 @@ export function shouldHidePracticeFeedback(pathname: string, journeyStep?: numbe
 }
 
 export const PRACTICE_TRAY_HELP =
-  'Full school learning path for reviewers — same units, mastery, and checks learners will use. Pick your name, skip registration, learn through every station, leave feedback at unit ends.'
+  'Full school learning path for reviewers. Same units, mastery, and checks learners will use. Pick your name, skip registration, learn through every station, and leave feedback at unit ends.'

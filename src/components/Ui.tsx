@@ -45,12 +45,12 @@ export function PageHeader({
 export function StatusLabel({ status }: { status: string }) {
   const map: Record<string, { label: string; tone: string }> = {
     pending: { label: 'Not submitted yet', tone: 'warn' },
-    approved: { label: 'Approved — ready to learn', tone: 'ok' },
+    approved: { label: 'Approved. Ready to learn', tone: 'ok' },
     rejected: { label: 'Not approved', tone: 'danger' },
-    submitted: { label: 'Sent — waiting for review', tone: 'brand' },
+    submitted: { label: 'Sent. Waiting for review', tone: 'brand' },
     graded: { label: 'Graded', tone: 'ok' },
     PASS: { label: 'Safety cleared', tone: 'ok' },
-    BLOCKED: { label: 'Safety not passed yet — review and try again', tone: 'warn' },
+    BLOCKED: { label: 'Safety not passed yet. Review and try again', tone: 'warn' },
     EXPIRED: { label: 'Safety check expired', tone: 'danger' },
     MANUAL_REVIEW: { label: 'Needs instructor review', tone: 'warn' },
     learned: { label: 'Learned', tone: 'brand' },
@@ -66,7 +66,7 @@ export function StatusLabel({ status }: { status: string }) {
 export function RegistrationStatusLabel({ status }: { status: string }) {
   const map: Record<string, { label: string; tone: string }> = {
     pending: { label: 'Waiting for approval', tone: 'warn' },
-    approved: { label: 'Approved — ready to learn', tone: 'ok' },
+    approved: { label: 'Approved. Ready to learn', tone: 'ok' },
     rejected: { label: 'Not approved', tone: 'danger' },
   }
   const item = map[status] || { label: status, tone: 'brand' }

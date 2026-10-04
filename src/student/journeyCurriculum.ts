@@ -12,17 +12,17 @@ export const JOURNEY_STEPS = [
   { n: 1, title: 'Start as Student', help: 'Begin your learning path.', purpose: 'Students, instructors, and admins use different doors.', unit: 1 },
   { n: 2, title: 'Registration', help: 'Tell us who you are so we can support you.', purpose: 'Your profile opens learning after approval.', unit: 1 },
   { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the career assessment.', purpose: 'The full assessment runs in a language you understand. Later job-site steps use English.', unit: 2 },
-  { n: 4, title: 'Career Assessment', help: 'Rate work activities in your language.', purpose: 'A professional interest inventory — not a pass/fail quiz.', unit: 2 },
-  { n: 5, title: 'Work Style', help: 'How you like to work — in your language.', purpose: 'Work-style choices refine your pathway fit.', unit: 2 },
+  { n: 4, title: 'Career Assessment', help: 'Rate work activities in your language.', purpose: 'A professional interest inventory, not a pass/fail quiz.', unit: 2 },
+  { n: 5, title: 'Work Style', help: 'How you like to work, in your language.', purpose: 'Work-style choices refine your pathway fit.', unit: 2 },
   { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction is open now.', unit: 2 },
-  { n: 7, title: 'Visual Vocabulary', help: 'One picture at a time — hear English, then go to the next word.', purpose: 'Same clear card for each tool: picture, home language, English audio. Finish the full set.', unit: 3 },
+  { n: 7, title: 'Visual Vocabulary', help: 'One picture at a time. Hear English, then go to the next word.', purpose: 'Same clear card for each tool: picture, home language, English audio. Finish the full set.', unit: 3 },
   { n: 8, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
   { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
-  { n: 10, title: 'English Eye Spy', help: 'Find the real tool in a site scene — English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
+  { n: 10, title: 'English Eye Spy', help: 'Find the real tool in a site scene. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
   { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   { n: 12, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
-  { n: 13, title: 'Digital Skills', help: 'Practice real computer tasks — click, type, forms, uploads.', purpose: 'This may be someone’s first computer — every step is a hands-on micro-lesson.', unit: 5 },
-  { n: 14, title: 'Safety Training', help: 'Safety words with clear pictures — required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 5 },
+  { n: 13, title: 'Digital Skills', help: 'Practice real computer tasks: click, type, forms, uploads.', purpose: 'This may be someone’s first computer. Every step is a hands-on micro-lesson.', unit: 5 },
+  { n: 14, title: 'Safety Training', help: 'Safety words with clear pictures. Required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 5 },
   { n: 15, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 5 },
   { n: 16, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 5 },
   { n: 17, title: 'Instructor Observation', help: 'Rehearse competent skill order before a real instructor check.', purpose: 'Learned → Practised → Competent under real observation.', unit: 6 },
@@ -432,7 +432,7 @@ export const BASELINE_QUIZ: QuizItem[] = [
     imageKey: 'hard-hat',
     options: ['Hard hat', 'Hammer', 'Tape measure', 'Paint brush'],
     answer: 'Hard hat',
-    teachCorrect: 'Yes — this is a hard hat. It protects your head.',
+    teachCorrect: 'Yes. This is a hard hat. It protects your head.',
     teachWrong: 'Look again. The picture shows a hard hat for the head.',
   },
   {
@@ -442,7 +442,7 @@ export const BASELINE_QUIZ: QuizItem[] = [
     imageKey: 'hammer',
     options: ['Hammer', 'Ladder', 'Hard hat', 'Paint'],
     answer: 'Hammer',
-    teachCorrect: 'Yes — a hammer drives nails.',
+    teachCorrect: 'Yes. A hammer drives nails.',
     teachWrong: 'The picture shows a hammer, not a ladder or hard hat.',
   },
   {
@@ -452,7 +452,7 @@ export const BASELINE_QUIZ: QuizItem[] = [
     imageKey: 'ppe',
     options: ['Safety gear (PPE)', 'Sandals', 'Loose jewelry', 'Nothing special'],
     answer: 'Safety gear (PPE)',
-    teachCorrect: 'Yes — safety gear (PPE) protects your body on site.',
+    teachCorrect: 'Yes. Safety gear (PPE) protects your body on site.',
     teachWrong: 'The picture shows safety gear (PPE): hard hat, glasses, gloves, and boots.',
   },
   {
@@ -462,7 +462,7 @@ export const BASELINE_QUIZ: QuizItem[] = [
     imageKey: 'tape-measure',
     options: ['Tape measure', 'Saw', 'Hard hat', 'Nail'],
     answer: 'Tape measure',
-    teachCorrect: 'Yes — a tape measure shows length.',
+    teachCorrect: 'Yes. A tape measure shows length.',
     teachWrong: 'The picture shows a tape measure with numbers for length.',
   },
 ]
@@ -484,7 +484,7 @@ export const INTEREST_PATHS = [
     id: 'logistics' as const,
     title: 'Logistics',
     line: 'Move People, Move Opportunities.',
-    detail: 'Warehouse, loading, and moving goods — opens after Construction.',
+    detail: 'Warehouse, loading, and moving goods. Opens after Construction.',
     skills: [
       { id: 'l1', label: 'I can read simple labels on boxes', weight: 2 },
       { id: 'l2', label: 'I can lift and place items carefully', weight: 1 },
@@ -495,7 +495,7 @@ export const INTEREST_PATHS = [
     id: 'community' as const,
     title: 'Community Support',
     line: 'Stronger People, Stronger Communities.',
-    detail: 'Helping people in community roles — planned next.',
+    detail: 'Helping people in community roles. Planned next.',
     skills: [
       { id: 'm1', label: 'I can greet and help people calmly', weight: 2 },
       { id: 'm2', label: 'I can follow care or support routines', weight: 1 },
@@ -512,7 +512,7 @@ export const SAFETY_QUIZ: QuizItem[] = [
     imageKey: 'ppe',
     options: ['Safety gear (PPE)', 'Sandals', 'Loose jewelry', 'Skip all gear indoors'],
     answer: 'Safety gear (PPE)',
-    teachCorrect: 'Safety gear first — hard hat, boots, eye protection, and other required gear.',
+    teachCorrect: 'Safety gear first: hard hat, boots, eye protection, and other required gear.',
     teachWrong: 'The picture shows safety gear (PPE). Wear it before work starts.',
   },
   {
@@ -522,8 +522,8 @@ export const SAFETY_QUIZ: QuizItem[] = [
     imageKey: 'hard-hat',
     options: ['To protect the head', 'To measure wood', 'To cut boards', 'To drive nails'],
     answer: 'To protect the head',
-    teachCorrect: 'Yes — a hard hat protects the head from falling objects and bumps.',
-    teachWrong: 'A hard hat is head protection — not a measuring or cutting tool.',
+    teachCorrect: 'Yes. A hard hat protects the head from falling objects and bumps.',
+    teachWrong: 'A hard hat is head protection, not a measuring or cutting tool.',
   },
   {
     id: 's3',
@@ -532,7 +532,7 @@ export const SAFETY_QUIZ: QuizItem[] = [
     imageKey: 'hard-hat',
     options: ['Call for help / follow emergency steps', 'Keep working', 'Move heavy equipment alone', 'Film the scene first'],
     answer: 'Call for help / follow emergency steps',
-    teachCorrect: 'Get help first — people before production.',
+    teachCorrect: 'Get help first. People before production.',
     teachWrong: 'In an emergency, follow the site plan and get help right away.',
   },
 ]
@@ -545,7 +545,7 @@ export const FINAL_QUIZ: QuizItem[] = [
     imageKey: 'ppe',
     options: ['Before you start work', 'After the first cut', 'Only if the boss is watching', 'Never on indoor jobs'],
     answer: 'Before you start work',
-    teachCorrect: 'Safety gear before work — every time.',
+    teachCorrect: 'Safety gear before work, every time.',
     teachWrong: 'Safety gear is on before work begins.',
   },
   {
@@ -555,7 +555,7 @@ export const FINAL_QUIZ: QuizItem[] = [
     imageKey: 'tape-measure',
     options: ['Cut once', 'Guess the length', 'Skip the level', 'Throw the offcut'],
     answer: 'Cut once',
-    teachCorrect: 'Measure twice, cut once — careful work on site.',
+    teachCorrect: 'Measure twice, cut once. Careful work on site.',
     teachWrong: 'Measuring carefully prevents mistakes and waste.',
   },
   {
@@ -575,8 +575,8 @@ export const FINAL_QUIZ: QuizItem[] = [
     imageKey: 'saw',
     options: ['Saw', 'Hard hat', 'Level', 'Tape measure'],
     answer: 'Saw',
-    teachCorrect: 'Yes — a saw cuts wood. Keep hands clear.',
-    teachWrong: 'The picture shows a saw — the tool that cuts wood.',
+    teachCorrect: 'Yes. A saw cuts wood. Keep hands clear.',
+    teachWrong: 'The picture shows a saw, the tool that cuts wood.',
   },
 ]
 
@@ -628,7 +628,7 @@ export const WORD_ACTIONS = [
     id: 'wa-ppe',
     termId: 'ppe',
     title: 'Safety gear before entry',
-    body: 'Hard hat, glasses, gloves, boots — then enter the shop.',
+    body: 'Hard hat, glasses, gloves, boots. Then enter the shop.',
     actionCue: 'Safety gear on before you cross the line.',
   },
 ]
@@ -636,7 +636,7 @@ export const WORD_ACTIONS = [
 export const TOOL_CATEGORIES = [
   {
     title: 'Hand tools',
-    why: 'Hammer, tape measure, screwdriver — you move them with your hands.',
+    why: 'Hammer, tape measure, screwdriver. You move them with your hands.',
     mark: 'HT',
     prompt: 'Which group do you move with your hands only?',
     answer: 'Hand tools',
@@ -644,7 +644,7 @@ export const TOOL_CATEGORIES = [
   },
   {
     title: 'Power tools',
-    why: 'Drill and saw — electricity or batteries. Extra care required.',
+    why: 'Drill and saw use electricity or batteries. Extra care required.',
     mark: 'PT',
     prompt: 'Which group needs electricity or batteries?',
     answer: 'Power tools',
@@ -652,7 +652,7 @@ export const TOOL_CATEGORIES = [
   },
   {
     title: 'Materials',
-    why: 'Wood, drywall, screws — what you build with.',
+    why: 'Wood, drywall, screws: what you build with.',
     mark: 'MT',
     prompt: 'Wood, drywall, and screws belong to which group?',
     answer: 'Materials',
@@ -671,7 +671,7 @@ export const TOOL_CATEGORIES = [
 export const SYSTEM_TOPICS = [
   {
     title: 'Framing',
-    why: 'The skeleton of a building — walls and structure.',
+    why: 'The skeleton of a building: walls and structure.',
     mark: 'FR',
     prompt: 'What is the skeleton of a building called?',
     answer: 'Framing',
@@ -679,7 +679,7 @@ export const SYSTEM_TOPICS = [
   },
   {
     title: 'Interior finishes',
-    why: 'Drywall, paint, flooring — what people see inside.',
+    why: 'Drywall, paint, flooring: what people see inside.',
     mark: 'IF',
     prompt: 'Drywall, paint, and flooring are part of…',
     answer: 'Interior finishes',
@@ -791,8 +791,8 @@ export const DIGITAL_PRACTICE = [
     prompt: 'Which button continues to the next lesson?',
     options: ['Continue', 'Delete account', 'Mute forever', 'Skip safety'],
     answer: 'Continue',
-    teachCorrect: 'Yes — Continue moves you to the next station.',
-    teachWrong: 'Look for Continue / Apply / Next — those advance your path.',
+    teachCorrect: 'Yes. Continue moves you to the next station.',
+    teachWrong: 'Look for Continue / Apply / Next. Those advance your path.',
   },
   {
     id: 'type',
@@ -811,7 +811,7 @@ export const DIGITAL_PRACTICE = [
     prompt: 'Which field must be filled before you can submit?',
     options: ['Your full name', 'Favorite color (optional)', 'A blank note', 'Nothing'],
     answer: 'Your full name',
-    teachCorrect: 'Required fields — usually marked — must be completed.',
+    teachCorrect: 'Required fields (usually marked) must be completed.',
     teachWrong: 'Required fields like your name must be filled before submit.',
   },
   {
@@ -827,7 +827,7 @@ export const DIGITAL_PRACTICE = [
     ],
     answer: 'A clear photo of your safety gear check',
     teachCorrect: 'Clear, relevant evidence of YOUR work is what instructors need.',
-    teachWrong: 'Upload clear photos of your own work — never passwords or other people’s files.',
+    teachWrong: 'Upload clear photos of your own work. Never passwords or other people’s files.',
   },
   {
     id: 'video',
@@ -841,7 +841,7 @@ export const DIGITAL_PRACTICE = [
       'Share your password',
     ],
     answer: 'Answer the check question',
-    teachCorrect: 'Watch, then answer — that is how learning sticks.',
+    teachCorrect: 'Watch, then answer. That is how learning sticks.',
     teachWrong: 'Stay with the lesson and answer the check after the clip.',
   },
 ]
@@ -962,7 +962,7 @@ export const OBSERVATION_SCENARIOS = [
       { id: 'hands', label: 'Gloves ready for the task', correctOrder: 3 },
       { id: 'enter', label: 'Enter the bay only after gear is on', correctOrder: 4 },
     ],
-    passNote: 'Competent means gear is correct BEFORE you cross the line — every time.',
+    passNote: 'Competent means gear is correct BEFORE you cross the line, every time.',
   },
   {
     id: 'measure',
@@ -975,7 +975,7 @@ export const OBSERVATION_SCENARIOS = [
       { id: 'mark', label: 'Mark the cut line once', correctOrder: 3 },
       { id: 'check', label: 'Measure a second time before cutting', correctOrder: 4 },
     ],
-    passNote: 'Measure twice, cut once — that is the competent standard.',
+    passNote: 'Measure twice, cut once. That is the competent standard.',
   },
   {
     id: 'level-wall',
@@ -1006,8 +1006,8 @@ export const SITE_DECISIONS = [
       'Film a video for social media',
     ],
     answer: 'Report it / make the area safe',
-    teachCorrect: 'See something unsafe → speak up and make it safe. People before production.',
-    teachWrong: 'Hazards get reported and controlled first — never ignored.',
+    teachCorrect: 'See something unsafe, speak up and make it safe. People before production.',
+    teachWrong: 'Hazards get reported and controlled first, never ignored.',
   },
   {
     id: 'instruction',
@@ -1048,7 +1048,7 @@ export const SITE_DECISIONS = [
       'Date, tasks you did, and supervisor name',
       'Only your lunch order',
       'Someone else’s private phone number',
-      'Nothing — logs are optional forever',
+      'Nothing. Logs are optional forever',
     ],
     answer: 'Date, tasks you did, and supervisor name',
     teachCorrect: 'Clear daily notes help instructors and employers trust your hours.',
@@ -1069,7 +1069,7 @@ export const EMPLOYMENT_PREP = [
     ],
     answer: 'I learned foundations, safety, and site English with instructors who checked my skills',
     teachCorrect: 'Connect your training to safety, language, and verified skill.',
-    teachWrong: 'Employers want proof of foundations — not shortcuts.',
+    teachWrong: 'Employers want proof of foundations, not shortcuts.',
   },
   {
     id: 'safety',
@@ -1081,7 +1081,7 @@ export const EMPLOYMENT_PREP = [
       'Dress shoes',
     ],
     answer: 'Hard hat and required safety gear (PPE)',
-    teachCorrect: 'Lead with safety — it shows you are site-ready.',
+    teachCorrect: 'Lead with safety. It shows you are site-ready.',
     teachWrong: 'Always name hard hat / PPE before entry.',
   },
   {
@@ -1095,7 +1095,7 @@ export const EMPLOYMENT_PREP = [
     ],
     answer: 'Hand them the level safely',
     teachCorrect: 'Short site talk + safe tool passing = good teammate.',
-    teachWrong: 'Pass tools hand-to-hand — never throw.',
+    teachWrong: 'Pass tools hand-to-hand. Never throw.',
   },
 ]
 

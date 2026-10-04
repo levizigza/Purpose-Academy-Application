@@ -155,7 +155,7 @@ export function VocabSheet({
         <span style={{ width: `${Math.round((heardCount / Math.max(1, terms.length)) * 100)}%` }} />
       </div>
       <p className="vocab-sheet-lede">
-        See the picture. Read your language. Hear the English word — then go to the next one.
+        See the picture. Read your language. Hear the English word, then go to the next one.
       </p>
 
       <VocabSheetCard

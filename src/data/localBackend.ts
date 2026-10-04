@@ -521,7 +521,7 @@ export function localObserve(input: {
         input.studentId,
         'workshop_practical',
         'MANUAL_REVIEW',
-        'Critical or material gap — remediation required before repeat assessment',
+        'Critical or material gap. Remediation required before repeat assessment',
         null,
       )
     }

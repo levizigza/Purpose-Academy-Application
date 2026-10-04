@@ -49,14 +49,14 @@ export const SEQUENCE_CATALOG: {
   {
     id: 'admin-contact',
     label: 'Admin · Contact Admin',
-    help: 'Sequence 1 — message the admin team',
+    help: 'Sequence 1. Message the admin team',
     to: '/enter/admin/contact',
     group: 'admin',
   },
   {
     id: 'admin-guest',
     label: 'Admin · Employed / Guest',
-    help: 'Sequence 2 — employer or guest request',
+    help: 'Sequence 2. Employer or guest request',
     to: '/enter/admin/guest',
     group: 'admin',
   },
@@ -70,7 +70,7 @@ export const SEQUENCE_CATALOG: {
   {
     id: 'future-app',
     label: 'Purpose Academy Application',
-    help: 'Future full application — link reserved (not live yet)',
+    help: 'Future full application. Link reserved (not live yet)',
     to: '',
     group: 'app',
     placeholder: true,

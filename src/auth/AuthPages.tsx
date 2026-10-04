@@ -80,7 +80,7 @@ export function LoginPage() {
           <summary>Demo accounts (for testing)</summary>
           {isLocalMode() && (
             <div className="alert ok" style={{ marginTop: '0.65rem' }}>
-              Browser demo mode — training runs in this browser.
+              Browser demo mode. Training runs in this browser.
               <div style={{ marginTop: '0.65rem' }}>
                 <button
                   type="button"

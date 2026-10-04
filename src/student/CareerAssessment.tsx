@@ -225,7 +225,7 @@ export function CareerAssessmentResult({
         <ul className="career-code-areas">
           {top3.map((area) => (
             <li key={area}>
-              <strong>{area}</strong> — {t(RIASEC_LABELS[area], lang)}
+              <strong>{area}</strong>: {t(RIASEC_LABELS[area], lang)}
             </li>
           ))}
         </ul>

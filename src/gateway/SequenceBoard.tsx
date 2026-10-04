@@ -56,7 +56,7 @@ export function SequenceBoard({ compact = false }: { compact?: boolean }) {
       <div className="sequence-board-head">
         <div>
           <p className="section-kicker">On this site</p>
-          <h2>{compact ? 'Your sequences' : 'All sequences — open and track'}</h2>
+          <h2>{compact ? 'Your sequences' : 'All sequences. Open and track'}</h2>
           <p className="lede">
             {done} of {total} live paths complete in this browser.
             {studentStep > 0 && studentStep < 20
@@ -103,8 +103,8 @@ export function SequenceBoard({ compact = false }: { compact?: boolean }) {
                 {complete && record && (
                   <em>Completed {formatWhen(record.completedAt)}</em>
                 )}
-                {studentInProgress && <em>In progress — step {studentStep} of 20</em>}
-                {placeholder && <em>Empty link for now — destination comes later</em>}
+                {studentInProgress && <em>In progress. Step {studentStep} of 20</em>}
+                {placeholder && <em>Empty link for now. Destination comes later</em>}
               </div>
               {placeholder ? (
                 <a

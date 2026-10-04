@@ -86,7 +86,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       {
         id: 'sys-1',
         role: 'bot',
-        text: `You’re reviewing ${pageTitleFromPath(pathname)}. Tell me what to fix or improve — I’ll send it to Levi.`,
+        text: `You’re reviewing ${pageTitleFromPath(pathname)}. Tell me what to fix or improve. I’ll send it to Levi.`,
       },
     ])
   }, [pathname, quizComplete, journeyTick])
@@ -140,7 +140,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
     setPracticeName(chosen)
     setName(chosen)
     push('user', chosen)
-    push('bot', `Thanks, ${chosen}. Leave notes anytime — then Continue will ask if you sent feedback.`)
+    push('bot', `Thanks, ${chosen}. Leave notes anytime. Then Continue will ask if you sent feedback.`)
   }
 
   async function onSend(e: FormEvent) {
@@ -158,7 +158,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       })
       markPracticeFeedbackAck(feedbackKey)
       push('user', note)
-      push('bot', 'Got it — saved for Levi in Admin → Practice feedback. You can continue when ready.')
+      push('bot', 'Got it. Saved for Levi in Admin → Practice feedback. You can continue when ready.')
       setBody('')
     } catch (err) {
       push('bot', err instanceof Error ? err.message : 'Could not send that note.')
@@ -234,7 +234,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
                 </button>
               </form>
             ) : blockForQuiz ? (
-              <p className="practice-dock-prompt">Finish this quiz first — then send feedback on the whole activity.</p>
+              <p className="practice-dock-prompt">Finish this quiz first, then send feedback on the whole activity.</p>
             ) : (
               <form className="practice-chat-form" onSubmit={onSend}>
                 <label className="sr-only" htmlFor="practice-fb-body">
@@ -292,7 +292,7 @@ export function PracticeModeBanner() {
   return (
     <div className="practice-banner motion-soft-pulse" role="status">
       <span>
-        Practice mode{name ? ` · ${name}` : ''} — registration skipped. Use Back anytime, or Start over to run the
+        Practice mode{name ? ` · ${name}` : ''}. Registration skipped. Use Back anytime, or Start over to run the
         path from the top.
       </span>
       <span className="practice-banner-actions">

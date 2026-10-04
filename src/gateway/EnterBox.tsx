@@ -70,7 +70,7 @@ const ENTRIES: Entry[] = [
   {
     placeholder: true,
     label: 'Purpose Academy Application',
-    help: 'Coming soon — reserved',
+    help: 'Coming soon',
     tone: 'app',
     tool: 'latch',
     completeIds: [],
@@ -160,7 +160,7 @@ function PracticeNameGate({
         <p className="section-kicker">Practice Mode</p>
         <h2>Who is reviewing?</h2>
         <p className="lede">
-          For ChuChu, Yonas, Kinfe, Saba &amp; Levi — walk the full site without registration, catch issues, and send
+          For ChuChu, Yonas, Kinfe, Saba &amp; Levi. Walk the full site without registration, catch issues, and send
           feedback so we can fix things.
         </p>
         <div className="practice-name-grid">
@@ -254,7 +254,7 @@ export function EnterBox() {
       <aside
         ref={boxRef}
         className={`toolbox${flying ? ' is-flying' : ''}`}
-        aria-label="Purpose Academy tool chest — choose your path"
+        aria-label="Purpose Academy tool chest. choose your path"
       >
         <div className="toolbox-rim" aria-hidden />
         <div className="toolbox-handle" aria-hidden>
@@ -297,9 +297,9 @@ export function EnterBox() {
               const help = item.placeholder
                 ? item.help
                 : done
-                  ? 'Done — open again'
+                  ? 'Done. Open again'
                   : partial
-                    ? 'Partly done — continue'
+                    ? 'Partly done. Continue'
                     : item.help
               const inner: ReactNode = (
                 <>
@@ -383,7 +383,7 @@ export function EnterBox() {
             <div className="toolbox-flyout-lid">
               <p className="toolbox-kicker">Tool chest</p>
               <h2 className="toolbox-title">{flyLabel}</h2>
-              <p className="toolbox-lede">Tray opening — stepping onto the path…</p>
+              <p className="toolbox-lede">Tray opening. Stepping onto the path…</p>
             </div>
             <div className="toolbox-flyout-tray" />
           </div>
