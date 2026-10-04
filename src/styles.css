@@ -2430,8 +2430,8 @@ table.data th {
   opacity: 0.22;
 }
 
-.shell > *:not(.ambient),
-.app-shell > *:not(.ambient),
+.shell > *:not(.ambient):not(.practice-chat),
+.app-shell > *:not(.ambient):not(.practice-chat),
 .shell-main,
 .topbar,
 .footer,
@@ -2439,6 +2439,12 @@ table.data th {
 .page-motion {
   position: relative;
   z-index: 1;
+}
+
+.shell > .practice-chat,
+.app-shell > .practice-chat {
+  position: fixed;
+  z-index: 200;
 }
 
 .hero {
@@ -6136,9 +6142,10 @@ html.pa-page-wipe .hero-inner {
 /* Side feedback chatbot */
 .practice-chat {
   position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  top: auto;
+  right: 0;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
   z-index: 200;
   display: flex;
   flex-direction: column;
@@ -6154,6 +6161,8 @@ html.pa-page-wipe .hero-inner {
 .practice-chat.is-open {
   top: max(4.5rem, env(safe-area-inset-top));
   bottom: max(0.75rem, env(safe-area-inset-bottom));
+  transform: none;
+  right: max(0.75rem, env(safe-area-inset-right));
 }
 
 .practice-chat-tab {
@@ -6161,15 +6170,18 @@ html.pa-page-wipe .hero-inner {
   align-items: center;
   gap: 0.45rem;
   border: 0;
-  border-radius: 999px;
-  padding: 0.75rem 1.15rem;
+  border-radius: 14px 0 0 14px;
+  padding: 0.85rem 0.85rem 0.85rem 1rem;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
   font-family: var(--display);
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   background: linear-gradient(135deg, #e8a317, #f5c542);
   color: #041526;
   cursor: pointer;
-  box-shadow: 0 12px 28px rgba(232, 163, 23, 0.4);
+  box-shadow: -8px 0 24px rgba(232, 163, 23, 0.35);
 }
 
 .practice-chat-tab-dot {
@@ -6337,6 +6349,22 @@ html.pa-page-wipe .hero-inner {
 }
 
 @media (max-width: 720px) {
+  .practice-chat:not(.is-open) {
+    top: auto;
+    bottom: max(5.5rem, env(safe-area-inset-bottom));
+    right: max(0.65rem, env(safe-area-inset-right));
+    transform: none;
+  }
+
+  .practice-chat-tab {
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+    transform: none;
+    border-radius: 999px;
+    padding: 0.75rem 1.15rem;
+    box-shadow: 0 12px 28px rgba(232, 163, 23, 0.4);
+  }
+
   .practice-chat.is-open {
     left: 0.65rem;
     right: 0.65rem;
@@ -6519,8 +6547,7 @@ video {
 }
 
 .practice-chat {
-  right: max(0.65rem, env(safe-area-inset-right));
-  bottom: max(0.65rem, env(safe-area-inset-bottom));
+  right: 0;
 }
 
 .practice-gate-card {

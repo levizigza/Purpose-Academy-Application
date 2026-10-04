@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState, type ReactNode } from 'react'
+import { FormEvent, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSession } from '../auth/Session'
 import { BRAND_ASSETS } from '../brand/assets'
@@ -278,6 +278,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
   const [correct, setCorrect] = useState(false)
   const [done, setDone] = useState(false)
   const [gateBlocked, setGateBlocked] = useState(false)
+  const [feedbackPrompt, setFeedbackPrompt] = useState(false)
   const item = items[idx]
 
   useEffect(() => {
@@ -290,6 +291,44 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
   useEffect(() => {
     if (done) window.dispatchEvent(new Event('pa-quiz-complete'))
   }, [done])
+
+  function currentStepKey() {
+    try {
+      const step = Number(sessionStorage.getItem(JOURNEY_KEY) || '0')
+      return practiceFeedbackKey('/journey', step || undefined)
+    } catch {
+      return practiceFeedbackKey('/journey')
+    }
+  }
+
+  function handleComplete() {
+    if (!isPracticeMode()) {
+      playFoley('wood')
+      onComplete()
+      return
+    }
+    const key = currentStepKey()
+    if (hasPracticeFeedbackAck(key)) {
+      playFoley('wood')
+      onComplete()
+      return
+    }
+    const panel = document.querySelector('.train-panel')
+    if (panel) (panel as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'end' })
+    window.setTimeout(() => setFeedbackPrompt(true), 420)
+  }
+
+  function confirmFeedbackYes() {
+    markPracticeFeedbackAck(currentStepKey())
+    setFeedbackPrompt(false)
+    playFoley('wood')
+    onComplete()
+  }
+
+  function confirmFeedbackNo() {
+    setFeedbackPrompt(false)
+    openPracticeChat()
+  }
 
   function pick(opt: string) {
     if (answered) return
@@ -317,12 +356,31 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
           <p className="alert warn">Safety requires a perfect score. Review and try again.</p>
         )}
         {(!gated || score === items.length) && (
-          <button type="button" className="btn btn-primary" onClick={onComplete}>Continue</button>
+          <button type="button" className="btn btn-primary" onClick={handleComplete}>Continue</button>
         )}
         {gated && score < items.length && (
           <button type="button" className="btn btn-primary" onClick={() => { setIdx(0); setScore(0); setDone(false); setAnswered(null); setCorrect(false); }}>
             Retry quiz
           </button>
+        )}
+        {feedbackPrompt && (
+          <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">
+            <div className="practice-next-gate-card">
+              <h3>Did you leave feedback on this step?</h3>
+              <p>
+                Scroll the page and use the feedback chat on the side if something felt unclear. Confirm when you are
+                ready to move on.
+              </p>
+              <div className="practice-next-gate-actions">
+                <button type="button" className="btn btn-primary" onClick={confirmFeedbackYes}>
+                  Yes — continue
+                </button>
+                <button type="button" className="btn btn-ghost" onClick={confirmFeedbackNo}>
+                  Not yet — open chat
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     )
@@ -383,6 +441,8 @@ export function StudentSequencePage() {
   const [error, setError] = useState<string | null>(null)
   const [transitioning, setTransitioning] = useState(false)
   const [transitionMsg, setTransitionMsg] = useState('Moving to the next station…')
+  const [practiceAdvancePrompt, setPracticeAdvancePrompt] = useState(false)
+  const practiceAdvanceRef = useRef<(() => void) | null>(null)
   const [empDone, setEmpDone] = useState(() => {
     try { return !!sessionStorage.getItem(EMP_KEY) } catch { return false }
   })
@@ -479,10 +539,65 @@ export function StudentSequencePage() {
     }, 900)
   }
 
+  /** Practice mode: ask for feedback before leaving the current step via in-panel Continues. */
+  function requestPracticeAdvance(advance: () => void) {
+    if (!isPracticeMode()) {
+      advance()
+      return
+    }
+    const key = practiceFeedbackKey('/journey', step)
+    if (hasPracticeFeedbackAck(key)) {
+      advance()
+      return
+    }
+    practiceAdvanceRef.current = advance
+    const panel = document.querySelector('.train-panel')
+    if (panel) (panel as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'end' })
+    window.setTimeout(() => setPracticeAdvancePrompt(true), 420)
+  }
+
+  function confirmPracticeAdvanceYes() {
+    markPracticeFeedbackAck(practiceFeedbackKey('/journey', step))
+    setPracticeAdvancePrompt(false)
+    const fn = practiceAdvanceRef.current
+    practiceAdvanceRef.current = null
+    playFoley('wood')
+    fn?.()
+  }
+
+  function confirmPracticeAdvanceNo() {
+    setPracticeAdvancePrompt(false)
+    practiceAdvanceRef.current = null
+    openPracticeChat()
+  }
+
   function Shell(props: {
     step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
   }) {
-    return <StepShell {...props} transitioning={transitioning} transitionMsg={transitionMsg} />
+    return (
+      <>
+        <StepShell {...props} transitioning={transitioning} transitionMsg={transitionMsg} />
+        {practiceAdvancePrompt && (
+          <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">
+            <div className="practice-next-gate-card">
+              <h3>Did you leave feedback on this step?</h3>
+              <p>
+                Scroll the page and use the feedback chat on the side if something felt unclear. Confirm when you are
+                ready to move on.
+              </p>
+              <div className="practice-next-gate-actions">
+                <button type="button" className="btn btn-primary" onClick={confirmPracticeAdvanceYes}>
+                  Yes — continue
+                </button>
+                <button type="button" className="btn btn-ghost" onClick={confirmPracticeAdvanceNo}>
+                  Not yet — open chat
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
+    )
   }
 
   function resetVocabBeatFlags() {
@@ -549,6 +664,10 @@ export function StudentSequencePage() {
   }
 
   async function finishPathway() {
+    if (isPracticeMode()) {
+      go(7, 'Opening Construction vocabulary…')
+      return
+    }
     const ok = await ensureDemoStudent()
     if (!ok) return
     try {
@@ -834,7 +953,19 @@ export function StudentSequencePage() {
   if (step === 6) {
     const title = interest === 'logistics' ? 'Logistics' : interest === 'community' ? 'Community Support' : 'Construction'
     return (
-      <Shell step={6} onBack={() => go(5)}>
+      <Shell
+        step={6}
+        onBack={() => go(5)}
+        onNext={() => {
+          void (async () => {
+            setBusy(true)
+            await finishPathway()
+            setBusy(false)
+          })()
+        }}
+        nextLabel={busy ? 'Saving…' : 'Continue into Construction vocabulary'}
+        nextDisabled={busy}
+      >
         {error && <div className="alert error">{error}</div>}
         <div className="alert ok">
           You chose <strong>{title}</strong>. Today&rsquo;s open program is <strong>Construction</strong>.
@@ -851,9 +982,6 @@ export function StudentSequencePage() {
             You showed interest in {title}. Today&rsquo;s live path is Construction — same steps, different job focus later.
           </div>
         )}
-        <button type="button" className="btn btn-primary" disabled={busy} onClick={async () => { setBusy(true); await finishPathway(); setBusy(false) }}>
-          {busy ? 'Saving…' : 'Continue into Construction vocabulary'}
-        </button>
       </Shell>
     )
   }
@@ -1018,7 +1146,10 @@ export function StudentSequencePage() {
         setMatchCorrect(false)
         return
       }
-      if (isLast) { go(10, 'Opening English Eye Spy…'); return }
+      if (isLast) {
+        requestPracticeAdvance(() => go(10, 'Opening English Eye Spy…'))
+        return
+      }
       const next = matchIdx + 1
       setMatchIdx(next)
       setMatchAnswer(null)
@@ -1099,7 +1230,10 @@ export function StudentSequencePage() {
         setInstrCorrect(false)
         return
       }
-      if (isLast) { go(12, 'Opening site language…'); return }
+      if (isLast) {
+        requestPracticeAdvance(() => go(12, 'Opening site language…'))
+        return
+      }
       setInstrIdx((i) => i + 1)
       setInstrHeard(false)
       setInstrAnswer(null)

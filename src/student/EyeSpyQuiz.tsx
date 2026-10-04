@@ -2,6 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { ATTEMPT_POLICY, type EyeSpyScene } from './journeyCurriculum'
 import { toolImage } from './toolImages'
 import { playFoley } from '../audio/foley'
+import {
+  hasPracticeFeedbackAck,
+  isPracticeMode,
+  markPracticeFeedbackAck,
+  openPracticeChat,
+  practiceFeedbackKey,
+} from '../practice/PracticeMode'
 
 type Mode = 'exercise' | 'exam'
 
@@ -45,6 +52,7 @@ export function EyeSpyQuiz({
   const [attempt, setAttempt] = useState(1)
   const [phase, setPhase] = useState<'play' | 'feedback' | 'summary'>('play')
   const [lastOk, setLastOk] = useState(false)
+  const [feedbackPrompt, setFeedbackPrompt] = useState(false)
 
   const group = groups[groupIdx]
   const variants = scenesForGroup(scenes, group)
@@ -116,6 +124,44 @@ export function EyeSpyQuiz({
     setPhase('play')
   }
 
+  function currentStepKey() {
+    try {
+      const step = Number(sessionStorage.getItem('pa-student-journey-step-v1') || '0')
+      return practiceFeedbackKey('/journey', step || undefined)
+    } catch {
+      return practiceFeedbackKey('/journey')
+    }
+  }
+
+  function handleComplete() {
+    if (!isPracticeMode()) {
+      playFoley('wood')
+      onComplete()
+      return
+    }
+    const key = currentStepKey()
+    if (hasPracticeFeedbackAck(key)) {
+      playFoley('wood')
+      onComplete()
+      return
+    }
+    const panel = document.querySelector('.train-panel')
+    if (panel) (panel as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'end' })
+    window.setTimeout(() => setFeedbackPrompt(true), 420)
+  }
+
+  function confirmFeedbackYes() {
+    markPracticeFeedbackAck(currentStepKey())
+    setFeedbackPrompt(false)
+    playFoley('wood')
+    onComplete()
+  }
+
+  function confirmFeedbackNo() {
+    setFeedbackPrompt(false)
+    openPracticeChat()
+  }
+
   if (phase === 'summary') {
     const pass = correctCount >= need && misses === 0
     const examLocked = mode === 'exam' && maxAttempts != null && attempt >= maxAttempts && !pass
@@ -130,7 +176,7 @@ export function EyeSpyQuiz({
           You must find every tool with no mistakes. Wrong answers change the scene.
         </p>
         {pass ? (
-          <button type="button" className="btn btn-primary" onClick={onComplete}>
+          <button type="button" className="btn btn-primary" onClick={handleComplete}>
             Continue
           </button>
         ) : examLocked ? (
@@ -143,6 +189,25 @@ export function EyeSpyQuiz({
               ? `Try exam again (${attempt + 1} of ${maxAttempts})`
               : 'Try again — find every tool with no mistakes'}
           </button>
+        )}
+        {feedbackPrompt && (
+          <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">
+            <div className="practice-next-gate-card">
+              <h3>Did you leave feedback on this step?</h3>
+              <p>
+                Scroll the page and use the feedback chat on the side if something felt unclear. Confirm when you are
+                ready to move on.
+              </p>
+              <div className="practice-next-gate-actions">
+                <button type="button" className="btn btn-primary" onClick={confirmFeedbackYes}>
+                  Yes — continue
+                </button>
+                <button type="button" className="btn btn-ghost" onClick={confirmFeedbackNo}>
+                  Not yet — open chat
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     )
