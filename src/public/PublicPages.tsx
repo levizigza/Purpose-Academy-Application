@@ -95,7 +95,7 @@ export function HomePage() {
               <div className="signal-media">
                 <img
                   src={BRAND_ASSETS.photoConstruction}
-                  alt="Construction students learning on a job site"
+                  alt="Building exterior for Construction Foundations"
                 />
                 <img className="signal-icon" src={BRAND_ASSETS.iconConstruction} alt="" />
               </div>
@@ -215,7 +215,7 @@ export function ProgramsPage() {
           </Link>
         </div>
         <figure className="school-program-media">
-          <img src={BRAND_ASSETS.photoConstruction} alt="Construction foundations training at Purpose Academy" />
+          <img src={BRAND_ASSETS.photoConstruction} alt="Building exterior — Construction Foundations at Purpose Academy" />
         </figure>
       </Reveal>
 
