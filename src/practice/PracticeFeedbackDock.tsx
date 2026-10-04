@@ -1,11 +1,12 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   getPracticeName,
   isPracticeMode,
   markPracticeFeedbackAck,
   PRACTICE_REVIEWERS,
   practiceFeedbackKey,
+  restartPracticeFromTop,
   setPracticeName,
   shouldHidePracticeFeedback,
 } from './PracticeMode'
@@ -261,6 +262,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
 
 export function PracticeModeBanner() {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const [name, setName] = useState(() => getPracticeName())
   const [active, setActive] = useState(() => isPracticeMode())
 
@@ -271,26 +273,42 @@ export function PracticeModeBanner() {
     }
     sync()
     window.addEventListener('pa-practice-started', sync)
-    return () => window.removeEventListener('pa-practice-started', sync)
+    window.addEventListener('pa-practice-restarted', sync)
+    return () => {
+      window.removeEventListener('pa-practice-started', sync)
+      window.removeEventListener('pa-practice-restarted', sync)
+    }
   }, [pathname])
 
   if (!active) return null
   const onJourney = pathname === '/journey'
+
+  function startOver() {
+    restartPracticeFromTop()
+    navigate('/journey')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <div className="practice-banner motion-soft-pulse" role="status">
       <span>
-        Practice mode{name ? ` · ${name}` : ''} — registration skipped. Use the feedback chat on the side as you
-        review.
+        Practice mode{name ? ` · ${name}` : ''} — registration skipped. Use Back anytime, or Start over to run the
+        path from the top.
       </span>
-      {onJourney ? (
-        <Link className="practice-banner-cta" to="/">
-          Review website
-        </Link>
-      ) : (
-        <Link className="practice-banner-cta" to="/journey">
-          Continue training path
-        </Link>
-      )}
+      <span className="practice-banner-actions">
+        {onJourney ? (
+          <Link className="practice-banner-cta" to="/">
+            Review website
+          </Link>
+        ) : (
+          <Link className="practice-banner-cta" to="/journey">
+            Continue training
+          </Link>
+        )}
+        <button type="button" className="practice-banner-cta" onClick={startOver}>
+          Start over
+        </button>
+      </span>
     </div>
   )
 }

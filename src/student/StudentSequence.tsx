@@ -40,6 +40,7 @@ import {
   openPracticeChat,
   PRACTICE_ENTRY_STEP,
   practiceFeedbackKey,
+  resetPracticeProgress,
 } from '../practice/PracticeMode'
 
 const JOURNEY_KEY = 'pa-student-journey-step-v1'
@@ -515,6 +516,24 @@ export function StudentSequencePage() {
       saveStep(PRACTICE_ENTRY_STEP)
     }
   }, [step])
+
+  /* Banner "Start over" / fresh Practice Mode entry — jump back to language step */
+  useEffect(() => {
+    const onRestart = () => {
+      if (!isPracticeMode()) return
+      setEmpDone(false)
+      setObsForm({ skill: '', station: '', notes: '' })
+      setLogForm({ date: '', tasks: '', supervisor: '' })
+      setEmpForm({ resume_goal: '', availability: '' })
+      setError(null)
+      setTransitioning(false)
+      setStep(PRACTICE_ENTRY_STEP)
+      saveStep(PRACTICE_ENTRY_STEP)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    window.addEventListener('pa-practice-restarted', onRestart)
+    return () => window.removeEventListener('pa-practice-restarted', onRestart)
+  }, [])
 
   function go(next: number, message?: string) {
     stopSpeech()
@@ -1584,10 +1603,16 @@ export function StudentSequencePage() {
               type="button"
               className="btn btn-ghost"
               onClick={() => {
-                const restart = isPracticeMode() ? PRACTICE_ENTRY_STEP : 1
-                saveStep(restart)
+                if (isPracticeMode()) {
+                  resetPracticeProgress()
+                  setEmpDone(false)
+                  setStep(PRACTICE_ENTRY_STEP)
+                  go(PRACTICE_ENTRY_STEP)
+                  return
+                }
+                saveStep(1)
                 setEmpDone(false)
-                go(restart)
+                go(1)
               }}
             >
               Restart training path

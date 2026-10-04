@@ -43,13 +43,41 @@ export function getPracticeName(): string {
   }
 }
 
+/** Clear journey progress / feedback acks so a reviewer can run the path again from the top. */
+export function resetPracticeProgress() {
+  try {
+    sessionStorage.removeItem(ACK_KEY)
+    sessionStorage.removeItem('pa-student-observation-v1')
+    sessionStorage.removeItem('pa-student-daily-log-v1')
+    sessionStorage.removeItem('pa-student-employment-v1')
+    sessionStorage.setItem('pa-student-journey-step-v1', String(PRACTICE_ENTRY_STEP))
+    window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: PRACTICE_ENTRY_STEP } }))
+    window.dispatchEvent(new Event('pa-practice-restarted'))
+  } catch {
+    /* ignore */
+  }
+}
+
 export function startPracticeMode(fullName: string) {
   const name = fullName.trim()
   try {
     sessionStorage.setItem(FLAG_KEY, '1')
     if (name) sessionStorage.setItem(NAME_KEY, name)
-    /* Skip registration — land on language / real training process */
-    sessionStorage.setItem('pa-student-journey-step-v1', String(PRACTICE_ENTRY_STEP))
+    /* Fresh run every time — skip registration, land on language / real training process */
+    resetPracticeProgress()
+    window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Keep reviewer name, wipe progress, and jump back to the first training step. */
+export function restartPracticeFromTop() {
+  const name = getPracticeName()
+  try {
+    sessionStorage.setItem(FLAG_KEY, '1')
+    if (name) sessionStorage.setItem(NAME_KEY, name)
+    resetPracticeProgress()
     window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
   } catch {
     /* ignore */
