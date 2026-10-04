@@ -663,23 +663,35 @@ p {
   z-index: 2;
 }
 
-/* Quiet deep-background PA watermark — further back than copy / toolbox */
-.hero-pa-watermark {
+/* Deep-background PA — faded watermark with doorway light, behind copy + toolbox */
+.hero-pa-back {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.16;
-  background:
-    radial-gradient(ellipse 42% 48% at 28% 55%, rgba(255, 246, 200, 0.1), transparent 70%);
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 186 128'%3E%3Cpath fill='%23fff' fill-rule='evenodd' d='M32 22h34c20 0 34 13 34 32s-14 32-34 32H50v42H32V22zm18 48h16c8 0 14-5 14-12s-6-12-14-12H50v24z'/%3E%3Cpath fill='%23fff' d='M130 22l-22 96h18l14-96h-10zm24 0l22 96h-18L146 22h8z'/%3E%3Cpath fill='%23fff' d='M120 68h44l-3 13h-38z'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 186 128'%3E%3Cpath fill='%23fff' fill-rule='evenodd' d='M32 22h34c20 0 34 13 34 32s-14 32-34 32H50v42H32V22zm18 48h16c8 0 14-5 14-12s-6-12-14-12H50v24z'/%3E%3Cpath fill='%23fff' d='M130 22l-22 96h18l14-96h-10zm24 0l22 96h-18L146 22h8z'/%3E%3Cpath fill='%23fff' d='M120 68h44l-3 13h-38z'/%3E%3C/svg%3E");
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: 8% 58%;
-  mask-position: 8% 58%;
-  -webkit-mask-size: min(58vw, 520px) auto;
-  mask-size: min(58vw, 520px) auto;
+  display: grid;
+  align-items: center;
+  justify-items: start;
+  padding: 0 0 0 0;
+  overflow: hidden;
+}
+
+.hero-pa-back .hero-pa-mark {
+  width: min(78vw, 760px);
+  margin-left: clamp(-2%, 2vw, 4%);
+  margin-top: 4%;
+  opacity: 0.38;
+  filter: drop-shadow(0 0 48px rgba(255, 230, 150, 0.16));
+  transform: translateY(-2%);
+}
+
+.hero-pa-back .site-pa-svg {
+  filter: drop-shadow(0 24px 52px rgba(0, 0, 0, 0.42));
+}
+
+/* Old CSS-mask watermark retired in favor of real SitePaMark */
+.hero-pa-watermark {
+  display: none;
 }
 
 .site-pa-mark {
@@ -697,12 +709,18 @@ p {
 }
 
 @media (max-width: 860px) {
-  .hero-pa-watermark {
-    opacity: 0.12;
-    -webkit-mask-position: 50% 8%;
-    mask-position: 50% 8%;
-    -webkit-mask-size: min(80vw, 340px) auto;
-    mask-size: min(80vw, 340px) auto;
+  .hero-pa-back {
+    align-items: start;
+    justify-items: center;
+    padding: 4% 0 0;
+  }
+
+  .hero-pa-back .hero-pa-mark {
+    width: min(92vw, 440px);
+    margin-left: 0;
+    margin-top: 0;
+    opacity: 0.3;
+    transform: none;
   }
 }
 
