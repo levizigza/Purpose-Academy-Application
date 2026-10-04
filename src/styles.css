@@ -6903,6 +6903,18 @@ table.data th {
   background: #fff;
 }
 
+.school-program-feature + .school-program-feature {
+  margin-top: 1rem;
+}
+
+.school-program-copy .badge {
+  margin-bottom: 0.55rem;
+}
+
+.school-program-copy .btn {
+  margin-top: 0.35rem;
+}
+
 @media (max-width: 860px) {
   .school-program-feature {
     grid-template-columns: 1fr;

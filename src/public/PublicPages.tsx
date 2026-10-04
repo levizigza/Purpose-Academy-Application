@@ -219,26 +219,51 @@ export function ProgramsPage() {
         </figure>
       </Reveal>
 
-      <div className="signal-row">
-        <Reveal as="article" className="signal logistics muted-signal" delay={120}>
-          <div className="signal-media">
-            <img src={BRAND_ASSETS.photoLogistics} alt="Logistics training environment" />
-            <img className="signal-icon" src={BRAND_ASSETS.iconLogistics} alt="" />
-          </div>
-          <h2>Warehousing & Logistics</h2>
-          <p>Future school track with the same foundation-to-practice standard after Construction is proven.</p>
+      <Reveal as="article" className="school-program-feature site-crate" delay={120}>
+        <div className="school-program-copy">
           <span className="badge">Coming next</span>
-        </Reveal>
-        <Reveal as="article" className="signal community muted-signal" delay={180}>
-          <div className="signal-media">
-            <img src={BRAND_ASSETS.photoCommunity} alt="Community support on a construction site" />
-            <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
-          </div>
-          <h2>Community Support</h2>
-          <p>Planned program for people-focused careers using our school model.</p>
+          <h2>Warehousing & Logistics</h2>
+          <p>
+            The next school pathway after Construction is established. Same foundation-to-practice model: workplace
+            language, safety, equipment awareness, and supervised drills that prepare learners for warehouse and
+            logistics roles in Alberta.
+          </p>
+          <ul className="school-bullets">
+            <li>Warehouse safety and clear site English</li>
+            <li>Inventory, packing, and receiving practice</li>
+            <li>Same instructor observation and Skills Passport standard</li>
+          </ul>
+          <Link className="btn btn-primary" to="/admissions">
+            Ask about Logistics
+          </Link>
+        </div>
+        <figure className="school-program-media">
+          <img src={BRAND_ASSETS.photoLogistics} alt="Warehouse training environment for Warehousing and Logistics" />
+        </figure>
+      </Reveal>
+
+      <Reveal as="article" className="school-program-feature site-crate" delay={180}>
+        <div className="school-program-copy">
           <span className="badge">Planned</span>
-        </Reveal>
-      </div>
+          <h2>Community Support</h2>
+          <p>
+            A planned pathway for people-focused work using the same school model. Learners build communication,
+            documentation, and professional habits with instructor support, then move toward community and client-support
+            roles.
+          </p>
+          <ul className="school-bullets">
+            <li>Client communication and workplace English</li>
+            <li>Documentation and professional conduct</li>
+            <li>Foundation-to-practice path with instructor checks</li>
+          </ul>
+          <Link className="btn btn-primary" to="/admissions">
+            Ask about Community Support
+          </Link>
+        </div>
+        <figure className="school-program-media">
+          <img src={BRAND_ASSETS.photoCommunity} alt="Workers talking on a construction site for Community Support" />
+        </figure>
+      </Reveal>
     </div>
   )
 }
