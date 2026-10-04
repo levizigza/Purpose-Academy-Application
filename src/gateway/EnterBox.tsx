@@ -241,7 +241,8 @@ export function EnterBox() {
       playFoley('latch')
       playFoley('metal')
     })
-    window.setTimeout(() => launchTo('/journey', 'Practice Mode'), 380)
+    /* Land on the live site — registration is skipped inside the training path */
+    window.setTimeout(() => launchTo('/', 'Practice Mode'), 380)
   }
 
   return (

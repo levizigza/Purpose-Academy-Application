@@ -6103,26 +6103,66 @@ html.pa-page-wipe .hero-inner {
   font-weight: 700;
   text-align: center;
   box-shadow: 0 10px 24px rgba(7, 30, 61, 0.22);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem 0.85rem;
+}
+
+.practice-banner-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 248, 232, 0.95);
+  color: #0b2f5c;
+  text-decoration: none;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.practice-banner-cta:hover,
+.practice-banner-cta:focus-visible {
+  background: #fff;
+  outline: 2px solid #f5c542;
+  outline-offset: 2px;
 }
 
 .shell.is-train .practice-banner {
   width: min(100% - 1rem, 720px);
 }
 
-.practice-dock {
+/* Side feedback chatbot */
+.practice-chat {
   position: fixed;
   right: 1rem;
   bottom: 1rem;
-  z-index: 80;
-  width: min(calc(100vw - 1.5rem), 340px);
+  top: auto;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
+  pointer-events: none;
 }
 
-.practice-dock-tab {
-  margin-left: auto;
-  display: block;
+.practice-chat > * {
+  pointer-events: auto;
+}
+
+.practice-chat.is-open {
+  top: max(4.5rem, env(safe-area-inset-top));
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+.practice-chat-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   border: 0;
   border-radius: 999px;
-  padding: 0.7rem 1.1rem;
+  padding: 0.75rem 1.15rem;
   font-family: var(--display);
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -6132,23 +6172,181 @@ html.pa-page-wipe .hero-inner {
   box-shadow: 0 12px 28px rgba(232, 163, 23, 0.4);
 }
 
-.practice-dock-panel {
-  padding: 1rem 1.05rem 1.15rem;
-  display: grid;
-  gap: 0.65rem;
+.practice-chat-tab-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #0b2f5c;
+  box-shadow: 0 0 0 4px rgba(11, 47, 92, 0.15);
 }
 
-.practice-dock-head {
+.practice-chat-panel {
+  width: min(calc(100vw - 1.5rem), 360px);
+  height: min(72vh, 560px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  border-radius: 18px;
+  border: 1px solid rgba(11, 47, 92, 0.14);
+  background: linear-gradient(180deg, #0f1a28, #152538);
+  color: #e8eef6;
+  box-shadow: 0 24px 48px rgba(4, 16, 30, 0.45);
+  overflow: hidden;
+}
+
+.practice-chat-head {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.practice-dock-lede,
+.practice-chat-head strong {
+  display: block;
+  font-family: var(--display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.92rem;
+}
+
+.practice-chat-head p {
+  margin: 0.2rem 0 0;
+  color: #9aabc0;
+  font-size: 0.82rem;
+}
+
+.practice-chat-head .linkish {
+  color: #f5c542;
+}
+
+.practice-chat-thread {
+  overflow: auto;
+  padding: 0.9rem 1rem;
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+}
+
+.practice-chat-bubble {
+  max-width: 92%;
+  padding: 0.7rem 0.85rem;
+  border-radius: 14px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.practice-chat-bubble.is-bot,
+.practice-chat-bubble.is-system {
+  justify-self: start;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.practice-chat-bubble.is-user {
+  justify-self: end;
+  background: rgba(232, 163, 23, 0.2);
+  border: 1px solid rgba(232, 163, 23, 0.35);
+  color: #fff8e8;
+}
+
+.practice-chat-composer {
+  padding: 0.85rem 1rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.practice-chat-form {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.practice-chat-form textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8eef6;
+  padding: 0.7rem 0.8rem;
+  resize: vertical;
+  font: inherit;
+}
+
+.practice-chat-form textarea::placeholder {
+  color: #8a9ab0;
+}
+
+.practice-chat .practice-name-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.practice-chat .field label {
+  color: #d4dde8;
+}
+
+.practice-chat .field input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #e8eef6;
+}
+
 .practice-dock-prompt {
   margin: 0;
   font-size: 0.92rem;
+}
+
+.practice-next-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(4, 16, 30, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.practice-next-gate-card {
+  width: min(100%, 420px);
+  padding: 1.25rem 1.3rem;
+  border-radius: 16px;
+  background: #101a28;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e8eef6;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+}
+
+.practice-next-gate-card h3 {
+  margin: 0 0 0.45rem;
+  font-family: var(--display);
+  font-size: 1.25rem;
+}
+
+.practice-next-gate-card p {
+  margin: 0 0 1rem;
+  color: #9aabc0;
+  line-height: 1.45;
+}
+
+.practice-next-gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+@media (max-width: 720px) {
+  .practice-chat.is-open {
+    left: 0.65rem;
+    right: 0.65rem;
+    align-items: stretch;
+  }
+
+  .practice-chat-panel {
+    width: 100%;
+    height: min(70vh, 520px);
+  }
 }
 
 .practice-filter-row {
@@ -6320,10 +6518,9 @@ video {
   line-height: 1.3;
 }
 
-.practice-dock {
+.practice-chat {
   right: max(0.65rem, env(safe-area-inset-right));
   bottom: max(0.65rem, env(safe-area-inset-bottom));
-  width: min(calc(100vw - 1.25rem), 340px);
 }
 
 .practice-gate-card {
@@ -6439,7 +6636,7 @@ video {
     gap: 0.55rem 0.85rem;
   }
 
-  .practice-dock-tab {
+  .practice-chat-tab {
     padding: 0.62rem 0.95rem;
   }
 

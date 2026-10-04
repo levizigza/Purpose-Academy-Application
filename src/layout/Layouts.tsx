@@ -5,6 +5,7 @@ import { homeForRole, useSession } from '../auth/Session'
 import { AmbientField, PageMotion } from '../components/Motion'
 import { LoadingScreen, SkipLink } from '../components/Ui'
 import { PracticeFeedbackDock, PracticeModeBanner } from '../practice/PracticeFeedbackDock'
+import { isPracticeMode } from '../practice/PracticeMode'
 import type { Role } from '../data/types'
 
 function BrandLockup({ to, compact = false, dark = false }: { to: string; compact?: boolean; dark?: boolean }) {
@@ -25,6 +26,7 @@ export function PublicLayout() {
   if (loading) return <LoadingScreen label={`Opening ${BRAND.name}…`} />
 
   const isTrain = pathname === '/journey' || pathname === '/enter/student'
+  const practice = isPracticeMode()
 
   return (
     <div className={`shell${isTrain ? ' is-train' : ''}`}>
@@ -40,6 +42,7 @@ export function PublicLayout() {
               <NavLink to="/about">About</NavLink>
               <NavLink to="/give">Give</NavLink>
               <NavLink to="/contact">Contact</NavLink>
+              {practice && <NavLink to="/journey">Training</NavLink>}
               {user && (
                 <NavLink to={homeForRole(user.role, student?.registration_status)}>Portal</NavLink>
               )}
@@ -49,6 +52,10 @@ export function PublicLayout() {
                 <button type="button" className="linkish nav-signout" onClick={logout}>
                   Sign out
                 </button>
+              ) : practice ? (
+                <NavLink className="btn btn-primary nav-cta" to="/journey">
+                  Continue training
+                </NavLink>
               ) : (
                 <NavLink className="btn btn-primary nav-cta" to="/login">
                   {BRAND.secondaryCta}
@@ -78,7 +85,7 @@ export function PublicLayout() {
             <Link to="/programs">Programs</Link>
             <Link to="/give">Give</Link>
             <Link to="/contact">Contact</Link>
-            <Link to="/login">{BRAND.secondaryCta}</Link>
+            {practice ? <Link to="/journey">Training path</Link> : <Link to="/login">{BRAND.secondaryCta}</Link>}
           </div>
         </div>
       </footer>

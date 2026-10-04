@@ -33,6 +33,14 @@ import {
 } from './speech'
 import { toolImage } from './toolImages'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
+import {
+  hasPracticeFeedbackAck,
+  isPracticeMode,
+  markPracticeFeedbackAck,
+  openPracticeChat,
+  PRACTICE_ENTRY_STEP,
+  practiceFeedbackKey,
+} from '../practice/PracticeMode'
 
 const JOURNEY_KEY = 'pa-student-journey-step-v1'
 const OBS_KEY = 'pa-student-observation-v1'
@@ -40,7 +48,10 @@ const LOG_KEY = 'pa-student-daily-log-v1'
 const EMP_KEY = 'pa-student-employment-v1'
 
 function saveStep(step: number) {
-  try { sessionStorage.setItem(JOURNEY_KEY, String(step)) } catch { /* */ }
+  try {
+    sessionStorage.setItem(JOURNEY_KEY, String(step))
+    window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step } }))
+  } catch { /* */ }
 }
 
 function loadStep() {
@@ -148,13 +159,51 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 }) {
   const meta = JOURNEY_STEPS[step - 1]
   const pct = Math.round((step / 20) * 100)
+  const [feedbackPrompt, setFeedbackPrompt] = useState(false)
+
+  function handleNext() {
+    if (!onNext) return
+    if (!isPracticeMode()) {
+      playFoley('wood')
+      onNext()
+      return
+    }
+    const key = practiceFeedbackKey('/journey', step)
+    if (hasPracticeFeedbackAck(key)) {
+      playFoley('wood')
+      onNext()
+      return
+    }
+    /* Scroll the step so reviewers can skim, then ask about feedback at the bottom. */
+    const panel = document.querySelector('.train-panel')
+    const actions = document.querySelector('.train-actions')
+    const target = (actions as HTMLElement | null) || (panel as HTMLElement | null)
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    } else {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })
+    }
+    window.setTimeout(() => setFeedbackPrompt(true), 420)
+  }
+
+  function confirmFeedbackYes() {
+    markPracticeFeedbackAck(practiceFeedbackKey('/journey', step))
+    setFeedbackPrompt(false)
+    playFoley('wood')
+    onNext?.()
+  }
+
+  function confirmFeedbackNo() {
+    setFeedbackPrompt(false)
+    openPracticeChat()
+  }
 
   return (
     <div className="shell-main train-shell">
       <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
       <header className="train-header">
         <div className="train-header-top">
-          <p className="train-kicker">Step {step} of 20</p>
+          <p className="train-kicker">Step {step} of 20{isPracticeMode() ? ' · Practice' : ''}</p>
           <div className="train-sound-slot">
             <FoleyToggle compact />
           </div>
@@ -189,16 +238,33 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
           <button
             type="button"
             className="btn btn-primary train-next"
-            onClick={() => {
-              playFoley('wood')
-              onNext()
-            }}
+            onClick={handleNext}
             disabled={nextDisabled}
           >
             {nextLabel}
           </button>
         )}
       </div>
+
+      {feedbackPrompt && (
+        <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">
+          <div className="practice-next-gate-card">
+            <h3>Did you leave feedback on this step?</h3>
+            <p>
+              Scroll the page and use the feedback chat on the side if something felt unclear. Confirm when you are
+              ready to move on.
+            </p>
+            <div className="practice-next-gate-actions">
+              <button type="button" className="btn btn-primary" onClick={confirmFeedbackYes}>
+                Yes — continue
+              </button>
+              <button type="button" className="btn btn-ghost" onClick={confirmFeedbackNo}>
+                Not yet — open chat
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -379,6 +445,15 @@ export function StudentSequencePage() {
   useEffect(() => { primeSpeech() }, [])
   useEffect(() => () => { stopSpeech() }, [])
 
+  /* Practice mode skips registration entirely */
+  useEffect(() => {
+    if (!isPracticeMode()) return
+    if (step < PRACTICE_ENTRY_STEP) {
+      setStep(PRACTICE_ENTRY_STEP)
+      saveStep(PRACTICE_ENTRY_STEP)
+    }
+  }, [step])
+
   function go(next: number, message?: string) {
     stopSpeech()
     setError(null)
@@ -539,6 +614,13 @@ export function StudentSequencePage() {
   ]
 
   if (step === 1) {
+    if (isPracticeMode()) {
+      return (
+        <Shell step={PRACTICE_ENTRY_STEP} onBack={() => navigate('/')} onNext={() => go(PRACTICE_ENTRY_STEP)}>
+          <p className="train-login-lede">Practice mode skips registration. Opening your language step…</p>
+        </Shell>
+      )
+    }
     return (
       <Shell step={1} onBack={() => navigate('/enter/student')} onNext={() => go(2, 'Opening registration…')} nextLabel="Continue as a new student">
         <div className="train-login">
@@ -569,6 +651,13 @@ export function StudentSequencePage() {
   }
 
   if (step === 2) {
+    if (isPracticeMode()) {
+      return (
+        <Shell step={PRACTICE_ENTRY_STEP} onBack={() => navigate('/')} onNext={() => go(PRACTICE_ENTRY_STEP)}>
+          <p className="train-login-lede">Practice mode skips registration. Opening your language step…</p>
+        </Shell>
+      )
+    }
     async function onRegister(e: FormEvent) {
       e.preventDefault()
       if (regForm.password.length < 8) {
@@ -649,7 +738,7 @@ export function StudentSequencePage() {
     return (
       <Shell
         step={3}
-        onBack={() => go(2)}
+        onBack={() => (isPracticeMode() ? navigate('/') : go(2))}
         onNext={() => {
           setRegForm((f) => ({ ...f, preferred_language: supportLang }))
           go(4)
@@ -1355,7 +1444,18 @@ export function StudentSequencePage() {
           </div>
           <div className="hero-actions">
             <Link className="btn btn-primary" to="/app/student">Go to my dashboard</Link>
-            <button type="button" className="btn btn-ghost" onClick={() => { saveStep(1); setEmpDone(false); go(1) }}>Restart training path</button>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={() => {
+                const restart = isPracticeMode() ? PRACTICE_ENTRY_STEP : 1
+                saveStep(restart)
+                setEmpDone(false)
+                go(restart)
+              }}
+            >
+              Restart training path
+            </button>
           </div>
         </>
       )}
