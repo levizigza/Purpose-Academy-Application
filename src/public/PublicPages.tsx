@@ -117,7 +117,7 @@ export function HomePage() {
             </Reveal>
             <Reveal as="article" className="signal community" delay={220}>
               <div className="signal-media">
-                <img src={BRAND_ASSETS.photoCommunity} alt="Community support professionals at work" />
+                <img src={BRAND_ASSETS.photoCommunity} alt="Construction site community support — workers talking on the job" />
                 <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
               </div>
               <h3>Community Support</h3>
@@ -231,7 +231,7 @@ export function ProgramsPage() {
         </Reveal>
         <Reveal as="article" className="signal community muted-signal" delay={180}>
           <div className="signal-media">
-            <img src={BRAND_ASSETS.photoCommunity} alt="Community support training setting" />
+            <img src={BRAND_ASSETS.photoCommunity} alt="Community support on a construction site — mentoring and teamwork" />
             <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
           </div>
           <h2>Community Support</h2>
