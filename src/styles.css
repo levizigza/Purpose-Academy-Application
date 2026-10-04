@@ -1981,11 +1981,11 @@ table.data th {
   }
 
   .threshold-hammer {
-    right: max(0.35rem, env(safe-area-inset-right));
+    right: clamp(2.4rem, 12vw, 7rem);
   }
 
   .threshold-hammer-icon {
-    width: clamp(5.8rem, 34vw, 7.2rem);
+    width: clamp(6rem, 28vw, 7.6rem);
   }
 }
 
@@ -2005,7 +2005,7 @@ table.data th {
   }
 
   .threshold-hammer-icon {
-    width: clamp(5.2rem, 18vh, 6.5rem);
+    width: clamp(5.6rem, 18vh, 7rem);
   }
 }
 
@@ -2031,7 +2031,7 @@ table.data th {
   }
 
   .threshold-hammer-icon {
-    width: clamp(5.5rem, 20vw, 7rem);
+    width: clamp(5.8rem, 22vw, 7.4rem);
   }
 }
 
@@ -2063,14 +2063,15 @@ table.data th {
 
 .threshold-hammer {
   position: fixed;
-  right: max(0.85rem, env(safe-area-inset-right));
+  /* Keep the sledge in the composition — inset from the edge toward the doorway */
+  right: clamp(3.5rem, 16vw, 11rem);
   top: 50%;
   z-index: 12;
   display: grid;
   place-items: center;
   width: auto;
   margin: 0;
-  padding: 0.2rem;
+  padding: 0.35rem;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -2078,7 +2079,7 @@ table.data th {
   box-shadow: none;
   cursor: pointer;
   opacity: 0;
-  transform: translateY(-50%) translateX(12px) rotate(8deg);
+  transform: translateY(-50%) translateX(12px) rotate(6deg);
   transition: transform 0.28s ease, filter 0.28s ease;
   filter: drop-shadow(0 14px 28px rgba(90, 55, 8, 0.45));
 }
@@ -2088,24 +2089,36 @@ table.data th {
 }
 
 .threshold-hammer:hover:not(:disabled) {
-  transform: translateY(-50%) translateX(2px) rotate(4deg);
+  transform: translateY(-50%) translateX(-4px) rotate(2deg);
   filter: drop-shadow(0 18px 32px rgba(90, 55, 8, 0.55));
 }
 
 .threshold-hammer:active:not(:disabled) {
-  transform: translateY(-50%) translateX(0) rotate(2deg) scale(0.98);
+  transform: translateY(-50%) translateX(-6px) rotate(0deg) scale(0.98);
 }
 
 .threshold-hammer-icon {
-  width: clamp(5.6rem, 14vw, 7.5rem);
+  width: clamp(6.4rem, 16vw, 8.6rem);
   height: auto;
   display: block;
+}
+
+.threshold-hammer-icon .threshold-enter-word {
+  animation: enter-flash 1.15s ease-in-out infinite;
+  paint-order: stroke fill;
+  stroke: rgba(11, 47, 92, 0.55);
+  stroke-width: 0.6px;
 }
 
 .threshold-hammer.is-smashing {
   animation: hammer-smash 0.7s cubic-bezier(0.18, 0.72, 0.22, 1) forwards;
   pointer-events: none;
   z-index: 14;
+}
+
+.threshold-hammer.is-smashing .threshold-enter-word {
+  animation: none;
+  opacity: 0.85;
 }
 
 .foley-toggle.is-compact {
@@ -2234,18 +2247,37 @@ table.data th {
 @keyframes hammer-side-in {
   from {
     opacity: 0;
-    transform: translateY(-50%) translateX(48px) rotate(18deg);
+    transform: translateY(-50%) translateX(36px) rotate(14deg);
   }
   to {
     opacity: 1;
-    transform: translateY(-50%) translateX(0) rotate(8deg);
+    transform: translateY(-50%) translateX(0) rotate(6deg);
+  }
+}
+
+@keyframes enter-flash {
+  0%,
+  100% {
+    fill: #f5c542;
+    opacity: 1;
+    filter: drop-shadow(0 0 0 rgba(245, 197, 66, 0));
+  }
+  45% {
+    fill: #fff6d0;
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(245, 197, 66, 0.95));
+  }
+  55% {
+    fill: #ffffff;
+    opacity: 1;
+    filter: drop-shadow(0 0 10px rgba(255, 248, 210, 0.9));
   }
 }
 
 @keyframes hammer-smash {
   0% {
     opacity: 1;
-    transform: translateY(-50%) translateX(0) rotate(8deg);
+    transform: translateY(-50%) translateX(0) rotate(6deg);
   }
   28% {
     transform: translateY(-58%) translateX(-6vw) rotate(-28deg) scale(1.05);
@@ -2296,17 +2328,17 @@ table.data th {
 
 @media (max-width: 640px) {
   .threshold-hammer {
-    right: max(0.2rem, env(safe-area-inset-right));
+    right: clamp(1.6rem, 10vw, 4.5rem);
   }
 
   .threshold-hammer-icon {
-    width: clamp(3.8rem, 18vw, 5.2rem);
+    width: clamp(5.2rem, 24vw, 6.6rem);
   }
 }
 
 @media (max-height: 620px) {
   .threshold-hammer-icon {
-    width: clamp(3.4rem, 16vh, 4.8rem);
+    width: clamp(4.8rem, 17vh, 6rem);
   }
 }
 
@@ -2314,6 +2346,11 @@ table.data th {
   .mirror-break,
   .threshold-hammer.is-smashing {
     display: none !important;
+  }
+
+  .threshold-hammer-icon .threshold-enter-word {
+    animation: none;
+    fill: #f5c542;
   }
 }
 

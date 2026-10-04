@@ -95,14 +95,15 @@ function EnterHammer({ className = '' }: { className?: string }) {
       <ellipse cx="55" cy="254" rx="11" ry="7" fill="#3d280c" />
       <ellipse cx="55" cy="252" rx="8" ry="4" fill="#8b6914" opacity="0.55" />
       <text
+        className="threshold-enter-word"
         x="55"
         y="148"
         textAnchor="middle"
-        fill="#0b2f5c"
+        fill="#f5c542"
         fontFamily="Montserrat, Arial Black, sans-serif"
-        fontSize="16"
+        fontSize="18"
         fontWeight="800"
-        letterSpacing="0.28em"
+        letterSpacing="0.32em"
         transform="rotate(90 55 148)"
       >
         ENTER
