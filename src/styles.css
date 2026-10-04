@@ -663,7 +663,7 @@ p {
   z-index: 2;
 }
 
-/* Deep-background PA — faded watermark with doorway light, behind copy + toolbox */
+/* Deep-background PA — faded letter monogram behind copy + toolbox */
 .hero-pa-back {
   position: absolute;
   inset: 0;
@@ -2023,16 +2023,31 @@ table.data th {
   }
 }
 
+
+.threshold-glass {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  min-height: min(88dvh, 900px);
+}
+
+.threshold-glass.is-gone {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .threshold-hammer {
   position: fixed;
-  right: max(1.1rem, env(safe-area-inset-right));
+  right: max(0.85rem, env(safe-area-inset-right));
   top: 50%;
-  z-index: 6;
+  z-index: 12;
   display: grid;
   place-items: center;
   width: auto;
   margin: 0;
-  padding: 0.35rem 0.45rem;
+  padding: 0.2rem;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -2040,33 +2055,34 @@ table.data th {
   box-shadow: none;
   cursor: pointer;
   opacity: 0;
-  transform: translateY(-50%) translateX(18px) rotate(-18deg);
+  transform: translateY(-50%) translateX(12px) rotate(8deg);
   transition: transform 0.28s ease, filter 0.28s ease;
-  filter: drop-shadow(0 8px 16px rgba(201, 132, 14, 0.4));
+  filter: drop-shadow(0 14px 28px rgba(90, 55, 8, 0.45));
 }
 
 .threshold-hammer.is-visible {
-  animation: hammer-side-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+  animation: hammer-side-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
 }
 
 .threshold-hammer:hover:not(:disabled) {
-  transform: translateY(-50%) translateX(4px) rotate(-12deg);
-  filter: drop-shadow(0 12px 18px rgba(201, 132, 14, 0.5));
+  transform: translateY(-50%) translateX(2px) rotate(4deg);
+  filter: drop-shadow(0 18px 32px rgba(90, 55, 8, 0.55));
 }
 
 .threshold-hammer:active:not(:disabled) {
-  transform: translateY(-50%) translateX(0) rotate(-8deg) scale(0.98);
+  transform: translateY(-50%) translateX(0) rotate(2deg) scale(0.98);
 }
 
 .threshold-hammer-icon {
-  width: clamp(7.2rem, 22vw, 9rem);
+  width: clamp(5.6rem, 14vw, 7.5rem);
   height: auto;
   display: block;
 }
 
 .threshold-hammer.is-smashing {
-  animation: hammer-smash 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: hammer-smash 0.7s cubic-bezier(0.18, 0.72, 0.22, 1) forwards;
   pointer-events: none;
+  z-index: 14;
 }
 
 .foley-toggle.is-compact {
@@ -2082,147 +2098,144 @@ table.data th {
   z-index: 5;
 }
 
-/* Smash: cracks, impact flash, shards flying off */
-.threshold-smash {
+/* ── Mirror smash: cracks on intact glass, then shards fall with the image ── */
+
+.mirror-break {
   position: absolute;
   inset: 0;
-  z-index: 8;
+  z-index: 10;
   pointer-events: none;
   overflow: hidden;
 }
 
-.threshold-cracks {
+.mirror-cracks {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  z-index: 3;
 }
 
-.threshold-cracks .crack {
+.mirror-cracks .crack {
   fill: none;
-  stroke: rgba(11, 47, 92, 0.72);
-  stroke-width: 0.55;
+  stroke: rgba(20, 40, 70, 0.55);
+  stroke-width: 0.22;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 140;
-  stroke-dashoffset: 140;
-  animation: crack-draw 0.38s ease-out 0.18s forwards;
-  filter: drop-shadow(0 0 0.4px rgba(11, 47, 92, 0.35));
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: crack-draw 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) 0.18s forwards;
+  filter: drop-shadow(0 0 0.6px rgba(255, 255, 255, 0.65));
 }
 
-.threshold-cracks .crack-b { animation-delay: 0.22s; }
-.threshold-cracks .crack-c { animation-delay: 0.26s; }
-.threshold-cracks .crack-d { animation-delay: 0.28s; }
-.threshold-cracks .crack-e { animation-delay: 0.2s; }
-.threshold-cracks .crack-f { animation-delay: 0.24s; }
-.threshold-cracks .crack-g { animation-delay: 0.3s; }
-.threshold-cracks .crack-h { animation-delay: 0.32s; }
+.mirror-cracks .c2 { animation-delay: 0.2s; stroke-width: 0.18; }
+.mirror-cracks .c3 { animation-delay: 0.24s; }
+.mirror-cracks .c4 { animation-delay: 0.22s; }
+.mirror-cracks .c5 { animation-delay: 0.28s; }
+.mirror-cracks .c6 { animation-delay: 0.26s; }
+.mirror-cracks .c7 { animation-delay: 0.19s; stroke-width: 0.28; }
+.mirror-cracks .c8 { animation-delay: 0.23s; stroke-width: 0.26; }
+.mirror-cracks .c9 { animation-delay: 0.3s; }
+.mirror-cracks .c10 { animation-delay: 0.32s; }
+.mirror-cracks .c11 { animation-delay: 0.34s; stroke-width: 0.14; }
+.mirror-cracks .c12 { animation-delay: 0.36s; stroke-width: 0.14; }
 
-.threshold-impact {
+.mirror-impact {
   position: absolute;
   left: 50%;
   top: 46%;
-  width: 18vmin;
-  height: 18vmin;
+  width: 28vmin;
+  height: 28vmin;
   border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0.2);
-  background: radial-gradient(circle, rgba(245, 197, 66, 0.55), transparent 70%);
+  transform: translate(-50%, -50%) scale(0.15);
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(245, 197, 66, 0.35) 28%, transparent 68%);
   opacity: 0;
-  animation: smash-impact 0.45s ease-out 0.16s forwards;
+  z-index: 4;
+  animation: smash-impact 0.5s ease-out 0.16s forwards;
 }
 
-.threshold-shards {
+.mirror-shards {
   position: absolute;
   inset: 0;
+  z-index: 2;
+  opacity: 0;
 }
 
-.threshold-shards .shard {
+.mirror-break.is-active .mirror-shards {
+  opacity: 1;
+}
+
+.mirror-break.is-active .mirror-cracks {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.mirror-shard {
   position: absolute;
-  background: linear-gradient(145deg, #ffffff, #eef2f7);
-  box-shadow:
-    inset 0 0 0 1px rgba(11, 47, 92, 0.14),
-    0 8px 20px rgba(11, 47, 92, 0.12);
-  opacity: 0;
-  animation: shard-burst 0.78s cubic-bezier(0.22, 0.8, 0.25, 1) 0.36s forwards;
+  inset: 0;
+  transform-origin: 50% 48%;
+  will-change: transform, opacity, filter;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.55));
 }
 
-.threshold-shards .s1 {
-  left: 0; top: 0; width: 42%; height: 38%;
-  clip-path: polygon(0 0, 100% 0, 70% 100%, 0 85%);
-  --dx: -18vw; --dy: -16vh; --rot: -18deg;
-}
-.threshold-shards .s2 {
-  left: 38%; top: 0; width: 36%; height: 42%;
-  clip-path: polygon(10% 0, 100% 0, 100% 70%, 0 100%);
-  --dx: 8vw; --dy: -22vh; --rot: 12deg;
-}
-.threshold-shards .s3 {
-  right: 0; top: 0; width: 34%; height: 48%;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 18% 70%);
-  --dx: 22vw; --dy: -10vh; --rot: 22deg;
-}
-.threshold-shards .s4 {
-  left: 0; top: 32%; width: 40%; height: 40%;
-  clip-path: polygon(0 10%, 100% 0, 80% 100%, 0 100%);
-  --dx: -26vw; --dy: 6vh; --rot: -28deg;
-}
-.threshold-shards .s5 {
-  left: 34%; top: 34%; width: 38%; height: 36%;
-  clip-path: polygon(20% 0, 100% 15%, 70% 100%, 0 80%);
-  --dx: 4vw; --dy: 18vh; --rot: 8deg;
-  animation-delay: 0.4s;
-}
-.threshold-shards .s6 {
-  right: 0; top: 38%; width: 36%; height: 40%;
-  clip-path: polygon(0 0, 100% 20%, 100% 100%, 10% 100%);
-  --dx: 28vw; --dy: 12vh; --rot: 30deg;
-}
-.threshold-shards .s7 {
-  left: 0; bottom: 0; width: 48%; height: 36%;
-  clip-path: polygon(0 0, 100% 20%, 90% 100%, 0 100%);
-  --dx: -14vw; --dy: 24vh; --rot: -14deg;
-}
-.threshold-shards .s8 {
-  right: 0; bottom: 0; width: 56%; height: 34%;
-  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
-  --dx: 16vw; --dy: 26vh; --rot: 16deg;
+.mirror-break.is-active .mirror-shard {
+  animation: mirror-fall 1.45s cubic-bezier(0.33, 0.05, 0.55, 1) var(--delay, 0ms) forwards;
 }
 
-.threshold.is-smashing .threshold-stage {
-  animation: stage-crack-hold 0.4s ease-out forwards;
+.mirror-shard-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(11, 47, 92, 0.06);
 }
 
-.threshold.is-smashing .threshold-pathways,
-.threshold.is-smashing .threshold-school-name {
-  opacity: 0;
-  transition: opacity 0.2s ease;
+.mirror-shard-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), transparent 42%, rgba(11, 47, 92, 0.04));
+  pointer-events: none;
+}
+
+.threshold.is-smashing .threshold-glass.is-live {
+  animation: glass-hold 0.48s ease-out forwards;
+}
+
+.threshold.is-shattering .threshold-glass {
+  visibility: hidden;
 }
 
 @keyframes hammer-side-in {
   from {
     opacity: 0;
-    transform: translateY(-50%) translateX(40px) rotate(-28deg);
+    transform: translateY(-50%) translateX(48px) rotate(18deg);
   }
   to {
     opacity: 1;
-    transform: translateY(-50%) translateX(0) rotate(-18deg);
+    transform: translateY(-50%) translateX(0) rotate(8deg);
   }
 }
 
 @keyframes hammer-smash {
   0% {
     opacity: 1;
-    transform: translateY(-50%) translateX(0) rotate(-18deg);
+    transform: translateY(-50%) translateX(0) rotate(8deg);
   }
-  35% {
-    transform: translateY(-55%) translateX(-8vw) rotate(-42deg);
+  28% {
+    transform: translateY(-58%) translateX(-6vw) rotate(-28deg) scale(1.05);
   }
-  55% {
-    transform: translate(-42vw, -8%) rotate(-8deg) scale(1.05);
+  48% {
+    transform: translate(-38vw, -6%) rotate(-8deg) scale(1.12);
+  }
+  62% {
+    transform: translate(-42vw, -2%) rotate(4deg) scale(1.04);
   }
   100% {
     opacity: 0;
-    transform: translate(-48vw, 6%) rotate(12deg) scale(0.9);
+    transform: translate(-46vw, 10%) rotate(18deg) scale(0.92);
   }
 }
 
@@ -2231,73 +2244,53 @@ table.data th {
 }
 
 @keyframes smash-impact {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.15); }
-  40% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.6); }
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.12); }
+  35% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.55); }
 }
 
-@keyframes shard-burst {
+@keyframes mirror-fall {
   0% {
     opacity: 1;
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.55));
+  }
+  18% {
+    opacity: 1;
+    transform: translate3d(calc(var(--dx) * 0.08), 2vh, 0) rotate(calc(var(--rot) * 0.15));
   }
   100% {
     opacity: 0;
-    transform: translate(var(--dx), var(--dy)) rotate(var(--rot));
+    transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--rot));
+    filter: drop-shadow(0 18px 24px rgba(11, 47, 92, 0.18));
   }
 }
 
-@keyframes stage-crack-hold {
-  0%, 55% { opacity: 1; filter: none; }
-  100% { opacity: 0; filter: blur(1px); }
+@keyframes glass-hold {
+  0%, 70% { opacity: 1; filter: none; }
+  100% { opacity: 1; filter: contrast(1.04) brightness(1.02); }
 }
 
-@keyframes threshold-path-in {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: none; }
+@media (max-width: 640px) {
+  .threshold-hammer {
+    right: max(0.2rem, env(safe-area-inset-right));
+  }
+
+  .threshold-hammer-icon {
+    width: clamp(3.8rem, 18vw, 5.2rem);
+  }
+}
+
+@media (max-height: 620px) {
+  .threshold-hammer-icon {
+    width: clamp(3.4rem, 16vh, 4.8rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .threshold-lockup,
-  .threshold-door-slot,
-  .threshold-brand-zoom,
-  .doorway-prelight,
-  .doorway-leaf,
-  .threshold-hammer {
-    transition: none !important;
-    animation: none !important;
-  }
-
-  .threshold-brand-zoom.is-closed,
-  .threshold-brand-zoom.is-opening,
-  .threshold-brand-zoom.is-open,
-  .threshold-brand-zoom.is-ready {
-    transform: none;
-  }
-
-  .threshold-lockup.is-visible,
-  .threshold-hammer.is-visible {
-    opacity: 1;
-    transform: translateY(-50%) rotate(-18deg);
-  }
-
-  .threshold-hammer.is-smashing,
-  .threshold-smash {
-    display: none;
-  }
-
-  .threshold-door-slot.is-done {
-    opacity: 0;
-  }
-
-  .doorway-opening .doorway-leaf,
-  .doorway-open .doorway-leaf {
-    transform: rotateY(-78deg);
-  }
-
-  .doorway-opening .doorway-prelight,
-  .doorway-open .doorway-prelight {
-    opacity: 1;
+  .mirror-break,
+  .threshold-hammer.is-smashing {
+    display: none !important;
   }
 }
 
