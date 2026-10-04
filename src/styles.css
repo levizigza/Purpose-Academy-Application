@@ -4591,6 +4591,143 @@ table.data th {
   margin: 0;
 }
 
+.train-unit-pill {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem 0.7rem;
+  margin: 0.35rem 0 0.55rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(245, 197, 66, 0.14);
+  border: 1px solid rgba(245, 197, 66, 0.35);
+  color: #f5c542;
+  font-size: 0.78rem;
+  width: fit-content;
+}
+
+.train-unit-pill span {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.train-unit-pill strong {
+  color: #fff;
+  font-weight: 800;
+}
+
+.train-unit-pill em {
+  font-style: normal;
+  color: rgba(244, 247, 251, 0.7);
+}
+
+.train-check-prompt {
+  margin: 0.75rem 0 0.45rem;
+  font-weight: 800;
+  color: #f4f7fb;
+}
+
+.train-checkin-note {
+  margin: 0 0 0.75rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  background: rgba(245, 197, 66, 0.1);
+  border: 1px solid rgba(245, 197, 66, 0.28);
+  color: #f5c542;
+  font-weight: 700;
+}
+
+.phrase-lesson-card,
+.topic-lesson-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+  background: rgba(15, 36, 56, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.phrase-lesson-en {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.6vw, 1.55rem);
+  font-weight: 850;
+  color: #fff;
+  line-height: 1.25;
+}
+
+.topic-lesson-card h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.topic-lesson-card > p {
+  margin: 0;
+  color: rgba(232, 238, 246, 0.82);
+}
+
+.vocab-lesson-bar {
+  height: 0.45rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.vocab-lesson-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1a4f8a, #f5c542);
+  transition: width 0.25s ease;
+}
+
+.vocab-sheet-definition {
+  margin: 0.35rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.vocab-sheet-card-focus {
+  background: rgba(15, 36, 56, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #e8eef6;
+}
+
+.vocab-sheet-card-focus .vocab-sheet-en,
+.vocab-sheet-card-focus .vocab-sheet-lang-word {
+  color: #fff;
+}
+
+.vocab-sheet-card-focus .vocab-sheet-progress,
+.vocab-sheet-card-focus .vocab-sheet-lang-name,
+.vocab-sheet-card-focus .vocab-sheet-definition {
+  color: rgba(244, 247, 251, 0.7);
+}
+
+.vocab-sheet-card-focus .vocab-sheet-sentence {
+  background: rgba(245, 197, 66, 0.12);
+  color: #f5c542;
+  border: none;
+}
+
+.vocab-sheet-card-focus .vocab-sheet-lang-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #e8eef6;
+}
+
+.vocab-sheet-card-focus .vocab-sheet-photo-focus img {
+  background: #0a1f33;
+}
+
+.vocab-sheet-audio.is-done {
+  background: rgba(46, 204, 113, 0.18);
+  border-color: rgba(46, 204, 113, 0.45);
+  color: #7dffa8;
+}
+
 /* Learn cards */
 
 .train-learn-grid {

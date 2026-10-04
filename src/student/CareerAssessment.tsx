@@ -50,15 +50,6 @@ export function CareerInterestAssessment({ lang, onComplete, onBack }: InterestP
     })
   }
 
-  function goNext() {
-    if (!local[item.id]) return
-    if (idx >= items.length - 1) {
-      onComplete(localRef.current)
-      return
-    }
-    setIdx((i) => i + 1)
-  }
-
   return (
     <div className="career-assess" data-assess-idx={idx}>
       <header className="career-assess-head">
@@ -102,9 +93,6 @@ export function CareerInterestAssessment({ lang, onComplete, onBack }: InterestP
             ←
           </button>
         )}
-        <button type="button" className="btn btn-primary" disabled={!current} onClick={goNext}>
-          {t(ASSESSMENT_COPY.next, lang)}
-        </button>
       </div>
     </div>
   )
@@ -141,15 +129,6 @@ export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) 
       }
       return i + 1
     })
-  }
-
-  function goNext() {
-    if (!local[item.id]) return
-    if (idx >= items.length - 1) {
-      onComplete(localRef.current)
-      return
-    }
-    setIdx((i) => i + 1)
   }
 
   return (
@@ -194,9 +173,6 @@ export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) 
             </button>
           )
         )}
-        <button type="button" className="btn btn-primary" disabled={!current} onClick={goNext}>
-          {idx >= items.length - 1 ? t(ASSESSMENT_COPY.seeResults, lang) : t(ASSESSMENT_COPY.next, lang)}
-        </button>
       </div>
     </div>
   )

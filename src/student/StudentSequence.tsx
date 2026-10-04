@@ -17,8 +17,10 @@ import {
   TOOL_CATEGORIES,
   SYSTEM_TOPICS,
   COMPUTER_SKILLS,
+  SITE_PHRASES,
   WORD_ACTIONS,
   EYE_SPY_SCENES,
+  unitForStep,
   type SupportLang,
   type QuizItem,
 } from './journeyCurriculum'
@@ -181,11 +183,12 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
   const help = shellCopy ? assessT(shellCopy.help, supportLang!) : base.help
   const purpose = shellCopy ? assessT(shellCopy.purpose, supportLang!) : base.purpose
+  const unit = unitForStep(step)
   const pct = Math.round((step / 20) * 100)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
   const stepKicker = motherTongue
     ? `${assessT(ASSESSMENT_COPY.stepOf, supportLang!)} ${step} ${assessT(ASSESSMENT_COPY.ofTotal, supportLang!)} 20`
-    : `Step ${step} of 20`
+    : `Step ${step} of 20 · Unit ${unit.id}: ${unit.label}`
   const whyLabel = motherTongue
     ? ({
         Spanish: '¿Por qué este paso?',
@@ -257,6 +260,13 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         </div>
         <h1 className="train-title">{title}</h1>
         <p className="train-simple-line">{help}</p>
+        {!motherTongue && (
+          <p className="train-unit-pill" aria-label={`Learning unit ${unit.id}`}>
+            <span>Unit {unit.id}</span>
+            <strong>{unit.label}</strong>
+            <em>Steps {unit.range}</em>
+          </p>
+        )}
         <details className="train-why-details">
           <summary>{whyLabel}</summary>
           <p className="train-purpose">{purpose}</p>
@@ -486,7 +496,8 @@ export function StudentSequencePage() {
   const [careerStyleAnswers, setCareerStyleAnswers] = useState<Record<string, string>>({})
   const [riasecScores, setRiasecScores] = useState(() => scoreInterestAnswers({}))
   const [actionIdx, setActionIdx] = useState(0)
-  const [actionDone, setActionDone] = useState<Record<string, boolean>>({})
+  const [actionAnswer, setActionAnswer] = useState<string | null>(null)
+  const [actionCorrect, setActionCorrect] = useState(false)
   const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -497,8 +508,10 @@ export function StudentSequencePage() {
   const [empDone, setEmpDone] = useState(() => {
     try { return !!sessionStorage.getItem(EMP_KEY) } catch { return false }
   })
-  const [phraseHeard, setPhraseHeard] = useState<Record<string, boolean>>({})
-  const [phraseSaid, setPhraseSaid] = useState<Record<string, boolean>>({})
+  const [phraseIdx, setPhraseIdx] = useState(0)
+  const [phraseHeard, setPhraseHeard] = useState(false)
+  const [phraseAnswer, setPhraseAnswer] = useState<string | null>(null)
+  const [phraseCorrect, setPhraseCorrect] = useState(false)
 
   /* Step 2 registration form */
   const [regForm, setRegForm] = useState({
@@ -532,10 +545,14 @@ export function StudentSequencePage() {
   const [compChecks, setCompChecks] = useState<Record<string, boolean>>({})
 
   /* Step 15 tool categories */
-  const [toolSeen, setToolSeen] = useState<Record<string, boolean>>({})
+  const [toolIdx, setToolIdx] = useState(0)
+  const [toolAnswer, setToolAnswer] = useState<string | null>(null)
+  const [toolCorrect, setToolCorrect] = useState(false)
 
   /* Step 16 system topics */
-  const [sysSeen, setSysSeen] = useState<Record<string, boolean>>({})
+  const [sysIdx, setSysIdx] = useState(0)
+  const [sysAnswer, setSysAnswer] = useState<string | null>(null)
+  const [sysCorrect, setSysCorrect] = useState(false)
 
   /* Step 17 observation form */
   const [obsForm, setObsForm] = useState({ skill: '', station: '', notes: '' })
@@ -707,7 +724,6 @@ export function StudentSequencePage() {
     stopSpeech()
     await speakSupport(term.gloss[lang], lang)
     setVocabSpeakingId(null)
-    setVocabHeard((h) => ({ ...h, [term.id]: true }))
   }
   function resetMatch() {
     setMatchIdx(0)
@@ -1042,7 +1058,7 @@ export function StudentSequencePage() {
       <Shell
         step={7}
         onBack={() => go(6)}
-        onNext={ready ? () => { setActionIdx(0); go(8) } : undefined}
+        onNext={ready ? () => { setActionIdx(0); setActionAnswer(null); setActionCorrect(false); go(8) } : undefined}
         nextLabel="Continue to Word → Action"
         nextDisabled={!ready}
       >
@@ -1053,39 +1069,55 @@ export function StudentSequencePage() {
           speakingId={vocabSpeakingId}
           heard={vocabHeard}
           onIndexChange={setVocabIdx}
-          onSeen={(termId) => setVocabHeard((h) => ({ ...h, [termId]: true }))}
           onPlayEnglish={(term) => void playVocabEnglish(term)}
           onPlayLang={(term, lang) => void playVocabLang(term, lang)}
         />
         <p className="train-vocab-counter">
           {ready
-            ? `All ${VOCAB_UNIT.length} words done · Ready to continue`
-            : `Seen ${heardCount} of ${VOCAB_UNIT.length} words — keep going one by one`}
+            ? `Heard all ${VOCAB_UNIT.length} English words · Ready to continue`
+            : `Heard ${heardCount} of ${VOCAB_UNIT.length} English words`}
         </p>
-        <TeachNote>
-          One clear picture per word. Read your language, hear English, then move to the next word until you finish the set.
-        </TeachNote>
       </Shell>
     )
   }
 
-  /* Step 8: Word → Action */
+  /* Step 8: Word → Action — see action, check which tool */
   if (step === 8) {
     const item = WORD_ACTIONS[actionIdx]
     const term = VOCAB_UNIT.find((t) => t.id === item.termId)
     const isLast = actionIdx >= WORD_ACTIONS.length - 1
-    const seen = !!actionDone[item.id]
+    const options = [
+      term?.english || item.termId,
+      ...VOCAB_UNIT.filter((t) => t.id !== item.termId).slice(0, 3).map((t) => t.english),
+    ]
+
+    function pickAction(opt: string) {
+      if (actionAnswer) return
+      const ok = opt === term?.english
+      setActionAnswer(opt)
+      setActionCorrect(ok)
+      playFoley(ok ? 'correct' : 'wrong')
+    }
+
+    function nextAction() {
+      if (!actionCorrect) {
+        setActionAnswer(null)
+        setActionCorrect(false)
+        return
+      }
+      if (isLast) {
+        resetMatch()
+        go(9)
+        return
+      }
+      setActionIdx((i) => i + 1)
+      setActionAnswer(null)
+      setActionCorrect(false)
+    }
+
     return (
-      <Shell
-        step={8}
-        onBack={() => { resetVocab(); go(7) }}
-        onNext={seen ? () => {
-          if (isLast) { resetMatch(); go(9); return }
-          setActionIdx((i) => i + 1)
-        } : undefined}
-        nextLabel={isLast ? 'Continue to supported practice' : 'Next action'}
-      >
-        <WhyWork>Seeing the action helps your brain link the English word to real movement.</WhyWork>
+      <Shell step={8} onBack={() => { resetVocab(); go(7) }}>
+        <p className="train-vocab-counter">Action {actionIdx + 1} of {WORD_ACTIONS.length}</p>
         <article className="word-action-card">
           <PictureCard
             image={toolImage(term?.imageKey)}
@@ -1094,15 +1126,32 @@ export function StudentSequencePage() {
             caption={item.body}
           />
           <p className="word-action-cue"><strong>Action cue:</strong> {item.actionCue}</p>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => setActionDone((d) => ({ ...d, [item.id]: true }))}
-          >
-            {seen ? 'Watched ✓' : 'I studied this action'}
-          </button>
+          <p className="train-check-prompt">Which tool is this action for?</p>
+          <div className="train-choice-grid">
+            {options.map((opt) => (
+              <ChoiceButton
+                key={opt}
+                state={actionAnswer === opt ? (actionCorrect ? 'correct' : 'wrong') : actionAnswer ? (opt === term?.english ? 'correct' : 'idle') : 'idle'}
+                disabled={!!actionAnswer && opt !== actionAnswer && opt !== term?.english}
+                onClick={() => pickAction(opt)}
+              >
+                {opt}
+              </ChoiceButton>
+            ))}
+          </div>
+          {actionAnswer && (
+            <>
+              <div className={`alert ${actionCorrect ? 'ok' : 'warn'}`}>
+                {actionCorrect ? 'Yes — word and action match.' : `Not yet. This action uses the ${term?.english}.`}
+              </div>
+              <button type="button" className="btn btn-primary" onClick={nextAction}>
+                {actionCorrect
+                  ? (isLast ? 'Continue to supported practice' : 'Next action')
+                  : 'Try again'}
+              </button>
+            </>
+          )}
         </article>
-        <TeachNote>Connect the English word to a real job-site action.</TeachNote>
       </Shell>
     )
   }
@@ -1139,7 +1188,6 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={9} onBack={() => go(8)}>
-        <WhyWork>Matching picture to word is practice for your eyes and memory.</WhyWork>
         <p className="train-vocab-counter">Match {matchIdx + 1} of {VOCAB_UNIT.length}</p>
         <PictureCard
           image={toolImage(term.imageKey)}
@@ -1286,55 +1334,79 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 12: Site language — practical phrases */
+  /* Step 12: Site language — hear phrase, choose meaning, one by one */
   if (step === 12) {
-    const phrases = [
-      { en: 'Measure twice, cut once.', why: 'Stops waste and mistakes.' },
-      { en: 'Hard hats on in the bay.', why: 'Safety rule you will hear every day.' },
-      { en: 'Pass me the level.', why: 'Short tool request between workers.' },
-      { en: 'Hold the board steady.', why: 'Teamwork on a cut or install.' },
-    ]
-    const allReady = phrases.every((p) => phraseHeard[p.en] && phraseSaid[p.en])
+    const phrase = SITE_PHRASES[Math.min(phraseIdx, SITE_PHRASES.length - 1)]
+    const isLast = phraseIdx >= SITE_PHRASES.length - 1
+
+    function pickPhrase(opt: string) {
+      if (!phraseHeard || phraseAnswer) return
+      const ok = opt === phrase.answer
+      setPhraseAnswer(opt)
+      setPhraseCorrect(ok)
+      playFoley(ok ? 'correct' : 'wrong')
+    }
+
+    function nextPhrase() {
+      if (!phraseCorrect) {
+        setPhraseAnswer(null)
+        setPhraseCorrect(false)
+        return
+      }
+      if (isLast) {
+        go(13, 'Opening digital skills…')
+        return
+      }
+      setPhraseIdx((i) => i + 1)
+      setPhraseHeard(false)
+      setPhraseAnswer(null)
+      setPhraseCorrect(false)
+    }
+
     return (
-      <Shell
-        step={12}
-        onBack={() => { resetInstr(); go(11) }}
-        onNext={allReady ? () => go(13, 'Opening digital skills…') : undefined}
-        nextLabel="Continue to digital skills"
-      >
-        <WhyWork>These phrases show up on Alberta job sites. Know these words well.</WhyWork>
-        <div className="phrase-practice">
-          {phrases.map((p) => (
-            <div key={p.en} className="phrase-practice-item">
-              <strong>{p.en}</strong>
-              <p className="muted">{p.why}</p>
-              <div className="train-audio-row">
-                <button
-                  type="button"
-                  className={`btn ${phraseHeard[p.en] ? 'btn-secondary on-light' : 'btn-primary'}`}
-                  disabled={speaking !== null}
-                  onClick={() => {
-                    void (async () => {
-                      await playEnglish(p.en)
-                      setPhraseHeard((h) => ({ ...h, [p.en]: true }))
-                    })()
-                  }}
-                >
-                  {phraseHeard[p.en] ? 'Heard ✓' : 'Hear English'}
-                </button>
+      <Shell step={12} onBack={() => { resetInstr(); go(11) }}>
+        <p className="train-vocab-counter">Phrase {phraseIdx + 1} of {SITE_PHRASES.length}</p>
+        <article className="phrase-lesson-card">
+          <p className="phrase-lesson-en">{phrase.en}</p>
+          <button
+            type="button"
+            className={`btn ${phraseHeard ? 'btn-secondary on-light' : 'btn-primary'}`}
+            disabled={speaking !== null}
+            onClick={() => {
+              void (async () => {
+                await playEnglish(phrase.en)
+                setPhraseHeard(true)
+              })()
+            }}
+          >
+            {phraseHeard ? 'Heard ✓ · Hear again' : 'Hear English'}
+          </button>
+          <p className="train-check-prompt">What does this phrase mean on site?</p>
+          <div className="train-choice-grid">
+            {phrase.options.map((opt) => (
+              <ChoiceButton
+                key={opt}
+                state={phraseAnswer === opt ? (phraseCorrect ? 'correct' : 'wrong') : phraseAnswer ? (opt === phrase.answer ? 'correct' : 'idle') : 'idle'}
+                disabled={!phraseHeard || (!!phraseAnswer && opt !== phraseAnswer && opt !== phrase.answer)}
+                onClick={() => pickPhrase(opt)}
+              >
+                {opt}
+              </ChoiceButton>
+            ))}
+          </div>
+          {phraseAnswer && (
+            <>
+              <div className={`alert ${phraseCorrect ? 'ok' : 'warn'}`}>
+                {phraseCorrect ? `Yes — ${phrase.why}` : `Not yet. ${phrase.why}`}
               </div>
-              <label className="train-honesty-check">
-                <input
-                  type="checkbox"
-                  checked={!!phraseSaid[p.en]}
-                  onChange={() => setPhraseSaid((s) => ({ ...s, [p.en]: !s[p.en] }))}
-                />
-                <span>I said this phrase out loud.</span>
-              </label>
-            </div>
-          ))}
-        </div>
-        <TeachNote>Hear each phrase. Say it out loud. Then continue.</TeachNote>
+              <button type="button" className="btn btn-primary" onClick={nextPhrase}>
+                {phraseCorrect
+                  ? (isLast ? 'Continue to digital skills' : 'Next phrase')
+                  : 'Try again'}
+              </button>
+            </>
+          )}
+        </article>
       </Shell>
     )
   }
@@ -1342,8 +1414,7 @@ export function StudentSequencePage() {
   if (step === 13) {
     return (
       <Shell step={13} onBack={() => go(12)} onNext={() => go(14, 'Opening safety…')} nextLabel="Continue to safety">
-        <WhyWork>This may be someone’s first computer. Every skill here is practical for Canadian training.</WhyWork>
-        <TeachNote>Check only what you can do today. Empty boxes are honest — we can teach those skills.</TeachNote>
+        <p className="train-checkin-note">Check-in only — not graded. Empty boxes are honest.</p>
         <ul className="train-check-list">
           {COMPUTER_SKILLS.map((s) => (
             <CheckItem key={s.id} id={`pc-${s.id}`} title={s.title} why={s.why} checked={!!compChecks[s.id]} onChange={() => setCompChecks((c) => ({ ...c, [s.id]: !c[s.id] }))} />
@@ -1356,45 +1427,138 @@ export function StudentSequencePage() {
   if (step === 14) {
     return (
       <Shell step={14} onBack={() => go(13)}>
-        <PictureCard emoji="!" label="Safety is a gate" caption="Alberta / Canada site safety in simple English with clear imagery." />
-        <WhyWork>Safe workers protect themselves, their team, and their future on site.</WhyWork>
-        <QuizRunner items={SAFETY_QUIZ} onComplete={() => go(15)} gated />
+        <QuizRunner items={SAFETY_QUIZ} onComplete={() => { setToolIdx(0); setToolAnswer(null); setToolCorrect(false); go(15) }} gated />
       </Shell>
     )
   }
 
   if (step === 15) {
-    const allSeen = TOOL_CATEGORIES.every((c) => toolSeen[c.title])
+    const cat = TOOL_CATEGORIES[Math.min(toolIdx, TOOL_CATEGORIES.length - 1)]
+    const isLast = toolIdx >= TOOL_CATEGORIES.length - 1
+
+    function pickTool(opt: string) {
+      if (toolAnswer) return
+      const ok = opt === cat.answer
+      setToolAnswer(opt)
+      setToolCorrect(ok)
+      playFoley(ok ? 'correct' : 'wrong')
+    }
+
+    function nextTool() {
+      if (!toolCorrect) {
+        setToolAnswer(null)
+        setToolCorrect(false)
+        return
+      }
+      if (isLast) {
+        setSysIdx(0)
+        setSysAnswer(null)
+        setSysCorrect(false)
+        go(16)
+        return
+      }
+      setToolIdx((i) => i + 1)
+      setToolAnswer(null)
+      setToolCorrect(false)
+    }
+
     return (
-      <Shell step={15} onBack={() => go(14)} onNext={allSeen ? () => go(16) : undefined} nextLabel="Continue to systems">
-        <PictureCard emoji="T" label="Tools & Equipment" caption="Tap each category. Know the name before you use it." />
-        <div className="train-card-grid">
-          {TOOL_CATEGORIES.map((cat) => (
-            <button key={cat.title} type="button" className={`train-topic-card${toolSeen[cat.title] ? ' is-seen' : ''}`} onClick={() => setToolSeen((s) => ({ ...s, [cat.title]: true }))}>
-              <span className="train-topic-mark">{cat.mark}</span>
-              <strong>{cat.title}</strong>
-              <p>{cat.why}</p>
-            </button>
-          ))}
-        </div>
+      <Shell step={15} onBack={() => go(14)}>
+        <p className="train-vocab-counter">Tool group {toolIdx + 1} of {TOOL_CATEGORIES.length}</p>
+        <article className="topic-lesson-card">
+          <span className="train-topic-mark">{cat.mark}</span>
+          <h3>{cat.title}</h3>
+          <p>{cat.why}</p>
+          <p className="train-check-prompt">{cat.prompt}</p>
+          <div className="train-choice-grid">
+            {cat.options.map((opt) => (
+              <ChoiceButton
+                key={opt}
+                state={toolAnswer === opt ? (toolCorrect ? 'correct' : 'wrong') : toolAnswer ? (opt === cat.answer ? 'correct' : 'idle') : 'idle'}
+                disabled={!!toolAnswer && opt !== toolAnswer && opt !== cat.answer}
+                onClick={() => pickTool(opt)}
+              >
+                {opt}
+              </ChoiceButton>
+            ))}
+          </div>
+          {toolAnswer && (
+            <>
+              <div className={`alert ${toolCorrect ? 'ok' : 'warn'}`}>
+                {toolCorrect ? 'Correct.' : `Not yet. The answer is ${cat.answer}.`}
+              </div>
+              <button type="button" className="btn btn-primary" onClick={nextTool}>
+                {toolCorrect
+                  ? (isLast ? 'Continue to systems' : 'Next tool group')
+                  : 'Try again'}
+              </button>
+            </>
+          )}
+        </article>
       </Shell>
     )
   }
 
   if (step === 16) {
-    const allSeen = SYSTEM_TOPICS.every((t) => sysSeen[t.title])
+    const topic = SYSTEM_TOPICS[Math.min(sysIdx, SYSTEM_TOPICS.length - 1)]
+    const isLast = sysIdx >= SYSTEM_TOPICS.length - 1
+
+    function pickSys(opt: string) {
+      if (sysAnswer) return
+      const ok = opt === topic.answer
+      setSysAnswer(opt)
+      setSysCorrect(ok)
+      playFoley(ok ? 'correct' : 'wrong')
+    }
+
+    function nextSys() {
+      if (!sysCorrect) {
+        setSysAnswer(null)
+        setSysCorrect(false)
+        return
+      }
+      if (isLast) {
+        go(17)
+        return
+      }
+      setSysIdx((i) => i + 1)
+      setSysAnswer(null)
+      setSysCorrect(false)
+    }
+
     return (
-      <Shell step={16} onBack={() => go(15)} onNext={allSeen ? () => go(17) : undefined} nextLabel="Continue to observation">
-        <PictureCard emoji="S" label="Construction Systems" caption="Your role fits the whole build — not one task alone." />
-        <div className="train-card-grid">
-          {SYSTEM_TOPICS.map((topic) => (
-            <button key={topic.title} type="button" className={`train-topic-card${sysSeen[topic.title] ? ' is-seen' : ''}`} onClick={() => setSysSeen((s) => ({ ...s, [topic.title]: true }))}>
-              <span className="train-topic-mark">{topic.mark}</span>
-              <strong>{topic.title}</strong>
-              <p>{topic.why}</p>
-            </button>
-          ))}
-        </div>
+      <Shell step={16} onBack={() => go(15)}>
+        <p className="train-vocab-counter">System {sysIdx + 1} of {SYSTEM_TOPICS.length}</p>
+        <article className="topic-lesson-card">
+          <span className="train-topic-mark">{topic.mark}</span>
+          <h3>{topic.title}</h3>
+          <p>{topic.why}</p>
+          <p className="train-check-prompt">{topic.prompt}</p>
+          <div className="train-choice-grid">
+            {topic.options.map((opt) => (
+              <ChoiceButton
+                key={opt}
+                state={sysAnswer === opt ? (sysCorrect ? 'correct' : 'wrong') : sysAnswer ? (opt === topic.answer ? 'correct' : 'idle') : 'idle'}
+                disabled={!!sysAnswer && opt !== sysAnswer && opt !== topic.answer}
+                onClick={() => pickSys(opt)}
+              >
+                {opt}
+              </ChoiceButton>
+            ))}
+          </div>
+          {sysAnswer && (
+            <>
+              <div className={`alert ${sysCorrect ? 'ok' : 'warn'}`}>
+                {sysCorrect ? 'Correct.' : `Not yet. The answer is ${topic.answer}.`}
+              </div>
+              <button type="button" className="btn btn-primary" onClick={nextSys}>
+                {sysCorrect
+                  ? (isLast ? 'Continue to observation' : 'Next system')
+                  : 'Try again'}
+              </button>
+            </>
+          )}
+        </article>
       </Shell>
     )
   }

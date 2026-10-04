@@ -9,27 +9,43 @@
  */
 
 export const JOURNEY_STEPS = [
-  { n: 1, title: 'Start as Student', help: 'Begin your learning path.', purpose: 'Students, instructors, and admins use different doors.' },
-  { n: 2, title: 'Registration', help: 'Tell us who you are so we can support you.', purpose: 'Your profile opens learning after approval.' },
-  { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the career assessment.', purpose: 'The full assessment runs in a language you understand. Later job-site steps use English.' },
-  { n: 4, title: 'Career Assessment', help: 'Rate work activities in your language.', purpose: 'A professional interest inventory — not a pass/fail quiz.' },
-  { n: 5, title: 'Work Style', help: 'How you like to work — in your language.', purpose: 'Work-style choices refine your pathway fit.' },
-  { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction is open now.' },
-  { n: 7, title: 'Visual Vocabulary', help: 'One picture at a time — go through every word.', purpose: 'Same clear card for each tool: picture, home language, English audio. Finish the full set.' },
-  { n: 8, title: 'Word → Action', help: 'See the word become a real site action.', purpose: 'Link English words to real movement.' },
-  { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.' },
-  { n: 10, title: 'English Eye Spy', help: 'Find the real tool in a site scene — English only.', purpose: 'Prove you know the object among other tools.' },
-  { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.' },
-  { n: 12, title: 'Site Language', help: 'Practice real job-site phrases.', purpose: 'Useful English you will hear on Alberta sites.' },
-  { n: 13, title: 'Digital Skills', help: 'Learn computer basics for training and work.', purpose: 'This may be someone’s first computer — keep every step practical.' },
-  { n: 14, title: 'Safety Training', help: 'Safety words with clear pictures — required.', purpose: 'Alberta / Canada site safety in simple English.' },
-  { n: 15, title: 'Tools & Equipment', help: 'Name the tools you will use.', purpose: 'Safe naming before safe use with an instructor.' },
-  { n: 16, title: 'Construction Systems', help: 'See how your role fits the whole build.', purpose: 'Your task feeds the whole building.' },
-  { n: 17, title: 'Instructor Observation', help: 'Ask an instructor to check a skill.', purpose: 'Learned → Practised → Competent under real observation.' },
-  { n: 18, title: 'On-Site Training', help: 'Log site work and supervisor feedback.', purpose: 'Daily notes, tasks, and site feedback.' },
-  { n: 19, title: 'Final Exam & Certificate', help: 'Written + practical checks. Pass to open your certificate.', purpose: 'Eye Spy needs 100%. Exam tries are limited.' },
-  { n: 20, title: 'Employment Connection', help: 'See hiring partners and enter work with support.', purpose: 'Start work with follow-up support.' },
+  { n: 1, title: 'Start as Student', help: 'Begin your learning path.', purpose: 'Students, instructors, and admins use different doors.', unit: 1 },
+  { n: 2, title: 'Registration', help: 'Tell us who you are so we can support you.', purpose: 'Your profile opens learning after approval.', unit: 1 },
+  { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the career assessment.', purpose: 'The full assessment runs in a language you understand. Later job-site steps use English.', unit: 2 },
+  { n: 4, title: 'Career Assessment', help: 'Rate work activities in your language.', purpose: 'A professional interest inventory — not a pass/fail quiz.', unit: 2 },
+  { n: 5, title: 'Work Style', help: 'How you like to work — in your language.', purpose: 'Work-style choices refine your pathway fit.', unit: 2 },
+  { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction is open now.', unit: 2 },
+  { n: 7, title: 'Visual Vocabulary', help: 'One picture at a time — hear English, then go to the next word.', purpose: 'Same clear card for each tool: picture, home language, English audio. Finish the full set.', unit: 3 },
+  { n: 8, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
+  { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
+  { n: 10, title: 'English Eye Spy', help: 'Find the real tool in a site scene — English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
+  { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
+  { n: 12, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
+  { n: 13, title: 'Digital Skills', help: 'Honest check-in — not a graded quiz.', purpose: 'This may be someone’s first computer — keep every step practical.', unit: 5 },
+  { n: 14, title: 'Safety Training', help: 'Safety words with clear pictures — required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 5 },
+  { n: 15, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 5 },
+  { n: 16, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 5 },
+  { n: 17, title: 'Instructor Observation', help: 'Ask an instructor to check a skill.', purpose: 'Learned → Practised → Competent under real observation.', unit: 6 },
+  { n: 18, title: 'On-Site Training', help: 'Log site work and supervisor feedback.', purpose: 'Daily notes, tasks, and site feedback.', unit: 6 },
+  { n: 19, title: 'Final Exam & Certificate', help: 'Written + practical checks. Pass to open your certificate.', purpose: 'Eye Spy needs 100%. Exam tries are limited.', unit: 6 },
+  { n: 20, title: 'Employment Connection', help: 'See hiring partners and enter work with support.', purpose: 'Start work with follow-up support.', unit: 6 },
 ] as const
+
+/** Path units — structured learning path on the existing train template. */
+export const LEARNING_UNITS = [
+  { id: 1, label: 'Start', range: '1–2' },
+  { id: 2, label: 'Find your path', range: '3–6' },
+  { id: 3, label: 'Learn the words', range: '7–8' },
+  { id: 4, label: 'Practice English', range: '9–12' },
+  { id: 5, label: 'Site ready', range: '13–16' },
+  { id: 6, label: 'Work ready', range: '17–20' },
+] as const
+
+export function unitForStep(step: number) {
+  const meta = JOURNEY_STEPS[step - 1]
+  const id = meta?.unit ?? 1
+  return LEARNING_UNITS.find((u) => u.id === id) || LEARNING_UNITS[0]
+}
 
 export type SupportLang = 'Spanish' | 'Arabic' | 'Hindi' | 'Amharic' | 'Tigrinya'
 
@@ -558,18 +574,117 @@ export const WORD_ACTIONS = [
 ]
 
 export const TOOL_CATEGORIES = [
-  { title: 'Hand tools', why: 'Hammer, tape measure, screwdriver — you move them with your hands.', mark: 'HT' },
-  { title: 'Power tools', why: 'Drill and saw — electricity or batteries. Extra care required.', mark: 'PT' },
-  { title: 'Materials', why: 'Wood, drywall, screws — what you build with.', mark: 'MT' },
-  { title: 'Mobile equipment', why: 'Lifts and machines. Only with proper training.', mark: 'ME' },
+  {
+    title: 'Hand tools',
+    why: 'Hammer, tape measure, screwdriver — you move them with your hands.',
+    mark: 'HT',
+    prompt: 'Which group do you move with your hands only?',
+    answer: 'Hand tools',
+    options: ['Hand tools', 'Power tools', 'Mobile equipment', 'Interior finishes'],
+  },
+  {
+    title: 'Power tools',
+    why: 'Drill and saw — electricity or batteries. Extra care required.',
+    mark: 'PT',
+    prompt: 'Which group needs electricity or batteries?',
+    answer: 'Power tools',
+    options: ['Materials', 'Power tools', 'Hand tools', 'Framing'],
+  },
+  {
+    title: 'Materials',
+    why: 'Wood, drywall, screws — what you build with.',
+    mark: 'MT',
+    prompt: 'Wood, drywall, and screws belong to which group?',
+    answer: 'Materials',
+    options: ['Mobile equipment', 'Power tools', 'Materials', 'Trade awareness'],
+  },
+  {
+    title: 'Mobile equipment',
+    why: 'Lifts and machines. Only with proper training.',
+    mark: 'ME',
+    prompt: 'Lifts and machines are in which group?',
+    answer: 'Mobile equipment',
+    options: ['Hand tools', 'Materials', 'Interior finishes', 'Mobile equipment'],
+  },
 ]
 
 export const SYSTEM_TOPICS = [
-  { title: 'Framing', why: 'The skeleton of a building — walls and structure.', mark: 'FR' },
-  { title: 'Interior finishes', why: 'Drywall, paint, flooring — what people see inside.', mark: 'IF' },
-  { title: 'Exterior systems', why: 'Siding, roofs, and weather protection.', mark: 'EX' },
-  { title: 'Trade awareness', why: 'How electrical, plumbing, and HVAC fit the build.', mark: 'TR' },
-  { title: 'Measurement & math', why: 'Measure twice. Simple math keeps cuts true.', mark: 'MM' },
+  {
+    title: 'Framing',
+    why: 'The skeleton of a building — walls and structure.',
+    mark: 'FR',
+    prompt: 'What is the skeleton of a building called?',
+    answer: 'Framing',
+    options: ['Framing', 'Interior finishes', 'Exterior systems', 'Measurement & math'],
+  },
+  {
+    title: 'Interior finishes',
+    why: 'Drywall, paint, flooring — what people see inside.',
+    mark: 'IF',
+    prompt: 'Drywall, paint, and flooring are part of…',
+    answer: 'Interior finishes',
+    options: ['Framing', 'Exterior systems', 'Interior finishes', 'Mobile equipment'],
+  },
+  {
+    title: 'Exterior systems',
+    why: 'Siding, roofs, and weather protection.',
+    mark: 'EX',
+    prompt: 'Siding and roofs protect the building as…',
+    answer: 'Exterior systems',
+    options: ['Trade awareness', 'Exterior systems', 'Hand tools', 'Framing'],
+  },
+  {
+    title: 'Trade awareness',
+    why: 'How electrical, plumbing, and HVAC fit the build.',
+    mark: 'TR',
+    prompt: 'Electrical, plumbing, and HVAC fit under…',
+    answer: 'Trade awareness',
+    options: ['Materials', 'Measurement & math', 'Trade awareness', 'Power tools'],
+  },
+  {
+    title: 'Measurement & math',
+    why: 'Measure twice. Simple math keeps cuts true.',
+    mark: 'MM',
+    prompt: '“Measure twice” belongs to which system topic?',
+    answer: 'Measurement & math',
+    options: ['Framing', 'Measurement & math', 'Exterior systems', 'Interior finishes'],
+  },
+]
+
+export const SITE_PHRASES = [
+  {
+    en: 'Measure twice, cut once.',
+    why: 'Stops waste and mistakes.',
+    prompt: 'What does this phrase remind you to do?',
+    answer: 'Check your measurement before you cut',
+    options: [
+      'Check your measurement before you cut',
+      'Run to the tool crib',
+      'Take off your hard hat',
+      'Start the saw at full speed',
+    ],
+  },
+  {
+    en: 'Hard hats on in the bay.',
+    why: 'Safety rule you will hear every day.',
+    prompt: 'What must you wear in the bay?',
+    answer: 'A hard hat',
+    options: ['A hard hat', 'Only gloves', 'No PPE', 'Dress shoes'],
+  },
+  {
+    en: 'Pass me the level.',
+    why: 'Short tool request between workers.',
+    prompt: 'What is the worker asking for?',
+    answer: 'The level',
+    options: ['The level', 'The lunch break', 'The truck keys', 'The blueprint only'],
+  },
+  {
+    en: 'Hold the board steady.',
+    why: 'Teamwork on a cut or install.',
+    prompt: 'What should your partner do?',
+    answer: 'Keep the board still',
+    options: ['Keep the board still', 'Throw the board away', 'Leave the bay', 'Turn off the lights'],
+  },
 ]
 
 export const COMPUTER_SKILLS = [
