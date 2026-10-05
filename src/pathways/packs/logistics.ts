@@ -79,7 +79,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-pallet',
       definition: 'A flat wooden or plastic platform used to stack and move goods.',
       sentence: 'Load the boxes evenly onto the pallet.',
-      gloss: gloss('Paleta', 'Tabiq naqil', 'Palette / takhta', 'Palette / ye-metshuf tabiq', 'Palette / nay-metshuf tabiq'),
+      gloss: gloss('Paleta', 'منصة نقالة', 'पैलेट', 'ፓሌት', 'ፓሌት'),
     },
     {
       id: 'scanner',
@@ -88,7 +88,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-scanner',
       definition: 'A handheld device that reads barcodes on labels.',
       sentence: 'Scan the barcode and wait for the beep.',
-      gloss: gloss('Escaner', 'Masah / jawwaz', 'Scanner / barcode pathak', 'Scanner / barcode anbi', 'Scanner / barcode anbi'),
+      gloss: gloss('Escáner', 'ماسح الباركود', 'स्कैनर', 'ስካነር', 'ስካነር'),
     },
     {
       id: 'label',
@@ -97,7 +97,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-label',
       definition: 'A sticker that shows destination, barcode, and order details.',
       sentence: 'Check the shipping label before you stage the box.',
-      gloss: gloss('Etiqueta de envio', 'Bitagat shahn', 'Shipping label / bhejne ka label', 'Ye-metshuf label', 'Nay-metshuf label'),
+      gloss: gloss('Etiqueta de envío', 'ملصق الشحن', 'शिपिंग लेबल', 'የመላኪያ መለያ', 'ናይ ምልኣኽ ላበል'),
     },
     {
       id: 'vest',
@@ -106,7 +106,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-vest',
       definition: 'A bright high-visibility vest that helps people and drivers see you.',
       sentence: 'Put on your safety vest before you enter the floor.',
-      gloss: gloss('Chaleco de seguridad', 'Sitra amn', 'Suraksha jacket', 'Ye-debab mekelakiya', 'Nay-debab mekelakeli'),
+      gloss: gloss('Chaleco de seguridad', 'سترة أمان', 'सुरक्षा जैकेट', 'የደህንነት ጃኬት', 'ናይ ድሕንነት ቬስት'),
     },
     {
       id: 'dolly',
@@ -115,7 +115,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-dolly',
       definition: 'A two-wheel cart for moving heavy boxes by hand.',
       sentence: 'Use the hand truck for the heavy boxes.',
-      gloss: gloss('Carretilla', 'Arabat yad', 'Hath-gadi / trolley', 'Ye-ej arabat', 'Nay-ed arabat'),
+      gloss: gloss('Carretilla de mano', 'عربة يد', 'हैंड ट्रक', 'የእጅ ጋሪ', 'ናይ ኢድ ጋራ'),
     },
     {
       id: 'manifest',
@@ -124,7 +124,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-manifest',
       definition: 'A list of what is on a shipment, pallet, or truck.',
       sentence: 'Check the manifest before you sign for the load.',
-      gloss: gloss('Manifiesto', 'Qaimat shahn', 'Manifest / mal suchi', 'Ye-metshuf zenbel', 'Nay-metshuf zenbel'),
+      gloss: gloss('Manifiesto', 'قائمة الشحن', 'मैनिफेस्ट', 'የጭነት ዝርዝር', 'ናይ ጽዕነት ዝርዝር'),
     },
     {
       id: 'rack',
@@ -133,7 +133,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-rack',
       definition: 'Industrial shelving used to store pallets and cartons by location.',
       sentence: 'Place the pallet squarely on the storage rack.',
-      gloss: gloss('Estanteria', 'Raf takhzin', 'Storage rack / shelving', 'Ye-meqemacha raf', 'Nay-meqemacha raf'),
+      gloss: gloss('Estantería', 'رف تخزين', 'स्टोरेज रैक', 'የማከማቻ መደርደሪያ', 'ናይ መኽዘን መደርደሪ'),
     },
     {
       id: 'jack',
@@ -142,7 +142,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-jack',
       definition: 'A manual jack that slides under a pallet so you can roll it short distances.',
       sentence: 'Slide the pallet jack under the pallet before you lift.',
-      gloss: gloss('Gato de paleta', 'Rafi at al-tabiq', 'Pallet jack / uthane ka jack', 'Ye-palette jack', 'Nay-palette jack'),
+      gloss: gloss('Transpaleta', 'رافعة المنصة', 'पैलेट जैक', 'ፓሌት ጃክ', 'ፓሌት ጃክ'),
     },
     {
       id: 'wrap',
@@ -151,7 +151,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-wrap',
       definition: 'Plastic film wrapped tightly around a pallet to keep the load stable.',
       sentence: 'Wrap the pallet with stretch wrap before shipping.',
-      gloss: gloss('Film estirable', 'Ghilaf mutamatit', 'Stretch wrap / plastic film', 'Ye-plastic film', 'Nay-plastic film'),
+      gloss: gloss('Film estirable', 'غلاف مطاطي', 'स्ट्रेच रैप', 'ስትሬች ራፕ', 'ስትሬች ራፕ'),
     },
   ],
   wordActions: [
@@ -369,11 +369,11 @@ export const logisticsPack: PathwayPack = {
       options: ['Scan the shipping label', 'Move the pallet first', 'Remove your vest', 'Climb the rack'],
       supportHint: hint(
         'Scan the shipping label.',
-        'Escanea la etiqueta de envio.',
-        'Imsah bitagat al-shahn.',
-        'Shipping label scan karo.',
-        'Shipping label scan adirgu.',
-        'Shipping label scan gebiru.',
+        'Escanea la etiqueta de envío.',
+        'امسح ملصق الشحن.',
+        'शिपिंग लेबल स्कैन करो।',
+        'የመላኪያ መለያውን ስካን አድርጉ።',
+        'ናይ ምልኣኽ ላበል ስካን ግበሩ።',
       ),
     },
     {
@@ -389,10 +389,10 @@ export const logisticsPack: PathwayPack = {
       supportHint: hint(
         'Put on your safety vest before you enter.',
         'Ponte el chaleco antes de entrar.',
-        'Irtiadi al-sitra qabla al-dukhul.',
-        'Andar jane se pehle safety vest pehno.',
-        'Ke megebat befit safety vest asdigu.',
-        'Qidmi meAtat safety vest asdugu.',
+        'ارتدِ سترة الأمان قبل الدخول.',
+        'अंदर जाने से पहले सुरक्षा जैकेट पहनो।',
+        'ከመግባት በፊት የደህንነት ጃኬት ያድርጉ።',
+        'ቅድሚ ምእታው ናይ ድሕንነት ቬስት ኣስድጉ።',
       ),
     },
     {
@@ -403,10 +403,10 @@ export const logisticsPack: PathwayPack = {
       supportHint: hint(
         'Load the boxes onto the pallet.',
         'Carga las cajas en la paleta.',
-        'Hammal al-sanadiq ala al-tabiq.',
-        'Boxes ko palette par load karo.',
-        'Sandukochun be palette lay asferu.',
-        'Sandukkat ab palette asferu.',
+        'حمّل الصناديق على المنصة.',
+        'बक्सों को पैलेट पर लोड करो।',
+        'ሳጥኖቹን በፓሌት ላይ ጫኑ።',
+        'ሳንዱቓት ኣብ ፓሌት ጽዕኑ።',
       ),
     },
     {
@@ -422,10 +422,10 @@ export const logisticsPack: PathwayPack = {
       supportHint: hint(
         'Check the manifest before loading.',
         'Revisa el manifiesto antes de cargar.',
-        'Raji al-qaima qabla al-tahmil.',
-        'Load se pehle manifest check karo.',
-        'Ke meferat befit manifest yaregagtu.',
-        'Qidmi meferat manifest aregagtsu.',
+        'راجع قائمة الشحن قبل التحميل.',
+        'लोड से पहले मैनिफेस्ट जाँचो।',
+        'ከመጫን በፊት የጭነት ዝርዝሩን ያረጋግጡ።',
+        'ቅድሚ ምጽዓን ንናይ ጽዕነት ዝርዝር ኣረጋግጹ።',
       ),
     },
     {
@@ -441,10 +441,10 @@ export const logisticsPack: PathwayPack = {
       supportHint: hint(
         'Use the hand truck for heavy boxes.',
         'Usa la carretilla para cajas pesadas.',
-        'Istakhdim arabat al-yad lil-sanadiq al-thaqila.',
-        'Bhari boxes ke liye hand truck use karo.',
-        'Lezinu sandukoch le hand truck techemu.',
-        'Nkabd sandukkat hand truck tegberu.',
+        'استخدم عربة اليد للصناديق الثقيلة.',
+        'भारी बक्सों के लिए हैंड ट्रक इस्तेमाल करो।',
+        'ከባድ ሳጥኖች ለእጅ ጋሪ ይጠቀሙ።',
+        'ንከቢድ ሳንዱቓት ናይ ኢድ ጋራ ተጠቐሙ።',
       ),
     },
     {
@@ -459,11 +459,11 @@ export const logisticsPack: PathwayPack = {
       ],
       supportHint: hint(
         'Slide the pallet jack under the pallet.',
-        'Desliza el gato de paleta bajo la paleta.',
-        'Adkhil rafi at al-tabiq taht al-tabiq.',
-        'Pallet jack ko palette ke neeche slide karo.',
-        'Pallet jackun ke pallet tac asgedu.',
-        'Pallet jack ab pallet tichti asgedu.',
+        'Desliza la transpaleta bajo la paleta.',
+        'أدخل رافعة المنصة تحت المنصة.',
+        'पैलेट जैक को पैलेट के नीचे स्लाइड करो।',
+        'ፓሌት ጃኩን ከፓሌቱ ስር አስገቡ።',
+        'ፓሌት ጃክ ኣብ ትሕቲ ፓሌት ኣእትዉ።',
       ),
     },
     {
@@ -479,10 +479,10 @@ export const logisticsPack: PathwayPack = {
       supportHint: hint(
         'Wrap the pallet with stretch wrap.',
         'Envuelve la paleta con film estirable.',
-        'Luff al-tabiq bil-ghilaf al-mutamatit.',
-        'Palette ko stretch wrap se wrap karo.',
-        'Palette be stretch wrap tififu.',
-        'Palette bstretch wrap tififu.',
+        'غلّف المنصة بالغلاف المطاطي.',
+        'पैलेट को स्ट्रेच रैप से लपेटो।',
+        'ፓሌቱን በስትሬች ራፕ ጠቅልሉ።',
+        'ንፓሌት ብስትሬች ራፕ ጠቅልሉ።',
       ),
     },
     {
@@ -497,11 +497,11 @@ export const logisticsPack: PathwayPack = {
       ],
       supportHint: hint(
         'Stage the pallet in bay three.',
-        'Coloca la paleta en la bahia tres.',
-        'Waddi al-tabiq ila al-maqarr al-thalith.',
-        'Palette ko bay three mein stage karo.',
-        'Palette bay sost lay asferu.',
-        'Palette nab bay seleste asferu.',
+        'Coloca la paleta en la bahía tres.',
+        'ضع المنصة في المكان الثالث.',
+        'पैलेट को बे तीन में स्टेज करो।',
+        'ፓሌቱን በቤይ ሶስት ላይ አስቀምጡ።',
+        'ንፓሌት ኣብ ቤይ ሰለስተ ኣቐምጡ።',
       ),
     },
     {
@@ -517,10 +517,10 @@ export const logisticsPack: PathwayPack = {
       supportHint: hint(
         'Keep the aisle clear.',
         'Mantén el pasillo despejado.',
-        'Abqi al-mamarr wafihan.',
-        'Aisle clear rakho.',
-        'Mengedun kefitu yadrigu.',
-        'Mengedi kefitu yegberu.',
+        'أبقِ الممر واضحاً.',
+        'गलियारा साफ़ रखो।',
+        'መተላለፊያውን ክፍት ያድርጉ።',
+        'መገዲ ክፉት ግበሩ።',
       ),
     },
   ],
