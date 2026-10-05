@@ -198,11 +198,9 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
         <ol className="ph-units">
           {LEARNING_UNITS.map((u) => {
             const steps = stepsInUnit(u.id)
-            const first = steps[0]
             const state = unitState(u.id, currentStep)
             if (state === 'skipped') return null
 
-            const practiceFirst = Math.max(first, PRACTICE_ENTRY_STEP)
             const pct = unitMasteryPercent(steps)
             const goal = UNIT_GOALS[u.id]
             const visibleSteps = steps.filter((n) => n >= PRACTICE_ENTRY_STEP)
