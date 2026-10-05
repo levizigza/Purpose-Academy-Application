@@ -8804,8 +8804,7 @@ video {
   align-items: flex-end;
 }
 
-.skills-passport-lpc-counts,
-.dash-lpc {
+.skills-passport-lpc-counts {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
@@ -8864,24 +8863,4 @@ video {
   margin: 0;
   color: #4a6078;
   font-size: 0.9rem;
-}
-
-.dash-metric {
-  font-size: 2rem;
-  font-weight: 800;
-  margin: 0;
-  line-height: 1.1;
-  color: var(--brand-deep);
-}
-
-.dash-pathway-list li {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.35rem 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
-}
-
-.dash-pathway-list li:last-child {
-  border-bottom: 0;
 }

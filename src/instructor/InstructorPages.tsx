@@ -18,134 +18,37 @@ export function InstructorDashboardPage() {
   const pendingSubs = db.submissions.filter((s) => s.status === 'submitted')
   const blocked = db.safety_gate_states.filter((g) => g.status !== 'PASS')
   const approvedStudents = db.students.filter((s) => s.registration_status === 'approved')
-  const comps = db.learner_competencies
-  const learned = comps.filter((c) => c.status === 'learned').length
-  const practised = comps.filter((c) => c.status === 'practised').length
-  const competent = comps.filter((c) => c.status === 'competent').length
-  const remediation = comps.filter((c) => c.status === 'remediation_required')
-  const byPathway = {
-    construction: approvedStudents.filter((s) => s.pathway === 'construction').length,
-    logistics: approvedStudents.filter((s) => s.pathway === 'logistics').length,
-    community: approvedStudents.filter((s) => s.pathway === 'community').length,
-    foundation: approvedStudents.filter((s) => !s.pathway).length,
-  }
-  const gapLearners = approvedStudents
-    .map((s) => {
-      const u = db.users.find((x) => x.uid === s.uid)
-      const needsHelp = remediation.filter((c) => c.student_id === s.id).length
-      const gate = getSafetyGate(s.id)
-      return {
-        id: s.id,
-        name: u?.full_name ?? s.id,
-        pathway: s.pathway ?? 'foundation',
-        needsHelp,
-        blocked: gate?.status !== 'PASS',
-      }
-    })
-    .filter((r) => r.needsHelp > 0 || r.blocked)
-    .slice(0, 8)
 
   return (
-    <div className="stack dash-instructor">
+    <div className="stack">
       <div>
         <p className="section-kicker">Instructor</p>
         <h1>Today</h1>
-        <p>
-          The app supports learning. You teach, observe, correct, and evaluate — moving learners from
-          Learned → Practised → Competent.
-        </p>
+        <p>Help learners move from practice to verified skill: grading, safety, and observation first.</p>
       </div>
       <div className="grid-3">
         <div className="panel stack">
           <h2>Awaiting grading</h2>
-          <p className="dash-metric">{pendingSubs.length}</p>
+          <p style={{ fontSize: '2rem', fontWeight: 700, margin: 0 }}>{pendingSubs.length}</p>
           <Link className="btn btn-ghost" to="/app/instructor/assignments">
             Review assignments
           </Link>
         </div>
         <div className="panel stack">
           <h2>Safety blocks</h2>
-          <p className="dash-metric">{blocked.length}</p>
+          <p style={{ fontSize: '2rem', fontWeight: 700, margin: 0 }}>{blocked.length}</p>
           <Link className="btn btn-ghost" to="/app/instructor/safety">
             Open safety
           </Link>
         </div>
         <div className="panel stack">
           <h2>Active learners</h2>
-          <p className="dash-metric">{approvedStudents.length}</p>
+          <p style={{ fontSize: '2rem', fontWeight: 700, margin: 0 }}>{approvedStudents.length}</p>
           <Link className="btn btn-ghost" to="/app/instructor/students">
             Learner list
           </Link>
         </div>
       </div>
-
-      <div className="panel stack">
-        <h2>Competency stages (cohort)</h2>
-        <p className="muted" style={{ margin: 0 }}>
-          Quiz scores alone never mark Competent. Observation confirms the standard.
-        </p>
-        <div className="skills-passport-lpc-counts dash-lpc">
-          <span className="skills-passport-count">
-            <strong>{learned}</strong>
-            <span>Learned</span>
-          </span>
-          <span className="skills-passport-count">
-            <strong>{practised}</strong>
-            <span>Practised</span>
-          </span>
-          <span className="skills-passport-count is-competent">
-            <strong>{competent}</strong>
-            <span>Competent</span>
-          </span>
-          <span className="skills-passport-count is-warn">
-            <strong>{remediation.length}</strong>
-            <span>Needs practice</span>
-          </span>
-        </div>
-        <Link className="btn btn-primary" to="/app/instructor/observe">
-          Record practical observation
-        </Link>
-      </div>
-
-      <div className="grid-2">
-        <div className="panel stack">
-          <h2>Pathway mix</h2>
-          <ul className="list-plain dash-pathway-list">
-            <li>
-              <strong>Construction</strong> · {byPathway.construction}
-            </li>
-            <li>
-              <strong>Logistics</strong> · {byPathway.logistics}
-            </li>
-            <li>
-              <strong>Community Support</strong> · {byPathway.community}
-            </li>
-            <li>
-              <strong>Still in foundation</strong> · {byPathway.foundation}
-            </li>
-          </ul>
-        </div>
-        <div className="panel stack">
-          <h2>Learning gaps to support</h2>
-          {gapLearners.length === 0 ? (
-            <p className="muted">No remediation or safety blocks flagged right now.</p>
-          ) : (
-            <ul className="list-plain">
-              {gapLearners.map((g) => (
-                <li key={g.id}>
-                  <strong>{g.name}</strong> · {g.pathway}
-                  {g.needsHelp > 0 && ` · ${g.needsHelp} remediation`}
-                  {g.blocked && ' · safety blocked'}
-                </li>
-              ))}
-            </ul>
-          )}
-          <Link className="btn btn-ghost" to="/app/instructor/students">
-            Open learner list
-          </Link>
-        </div>
-      </div>
-
       <div className="panel stack">
         <h2>Classes</h2>
         <ul className="list-plain">
