@@ -13,6 +13,8 @@ const LABEL: Record<string, { title: string; tone: string; mark: string }> = {
   'log-dolly': { title: 'Hand truck', tone: '#356f58', mark: 'HT' },
   'log-manifest': { title: 'Manifest', tone: '#245844', mark: 'MF' },
   'log-rack': { title: 'Storage rack', tone: '#1d4637', mark: 'RK' },
+  'log-jack': { title: 'Pallet jack', tone: '#2a6b52', mark: 'PJ' },
+  'log-wrap': { title: 'Stretch wrap', tone: '#4a9a78', mark: 'SW' },
   'com-badge': { title: 'Name badge', tone: '#7c5cbf', mark: 'NB' },
   'com-clipboard': { title: 'Clipboard', tone: '#6347a0', mark: 'CB' },
   'com-first-aid': { title: 'First aid kit', tone: '#c44b4b', mark: 'FA' },
