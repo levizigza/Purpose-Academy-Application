@@ -20,6 +20,10 @@ const LABEL: Record<string, { title: string; tone: string; mark: string }> = {
   'com-schedule': { title: 'Schedule', tone: '#6b57b0', mark: 'SCH' },
   'com-phone': { title: 'Work phone', tone: '#4d3d8c', mark: 'PH' },
   'com-welcome': { title: 'Welcome desk', tone: '#8a6fd0', mark: 'WD' },
+  'com-consent': { title: 'Consent form', tone: '#5a7ab8', mark: 'CF' },
+  'com-hygiene': { title: 'Hygiene station', tone: '#3d9a8b', mark: 'HY' },
+  'log-jack': { title: 'Pallet jack', tone: '#2a6b52', mark: 'PJ' },
+  'log-wrap': { title: 'Stretch wrap', tone: '#3f8f6c', mark: 'SW' },
 }
 
 const svgCache = new Map<string, string>()
