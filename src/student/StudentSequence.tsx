@@ -60,6 +60,16 @@ import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { VocabSheet } from './VocabSheet'
 import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
 import { PracticeHub, PracticeStatsStrip } from './PracticeHub'
+import { getKnownVocabIds, markVocabKnown } from './adaptiveVocab'
+import {
+  createFollowUpPlan,
+  followUpSummary,
+  loadFollowUp,
+  saveFollowUp,
+  updateCheckIn,
+  type EmploymentFollowUp,
+  type FollowUpDay,
+} from './employmentFollowUp'
 import {
   advanceBlockedReason,
   canAdvanceFromStep,
@@ -616,6 +626,7 @@ export function StudentSequencePage() {
   /* Step 7 visual vocabulary — all five languages; press yours → connect to English */
   const [vocabHeard, setVocabHeard] = useState<Record<string, boolean>>({})
   const [vocabConnected, setVocabConnected] = useState<Record<string, HomeLang>>({})
+  const [vocabKnownIds, setVocabKnownIds] = useState<string[]>(() => getKnownVocabIds(getActivePathway()))
   const [vocabSpeakingId, setVocabSpeakingId] = useState<string | null>(null)
   const [vocabIdx, setVocabIdx] = useState(0)
   const [speaking, setSpeaking] = useState<'en' | 'support' | 'both' | null>(null)
@@ -667,12 +678,25 @@ export function StudentSequencePage() {
   /* Step 19 honesty */
   const [honestyChecked, setHonestyChecked] = useState(false)
 
-  /* Step 20 employment prep */
+  /* Step 20 employment prep + 30/90/180 follow-up */
   const [empIdx, setEmpIdx] = useState(0)
   const [empAnswer, setEmpAnswer] = useState<string | null>(null)
   const [empCorrect, setEmpCorrect] = useState(false)
   const [empForm, setEmpForm] = useState({ resume_goal: '', availability: '' })
   const [empQuizDone, setEmpQuizDone] = useState(false)
+  const [followUp, setFollowUp] = useState<EmploymentFollowUp | null>(() => loadFollowUp())
+
+  useEffect(() => {
+    const sync = () => setFollowUp(loadFollowUp())
+    window.addEventListener('pa-employment-followup-changed', sync)
+    return () => window.removeEventListener('pa-employment-followup-changed', sync)
+  }, [])
+
+  useEffect(() => {
+    const sync = () => setVocabKnownIds(getKnownVocabIds(pathwayId))
+    window.addEventListener('pa-vocab-known-changed', sync)
+    return () => window.removeEventListener('pa-vocab-known-changed', sync)
+  }, [pathwayId])
 
   useEffect(() => { saveStep(step) }, [step])
   useEffect(() => { if (student?.preferred_language) setSupportLang(student.preferred_language as SupportLang) }, [student?.preferred_language])
@@ -692,6 +716,7 @@ export function StudentSequencePage() {
     setVocabIdx(0)
     setVocabHeard({})
     setVocabConnected({})
+    setVocabKnownIds(getKnownVocabIds(pathwayId))
     setActionIdx(0)
     setActionAnswer(null)
     setActionCorrect(false)
@@ -981,6 +1006,12 @@ export function StudentSequencePage() {
     stopSpeech()
     await speakSupport(term.gloss[lang], lang)
     setVocabSpeakingId(null)
+  }
+
+  function markCurrentVocabKnown(term: (typeof VOCAB_UNIT)[number]) {
+    markVocabKnown(pathwayId, term.id)
+    setVocabKnownIds(getKnownVocabIds(pathwayId))
+    playFoley('whoosh')
   }
 
   function resetMatch() {
@@ -1280,7 +1311,10 @@ export function StudentSequencePage() {
 
   /* Step 7: Visual Vocabulary — all five languages; press yours → connect to English */
   if (step === 7) {
-    const linkedCount = VOCAB_UNIT.filter((t) => vocabHeard[t.id] && vocabConnected[t.id]).length
+    const knownSet = new Set(vocabKnownIds)
+    const linkedCount = VOCAB_UNIT.filter(
+      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
+    ).length
     const ready = linkedCount >= VOCAB_UNIT.length
 
     return (
@@ -1297,14 +1331,16 @@ export function StudentSequencePage() {
           speakingId={vocabSpeakingId}
           heard={vocabHeard}
           connected={vocabConnected}
+          knownIds={vocabKnownIds}
           onIndexChange={setVocabIdx}
           onPlayEnglish={(term) => void playVocabEnglish(term)}
           onConnectLang={(term, lang) => void connectVocabLang(term, lang)}
+          onMarkKnown={(term) => markCurrentVocabKnown(term)}
         />
         <p className="train-vocab-counter">
           {ready
             ? `Linked all ${VOCAB_UNIT.length} words to English · Ready to continue`
-            : `Linked ${linkedCount} of ${VOCAB_UNIT.length} words`}
+            : `Linked ${linkedCount} of ${VOCAB_UNIT.length} words${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
         </p>
       </Shell>
     )
@@ -2145,11 +2181,24 @@ export function StudentSequencePage() {
 
   function handleComplete(e: FormEvent) {
     e.preventDefault()
-    try { sessionStorage.setItem(EMP_KEY, JSON.stringify({ ...empForm, prepDone: true })) } catch { /* */ }
+    const plan = createFollowUpPlan({
+      pathway: meta.label,
+      roleGoal: empForm.resume_goal,
+      availability: empForm.availability,
+    })
+    saveFollowUp(plan)
+    setFollowUp(plan)
+    try { sessionStorage.setItem(EMP_KEY, JSON.stringify({ ...empForm, prepDone: true, followUp: true })) } catch { /* */ }
     markSequenceComplete('student', { detail: user?.full_name || 'Student' })
     recordSkillAttempt('employment', true)
     playFoley('metal')
     setEmpDone(true)
+  }
+
+  function recordFollowUp(day: FollowUpDay, status: 'employed' | 'seeking' | 'missed' | 'completed') {
+    const next = updateCheckIn(day, { status, notes: status === 'employed' ? 'Working' : status })
+    if (next) setFollowUp(next)
+    playFoley('correct')
   }
 
   if (!empQuizDone) {
@@ -2237,15 +2286,50 @@ export function StudentSequencePage() {
       ) : (
         <>
           <div className="alert ok">
-            Student training path complete. Your Skills Passport and dashboard are ready.
+            Student training path complete. Your Skills Passport and 30 / 90 / 180 day follow-up are open.
           </div>
           <div className="train-learn-grid">
             <LearnCard title="Hiring partner match" body={`Connect with ${meta.label.toLowerCase()} partners hiring from this pathway.`} />
             <LearnCard title="Resume & interview" body="Show skills in clear, short English." />
-            <LearnCard title="30 / 90 / 180 day follow-up" body="Support after you start work, not a dead end." />
+            <LearnCard
+              title="30 / 90 / 180 day follow-up"
+              body={followUpSummary(followUp).label}
+            />
           </div>
+
+          {followUp && (
+            <div className="panel stack emp-followup">
+              <h3>Employment follow-up schedule</h3>
+              <p className="muted" style={{ margin: 0 }}>
+                Purpose Academy stays with you after placement — check in at 30, 90, and 180 days.
+              </p>
+              <ul className="list-plain emp-followup-list">
+                {followUp.checkIns.map((c) => (
+                  <li key={c.day} className={`emp-followup-item is-${c.status}`}>
+                    <div>
+                      <strong>Day {c.day}</strong>
+                      <div className="muted">Due {new Date(c.dueAt).toLocaleDateString()}</div>
+                      <div className="badge">{c.status.replace('_', ' ')}</div>
+                    </div>
+                    {c.status === 'scheduled' && (
+                      <div className="hero-actions">
+                        <button type="button" className="btn btn-primary" onClick={() => recordFollowUp(c.day, 'employed')}>
+                          I am working
+                        </button>
+                        <button type="button" className="btn btn-secondary on-light" onClick={() => recordFollowUp(c.day, 'seeking')}>
+                          Still seeking
+                        </button>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="hero-actions">
-            <Link className="btn btn-primary" to="/app/student">Go to my dashboard</Link>
+            <Link className="btn btn-primary" to="/app/student/skills">Open Skills Passport</Link>
+            <Link className="btn btn-secondary on-light" to="/app/student">Go to my dashboard</Link>
             <button
               type="button"
               className="btn btn-ghost"

@@ -14,32 +14,103 @@ import {
 export function AdminDashboardPage() {
   const db = useDb()
   const pending = db.students.filter((s) => s.registration_status === 'pending').length
-  const approved = db.students.filter((s) => s.registration_status === 'approved').length
+  const approvedStudents = db.students.filter((s) => s.registration_status === 'approved')
+  const approved = approvedStudents.length
   const audits = db.audit_events.slice(0, 5)
+  const foundationOnly = approvedStudents.filter((s) => !s.pathway && !s.foundation_complete).length
+  const foundationDone = approvedStudents.filter((s) => s.foundation_complete && !s.pathway).length
+  const specialized = {
+    construction: approvedStudents.filter((s) => s.pathway === 'construction').length,
+    logistics: approvedStudents.filter((s) => s.pathway === 'logistics').length,
+    community: approvedStudents.filter((s) => s.pathway === 'community').length,
+  }
+  const competentCount = db.learner_competencies.filter((c) => c.status === 'competent').length
+  const safetyBlocked = db.safety_gate_states.filter((g) => g.status !== 'PASS').length
+  const instructors = db.instructors.length
 
   return (
-    <div className="stack">
+    <div className="stack dash-admin">
       <div>
         <p className="section-kicker">Admin</p>
         <h1>Operations</h1>
-        <p>Approve learners, keep programs clear, and protect the evidence trail that makes skills trustworthy.</p>
+        <p>
+          Approve learners, keep programs clear, and protect the evidence trail that makes Skills
+          Passport claims trustworthy.
+        </p>
       </div>
       <div className="grid-3">
-        <div className="panel">
+        <div className="panel stack">
           <h2>Pending approvals</h2>
-          <p style={{ fontSize: '2rem', fontWeight: 700 }}>{pending}</p>
+          <p className="dash-metric">{pending}</p>
+          <Link className="btn btn-ghost" to="/app/admin/students">
+            Review registrations
+          </Link>
         </div>
-        <div className="panel">
+        <div className="panel stack">
           <h2>Approved students</h2>
-          <p style={{ fontSize: '2rem', fontWeight: 700 }}>{approved}</p>
+          <p className="dash-metric">{approved}</p>
         </div>
-        <div className="panel">
+        <div className="panel stack">
           <h2>Active courses</h2>
-          <p style={{ fontSize: '2rem', fontWeight: 700 }}>
-            {db.courses.filter((c) => c.active).length}
-          </p>
+          <p className="dash-metric">{db.courses.filter((c) => c.active).length}</p>
+          <Link className="btn btn-ghost" to="/app/admin/courses">
+            View courses
+          </Link>
         </div>
       </div>
+
+      <div className="panel stack">
+        <h2>Program funnel</h2>
+        <p className="muted" style={{ margin: 0 }}>
+          Foundation preparation → specialized pathway → verified competency → employment follow-up.
+        </p>
+        <div className="skills-passport-lpc-counts dash-lpc">
+          <span className="skills-passport-count">
+            <strong>{foundationOnly}</strong>
+            <span>In foundation</span>
+          </span>
+          <span className="skills-passport-count">
+            <strong>{foundationDone}</strong>
+            <span>Ready to choose</span>
+          </span>
+          <span className="skills-passport-count">
+            <strong>
+              {specialized.construction + specialized.logistics + specialized.community}
+            </strong>
+            <span>In a pathway</span>
+          </span>
+          <span className="skills-passport-count is-competent">
+            <strong>{competentCount}</strong>
+            <span>Competent records</span>
+          </span>
+        </div>
+        <ul className="list-plain dash-pathway-list">
+          <li>
+            <strong>Construction</strong> · {specialized.construction}
+          </li>
+          <li>
+            <strong>Logistics</strong> · {specialized.logistics}
+          </li>
+          <li>
+            <strong>Community Support</strong> · {specialized.community}
+          </li>
+          <li>
+            <strong>Instructors on roster</strong> · {instructors}
+          </li>
+          <li>
+            <strong>Safety gates blocked</strong> · {safetyBlocked}
+          </li>
+        </ul>
+        <div className="hero-actions">
+          <Link className="btn btn-secondary on-light" to="/app/admin/reports">
+            Open outcome reports
+          </Link>
+          <Link className="btn btn-ghost" to="/app/admin/schedules">
+            Schedules &amp; announcements
+          </Link>
+        </div>
+      </div>
+
       <div className="panel site-plan stack">
         <h2>Student practice feedback</h2>
         <p className="muted" style={{ margin: 0 }}>
@@ -237,7 +308,8 @@ export function AdminReportsPage() {
       <h1>Reports</h1>
       <p className="muted">
         Enrollment / completion / competency snapshot. Definitions: completion means program requirements, not mere
-        account activity. Competent requires authorized human assessment.
+        account activity. Competent requires authorized human assessment. Employment follow-up (30 / 90 / 180 days)
+        is tracked with each graduate after Skills Passport readiness.
       </p>
       <div className="table-wrap panel">
         <table className="data">

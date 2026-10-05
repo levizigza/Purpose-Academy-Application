@@ -39,14 +39,17 @@ type CardProps = {
   heardEnglish: boolean
   /** Language the learner pressed to bridge meaning → English */
   connectedLang: HomeLang | null
+  alreadyKnown: boolean
   onPlayEnglish: () => void
   onConnectLang: (lang: HomeLang) => void
+  onMarkKnown: () => void
 }
 
 /**
  * Visual vocabulary card — Purpose Academy worksheet mold:
  * English · picture · all five home-language glosses.
  * Learner presses the language they understand, then hears English.
+ * Adaptive: “I already know this” skips the translation bridge (still hear English once).
  */
 export function VocabSheetCard({
   index,
@@ -55,37 +58,44 @@ export function VocabSheetCard({
   speaking,
   heardEnglish,
   connectedLang,
+  alreadyKnown,
   onPlayEnglish,
   onConnectLang,
+  onMarkKnown,
 }: CardProps) {
   const img = pathwayImage(term.imageKey)
-  const ready = !!connectedLang && heardEnglish
+  const bridged = !!connectedLang || alreadyKnown
+  const ready = bridged && heardEnglish
 
   return (
     <article
-      className={`vocab-sheet-card vocab-sheet-card-focus${heardEnglish ? ' is-heard' : ''}${connectedLang ? ' is-connected' : ''}`}
+      className={`vocab-sheet-card vocab-sheet-card-focus${heardEnglish ? ' is-heard' : ''}${bridged ? ' is-connected' : ''}${alreadyKnown ? ' is-known' : ''}`}
     >
       <header className="vocab-sheet-card-head">
         <span className={`vocab-sheet-num tone-${(index % 4) + 1}`}>{index}</span>
-        <strong className={`vocab-sheet-en${connectedLang ? ' is-linked' : ''}`}>{term.english}</strong>
+        <strong className={`vocab-sheet-en${bridged ? ' is-linked' : ''}`}>{term.english}</strong>
         <button
           type="button"
           className={`vocab-sheet-audio${heardEnglish ? ' is-done' : ''}`}
           aria-label={`Listen to ${term.english}`}
-          disabled={speaking || !connectedLang}
+          disabled={speaking || !bridged}
           onClick={onPlayEnglish}
-          title={connectedLang ? 'Listen to English' : 'Press your language first'}
+          title={bridged ? 'Listen to English' : 'Press your language first'}
         >
           <SpeakerIcon />
           <span>
-            {speaking ? '…' : heardEnglish ? 'Heard ✓' : connectedLang ? 'Hear English' : 'Language first'}
+            {speaking ? '…' : heardEnglish ? 'Heard ✓' : bridged ? 'Hear English' : 'Language first'}
           </span>
         </button>
       </header>
 
       <p className="vocab-sheet-progress" aria-live="polite">
         Word {index} of {total}
-        {connectedLang ? ` · Connected: ${connectedLang} → English` : ' · Press the language you understand'}
+        {alreadyKnown
+          ? ' · Already known — confirm English'
+          : connectedLang
+            ? ` · Connected: ${connectedLang} → English`
+            : ' · Press the language you understand'}
         {ready ? ' · Linked ✓' : ''}
       </p>
 
@@ -107,7 +117,7 @@ export function VocabSheetCard({
                 <button
                   type="button"
                   className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}`}
-                  disabled={speaking}
+                  disabled={speaking || alreadyKnown}
                   onClick={() => onConnectLang(lang)}
                   aria-pressed={selected}
                   aria-label={`Connect ${term.gloss[lang]} (${lang}) to English ${term.english}`}
@@ -129,6 +139,15 @@ export function VocabSheetCard({
 
       <p className="vocab-sheet-definition">{term.definition}</p>
       <p className="vocab-sheet-sentence">{term.sentence}</p>
+
+      {!alreadyKnown && (
+        <button type="button" className="btn btn-ghost vocab-known-btn" onClick={onMarkKnown}>
+          I already know this word
+        </button>
+      )}
+      {alreadyKnown && (
+        <p className="vocab-known-note">Marked known — hear English once to confirm, then continue.</p>
+      )}
     </article>
   )
 }
@@ -141,14 +160,17 @@ type DeckProps = {
   heard: Record<string, boolean>
   /** Home language pressed for each term id (bridge to English) */
   connected: Record<string, HomeLang>
+  /** Adaptive: term ids the learner already knows */
+  knownIds: string[]
   onIndexChange: (index: number) => void
   onPlayEnglish: (term: VocabTerm) => void
   onConnectLang: (term: VocabTerm, lang: HomeLang) => void
+  onMarkKnown: (term: VocabTerm) => void
 }
 
 /**
  * One-by-one vocabulary deck (worksheet mold).
- * Pattern: see picture → press your language → hear English → next.
+ * Pattern: see picture → press your language (or mark known) → hear English → next.
  */
 export function VocabSheet({
   terms,
@@ -156,18 +178,25 @@ export function VocabSheet({
   speakingId,
   heard,
   connected,
+  knownIds,
   onIndexChange,
   onPlayEnglish,
   onConnectLang,
+  onMarkKnown,
 }: DeckProps) {
+  const knownSet = new Set(knownIds)
   const idx = Math.min(Math.max(0, index), Math.max(0, terms.length - 1))
   const term = terms[idx]
   const atEnd = idx >= terms.length - 1
   const heardEnglish = !!heard[term.id]
   const connectedLang = connected[term.id] ?? null
-  const linkedCount = terms.filter((t) => heard[t.id] && connected[t.id]).length
+  const alreadyKnown = knownSet.has(term.id)
+  const bridged = !!connectedLang || alreadyKnown
+  const linkedCount = terms.filter(
+    (t) => heard[t.id] && (connected[t.id] || knownSet.has(t.id)),
+  ).length
   const allLinked = linkedCount >= terms.length
-  const wordReady = !!connectedLang && heardEnglish
+  const wordReady = bridged && heardEnglish
 
   function goPrev() {
     onIndexChange(Math.max(0, idx - 1))
@@ -184,7 +213,7 @@ export function VocabSheet({
         <span style={{ width: `${Math.round((linkedCount / Math.max(1, terms.length)) * 100)}%` }} />
       </div>
       <p className="vocab-sheet-lede">
-        See the picture. Press the language you understand. Connect it to the English word, then hear English.
+        See the picture. Press the language you understand — or mark a word you already know — then hear English.
       </p>
 
       <VocabSheetCard
@@ -195,8 +224,10 @@ export function VocabSheet({
         speaking={speakingId === term.id}
         heardEnglish={heardEnglish}
         connectedLang={connectedLang}
+        alreadyKnown={alreadyKnown}
         onPlayEnglish={() => onPlayEnglish(term)}
         onConnectLang={(lang) => onConnectLang(term, lang)}
+        onMarkKnown={() => onMarkKnown(term)}
       />
 
       <div className="vocab-sheet-nav">
@@ -209,7 +240,7 @@ export function VocabSheet({
           disabled={!wordReady || (atEnd && allLinked)}
           onClick={goNext}
         >
-          {!connectedLang
+          {!bridged
             ? 'Press your language first'
             : !heardEnglish
               ? 'Hear English next'
