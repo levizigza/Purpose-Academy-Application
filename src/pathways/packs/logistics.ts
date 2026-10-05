@@ -13,6 +13,37 @@ export const logisticsPack: PathwayPack = {
     tools: 'Equipment',
     systems: 'Logistics skills',
   },
+  unitGoals: {
+    3: {
+      goal: 'Learn the Level-1 warehouse words you will hear on an Alberta logistics floor.',
+      outcomes: ['See each object and hear English', 'Connect the English word to the real action'],
+    },
+    4: {
+      goal: 'Use English with support, then prove you can find and follow warehouse language.',
+      outcomes: [
+        'Match pictures to English words',
+        'Find objects in a busy bay',
+        'Follow short workplace instructions',
+        'Understand common warehouse phrases',
+      ],
+    },
+    5: {
+      goal: 'Build the digital, safety, equipment, and systems foundations every warehouse expects.',
+      outcomes: [
+        'Practice school computer tasks',
+        'Pass required safety checks',
+        'Name equipment groups and logistics systems',
+      ],
+    },
+    6: {
+      goal: 'Prove readiness under observation, then connect to logistics employment support.',
+      outcomes: [
+        'Rehearse competent skill order',
+        'Make safe floor decisions',
+        'Pass the final checks and open employment support',
+      ],
+    },
+  },
   stepTitles: {
     12: {
       title: 'Warehouse Language',

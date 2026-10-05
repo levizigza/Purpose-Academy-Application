@@ -12,6 +12,7 @@ import {
   getActivePathway,
   getPathwayJourneySteps,
   getPathwayPack,
+  getPathwayUnitGoal,
   pathwayMeta,
   setActivePathway,
   setRecommendedPathway,
@@ -20,7 +21,6 @@ import {
 } from '../pathways'
 import {
   SUPPORT_LANGUAGES,
-  UNIT_GOALS,
   LEARNING_UNITS,
   DIGITAL_PRACTICE,
   MATCH_PRACTICE_ROUNDS,
@@ -314,11 +314,11 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       </header>
 
       <Reveal className="train-panel" delay={40}>
-        {isUnitEntryStep(step) && UNIT_GOALS[unit.id] && (
+        {isUnitEntryStep(step) && getPathwayUnitGoal(unit.id) && (
           <UnitIntroCard
             unitId={unit.id}
-            goal={UNIT_GOALS[unit.id].goal}
-            outcomes={UNIT_GOALS[unit.id].outcomes}
+            goal={getPathwayUnitGoal(unit.id)!.goal}
+            outcomes={getPathwayUnitGoal(unit.id)!.outcomes}
           />
         )}
         {children}

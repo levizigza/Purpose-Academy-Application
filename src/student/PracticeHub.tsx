@@ -1,5 +1,5 @@
 import { useEffect, useState, type CSSProperties } from 'react'
-import { LEARNING_UNITS, UNIT_GOALS, unitForStep } from './journeyCurriculum'
+import { LEARNING_UNITS, unitForStep } from './journeyCurriculum'
 import {
   canAdvanceFromStep,
   domainMasteryPercent,
@@ -20,6 +20,7 @@ import {
   pathwayIcon,
   pathwayMeta,
   pathwayPhoto,
+  getPathwayUnitGoal,
 } from '../pathways'
 
 type Props = {
@@ -258,7 +259,7 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
             if (state === 'skipped') return null
 
             const pct = unitMasteryPercent(steps)
-            const goal = UNIT_GOALS[u.id]
+            const goal = getPathwayUnitGoal(u.id, pathwayId)
             const visibleSteps = steps.filter((n) => n >= PRACTICE_ENTRY_STEP)
             const expanded = Boolean(openUnits[u.id])
             const statusLabel =

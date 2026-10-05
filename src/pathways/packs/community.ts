@@ -13,6 +13,37 @@ export const communityPack: PathwayPack = {
     tools: 'Support tools',
     systems: 'Community skills',
   },
+  unitGoals: {
+    3: {
+      goal: 'Learn the Level-1 support words you will hear in community workplaces.',
+      outcomes: ['See each object and hear English', 'Connect the English word to the real action'],
+    },
+    4: {
+      goal: 'Use English with support, then prove you can find and follow support-language cues.',
+      outcomes: [
+        'Match pictures to English words',
+        'Find objects in a busy welcome area',
+        'Follow short workplace instructions',
+        'Understand common support phrases',
+      ],
+    },
+    5: {
+      goal: 'Build the digital, safety, tool, and systems foundations community roles expect.',
+      outcomes: [
+        'Practice school computer tasks',
+        'Pass required safety checks',
+        'Name support tools and community systems',
+      ],
+    },
+    6: {
+      goal: 'Prove readiness under observation, then connect to community employment support.',
+      outcomes: [
+        'Rehearse competent skill order',
+        'Make respectful placement decisions',
+        'Pass the final checks and open employment support',
+      ],
+    },
+  },
   stepTitles: {
     12: {
       title: 'Support Language',

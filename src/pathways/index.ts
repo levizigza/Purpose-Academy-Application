@@ -7,5 +7,5 @@ export {
   setRecommendedPathway,
   clearPathwaySession,
 } from './session'
-export { getPathwayPack, getPathwayJourneySteps, PACKS } from './content'
+export { getPathwayPack, getPathwayJourneySteps, getPathwayUnitGoal, PACKS } from './content'
 export { pathwayImage } from './images'

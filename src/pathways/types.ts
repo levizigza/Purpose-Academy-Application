@@ -57,6 +57,8 @@ export type PathwaySkillDomains = {
   systems: string
 }
 
+export type PathwayUnitGoal = { goal: string; outcomes: string[] }
+
 /**
  * One content pack = one stream.
  * Same shape for Construction, Logistics, and Community Support.
@@ -65,6 +67,8 @@ export type PathwayPack = {
   id: PathwayId
   skillDomains: PathwaySkillDomains
   stepTitles: StepTitleOverrides
+  /** Optional overrides for shared UNIT_GOALS (keyed by unit id). */
+  unitGoals?: Partial<Record<number, PathwayUnitGoal>>
   vocab: VocabTerm[]
   wordActions: WordAction[]
   eyeSpyScenes: EyeSpyScene[]

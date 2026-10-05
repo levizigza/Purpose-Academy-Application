@@ -1,6 +1,6 @@
 import type { HomeLang, SupportLang, VocabTerm } from './journeyCurriculum'
 import { HOME_LANGUAGES, SUPPORT_LANGUAGES } from './journeyCurriculum'
-import { toolImage } from './toolImages'
+import { pathwayImage } from '../pathways'
 
 /** Worksheet language order (matches Purpose Academy visual vocabulary sheets). No French. */
 export const VOCAB_SHEET_LANGS: HomeLang[] = HOME_LANGUAGES
@@ -45,7 +45,7 @@ export function VocabSheetCard({
   onPlayEnglish,
   onPlayLang,
 }: CardProps) {
-  const img = toolImage(term.imageKey)
+  const img = pathwayImage(term.imageKey)
   return (
     <article className={`vocab-sheet-card vocab-sheet-card-focus${heardEnglish ? ' is-heard' : ''}`}>
       <header className="vocab-sheet-card-head">

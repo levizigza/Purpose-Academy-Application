@@ -1,9 +1,9 @@
-import type { PathwayId, PathwayPack } from './types'
+import type { PathwayId, PathwayPack, PathwayUnitGoal } from './types'
 import { constructionPack } from './packs/construction'
 import { logisticsPack } from './packs/logistics'
 import { communityPack } from './packs/community'
 import { getActivePathway } from './session'
-import { JOURNEY_STEPS } from '../student/journeyCurriculum'
+import { JOURNEY_STEPS, UNIT_GOALS } from '../student/journeyCurriculum'
 
 const PACKS: Record<PathwayId, PathwayPack> = {
   construction: constructionPack,
@@ -28,6 +28,11 @@ export function getPathwayJourneySteps(id: PathwayId = getActivePathway()) {
       purpose: overlay.purpose ?? step.purpose,
     }
   })
+}
+
+export function getPathwayUnitGoal(unitId: number, id: PathwayId = getActivePathway()): PathwayUnitGoal | undefined {
+  const pack = getPathwayPack(id)
+  return pack.unitGoals?.[unitId] || UNIT_GOALS[unitId]
 }
 
 export { PACKS }
