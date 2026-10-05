@@ -250,7 +250,9 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
                         const meta = JOURNEY_STEPS[n - 1]
                         const skill = SKILL_BY_STEP[n]
                         const level = skill ? getMasteryLevel(skill) : 'locked'
-                        const unlocked = n <= Math.max(currentStep, practiceFirst)
+                        const unlocked =
+                          state === 'done' ||
+                          (state === 'current' && n <= Math.max(currentStep, PRACTICE_ENTRY_STEP))
                         const isCurrent = n === currentStep
                         const shownLevel = unlocked ? (level === 'locked' ? 'attempted' : level) : 'locked'
                         return (
