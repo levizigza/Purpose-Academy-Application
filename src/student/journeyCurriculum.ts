@@ -15,7 +15,7 @@ export const JOURNEY_STEPS = [
   { n: 4, title: 'Career Assessment', help: 'Rate work activities in your language.', purpose: 'A professional interest inventory, not a pass/fail quiz.', unit: 2 },
   { n: 5, title: 'Work Style', help: 'How you like to work, in your language.', purpose: 'Work-style choices refine your pathway fit.', unit: 2 },
   { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction is open now.', unit: 2 },
-  { n: 7, title: 'Visual Vocabulary', help: 'One picture at a time. Hear English, then go to the next word.', purpose: 'Same clear card for each tool: picture, home language, English audio. Finish the full set.', unit: 3 },
+  { n: 7, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English.', purpose: 'All five home languages stay visible. You choose the bridge to English.', unit: 3 },
   { n: 8, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
   { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
   { n: 10, title: 'English Eye Spy', help: 'Find the real tool in a site scene. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },

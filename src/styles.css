@@ -6815,6 +6815,35 @@ table.data th {
   background: #fff4d4;
 }
 
+.vocab-sheet-langs .is-connected-lang .vocab-sheet-lang-btn,
+.vocab-sheet-lang-btn.is-selected {
+  background: #fff0c2;
+  border-color: #e8a317;
+  box-shadow: 0 0 0 1px rgba(232, 163, 23, 0.45);
+}
+
+.vocab-sheet-en.is-linked {
+  color: #c48900;
+}
+
+.vocab-sheet-lang-link {
+  margin-left: auto;
+  font: 700 11px Montserrat, system-ui, sans-serif;
+  color: #c48900;
+  white-space: nowrap;
+}
+
+.vocab-match-langs {
+  margin: 0.75rem 0 0.5rem;
+  max-height: none;
+}
+
+.vocab-match-langs .vocab-sheet-lang-btn {
+  width: 100%;
+  justify-content: flex-start;
+  gap: 0.65rem;
+}
+
 .vocab-sheet-flag {
   display: inline-grid;
   place-items: center;

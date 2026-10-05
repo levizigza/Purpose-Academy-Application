@@ -27,6 +27,7 @@ import {
   unitForStep,
   isUnitEntryStep,
   type SupportLang,
+  type HomeLang,
   type QuizItem,
   type VocabTerm,
 } from './journeyCurriculum'
@@ -612,8 +613,9 @@ export function StudentSequencePage() {
     preferred_language: 'Amharic', previous_experience: '',
   })
 
-  /* Step 7 visual vocabulary — one picture at a time through the full set */
+  /* Step 7 visual vocabulary — all five languages; press yours → connect to English */
   const [vocabHeard, setVocabHeard] = useState<Record<string, boolean>>({})
+  const [vocabConnected, setVocabConnected] = useState<Record<string, HomeLang>>({})
   const [vocabSpeakingId, setVocabSpeakingId] = useState<string | null>(null)
   const [vocabIdx, setVocabIdx] = useState(0)
   const [speaking, setSpeaking] = useState<'en' | 'support' | 'both' | null>(null)
@@ -689,6 +691,7 @@ export function StudentSequencePage() {
     setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
     setVocabIdx(0)
     setVocabHeard({})
+    setVocabConnected({})
     setActionIdx(0)
     setActionAnswer(null)
     setActionCorrect(false)
@@ -941,6 +944,7 @@ export function StudentSequencePage() {
 
   function resetVocab() {
     setVocabHeard({})
+    setVocabConnected({})
     setVocabSpeakingId(null)
     setVocabIdx(0)
     setSpeaking(null)
@@ -971,17 +975,14 @@ export function StudentSequencePage() {
     recordSkillAttempt('vocab', true, 8)
   }
 
-  async function playVocabLang(term: (typeof VOCAB_UNIT)[number], lang: Exclude<SupportLang, 'English'>) {
+  async function connectVocabLang(term: (typeof VOCAB_UNIT)[number], lang: HomeLang) {
+    setVocabConnected((c) => ({ ...c, [term.id]: lang }))
     setVocabSpeakingId(term.id)
     stopSpeech()
     await speakSupport(term.gloss[lang], lang)
     setVocabSpeakingId(null)
   }
 
-  function termGloss(term: (typeof VOCAB_UNIT)[number], lang: SupportLang = supportLang) {
-    if (lang === 'English') return term.english
-    return term.gloss[lang]
-  }
   function resetMatch() {
     setMatchIdx(0)
     setMatchRound(1)
@@ -1277,10 +1278,10 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 7: Visual Vocabulary — one picture/word at a time through the full set */
+  /* Step 7: Visual Vocabulary — all five languages; press yours → connect to English */
   if (step === 7) {
-    const heardCount = VOCAB_UNIT.filter((t) => vocabHeard[t.id]).length
-    const ready = heardCount >= VOCAB_UNIT.length
+    const linkedCount = VOCAB_UNIT.filter((t) => vocabHeard[t.id] && vocabConnected[t.id]).length
+    const ready = linkedCount >= VOCAB_UNIT.length
 
     return (
       <Shell
@@ -1293,17 +1294,17 @@ export function StudentSequencePage() {
         <VocabSheet
           terms={VOCAB_UNIT}
           index={vocabIdx}
-          supportLang={supportLang}
           speakingId={vocabSpeakingId}
           heard={vocabHeard}
+          connected={vocabConnected}
           onIndexChange={setVocabIdx}
           onPlayEnglish={(term) => void playVocabEnglish(term)}
-          onPlayLang={(term, lang) => void playVocabLang(term, lang)}
+          onConnectLang={(term, lang) => void connectVocabLang(term, lang)}
         />
         <p className="train-vocab-counter">
           {ready
-            ? `Heard all ${VOCAB_UNIT.length} English words · Ready to continue`
-            : `Heard ${heardCount} of ${VOCAB_UNIT.length} English words`}
+            ? `Linked all ${VOCAB_UNIT.length} words to English · Ready to continue`
+            : `Linked ${linkedCount} of ${VOCAB_UNIT.length} words`}
         </p>
       </Shell>
     )
@@ -1433,15 +1434,27 @@ export function StudentSequencePage() {
         <PictureCard
           image={pathwayImage(term.imageKey)}
           fit="contain"
-          label="Match the word to the picture"
-          sub={supportLang === 'English' ? 'English word' : `${supportLang}: ${termGloss(term)}`}
-          caption="Still supported. Translation and audio are allowed here."
+          label="Match the English word to the picture"
+          caption="All five languages stay visible. Press any language for help, then choose the English word."
         />
+        <ul className="vocab-sheet-langs vocab-match-langs" aria-label="All language meanings">
+          {(['Amharic', 'Tigrinya', 'Arabic', 'Spanish', 'Hindi'] as HomeLang[]).map((lang) => (
+            <li key={lang}>
+              <button
+                type="button"
+                className="vocab-sheet-lang-btn"
+                disabled={speaking !== null}
+                onClick={() => void playSupport(term.gloss[lang], lang)}
+                aria-label={`Hear ${term.gloss[lang]} in ${lang}`}
+              >
+                <span className="vocab-sheet-lang-name">{lang}</span>
+                <span className="vocab-sheet-lang-word">{term.gloss[lang]}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
         <div className="train-audio-row">
           <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>Hear English</button>
-          {supportLang !== 'English' && (
-            <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playSupport(termGloss(term))}>Hear {supportLang}</button>
-          )}
         </div>
         <div className="train-choice-grid">
           {matchOptions.map((opt) => (
