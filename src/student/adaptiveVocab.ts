@@ -54,3 +54,8 @@ export function clearKnownVocab(pathway?: PathwayId) {
   delete map[pathway]
   save(map)
 }
+
+/** Count of known terms for a pathway (adaptive drill sizing). */
+export function knownVocabCount(pathway: PathwayId) {
+  return getKnownVocabIds(pathway).length
+}

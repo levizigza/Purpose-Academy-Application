@@ -22,11 +22,16 @@ import {
   pathwayPhoto,
   getPathwayUnitGoal,
 } from '../pathways'
+import { followUpSummary, loadFollowUp } from './employmentFollowUp'
 
 type Props = {
   currentStep: number
+  /** True after Employment Connection is finished in this practice run. */
+  pathComplete?: boolean
   onOpenLesson: (step: number) => void
   onContinue: () => void
+  onOpenPassport?: () => void
+  onRestart?: () => void
 }
 
 type UnitState = 'done' | 'current' | 'locked' | 'skipped'
@@ -80,7 +85,14 @@ function MasteryMeter({ percent, label }: { percent: number; label: string }) {
  * Professional learning dashboard for Student Practice Mode.
  * Pathway-aware: same skeleton for Construction, Logistics, Community Support.
  */
-export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
+export function PracticeHub({
+  currentStep,
+  pathComplete = false,
+  onOpenLesson,
+  onContinue,
+  onOpenPassport,
+  onRestart,
+}: Props) {
   const [, bump] = useState(0)
   const [openUnits, setOpenUnits] = useState<Record<number, boolean>>(() => {
     const initial: Record<number, boolean> = {}
@@ -96,10 +108,12 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
     window.addEventListener('pa-mastery-changed', sync)
     window.addEventListener('pa-practice-restarted', sync)
     window.addEventListener('pa-pathway-changed', sync)
+    window.addEventListener('pa-employment-followup-changed', sync)
     return () => {
       window.removeEventListener('pa-mastery-changed', sync)
       window.removeEventListener('pa-practice-restarted', sync)
       window.removeEventListener('pa-pathway-changed', sync)
+      window.removeEventListener('pa-employment-followup-changed', sync)
     }
   }, [])
 
@@ -118,6 +132,8 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
   const unitSteps = stepsInUnit(unit.id).filter((n) => n >= PRACTICE_ENTRY_STEP)
   const unitDoneCount = unitSteps.filter((n) => n < currentStep).length
   const unitPct = unitMasteryPercent(stepsInUnit(unit.id))
+  const freshStart = resumeStep === PRACTICE_ENTRY_STEP && stats.lessonsCompleted === 0 && overall === 0
+  const followSummary = followUpSummary(loadFollowUp())
   const domains = [
     { label: pack.skillDomains.vocabulary, pct: domainMasteryPercent(SKILL_DOMAINS.vocabulary) },
     { label: pack.skillDomains.safety, pct: domainMasteryPercent(SKILL_DOMAINS.safety) },
@@ -130,9 +146,22 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
     setOpenUnits((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
+  const resumeLabel = pathComplete
+    ? 'Review employment step'
+    : freshStart
+      ? 'Start path'
+      : 'Resume lesson'
+  const resumeChip = pathComplete ? 'Path complete' : `Step ${resumeStep} of 20`
+  const resumeHeading = pathComplete
+    ? 'Training path complete'
+    : `Unit ${unit.id}: ${unit.label}`
+  const resumeLesson = pathComplete
+    ? `Skills Passport + ${followSummary.label}`
+    : resumeMeta?.title
+
   return (
     <div
-      className={`shell-main practice-hub is-${pathwayId}`}
+      className={`shell-main practice-hub is-${pathwayId}${pathComplete ? ' is-complete' : ''}`}
       style={{ '--ph-stream': meta.accent, '--ph-stream-soft': meta.soft } as CSSProperties}
     >
       <header className="ph-hero">
@@ -157,24 +186,36 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
             <img src={pathwayPhoto(pathwayId)} alt="" />
           </div>
           <div className="ph-resume-top">
-            <p className="ph-resume-label">Up next</p>
-            <span className="ph-resume-chip">Step {resumeStep} of 20</span>
+            <p className="ph-resume-label">{pathComplete ? 'Finished' : freshStart ? 'Begin here' : 'Up next'}</p>
+            <span className="ph-resume-chip">{resumeChip}</span>
           </div>
-          <h2>
-            Unit {unit.id}: {unit.label}
-          </h2>
-          <p className="ph-resume-lesson">{resumeMeta?.title}</p>
+          <h2>{resumeHeading}</h2>
+          <p className="ph-resume-lesson">{resumeLesson}</p>
           <div className="ph-resume-progress" aria-label={`${unitPct}% unit mastery`}>
             <div className="ph-resume-progress-track">
-              <span style={{ width: `${unitPct}%` }} />
+              <span style={{ width: `${pathComplete ? 100 : unitPct}%` }} />
             </div>
             <em>
-              {unitDoneCount}/{unitSteps.length} lessons started · {unitPct}% mastery
+              {pathComplete
+                ? 'All units open for review · follow-up schedule active'
+                : `${unitDoneCount}/${unitSteps.length} lessons started · ${unitPct}% mastery`}
             </em>
           </div>
-          <button type="button" className="btn btn-primary ph-resume-btn" onClick={onContinue}>
-            Resume lesson
-          </button>
+          <div className="ph-resume-actions">
+            <button type="button" className="btn btn-primary ph-resume-btn" onClick={onContinue}>
+              {resumeLabel}
+            </button>
+            {pathComplete && onOpenPassport && (
+              <button type="button" className="btn btn-secondary on-light" onClick={onOpenPassport}>
+                Skills Passport
+              </button>
+            )}
+            {pathComplete && onRestart && (
+              <button type="button" className="btn btn-ghost" onClick={onRestart}>
+                Start over
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
@@ -367,7 +408,7 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
           </p>
         </div>
         <button type="button" className="btn btn-primary" onClick={onContinue}>
-          Enter current lesson
+          {resumeLabel}
         </button>
       </aside>
     </div>

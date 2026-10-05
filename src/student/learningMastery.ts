@@ -304,3 +304,8 @@ export function advanceBlockedReason(step: number): string | null {
   if (!skill) return null
   return `Keep practising until this skill is Familiar (${masteryLabel(getMasteryLevel(skill))} now).`
 }
+
+/** Soft credit toward Familiar when a learner marks a vocab word as already known. */
+export function creditKnownVocabMastery() {
+  return recordSkillAttempt('vocab', true, 6)
+}

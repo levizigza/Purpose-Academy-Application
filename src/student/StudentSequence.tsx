@@ -73,6 +73,7 @@ import {
 import {
   advanceBlockedReason,
   canAdvanceFromStep,
+  creditKnownVocabMastery,
   markLessonCompleted,
   markSkillOpened,
   recordSkillAttempt,
@@ -603,8 +604,9 @@ export function StudentSequencePage() {
   const [transitioning, setTransitioning] = useState(false)
   const [transitionMsg, setTransitionMsg] = useState('Moving to the next station…')
   const [practiceAdvancePrompt, setPracticeAdvancePrompt] = useState(false)
+  const [advanceGateMsg, setAdvanceGateMsg] = useState<string | null>(null)
   const practiceAdvanceRef = useRef<(() => void) | null>(null)
-  const [practiceView, setPracticeView] = useState<'hub' | 'lesson'>(() =>
+  const [practiceView, setPracticeView] = useState<'hub' | 'lesson' | 'passport'>(() =>
     isPracticeMode() ? 'hub' : 'lesson',
   )
   const [checkpointUnit, setCheckpointUnit] = useState<number | null>(null)
@@ -707,6 +709,18 @@ export function StudentSequencePage() {
     if (skill) markSkillOpened(skill)
   }, [step])
 
+  /* Seed matching options from the adaptive deck when entering step 9. */
+  useEffect(() => {
+    if (step !== 9) return
+    const knownSet = new Set(getKnownVocabIds(pathwayId))
+    const unknown = VOCAB_UNIT.filter((t) => !knownSet.has(t.id))
+    const deck = unknown.length >= 4 ? unknown : VOCAB_UNIT
+    const term = deck[0]
+    if (!term) return
+    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
+    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+  }, [step, pathwayId])
+
   useEffect(() => {
     /* When pathway changes, reset lesson-local drills so content matches the pack. */
     const term = VOCAB_UNIT[0]
@@ -761,32 +775,65 @@ export function StudentSequencePage() {
     }
   }, [step])
 
+  function resetDrillLocals() {
+    setActionIdx(0)
+    setActionAnswer(null)
+    setActionCorrect(false)
+    setMatchIdx(0)
+    setMatchRound(1)
+    setMatchAnswer(null)
+    setMatchCorrect(false)
+    setInstrIdx(0)
+    setInstrHeard(false)
+    setInstrAnswer(null)
+    setInstrCorrect(false)
+    setPhraseIdx(0)
+    setPhraseHeard(false)
+    setPhraseAnswer(null)
+    setPhraseCorrect(false)
+    setDigIdx(0)
+    setDigAnswer(null)
+    setDigCorrect(false)
+    setDigTyped('')
+    setToolIdx(0)
+    setToolAnswer(null)
+    setToolCorrect(false)
+    setSysIdx(0)
+    setSysAnswer(null)
+    setSysCorrect(false)
+    setObsIdx(0)
+    setObsPicked([])
+    setObsChecked(false)
+    setObsCorrect(false)
+    setSiteIdx(0)
+    setSiteAnswer(null)
+    setSiteCorrect(false)
+    setEmpIdx(0)
+    setEmpAnswer(null)
+    setEmpCorrect(false)
+    setAdvanceGateMsg(null)
+    setVocabIdx(0)
+    setVocabHeard({})
+    setVocabConnected({})
+    setVocabSpeakingId(null)
+  }
+
   /* Banner "Start over" / fresh Practice Mode entry — jump back to language step */
   useEffect(() => {
     const onRestart = () => {
       if (!isPracticeMode()) return
       setEmpDone(false)
       setEmpQuizDone(false)
-      setObsIdx(0)
-      setObsPicked([])
-      setObsChecked(false)
-      setObsCorrect(false)
-      setSiteIdx(0)
-      setSiteAnswer(null)
-      setSiteCorrect(false)
-      setDigIdx(0)
-      setDigAnswer(null)
-      setDigCorrect(false)
-      setDigTyped('')
+      setFollowUp(null)
+      setVocabKnownIds([])
       setLogForm({ date: '', tasks: '', supervisor: '' })
       setEmpForm({ resume_goal: '', availability: '' })
-      setEmpIdx(0)
-      setEmpAnswer(null)
-      setEmpCorrect(false)
       setError(null)
       setTransitioning(false)
-      setMatchRound(1)
       setCheckpointUnit(null)
+      setFinalPhase('eyespy')
+      setHonestyChecked(false)
+      resetDrillLocals()
       setPracticeView('hub')
       setStep(PRACTICE_ENTRY_STEP)
       saveStep(PRACTICE_ENTRY_STEP)
@@ -809,8 +856,11 @@ export function StudentSequencePage() {
     setError(null)
     setSpeaking(null)
     setCheckpointUnit(null)
+    setAdvanceGateMsg(null)
     const target = Math.min(20, Math.max(1, next))
+    if (target !== step) resetDrillLocals()
     if (target === step) {
+      resetDrillLocals()
       setStep(target)
       setPracticeView('lesson')
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -848,16 +898,18 @@ export function StudentSequencePage() {
 
   /** Practice mode: ask for feedback at unit boundaries before leaving via in-panel Continues. */
   function requestPracticeAdvance(advance: () => void) {
-    if (!isPracticeMode() || !shouldAskPracticeFeedback(step)) {
-      if (isPracticeMode() && !canAdvanceFromStep(step)) {
-        playFoley('wrong')
-        return
-      }
-      advance()
+    if (isPracticeMode() && !canAdvanceFromStep(step)) {
+      const reason = advanceBlockedReason(step) || 'Keep practising until this skill is Familiar.'
+      setAdvanceGateMsg(reason)
+      playFoley('wrong')
+      window.setTimeout(() => {
+        document.querySelector('.train-advance-gate')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }, 50)
       return
     }
-    if (!canAdvanceFromStep(step)) {
-      playFoley('wrong')
+    setAdvanceGateMsg(null)
+    if (!isPracticeMode() || !shouldAskPracticeFeedback(step)) {
+      advance()
       return
     }
     const key = practiceFeedbackKey('/journey', step)
@@ -869,6 +921,15 @@ export function StudentSequencePage() {
     const panel = document.querySelector('.train-panel')
     if (panel) (panel as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'end' })
     window.setTimeout(() => setPracticeAdvancePrompt(true), 420)
+  }
+
+  function AdvanceGateNote() {
+    if (!advanceGateMsg) return null
+    return (
+      <p className="train-advance-gate alert warn" role="status">
+        {advanceGateMsg} Keep answering until this lesson is Familiar.
+      </p>
+    )
   }
 
   function confirmPracticeAdvanceYes() {
@@ -926,12 +987,105 @@ export function StudentSequencePage() {
     return (
       <PracticeHub
         currentStep={step}
+        pathComplete={empDone && step >= 20}
         onContinue={() => {
           setPracticeView('lesson')
           window.scrollTo({ top: 0, behavior: 'smooth' })
         }}
         onOpenLesson={(n) => go(n, `Opening step ${n}…`)}
+        onOpenPassport={() => {
+          setPracticeView('passport')
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }}
+        onRestart={() => {
+          resetPracticeProgress()
+          setEmpDone(false)
+          setEmpQuizDone(false)
+          setFollowUp(null)
+          setVocabKnownIds([])
+          setPracticeView('hub')
+          setStep(PRACTICE_ENTRY_STEP)
+          saveStep(PRACTICE_ENTRY_STEP)
+        }}
       />
+    )
+  }
+
+  if (isPracticeMode() && practiceView === 'passport') {
+    const summary = followUpSummary(followUp)
+    return (
+      <div className="shell-main practice-passport">
+        <header className="page-header stack">
+          <button type="button" className="back-link" onClick={() => setPracticeView('hub')}>
+            ← Path home
+          </button>
+          <p className="section-kicker">Verified skill · Practice Mode</p>
+          <h1>Skills Passport</h1>
+          <p className="lede">
+            What you studied and practised on this path — not Red Seal, apprenticeship certification, or a guaranteed
+            job. Competent still needs a real instructor later.
+          </p>
+        </header>
+        <div className="train-learn-grid skills-passport-stages">
+          <article className="skills-passport-stage">
+            <span className="badge brand">Learned</span>
+            <h3>Learned</h3>
+            <p>Studied in the app — understanding, not yet verified on the job.</p>
+          </article>
+          <article className="skills-passport-stage">
+            <span className="badge brand">Practised</span>
+            <h3>Practised</h3>
+            <p>Tried through Practice Mode drills and unit checkpoints.</p>
+          </article>
+          <article className="skills-passport-stage">
+            <span className="badge ok">Competent</span>
+            <h3>Competent</h3>
+            <p>Authorized instructor confirmation — not awarded by Practice Mode alone.</p>
+          </article>
+        </div>
+        <div className="panel stack emp-followup">
+          <h2>Employment follow-up</h2>
+          <p className="muted" style={{ margin: 0 }}>
+            Graduation is not the end. Check in at 30, 90, and 180 days.
+          </p>
+          {!followUp ? (
+            <p>Complete Employment Connection to open your follow-up schedule.</p>
+          ) : (
+            <>
+              <p>
+                <strong>{summary.label}</strong>
+                {followUp.roleGoal ? ` · Goal: ${followUp.roleGoal}` : ''}
+              </p>
+              <ul className="list-plain emp-followup-list">
+                {followUp.checkIns.map((c) => (
+                  <li key={c.day} className={`emp-followup-item is-${c.status}`}>
+                    <div>
+                      <strong>Day {c.day}</strong>
+                      <div className="muted">Due {new Date(c.dueAt).toLocaleDateString()}</div>
+                    </div>
+                    <span className="badge">{c.status.replace('_', ' ')}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+        <div className="hero-actions">
+          <button type="button" className="btn btn-primary" onClick={() => setPracticeView('hub')}>
+            Back to path home
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary on-light"
+            onClick={() => {
+              setPracticeView('lesson')
+              go(20)
+            }}
+          >
+            Open employment step
+          </button>
+        </div>
+      </div>
     )
   }
 
@@ -1011,6 +1165,7 @@ export function StudentSequencePage() {
   function markCurrentVocabKnown(term: (typeof VOCAB_UNIT)[number]) {
     markVocabKnown(pathwayId, term.id)
     setVocabKnownIds(getKnownVocabIds(pathwayId))
+    creditKnownVocabMastery()
     playFoley('whoosh')
   }
 
@@ -1024,12 +1179,6 @@ export function StudentSequencePage() {
     setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
   }
   function resetInstr() { setInstrIdx(0); setInstrHeard(false); setInstrAnswer(null); setInstrCorrect(false) }
-
-  function shuffleMatchOptions(idx: number) {
-    const term = VOCAB_UNIT[idx]
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
-  }
 
   async function ensureDemoStudent() {
     if (user?.role === 'student' && student?.registration_status === 'approved') return true
@@ -1348,9 +1497,22 @@ export function StudentSequencePage() {
 
   /* Step 8: Word → Action — see action, check which tool */
   if (step === 8) {
-    const item = WORD_ACTIONS[actionIdx]
+    const knownSet = new Set(vocabKnownIds)
+    const unknownActions = WORD_ACTIONS.filter((a) => !knownSet.has(a.termId))
+    /* Adaptive: drill unknowns first; keep a short known review only if the deck would be too thin. */
+    const actionDeck =
+      unknownActions.length >= 3
+        ? unknownActions
+        : [
+            ...unknownActions,
+            ...WORD_ACTIONS.filter((a) => knownSet.has(a.termId)).slice(0, Math.max(0, 3 - unknownActions.length)),
+          ]
+    const safeDeck = actionDeck.length ? actionDeck : WORD_ACTIONS
+    const safeIdx = Math.min(actionIdx, safeDeck.length - 1)
+    const item = safeDeck[safeIdx]
     const term = VOCAB_UNIT.find((t) => t.id === item.termId)
-    const isLast = actionIdx >= WORD_ACTIONS.length - 1
+    const alreadyKnown = knownSet.has(item.termId)
+    const isLast = safeIdx >= safeDeck.length - 1
     const options = [
       term?.english || item.termId,
       ...VOCAB_UNIT.filter((t) => t.id !== item.termId).slice(0, 3).map((t) => t.english),
@@ -1382,7 +1544,10 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={8} onBack={() => { resetVocab(); go(7) }}>
-        <p className="train-vocab-counter">Action {actionIdx + 1} of {WORD_ACTIONS.length}</p>
+        <p className="train-vocab-counter">
+          Action {safeIdx + 1} of {safeDeck.length}
+          {knownSet.size ? ` · ${knownSet.size} already known skipped or quick-checked` : ''}
+        </p>
         <article className="word-action-card">
           <PictureCard
             image={pathwayImage(term?.imageKey)}
@@ -1390,6 +1555,9 @@ export function StudentSequencePage() {
             label={item.title}
             caption={item.body}
           />
+          {alreadyKnown && (
+            <p className="vocab-known-note">Already known — quick confirm the action, then continue.</p>
+          )}
           <p className="word-action-cue"><strong>Action cue:</strong> {item.actionCue}</p>
           <p className="train-check-prompt">Which tool is this action for?</p>
           <div className="train-choice-grid">
@@ -1409,6 +1577,7 @@ export function StudentSequencePage() {
               <div className={`alert ${actionCorrect ? 'ok' : 'warn'}`}>
                 {actionCorrect ? 'Yes. Word and action match.' : `Not yet. This action uses the ${term?.english}.`}
               </div>
+              <AdvanceGateNote />
               <button type="button" className="btn btn-primary" onClick={nextAction}>
                 {actionCorrect
                   ? (isLast ? 'Continue to supported practice' : 'Next action')
@@ -1423,9 +1592,18 @@ export function StudentSequencePage() {
 
   /* Step 9: Supported matching */
   if (step === 9) {
-    const term = VOCAB_UNIT[matchIdx]
-    const isLast = matchIdx >= VOCAB_UNIT.length - 1
-    const roundsNeeded = isPracticeMode() ? MATCH_PRACTICE_ROUNDS : 1
+    const knownSet = new Set(vocabKnownIds)
+    const unknownTerms = VOCAB_UNIT.filter((t) => !knownSet.has(t.id))
+    const matchDeck =
+      unknownTerms.length >= 4
+        ? unknownTerms
+        : VOCAB_UNIT
+    const safeIdx = Math.min(matchIdx, matchDeck.length - 1)
+    const term = matchDeck[safeIdx]
+    const alreadyKnown = knownSet.has(term.id)
+    const isLast = safeIdx >= matchDeck.length - 1
+    const roundsNeeded =
+      isPracticeMode() && unknownTerms.length <= 3 ? 1 : isPracticeMode() ? MATCH_PRACTICE_ROUNDS : 1
 
     function pickMatch(opt: string) {
       if (matchAnswer) return
@@ -1448,24 +1626,31 @@ export function StudentSequencePage() {
           setMatchIdx(0)
           setMatchAnswer(null)
           setMatchCorrect(false)
-          shuffleMatchOptions(0)
+          const first = matchDeck[0]
+          const distractors = VOCAB_UNIT.filter((t) => t.id !== first.id).slice(0, 3)
+          setMatchOptions([first, ...distractors].sort(() => Math.random() - 0.5))
           playFoley('whoosh')
           return
         }
         requestPracticeAdvance(() => go(10, 'Opening English Eye Spy…'))
         return
       }
-      const next = matchIdx + 1
+      const next = safeIdx + 1
       setMatchIdx(next)
       setMatchAnswer(null)
       setMatchCorrect(false)
-      shuffleMatchOptions(next)
+      const nextTerm = matchDeck[next]
+      const distractors = VOCAB_UNIT.filter((t) => t.id !== nextTerm.id).slice(0, 3)
+      setMatchOptions([nextTerm, ...distractors].sort(() => Math.random() - 0.5))
     }
 
     return (
       <Shell step={9} onBack={() => go(8)}>
         <p className="train-vocab-counter">
-          Round {matchRound} of {roundsNeeded} · Match {matchIdx + 1} of {VOCAB_UNIT.length}
+          Round {matchRound} of {roundsNeeded} · Match {safeIdx + 1} of {matchDeck.length}
+          {unknownTerms.length < VOCAB_UNIT.length
+            ? ` · Focusing on ${unknownTerms.length || matchDeck.length} words to strengthen`
+            : ''}
         </p>
         <PictureCard
           image={pathwayImage(term.imageKey)}
@@ -1473,6 +1658,9 @@ export function StudentSequencePage() {
           label="Match the English word to the picture"
           caption="All five languages stay visible. Press any language for help, then choose the English word."
         />
+        {alreadyKnown && (
+          <p className="vocab-known-note">Already known — quick confirm, then continue.</p>
+        )}
         <ul className="vocab-sheet-langs vocab-match-langs" aria-label="All language meanings">
           {(['Amharic', 'Tigrinya', 'Arabic', 'Spanish', 'Hindi'] as HomeLang[]).map((lang) => (
             <li key={lang}>
@@ -1509,9 +1697,10 @@ export function StudentSequencePage() {
             <div className={`alert ${matchCorrect ? 'ok' : 'warn'}`}>
               {matchCorrect ? 'Yes. Picture and word match.' : `Not yet. The correct word is ${term.english}. Try again.`}
             </div>
+            <AdvanceGateNote />
             <button type="button" className="btn btn-primary" onClick={nextMatch}>
               {matchCorrect
-                ? (isLast ? 'Continue to English Eye Spy' : 'Next match')
+                ? (isLast && matchRound >= roundsNeeded ? 'Continue to English Eye Spy' : isLast ? 'Next round' : 'Next match')
                 : 'Try again'}
             </button>
           </>
@@ -2173,7 +2362,20 @@ export function StudentSequencePage() {
             <input type="checkbox" checked={honestyChecked} onChange={() => setHonestyChecked(!honestyChecked)} />
             <span>I understand what this certificate shows and does not show.</span>
           </label>
-          <Link className="btn btn-ghost" to="/app/student/skills">View Skills Passport →</Link>
+          {isPracticeMode() ? (
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={() => {
+                setPracticeView('passport')
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
+            >
+              View Skills Passport →
+            </button>
+          ) : (
+            <Link className="btn btn-ghost" to="/app/student/skills">View Skills Passport →</Link>
+          )}
         </div>
       </Shell>
     )
@@ -2328,8 +2530,35 @@ export function StudentSequencePage() {
           )}
 
           <div className="hero-actions">
-            <Link className="btn btn-primary" to="/app/student/skills">Open Skills Passport</Link>
-            <Link className="btn btn-secondary on-light" to="/app/student">Go to my dashboard</Link>
+            {isPracticeMode() ? (
+              <>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => {
+                    setPracticeView('passport')
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
+                >
+                  Open Skills Passport
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary on-light"
+                  onClick={() => {
+                    setPracticeView('hub')
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
+                >
+                  Path home
+                </button>
+              </>
+            ) : (
+              <>
+                <Link className="btn btn-primary" to="/app/student/skills">Open Skills Passport</Link>
+                <Link className="btn btn-secondary on-light" to="/app/student">Go to my dashboard</Link>
+              </>
+            )}
             <button
               type="button"
               className="btn btn-ghost"
@@ -2338,8 +2567,11 @@ export function StudentSequencePage() {
                   resetPracticeProgress()
                   setEmpDone(false)
                   setEmpQuizDone(false)
+                  setFollowUp(null)
+                  setVocabKnownIds([])
+                  setPracticeView('hub')
                   setStep(PRACTICE_ENTRY_STEP)
-                  go(PRACTICE_ENTRY_STEP)
+                  saveStep(PRACTICE_ENTRY_STEP)
                   return
                 }
                 saveStep(1)

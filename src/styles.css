@@ -8864,3 +8864,31 @@ video {
   color: #4a6078;
   font-size: 0.9rem;
 }
+
+/* ---- Practice Mode walkthrough polish ---- */
+.ph-resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+}
+
+.ph-resume-actions .ph-resume-btn {
+  margin: 0;
+}
+
+.practice-hub.is-complete .ph-resume {
+  border-color: color-mix(in srgb, #2a7a4b 40%, var(--line, #c9d8e8));
+}
+
+.practice-passport {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 2.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.train-advance-gate {
+  margin: 0.5rem 0;
+}
