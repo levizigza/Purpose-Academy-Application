@@ -206,7 +206,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
           <div className="practice-chat-composer">
             {needName ? (
               <form className="stack" onSubmit={onName}>
-                <p className="practice-dock-prompt">Who are you reviewing as?</p>
+                <p className="practice-dock-prompt">Who is practising?</p>
                 <div className="practice-name-grid">
                   {PRACTICE_REVIEWERS.map((r) => (
                     <button
