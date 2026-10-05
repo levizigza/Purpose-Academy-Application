@@ -79,7 +79,7 @@ export const communityPack: PathwayPack = {
       imageKey: 'com-badge',
       definition: 'An ID card that shows your name and role so people know who you are.',
       sentence: 'Wear your name badge where people can see it.',
-      gloss: gloss('Credencial', 'Bitaqa', 'Name badge', 'Name badge', 'Name badge'),
+      gloss: gloss('Credencial', 'Bitaqa', 'Nam ka badge / billa', 'Ye-sim badge', 'Nay-sim badge'),
     },
     {
       id: 'clipboard',
@@ -88,7 +88,7 @@ export const communityPack: PathwayPack = {
       imageKey: 'com-clipboard',
       definition: 'A board that holds papers for notes and forms. Keep private pages covered.',
       sentence: 'Write the notes on the clipboard.',
-      gloss: gloss('Portapapeles', 'Lawh kitabah', 'Clipboard', 'Clipboard', 'Clipboard'),
+      gloss: gloss('Portapapeles', 'Lawh kitabah', 'Clipboard / likhne ki board', 'Ye-metshaf board', 'Nay-metshaf board'),
     },
     {
       id: 'first-aid',
@@ -97,7 +97,7 @@ export const communityPack: PathwayPack = {
       imageKey: 'com-first-aid',
       definition: 'A marked box with supplies for small injuries. Know where it is before you need it.',
       sentence: 'Get the first aid kit from the wall.',
-      gloss: gloss('Botiquin', 'Sanduq isaf', 'First aid kit', 'First aid kit', 'First aid kit'),
+      gloss: gloss('Botiquin', 'Sanduq isaf', 'Prathamik upchar peti', 'Ye-quwat sanduq', 'Nay-quwat sanduq'),
     },
     {
       id: 'gloves',
@@ -106,7 +106,7 @@ export const communityPack: PathwayPack = {
       imageKey: 'com-gloves',
       definition: 'Gloves that protect your hands during cleaning or personal-care support tasks.',
       sentence: 'Put on protective gloves before cleaning.',
-      gloss: gloss('Guantes protectores', 'Quffazat', 'Protective gloves', 'Protective gloves', 'Protective gloves'),
+      gloss: gloss('Guantes protectores', 'Quffazat', 'Suraksha gloves', 'Ye-ej mekelakiya', 'Nay-ed mekelakeli'),
     },
     {
       id: 'schedule',
@@ -115,7 +115,7 @@ export const communityPack: PathwayPack = {
       imageKey: 'com-schedule',
       definition: 'A plan that shows times and tasks for the day. Check it before each visit.',
       sentence: 'Check the schedule for your next visit.',
-      gloss: gloss('Horario', 'Jadwal', 'Schedule', 'Schedule', 'Schedule'),
+      gloss: gloss('Horario', 'Jadwal', 'Schedule / karyakram', 'Ye-gize schedule', 'Nay-gize schedule'),
     },
     {
       id: 'phone',
@@ -124,7 +124,7 @@ export const communityPack: PathwayPack = {
       imageKey: 'com-phone',
       definition: 'A phone used for work calls, check-ins, and calling a supervisor.',
       sentence: 'Call the supervisor on the work phone.',
-      gloss: gloss('Telefono de trabajo', 'Hatiff amal', 'Work phone', 'Work phone', 'Work phone'),
+      gloss: gloss('Telefono de trabajo', 'Hatiff amal', 'Kam ka phone', 'Ye-sera telefon', 'Nay-sera telefon'),
     },
     {
       id: 'welcome',
@@ -133,7 +133,7 @@ export const communityPack: PathwayPack = {
       imageKey: 'com-welcome',
       definition: 'The front desk where people arrive, ask for help, and begin intake.',
       sentence: 'Meet the visitor at the welcome desk.',
-      gloss: gloss('Recepcion', 'Maktab istiqbal', 'Welcome desk', 'Welcome desk', 'Welcome desk'),
+      gloss: gloss('Recepcion', 'Maktab istiqbal', 'Swagat desk', 'Ye-selam desk', 'Nay-selam desk'),
     },
     {
       id: 'consent',
@@ -144,10 +144,10 @@ export const communityPack: PathwayPack = {
       sentence: 'Check the consent form before you enter.',
       gloss: gloss(
         'Formulario de consentimiento',
-        'Istithmar al-muwafaqa',
-        'Consent form',
-        'Consent form',
-        'Consent form',
+        'Istimarat al-muwafaqa',
+        'Anumati form / sahmati patra',
+        'Ye-fimam form',
+        'Nay-fimam form',
       ),
     },
     {
@@ -160,9 +160,9 @@ export const communityPack: PathwayPack = {
       gloss: gloss(
         'Estacion de higiene',
         'Mahattat al-nazafa',
-        'Hygiene station',
-        'Hygiene station',
-        'Hygiene station',
+        'Swachhta station',
+        'Ye-tsehnet station',
+        'Nay-tsehnet station',
       ),
     },
   ],
@@ -482,10 +482,10 @@ export const communityPack: PathwayPack = {
       supportHint: hint(
         'Check the consent form before you enter.',
         'Revisa el formulario de consentimiento antes de entrar.',
-        'Raji istithmar al-muwafaqa qabla al-dukhul.',
-        'Andar jane se pehle consent form check karo.',
-        'Ke megebat befit consent form yaregagtu.',
-        'Qidmi meAtat consent form aregagtsu.',
+        'Raji istimarat al-muwafaqa qabla al-dukhul.',
+        'Andar jane se pehle anumati form check karo.',
+        'Ke megebat befit ye-fimam form yaregagtu.',
+        'Qidmi meAtat nay-fimam form aregagtsu.',
       ),
     },
     {

@@ -79,7 +79,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-pallet',
       definition: 'A flat wooden or plastic platform used to stack and move goods.',
       sentence: 'Load the boxes evenly onto the pallet.',
-      gloss: gloss('Paleta', 'Tabiq naqil', 'Palette', 'Palette', 'Palette'),
+      gloss: gloss('Paleta', 'Tabiq naqil', 'Palette / takhta', 'Palette / ye-metshuf tabiq', 'Palette / nay-metshuf tabiq'),
     },
     {
       id: 'scanner',
@@ -88,7 +88,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-scanner',
       definition: 'A handheld device that reads barcodes on labels.',
       sentence: 'Scan the barcode and wait for the beep.',
-      gloss: gloss('Escaner', 'Masah', 'Scanner', 'Scanner', 'Scanner'),
+      gloss: gloss('Escaner', 'Masah / jawwaz', 'Scanner / barcode pathak', 'Scanner / barcode anbi', 'Scanner / barcode anbi'),
     },
     {
       id: 'label',
@@ -97,7 +97,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-label',
       definition: 'A sticker that shows destination, barcode, and order details.',
       sentence: 'Check the shipping label before you stage the box.',
-      gloss: gloss('Etiqueta de envio', 'Bitagat shahn', 'Shipping label', 'Shipping label', 'Shipping label'),
+      gloss: gloss('Etiqueta de envio', 'Bitagat shahn', 'Shipping label / bhejne ka label', 'Ye-metshuf label', 'Nay-metshuf label'),
     },
     {
       id: 'vest',
@@ -106,7 +106,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-vest',
       definition: 'A bright high-visibility vest that helps people and drivers see you.',
       sentence: 'Put on your safety vest before you enter the floor.',
-      gloss: gloss('Chaleco de seguridad', 'Sitra amn', 'Safety vest', 'Safety vest', 'Safety vest'),
+      gloss: gloss('Chaleco de seguridad', 'Sitra amn', 'Suraksha jacket', 'Ye-debab mekelakiya', 'Nay-debab mekelakeli'),
     },
     {
       id: 'dolly',
@@ -115,7 +115,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-dolly',
       definition: 'A two-wheel cart for moving heavy boxes by hand.',
       sentence: 'Use the hand truck for the heavy boxes.',
-      gloss: gloss('Carretilla', 'Arabat yad', 'Hand truck', 'Hand truck', 'Hand truck'),
+      gloss: gloss('Carretilla', 'Arabat yad', 'Hath-gadi / trolley', 'Ye-ej arabat', 'Nay-ed arabat'),
     },
     {
       id: 'manifest',
@@ -124,7 +124,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-manifest',
       definition: 'A list of what is on a shipment, pallet, or truck.',
       sentence: 'Check the manifest before you sign for the load.',
-      gloss: gloss('Manifiesto', 'Qaimat shahn', 'Manifest', 'Manifest', 'Manifest'),
+      gloss: gloss('Manifiesto', 'Qaimat shahn', 'Manifest / mal suchi', 'Ye-metshuf zenbel', 'Nay-metshuf zenbel'),
     },
     {
       id: 'rack',
@@ -133,7 +133,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-rack',
       definition: 'Industrial shelving used to store pallets and cartons by location.',
       sentence: 'Place the pallet squarely on the storage rack.',
-      gloss: gloss('Estanteria', 'Raf takhzin', 'Storage rack', 'Storage rack', 'Storage rack'),
+      gloss: gloss('Estanteria', 'Raf takhzin', 'Storage rack / shelving', 'Ye-meqemacha raf', 'Nay-meqemacha raf'),
     },
     {
       id: 'jack',
@@ -142,7 +142,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-jack',
       definition: 'A manual jack that slides under a pallet so you can roll it short distances.',
       sentence: 'Slide the pallet jack under the pallet before you lift.',
-      gloss: gloss('Gato de paleta', 'Rafi at al-tabiq', 'Pallet jack', 'Pallet jack', 'Pallet jack'),
+      gloss: gloss('Gato de paleta', 'Rafi at al-tabiq', 'Pallet jack / uthane ka jack', 'Ye-palette jack', 'Nay-palette jack'),
     },
     {
       id: 'wrap',
@@ -151,7 +151,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-wrap',
       definition: 'Plastic film wrapped tightly around a pallet to keep the load stable.',
       sentence: 'Wrap the pallet with stretch wrap before shipping.',
-      gloss: gloss('Film estirable', 'Ghilaf mutamatit', 'Stretch wrap', 'Stretch wrap', 'Stretch wrap'),
+      gloss: gloss('Film estirable', 'Ghilaf mutamatit', 'Stretch wrap / plastic film', 'Ye-plastic film', 'Nay-plastic film'),
     },
   ],
   wordActions: [
