@@ -1,12 +1,17 @@
 /**
  * Free open-source / no-key APIs from https://github.com/public-apis/public-apis
  * Used server-side so the browser never hits CORS walls.
+ * Neural TTS via Microsoft Edge Read Aloud (msedge-tts) — no paid key.
  */
+
+import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts'
 
 const LANG_MAP = {
   Amharic: 'am',
+  Tigrinya: 'ti',
   Spanish: 'es',
   Arabic: 'ar',
+  Hindi: 'hi',
   Tagalog: 'tl',
   French: 'fr',
   'English only': 'en',
@@ -214,4 +219,106 @@ export async function httpbinHealth() {
   if (!res.ok) return { ok: false }
   const data = await res.json()
   return { ok: true, origin: data.origin, url: data.url, source: 'Httpbin' }
+}
+
+/**
+ * Neural TTS — Microsoft Edge Read Aloud voices (free, no API key).
+ * Far more natural than browser speechSynthesis for student vocab audio.
+ * Fallback: Google Translate TTS (public undocumented endpoint) then none.
+ *
+ * Languages used by Purpose Academy support bridge:
+ * English, Spanish, Arabic, Hindi, Amharic. Tigrinya falls back to Amharic voice.
+ */
+const EDGE_VOICE = {
+  en: 'en-US-JennyNeural',
+  es: 'es-MX-DaliaNeural',
+  ar: 'ar-SA-ZariyahNeural',
+  hi: 'hi-IN-SwaraNeural',
+  am: 'am-ET-MekdesNeural',
+  ti: 'am-ET-MekdesNeural', // no Edge ti voice yet — closest Ge'ez-script neural
+}
+
+const TTS_CACHE = new Map()
+const TTS_CACHE_MAX = 120
+
+function ttsCacheKey(text, lang) {
+  return `${lang}::${text}`
+}
+
+function rememberTts(key, buffer, contentType, voice, source) {
+  if (TTS_CACHE.size >= TTS_CACHE_MAX) {
+    const first = TTS_CACHE.keys().next().value
+    TTS_CACHE.delete(first)
+  }
+  TTS_CACHE.set(key, { buffer, contentType, voice, source, at: Date.now() })
+}
+
+async function edgeNeuralSpeech(text, lang) {
+  const voice = EDGE_VOICE[lang] || EDGE_VOICE.en
+  const tts = new MsEdgeTTS()
+  await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3)
+  const { audioStream } = tts.toStream(text)
+  const chunks = []
+  for await (const chunk of audioStream) chunks.push(chunk)
+  const buffer = Buffer.concat(chunks)
+  if (!buffer.length) throw new Error('Empty Edge TTS audio')
+  return { buffer, contentType: 'audio/mpeg', voice, source: 'Microsoft Edge neural TTS (msedge-tts)' }
+}
+
+/** Google Translate TTS — listed widely as a free anonymous TTS endpoint. */
+async function googleTranslateSpeech(text, lang) {
+  const tl = lang === 'ti' ? 'am' : lang
+  const url = new URL('https://translate.google.com/translate_tts')
+  url.searchParams.set('ie', 'UTF-8')
+  url.searchParams.set('client', 'tw-ob')
+  url.searchParams.set('tl', tl)
+  url.searchParams.set('q', text.slice(0, 180))
+  const res = await fetch(url, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (PurposeAcademy; educational)' },
+  })
+  if (!res.ok) throw new Error(`Google TTS unavailable (${res.status})`)
+  const buffer = Buffer.from(await res.arrayBuffer())
+  if (buffer.length < 500) throw new Error('Google TTS returned empty audio')
+  return {
+    buffer,
+    contentType: 'audio/mpeg',
+    voice: `gtts-${tl}`,
+    source: 'Google Translate TTS',
+  }
+}
+
+/**
+ * Synthesize short speech for vocab / instruction audio.
+ * @param {string} text
+ * @param {string} lang BCP-47-ish short code: en|es|ar|hi|am|ti
+ */
+export async function synthesizeSpeech(text, lang = 'en') {
+  const clean = String(text || '').trim().replace(/\s+/g, ' ')
+  if (!clean) throw new Error('Text is required')
+  if (clean.length > 280) throw new Error('Text too long for speech (max 280 characters)')
+  const code = String(lang || 'en').toLowerCase().split('-')[0]
+  const key = ttsCacheKey(clean, code)
+  const hit = TTS_CACHE.get(key)
+  if (hit) return { ...hit, cached: true }
+
+  let result
+  try {
+    result = await edgeNeuralSpeech(clean, code)
+  } catch {
+    result = await googleTranslateSpeech(clean, code)
+  }
+  rememberTts(key, result.buffer, result.contentType, result.voice, result.source)
+  return { ...result, cached: false }
+}
+
+/** Free Dictionary pronunciation URL when available (human recordings for many English words). */
+export async function englishPronunciation(word) {
+  const dict = await dictionaryLookup(word)
+  return {
+    word: dict.word,
+    audio: dict.audio,
+    phonetic: dict.phonetic,
+    source: dict.source,
+    found: Boolean(dict.audio),
+  }
 }

@@ -334,6 +334,37 @@ export function registerRoutes(app) {
     }
   })
 
+  /**
+   * Neural text-to-speech for Practice Mode / student vocab.
+   * Public (no auth) so Student Practice Mode can hear human-sounding voices.
+   * Query: text, lang (en|es|ar|hi|am|ti or language name)
+   */
+  app.get('/api/enrich/tts', async (req, res) => {
+    try {
+      const text = String(req.query.text || req.query.q || '')
+      const langRaw = String(req.query.lang || 'en')
+      const lang = /^[a-z]{2}/i.test(langRaw) ? langRaw : apis.langCode(langRaw)
+      const result = await apis.synthesizeSpeech(text, lang)
+      res.setHeader('Content-Type', result.contentType)
+      res.setHeader('Cache-Control', 'public, max-age=86400')
+      res.setHeader('X-PA-TTS-Voice', result.voice)
+      res.setHeader('X-PA-TTS-Source', result.source)
+      res.setHeader('X-PA-TTS-Cached', result.cached ? '1' : '0')
+      res.send(result.buffer)
+    } catch (e) {
+      res.status(502).json({ error: e.message || 'Speech unavailable' })
+    }
+  })
+
+  /** Free Dictionary pronunciation for single English words (public-apis). */
+  app.get('/api/enrich/pronounce/:word', async (req, res) => {
+    try {
+      res.json(await apis.englishPronunciation(req.params.word))
+    } catch (e) {
+      res.status(502).json({ error: e.message })
+    }
+  })
+
   app.get('/api/enrich/calgary', async (_req, res) => {
     try {
       res.json(await apis.calgaryWeather())
