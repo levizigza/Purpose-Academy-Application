@@ -132,7 +132,11 @@ export function PracticeHub({
   const unitSteps = stepsInUnit(unit.id).filter((n) => n >= PRACTICE_ENTRY_STEP)
   const unitDoneCount = unitSteps.filter((n) => n < currentStep).length
   const unitPct = unitMasteryPercent(stepsInUnit(unit.id))
-  const freshStart = resumeStep === PRACTICE_ENTRY_STEP && stats.lessonsCompleted === 0 && overall === 0
+  const freshStart =
+    !pathComplete &&
+    resumeStep === PRACTICE_ENTRY_STEP &&
+    stats.lessonsCompleted === 0 &&
+    stats.xp < 25
   const followSummary = followUpSummary(loadFollowUp())
   const domains = [
     { label: pack.skillDomains.vocabulary, pct: domainMasteryPercent(SKILL_DOMAINS.vocabulary) },

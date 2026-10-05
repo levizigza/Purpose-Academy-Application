@@ -705,9 +705,10 @@ export function StudentSequencePage() {
   useEffect(() => { primeSpeech() }, [])
   useEffect(() => () => { stopSpeech() }, [])
   useEffect(() => {
+    if (isPracticeMode() && practiceView !== 'lesson') return
     const skill = SKILL_BY_STEP[step]
     if (skill) markSkillOpened(skill)
-  }, [step])
+  }, [step, practiceView])
 
   /* Seed matching options from the adaptive deck when entering step 9. */
   useEffect(() => {
