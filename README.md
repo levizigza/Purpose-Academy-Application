@@ -67,6 +67,8 @@ Useful checks:
 | API | Use in Purpose Academy |
 |-----|------------------------|
 | [Free Dictionary](https://dictionaryapi.dev/) | Live definitions + pronunciation audio for vocabulary |
+| Microsoft Edge neural TTS (`msedge-tts`) | Human-sounding speech for English + support languages (`/api/enrich/tts`) |
+| Google Translate TTS | Fallback speech when Edge is unavailable |
 | [MyMemory Translation](https://mymemory.translated.net/) | Support-language bridge for definitions |
 | [Lorem Picsum](https://picsum.photos/) | Visual anchors for vocabulary cards |
 | [Quotable](https://github.com/lukePeavey/quotable) | Learner home encouragement quote |
@@ -74,6 +76,8 @@ Useful checks:
 | [Zippopotam.us](http://www.zippopotam.us) | Canadian postal lookup (`/api/enrich/postal/:code`) |
 | [Universities List](https://github.com/Hipo/university-domains-list) | Canadian institutions (`/api/enrich/universities`) |
 | [Httpbin](https://httpbin.org/) | API health connectivity probe |
+
+Student audio priority: Free Dictionary recording (when present) → Edge neural voice → browser `speechSynthesis`.
 
 ## Architecture
 
