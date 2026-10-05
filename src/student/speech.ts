@@ -4,8 +4,8 @@ import type { SupportLang } from './journeyCurriculum'
  * Speech for Purpose Academy student audio.
  *
  * Priority (most human → fallback):
- * 1. Free Dictionary human pronunciation for single English words (public-apis)
- * 2. Microsoft Edge neural TTS via /api/enrich/tts (Jenny / Dalia / Zariyah / Swara / Mekdes)
+ * 1. Microsoft Edge neural TTS via /api/enrich/tts (Jenny / Dalia / Zariyah / Swara / Mekdes)
+ * 2. Free Dictionary human pronunciation for single English words (public-apis) — short timeout
  * 3. Browser speechSynthesis (last resort — often robotic)
  */
 
@@ -149,12 +149,15 @@ async function speakNeural(text: string, langCode: string): Promise<boolean> {
   return playAudioUrl(url)
 }
 
-/** Prefer Free Dictionary human recordings for single English words. */
+/** Optional Free Dictionary recording — never block neural TTS if the API is slow. */
 async function speakDictionaryEnglish(word: string): Promise<boolean> {
   const clean = word.trim()
   if (!clean || /\s/.test(clean)) return false
   try {
-    const res = await fetch(`${apiBase()}/api/enrich/pronounce/${encodeURIComponent(clean.toLowerCase())}`)
+    const res = await fetch(
+      `${apiBase()}/api/enrich/pronounce/${encodeURIComponent(clean.toLowerCase())}`,
+      { signal: AbortSignal.timeout(2000) },
+    )
     if (!res.ok) return false
     const data = (await res.json()) as { audio?: string | null; found?: boolean }
     if (!data.audio) return false
@@ -187,12 +190,12 @@ function speakBrowser(text: string, lang: string): Promise<boolean> {
 }
 
 async function speak(text: string, langCode: string, browserLang: string): Promise<boolean> {
+  const neuralOk = await speakNeural(text, langCode)
+  if (neuralOk) return true
   if (langCode === 'en') {
     const dictOk = await speakDictionaryEnglish(text)
     if (dictOk) return true
   }
-  const neuralOk = await speakNeural(text, langCode)
-  if (neuralOk) return true
   return speakBrowser(text, browserLang)
 }
 

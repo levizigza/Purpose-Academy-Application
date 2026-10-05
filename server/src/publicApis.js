@@ -25,7 +25,23 @@ export function langCode(name) {
 /** Free Dictionary API — https://dictionaryapi.dev/ */
 export async function dictionaryLookup(word) {
   const q = encodeURIComponent(String(word).trim().toLowerCase())
-  const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${q}`)
+  let res
+  try {
+    /* Dictionaryapi.dev often stalls; never block student audio on it. */
+    res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${q}`, {
+      signal: AbortSignal.timeout(2500),
+    })
+  } catch {
+    return {
+      word,
+      found: false,
+      definition: null,
+      phonetic: null,
+      audio: null,
+      partOfSpeech: null,
+      examples: [],
+    }
+  }
   if (!res.ok) {
     return {
       word,

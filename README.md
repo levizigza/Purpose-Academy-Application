@@ -77,7 +77,7 @@ Useful checks:
 | [Universities List](https://github.com/Hipo/university-domains-list) | Canadian institutions (`/api/enrich/universities`) |
 | [Httpbin](https://httpbin.org/) | API health connectivity probe |
 
-Student audio priority: Free Dictionary recording (when present) → Edge neural voice → browser `speechSynthesis`.
+Student audio priority: Edge neural voice → Free Dictionary recording (short timeout) → browser `speechSynthesis`.
 
 ## Architecture
 
