@@ -272,7 +272,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         <div className="train-header-top">
           <p className="train-kicker">
             {stepKicker}
-            {practice ? ' · Practice' : ''}
+            {practice ? ' · Student Practice' : ''}
           </p>
           <div className="train-sound-slot">
             {practice && onOpenHub && (
@@ -966,7 +966,7 @@ export function StudentSequencePage() {
     if (isPracticeMode()) {
       return (
         <Shell step={PRACTICE_ENTRY_STEP} onBack={() => navigate('/')} onNext={() => go(PRACTICE_ENTRY_STEP)}>
-          <p className="train-login-lede">Practice mode skips registration. Opening your language step…</p>
+          <p className="train-login-lede">Student Practice Mode skips registration. Opening your language step…</p>
         </Shell>
       )
     }
@@ -1003,7 +1003,7 @@ export function StudentSequencePage() {
     if (isPracticeMode()) {
       return (
         <Shell step={PRACTICE_ENTRY_STEP} onBack={() => navigate('/')} onNext={() => go(PRACTICE_ENTRY_STEP)}>
-          <p className="train-login-lede">Practice mode skips registration. Opening your language step…</p>
+          <p className="train-login-lede">Student Practice Mode skips registration. Opening your language step…</p>
         </Shell>
       )
     }

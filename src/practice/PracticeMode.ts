@@ -1,4 +1,4 @@
-/** Practice mode — full-site preview for reviewers (no registration). */
+/** Student Practice Mode: full-site student path preview (no registration). */
 
 export const PRACTICE_REVIEWERS = ['ChuChu', 'Yonas', 'Kinfe', 'Saba', 'Levi'] as const
 export type PracticeReviewer = (typeof PRACTICE_REVIEWERS)[number] | string
@@ -188,4 +188,4 @@ export function shouldHidePracticeFeedback(pathname: string, journeyStep?: numbe
 }
 
 export const PRACTICE_TRAY_HELP =
-  'Full school learning platform for reviewers. Path home, XP, mastery gates, unit checkpoints, and the same drills learners use. Pick your name, skip registration, learn every station, and leave feedback at unit ends.'
+  'Full student learning platform. Path home, XP, mastery gates, unit checkpoints, and the same drills the real student path will use. Skip registration, learn every station, and leave feedback as you go.'

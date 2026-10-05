@@ -86,7 +86,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       {
         id: 'sys-1',
         role: 'bot',
-        text: `You’re reviewing ${pageTitleFromPath(pathname)}. Tell me what to fix or improve. I’ll send it to Levi.`,
+        text: `You’re in Student Practice Mode on ${pageTitleFromPath(pathname)}. Tell me what to fix or improve. I’ll send it to Levi.`,
       },
     ])
   }, [pathname, quizComplete, journeyTick])
@@ -187,7 +187,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
           <header className="practice-chat-head">
             <div>
               <strong>Feedback chat</strong>
-              <p>Practice mode · {pageTitleFromPath(pathname)}</p>
+              <p>Student Practice Mode · {pageTitleFromPath(pathname)}</p>
             </div>
             <button type="button" className="linkish" onClick={() => setOpen(false)}>
               Close
@@ -292,8 +292,8 @@ export function PracticeModeBanner() {
   return (
     <div className="practice-banner motion-soft-pulse" role="status">
       <span>
-        Practice mode{name ? ` · ${name}` : ''}. Registration skipped. Use Back anytime, or Start over to run the
-        path from the top.
+        Student Practice Mode{name ? ` · ${name}` : ''}. Registration skipped. Use Back anytime, or Start over to run
+        the path from the top.
       </span>
       <span className="practice-banner-actions">
         {onJourney ? (

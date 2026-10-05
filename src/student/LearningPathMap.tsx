@@ -40,7 +40,7 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
     <section className={`learning-path-map${compact ? ' is-compact' : ''}${practice ? ' is-practice' : ''}`} aria-label="Learning path">
       <header className="lp-head">
         <div>
-          <p className="lp-kicker">{practice ? 'Practice run · full school path' : 'Your learning path'}</p>
+          <p className="lp-kicker">{practice ? 'Student Practice · full school path' : 'Your learning path'}</p>
           <h2 className="lp-title">
             Unit {currentUnit.id}: {currentUnit.label}
           </h2>

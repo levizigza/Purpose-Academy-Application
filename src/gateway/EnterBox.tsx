@@ -44,7 +44,7 @@ const ENTRIES: Entry[] = [
   },
   {
     to: '/journey',
-    label: 'Practice Mode',
+    label: 'Student Practice Mode',
     help: PRACTICE_TRAY_HELP,
     tone: 'journey',
     tool: 'wrench',
@@ -155,13 +155,13 @@ function PracticeNameGate({
 }) {
   const [name, setName] = useState(() => getPracticeName())
   return (
-    <div className="practice-gate" role="dialog" aria-modal="true" aria-label="Practice mode name">
+    <div className="practice-gate" role="dialog" aria-modal="true" aria-label="Student Practice Mode name">
       <div className="practice-gate-card site-crate">
-        <p className="section-kicker">Practice Mode</p>
-        <h2>Who is reviewing?</h2>
+        <p className="section-kicker">Student Practice Mode</p>
+        <h2>Who is practising?</h2>
         <p className="lede">
-          For ChuChu, Yonas, Kinfe, Saba &amp; Levi. Walk the full site without registration, catch issues, and send
-          feedback so we can fix things.
+          Walk the full student learning path without registration. Catch issues, learn every station, and send
+          feedback so we can improve the school experience.
         </p>
         <div className="practice-name-grid">
           {PRACTICE_REVIEWERS.map((r) => (
@@ -192,7 +192,7 @@ function PracticeNameGate({
             disabled={!name.trim()}
             onClick={() => onReady(name.trim())}
           >
-            Enter Practice Mode
+            Enter Student Practice Mode
           </button>
           <button type="button" className="btn btn-ghost" onClick={onCancel}>
             Cancel
@@ -240,13 +240,13 @@ export function EnterBox() {
   function beginPractice(name: string) {
     startPracticeMode(name)
     setPracticeGate(false)
-    setOpenTray('Practice Mode')
+    setOpenTray('Student Practice Mode')
     void unlockFoley().then(() => {
       playFoley('latch')
       playFoley('metal')
     })
     /* Skip registration and open the real training path */
-    window.setTimeout(() => launchTo('/journey', 'Practice Mode'), 380)
+    window.setTimeout(() => launchTo('/journey', 'Student Practice Mode'), 380)
   }
 
   return (
@@ -306,7 +306,7 @@ export function EnterBox() {
                   {item.practice && (
                     <span className="practice-point" aria-hidden>
                       <span className="practice-point-arrow">➜</span>
-                      <span className="practice-point-label">Reviewers</span>
+                      <span className="practice-point-label">Students</span>
                     </span>
                   )}
                   <span className="toolbox-etch" aria-hidden>

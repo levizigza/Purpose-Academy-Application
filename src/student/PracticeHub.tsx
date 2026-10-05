@@ -27,7 +27,7 @@ function levelTone(level: MasteryLevel) {
 }
 
 /**
- * Duolingo/Khan-style learning home for Practice Mode.
+ * Duolingo/Khan-style learning home for Student Practice Mode.
  * Full curriculum map, XP, streak, and jump-into unlocked lessons.
  */
 export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
@@ -51,11 +51,11 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
   return (
     <div className="shell-main practice-hub">
       <header className="ph-hero">
-        <p className="ph-kicker">Practice Mode · Full school platform</p>
+        <p className="ph-kicker">Student Practice Mode · Full school platform</p>
         <h1>Your learning path</h1>
         <p className="ph-lede">
-          Same units, drills, mastery gates, and checkpoints learners use. Work each station until the skill is
-          Familiar, then move on.
+          Same units, drills, mastery gates, and checkpoints the real student path will use. Work each station until
+          the skill is Familiar, then move on.
         </p>
         <div className="ph-stat-row" aria-label="Learning stats">
           <div className="ph-stat">
@@ -110,7 +110,7 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
                   </h2>
                   <p>{goal?.goal}</p>
                   {unitLocked ? (
-                    <em className="ph-skip">Skipped in Practice Mode (registration)</em>
+                    <em className="ph-skip">Skipped in Student Practice Mode (registration)</em>
                   ) : (
                     <em>{pct}% unit mastery · Steps {u.range}</em>
                   )}
@@ -168,8 +168,8 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
 
       <aside className="ph-footnote">
         <p>
-          Platform pattern: learn → try → feedback → retry until Familiar → unit checkpoint → next unit. Reviewer
-          feedback chat stays available at unit ends.
+          Platform pattern: learn → try → feedback → retry until Familiar → unit checkpoint → next unit. Feedback
+          chat stays available at unit ends.
         </p>
         <button type="button" className="btn btn-secondary on-light" onClick={onContinue}>
           Enter current lesson
