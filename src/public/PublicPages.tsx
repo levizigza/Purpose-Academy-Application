@@ -111,18 +111,23 @@ export function HomePage() {
                 <img src={BRAND_ASSETS.photoLogistics} alt="Warehouse and logistics training environment" />
                 <img className="signal-icon" src={BRAND_ASSETS.iconLogistics} alt="" />
               </div>
-              <h3>Warehousing & Logistics</h3>
-              <p>Next program track after Construction is established. Same school standard.</p>
-              <span className="badge">Coming next</span>
+              <h3>Logistics Foundations</h3>
+              <p>
+                Warehouse safety, equipment, inventory systems, and workplace English on the same 20-step school path.
+              </p>
+              <span className="badge ok">Enrolling now</span>
             </Reveal>
             <Reveal as="article" className="signal community" delay={220}>
               <div className="signal-media">
                 <img src={BRAND_ASSETS.photoCommunity} alt="Workers talking on a construction site" />
                 <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
               </div>
-              <h3>Community Support</h3>
-              <p>Planned pathway for people-focused work using the same foundation-to-practice model.</p>
-              <span className="badge">Planned</span>
+              <h3>Community Support Foundations</h3>
+              <p>
+                Welcome and intake, privacy, care supplies, and support English using the same foundation-to-practice
+                model.
+              </p>
+              <span className="badge ok">Enrolling now</span>
             </Reveal>
           </div>
           <div className="hero-actions" style={{ marginTop: '1.25rem' }}>
@@ -221,16 +226,15 @@ export function ProgramsPage() {
 
       <Reveal as="article" className="school-program-feature site-crate" delay={120}>
         <div className="school-program-copy">
-          <span className="badge">Coming next</span>
-          <h2>Warehousing & Logistics</h2>
+          <span className="badge ok">Enrolling now</span>
+          <h2>Logistics Foundations</h2>
           <p>
-            The next school pathway after Construction is established. Same foundation-to-practice model: workplace
-            language, safety, equipment awareness, and supervised drills that prepare learners for warehouse and
-            logistics roles in Alberta.
+            Same 20-step school path as Construction: assess fit, learn vocabulary, practise English, build safety and
+            systems skills, then move toward warehouse and logistics roles with instructor checks.
           </p>
           <ul className="school-bullets">
-            <li>Warehouse safety and clear site English</li>
-            <li>Inventory, packing, and receiving practice</li>
+            <li>Warehouse safety and clear workplace English</li>
+            <li>Scanning, receiving, put-away, picking, and shipping</li>
             <li>Same instructor observation and Skills Passport standard</li>
           </ul>
           <Link className="btn btn-primary" to="/admissions">
@@ -238,22 +242,21 @@ export function ProgramsPage() {
           </Link>
         </div>
         <figure className="school-program-media">
-          <img src={BRAND_ASSETS.photoLogistics} alt="Warehouse training environment for Warehousing and Logistics" />
+          <img src={BRAND_ASSETS.photoLogistics} alt="Warehouse training environment for Logistics Foundations" />
         </figure>
       </Reveal>
 
       <Reveal as="article" className="school-program-feature site-crate" delay={180}>
         <div className="school-program-copy">
-          <span className="badge">Planned</span>
-          <h2>Community Support</h2>
+          <span className="badge ok">Enrolling now</span>
+          <h2>Community Support Foundations</h2>
           <p>
-            A planned pathway for people-focused work using the same school model. Learners build communication,
-            documentation, and professional habits with instructor support, then move toward community and client-support
-            roles.
+            Same progression, different craft: welcome and intake, privacy, care supplies, and support English, with
+            instructor verification before placement and employment connection.
           </p>
           <ul className="school-bullets">
             <li>Client communication and workplace English</li>
-            <li>Documentation and professional conduct</li>
+            <li>Privacy, dignity, and escalation habits</li>
             <li>Foundation-to-practice path with instructor checks</li>
           </ul>
           <Link className="btn btn-primary" to="/admissions">
@@ -261,7 +264,7 @@ export function ProgramsPage() {
           </Link>
         </div>
         <figure className="school-program-media">
-          <img src={BRAND_ASSETS.photoCommunity} alt="Workers talking on a construction site for Community Support" />
+          <img src={BRAND_ASSETS.photoCommunity} alt="Community Support Foundations training environment" />
         </figure>
       </Reveal>
     </div>

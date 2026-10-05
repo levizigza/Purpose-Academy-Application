@@ -1,16 +1,26 @@
-import { useEffect, useState } from 'react'
-import { JOURNEY_STEPS, LEARNING_UNITS, UNIT_GOALS, unitForStep } from './journeyCurriculum'
+import { useEffect, useState, type CSSProperties } from 'react'
+import { LEARNING_UNITS, UNIT_GOALS, unitForStep } from './journeyCurriculum'
 import {
   canAdvanceFromStep,
+  domainMasteryPercent,
   getMasteryLevel,
   getPlatformStats,
   masteryLabel,
   overallMasteryPercent,
   SKILL_BY_STEP,
+  SKILL_DOMAINS,
   unitMasteryPercent,
   type MasteryLevel,
 } from './learningMastery'
 import { getPracticeName, PRACTICE_ENTRY_STEP } from '../practice/PracticeMode'
+import {
+  getActivePathway,
+  getPathwayJourneySteps,
+  getPathwayPack,
+  pathwayIcon,
+  pathwayMeta,
+  pathwayPhoto,
+} from '../pathways'
 
 type Props = {
   currentStep: number
@@ -21,7 +31,7 @@ type Props = {
 type UnitState = 'done' | 'current' | 'locked' | 'skipped'
 
 function stepsInUnit(unitId: number) {
-  return JOURNEY_STEPS.filter((s) => s.unit === unitId).map((s) => s.n)
+  return getPathwayJourneySteps().filter((s) => s.unit === unitId).map((s) => s.n)
 }
 
 function levelTone(level: MasteryLevel) {
@@ -67,7 +77,7 @@ function MasteryMeter({ percent, label }: { percent: number; label: string }) {
 
 /**
  * Professional learning dashboard for Student Practice Mode.
- * Clear progress, resume CTA, and a structured curriculum map.
+ * Pathway-aware: same skeleton for Construction, Logistics, Community Support.
  */
 export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
   const [, bump] = useState(0)
@@ -84,46 +94,70 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
     const sync = () => bump((n) => n + 1)
     window.addEventListener('pa-mastery-changed', sync)
     window.addEventListener('pa-practice-restarted', sync)
+    window.addEventListener('pa-pathway-changed', sync)
     return () => {
       window.removeEventListener('pa-mastery-changed', sync)
       window.removeEventListener('pa-practice-restarted', sync)
+      window.removeEventListener('pa-pathway-changed', sync)
     }
   }, [])
 
+  const pathwayId = getActivePathway()
+  const meta = pathwayMeta(pathwayId)
+  const pack = getPathwayPack(pathwayId)
+  const journeySteps = getPathwayJourneySteps(pathwayId)
   const stats = getPlatformStats()
   const overall = overallMasteryPercent()
   const resumeStep = Math.max(currentStep, PRACTICE_ENTRY_STEP)
   const unit = unitForStep(resumeStep)
-  const resumeMeta = JOURNEY_STEPS[resumeStep - 1]
+  const resumeMeta = journeySteps[resumeStep - 1]
   const practiceName = getPracticeName()
   const activeUnits = LEARNING_UNITS.filter((u) => unitState(u.id, currentStep) !== 'skipped')
   const completedUnits = activeUnits.filter((u) => unitState(u.id, currentStep) === 'done').length
   const unitSteps = stepsInUnit(unit.id).filter((n) => n >= PRACTICE_ENTRY_STEP)
   const unitDoneCount = unitSteps.filter((n) => n < currentStep).length
   const unitPct = unitMasteryPercent(stepsInUnit(unit.id))
+  const domains = [
+    { label: pack.skillDomains.vocabulary, pct: domainMasteryPercent(SKILL_DOMAINS.vocabulary) },
+    { label: pack.skillDomains.safety, pct: domainMasteryPercent(SKILL_DOMAINS.safety) },
+    { label: pack.skillDomains.tools, pct: domainMasteryPercent(SKILL_DOMAINS.tools) },
+    { label: pack.skillDomains.systems, pct: domainMasteryPercent(SKILL_DOMAINS.systems) },
+    { label: 'Overall progress', pct: overall },
+  ]
 
   function toggleUnit(id: number) {
     setOpenUnits((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
   return (
-    <div className="shell-main practice-hub">
+    <div
+      className={`shell-main practice-hub is-${pathwayId}`}
+      style={{ '--ph-stream': meta.accent, '--ph-stream-soft': meta.soft } as CSSProperties}
+    >
       <header className="ph-hero">
         <div className="ph-hero-copy">
           <p className="ph-kicker">Student Practice Mode</p>
           <h1>Learning dashboard</h1>
           <p className="ph-lede">
-            {practiceName ? `${practiceName}, your` : 'Your'} full school path: units, drills, mastery gates, and
-            checkpoints. Reach Familiar on each station before advancing.
+            {practiceName ? `${practiceName}, your` : 'Your'} {meta.programTitle} path: units, drills, mastery gates,
+            and checkpoints. Reach Familiar on each station before advancing.
           </p>
+          <div className="ph-pathway-badge">
+            <img src={pathwayIcon(pathwayId)} alt="" />
+            <div>
+              <strong>{meta.programTitle}</strong>
+              <span>{meta.tagline}</span>
+            </div>
+          </div>
         </div>
 
         <div className="ph-resume">
+          <div className="ph-resume-media" aria-hidden>
+            <img src={pathwayPhoto(pathwayId)} alt="" />
+          </div>
           <div className="ph-resume-top">
             <p className="ph-resume-label">Up next</p>
-            <span className="ph-resume-chip">
-              Step {resumeStep} of 20
-            </span>
+            <span className="ph-resume-chip">Step {resumeStep} of 20</span>
           </div>
           <h2>
             Unit {unit.id}: {unit.label}
@@ -169,6 +203,28 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
             <span className="ph-metric-hint">Cleared</span>
           </article>
         </div>
+      </section>
+
+      <section className="ph-domains" aria-label="My progress">
+        <div className="ph-section-head">
+          <div>
+            <h2>My progress</h2>
+            <p>Skill domains for {meta.programTitle} — same structure on every pathway.</p>
+          </div>
+        </div>
+        <ul className="ph-domain-list">
+          {domains.map((d) => (
+            <li key={d.label}>
+              <div className="ph-domain-row">
+                <span>{d.label}</span>
+                <strong>{d.pct}%</strong>
+              </div>
+              <div className="ph-domain-track" aria-hidden>
+                <span style={{ width: `${d.pct}%` }} />
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="ph-curriculum" aria-label="Curriculum">
@@ -245,7 +301,7 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
                   <div className="ph-unit-body">
                     <ol className="ph-lessons">
                       {visibleSteps.map((n) => {
-                        const meta = JOURNEY_STEPS[n - 1]
+                        const stepMeta = journeySteps[n - 1]
                         const skill = SKILL_BY_STEP[n]
                         const level = skill ? getMasteryLevel(skill) : 'locked'
                         const unlocked =
@@ -262,12 +318,12 @@ export function PracticeHub({ currentStep, onOpenLesson, onContinue }: Props) {
                               type="button"
                               disabled={!unlocked}
                               onClick={() => onOpenLesson(n)}
-                              aria-label={`${meta.title}, ${masteryLabel(level)}`}
+                              aria-label={`${stepMeta.title}, ${masteryLabel(level)}`}
                             >
                               <span className={levelTone(shownLevel)} aria-hidden />
                               <span className="ph-lesson-copy">
                                 <strong>
-                                  {n}. {meta.title}
+                                  {n}. {stepMeta.title}
                                 </strong>
                                 <span>
                                   {isCurrent

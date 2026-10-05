@@ -106,21 +106,23 @@ export function createSeedDatabase() {
       },
       {
         id: 'course-logistics',
-        title: 'Warehousing and Logistics',
+        title: 'Logistics Foundations',
         category: 'logistics',
-        description: 'Future pathway that reuses the same learning architecture after Construction is validated.',
-        duration: 'TBD',
-        skills: ['Warehouse safety', 'Inventory', 'Packing', 'Receiving'],
-        active: false,
+        description:
+          'Logistics foundations: warehouse safety, equipment, inventory systems, workplace English, and instructor-verified skill.',
+        duration: '12-16 weeks',
+        skills: ['Warehouse safety', 'Inventory', 'Scanning', 'Receiving', 'Shipping'],
+        active: true,
       },
       {
         id: 'course-community',
-        title: 'Community Support',
+        title: 'Community Support Foundations',
         category: 'community',
-        description: 'Future pathway for community service and client-support readiness.',
-        duration: 'TBD',
-        skills: ['Client communication', 'Documentation', 'Professional conduct'],
-        active: false,
+        description:
+          'Community support foundations: welcome & intake, privacy, care supplies, workplace English, and instructor-verified skill.',
+        duration: '12-16 weeks',
+        skills: ['Client communication', 'Privacy & dignity', 'Documentation', 'Escalation'],
+        active: true,
       },
     ],
     modules: [

@@ -72,7 +72,14 @@ export function StudentHomePage() {
   const fProg = foundationProgress(student.id)
   const cProg = constructionProgress(student.id)
   const nextLesson = (() => {
-    const courseId = student.pathway === 'construction' ? 'course-construction' : 'course-foundation'
+    const courseId =
+      student.pathway === 'logistics'
+        ? 'course-logistics'
+        : student.pathway === 'community'
+          ? 'course-community'
+          : student.pathway === 'construction'
+            ? 'course-construction'
+            : 'course-foundation'
     const modules = db.modules.filter((m) => m.course_id === courseId).sort((a, b) => a.order - b.order)
     for (const mod of modules) {
       const lessons = db.lessons.filter((l) => l.module_id === mod.id).sort((a, b) => a.order - b.order)

@@ -1,0 +1,83 @@
+/**
+ * Three-stream learning system.
+ *
+ * Shared skeleton (same progression for every student):
+ *   Assess fit → Enter pathway → Language & vocab → Practice English →
+ *   Digital & safety → Tools & systems → Observation & site → Credential & employment
+ *
+ * What changes per pathway: imagery, vocabulary, safety/context language,
+ * tools/equipment, workplace systems, observation drills, and employment prep.
+ * What stays the same: step order, units, mastery gates, checkpoints, UX chrome.
+ */
+
+import type { EyeSpyScene, QuizItem, SupportLang, VocabTerm } from '../student/journeyCurriculum'
+import {
+  WORD_ACTIONS,
+  WORKPLACE_INSTRUCTIONS,
+  TOOL_CATEGORIES,
+  SYSTEM_TOPICS,
+  SITE_PHRASES,
+  OBSERVATION_SCENARIOS,
+  SITE_DECISIONS,
+  EMPLOYMENT_PREP,
+} from '../student/journeyCurriculum'
+
+export type PathwayId = 'construction' | 'logistics' | 'community'
+
+export type PathwayMeta = {
+  id: PathwayId
+  label: string
+  programTitle: string
+  tagline: string
+  accent: string
+  soft: string
+  courseId: string
+  photo: 'photoConstruction' | 'photoLogistics' | 'photoCommunity'
+  icon: 'iconConstruction' | 'iconLogistics' | 'iconCommunity'
+  open: boolean
+}
+
+export type WordAction = (typeof WORD_ACTIONS)[number]
+export type WorkplaceInstruction = (typeof WORKPLACE_INSTRUCTIONS)[number]
+export type ToolCategory = (typeof TOOL_CATEGORIES)[number]
+export type SystemTopic = (typeof SYSTEM_TOPICS)[number]
+export type SitePhrase = (typeof SITE_PHRASES)[number]
+export type ObservationScenario = (typeof OBSERVATION_SCENARIOS)[number]
+export type SiteDecision = (typeof SITE_DECISIONS)[number]
+export type EmploymentItem = (typeof EMPLOYMENT_PREP)[number]
+
+export type StepTitleOverrides = Partial<
+  Record<number, { title?: string; help?: string; purpose?: string }>
+>
+
+export type PathwaySkillDomains = {
+  vocabulary: string
+  safety: string
+  tools: string
+  systems: string
+}
+
+/**
+ * One content pack = one stream.
+ * Same shape for Construction, Logistics, and Community Support.
+ */
+export type PathwayPack = {
+  id: PathwayId
+  skillDomains: PathwaySkillDomains
+  stepTitles: StepTitleOverrides
+  vocab: VocabTerm[]
+  wordActions: WordAction[]
+  eyeSpyScenes: EyeSpyScene[]
+  workplaceInstructions: WorkplaceInstruction[]
+  sitePhrases: SitePhrase[]
+  safetyQuiz: QuizItem[]
+  toolCategories: ToolCategory[]
+  systemTopics: SystemTopic[]
+  observationScenarios: ObservationScenario[]
+  siteDecisions: SiteDecision[]
+  finalQuiz: QuizItem[]
+  employmentPrep: EmploymentItem[]
+  unitCheckpoints: Record<number, QuizItem[]>
+}
+
+export type { SupportLang, VocabTerm, QuizItem, EyeSpyScene }

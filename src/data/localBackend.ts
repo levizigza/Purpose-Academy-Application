@@ -396,18 +396,24 @@ export function localSelectPathway(uid: string, pathway: Pathway) {
   mutate((db) => {
     const student = db.students.find((s) => s.uid === uid)
     if (!student) throw new Error('Student not found')
-    if (pathway !== 'construction') {
-      throw new Error('Only the Construction pathway is open in this pilot.')
+    if (pathway !== 'construction' && pathway !== 'logistics' && pathway !== 'community') {
+      throw new Error('Unknown pathway')
     }
-    // Guided journey is the foundation path for this pilot — selecting Construction completes it.
+    const courseId =
+      pathway === 'logistics'
+        ? 'course-logistics'
+        : pathway === 'community'
+          ? 'course-community'
+          : 'course-construction'
+    // Guided journey is the foundation path — selecting a stream completes it and enrolls the program.
     student.foundation_complete = true
     student.pathway = pathway
-    student.program_id = 'course-construction'
-    if (!db.enrollments.some((e) => e.student_id === student.id && e.course_id === 'course-construction')) {
+    student.program_id = courseId
+    if (!db.enrollments.some((e) => e.student_id === student.id && e.course_id === courseId)) {
       db.enrollments.push({
         id: id('en'),
         student_id: student.id,
-        course_id: 'course-construction',
+        course_id: courseId,
         status: 'active',
         enrolled_at: now(),
       })

@@ -518,15 +518,23 @@ export function registerRoutes(app) {
         const gate = requireApprovedStudent(db, req.user.uid)
         if (!gate.ok) throw Object.assign(new Error(gate.error), { status: gate.status, code: gate.code })
         const student = gate.student
-        if (pathway !== 'construction') throw new Error('Only the Construction pathway is open in this pilot.')
+        if (pathway !== 'construction' && pathway !== 'logistics' && pathway !== 'community') {
+          throw new Error('Unknown pathway')
+        }
+        const courseId =
+          pathway === 'logistics'
+            ? 'course-logistics'
+            : pathway === 'community'
+              ? 'course-community'
+              : 'course-construction'
         student.foundation_complete = true
         student.pathway = pathway
-        student.program_id = 'course-construction'
-        if (!db.enrollments.some((e) => e.student_id === student.id && e.course_id === 'course-construction')) {
+        student.program_id = courseId
+        if (!db.enrollments.some((e) => e.student_id === student.id && e.course_id === courseId)) {
           db.enrollments.push({
             id: id('en'),
             student_id: student.id,
-            course_id: 'course-construction',
+            course_id: courseId,
             status: 'active',
             enrolled_at: now(),
           })

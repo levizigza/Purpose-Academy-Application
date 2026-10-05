@@ -179,6 +179,20 @@ export function getMasteryLevel(id: SkillId): MasteryLevel {
   return getSkillRecord(id).level
 }
 
+/** Average mastery across a skill domain (student dashboard progress bars). */
+export function domainMasteryPercent(skills: SkillId[]): number {
+  if (!skills.length) return 0
+  const sum = skills.reduce((acc, id) => acc + LEVEL_WEIGHT[getMasteryLevel(id)], 0)
+  return Math.round(sum / skills.length)
+}
+
+export const SKILL_DOMAINS = {
+  vocabulary: ['vocab', 'word-action', 'matching'] as SkillId[],
+  safety: ['safety', 'eye-spy', 'instructions'] as SkillId[],
+  tools: ['tools', 'site-phrases'] as SkillId[],
+  systems: ['systems', 'observation', 'site-log', 'digital'] as SkillId[],
+}
+
 export function getPlatformStats(): PlatformStats {
   return loadStats()
 }

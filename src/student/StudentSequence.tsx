@@ -9,29 +9,26 @@ import { DEMO_PASSWORDS } from '../data/seed'
 import { markSequenceComplete } from '../gateway/sequenceProgress'
 import { selectPathway } from '../data/store'
 import {
-  JOURNEY_STEPS,
+  getActivePathway,
+  getPathwayJourneySteps,
+  getPathwayPack,
+  pathwayMeta,
+  setActivePathway,
+  setRecommendedPathway,
+  pathwayImage,
+  type PathwayId as StreamPathwayId,
+} from '../pathways'
+import {
   SUPPORT_LANGUAGES,
-  VOCAB_UNIT,
-  SAFETY_QUIZ,
-  FINAL_QUIZ,
-  TOOL_CATEGORIES,
-  SYSTEM_TOPICS,
-  SITE_PHRASES,
-  WORD_ACTIONS,
-  EYE_SPY_SCENES,
   UNIT_GOALS,
   LEARNING_UNITS,
-  WORKPLACE_INSTRUCTIONS,
   DIGITAL_PRACTICE,
-  OBSERVATION_SCENARIOS,
-  SITE_DECISIONS,
-  EMPLOYMENT_PREP,
   MATCH_PRACTICE_ROUNDS,
-  UNIT_CHECKPOINTS,
   unitForStep,
   isUnitEntryStep,
   type SupportLang,
   type QuizItem,
+  type VocabTerm,
 } from './journeyCurriculum'
 import {
   CareerAssessmentResult,
@@ -58,7 +55,6 @@ import {
   speakSupport,
   stopSpeech,
 } from './speech'
-import { toolImage } from './toolImages'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { VocabSheet } from './VocabSheet'
 import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
@@ -156,7 +152,7 @@ function PictureCard({
 
 /** Always show the quiz item's object image — never a random site photo. */
 function quizObjectImage(item: QuizItem): string | undefined {
-  return toolImage(item.imageKey) || toolImage(item.answer) || toolImage(item.emoji)
+  return pathwayImage(item.imageKey) || pathwayImage(item.answer) || pathwayImage(item.emoji)
 }
 
 function ChoiceButton({ children, onClick, state, disabled }: {
@@ -186,7 +182,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   onOpenHub?: () => void
   onJumpLesson?: (n: number) => void
 }) {
-  const base = JOURNEY_STEPS[step - 1]
+  const journeySteps = getPathwayJourneySteps()
+  const base = journeySteps[step - 1]
   const motherTongue = supportLang && step >= 3 && step <= 6
   const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 6] : null
   const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
@@ -301,7 +298,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
           <span style={{ width: `${pct}%` }} />
         </div>
         <ol className="train-dots" aria-label="Step progress">
-          {JOURNEY_STEPS.map((s) => {
+          {journeySteps.map((s) => {
             const skipped = practice && s.n < PRACTICE_ENTRY_STEP
             const cls = s.n === step ? 'is-current' : skipped ? 'is-skipped' : s.n < step ? 'is-done' : ''
             return <li key={s.n} className={cls} title={skipped ? `${s.title} (skipped in practice)` : s.title} />
@@ -551,6 +548,34 @@ export function StudentSequencePage() {
   const navigate = useNavigate()
   const { user, student, login, register, refresh } = useSession()
   const [step, setStep] = useState(loadStep)
+  const [pathwayId, setPathwayId] = useState<StreamPathwayId>(() => getActivePathway())
+  const pack = getPathwayPack(pathwayId)
+  const meta = pathwayMeta(pathwayId)
+  const VOCAB_UNIT = pack.vocab
+  const WORD_ACTIONS = pack.wordActions
+  const EYE_SPY_SCENES = pack.eyeSpyScenes
+  const WORKPLACE_INSTRUCTIONS = pack.workplaceInstructions
+  const SITE_PHRASES = pack.sitePhrases
+  const SAFETY_QUIZ = pack.safetyQuiz
+  const TOOL_CATEGORIES = pack.toolCategories
+  const SYSTEM_TOPICS = pack.systemTopics
+  const OBSERVATION_SCENARIOS = pack.observationScenarios
+  const SITE_DECISIONS = pack.siteDecisions
+  const FINAL_QUIZ = pack.finalQuiz
+  const EMPLOYMENT_PREP = pack.employmentPrep
+  const UNIT_CHECKPOINTS = pack.unitCheckpoints
+  const JOURNEY_STEPS = getPathwayJourneySteps(pathwayId)
+
+  useEffect(() => {
+    const sync = () => setPathwayId(getActivePathway())
+    window.addEventListener('pa-pathway-changed', sync)
+    window.addEventListener('pa-practice-restarted', sync)
+    return () => {
+      window.removeEventListener('pa-pathway-changed', sync)
+      window.removeEventListener('pa-practice-restarted', sync)
+    }
+  }, [])
+
   const [supportLang, setSupportLang] = useState<SupportLang>(
     (student?.preferred_language as SupportLang) || 'Amharic',
   )
@@ -597,7 +622,7 @@ export function StudentSequencePage() {
   const [matchIdx, setMatchIdx] = useState(0)
   const [matchAnswer, setMatchAnswer] = useState<string | null>(null)
   const [matchCorrect, setMatchCorrect] = useState(false)
-  const [matchOptions, setMatchOptions] = useState(() => {
+  const [matchOptions, setMatchOptions] = useState<VocabTerm[]>(() => {
     const term = VOCAB_UNIT[0]
     const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
     return [term, ...distractors].sort(() => Math.random() - 0.5)
@@ -655,6 +680,49 @@ export function StudentSequencePage() {
     const skill = SKILL_BY_STEP[step]
     if (skill) markSkillOpened(skill)
   }, [step])
+
+  useEffect(() => {
+    /* When pathway changes, reset lesson-local drills so content matches the pack. */
+    const term = VOCAB_UNIT[0]
+    if (!term) return
+    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
+    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+    setVocabIdx(0)
+    setVocabHeard({})
+    setActionIdx(0)
+    setActionAnswer(null)
+    setActionCorrect(false)
+    setMatchIdx(0)
+    setMatchAnswer(null)
+    setMatchCorrect(false)
+    setMatchRound(1)
+    setInstrIdx(0)
+    setInstrHeard(false)
+    setInstrAnswer(null)
+    setInstrCorrect(false)
+    setPhraseIdx(0)
+    setPhraseHeard(false)
+    setPhraseAnswer(null)
+    setPhraseCorrect(false)
+    setToolIdx(0)
+    setToolAnswer(null)
+    setToolCorrect(false)
+    setSysIdx(0)
+    setSysAnswer(null)
+    setSysCorrect(false)
+    setObsIdx(0)
+    setObsPicked([])
+    setObsChecked(false)
+    setObsCorrect(false)
+    setSiteIdx(0)
+    setSiteAnswer(null)
+    setSiteCorrect(false)
+    setEmpIdx(0)
+    setEmpAnswer(null)
+    setEmpCorrect(false)
+    setEmpQuizDone(false)
+    setFinalPhase('eyespy')
+  }, [pathwayId])
 
   /* Practice mode skips registration entirely */
   useEffect(() => {
@@ -941,8 +1009,13 @@ export function StudentSequencePage() {
   }
 
   async function finishPathway() {
+    const chosen = (interest || getActivePathway()) as StreamPathwayId
+    setRecommendedPathway(chosen)
+    setActivePathway(chosen)
+    setPathwayId(chosen)
+    const label = pathwayMeta(chosen).programTitle
     if (isPracticeMode()) {
-      go(7, 'Opening Construction vocabulary…')
+      go(7, `Opening ${label} vocabulary…`)
       return
     }
     const ok = await ensureDemoStudent()
@@ -950,13 +1023,13 @@ export function StudentSequencePage() {
     try {
       const sid = student?.id
       if (sid) {
-        await selectPathway(sid, 'construction')
+        await selectPathway(sid, chosen)
         await refresh()
       }
-      go(7, 'Opening Construction vocabulary…')
+      go(7, `Opening ${label} vocabulary…`)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not save pathway')
-      go(7, 'Opening Construction vocabulary…')
+      go(7, `Opening ${label} vocabulary…`)
     }
   }
 
@@ -1275,7 +1348,7 @@ export function StudentSequencePage() {
         <p className="train-vocab-counter">Action {actionIdx + 1} of {WORD_ACTIONS.length}</p>
         <article className="word-action-card">
           <PictureCard
-            image={toolImage(term?.imageKey)}
+            image={pathwayImage(term?.imageKey)}
             fit="contain"
             label={item.title}
             caption={item.body}
@@ -1358,7 +1431,7 @@ export function StudentSequencePage() {
           Round {matchRound} of {roundsNeeded} · Match {matchIdx + 1} of {VOCAB_UNIT.length}
         </p>
         <PictureCard
-          image={toolImage(term.imageKey)}
+          image={pathwayImage(term.imageKey)}
           fit="contain"
           label="Match the word to the picture"
           sub={supportLang === 'English' ? 'English word' : `${supportLang}: ${termGloss(term)}`}
@@ -1445,7 +1518,7 @@ export function StudentSequencePage() {
         <p className="train-vocab-counter">Instruction {instrIdx + 1} of {WORKPLACE_INSTRUCTIONS.length} · English only</p>
         <div className="train-instruction">
           <PictureCard
-            image={toolImage(instr.imageKey)}
+            image={pathwayImage(instr.imageKey)}
             fit="contain"
             label="A worker gives a direction"
             caption="Listen in English (required). Mother-tongue help is optional only."
@@ -2135,12 +2208,12 @@ export function StudentSequencePage() {
       {!empDone ? (
         <form className="stack" onSubmit={handleComplete}>
           <div className="alert ok">
-            Partner focus: construction employers who understand this pathway.
+            Partner focus: {meta.label.toLowerCase()} employers who understand this pathway.
           </div>
           <h3>Employment readiness</h3>
           <div className="field">
-            <label htmlFor="emp-goal">Target construction role</label>
-            <textarea id="emp-goal" value={empForm.resume_goal} onChange={(e) => setEmpForm({ ...empForm, resume_goal: e.target.value })} required rows={3} placeholder="e.g. Construction helper / framing crew" />
+            <label htmlFor="emp-goal">Target {meta.label.toLowerCase()} role</label>
+            <textarea id="emp-goal" value={empForm.resume_goal} onChange={(e) => setEmpForm({ ...empForm, resume_goal: e.target.value })} required rows={3} placeholder={`e.g. ${meta.label} helper / entry role`} />
           </div>
           <div className="field">
             <label htmlFor="emp-avail">Availability</label>
@@ -2154,7 +2227,7 @@ export function StudentSequencePage() {
             Student training path complete. Your Skills Passport and dashboard are ready.
           </div>
           <div className="train-learn-grid">
-            <LearnCard title="Hiring partner match" body="Connect with construction companies hiring from this pathway." />
+            <LearnCard title="Hiring partner match" body={`Connect with ${meta.label.toLowerCase()} partners hiring from this pathway.`} />
             <LearnCard title="Resume & interview" body="Show skills in clear, short English." />
             <LearnCard title="30 / 90 / 180 day follow-up" body="Support after you start work, not a dead end." />
           </div>

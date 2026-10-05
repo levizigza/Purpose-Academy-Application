@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { JOURNEY_STEPS, LEARNING_UNITS, unitForStep } from './journeyCurriculum'
+import { LEARNING_UNITS, unitForStep } from './journeyCurriculum'
+import { getPathwayJourneySteps } from '../pathways'
 import {
   getMasteryLevel,
   getPlatformStats,
@@ -83,7 +84,7 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
               {(!compact || state === 'current') && state !== 'locked' && (
                 <ol className="lp-lessons">
                   {steps.map((n) => {
-                    const meta = JOURNEY_STEPS[n - 1]
+                    const meta = getPathwayJourneySteps()[n - 1]
                     const skill = SKILL_BY_STEP[n]
                     const level = skill ? getMasteryLevel(skill) : 'locked'
                     const lessonState =
@@ -129,7 +130,7 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
 }
 
 function stepsInUnit(unitId: number) {
-  return JOURNEY_STEPS.filter((s) => s.unit === unitId).map((s) => s.n)
+  return getPathwayJourneySteps().filter((s) => s.unit === unitId).map((s) => s.n)
 }
 
 /** Short unit intro card shown when a learner enters a new unit. */

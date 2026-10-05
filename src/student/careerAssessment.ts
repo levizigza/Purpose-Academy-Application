@@ -175,20 +175,20 @@ export const ASSESSMENT_COPY = {
     Tigrinya: 'ብመሰረት መልስታትካ፣ ሎሚ ዝሰማማዕካ መንገዲ እዚ እዩ።',
   } satisfies LangText,
   openNow: {
-    Spanish: 'Programa abierto hoy: Construcción',
-      English: 'Program open today: Construction',
-    Arabic: 'البرنامج المفتوح اليوم: البناء',
-    Hindi: 'आज खुला कार्यक्रम: निर्माण',
-    Amharic: 'ዛሬ ክፍት ፕሮግራም፡ ግንባታ',
-    Tigrinya: 'ሎሚ ክፉት ፕሮግራም፡ ህንጻ',
+    Spanish: 'Tres caminos abiertos: Construcción · Logística · Apoyo comunitario',
+      English: 'Three pathways open: Construction · Logistics · Community Support',
+    Arabic: 'ثلاثة مسارات مفتوحة: البناء · اللوجستيات · الدعم المجتمعي',
+    Hindi: 'तीन मार्ग खुले: निर्माण · लॉजिस्टिक्स · सामुदायिक सहायता',
+    Amharic: 'ሦስት መንገዶች ክፍት፡ ግንባታ · ሎጂስቲክስ · የማህበረሰብ ድጋፍ',
+    Tigrinya: 'ሰለስተ መንገድታት ክፉታት፡ ህንጻ · ሎጂስቲክስ · ናይ ማሕበረሰብ ድጋፍ',
   } satisfies LangText,
   continueVocab: {
-    Spanish: 'Continuar al vocabulario de construcción',
-      English: 'Continue to construction vocabulary',
-    Arabic: 'المتابعة إلى مفردات البناء',
-    Hindi: 'निर्माण शब्दावली पर जारी रखें',
-    Amharic: 'ወደ የግንባታ ቃላት ቀጥል',
-    Tigrinya: 'ናብ ናይ ህንጻ ቃላት ቀጽል',
+    Spanish: 'Continuar al vocabulario de tu camino',
+      English: 'Continue to your pathway vocabulary',
+    Arabic: 'المتابعة إلى مفردات مسارك',
+    Hindi: 'अपने मार्ग की शब्दावली पर जारी रखें',
+    Amharic: 'ወደ የመንገድዎ ቃላት ቀጥል',
+    Tigrinya: 'ናብ ናይ መንገድካ ቃላት ቀጽል',
   } satisfies LangText,
   yourCode: {
     Spanish: 'Tu código de intereses',
@@ -383,12 +383,12 @@ export const ASSESSMENT_SHELL: Record<
       Tigrinya: 'ምስ መልስታትካ ዝሰማማዕ መንገዲ።',
     },
     purpose: {
-      Spanish: 'Perfil de intereses → camino recomendado. Construcción está abierto hoy.',
-      English: 'Interest profile → recommended pathway. Construction is open today.',
-      Arabic: 'ملف الاهتمامات → المسار الموصى به. البناء مفتوح اليوم.',
-      Hindi: 'रुचि प्रोफ़ाइल → सुझाया गया मार्ग। निर्माण आज खुला है।',
-      Amharic: 'የፍላጎት መገለጫ → የሚመከር መንገድ። ግንባታ ዛሬ ክፍት ነው።',
-      Tigrinya: 'ናይ ፍቓድ መግለጺ → ዝምከር መንገዲ። ህንጻ ሎሚ ክፉት እዩ።',
+      Spanish: 'Perfil de intereses → camino recomendado. Construcción, Logística y Apoyo comunitario están abiertos.',
+      English: 'Interest profile → recommended pathway. Construction, Logistics, and Community Support are open.',
+      Arabic: 'ملف الاهتمامات → المسار الموصى به. البناء واللوجستيات والدعم المجتمعي مفتوحة.',
+      Hindi: 'रुचि प्रोफ़ाइल → सुझाया गया मार्ग। निर्माण, लॉजिस्टिक्स और सामुदायिक सहायता खुले हैं।',
+      Amharic: 'የፍላጎት መገለጫ → የሚመከር መንገድ። ግንባታ፣ ሎጂስቲክስ እና የማህበረሰብ ድጋፍ ክፍት ናቸው።',
+      Tigrinya: 'ናይ ፍቓድ መግለጺ → ዝምከር መንገዲ። ህንጻ፣ ሎጂስቲክስን ናይ ማሕበረሰብ ድጋፍን ክፉታት እዮም።',
     },
   },
 }
@@ -1166,16 +1166,16 @@ export const PATHWAY_RESULT: Record<
       Tigrinya: 'ሎጂስቲክስ',
     },
     summary: {
-      Spanish: 'Tus respuestas destacan organización, movimiento de materiales y sistemas ordenados. Hoy empiezas con Fundamentos de Construcción; logística abre después con el mismo estándar.',
-      English: 'Your answers highlight organization, moving materials, and orderly systems. Today you start with Construction Foundations; logistics opens later to the same standard.',
+      Spanish: 'Tus respuestas destacan organización, movimiento de materiales y sistemas ordenados. Fundamentos de Logística es tu mejor comienzo.',
+      English: 'Your answers highlight organization, moving materials, and orderly systems. Logistics Foundations is your best start.',
       Arabic:
-        'تُبرز إجاباتك التنظيم وحركة المواد والأنظمة المرتبة. اليوم تبدأ بأسس البناء؛ اللوجستيات تُفتح لاحقاً بنفس المعيار.',
+        'تُبرز إجاباتك التنظيم وحركة المواد والأنظمة المرتبة. أسس اللوجستيات هي أفضل بداية لك.',
       Hindi:
-        'आपके जवाब संगठन, सामग्री की आवाजाही और व्यवस्थित सिस्टम दिखाते हैं। आज निर्माण की बुनियाद से शुरू करें; लॉजिस्टिक्स बाद में उसी मानक से खुलेगा।',
+        'आपके जवाब संगठन, सामग्री की आवाजाही और व्यवस्थित सिस्टम दिखाते हैं। लॉजिस्टिक्स की बुनियाद आपके लिए सबसे अच्छी शुरुआत है।',
       Amharic:
-        'መልሶችዎ ድርጅት፣ የቁሳቁስ እንቅስቃሴ እና ሥርዓታማ ስርዓቶችን ያሳያሉ። ዛሬ የግንባታ መሠረቶች ይጀምሩ፤ ሎጂስቲክስ በኋላ በተመሳሳይ ደረጃ ይከፈታል።',
+        'መልሶችዎ ድርጅት፣ የቁሳቁስ እንቅስቃሴ እና ሥርዓታማ ስርዓቶችን ያሳያሉ። የሎጂስቲክስ መሠረቶች የእርስዎ ምርጥ መጀመሪያ ነው።',
       Tigrinya:
-        'መልስታትካ ውደባ፣ ናይ ኣቕሑ ምንቅስቓስን ስርዓታዊ ስርዓታትን የርኢ። ሎሚ ናይ ህንጻ መሰረታት ጀምር፤ ሎጂስቲክስ ድሕሪኡ ብተመሳሳሊ መለክዒ ክኽፈት እዩ።',
+        'መልስታትካ ውደባ፣ ናይ ኣቕሑ ምንቅስቓስን ስርዓታዊ ስርዓታትን የርኢ። ናይ ሎጂስቲክስ መሰረታት ዝበለጸ ጅማሮኻ እዩ።',
     },
     strengths: [
       {
@@ -1198,16 +1198,16 @@ export const PATHWAY_RESULT: Record<
       Tigrinya: 'ናይ ማሕበረሰብ ድጋፍ',
     },
     summary: {
-      Spanish: 'Tus respuestas destacan ayudar personas con paciencia y respeto. Hoy el programa abierto es Fundamentos de Construcción; la vía comunitaria viene después.',
-      English: 'Your answers highlight helping people with patience and respect. The program open today is Construction Foundations; the community pathway comes later.',
+      Spanish: 'Tus respuestas destacan ayudar personas con paciencia y respeto. Fundamentos de Apoyo Comunitario es tu mejor comienzo.',
+      English: 'Your answers highlight helping people with patience and respect. Community Support Foundations is your best start.',
       Arabic:
-        'تُبرز إجاباتك مساعدة الناس بالصبر والاحترام. البرنامج المفتوح اليوم هو أسس البناء؛ مسار المجتمع يأتي لاحقاً.',
+        'تُبرز إجاباتك مساعدة الناس بالصبر والاحترام. أسس الدعم المجتمعي هي أفضل بداية لك.',
       Hindi:
-        'आपके जवाब धैर्य और सम्मान से लोगों की मदद दिखाते हैं। आज खुला कार्यक्रम निर्माण की बुनियाद है; सामुदायिक मार्ग बाद में आएगा।',
+        'आपके जवाब धैर्य और सम्मान से लोगों की मदद दिखाते हैं। सामुदायिक सहायता की बुनियाद आपके लिए सबसे अच्छी शुरुआत है।',
       Amharic:
-        'መልሶችዎ ሰዎችን በትዕግስትና ክብር መርዳትን ያሳያሉ። ዛሬ ክፍት ፕሮግራም የግንባታ መሠረቶች ነው፤ የማህበረሰብ መንገድ በኋላ ይመጣል።',
+        'መልሶችዎ ሰዎችን በትዕግስትና ክብር መርዳትን ያሳያሉ። የማህበረሰብ ድጋፍ መሠረቶች የእርስዎ ምርጥ መጀመሪያ ነው።',
       Tigrinya:
-        'መልስታትካ ሰባት ብትዕግስትን ክብርን ምሕጋዝ የርኢ። ሎሚ ክፉት ፕሮግራም ናይ ህንጻ መሰረታት እዩ፤ ናይ ማሕበረሰብ መንገዲ ድሕሪኡ ክመጽእ እዩ።',
+        'መልስታትካ ሰባት ብትዕግስትን ክብርን ምሕጋዝ የርኢ። ናይ ማሕበረሰብ ድጋፍ መሰረታት ዝበለጸ ጅማሮኻ እዩ።',
     },
     strengths: [
       {

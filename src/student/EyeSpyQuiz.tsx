@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ATTEMPT_POLICY, type EyeSpyScene } from './journeyCurriculum'
-import { toolImage } from './toolImages'
+import { pathwayImage } from '../pathways'
 import { playFoley } from '../audio/foley'
 import { recordSkillAttempt } from './learningMastery'
 import {
@@ -231,7 +231,7 @@ export function EyeSpyQuiz({
           ))}
         </div>
         {scene.hotspots.map((h, index) => {
-          const img = toolImage(h.imageKey)
+          const img = pathwayImage(h.imageKey)
           const selected = pickedHotspot === h.id
           return (
             <button
