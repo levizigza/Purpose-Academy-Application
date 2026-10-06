@@ -97,7 +97,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-bin',
       definition: 'A sturdy container used to hold or sort items.',
       sentence: 'Put it in the bin.',
-      gloss: gloss('Contenedor', 'حاوية', 'डिब्बा', 'ቅርጫት', 'ቅርጫት'),
+      gloss: gloss('Contenedor', 'حاوية', 'डिब्बा', 'መያዣ', 'መያዣ'),
     },
     {
       id: 'shelf',
@@ -115,7 +115,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-rack',
       definition: 'Strong warehouse framing that holds boxes and pallets.',
       sentence: 'The rack holds boxes.',
-      gloss: gloss('Estantería', 'حامل', 'रैक', 'መቆሚያ', 'መደርደሪያ'),
+      gloss: gloss('Estantería', 'رفوف التخزين', 'रैक', 'ራክ', 'ራክ'),
     },
     {
       id: 'pallet',
@@ -142,7 +142,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-dolly',
       definition: 'A two-wheel hand truck used to move stacked boxes.',
       sentence: 'Use the dolly to move boxes.',
-      gloss: gloss('Plataforma rodante', 'عربة يدوية', 'ट्राली', 'ተንከባላይ ጋሪ', 'ተንከባላይ'),
+      gloss: gloss('Carretilla de mano', 'عربة يدوية', 'हैंड ट्रक', 'የእጅ ጋሪ', 'ናይ ኢድ ጋሪ'),
     },
     {
       id: 'truck',
@@ -223,7 +223,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-ramp',
       definition: 'A sloping surface used to move carts into a truck or dock.',
       sentence: 'Move the cart up the ramp.',
-      gloss: gloss('Rampa', 'منحدر', 'ढलान', 'ማረፊያ', 'ራምፕ'),
+      gloss: gloss('Rampa', 'منحدر', 'रैंप', 'ራምፕ', 'ራምፕ'),
     },
     {
       id: 'dock',
@@ -232,7 +232,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-dock',
       definition: 'The loading area where trucks park to load and unload.',
       sentence: 'The truck is at the dock.',
-      gloss: gloss('Muelle', 'رصيف التحميل', 'डॉक', 'ማረፊያ', 'መራብ'),
+      gloss: gloss('Muelle de carga', 'رصيف التحميل', 'लोडिंग डॉक', 'የመጫኛ ዶክ', 'ናይ ጽዕነት ዶክ'),
     },
     {
       id: 'office',
