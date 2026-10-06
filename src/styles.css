@@ -6589,13 +6589,24 @@ table.data th {
 }
 
 .vocab-sheet-photo-focus {
-  min-height: 14rem;
+  min-height: 16rem;
   aspect-ratio: 4 / 3;
+  position: relative;
 }
 
 .vocab-sheet-photo-focus img {
   object-fit: contain;
-  background: #f4f7fb;
+  background: #111820;
+}
+
+.vocab-sheet-photo-caption {
+  margin: 0;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #f5c542;
+  background: rgba(8, 14, 22, 0.88);
 }
 
 .vocab-sheet-nav {

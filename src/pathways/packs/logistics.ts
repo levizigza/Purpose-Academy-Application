@@ -19,8 +19,8 @@ export const logisticsPack: PathwayPack = {
     3: {
       goal: 'Learn Level-1 logistics words 1–20 from the Purpose Academy visual vocabulary table.',
       outcomes: [
-        'See each object and hear English',
-        'Connect the English word to the real warehouse action',
+        'See a real photo of each object and hear English',
+        'Connect your language to the English word (sentences come later)',
       ],
     },
     4: {

@@ -17,6 +17,7 @@ import sawPhoto from '../assets/photos/tools/saw-photo.jpg'
 import tapePhoto from '../assets/photos/tools/tape-photo.jpg'
 import hardHatPhoto from '../assets/photos/tools/hardhat-photo.jpg'
 import levelPhoto from '../assets/photos/tools/level-photo.jpg'
+import ppePhoto from '../assets/photos/tools/ppe-clear.jpg'
 
 export type ToolImageKey =
   | 'hard-hat'
@@ -39,8 +40,8 @@ const TOOL_IMAGES: Record<ToolImageKey, string> = {
   saw: sawPhoto,
   drill: drillPhoto,
   level: levelPhoto, // wooden spirit level with visible bubble
-  ppe: ppeSvg, // clear set: hard hat + glasses + gloves + boots
-  'safety-check': ppeSvg,
+  ppe: ppePhoto,
+  'safety-check': ppePhoto,
 }
 
 export const TOOL_ICONS = {

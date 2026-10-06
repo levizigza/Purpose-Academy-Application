@@ -1552,7 +1552,7 @@ export function StudentSequencePage() {
         <article className="word-action-card">
           <PictureCard
             image={pathwayImage(term?.imageKey)}
-            fit="contain"
+            fit="cover"
             label={item.title}
             caption={item.body}
           />
@@ -1655,7 +1655,7 @@ export function StudentSequencePage() {
         </p>
         <PictureCard
           image={pathwayImage(term.imageKey)}
-          fit="contain"
+          fit="cover"
           label="Match the English word to the picture"
           caption="All five languages stay visible. Press any language for help, then choose the English word."
         />

@@ -46,10 +46,10 @@ type CardProps = {
 }
 
 /**
- * Visual vocabulary card — Purpose Academy worksheet mold:
- * English · picture · all five home-language glosses.
+ * Visual vocabulary card — image-first worksheet mold:
+ * English · real object photo · all five home-language glosses.
+ * Sentences belong in a later step (not mixed into first vocab pass).
  * Learner presses the language they understand, then hears English.
- * Adaptive: “I already know this” skips the translation bridge (still hear English once).
  */
 export function VocabSheetCard({
   index,
@@ -102,12 +102,13 @@ export function VocabSheetCard({
       <div className="vocab-sheet-body vocab-sheet-body-focus">
         <figure className="vocab-sheet-photo vocab-sheet-photo-focus">
           {img ? (
-            <img src={img} alt={term.english} />
+            <img src={img} alt={`Photo of ${term.english}`} />
           ) : (
             <span className="vocab-sheet-fallback" aria-hidden>
               {term.emoji}
             </span>
           )}
+          <figcaption className="vocab-sheet-photo-caption">Look at the picture. Connect it to English.</figcaption>
         </figure>
         <ul className="vocab-sheet-langs" aria-label="Press the language you understand">
           {VOCAB_SHEET_LANGS.map((lang) => {
@@ -136,9 +137,6 @@ export function VocabSheetCard({
           })}
         </ul>
       </div>
-
-      <p className="vocab-sheet-definition">{term.definition}</p>
-      <p className="vocab-sheet-sentence">{term.sentence}</p>
 
       {!alreadyKnown && (
         <button type="button" className="btn btn-ghost vocab-known-btn" onClick={onMarkKnown}>
@@ -213,7 +211,8 @@ export function VocabSheet({
         <span style={{ width: `${Math.round((linkedCount / Math.max(1, terms.length)) * 100)}%` }} />
       </div>
       <p className="vocab-sheet-lede">
-        See the picture. Press the language you understand — or mark a word you already know — then hear English.
+        Picture first. Press the language you understand — or mark a word you already know — then hear English.
+        Sentences come later, after you know the words.
       </p>
 
       <VocabSheetCard

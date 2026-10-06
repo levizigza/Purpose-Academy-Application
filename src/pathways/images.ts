@@ -1,72 +1,83 @@
 /**
- * Pathway visual resolver.
- * Construction keeps photo-quality tool images.
- * Logistics / Community use clear labeled SVG cards until dedicated photos land.
+ * Pathway visual resolver — real object photos for every stream.
+ * Construction uses tool photos; Logistics / Community use dedicated stock photos.
+ * Learners must see the object, not a letter badge.
  */
 import { toolImage as constructionToolImage } from '../student/toolImages'
 
-const LABEL: Record<string, { title: string; tone: string; mark: string }> = {
-  'log-box': { title: 'Box', tone: '#3d8f6e', mark: 'BX' },
-  'log-bag': { title: 'Bag', tone: '#2f6f55', mark: 'BG' },
-  'log-bin': { title: 'Bin', tone: '#4ea37f', mark: 'BN' },
-  'log-shelf': { title: 'Shelf', tone: '#356f58', mark: 'SH' },
-  'log-rack': { title: 'Rack', tone: '#1d4637', mark: 'RK' },
-  'log-pallet': { title: 'Pallet', tone: '#245844', mark: 'PL' },
-  'log-cart': { title: 'Cart', tone: '#3f8f6c', mark: 'CT' },
-  'log-dolly': { title: 'Dolly', tone: '#356f58', mark: 'DY' },
-  'log-truck': { title: 'Truck', tone: '#2a6b52', mark: 'TK' },
-  'log-van': { title: 'Van', tone: '#3d8f6e', mark: 'VN' },
-  'log-trailer': { title: 'Trailer', tone: '#2f6f55', mark: 'TR' },
-  'log-door': { title: 'Door', tone: '#4ea37f', mark: 'DR' },
-  'log-gate': { title: 'Gate', tone: '#e8a317', mark: 'GT' },
-  'log-floor': { title: 'Floor', tone: '#356f58', mark: 'FL' },
-  'log-wall': { title: 'Wall', tone: '#1d4637', mark: 'WL' },
-  'log-aisle': { title: 'Aisle', tone: '#245844', mark: 'AL' },
-  'log-ramp': { title: 'Ramp', tone: '#3f8f6c', mark: 'RP' },
-  'log-dock': { title: 'Dock', tone: '#2a6b52', mark: 'DK' },
-  'log-office': { title: 'Office', tone: '#4ea37f', mark: 'OF' },
-  'log-warehouse': { title: 'Warehouse', tone: '#1d4637', mark: 'WH' },
-  'log-scanner': { title: 'Scanner', tone: '#2f6f55', mark: 'SC' },
-  'log-label': { title: 'Shipping label', tone: '#4ea37f', mark: 'LB' },
-  'log-vest': { title: 'Safety vest', tone: '#e8a317', mark: 'SV' },
-  'log-manifest': { title: 'Manifest', tone: '#245844', mark: 'MF' },
-  'log-jack': { title: 'Pallet jack', tone: '#2a6b52', mark: 'PJ' },
-  'log-wrap': { title: 'Stretch wrap', tone: '#3f8f6c', mark: 'SW' },
-  'com-badge': { title: 'Name badge', tone: '#7c5cbf', mark: 'NB' },
-  'com-clipboard': { title: 'Clipboard', tone: '#6347a0', mark: 'CB' },
-  'com-first-aid': { title: 'First aid kit', tone: '#c44b4b', mark: 'FA' },
-  'com-gloves': { title: 'Protective gloves', tone: '#5b8fd6', mark: 'GL' },
-  'com-schedule': { title: 'Schedule', tone: '#6b57b0', mark: 'SCH' },
-  'com-phone': { title: 'Work phone', tone: '#4d3d8c', mark: 'PH' },
-  'com-welcome': { title: 'Welcome desk', tone: '#8a6fd0', mark: 'WD' },
-  'com-consent': { title: 'Consent form', tone: '#5a7ab8', mark: 'CF' },
-  'com-hygiene': { title: 'Hygiene station', tone: '#3d9a8b', mark: 'HY' },
-}
+import logBox from '../assets/photos/logistics/log-box.jpg'
+import logBag from '../assets/photos/logistics/log-bag.jpg'
+import logBin from '../assets/photos/logistics/log-bin.jpg'
+import logShelf from '../assets/photos/logistics/log-shelf.jpg'
+import logRack from '../assets/photos/logistics/log-rack.jpg'
+import logPallet from '../assets/photos/logistics/log-pallet.jpg'
+import logCart from '../assets/photos/logistics/log-cart.jpg'
+import logDolly from '../assets/photos/logistics/log-dolly.jpg'
+import logTruck from '../assets/photos/logistics/log-truck.jpg'
+import logVan from '../assets/photos/logistics/log-van.jpg'
+import logTrailer from '../assets/photos/logistics/log-trailer.jpg'
+import logDoor from '../assets/photos/logistics/log-door.jpg'
+import logGate from '../assets/photos/logistics/log-gate.jpg'
+import logFloor from '../assets/photos/logistics/log-floor.jpg'
+import logWall from '../assets/photos/logistics/log-wall.jpg'
+import logAisle from '../assets/photos/logistics/log-aisle.jpg'
+import logRamp from '../assets/photos/logistics/log-ramp.jpg'
+import logDock from '../assets/photos/logistics/log-dock.jpg'
+import logOffice from '../assets/photos/logistics/log-office.jpg'
+import logWarehouse from '../assets/photos/logistics/log-warehouse.jpg'
+import logScanner from '../assets/photos/logistics/log-scanner.jpg'
+import logLabel from '../assets/photos/logistics/log-label.jpg'
+import logVest from '../assets/photos/logistics/log-vest.jpg'
+import logManifest from '../assets/photos/logistics/log-manifest.jpg'
+import logJack from '../assets/photos/logistics/log-jack.jpg'
+import logWrap from '../assets/photos/logistics/log-wrap.jpg'
 
-const svgCache = new Map<string, string>()
+import comBadge from '../assets/photos/community/com-badge.jpg'
+import comClipboard from '../assets/photos/community/com-clipboard.jpg'
+import comFirstAid from '../assets/photos/community/com-first-aid.jpg'
+import comGloves from '../assets/photos/community/com-gloves.jpg'
+import comSchedule from '../assets/photos/community/com-schedule.jpg'
+import comPhone from '../assets/photos/community/com-phone.jpg'
+import comWelcome from '../assets/photos/community/com-welcome.jpg'
+import comConsent from '../assets/photos/community/com-consent.jpg'
+import comHygiene from '../assets/photos/community/com-hygiene.jpg'
 
-function svgCard(key: string): string {
-  const cached = svgCache.get(key)
-  if (cached) return cached
-  const meta = LABEL[key]
-  if (!meta) return ''
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0b121c"/>
-      <stop offset="100%" stop-color="${meta.tone}"/>
-    </linearGradient>
-  </defs>
-  <rect width="640" height="480" rx="28" fill="url(#g)"/>
-  <rect x="48" y="48" width="544" height="384" rx="22" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.22)" stroke-width="3"/>
-  <circle cx="320" cy="200" r="78" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.35)" stroke-width="3"/>
-  <text x="320" y="214" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="42" font-weight="800" fill="#fff">${meta.mark}</text>
-  <text x="320" y="330" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="36" font-weight="700" fill="#fff">${meta.title}</text>
-  <text x="320" y="372" text-anchor="middle" font-family="Source Sans 3, Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.72)">Purpose Academy</text>
-</svg>`
-  const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
-  svgCache.set(key, url)
-  return url
+const PATHWAY_PHOTOS: Record<string, string> = {
+  'log-box': logBox,
+  'log-bag': logBag,
+  'log-bin': logBin,
+  'log-shelf': logShelf,
+  'log-rack': logRack,
+  'log-pallet': logPallet,
+  'log-cart': logCart,
+  'log-dolly': logDolly,
+  'log-truck': logTruck,
+  'log-van': logVan,
+  'log-trailer': logTrailer,
+  'log-door': logDoor,
+  'log-gate': logGate,
+  'log-floor': logFloor,
+  'log-wall': logWall,
+  'log-aisle': logAisle,
+  'log-ramp': logRamp,
+  'log-dock': logDock,
+  'log-office': logOffice,
+  'log-warehouse': logWarehouse,
+  'log-scanner': logScanner,
+  'log-label': logLabel,
+  'log-vest': logVest,
+  'log-manifest': logManifest,
+  'log-jack': logJack,
+  'log-wrap': logWrap,
+  'com-badge': comBadge,
+  'com-clipboard': comClipboard,
+  'com-first-aid': comFirstAid,
+  'com-gloves': comGloves,
+  'com-schedule': comSchedule,
+  'com-phone': comPhone,
+  'com-welcome': comWelcome,
+  'com-consent': comConsent,
+  'com-hygiene': comHygiene,
 }
 
 /** Resolve an image for any pathway vocab / quiz / Eye Spy key. */
@@ -74,6 +85,6 @@ export function pathwayImage(key?: string | null): string | undefined {
   if (!key) return undefined
   const fromConstruction = constructionToolImage(key)
   if (fromConstruction) return fromConstruction
-  if (key in LABEL) return svgCard(key)
+  if (key in PATHWAY_PHOTOS) return PATHWAY_PHOTOS[key]
   return undefined
 }
