@@ -10,7 +10,13 @@ import {
   setPracticeName,
   shouldHidePracticeFeedback,
 } from './PracticeMode'
-import { submitPracticeFeedback } from './feedbackStore'
+import { setActivePreview, statusLabel } from './changeLoop'
+import {
+  describeChangeTicket,
+  fetchMyChangeTickets,
+  submitPracticeFeedback,
+  type PracticeFeedbackItem,
+} from './feedbackStore'
 
 function pageTitleFromPath(pathname: string) {
   if (pathname === '/') return 'Home'
@@ -64,6 +70,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
   const [quizActive, setQuizActive] = useState(false)
   const [quizDone, setQuizDone] = useState(quizComplete)
   const [lines, setLines] = useState<ChatLine[]>([])
+  const [openTickets, setOpenTickets] = useState<PracticeFeedbackItem[]>([])
   const endRef = useRef<HTMLDivElement | null>(null)
   const [journeyTick, setJourneyTick] = useState(0)
 
@@ -86,10 +93,29 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       {
         id: 'sys-1',
         role: 'bot',
-        text: `You’re in Practice on ${pageTitleFromPath(pathname)}. Tell me what to fix or improve. I’ll send it to Levi.`,
+        text: `You’re in Practice on ${pageTitleFromPath(pathname)}. Tell me what to fix or improve — it becomes a change request. You’ll preview the fix here, then Approve or ask for another pass before it goes live.`,
       },
     ])
   }, [pathname, quizComplete, journeyTick])
+
+  useEffect(() => {
+    if (!name) {
+      setOpenTickets([])
+      return
+    }
+    let cancelled = false
+    const pull = () => {
+      void fetchMyChangeTickets(name).then((items) => {
+        if (!cancelled) setOpenTickets(items)
+      })
+    }
+    pull()
+    const timer = window.setInterval(pull, 20000)
+    return () => {
+      cancelled = true
+      window.clearInterval(timer)
+    }
+  }, [name, journeyTick, open])
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
@@ -149,7 +175,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
     if (!note) return
     setBusy(true)
     try {
-      await submitPracticeFeedback({
+      const ticket = await submitPracticeFeedback({
         author: name,
         page: pathname + search,
         pageTitle: pageTitleFromPath(pathname),
@@ -158,13 +184,32 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       })
       markPracticeFeedbackAck(feedbackKey)
       push('user', note)
-      push('bot', 'Got it. Saved for Levi in Admin → Practice feedback. You can continue when ready.')
+      push(
+        'bot',
+        `Queued as a change request (${describeChangeTicket(ticket)}). When a preview is ready, open it below — Approve if it’s right, or send iteration notes until it matches what you wanted.`,
+      )
       setBody('')
+      setOpenTickets(await fetchMyChangeTickets(name))
     } catch (err) {
       push('bot', err instanceof Error ? err.message : 'Could not send that note.')
     } finally {
       setBusy(false)
     }
+  }
+
+  function tryPreview(ticket: PracticeFeedbackItem) {
+    if (ticket.patch) {
+      setActivePreview(ticket.id, ticket.patch)
+      setOpen(true)
+      push('bot', `Previewing: ${ticket.patch.summary}. Use the preview bar to Approve or request another pass.`)
+      return
+    }
+    if (ticket.previewUrl) {
+      window.open(ticket.previewUrl, '_blank', 'noopener,noreferrer')
+      push('bot', 'Opened the branch preview in a new tab. Come back here to Approve or request iteration.')
+      return
+    }
+    push('bot', 'No preview attached yet — this one is still queued or in progress.')
   }
 
   return (
@@ -200,6 +245,25 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
                 {line.text}
               </div>
             ))}
+            {openTickets.length > 0 && (
+              <div className="practice-change-queue" aria-label="Your open change requests">
+                <p className="practice-change-queue-label">Your open fixes</p>
+                {openTickets.slice(0, 6).map((t) => (
+                  <div key={t.id} className="practice-change-card">
+                    <div>
+                      <strong>{statusLabel(t.status || 'queued')}</strong>
+                      <span className="muted"> · {t.pageTitle}</span>
+                      <p>{t.body.slice(0, 120)}{t.body.length > 120 ? '…' : ''}</p>
+                    </div>
+                    {(t.status === 'preview_ready' || t.patch || t.previewUrl) && (
+                      <button type="button" className="btn btn-secondary on-light" onClick={() => tryPreview(t)}>
+                        {t.patch ? 'Try preview' : 'Open preview'}
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
             <div ref={endRef} />
           </div>
 

@@ -11,6 +11,16 @@ import {
   sanitizeText,
   scanPromptInjection,
 } from './security.js'
+import {
+  buildAgentBrief,
+  findBlockingTicket,
+  inferImpact,
+  inferScopes,
+  maybeCreateGithubIssue,
+  OPEN_STATUSES,
+  roundId,
+  sanitizePreviewPatch,
+} from './practiceChangeLoop.js'
 
 function id(prefix) {
   return `${prefix}-${randomUUID().slice(0, 8)}`
@@ -777,8 +787,8 @@ export function registerRoutes(app) {
     res.json({ ok: true, users: db.users.length })
   })
 
-  /** Practice Mode reviewer feedback — public submit, admin read. */
-  app.post('/api/practice/feedback', (req, res) => {
+  /** Practice Mode reviewer feedback — public submit, admin read, change-loop review. */
+  app.post('/api/practice/feedback', async (req, res) => {
     const authorGuard = guardUserText(req.body?.author || '', { field: 'Name', maxLen: 80 })
     const bodyGuard = guardUserText(req.body?.body || '', { field: 'Feedback', maxLen: 4000 })
     const pageGuard = guardUserText(req.body?.page || '', { field: 'Page', maxLen: 200 })
@@ -792,22 +802,250 @@ export function registerRoutes(app) {
     if (!pageGuard.ok) return res.status(400).json({ error: pageGuard.error, code: pageGuard.code })
     const kind = req.body?.kind === 'quiz' ? 'quiz' : 'page'
     const clientId = sanitizeText(req.body?.clientId || '', { maxLen: 80 })
+    const created = now()
+    const scopes = Array.isArray(req.body?.scopes)
+      ? req.body.scopes.map((s) => sanitizeText(String(s), { maxLen: 80 })).filter(Boolean).slice(0, 20)
+      : inferScopes(pageGuard.value, bodyGuard.value)
+    const impact =
+      req.body?.impact === 'sitewide' || req.body?.impact === 'shared' || req.body?.impact === 'local'
+        ? req.body.impact
+        : inferImpact(scopes)
+    const entryId = clientId || id('pf')
+    const agentBrief = buildAgentBrief({
+      id: entryId,
+      author: authorGuard.value,
+      page: pageGuard.value,
+      pageTitle: titleGuard.value || pageGuard.value,
+      body: bodyGuard.value,
+      scopes,
+      impact,
+    })
+
+    let githubIssueUrl
+    try {
+      githubIssueUrl = await maybeCreateGithubIssue({
+        pageTitle: titleGuard.value || pageGuard.value,
+        body: bodyGuard.value,
+        impact,
+        agentBrief,
+      })
+    } catch {
+      githubIssueUrl = undefined
+    }
+
     withDb((db) => {
       if (!Array.isArray(db.practice_feedback)) db.practice_feedback = []
       const entry = {
-        id: clientId || id('pf'),
+        id: entryId,
         author: authorGuard.value,
         page: pageGuard.value,
         pageTitle: titleGuard.value || pageGuard.value,
         body: bodyGuard.value,
         kind,
-        created_at: now(),
+        created_at: created,
+        updated_at: created,
+        status: 'queued',
+        impact,
+        scopes,
+        rounds: [
+          {
+            id: roundId(),
+            at: created,
+            by: authorGuard.value,
+            kind: 'feedback',
+            note: bodyGuard.value,
+          },
+          {
+            id: roundId(),
+            at: created,
+            by: 'system',
+            kind: 'queued',
+            note: `Queued as a ${impact} change. A preview will open for approval before it ships live.`,
+          },
+        ],
+        agentBrief,
+        githubIssueUrl,
       }
       const existing = db.practice_feedback.findIndex((f) => f.id === entry.id)
-      if (existing >= 0) db.practice_feedback[existing] = entry
-      else db.practice_feedback.unshift(entry)
+      if (existing >= 0) {
+        const prev = db.practice_feedback[existing]
+        db.practice_feedback[existing] = {
+          ...prev,
+          ...entry,
+          rounds: Array.isArray(prev.rounds) && prev.rounds.length ? prev.rounds : entry.rounds,
+          status: prev.status || entry.status,
+        }
+      } else db.practice_feedback.unshift(entry)
       if (db.practice_feedback.length > 2000) db.practice_feedback.length = 2000
-      res.status(201).json({ feedback: entry })
+      res.status(201).json({ feedback: existing >= 0 ? db.practice_feedback[existing] : entry })
+    })
+  })
+
+  /** Reviewer poll — open tickets for one Practice name (no admin auth). */
+  app.get('/api/practice/feedback/mine', (req, res) => {
+    const authorGuard = guardUserText(req.query?.author || '', { field: 'Name', maxLen: 80 })
+    if (!authorGuard.ok) return res.status(400).json({ error: authorGuard.error, code: authorGuard.code })
+    const db = loadDb()
+    const feedback = (Array.isArray(db.practice_feedback) ? db.practice_feedback : []).filter(
+      (f) => f.author === authorGuard.value && OPEN_STATUSES.has(f.status || 'queued'),
+    )
+    res.json({ feedback })
+  })
+
+  /** Reviewer approve / request iteration (must match ticket author). */
+  app.post('/api/practice/feedback/:id/review', (req, res) => {
+    const authorGuard = guardUserText(req.body?.author || '', { field: 'Name', maxLen: 80 })
+    const noteGuard = guardUserText(req.body?.note || '', {
+      field: 'Note',
+      maxLen: 2000,
+      allowEmpty: true,
+    })
+    if (!authorGuard.ok) return res.status(400).json({ error: authorGuard.error, code: authorGuard.code })
+    if (!noteGuard.ok) return res.status(400).json({ error: noteGuard.error, code: noteGuard.code })
+    const action = req.body?.action === 'approve' ? 'approve' : req.body?.action === 'iterate' ? 'iterate' : null
+    if (!action) return res.status(400).json({ error: 'Action must be approve or iterate.' })
+    if (action === 'iterate' && !noteGuard.value) {
+      return res.status(400).json({ error: 'Say what still needs to change.', code: 'EMPTY' })
+    }
+    const ticketId = sanitizeText(req.params.id || '', { maxLen: 80 })
+    withDb((db) => {
+      if (!Array.isArray(db.practice_feedback)) db.practice_feedback = []
+      const idx = db.practice_feedback.findIndex((f) => f.id === ticketId)
+      if (idx < 0) return res.status(404).json({ error: 'Change request not found.' })
+      const ticket = db.practice_feedback[idx]
+      if (ticket.author !== authorGuard.value) {
+        return res.status(403).json({ error: 'Only the reviewer who left this note can approve it.' })
+      }
+      if (!['preview_ready', 'needs_iteration', 'in_progress', 'approved'].includes(ticket.status)) {
+        return res.status(400).json({ error: 'This change is not ready for review yet.' })
+      }
+      const at = now()
+      const rounds = Array.isArray(ticket.rounds) ? [...ticket.rounds] : []
+      if (action === 'approve') {
+        rounds.push({
+          id: roundId(),
+          at,
+          by: authorGuard.value,
+          kind: 'approval',
+          note: noteGuard.value || 'Approved — ready to ship to the live site.',
+        })
+        ticket.status = 'approved'
+      } else {
+        rounds.push({
+          id: roundId(),
+          at,
+          by: authorGuard.value,
+          kind: 'iteration_request',
+          note: noteGuard.value,
+        })
+        ticket.status = 'needs_iteration'
+      }
+      ticket.rounds = rounds
+      ticket.updated_at = at
+      db.practice_feedback[idx] = ticket
+      res.json({ feedback: ticket })
+    })
+  })
+
+  /** Admin: advance lifecycle, attach preview URL / safe patch, ship or dismiss. */
+  app.patch('/api/practice/feedback/:id', authRequired, requireRole('admin'), (req, res) => {
+    const ticketId = sanitizeText(req.params.id || '', { maxLen: 80 })
+    const noteGuard = guardUserText(req.body?.note || '', {
+      field: 'Note',
+      maxLen: 2000,
+      allowEmpty: true,
+    })
+    if (!noteGuard.ok) return res.status(400).json({ error: noteGuard.error, code: noteGuard.code })
+    const byGuard = guardUserText(req.body?.by || req.user?.full_name || 'admin', {
+      field: 'Builder',
+      maxLen: 80,
+      allowEmpty: true,
+    })
+    const status = sanitizeText(req.body?.status || '', { maxLen: 40 })
+    const allowed = new Set([
+      'queued',
+      'in_progress',
+      'preview_ready',
+      'needs_iteration',
+      'approved',
+      'shipped',
+      'dismissed',
+    ])
+    if (status && !allowed.has(status)) {
+      return res.status(400).json({ error: 'Invalid status.' })
+    }
+    const previewUrlRaw = req.body?.previewUrl
+    let previewUrl
+    if (previewUrlRaw === null) previewUrl = null
+    else if (typeof previewUrlRaw === 'string' && previewUrlRaw.trim()) {
+      const cleaned = sanitizeText(previewUrlRaw, { maxLen: 500 })
+      if (!/^https?:\/\//i.test(cleaned)) {
+        return res.status(400).json({ error: 'Preview URL must start with http(s)://' })
+      }
+      previewUrl = cleaned
+    }
+    const patchProvided = Object.prototype.hasOwnProperty.call(req.body || {}, 'patch')
+    const patch = patchProvided
+      ? req.body.patch === null
+        ? null
+        : sanitizePreviewPatch(req.body.patch)
+      : undefined
+    if (patchProvided && req.body.patch != null && !patch) {
+      return res.status(400).json({
+        error: 'Patch rejected. Use allowlisted cssVars (--*), copy keys, or vocab field overrides only.',
+      })
+    }
+
+    withDb((db) => {
+      if (!Array.isArray(db.practice_feedback)) db.practice_feedback = []
+      const idx = db.practice_feedback.findIndex((f) => f.id === ticketId)
+      if (idx < 0) return res.status(404).json({ error: 'Change request not found.' })
+      const ticket = { ...db.practice_feedback[idx] }
+      const nextStatus = status || (patch || previewUrl ? 'preview_ready' : ticket.status)
+      if (['in_progress', 'preview_ready'].includes(nextStatus)) {
+        const blocker = findBlockingTicket(
+          db,
+          { scopes: ticket.scopes || [], impact: ticket.impact || 'local' },
+          ticket.id,
+        )
+        if (blocker) {
+          return res.status(409).json({
+            error: `Blocked by overlapping change ${blocker.id} (${blocker.status}). Finish or dismiss that one first so cross-changes do not collide.`,
+            code: 'SCOPE_CONFLICT',
+            blockingId: blocker.id,
+          })
+        }
+      }
+      const at = now()
+      const rounds = Array.isArray(ticket.rounds) ? [...ticket.rounds] : []
+      if (patch !== undefined) ticket.patch = patch || undefined
+      if (previewUrl !== undefined) ticket.previewUrl = previewUrl || undefined
+      if (nextStatus) ticket.status = nextStatus
+      const summary =
+        noteGuard.value ||
+        ticket.patch?.summary ||
+        (previewUrl ? `Preview: ${previewUrl}` : '') ||
+        `Status → ${ticket.status}`
+      rounds.push({
+        id: roundId(),
+        at,
+        by: byGuard.value || 'admin',
+        kind:
+          ticket.status === 'shipped'
+            ? 'ship'
+            : ticket.status === 'dismissed'
+              ? 'dismiss'
+              : ticket.status === 'preview_ready'
+                ? 'proposal'
+                : 'queued',
+        note: summary,
+        previewUrl: ticket.previewUrl,
+        patchSummary: ticket.patch?.summary,
+      })
+      ticket.rounds = rounds
+      ticket.updated_at = at
+      db.practice_feedback[idx] = ticket
+      res.json({ feedback: ticket })
     })
   })
 

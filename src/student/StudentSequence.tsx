@@ -561,6 +561,7 @@ export function StudentSequencePage() {
   const { user, student, login, register, refresh } = useSession()
   const [step, setStep] = useState(loadStep)
   const [pathwayId, setPathwayId] = useState<StreamPathwayId>(() => getActivePathway())
+  const [previewTick, setPreviewTick] = useState(0)
   const pack = getPathwayPack(pathwayId)
   const meta = pathwayMeta(pathwayId)
   const VOCAB_UNIT = pack.vocab
@@ -577,14 +578,18 @@ export function StudentSequencePage() {
   const EMPLOYMENT_PREP = pack.employmentPrep
   const UNIT_CHECKPOINTS = pack.unitCheckpoints
   const JOURNEY_STEPS = getPathwayJourneySteps(pathwayId)
+  void previewTick
 
   useEffect(() => {
     const sync = () => setPathwayId(getActivePathway())
+    const onPreview = () => setPreviewTick((n) => n + 1)
     window.addEventListener('pa-pathway-changed', sync)
     window.addEventListener('pa-practice-restarted', sync)
+    window.addEventListener('pa-preview-patch-changed', onPreview)
     return () => {
       window.removeEventListener('pa-pathway-changed', sync)
       window.removeEventListener('pa-practice-restarted', sync)
+      window.removeEventListener('pa-preview-patch-changed', onPreview)
     }
   }, [])
 

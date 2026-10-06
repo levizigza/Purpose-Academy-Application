@@ -6,6 +6,8 @@ import { homeForRole, useSession } from '../auth/Session'
 import { AmbientField, PageMotion } from '../components/Motion'
 import { LoadingScreen, SkipLink } from '../components/Ui'
 import { PracticeFeedbackDock, PracticeModeBanner } from '../practice/PracticeFeedbackDock'
+import { applyPreviewPatchToDom, getActivePreviewPatch } from '../practice/changeLoop'
+import { PreviewPatchBanner } from '../practice/PreviewPatchBanner'
 import { isPracticeMode } from '../practice/PracticeMode'
 import type { Role } from '../data/types'
 
@@ -29,6 +31,7 @@ export function PublicLayout() {
   useEffect(() => {
     const sync = () => setPractice(isPracticeMode())
     sync()
+    applyPreviewPatchToDom(getActivePreviewPatch())
     window.addEventListener('pa-practice-started', sync)
     return () => window.removeEventListener('pa-practice-started', sync)
   }, [pathname])
@@ -81,6 +84,7 @@ export function PublicLayout() {
       <main id="main-content">
         <PageMotion>
           <PracticeModeBanner />
+          <PreviewPatchBanner />
           <Outlet />
         </PageMotion>
       </main>
@@ -232,6 +236,7 @@ export function AppLayout({ role }: { role: Role }) {
       <main id="main-content" className="shell-main">
         <PageMotion>
           <PracticeModeBanner />
+          <PreviewPatchBanner />
           <Outlet />
         </PageMotion>
       </main>
@@ -282,6 +287,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <main id="main-content">
         <PageMotion>
           <PracticeModeBanner />
+          <PreviewPatchBanner />
           {children}
         </PageMotion>
       </main>

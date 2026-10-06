@@ -8094,6 +8094,121 @@ html.pa-page-wipe .hero-inner {
   align-items: baseline;
 }
 
+.practice-change-queue {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+  padding: 0.65rem 0.7rem;
+  border-radius: 12px;
+  background: rgba(8, 22, 38, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.practice-change-queue-label {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #9eb0c4;
+}
+
+.practice-change-card {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.practice-change-card p {
+  margin: 0.25rem 0 0;
+  font-size: 0.88rem;
+  color: #c5d2e0;
+  line-height: 1.35;
+}
+
+.practice-preview-banner {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0.65rem auto 0;
+  padding: 0.85rem 1rem;
+  width: min(100% - 1.5rem, 960px);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #12324a, #1a4533);
+  border: 1px solid rgba(232, 163, 23, 0.45);
+  color: #eef5fb;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+.practice-preview-banner-main {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.practice-preview-banner-main strong {
+  font-family: var(--display);
+  font-size: 1.05rem;
+}
+
+.practice-preview-banner-main span {
+  color: #b7c8d8;
+  font-size: 0.92rem;
+}
+
+.practice-preview-link {
+  color: #f0c56a;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.practice-preview-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.practice-preview-iterate {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.practice-preview-iterate textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.25);
+  color: #eef5fb;
+  padding: 0.55rem 0.65rem;
+  font: inherit;
+}
+
+.practice-preview-msg {
+  margin: 0;
+  color: #d7e8c8;
+  font-size: 0.9rem;
+}
+
+.practice-agent-brief {
+  white-space: pre-wrap;
+  font-size: 0.8rem;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  overflow: auto;
+}
+
+.practice-rounds {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+html[data-pa-previewing] .practice-preview-banner {
+  outline: 2px solid rgba(232, 163, 23, 0.55);
+}
+
 /* ——— Site-wide motion contrast (live accents vs calm copy) ——— */
 .section-kicker {
   position: relative;
