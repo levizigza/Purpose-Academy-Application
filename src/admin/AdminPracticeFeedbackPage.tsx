@@ -63,7 +63,7 @@ export function AdminPracticeFeedbackPage() {
   return (
     <div className="stack">
       <div>
-        <p className="section-kicker">Student Practice Mode</p>
+        <p className="section-kicker">Practice</p>
         <h1>Student practice feedback</h1>
         <p className="lede">
           Notes left while walking the full student learning path without registration. Use this inbox to decide what
@@ -123,7 +123,7 @@ export function AdminPracticeFeedbackPage() {
         {filtered.length === 0 && (
           <div className="panel site-crate">
             <p className="muted" style={{ margin: 0 }}>
-              No feedback yet. When someone opens Student Practice Mode and sends notes, they show up here.
+              No feedback yet. When someone opens Practice and sends notes, they show up here.
             </p>
           </div>
         )}

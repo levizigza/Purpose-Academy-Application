@@ -44,7 +44,7 @@ const ENTRIES: Entry[] = [
   },
   {
     to: '/journey',
-    label: 'Student Practice Mode',
+    label: 'Practice',
     help: PRACTICE_TRAY_HELP,
     tone: 'journey',
     tool: 'wrench',
@@ -155,9 +155,9 @@ function PracticeNameGate({
 }) {
   const [name, setName] = useState(() => getPracticeName())
   return (
-    <div className="practice-gate" role="dialog" aria-modal="true" aria-label="Student Practice Mode name">
+    <div className="practice-gate" role="dialog" aria-modal="true" aria-label="Practice name">
       <div className="practice-gate-card site-crate">
-        <p className="section-kicker">Student Practice Mode</p>
+        <p className="section-kicker">Practice</p>
         <h2>Who is practising?</h2>
         <p className="lede">
           Walk the full student learning path without registration. Catch issues, learn every station, and send
@@ -192,7 +192,7 @@ function PracticeNameGate({
             disabled={!name.trim()}
             onClick={() => onReady(name.trim())}
           >
-            Enter Student Practice Mode
+            Enter Practice
           </button>
           <button type="button" className="btn btn-ghost" onClick={onCancel}>
             Cancel
@@ -240,13 +240,13 @@ export function EnterBox() {
   function beginPractice(name: string) {
     startPracticeMode(name)
     setPracticeGate(false)
-    setOpenTray('Student Practice Mode')
+    setOpenTray('Practice')
     void unlockFoley().then(() => {
       playFoley('latch')
       playFoley('metal')
     })
     /* Skip registration and open the real training path */
-    window.setTimeout(() => launchTo('/journey', 'Student Practice Mode'), 380)
+    window.setTimeout(() => launchTo('/journey', 'Practice'), 380)
   }
 
   return (
@@ -306,7 +306,7 @@ export function EnterBox() {
                   {item.practice && (
                     <span className="practice-point" aria-hidden>
                       <span className="practice-point-arrow">➜</span>
-                      <span className="practice-point-label">Students</span>
+                      <span className="practice-point-label">Practice</span>
                     </span>
                   )}
                   <span className="toolbox-etch" aria-hidden>

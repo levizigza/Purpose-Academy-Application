@@ -43,7 +43,7 @@ export function AdminDashboardPage() {
       <div className="panel site-plan stack">
         <h2>Student practice feedback</h2>
         <p className="muted" style={{ margin: 0 }}>
-          Notes from ChuChu, Yonas, Kinfe, Saba &amp; Levi while walking Student Practice Mode.
+          Notes from ChuChu, Yonas, Kinfe, Saba &amp; Levi while walking Practice.
         </p>
         <Link className="btn btn-primary" to="/app/admin/feedback">
           Open practice feedback

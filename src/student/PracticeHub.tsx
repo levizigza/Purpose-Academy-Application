@@ -82,7 +82,7 @@ function MasteryMeter({ percent, label }: { percent: number; label: string }) {
 }
 
 /**
- * Professional learning dashboard for Student Practice Mode.
+ * Professional learning dashboard for Practice.
  * Pathway-aware: same skeleton for Construction, Logistics, Community Support.
  */
 export function PracticeHub({
@@ -157,7 +157,7 @@ export function PracticeHub({
       : 'Resume lesson'
   const resumeChip = pathComplete ? 'Path complete' : `Step ${resumeStep} of 20`
   const resumeHeading = pathComplete
-    ? 'Training path complete'
+    ? 'Practice path complete'
     : `Unit ${unit.id}: ${unit.label}`
   const resumeLesson = pathComplete
     ? `Skills Passport + ${followSummary.label}`
@@ -170,7 +170,7 @@ export function PracticeHub({
     >
       <header className="ph-hero">
         <div className="ph-hero-copy">
-          <p className="ph-kicker">Student Practice Mode</p>
+          <p className="ph-kicker">Practice</p>
           <h1>Learning dashboard</h1>
           <p className="ph-lede">
             {practiceName ? `${practiceName}, your` : 'Your'} {meta.programTitle} path: units, drills, mastery gates,
@@ -295,7 +295,7 @@ export function PracticeHub({
           </ul>
         </div>
 
-        <p className="ph-skip-note">Registration (Unit 1) is skipped in Student Practice Mode. You start at Unit 2.</p>
+        <p className="ph-skip-note">Registration (Unit 1) is skipped in Practice. You start at Unit 2.</p>
 
         <ol className="ph-units">
           {LEARNING_UNITS.map((u) => {

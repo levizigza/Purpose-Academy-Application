@@ -51,7 +51,7 @@ export function PublicLayout() {
               <NavLink to="/about">About</NavLink>
               <NavLink to="/give">Give</NavLink>
               <NavLink to="/contact">Contact</NavLink>
-              {practice && <NavLink to="/journey">Training</NavLink>}
+              {practice && <NavLink to="/journey">Practice</NavLink>}
               {user && (
                 <NavLink to={homeForRole(user.role, student?.registration_status)}>Portal</NavLink>
               )}
@@ -63,7 +63,7 @@ export function PublicLayout() {
                 </button>
               ) : practice && pathname !== '/journey' ? (
                 <NavLink className="btn btn-primary nav-cta" to="/journey">
-                  Continue training
+                  Continue practice
                 </NavLink>
               ) : practice ? (
                 <NavLink className="btn btn-secondary nav-cta" to="/">
@@ -98,7 +98,7 @@ export function PublicLayout() {
             <Link to="/programs">Programs</Link>
             <Link to="/give">Give</Link>
             <Link to="/contact">Contact</Link>
-            {practice ? <Link to="/journey">Training path</Link> : <Link to="/login">{BRAND.secondaryCta}</Link>}
+            {practice ? <Link to="/journey">Practice</Link> : <Link to="/login">{BRAND.secondaryCta}</Link>}
           </div>
         </div>
       </footer>

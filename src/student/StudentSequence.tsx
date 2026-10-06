@@ -1020,7 +1020,7 @@ export function StudentSequencePage() {
           <button type="button" className="back-link" onClick={() => setPracticeView('hub')}>
             ← Path home
           </button>
-          <p className="section-kicker">Verified skill · Practice Mode</p>
+          <p className="section-kicker">Verified skill · Practice</p>
           <h1>Skills Passport</h1>
           <p className="lede">
             What you studied and practised on this path — not Red Seal, apprenticeship certification, or a guaranteed
@@ -1036,12 +1036,12 @@ export function StudentSequencePage() {
           <article className="skills-passport-stage">
             <span className="badge brand">Practised</span>
             <h3>Practised</h3>
-            <p>Tried through Practice Mode drills and unit checkpoints.</p>
+            <p>Tried through Practice drills and unit checkpoints.</p>
           </article>
           <article className="skills-passport-stage">
             <span className="badge ok">Competent</span>
             <h3>Competent</h3>
-            <p>Authorized instructor confirmation — not awarded by Practice Mode alone.</p>
+            <p>Authorized instructor confirmation — not awarded by Practice alone.</p>
           </article>
         </div>
         <div className="panel stack emp-followup">
@@ -1221,7 +1221,7 @@ export function StudentSequencePage() {
     if (isPracticeMode()) {
       return (
         <Shell step={PRACTICE_ENTRY_STEP} onBack={() => navigate('/')} onNext={() => go(PRACTICE_ENTRY_STEP)}>
-          <p className="train-login-lede">Student Practice Mode skips registration. Opening your language step…</p>
+          <p className="train-login-lede">Practice skips registration. Opening your language step…</p>
         </Shell>
       )
     }
@@ -1258,7 +1258,7 @@ export function StudentSequencePage() {
     if (isPracticeMode()) {
       return (
         <Shell step={PRACTICE_ENTRY_STEP} onBack={() => navigate('/')} onNext={() => go(PRACTICE_ENTRY_STEP)}>
-          <p className="train-login-lede">Student Practice Mode skips registration. Opening your language step…</p>
+          <p className="train-login-lede">Practice skips registration. Opening your language step…</p>
         </Shell>
       )
     }

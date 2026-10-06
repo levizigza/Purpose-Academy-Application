@@ -192,7 +192,7 @@ export function SkillsPassportPage() {
           <p>
             Follow-up opens when you complete Employment Connection on the training path.{' '}
             <Link className="inline-link" to="/journey">
-              Continue training
+              Continue practice
             </Link>
           </p>
         ) : (
