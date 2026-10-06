@@ -124,8 +124,8 @@ export function HomePage() {
               </div>
               <h3>Community Support Foundations</h3>
               <p>
-                Eldercare skills: supporting older adults at home and in care settings, privacy and dignity, care
-                supplies, and workplace English on the same foundation-to-practice model.
+                Front-line community support: disability and community living, older adults, settlement support,
+                privacy and dignity, and workplace English on the same foundation-to-practice model.
               </p>
               <span className="badge ok">Enrolling now</span>
             </Reveal>
@@ -251,12 +251,13 @@ export function ProgramsPage() {
           <span className="badge ok">Enrolling now</span>
           <h2>Community Support Foundations</h2>
           <p>
-            Same progression, different craft: supporting older adults, privacy and dignity, care tools, and eldercare
-            English, with instructor verification before placement and employment connection.
+            Same progression, different craft: community support work across disability services, older adults,
+            newcomers, and community agencies — with privacy, support plans, community access, and instructor checks
+            before placement.
           </p>
           <ul className="school-bullets">
-            <li>Eldercare communication and workplace English</li>
-            <li>Privacy, dignity, and safeguarding habits with older adults</li>
+            <li>Support communication and workplace English</li>
+            <li>Privacy, dignity, support plans, and community access</li>
             <li>Foundation-to-practice path with instructor checks</li>
           </ul>
           <Link className="btn btn-primary" to="/admissions">
@@ -264,7 +265,7 @@ export function ProgramsPage() {
           </Link>
         </div>
         <figure className="school-program-media">
-          <img src={BRAND_ASSETS.photoCommunity} alt="Caregiver supporting an older adult in community care" />
+          <img src={BRAND_ASSETS.photoCommunity} alt="Community support worker helping someone with care and dignity" />
         </figure>
       </Reveal>
     </div>

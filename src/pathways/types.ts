@@ -30,7 +30,9 @@
  * Pathway sources used to strengthen packs (without changing the skeleton):
  *   Logistics — Purpose Academy Logistics Visual Vocabulary Level-1 (words 1–20);
  *               MSSC CLA/CLT flow; OSHA pedestrian/MHE awareness.
- *   Community — Skills for Care / Care Certificate (privacy, dignity, escalation, person-centred).
+ *   Community — Alberta Community Support Worker foundations (NorQuest-style streams):
+ *               disability / PDD community living, older adults, settlement & newcomers,
+ *               shelters/group homes; Care Certificate privacy/dignity/escalation; CDSW community access.
  */
 
 import type { EyeSpyScene, QuizItem, SupportLang, VocabTerm } from '../student/journeyCurriculum'

@@ -1050,7 +1050,7 @@ export const CAREER_STYLE_ITEMS: StyleItem[] = [
         pathway: 'community',
         label: {
           Spanish: 'Trabajo de apoyo comunitario o cuidado de personas',
-      English: 'Eldercare or community support for older adults',
+      English: 'Community support work (disability, older adults, settlement)',
           Arabic: 'عمل الدعم المجتمعي أو رعاية الناس',
           Hindi: 'सामुदायिक सहायता या लोगों की देखभाल का काम',
           Amharic: 'የማህበረሰብ ድጋፍ ወይም የሰዎች እንክብካቤ ሥራ',
@@ -1199,7 +1199,7 @@ export const PATHWAY_RESULT: Record<
     },
     summary: {
       Spanish: 'Tus respuestas destacan ayudar personas con paciencia y respeto. Fundamentos de Apoyo Comunitario es tu mejor comienzo.',
-      English: 'Your answers highlight supporting older adults with patience and respect. Community Support Foundations is your best start.',
+      English: 'Your answers highlight helping people in the community with patience and respect. Community Support Foundations is your best start.',
       Arabic:
         'تُبرز إجاباتك مساعدة الناس بالصبر والاحترام. أسس الدعم المجتمعي هي أفضل بداية لك.',
       Hindi:

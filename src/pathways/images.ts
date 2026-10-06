@@ -41,6 +41,13 @@ import comPhone from '../assets/photos/community/com-phone.jpg'
 import comWelcome from '../assets/photos/community/com-welcome.jpg'
 import comConsent from '../assets/photos/community/com-consent.jpg'
 import comHygiene from '../assets/photos/community/com-hygiene.jpg'
+import comWheelchair from '../assets/photos/community/com-wheelchair.jpg'
+import comWalker from '../assets/photos/community/com-walker.jpg'
+import comBus from '../assets/photos/community/com-bus.jpg'
+import comKeys from '../assets/photos/community/com-keys.jpg'
+import comSupportPlan from '../assets/photos/community/com-support-plan.jpg'
+import comBackpack from '../assets/photos/community/com-backpack.jpg'
+import comShopping from '../assets/photos/community/com-shopping.jpg'
 
 const PATHWAY_PHOTOS: Record<string, string> = {
   'log-box': logBox,
@@ -78,6 +85,13 @@ const PATHWAY_PHOTOS: Record<string, string> = {
   'com-welcome': comWelcome,
   'com-consent': comConsent,
   'com-hygiene': comHygiene,
+  'com-wheelchair': comWheelchair,
+  'com-walker': comWalker,
+  'com-bus': comBus,
+  'com-keys': comKeys,
+  'com-support-plan': comSupportPlan,
+  'com-backpack': comBackpack,
+  'com-shopping': comShopping,
 }
 
 /** Resolve an image for any pathway vocab / quiz / Eye Spy key. */

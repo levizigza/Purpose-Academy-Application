@@ -30,7 +30,7 @@ export const PATHWAY_META: Record<PathwayId, PathwayMeta> = {
     id: 'community',
     label: 'Community Support',
     programTitle: 'Community Support Foundations',
-    tagline: 'Support Older Adults. Care with Dignity.',
+    tagline: 'Help People. Strengthen Community.',
     accent: '#7c5cbf',
     soft: 'rgba(124, 92, 191, 0.14)',
     courseId: 'course-community',
