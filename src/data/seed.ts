@@ -121,9 +121,9 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Community Support Foundations',
         category: 'community',
         description:
-          'Community support foundations: welcome & intake, privacy, care supplies, workplace English, and instructor-verified skill.',
+          'Eldercare foundations: supporting older adults, privacy and dignity, care tools, workplace English, and instructor-verified skill.',
         duration: '12-16 weeks',
-        skills: ['Client communication', 'Privacy & dignity', 'Documentation', 'Escalation'],
+        skills: ['Eldercare communication', 'Privacy & dignity', 'Visit notes', 'Safeguarding'],
         active: true,
       },
     ],

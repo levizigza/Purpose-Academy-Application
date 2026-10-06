@@ -124,8 +124,8 @@ export function HomePage() {
               </div>
               <h3>Community Support Foundations</h3>
               <p>
-                Welcome and intake, privacy, care supplies, and support English using the same foundation-to-practice
-                model.
+                Eldercare skills: supporting older adults at home and in care settings, privacy and dignity, care
+                supplies, and workplace English on the same foundation-to-practice model.
               </p>
               <span className="badge ok">Enrolling now</span>
             </Reveal>
@@ -251,12 +251,12 @@ export function ProgramsPage() {
           <span className="badge ok">Enrolling now</span>
           <h2>Community Support Foundations</h2>
           <p>
-            Same progression, different craft: welcome and intake, privacy, care supplies, and support English, with
-            instructor verification before placement and employment connection.
+            Same progression, different craft: supporting older adults, privacy and dignity, care tools, and eldercare
+            English, with instructor verification before placement and employment connection.
           </p>
           <ul className="school-bullets">
-            <li>Client communication and workplace English</li>
-            <li>Privacy, dignity, and escalation habits</li>
+            <li>Eldercare communication and workplace English</li>
+            <li>Privacy, dignity, and safeguarding habits with older adults</li>
             <li>Foundation-to-practice path with instructor checks</li>
           </ul>
           <Link className="btn btn-primary" to="/admissions">

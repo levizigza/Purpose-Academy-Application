@@ -494,11 +494,11 @@ export const INTEREST_PATHS = [
   {
     id: 'community' as const,
     title: 'Community Support',
-    line: 'Stronger People, Stronger Communities.',
-    detail: 'Helping people in community roles. Planned next.',
+    line: 'Support Older Adults. Care with Dignity.',
+    detail: 'Supporting older adults at home and in care settings. Open now.',
     skills: [
-      { id: 'm1', label: 'I can greet and help people calmly', weight: 2 },
-      { id: 'm2', label: 'I can follow care or support routines', weight: 1 },
+      { id: 'm1', label: 'I can greet and help older adults calmly', weight: 2 },
+      { id: 'm2', label: 'I can follow eldercare support routines', weight: 1 },
       { id: 'm3', label: 'I want people-focused work', weight: 1 },
     ],
   },
