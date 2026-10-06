@@ -6,23 +6,19 @@ GitHub Pages only serves the static site. The Express API (`server/`) needs a fr
 
 **Why:** Real free web service, no credit card, HTTPS URL, GitHub deploy. Free instances sleep after ~15 minutes idle (cold start ~30–60s). Baked `public/tts` clips keep vocab audio instant while the API wakes.
 
-1. Open the one-click Blueprint deploy (uses `render.yaml` in this repo):
+**Live service (already deployed):** `https://purpose-academy-api.onrender.com`
 
-   [Deploy to Render](https://render.com/deploy?repo=https://github.com/levizigza/Purpose-Academy-Application)
+GitHub Pages builds pick this up from `.env.production` / the Pages workflow (`VITE_API_URL`). Override with a repo Actions variable named `VITE_API_URL` if the URL changes.
 
-2. Sign up / log in with **GitHub** (same account that owns this repo).
-3. Keep the **Free** plan. Deploy `purpose-academy-api`.
-4. Copy the service URL, e.g. `https://purpose-academy-api.onrender.com`.
-5. Wire the live site:
-   - Repo → **Settings → Secrets and variables → Actions → Variables**
-   - Add `VITE_API_URL` = `https://YOUR-SERVICE.onrender.com` (no trailing slash)
-   - Re-run **Deploy GitHub Pages** (or push to `main`)
+One-click Blueprint (uses `render.yaml`) if you need to recreate the service:
 
-6. Smoke test:
+[Deploy to Render](https://render.com/deploy?repo=https://github.com/levizigza/Purpose-Academy-Application)
+
+Smoke test:
 
 ```bash
-curl -sI "https://YOUR-SERVICE.onrender.com/api/health"
-curl -sI "https://YOUR-SERVICE.onrender.com/api/enrich/tts?lang=en&text=Hammer"
+curl -sI "https://purpose-academy-api.onrender.com/api/health"
+curl -sI "https://purpose-academy-api.onrender.com/api/enrich/tts?lang=en&text=Hammer"
 # Expect: X-PA-TTS-Voice: en-US-JennyNeural
 ```
 

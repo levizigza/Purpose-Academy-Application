@@ -82,7 +82,7 @@ Student audio priority: baked Edge neural MP3s (`public/tts`, works on GitHub Pa
 
 Bake clips locally with `npm run bake:tts` (requires `npm install --prefix server`).
 
-**Live API (recommended):** free Render host — see [docs/FREE_API_HOSTING.md](./docs/FREE_API_HOSTING.md). One-click: [Deploy to Render](https://render.com/deploy?repo=https://github.com/levizigza/Purpose-Academy-Application), then set GitHub Actions variable `VITE_API_URL` to the service URL.
+**Live API:** `https://purpose-academy-api.onrender.com` (Render free tier). Wired for GitHub Pages via `.env.production`. Details: [docs/FREE_API_HOSTING.md](./docs/FREE_API_HOSTING.md).
 
 ## Architecture
 

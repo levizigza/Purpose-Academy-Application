@@ -40,8 +40,9 @@ jobs:
       - name: Build site
         env:
           GITHUB_PAGES: 'true'
-          # Optional: live API for dynamic speech / auth. Pages also ships baked /tts clips.
-          VITE_API_URL: ${{ vars.VITE_API_URL }}
+          # Live Render API; override with repo variable VITE_API_URL if needed.
+          # Pages also ships baked /tts clips for instant vocab audio on cold starts.
+          VITE_API_URL: ${{ vars.VITE_API_URL || 'https://purpose-academy-api.onrender.com' }}
         run: npm run build
 
       - name: Add SPA fallback for GitHub Pages
