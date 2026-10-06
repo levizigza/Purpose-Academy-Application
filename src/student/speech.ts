@@ -4,9 +4,10 @@ import type { SupportLang } from './journeyCurriculum'
  * Speech for Purpose Academy student audio.
  *
  * Priority (most human → fallback):
- * 1. Microsoft Edge neural TTS via /api/enrich/tts (Jenny / Dalia / Zariyah / Swara / Mekdes)
- * 2. Free Dictionary human pronunciation for single English words (public-apis) — short timeout
- * 3. Browser speechSynthesis (last resort — often robotic)
+ * 1. Baked Edge neural MP3s in /tts (GitHub Pages — no API required)
+ * 2. Live Microsoft Edge neural TTS via /api/enrich/tts (local / hosted API)
+ * 3. Free Dictionary human pronunciation for single English words — short timeout
+ * 4. Browser speechSynthesis (last resort — often robotic)
  */
 
 /** BCP-47 tags for Web Speech API voices. */
@@ -41,10 +42,42 @@ const FALLBACK_LANG: Partial<Record<SupportLang, string>> = {
 let voicesReady: Promise<SpeechSynthesisVoice[]> | null = null
 let currentAudio: HTMLAudioElement | null = null
 const audioUrlCache = new Map<string, string>()
+let bakedManifest: Record<string, string> | null | undefined
 
 function apiBase() {
   const configured = import.meta.env.VITE_API_URL as string | undefined
   return configured?.replace(/\/$/, '') || ''
+}
+
+function assetBase() {
+  const base = import.meta.env.BASE_URL || '/'
+  return base.endsWith('/') ? base : `${base}/`
+}
+
+async function loadBakedManifest(): Promise<Record<string, string> | null> {
+  if (bakedManifest !== undefined) return bakedManifest
+  try {
+    const res = await fetch(`${assetBase()}tts/manifest.json`, { signal: AbortSignal.timeout(4000) })
+    if (!res.ok) {
+      bakedManifest = null
+      return null
+    }
+    bakedManifest = (await res.json()) as Record<string, string>
+    return bakedManifest
+  } catch {
+    bakedManifest = null
+    return null
+  }
+}
+
+async function speakBaked(text: string, langCode: string): Promise<boolean> {
+  const clean = text.trim().replace(/\s+/g, ' ')
+  if (!clean) return false
+  const manifest = await loadBakedManifest()
+  if (!manifest) return false
+  const file = manifest[`${langCode}::${clean}`]
+  if (!file) return false
+  return playAudioUrl(`${assetBase()}tts/${file}`)
 }
 
 function loadVoices(): Promise<SpeechSynthesisVoice[]> {
@@ -124,12 +157,15 @@ function playAudioUrl(url: string): Promise<boolean> {
 async function speakNeural(text: string, langCode: string): Promise<boolean> {
   const clean = text.trim()
   if (!clean) return false
+  /* Static Pages with no VITE_API_URL has no /api — skip the 404 round-trip. */
+  const base = apiBase()
+  if (!base && import.meta.env.PROD) return false
   const key = `${langCode}::${clean}`
   let url = audioUrlCache.get(key)
   if (!url) {
-    const endpoint = `${apiBase()}/api/enrich/tts?lang=${encodeURIComponent(langCode)}&text=${encodeURIComponent(clean)}`
+    const endpoint = `${base}/api/enrich/tts?lang=${encodeURIComponent(langCode)}&text=${encodeURIComponent(clean)}`
     try {
-      const res = await fetch(endpoint)
+      const res = await fetch(endpoint, { signal: AbortSignal.timeout(12000) })
       if (!res.ok) return false
       const blob = await res.blob()
       if (!blob.size) return false
@@ -190,6 +226,8 @@ function speakBrowser(text: string, lang: string): Promise<boolean> {
 }
 
 async function speak(text: string, langCode: string, browserLang: string): Promise<boolean> {
+  const bakedOk = await speakBaked(text, langCode)
+  if (bakedOk) return true
   const neuralOk = await speakNeural(text, langCode)
   if (neuralOk) return true
   if (langCode === 'en') {

@@ -56,6 +56,7 @@ Useful checks:
 | `npm run dev:api` | API only |
 | `npm run dev:web` | Vite only (needs API for login) |
 | `npm run build` | Typecheck + production web build |
+| `npm run bake:tts` | Bake Edge neural MP3s into `public/tts` for GitHub Pages |
 | `npm run start:api` | Production API start |
 | `npm run smoke:auth` | API auth smoke test |
 | `npm run test:e2e` | Browser login/register/approve E2E |
@@ -77,7 +78,11 @@ Useful checks:
 | [Universities List](https://github.com/Hipo/university-domains-list) | Canadian institutions (`/api/enrich/universities`) |
 | [Httpbin](https://httpbin.org/) | API health connectivity probe |
 
-Student audio priority: Edge neural voice → Free Dictionary recording (short timeout) → browser `speechSynthesis`.
+Student audio priority: baked Edge neural MP3s (`public/tts`, works on GitHub Pages) → live `/api/enrich/tts` when an API is configured → Free Dictionary (short timeout) → browser `speechSynthesis`.
+
+Bake clips locally with `npm run bake:tts` (requires `npm install --prefix server`).
+
+**Live API (recommended):** free Render host — see [docs/FREE_API_HOSTING.md](./docs/FREE_API_HOSTING.md). One-click: [Deploy to Render](https://render.com/deploy?repo=https://github.com/levizigza/Purpose-Academy-Application), then set GitHub Actions variable `VITE_API_URL` to the service URL.
 
 ## Architecture
 

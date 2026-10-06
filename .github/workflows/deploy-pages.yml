@@ -30,9 +30,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install API deps (neural TTS bake)
+        run: npm ci --prefix server
+
+      - name: Bake Edge neural TTS for Practice Mode (static Pages audio)
+        run: npm run bake:tts
+        continue-on-error: true
+
       - name: Build site
         env:
           GITHUB_PAGES: 'true'
+          # Optional: live API for dynamic speech / auth. Pages also ships baked /tts clips.
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
         run: npm run build
 
       - name: Add SPA fallback for GitHub Pages

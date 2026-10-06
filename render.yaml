@@ -1,0 +1,18 @@
+# Optional live API for dynamic neural TTS + auth (GitHub Pages uses baked TTS by default).
+# One-click: https://render.com/deploy?repo=https://github.com/levizigza/Purpose-Academy-Application
+services:
+  - type: web
+    name: purpose-academy-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGINS
+        value: https://levizigza.github.io,http://localhost:5173,http://127.0.0.1:5173
+      - key: JWT_SECRET
+        generateValue: true
