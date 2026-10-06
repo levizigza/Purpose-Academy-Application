@@ -46,9 +46,8 @@ type CardProps = {
 }
 
 /**
- * Visual vocabulary card — image-first worksheet mold:
- * English · real object photo · all five home-language glosses.
- * Sentences belong in a later step (not mixed into first vocab pass).
+ * Visual vocabulary card — Purpose Academy worksheet mold (one word per page):
+ * English · object photo · five home-language glosses · definition · contextual sentence.
  * Learner presses the language they understand, then hears English.
  */
 export function VocabSheetCard({
@@ -138,6 +137,9 @@ export function VocabSheetCard({
         </ul>
       </div>
 
+      <p className="vocab-sheet-definition">{term.definition}</p>
+      <p className="vocab-sheet-sentence">{term.sentence}</p>
+
       {!alreadyKnown && (
         <button type="button" className="btn btn-ghost vocab-known-btn" onClick={onMarkKnown}>
           I already know this word
@@ -211,8 +213,8 @@ export function VocabSheet({
         <span style={{ width: `${Math.round((linkedCount / Math.max(1, terms.length)) * 100)}%` }} />
       </div>
       <p className="vocab-sheet-lede">
-        Picture first. Press the language you understand — or mark a word you already know — then hear English.
-        Sentences come later, after you know the words.
+        See the picture. Press the language you understand — or mark a word you already know — then hear English.
+        Read the short sentence so the word stays in context.
       </p>
 
       <VocabSheetCard

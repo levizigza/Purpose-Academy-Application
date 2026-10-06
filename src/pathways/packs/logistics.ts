@@ -20,7 +20,7 @@ export const logisticsPack: PathwayPack = {
       goal: 'Learn Level-1 logistics words 1–20 from the Purpose Academy visual vocabulary table.',
       outcomes: [
         'See a real photo of each object and hear English',
-        'Connect your language to the English word (sentences come later)',
+        'Connect your language to the English word and a short workplace sentence',
       ],
     },
     4: {
@@ -79,7 +79,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-box',
       definition: 'A cardboard container used to pack and move goods.',
       sentence: 'This is a box.',
-      gloss: gloss('Caja', 'صندوق', 'बक्सा', 'ሳጥን', 'ሳጥን'),
+      gloss: gloss('Caja', 'صندوق', 'बक्सा', 'ሳጥን', 'ሳንዱቕ'),
     },
     {
       id: 'bag',
@@ -97,6 +97,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-bin',
       definition: 'A sturdy container used to hold or sort items.',
       sentence: 'Put it in the bin.',
+      // Worksheet listed ቅርጫት (“basket”) — use the warehouse sense: container/bin.
       gloss: gloss('Contenedor', 'حاوية', 'डिब्बा', 'መያዣ', 'መያዣ'),
     },
     {
@@ -106,7 +107,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-shelf',
       definition: 'A flat board where you place goods for storage.',
       sentence: 'Put it on the shelf.',
-      gloss: gloss('Estante', 'رف', 'शेल्फ', 'መደርደሪያ', 'መደርደሪያ'),
+      gloss: gloss('Estante', 'رف', 'शेल्फ', 'መደርደሪያ', 'መደርደሪ'),
     },
     {
       id: 'rack',
@@ -115,7 +116,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-rack',
       definition: 'Strong warehouse framing that holds boxes and pallets.',
       sentence: 'The rack holds boxes.',
-      gloss: gloss('Estantería', 'رفوف التخزين', 'रैक', 'ራክ', 'ራክ'),
+      gloss: gloss('Estantería', 'رفوف التخزين', 'रैक', 'መቆሚያ', 'መደራረሪ'),
     },
     {
       id: 'pallet',
@@ -131,9 +132,9 @@ export const logisticsPack: PathwayPack = {
       english: 'Cart',
       emoji: 'CT',
       imageKey: 'log-cart',
-      definition: 'A wheeled cage used to push goods across the warehouse floor.',
+      definition: 'A wheeled platform used to push goods across the floor.',
       sentence: 'Push the cart slowly.',
-      gloss: gloss('Carro', 'عربة', 'गाड़ी', 'ጋሪ', 'ጋሪ'),
+      gloss: gloss('Carrito', 'عربة', 'गाड़ी', 'ጋሪ', 'ጋሪ'),
     },
     {
       id: 'dolly',
@@ -142,7 +143,8 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-dolly',
       definition: 'A two-wheel hand truck used to move stacked boxes.',
       sentence: 'Use the dolly to move boxes.',
-      gloss: gloss('Carretilla de mano', 'عربة يدوية', 'हैंड ट्रक', 'የእጅ ጋሪ', 'ናይ ኢድ ጋሪ'),
+      // Worksheet Spanish “Plataforma rodante” is wrong for a hand truck.
+      gloss: gloss('Carretilla de mano', 'عربة يدوية', 'ट्राली', 'ተሽከርካሪ ጋሪ', 'ተሽከርካሪ'),
     },
     {
       id: 'truck',
@@ -187,7 +189,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-gate',
       definition: 'The controlled entrance where trucks arrive and leave.',
       sentence: 'The truck is at the gate.',
-      gloss: gloss('Entrada', 'بوابة', 'गेट', 'ኬላ', 'ካዝና'),
+      gloss: gloss('Entrada', 'بوابة', 'गेट', 'ኬላ', 'ካላሾ'),
     },
     {
       id: 'floor',
@@ -214,7 +216,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-aisle',
       definition: 'The clear path between racks for people and equipment.',
       sentence: 'Keep the aisle clear.',
-      gloss: gloss('Pasillo', 'ممر', 'गलियारा', 'መተላለፊያ', 'መተላለፊያ'),
+      gloss: gloss('Pasillo', 'ممر', 'गलियारा', 'መተላለፊያ', 'መተሓላለፊ'),
     },
     {
       id: 'ramp',
