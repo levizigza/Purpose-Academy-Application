@@ -131,9 +131,9 @@ export const logisticsPack: PathwayPack = {
       english: 'Cart',
       emoji: 'CT',
       imageKey: 'log-cart',
-      definition: 'A wheeled platform used to push goods across the floor.',
+      definition: 'A wheeled cage used to push goods across the warehouse floor.',
       sentence: 'Push the cart slowly.',
-      gloss: gloss('Carrito', 'عربة', 'गाड़ी', 'ጋሪ', 'ጋሪ'),
+      gloss: gloss('Carro', 'عربة', 'गाड़ी', 'ጋሪ', 'ጋሪ'),
     },
     {
       id: 'dolly',
