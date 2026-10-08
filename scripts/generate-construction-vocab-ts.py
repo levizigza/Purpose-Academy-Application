@@ -10,7 +10,6 @@ SRC = Path("/tmp/con-vv-extract/vocab660.json")
 CURATED = Path("/cursor/stores/self/construction-vv/gloss-overrides.json")
 INDEX = Path("/cursor/stores/self/construction-vv/words-001-660-full-index.json")
 OUT = Path("src/pathways/packs/constructionVocab660.ts")
-OUT_SHARED = Path("src/pathways/packs/constructionVocabShared200.ts")
 
 
 def esc(s: str) -> str:
@@ -87,22 +86,8 @@ def main():
     body = "".join(term_block(t) for t in terms)
     OUT.write_text(header + body + "]\n", encoding="utf-8")
 
-    shared_header = (
-        "/**\n"
-        " * Shared Construction Visual Vocabulary words 1–200 for Logistics (+200 → 700)\n"
-        " * and Community Support (foundational bank until community-specific docs arrive).\n"
-        " */\n"
-        "import type { VocabTerm } from '../../student/journeyCurriculum'\n"
-        "import { CONSTRUCTION_VOCAB_660 } from './constructionVocab660'\n\n"
-        "export const CONSTRUCTION_VOCAB_SHARED_200: VocabTerm[] = CONSTRUCTION_VOCAB_660.slice(0, 200).map((t) => ({\n"
-        "  ...t,\n"
-        "  id: `shared-${t.id}`,\n"
-        "}))\n"
-    )
-    OUT_SHARED.write_text(shared_header, encoding="utf-8")
-
     empty = sum(1 for t in terms if not all(t["gloss"].get(k) for k in ["Amharic", "Tigrinya", "Arabic", "Spanish", "Hindi"]))
-    print(f"Wrote {OUT} ({len(terms)} terms); shared {OUT_SHARED}; incomplete gloss rows: {empty}")
+    print(f"Wrote {OUT} ({len(terms)} terms); incomplete gloss rows: {empty}")
 
 
 if __name__ == "__main__":

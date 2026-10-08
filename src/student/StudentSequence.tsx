@@ -1471,12 +1471,12 @@ export function StudentSequencePage() {
       (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
     ).length
     /**
-     * Large worksheet tables (Logistics 700, Construction 660, Community 200)
-     * unlock the shared journey after Level-1 (words 1–20 / page 1); remaining
-     * pages stay available to practise.
+     * Large worksheet tables (Logistics 500, Construction 660) unlock the
+     * shared journey after Level-1 (words 1–20 / page 1); remaining pages stay
+     * available to practise. Community keeps the full small deck as the gate.
      */
     const journeyGateCount =
-      pathwayId === 'logistics' || pathwayId === 'construction' || pathwayId === 'community'
+      pathwayId === 'logistics' || pathwayId === 'construction'
         ? Math.min(20, VOCAB_UNIT.length)
         : VOCAB_UNIT.length
     const gateLinked = VOCAB_UNIT.slice(0, journeyGateCount).filter(
@@ -1506,7 +1506,7 @@ export function StudentSequencePage() {
           onMarkKnown={(term) => markCurrentVocabKnown(term)}
         />
         <p className="train-vocab-counter">
-          {pathwayId === 'logistics' || pathwayId === 'construction' || pathwayId === 'community'
+          {pathwayId === 'logistics' || pathwayId === 'construction'
             ? ready
               ? `Level-1 complete (${journeyGateCount} words) · Full table ${linkedCount} of ${VOCAB_UNIT.length} · Ready to continue`
               : `Level-1 ${gateLinked} of ${journeyGateCount} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
