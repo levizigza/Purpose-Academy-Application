@@ -9,8 +9,9 @@ import { gloss, hint } from '../packHelpers'
  *
  * Visual vocabulary (words 1–20) is sourced from the Purpose Academy
  * Logistics Visual Vocabulary worksheet: exact word-table translations
- * (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French) and worksheet-
+ * (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French) and carefully
  * matched object photos so each English word maps to one clear picture.
+ * Photos are treated as craft pieces — one object, one meaning, no mismatch.
  */
 export const logisticsPack: PathwayPack = {
   id: 'logistics',

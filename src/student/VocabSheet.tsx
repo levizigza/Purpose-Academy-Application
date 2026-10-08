@@ -65,10 +65,12 @@ export function VocabSheetCard({
   const img = pathwayImage(term.imageKey)
   const bridged = !!connectedLang || alreadyKnown
   const ready = bridged && heardEnglish
+  /** Logistics worksheet photos are studio-white object cards — keep the mat light. */
+  const studioPhoto = term.imageKey.startsWith('log-')
 
   return (
     <article
-      className={`vocab-sheet-card vocab-sheet-card-focus${heardEnglish ? ' is-heard' : ''}${bridged ? ' is-connected' : ''}${alreadyKnown ? ' is-known' : ''}`}
+      className={`vocab-sheet-card vocab-sheet-card-focus${heardEnglish ? ' is-heard' : ''}${bridged ? ' is-connected' : ''}${alreadyKnown ? ' is-known' : ''}${studioPhoto ? ' vocab-sheet-studio' : ''}`}
     >
       <header className="vocab-sheet-card-head">
         <span className={`vocab-sheet-num tone-${(index % 4) + 1}`}>{index}</span>
@@ -99,7 +101,7 @@ export function VocabSheetCard({
       </p>
 
       <div className="vocab-sheet-body vocab-sheet-body-focus">
-        <figure className="vocab-sheet-photo vocab-sheet-photo-focus">
+        <figure className={`vocab-sheet-photo vocab-sheet-photo-focus${studioPhoto ? ' is-studio' : ''}`}>
           {img ? (
             <img src={img} alt={`Photo of ${term.english}`} />
           ) : (
@@ -107,7 +109,9 @@ export function VocabSheetCard({
               {term.emoji}
             </span>
           )}
-          <figcaption className="vocab-sheet-photo-caption">Look at the picture. Connect it to English.</figcaption>
+          <figcaption className="vocab-sheet-photo-caption">
+            {studioPhoto ? 'Look at the object. Press your language. Then hear English.' : 'Look at the picture. Connect it to English.'}
+          </figcaption>
         </figure>
         <ul className="vocab-sheet-langs" aria-label="Press the language you understand">
           {VOCAB_SHEET_LANGS.map((lang) => {

@@ -6599,6 +6599,28 @@ table.data th {
   background: #111820;
 }
 
+/* Logistics Visual Vocabulary — white studio mat so the object reads clearly */
+.vocab-sheet-photo-focus.is-studio {
+  min-height: 18rem;
+  aspect-ratio: 4 / 5;
+  background: #ffffff;
+  border: 1px solid rgba(20, 40, 70, 0.12);
+  border-radius: 0.85rem;
+  overflow: hidden;
+}
+
+.vocab-sheet-photo-focus.is-studio img {
+  object-fit: contain;
+  background: #ffffff;
+  padding: 0.55rem;
+}
+
+.vocab-sheet-card.vocab-sheet-studio .vocab-sheet-photo-caption {
+  color: #1e3a5f;
+  background: rgba(245, 248, 252, 0.96);
+  border-top: 1px solid rgba(20, 40, 70, 0.08);
+}
+
 .vocab-sheet-photo-caption {
   margin: 0;
   padding: 0.45rem 0.65rem;
