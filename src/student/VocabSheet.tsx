@@ -177,9 +177,9 @@ type DeckProps = {
   onMarkKnown: (term: VocabTerm) => void
   /**
    * How many linked words unlock the journey “Continue” control.
-   * Defaults to the full deck. Logistics uses Level-1 (first page / 20 words)
-   * so the shared Practice skeleton stays even while the full 500-word table
-   * remains available page by page.
+   * Defaults to the full deck. Construction and Logistics use Level-1 (first
+   * page / 20 words) so the shared Practice skeleton stays even while large
+   * worksheet tables remain available page by page.
    */
   journeyGateCount?: number
 }
@@ -196,7 +196,7 @@ function termLinked(
 /**
  * One-by-one vocabulary deck (worksheet mold).
  * Pattern: see picture → press your language (or mark known) → hear English → next.
- * Large tables (e.g. Logistics 500) page in worksheet banks of 20.
+ * Large tables (Logistics 500, Construction 660) page in worksheet banks of 20.
  */
 export function VocabSheet({
   terms,

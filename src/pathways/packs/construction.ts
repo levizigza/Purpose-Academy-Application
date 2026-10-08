@@ -4,10 +4,11 @@
  * Construction Visual Vocabulary worksheet (30 pages): exact word-table
  * translations (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French),
  * workplace sentences, and worksheet object photos for every word.
+ * Practice layers (Word → Action, Eye Spy, Workplace Instructions) use the
+ * same worksheet ids and con-vv image keys.
  */
 import {
   EMPLOYMENT_PREP,
-  EYE_SPY_SCENES,
   FINAL_QUIZ,
   OBSERVATION_SCENARIOS,
   SAFETY_QUIZ,
@@ -16,10 +17,13 @@ import {
   SYSTEM_TOPICS,
   TOOL_CATEGORIES,
   UNIT_CHECKPOINTS,
-  WORD_ACTIONS,
-  WORKPLACE_INSTRUCTIONS,
 } from '../../student/journeyCurriculum'
 import type { PathwayPack } from '../types'
+import {
+  CONSTRUCTION_EYE_SPY_SCENES,
+  CONSTRUCTION_WORD_ACTIONS,
+  CONSTRUCTION_WORKPLACE_INSTRUCTIONS,
+} from './constructionPractice'
 import { CONSTRUCTION_VOCAB_660 } from './constructionVocab660'
 
 export const constructionPack: PathwayPack = {
@@ -39,8 +43,38 @@ export const constructionPack: PathwayPack = {
         'Use worksheet pages so the app matches the class vocabulary table',
       ],
     },
+    4: {
+      goal: 'Use English with support, then prove you can find and follow construction-site language.',
+      outcomes: [
+        'Match pictures to English words',
+        'Find tools and materials in a busy shop scene',
+        'Follow short workplace instructions',
+        'Understand common job-site phrases',
+      ],
+    },
+    5: {
+      goal: 'Build the digital, safety, tool, and systems foundations Alberta construction sites expect.',
+      outcomes: [
+        'Practice school computer tasks',
+        'Pass required safety checks',
+        'Name tool groups and construction systems',
+      ],
+    },
+    6: {
+      goal: 'Prove site readiness under observation, then connect to construction employment support.',
+      outcomes: [
+        'Rehearse competent skill order with measurable steps',
+        'Make safe site decisions, including stop-work',
+        'Pass the final checks and open employment support',
+      ],
+    },
   },
   stepTitles: {
+    8: {
+      title: 'Word → Action',
+      help: 'See a site action. Choose which tool or material it uses.',
+      purpose: 'Connect each Construction Visual Vocabulary word to a real job-site action.',
+    },
     12: {
       title: 'Site Language',
       help: 'Hear a job-site phrase. Choose what it means.',
@@ -63,9 +97,9 @@ export const constructionPack: PathwayPack = {
     },
   },
   vocab: CONSTRUCTION_VOCAB_660,
-  wordActions: WORD_ACTIONS,
-  eyeSpyScenes: EYE_SPY_SCENES,
-  workplaceInstructions: WORKPLACE_INSTRUCTIONS,
+  wordActions: CONSTRUCTION_WORD_ACTIONS,
+  eyeSpyScenes: CONSTRUCTION_EYE_SPY_SCENES,
+  workplaceInstructions: CONSTRUCTION_WORKPLACE_INSTRUCTIONS,
   sitePhrases: SITE_PHRASES,
   safetyQuiz: SAFETY_QUIZ,
   toolCategories: TOOL_CATEGORIES,

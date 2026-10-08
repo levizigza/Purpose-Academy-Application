@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate constructionVocab660.ts (+ shared first-200 export) from OCR/curated JSON."""
+"""Generate constructionVocab660.ts from OCR/curated JSON + workplace definitions."""
 from __future__ import annotations
 
 import json
@@ -8,6 +8,7 @@ from pathlib import Path
 
 SRC = Path("/tmp/con-vv-extract/vocab660.json")
 CURATED = Path("/cursor/stores/self/construction-vv/gloss-overrides.json")
+DEFINITIONS = Path("/cursor/stores/self/construction-vv/definitions.json")
 INDEX = Path("/cursor/stores/self/construction-vv/words-001-660-full-index.json")
 OUT = Path("src/pathways/packs/constructionVocab660.ts")
 
@@ -70,6 +71,17 @@ def main():
 
     terms = [by_n[n] for n in sorted(by_n)]
     assert len(terms) == 660
+
+    defs = {}
+    if DEFINITIONS.exists():
+        defs = json.loads(DEFINITIONS.read_text(encoding="utf-8"))
+
+    for t in terms:
+        d = defs.get(t["english"])
+        if d:
+            t["definition"] = d
+        elif t.get("definition", "").startswith("A construction workplace word"):
+            t["definition"] = f'{t["english"]} — used on a construction site. Example: {t["sentence"]}'
 
     header = (
         "/**\n"

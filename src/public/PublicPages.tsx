@@ -101,8 +101,8 @@ export function HomePage() {
               </div>
               <h3>Construction Foundations</h3>
               <p>
-                Safety, tools, materials, framing awareness, and site English, with instructor verification and an
-                apprenticeship pathway.
+                660-word Construction Visual Vocabulary, safety, tools, materials, and site English, with instructor
+                verification and an apprenticeship pathway.
               </p>
               <span className="badge ok">Enrolling now</span>
             </Reveal>
@@ -212,6 +212,7 @@ export function ProgramsPage() {
             employers in Alberta.
           </p>
           <ul className="school-bullets">
+            <li>660-word Construction Visual Vocabulary with workplace English</li>
             <li>Foundation theory + shop practice</li>
             <li>Instructor observation and Skills Passport</li>
             <li>Apprenticeship orientation and employer connection</li>
@@ -349,8 +350,9 @@ export function AboutPage() {
             apprenticeship.
           </p>
           <p>
-            Today {BRAND.name} operates as a trades school in {BRAND.place}. Construction Foundations is our
-            open program. Instructors verify skill. Partners help learners move into work and apprenticeship.
+            Today {BRAND.name} operates as a trades school in {BRAND.place}. Construction, Logistics, and Community
+            Support Foundations are open. Instructors verify skill. Partners help learners move into work and
+            apprenticeship.
           </p>
         </div>
         <figure className="serve-figure">

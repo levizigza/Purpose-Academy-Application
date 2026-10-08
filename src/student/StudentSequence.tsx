@@ -1582,7 +1582,13 @@ export function StudentSequencePage() {
             <p className="vocab-known-note">Already known — quick confirm the action, then continue.</p>
           )}
           <p className="word-action-cue"><strong>Action cue:</strong> {item.actionCue}</p>
-          <p className="train-check-prompt">Which tool is this action for?</p>
+          <p className="train-check-prompt">
+            {pathwayId === 'community'
+              ? 'Which support item is this action for?'
+              : pathwayId === 'logistics'
+                ? 'Which warehouse item is this action for?'
+                : 'Which tool or material is this action for?'}
+          </p>
           <div className="train-choice-grid">
             {options.map((opt) => (
               <ChoiceButton

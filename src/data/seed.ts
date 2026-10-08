@@ -101,9 +101,9 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Construction Workforce Readiness',
         category: 'construction',
         description:
-          'Construction foundations: safety, tools, materials, site English, and instructor-verified skill, with a clear path into apprenticeship.',
+          'Construction foundations: 660-word visual vocabulary, safety, tools, materials, site English, and instructor-verified skill, with a clear path into apprenticeship.',
         duration: '12-16 weeks',
-        skills: ['Site safety', 'Hand & power tools', 'Drywall', 'Flooring', 'Painting', 'Blueprint basics'],
+        skills: ['Visual vocabulary', 'Site safety', 'Hand & power tools', 'Drywall', 'Flooring', 'Painting'],
         active: true,
       },
       {
@@ -714,8 +714,8 @@ export function createSeedDatabase(): AppDatabase {
     announcements: [
       {
         id: 'ann-1',
-        title: 'Construction pathway pilot',
-        body: 'Construction is the active pathway. Logistics and Community Support will open after the Construction model is validated.',
+        title: 'Three pathways open',
+        body: 'Construction, Logistics, and Community Support Foundations are open. Start with the pathway that fits your goals; each uses the same 20-step school path with instructor checks.',
         audience: 'all',
         created_at: now,
       },
