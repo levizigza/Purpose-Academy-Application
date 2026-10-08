@@ -1,5 +1,6 @@
 import type { PathwayPack } from '../types'
-import { gloss, hint } from '../packHelpers'
+import { hint } from '../packHelpers'
+import { LOGISTICS_VOCAB_500 } from './logisticsVocab500'
 
 /**
  * Logistics Foundations content pack.
@@ -7,11 +8,11 @@ import { gloss, hint } from '../packHelpers'
  * OSHA pedestrian / MHE awareness). Powered forklifts = awareness / stay clear
  * only — never claimed as certification.
  *
- * Visual vocabulary (words 1–20) is sourced from the Purpose Academy
- * Logistics Visual Vocabulary worksheet: exact word-table translations
- * (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French) and carefully
- * matched object photos so each English word maps to one clear picture.
- * Photos are treated as craft pieces — one object, one meaning, no mismatch.
+ * Visual vocabulary (words 1–500) is sourced from the Purpose Academy
+ * Logistics Visual Vocabulary worksheet (25 pages): exact word-table
+ * translations (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French),
+ * workplace sentences, and worksheet object photos for every word.
+ * Words 1–20 keep remastered studio photos; words 21–500 use worksheet tiles.
  */
 export const logisticsPack: PathwayPack = {
   id: 'logistics',
@@ -23,7 +24,7 @@ export const logisticsPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn Level-1 logistics words 1–20 from the Purpose Academy visual vocabulary table.',
+      goal: 'Learn logistics words 1–500 from the Purpose Academy Logistics Visual Vocabulary table.',
       outcomes: [
         'See a real photo of each object and hear English',
         'Connect your language to the English word and a short workplace sentence',
@@ -78,193 +79,10 @@ export const logisticsPack: PathwayPack = {
     },
   },
   /**
-   * Level-1 visual vocabulary — words 1–20 from Purpose Academy
-   * Logistics Visual Vocabulary (exact word-table translations; no French).
-   * Photos match the worksheet object for each word so learners see the same
-   * picture in class materials and in the app. Logistics stream only.
+   * Full Logistics Visual Vocabulary — words 1–500 from the Purpose Academy
+   * worksheet (exact translations, sentences, and object photos).
    */
-  vocab: [
-    {
-      id: 'box',
-      english: 'Box',
-      emoji: 'BX',
-      imageKey: 'log-box',
-      definition: 'A cardboard container used to pack and move goods.',
-      sentence: 'This is a box.',
-      gloss: gloss('Caja', 'صندوق', 'बक्सा', 'ሳጥን', 'ሳንዱቕ'),
-    },
-    {
-      id: 'bag',
-      english: 'Bag',
-      emoji: 'BG',
-      imageKey: 'log-bag',
-      definition: 'A paper bag with handles used to carry light items.',
-      sentence: 'The bag is light.',
-      gloss: gloss('Bolsa', 'حقيبة / كيس', 'थैला', 'ቦርሳ', 'ቦርሳ'),
-    },
-    {
-      id: 'bin',
-      english: 'Bin',
-      emoji: 'BN',
-      imageKey: 'log-bin',
-      definition: 'A sturdy open container used to hold or sort items.',
-      sentence: 'Put it in the bin.',
-      gloss: gloss('Contenedor', 'حاوية', 'डिब्बा', 'ቅርጫት', 'ቅርጫት'),
-    },
-    {
-      id: 'shelf',
-      english: 'Shelf',
-      emoji: 'SH',
-      imageKey: 'log-shelf',
-      definition: 'A flat board on a frame where you place goods for storage.',
-      sentence: 'Put it on the shelf.',
-      gloss: gloss('Estante', 'رف', 'शेल्फ / ताक', 'መደርደሪያ', 'መደርደሪ'),
-    },
-    {
-      id: 'rack',
-      english: 'Rack',
-      emoji: 'RK',
-      imageKey: 'log-rack',
-      definition: 'Tall warehouse framing that holds boxes and pallets.',
-      sentence: 'The rack holds boxes.',
-      gloss: gloss('Estantería', 'حامل', 'रैक', 'መቆሚያ / መደርደሪያ', 'መደርደሪ'),
-    },
-    {
-      id: 'pallet',
-      english: 'Pallet',
-      emoji: 'PL',
-      imageKey: 'log-pallet',
-      definition: 'A flat wooden platform used to stack and move goods.',
-      sentence: 'The boxes are on the pallet.',
-      gloss: gloss('Palé / Tarima', 'منصة نقالة', 'पैलेट', 'ፓሌት', 'ፓሌት'),
-    },
-    {
-      id: 'cart',
-      english: 'Cart',
-      emoji: 'CT',
-      imageKey: 'log-cart',
-      definition: 'A flat wheeled platform with a handle used to push goods.',
-      sentence: 'Push the cart slowly.',
-      gloss: gloss('Carrito', 'عربة', 'गाड़ी', 'ጋሪ', 'ጋሪ'),
-    },
-    {
-      id: 'dolly',
-      english: 'Dolly',
-      emoji: 'DY',
-      imageKey: 'log-dolly',
-      definition: 'A two-wheel hand truck used to move stacked boxes.',
-      sentence: 'Use the dolly to move boxes.',
-      gloss: gloss('Plataforma rodante', 'عربة يدوية', 'ट्राली', 'ተሽከርካሪ ጋሪ', 'ተሽከርካሪ'),
-    },
-    {
-      id: 'truck',
-      english: 'Truck',
-      emoji: 'TK',
-      imageKey: 'log-truck',
-      definition: 'A large vehicle that carries goods between locations.',
-      sentence: 'The truck carries goods.',
-      gloss: gloss('Camión', 'شاحنة', 'ट्रक', 'የጭነት መኪና', 'ናይ ጽዕነት መኪና'),
-    },
-    {
-      id: 'van',
-      english: 'Van',
-      emoji: 'VN',
-      imageKey: 'log-van',
-      definition: 'A smaller delivery vehicle for lighter loads.',
-      sentence: 'The van is outside.',
-      gloss: gloss('Furgoneta', 'شاحنة صغيرة', 'वैन', 'ቫን / አነስተኛ መኪና', 'ቫን'),
-    },
-    {
-      id: 'trailer',
-      english: 'Trailer',
-      emoji: 'TR',
-      imageKey: 'log-trailer',
-      definition: 'A cargo unit pulled by a truck to haul materials.',
-      sentence: 'The trailer carries materials.',
-      gloss: gloss('Remolque', 'مقطورة', 'ट्रेलर', 'ተሳቢ', 'ተሳቢ'),
-    },
-    {
-      id: 'door',
-      english: 'Door',
-      emoji: 'DR',
-      imageKey: 'log-door',
-      definition: 'An entry that must stay clear for safe movement.',
-      sentence: 'Keep the door clear.',
-      gloss: gloss('Puerta', 'باب', 'दरवाज़ा', 'በር', 'ማዕጾ'),
-    },
-    {
-      id: 'gate',
-      english: 'Gate',
-      emoji: 'GT',
-      imageKey: 'log-gate',
-      definition: 'The controlled entrance where trucks arrive and leave.',
-      sentence: 'The truck is at the gate.',
-      gloss: gloss('Puerta / Entrada', 'بوابة', 'गेट / द्वार', 'ኬላ / በር', 'ካንሸሎ'),
-    },
-    {
-      id: 'floor',
-      english: 'Floor',
-      emoji: 'FL',
-      imageKey: 'log-floor',
-      definition: 'The walking surface of the warehouse — keep it clean and clear.',
-      sentence: 'Keep the floor clean.',
-      gloss: gloss('Suelo', 'أرضية', 'फ़र्श', 'ወለል', 'ባይታ'),
-    },
-    {
-      id: 'wall',
-      english: 'Wall',
-      emoji: 'WL',
-      imageKey: 'log-wall',
-      definition: 'A vertical surface that marks edges and storage zones.',
-      sentence: 'The box is near the wall.',
-      gloss: gloss('Pared', 'جدار', 'दीवार', 'ግድግዳ', 'መንደቕ'),
-    },
-    {
-      id: 'aisle',
-      english: 'Aisle',
-      emoji: 'AL',
-      imageKey: 'log-aisle',
-      definition: 'The clear path between racks for people and equipment.',
-      sentence: 'Keep the aisle clear.',
-      gloss: gloss('Pasillo', 'ممر', 'गलियारा', 'መተላለፊያ', 'መተሓላለፊ'),
-    },
-    {
-      id: 'ramp',
-      english: 'Ramp',
-      emoji: 'RP',
-      imageKey: 'log-ramp',
-      definition: 'A sloping surface used to move carts into a truck or dock.',
-      sentence: 'Move the cart up the ramp.',
-      gloss: gloss('Rampa', 'منحدر', 'ढलान', 'ማወጣጫ', 'ራምፕ'),
-    },
-    {
-      id: 'dock',
-      english: 'Dock',
-      emoji: 'DK',
-      imageKey: 'log-dock',
-      definition: 'The loading area where trucks park to load and unload.',
-      sentence: 'The truck is at the dock.',
-      gloss: gloss('Muelle', 'رصيف التحميل', 'डॉक', 'ማራገፊያ', 'መራገፊ'),
-    },
-    {
-      id: 'office',
-      english: 'Office',
-      emoji: 'OF',
-      imageKey: 'log-office',
-      definition: 'The room where supervisors work and records are kept.',
-      sentence: 'The supervisor is in the office.',
-      gloss: gloss('Oficina', 'مكتب', 'कार्यालय', 'ቢሮ', 'ቤት ጽሕፈት'),
-    },
-    {
-      id: 'warehouse',
-      english: 'Warehouse',
-      emoji: 'WH',
-      imageKey: 'log-warehouse',
-      definition: 'The building where goods are received, stored, and shipped.',
-      sentence: 'The warehouse stores goods.',
-      gloss: gloss('Almacén', 'مستودع', 'गोदाम', 'መጋዘን', 'መጋዘን'),
-    },
-  ],
+  vocab: LOGISTICS_VOCAB_500,
   wordActions: [
     {
       id: 'wa-box',

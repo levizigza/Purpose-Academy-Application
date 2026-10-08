@@ -100,5 +100,11 @@ export function pathwayImage(key?: string | null): string | undefined {
   const fromConstruction = constructionToolImage(key)
   if (fromConstruction) return fromConstruction
   if (key in PATHWAY_PHOTOS) return PATHWAY_PHOTOS[key]
+  // Logistics Visual Vocabulary words 21–500 (and worksheet tiles 1–20)
+  // live as static public assets extracted from the 500-word PDF.
+  if (key.startsWith('log-vv-')) {
+    const base = import.meta.env.BASE_URL || '/'
+    return `${base}media/logistics-vv/${key}.jpg`
+  }
   return undefined
 }

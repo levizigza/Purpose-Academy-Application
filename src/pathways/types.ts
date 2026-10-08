@@ -18,8 +18,8 @@
  * 9. Site decisions force real trade-offs with teachCorrect / teachWrong.
  * 10. Mastery without fluff: checkpoints recycle earlier skills into later judgment.
  *
- * Depth bar (match Construction Foundations craft; Logistics Level-1 table = 20 words):
- *   vocab ~7–20 · Eye Spy ≥8 scenes · instructions ≥8 · phrases ≥8 · safety ≥7 ·
+ * Depth bar (match Construction Foundations craft; Logistics Visual Vocabulary = 500 words):
+ *   vocab 500 (full worksheet) · Eye Spy ≥8 scenes · instructions ≥8 · phrases ≥8 · safety ≥7 ·
  *   observation ≥5 · site decisions ≥6 · final ≥7 · employment ≥6
  *
  * Visual vocabulary interaction (updated from early plan):
@@ -28,7 +28,7 @@
  *   Do not present post-assessment vocab as a single mother-tongue-only card.
  *
  * Pathway sources used to strengthen packs (without changing the skeleton):
- *   Logistics — Purpose Academy Logistics Visual Vocabulary Level-1 (words 1–20);
+ *   Logistics — Purpose Academy Logistics Visual Vocabulary (words 1–500);
  *               MSSC CLA/CLT flow; OSHA pedestrian/MHE awareness.
  *   Community — Alberta Community Support Worker foundations (NorQuest-style streams):
  *               disability / PDD community living, older adults, settlement & newcomers,
