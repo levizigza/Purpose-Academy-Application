@@ -1,7 +1,9 @@
 /**
  * Construction Foundations content pack.
- * Source of truth remains journeyCurriculum — this pack wraps it into the
- * shared three-stream PathwayPack shape.
+ * Visual vocabulary (words 1–660) is sourced from the Purpose Academy
+ * Construction Visual Vocabulary worksheet (30 pages): exact word-table
+ * translations (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French),
+ * workplace sentences, and worksheet object photos for every word.
  */
 import {
   EMPLOYMENT_PREP,
@@ -14,11 +16,11 @@ import {
   SYSTEM_TOPICS,
   TOOL_CATEGORIES,
   UNIT_CHECKPOINTS,
-  VOCAB_UNIT,
   WORD_ACTIONS,
   WORKPLACE_INSTRUCTIONS,
 } from '../../student/journeyCurriculum'
 import type { PathwayPack } from '../types'
+import { CONSTRUCTION_VOCAB_660 } from './constructionVocab660'
 
 export const constructionPack: PathwayPack = {
   id: 'construction',
@@ -27,6 +29,16 @@ export const constructionPack: PathwayPack = {
     safety: 'Safety',
     tools: 'Tools',
     systems: 'Construction skills',
+  },
+  unitGoals: {
+    3: {
+      goal: 'Learn the Purpose Academy Construction Visual Vocabulary (660 words in pages of 20). Complete Level-1 (words 1–20) to continue; more pages stay open to practise.',
+      outcomes: [
+        'See a real photo of each object and hear English',
+        'Connect your language to the English word and a short workplace sentence',
+        'Use worksheet pages so the app matches the class vocabulary table',
+      ],
+    },
   },
   stepTitles: {
     12: {
@@ -50,7 +62,7 @@ export const constructionPack: PathwayPack = {
       purpose: 'Daily judgment, notes, and site feedback.',
     },
   },
-  vocab: VOCAB_UNIT,
+  vocab: CONSTRUCTION_VOCAB_660,
   wordActions: WORD_ACTIONS,
   eyeSpyScenes: EYE_SPY_SCENES,
   workplaceInstructions: WORKPLACE_INSTRUCTIONS,

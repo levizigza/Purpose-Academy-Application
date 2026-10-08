@@ -106,5 +106,10 @@ export function pathwayImage(key?: string | null): string | undefined {
     const base = import.meta.env.BASE_URL || '/'
     return `${base}media/logistics-vv/${key}.jpg`
   }
+  // Construction Visual Vocabulary words 1–660 (worksheet object tiles).
+  if (key.startsWith('con-vv-')) {
+    const base = import.meta.env.BASE_URL || '/'
+    return `${base}media/construction-vv/${key}.jpg`
+  }
   return undefined
 }
