@@ -6,6 +6,11 @@ import { gloss, hint } from '../packHelpers'
  * Matches Construction Foundations craftsmanship depth (MSSC CLA/CLT flow,
  * OSHA pedestrian / MHE awareness). Powered forklifts = awareness / stay clear
  * only — never claimed as certification.
+ *
+ * Visual vocabulary (words 1–20) is sourced from the Purpose Academy
+ * Logistics Visual Vocabulary worksheet: exact word-table translations
+ * (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French) and worksheet-
+ * matched object photos so each English word maps to one clear picture.
  */
 export const logisticsPack: PathwayPack = {
   id: 'logistics',
@@ -71,6 +76,12 @@ export const logisticsPack: PathwayPack = {
       purpose: 'Daily judgment, notes, and supervisor feedback.',
     },
   },
+  /**
+   * Level-1 visual vocabulary — words 1–20 from Purpose Academy
+   * Logistics Visual Vocabulary (exact word-table translations; no French).
+   * Photos match the worksheet object for each word so learners see the same
+   * picture in class materials and in the app. Logistics stream only.
+   */
   vocab: [
     {
       id: 'box',
@@ -86,53 +97,52 @@ export const logisticsPack: PathwayPack = {
       english: 'Bag',
       emoji: 'BG',
       imageKey: 'log-bag',
-      definition: 'A soft container you can carry by hand.',
+      definition: 'A paper bag with handles used to carry light items.',
       sentence: 'The bag is light.',
-      gloss: gloss('Bolsa', 'حقيبة', 'थैला', 'ቦርሳ', 'ቦርሳ'),
+      gloss: gloss('Bolsa', 'حقيبة / كيس', 'थैला', 'ቦርሳ', 'ቦርሳ'),
     },
     {
       id: 'bin',
       english: 'Bin',
       emoji: 'BN',
       imageKey: 'log-bin',
-      definition: 'A sturdy container used to hold or sort items.',
+      definition: 'A sturdy open container used to hold or sort items.',
       sentence: 'Put it in the bin.',
-      // Worksheet listed ቅርጫት (“basket”) — use the warehouse sense: container/bin.
-      gloss: gloss('Contenedor', 'حاوية', 'डिब्बा', 'መያዣ', 'መያዣ'),
+      gloss: gloss('Contenedor', 'حاوية', 'डिब्बा', 'ቅርጫት', 'ቅርጫት'),
     },
     {
       id: 'shelf',
       english: 'Shelf',
       emoji: 'SH',
       imageKey: 'log-shelf',
-      definition: 'A flat board where you place goods for storage.',
+      definition: 'A flat board on a frame where you place goods for storage.',
       sentence: 'Put it on the shelf.',
-      gloss: gloss('Estante', 'رف', 'शेल्फ', 'መደርደሪያ', 'መደርደሪ'),
+      gloss: gloss('Estante', 'رف', 'शेल्फ / ताक', 'መደርደሪያ', 'መደርደሪ'),
     },
     {
       id: 'rack',
       english: 'Rack',
       emoji: 'RK',
       imageKey: 'log-rack',
-      definition: 'Strong warehouse framing that holds boxes and pallets.',
+      definition: 'Tall warehouse framing that holds boxes and pallets.',
       sentence: 'The rack holds boxes.',
-      gloss: gloss('Estantería', 'رفوف التخزين', 'रैक', 'መቆሚያ', 'መደራረሪ'),
+      gloss: gloss('Estantería', 'حامل', 'रैक', 'መቆሚያ / መደርደሪያ', 'መደርደሪ'),
     },
     {
       id: 'pallet',
       english: 'Pallet',
       emoji: 'PL',
       imageKey: 'log-pallet',
-      definition: 'A flat wooden or plastic platform used to stack and move goods.',
+      definition: 'A flat wooden platform used to stack and move goods.',
       sentence: 'The boxes are on the pallet.',
-      gloss: gloss('Palé', 'منصة نقالة', 'पैलेट', 'ፓሌት', 'ፓሌት'),
+      gloss: gloss('Palé / Tarima', 'منصة نقالة', 'पैलेट', 'ፓሌት', 'ፓሌት'),
     },
     {
       id: 'cart',
       english: 'Cart',
       emoji: 'CT',
       imageKey: 'log-cart',
-      definition: 'A wheeled platform used to push goods across the floor.',
+      definition: 'A flat wheeled platform with a handle used to push goods.',
       sentence: 'Push the cart slowly.',
       gloss: gloss('Carrito', 'عربة', 'गाड़ी', 'ጋሪ', 'ጋሪ'),
     },
@@ -143,8 +153,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-dolly',
       definition: 'A two-wheel hand truck used to move stacked boxes.',
       sentence: 'Use the dolly to move boxes.',
-      // Worksheet Spanish “Plataforma rodante” is wrong for a hand truck.
-      gloss: gloss('Carretilla de mano', 'عربة يدوية', 'ट्राली', 'ተሽከርካሪ ጋሪ', 'ተሽከርካሪ'),
+      gloss: gloss('Plataforma rodante', 'عربة يدوية', 'ट्राली', 'ተሽከርካሪ ጋሪ', 'ተሽከርካሪ'),
     },
     {
       id: 'truck',
@@ -162,7 +171,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-van',
       definition: 'A smaller delivery vehicle for lighter loads.',
       sentence: 'The van is outside.',
-      gloss: gloss('Furgoneta', 'شاحنة صغيرة', 'वैन', 'ቫን', 'ቫን'),
+      gloss: gloss('Furgoneta', 'شاحنة صغيرة', 'वैन', 'ቫን / አነስተኛ መኪና', 'ቫን'),
     },
     {
       id: 'trailer',
@@ -189,7 +198,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-gate',
       definition: 'The controlled entrance where trucks arrive and leave.',
       sentence: 'The truck is at the gate.',
-      gloss: gloss('Entrada', 'بوابة', 'गेट', 'ኬላ', 'ካላሾ'),
+      gloss: gloss('Puerta / Entrada', 'بوابة', 'गेट / द्वार', 'ኬላ / በር', 'ካንሸሎ'),
     },
     {
       id: 'floor',
@@ -225,7 +234,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-ramp',
       definition: 'A sloping surface used to move carts into a truck or dock.',
       sentence: 'Move the cart up the ramp.',
-      gloss: gloss('Rampa', 'منحدر', 'रैंप', 'ራምፕ', 'ራምፕ'),
+      gloss: gloss('Rampa', 'منحدر', 'ढलान', 'ማወጣጫ', 'ራምፕ'),
     },
     {
       id: 'dock',
@@ -234,7 +243,7 @@ export const logisticsPack: PathwayPack = {
       imageKey: 'log-dock',
       definition: 'The loading area where trucks park to load and unload.',
       sentence: 'The truck is at the dock.',
-      gloss: gloss('Muelle de carga', 'رصيف التحميل', 'लोडिंग डॉक', 'የመጫኛ ዶክ', 'ናይ ጽዕነት ዶክ'),
+      gloss: gloss('Muelle', 'رصيف التحميل', 'डॉक', 'ማራገፊያ', 'መራገፊ'),
     },
     {
       id: 'office',
@@ -267,8 +276,8 @@ export const logisticsPack: PathwayPack = {
       id: 'wa-bag',
       termId: 'bag',
       title: 'Bag in action',
-      body: 'Lift with two hands if heavy. Keep the bag closed while you walk.',
-      actionCue: 'Two hands. Closed. Steady walk.',
+      body: 'Hold both handles. Keep the bag upright so items stay inside while you walk.',
+      actionCue: 'Both handles. Upright. Steady walk.',
     },
     {
       id: 'wa-bin',
