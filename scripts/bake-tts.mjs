@@ -18,6 +18,7 @@ const SOURCE_FILES = [
   'src/student/journeyCurriculum.ts',
   'src/pathways/packs/construction.ts',
   'src/pathways/packs/logistics.ts',
+  'src/pathways/packs/logisticsVocab500.ts',
   'src/pathways/packs/community.ts',
 ]
 
@@ -78,40 +79,83 @@ function fileNameFor(lang, text) {
   return `${lang}-${hash}.mp3`
 }
 
+async function synthesizeWithRetry(text, lang, attempts = 4) {
+  let lastErr
+  for (let n = 1; n <= attempts; n++) {
+    try {
+      return await synthesizeSpeech(text, lang)
+    } catch (e) {
+      lastErr = e
+      const wait = Math.min(8000, 400 * 2 ** (n - 1))
+      await new Promise((r) => setTimeout(r, wait))
+    }
+  }
+  throw lastErr
+}
+
 async function main() {
   for (const f of SOURCE_FILES) extractFromSource(f)
   fs.mkdirSync(outDir, { recursive: true })
 
-  const list = [...phrases.values()]
-  console.log(`Baking ${list.length} neural TTS clips into public/tts/ …`)
+  /* Force re-bake logistics worksheet audio so all 500 words get clearer neural clips. */
+  const forceLogistics = process.env.BAKE_FORCE_LOGISTICS !== '0'
+  /** @type {Set<string>} */
+  const logisticsKeys = new Set()
+  if (forceLogistics) {
+    const before = phrases.size
+    phrases.clear()
+    extractFromSource('src/pathways/packs/logisticsVocab500.ts')
+    for (const { lang, text } of phrases.values()) logisticsKeys.add(`${lang}::${text}`)
+    for (const f of SOURCE_FILES) extractFromSource(f)
+    console.log(
+      `Force-rebake logistics worksheet phrases: ${logisticsKeys.size} (total unique after merge: ${phrases.size}; was ${before} before reload)`,
+    )
+  }
+
+  const langOrder = { en: 0, es: 1, ar: 2, hi: 3, am: 4, ti: 5 }
+  const list = [...phrases.values()].sort(
+    (a, b) => (langOrder[a.lang] ?? 9) - (langOrder[b.lang] ?? 9) || a.text.localeCompare(b.text),
+  )
+  const concurrency = Math.max(1, Number(process.env.BAKE_CONCURRENCY || 8))
+  console.log(`Baking ${list.length} neural TTS clips into public/tts/ (concurrency=${concurrency}) …`)
 
   /** @type {Record<string, string>} */
   const manifest = {}
   let ok = 0
   let fail = 0
+  let cached = 0
 
-  for (let i = 0; i < list.length; i++) {
-    const { lang, text } = list[i]
+  async function bakeOne(item, index) {
+    const { lang, text } = item
     const file = fileNameFor(lang, text)
     const dest = path.join(outDir, file)
     const key = `${lang}::${text}`
-    process.stdout.write(`[${i + 1}/${list.length}] ${lang} ${text.slice(0, 40)}… `)
+    const mustRefresh = forceLogistics && logisticsKeys.has(key)
+    const label = `[${index + 1}/${list.length}] ${lang} ${text.slice(0, 40)}`
     try {
-      if (fs.existsSync(dest) && fs.statSync(dest).size > 500) {
+      if (!mustRefresh && fs.existsSync(dest) && fs.statSync(dest).size > 500) {
         manifest[key] = file
         ok++
-        console.log('cached')
-        continue
+        cached++
+        console.log(`${label}… cached`)
+        return
       }
-      const result = await synthesizeSpeech(text, lang)
+      if (mustRefresh && fs.existsSync(dest)) fs.unlinkSync(dest)
+      const result = await synthesizeWithRetry(text, lang)
+      if (!result.buffer || result.buffer.length < 400) throw new Error('clip too small')
       fs.writeFileSync(dest, result.buffer)
       manifest[key] = file
       ok++
-      console.log(`${result.voice} (${result.buffer.length}b)`)
+      console.log(`${label}… ${result.voice} (${result.buffer.length}b)`)
     } catch (e) {
       fail++
-      console.log(`FAIL ${e.message || e}`)
+      console.log(`${label}… FAIL ${e.message || e}`)
     }
+  }
+
+  for (let i = 0; i < list.length; i += concurrency) {
+    const batch = list.slice(i, i + concurrency)
+    await Promise.all(batch.map((item, j) => bakeOne(item, i + j)))
   }
 
   /* Drop orphan mp3s not in manifest */
@@ -122,8 +166,14 @@ async function main() {
   }
 
   fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n')
-  console.log(`Done. ok=${ok} fail=${fail} manifest=${Object.keys(manifest).length}`)
+  console.log(
+    `Done. ok=${ok} cached=${cached} fail=${fail} manifest=${Object.keys(manifest).length}`,
+  )
   if (ok === 0) process.exit(1)
+  if (fail > 0) {
+    console.error(`Warning: ${fail} clips failed — re-run bake:tts to fill gaps.`)
+    process.exitCode = 2
+  }
 }
 
 main().catch((e) => {

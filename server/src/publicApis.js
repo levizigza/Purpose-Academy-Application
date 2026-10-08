@@ -246,12 +246,59 @@ export async function httpbinHealth() {
  * English, Spanish, Arabic, Hindi, Amharic. Tigrinya falls back to Amharic voice.
  */
 const EDGE_VOICE = {
+  // Jenny — clear instructional English for warehouse / workplace vocab
   en: 'en-US-JennyNeural',
   es: 'es-MX-DaliaNeural',
   ar: 'ar-SA-ZariyahNeural',
   hi: 'hi-IN-SwaraNeural',
   am: 'am-ET-MekdesNeural',
   ti: 'am-ET-MekdesNeural', // no Edge ti voice yet — closest Ge'ez-script neural
+}
+
+/** Learner-friendly speaking rate (slightly slower than default for clarity). */
+const EDGE_RATE = {
+  en: 0.9,
+  es: 0.92,
+  ar: 0.92,
+  hi: 0.92,
+  am: 0.92,
+  ti: 0.92,
+}
+
+/**
+ * Spoken forms for English logistics terms Edge sometimes rushes or misreads.
+ * Manifest keys stay as the written word; only synthesis input is adjusted.
+ */
+const EN_SPOKEN = {
+  Aisle: 'aisle',
+  aisle: 'aisle',
+  PPE: 'P P E',
+  'OS&D': 'O S and D',
+  QR: 'Q R',
+  ID: 'I D',
+  SKU: 'S K U',
+  GPS: 'G P S',
+  USB: 'U S B',
+  WiFi: 'why fie',
+  'Wi-Fi': 'why fie',
+  App: 'app',
+}
+
+function escapeXml(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+function spokenText(text, lang) {
+  if (lang !== 'en') return text
+  if (Object.prototype.hasOwnProperty.call(EN_SPOKEN, text)) return EN_SPOKEN[text]
+  // Expand common all-caps workplace acronyms letter-by-letter (2–5 letters)
+  if (/^[A-Z]{2,5}$/.test(text)) return text.split('').join(' ')
+  return text
 }
 
 const TTS_CACHE = new Map()
@@ -271,9 +318,12 @@ function rememberTts(key, buffer, contentType, voice, source) {
 
 async function edgeNeuralSpeech(text, lang) {
   const voice = EDGE_VOICE[lang] || EDGE_VOICE.en
+  const rate = EDGE_RATE[lang] ?? 0.92
+  const speak = escapeXml(spokenText(text, lang))
   const tts = new MsEdgeTTS()
-  await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3)
-  const { audioStream } = tts.toStream(text)
+  // Higher bitrate + slightly slower rate → clearer workplace vocabulary audio
+  await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3)
+  const { audioStream } = tts.toStream(speak, { rate, pitch: '+0Hz', volume: 100 })
   const chunks = []
   for await (const chunk of audioStream) chunks.push(chunk)
   const buffer = Buffer.concat(chunks)
