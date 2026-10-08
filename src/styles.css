@@ -6631,6 +6631,35 @@ table.data th {
   background: rgba(8, 14, 22, 0.88);
 }
 
+.vocab-sheet-pages {
+  max-width: 42rem;
+  margin: 0 auto 0.85rem;
+  width: 100%;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.vocab-sheet-page-label {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--ink-soft, #3a4a5c);
+}
+
+.vocab-sheet-page-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vocab-sheet-page-progress {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink, #142838);
+}
+
 .vocab-sheet-nav {
   display: flex;
   flex-wrap: wrap;

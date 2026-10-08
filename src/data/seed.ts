@@ -111,9 +111,9 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Logistics Foundations',
         category: 'logistics',
         description:
-          'Logistics foundations: warehouse safety, equipment, inventory systems, workplace English, and instructor-verified skill.',
+          'Logistics foundations: 500-word visual vocabulary, warehouse safety, equipment, inventory systems, workplace English, and instructor-verified skill.',
         duration: '12-16 weeks',
-        skills: ['Warehouse safety', 'Inventory', 'Scanning', 'Receiving', 'Shipping'],
+        skills: ['Visual vocabulary', 'Warehouse safety', 'Inventory', 'Scanning', 'Receiving', 'Shipping'],
         active: true,
       },
       {

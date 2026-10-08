@@ -24,10 +24,11 @@ export const logisticsPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn logistics words 1–500 from the Purpose Academy Logistics Visual Vocabulary table.',
+      goal: 'Learn the Purpose Academy Logistics Visual Vocabulary (500 words in pages of 20). Complete Level-1 (words 1–20) to continue; more pages stay open to practise.',
       outcomes: [
         'See a real photo of each object and hear English',
         'Connect your language to the English word and a short workplace sentence',
+        'Use worksheet pages so the app matches the class vocabulary table',
       ],
     },
     4: {

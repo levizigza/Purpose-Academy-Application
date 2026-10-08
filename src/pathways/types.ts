@@ -18,8 +18,9 @@
  * 9. Site decisions force real trade-offs with teachCorrect / teachWrong.
  * 10. Mastery without fluff: checkpoints recycle earlier skills into later judgment.
  *
- * Depth bar (match Construction Foundations craft; Logistics Visual Vocabulary = 500 words):
- *   vocab 500 (full worksheet) · Eye Spy ≥8 scenes · instructions ≥8 · phrases ≥8 · safety ≥7 ·
+ * Depth bar (match Construction Foundations craft):
+ *   vocab ~16–88 in the journey gate (Logistics Level-1 = words 1–20; full table = 500
+ *   in worksheet pages of 20) · Eye Spy ≥8 · instructions ≥8 · phrases ≥8 · safety ≥7 ·
  *   observation ≥5 · site decisions ≥6 · final ≥7 · employment ≥6
  *
  * Visual vocabulary interaction (updated from early plan):

@@ -113,7 +113,8 @@ export function HomePage() {
               </div>
               <h3>Logistics Foundations</h3>
               <p>
-                Warehouse safety, equipment, inventory systems, and workplace English on the same 20-step school path.
+                Visual vocabulary, warehouse safety, equipment, inventory systems, and workplace English on the same
+                20-step school path.
               </p>
               <span className="badge ok">Enrolling now</span>
             </Reveal>
@@ -233,8 +234,8 @@ export function ProgramsPage() {
             systems skills, then move toward warehouse and logistics roles with instructor checks.
           </p>
           <ul className="school-bullets">
-            <li>Warehouse safety and clear workplace English</li>
-            <li>Scanning, receiving, put-away, picking, and shipping</li>
+            <li>500-word Logistics Visual Vocabulary with workplace English</li>
+            <li>Warehouse safety, scanning, receiving, put-away, picking, and shipping</li>
             <li>Same instructor observation and Skills Passport standard</li>
           </ul>
           <Link className="btn btn-primary" to="/admissions">

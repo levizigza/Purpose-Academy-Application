@@ -1470,7 +1470,16 @@ export function StudentSequencePage() {
     const linkedCount = VOCAB_UNIT.filter(
       (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
     ).length
-    const ready = linkedCount >= VOCAB_UNIT.length
+    /**
+     * Logistics carries the full 500-word worksheet table. Unlock the shared
+     * journey after Level-1 (words 1–20 / page 1) so Practice stays even with
+     * Construction and Community; remaining pages stay available to practise.
+     */
+    const journeyGateCount = pathwayId === 'logistics' ? Math.min(20, VOCAB_UNIT.length) : VOCAB_UNIT.length
+    const gateLinked = VOCAB_UNIT.slice(0, journeyGateCount).filter(
+      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
+    ).length
+    const ready = gateLinked >= journeyGateCount
 
     return (
       <Shell
@@ -1487,15 +1496,20 @@ export function StudentSequencePage() {
           heard={vocabHeard}
           connected={vocabConnected}
           knownIds={vocabKnownIds}
+          journeyGateCount={journeyGateCount}
           onIndexChange={setVocabIdx}
           onPlayEnglish={(term) => void playVocabEnglish(term)}
           onConnectLang={(term, lang) => void connectVocabLang(term, lang)}
           onMarkKnown={(term) => markCurrentVocabKnown(term)}
         />
         <p className="train-vocab-counter">
-          {ready
-            ? `Linked all ${VOCAB_UNIT.length} words to English · Ready to continue`
-            : `Linked ${linkedCount} of ${VOCAB_UNIT.length} words${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
+          {pathwayId === 'logistics'
+            ? ready
+              ? `Level-1 complete (${journeyGateCount} words) · Full table ${linkedCount} of ${VOCAB_UNIT.length} · Ready to continue`
+              : `Level-1 ${gateLinked} of ${journeyGateCount} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
+            : ready
+              ? `Linked all ${VOCAB_UNIT.length} words to English · Ready to continue`
+              : `Linked ${linkedCount} of ${VOCAB_UNIT.length} words${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
         </p>
       </Shell>
     )

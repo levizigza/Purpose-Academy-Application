@@ -16,6 +16,9 @@ export const VOCAB_SHEET_LANGS: HomeLang[] = [
   'Hindi',
 ]
 
+/** Worksheet page size used by Purpose Academy visual vocabulary PDFs. */
+export const VOCAB_PAGE_SIZE = 20
+
 const FLAG: Record<SupportLang, string> = Object.fromEntries(
   SUPPORT_LANGUAGES.map((l) => [l.id, l.flag]),
 ) as Record<SupportLang, string>
@@ -110,7 +113,9 @@ export function VocabSheetCard({
             </span>
           )}
           <figcaption className="vocab-sheet-photo-caption">
-            {studioPhoto ? 'Look at the object. Press your language. Then hear English.' : 'Look at the picture. Connect it to English.'}
+            {studioPhoto
+              ? 'Look at the object. Press your language. Then hear English.'
+              : 'Look at the picture. Connect it to English.'}
           </figcaption>
         </figure>
         <ul className="vocab-sheet-langs" aria-label="Press the language you understand">
@@ -170,11 +175,28 @@ type DeckProps = {
   onPlayEnglish: (term: VocabTerm) => void
   onConnectLang: (term: VocabTerm, lang: HomeLang) => void
   onMarkKnown: (term: VocabTerm) => void
+  /**
+   * How many linked words unlock the journey “Continue” control.
+   * Defaults to the full deck. Logistics uses Level-1 (first page / 20 words)
+   * so the shared Practice skeleton stays even while the full 500-word table
+   * remains available page by page.
+   */
+  journeyGateCount?: number
+}
+
+function termLinked(
+  term: VocabTerm,
+  heard: Record<string, boolean>,
+  connected: Record<string, HomeLang>,
+  knownSet: Set<string>,
+) {
+  return !!heard[term.id] && (!!connected[term.id] || knownSet.has(term.id))
 }
 
 /**
  * One-by-one vocabulary deck (worksheet mold).
  * Pattern: see picture → press your language (or mark known) → hear English → next.
+ * Large tables (e.g. Logistics 500) page in worksheet banks of 20.
  */
 export function VocabSheet({
   terms,
@@ -187,6 +209,7 @@ export function VocabSheet({
   onPlayEnglish,
   onConnectLang,
   onMarkKnown,
+  journeyGateCount,
 }: DeckProps) {
   const knownSet = new Set(knownIds)
   const idx = Math.min(Math.max(0, index), Math.max(0, terms.length - 1))
@@ -196,11 +219,23 @@ export function VocabSheet({
   const connectedLang = connected[term.id] ?? null
   const alreadyKnown = knownSet.has(term.id)
   const bridged = !!connectedLang || alreadyKnown
-  const linkedCount = terms.filter(
-    (t) => heard[t.id] && (connected[t.id] || knownSet.has(t.id)),
-  ).length
+  const linkedCount = terms.filter((t) => termLinked(t, heard, connected, knownSet)).length
   const allLinked = linkedCount >= terms.length
   const wordReady = bridged && heardEnglish
+
+  const paged = terms.length > VOCAB_PAGE_SIZE
+  const pageCount = paged ? Math.ceil(terms.length / VOCAB_PAGE_SIZE) : 1
+  const page = paged ? Math.floor(idx / VOCAB_PAGE_SIZE) : 0
+  const pageStart = page * VOCAB_PAGE_SIZE
+  const pageEnd = Math.min(terms.length, pageStart + VOCAB_PAGE_SIZE)
+  const pageLinked = terms
+    .slice(pageStart, pageEnd)
+    .filter((t) => termLinked(t, heard, connected, knownSet)).length
+  const pageTotal = pageEnd - pageStart
+
+  const gate = Math.min(journeyGateCount ?? terms.length, terms.length)
+  const gateLinked = terms.slice(0, gate).filter((t) => termLinked(t, heard, connected, knownSet)).length
+  const gateReady = gateLinked >= gate
 
   function goPrev() {
     onIndexChange(Math.max(0, idx - 1))
@@ -211,6 +246,11 @@ export function VocabSheet({
     if (!atEnd) onIndexChange(idx + 1)
   }
 
+  function goPage(nextPage: number) {
+    const clamped = Math.min(Math.max(0, nextPage), pageCount - 1)
+    onIndexChange(clamped * VOCAB_PAGE_SIZE)
+  }
+
   return (
     <section className="vocab-sheet vocab-sheet-deck" aria-label="Visual vocabulary">
       <div className="vocab-lesson-bar" aria-hidden>
@@ -219,7 +259,44 @@ export function VocabSheet({
       <p className="vocab-sheet-lede">
         See the picture. Press the language you understand — or mark a word you already know — then hear English.
         Read the short sentence so the word stays in context.
+        {paged
+          ? ` This table has ${terms.length} words in worksheet pages of ${VOCAB_PAGE_SIZE}.`
+          : ''}
       </p>
+
+      {paged && (
+        <div className="vocab-sheet-pages" role="navigation" aria-label="Vocabulary worksheet pages">
+          <p className="vocab-sheet-page-label">
+            Page {page + 1} of {pageCount} · Words {pageStart + 1}–{pageEnd}
+            {gate < terms.length
+              ? gateReady
+                ? ' · Level-1 complete — journey unlocked; keep practising pages if you want'
+                : ` · Link words 1–${gate} to continue the journey`
+              : ''}
+          </p>
+          <div className="vocab-sheet-page-nav">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              disabled={page === 0}
+              onClick={() => goPage(page - 1)}
+            >
+              ← Page
+            </button>
+            <span className="vocab-sheet-page-progress">
+              Page linked {pageLinked} of {pageTotal}
+            </span>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              disabled={page >= pageCount - 1}
+              onClick={() => goPage(page + 1)}
+            >
+              Page →
+            </button>
+          </div>
+        </div>
+      )}
 
       <VocabSheetCard
         key={term.id}
