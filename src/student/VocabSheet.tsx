@@ -68,8 +68,9 @@ export function VocabSheetCard({
   const img = pathwayImage(term.imageKey)
   const bridged = !!connectedLang || alreadyKnown
   const ready = bridged && heardEnglish
-  /** Logistics worksheet photos are studio-white object cards — keep the mat light. */
-  const studioPhoto = term.imageKey.startsWith('log-')
+  /** Worksheet / studio-white object cards — keep the mat light (Logistics, Daily Conversation). */
+  const studioPhoto =
+    term.imageKey.startsWith('log-') || term.imageKey.startsWith('dc-vv-')
 
   return (
     <article
@@ -196,7 +197,7 @@ function termLinked(
 /**
  * One-by-one vocabulary deck (worksheet mold).
  * Pattern: see picture → press your language (or mark known) → hear English → next.
- * Large tables (Logistics 500, Construction 660) page in worksheet banks of 20.
+ * Large tables (Daily Conversation 200 + stream decks) page in worksheet banks of 20.
  */
 export function VocabSheet({
   terms,
