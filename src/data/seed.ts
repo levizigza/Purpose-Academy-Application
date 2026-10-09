@@ -101,9 +101,9 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Construction Workforce Readiness',
         category: 'construction',
         description:
-          'Construction foundations: safety, tools, materials, site English, and instructor-verified skill, with a clear path into apprenticeship.',
+          'Construction foundations: shared 200-word Daily Conversation Vocabulary, 660-word Construction Visual Vocabulary, safety, tools, materials, site English, and instructor-verified skill, with a clear path into apprenticeship.',
         duration: '12-16 weeks',
-        skills: ['Site safety', 'Hand & power tools', 'Drywall', 'Flooring', 'Painting', 'Blueprint basics'],
+        skills: ['Visual vocabulary', 'Site safety', 'Hand & power tools', 'Drywall', 'Flooring', 'Painting'],
         active: true,
       },
       {
@@ -111,7 +111,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Logistics Foundations',
         category: 'logistics',
         description:
-          'Logistics foundations: 500-word visual vocabulary, warehouse safety, equipment, inventory systems, workplace English, and instructor-verified skill.',
+          'Logistics foundations: shared 200-word Daily Conversation Vocabulary, 500-word Logistics Visual Vocabulary, warehouse safety, equipment, inventory systems, workplace English, and instructor-verified skill.',
         duration: '12-16 weeks',
         skills: ['Visual vocabulary', 'Warehouse safety', 'Inventory', 'Scanning', 'Receiving', 'Shipping'],
         active: true,
@@ -121,7 +121,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Community Support Foundations',
         category: 'community',
         description:
-          'Community support foundations: disability & community living, older adults, settlement support, privacy, support plans, workplace English, and instructor-verified skill.',
+          'Community support foundations: shared 200-word Daily Conversation Vocabulary, disability & community living, older adults, settlement support, privacy, support plans, workplace English, and instructor-verified skill.',
         duration: '12-16 weeks',
         skills: [
           'Community communication',
@@ -714,8 +714,8 @@ export function createSeedDatabase(): AppDatabase {
     announcements: [
       {
         id: 'ann-1',
-        title: 'Construction pathway pilot',
-        body: 'Construction is the active pathway. Logistics and Community Support will open after the Construction model is validated.',
+        title: 'Three pathways open',
+        body: 'Construction, Logistics, and Community Support Foundations are open. Start with the pathway that fits your goals; each uses the same 20-step school path with instructor checks.',
         audience: 'all',
         created_at: now,
       },

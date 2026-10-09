@@ -14,7 +14,7 @@ export const JOURNEY_STEPS = [
   { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the career assessment.', purpose: 'The full assessment runs in a language you understand. Later job-site steps use English.', unit: 2 },
   { n: 4, title: 'Career Assessment', help: 'Rate work activities in your language.', purpose: 'A professional interest inventory, not a pass/fail quiz.', unit: 2 },
   { n: 5, title: 'Work Style', help: 'How you like to work, in your language.', purpose: 'Work-style choices refine your pathway fit.', unit: 2 },
-  { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction is open now.', unit: 2 },
+  { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction, Logistics, and Community Support are open now.', unit: 2 },
   { n: 7, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English.', purpose: 'All five home languages stay visible. You choose the bridge to English.', unit: 3 },
   { n: 8, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
   { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
@@ -484,7 +484,7 @@ export const INTEREST_PATHS = [
     id: 'logistics' as const,
     title: 'Logistics',
     line: 'Move People, Move Opportunities.',
-    detail: 'Warehouse, loading, and moving goods. Opens after Construction.',
+    detail: 'Warehouse, loading, and moving goods. Open now.',
     skills: [
       { id: 'l1', label: 'I can read simple labels on boxes', weight: 2 },
       { id: 'l2', label: 'I can lift and place items carefully', weight: 1 },

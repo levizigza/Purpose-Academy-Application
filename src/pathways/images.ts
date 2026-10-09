@@ -106,5 +106,15 @@ export function pathwayImage(key?: string | null): string | undefined {
     const base = import.meta.env.BASE_URL || '/'
     return `${base}media/logistics-vv/${key}.jpg`
   }
+  // Construction Visual Vocabulary words 1–660 (worksheet object tiles).
+  if (key.startsWith('con-vv-')) {
+    const base = import.meta.env.BASE_URL || '/'
+    return `${base}media/construction-vv/${key}.jpg`
+  }
+  // Daily Conversation Vocabulary words 1–200 (shared across all streams).
+  if (key.startsWith('dc-vv-')) {
+    const base = import.meta.env.BASE_URL || '/'
+    return `${base}media/daily-conversation-vv/${key}.jpg`
+  }
   return undefined
 }
