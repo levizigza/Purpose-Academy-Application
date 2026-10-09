@@ -1,5 +1,6 @@
 import type { PathwayPack } from '../types'
 import { hint } from '../packHelpers'
+import { DAILY_CONVERSATION_VOCAB_200 } from './dailyConversationVocab200'
 import { LOGISTICS_VOCAB_500 } from './logisticsVocab500'
 
 /**
@@ -8,11 +9,8 @@ import { LOGISTICS_VOCAB_500 } from './logisticsVocab500'
  * OSHA pedestrian / MHE awareness). Powered forklifts = awareness / stay clear
  * only — never claimed as certification.
  *
- * Visual vocabulary (words 1–500) is sourced from the Purpose Academy
- * Logistics Visual Vocabulary worksheet (25 pages): exact word-table
- * translations (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French),
- * workplace sentences, and worksheet object photos for every word.
- * Words 1–20 keep remastered studio photos; words 21–500 use worksheet tiles.
+ * Vocabulary order: Daily Conversation (shared 200) → Logistics Visual Vocabulary (500).
+ * Level-1 gate = Daily Conversation words 1–20.
  */
 export const logisticsPack: PathwayPack = {
   id: 'logistics',
@@ -24,10 +22,10 @@ export const logisticsPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn the Purpose Academy Logistics Visual Vocabulary (500 words in pages of 20). Complete Level-1 (words 1–20) to continue; more pages stay open to practise.',
+      goal: 'Learn Daily Conversation Vocabulary (200 words shared across pathways), then Logistics Visual Vocabulary (500). Complete Level-1 (words 1–20) to continue; more pages stay open to practise.',
       outcomes: [
-        'See a real photo of each object and hear English',
-        'Connect your language to the English word and a short workplace sentence',
+        'See a real photo of each word and hear English',
+        'Connect your language to the English word and a short example sentence',
         'Use worksheet pages so the app matches the class vocabulary table',
       ],
     },
@@ -80,10 +78,9 @@ export const logisticsPack: PathwayPack = {
     },
   },
   /**
-   * Full Logistics Visual Vocabulary — words 1–500 from the Purpose Academy
-   * worksheet (exact translations, sentences, and object photos).
+   * Daily Conversation (shared 200) + Logistics Visual Vocabulary (500).
    */
-  vocab: LOGISTICS_VOCAB_500,
+  vocab: [...DAILY_CONVERSATION_VOCAB_200, ...LOGISTICS_VOCAB_500],
   wordActions: [
     {
       id: 'wa-box',

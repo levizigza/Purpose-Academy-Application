@@ -1,5 +1,7 @@
+import type { VocabTerm } from '../../student/journeyCurriculum'
 import type { PathwayPack } from '../types'
 import { gloss, hint } from '../packHelpers'
+import { DAILY_CONVERSATION_VOCAB_200 } from './dailyConversationVocab200'
 
 /**
  * Community Support Foundations content pack.
@@ -8,72 +10,11 @@ import { gloss, hint } from '../packHelpers'
  * older adults, settlement/newcomers, shelters, and group homes.
  * Aligned to Care Certificate values: dignity, privacy, choice, respect,
  * confidentiality, and escalate-when-unsure (support / observe / report).
+ *
+ * Vocabulary order: Daily Conversation (shared 200) → community support objects.
+ * Level-1 gate = Daily Conversation words 1–20.
  */
-export const communityPack: PathwayPack = {
-  id: 'community',
-  skillDomains: {
-    vocabulary: 'Vocabulary',
-    safety: 'Safety',
-    tools: 'Support tools',
-    systems: 'Community skills',
-  },
-  unitGoals: {
-    3: {
-      goal: 'Learn the Level-1 support words used in Alberta community support workplaces.',
-      outcomes: [
-        'See each support object and hear English',
-        'Connect the English word to the real community-support action',
-      ],
-    },
-    4: {
-      goal: 'Use English with support, then prove you can find and follow person-centred language with the people you support.',
-      outcomes: [
-        'Match pictures to English words',
-        'Find objects in agencies, homes, and community settings',
-        'Follow short workplace instructions',
-        'Understand dignity, privacy, and consent phrases for community support',
-      ],
-    },
-    5: {
-      goal: 'Build the digital, safety, tool, and systems foundations community support roles expect.',
-      outcomes: [
-        'Practice school computer tasks',
-        'Pass required privacy, hygiene, and safeguarding checks',
-        'Name support tools and community systems',
-      ],
-    },
-    6: {
-      goal: 'Prove readiness under observation, then connect to community-support employment.',
-      outcomes: [
-        'Rehearse competent support skill order',
-        'Make respectful placement decisions with people you support',
-        'Pass the final checks and open employment support',
-      ],
-    },
-  },
-  stepTitles: {
-    12: {
-      title: 'Support Language',
-      help: 'Hear a community-support phrase. Choose what it means.',
-      purpose: 'Useful English for dignity, privacy, consent, and escalation across community support settings.',
-    },
-    15: {
-      title: 'Support Tools & Materials',
-      help: 'Learn each support tool group. Answer one check.',
-      purpose: 'Safe naming before safe use with an instructor.',
-    },
-    16: {
-      title: 'Community Systems',
-      help: 'Learn each system. Answer one check.',
-      purpose: 'Your task helps people stay safe, informed, and supported with dignity.',
-    },
-    18: {
-      title: 'Placement Training',
-      help: 'Make community-support decisions and log the day like a real team member.',
-      purpose: 'Daily judgment, visit notes, and supervisor feedback.',
-    },
-  },
-  vocab: [
+const COMMUNITY_SUPPORT_VOCAB: VocabTerm[] = [
     {
       id: 'badge',
       english: 'Name badge',
@@ -230,7 +171,74 @@ export const communityPack: PathwayPack = {
       sentence: 'Carry the shopping bag to the bus.',
       gloss: gloss('Bolsa de compras', 'حقيبة التسوق', 'खरीदारी बैग', 'የግዢ ቦርሳ', 'ናይ ዕድጊ ቦርሳ'),
     },
-  ],
+  ]
+
+export const communityPack: PathwayPack = {
+  id: 'community',
+  skillDomains: {
+    vocabulary: 'Vocabulary',
+    safety: 'Safety',
+    tools: 'Support tools',
+    systems: 'Community skills',
+  },
+  unitGoals: {
+    3: {
+      goal: 'Learn Daily Conversation Vocabulary (200 words shared across pathways), then community support workplace words. Complete Level-1 (words 1–20) to continue; more pages stay open to practise.',
+      outcomes: [
+        'See a real photo of each word and hear English',
+        'Connect your language to the English word and a short example sentence',
+        'Connect support objects to real community-support actions',
+      ],
+    },
+    4: {
+      goal: 'Use English with support, then prove you can find and follow person-centred language with the people you support.',
+      outcomes: [
+        'Match pictures to English words',
+        'Find objects in agencies, homes, and community settings',
+        'Follow short workplace instructions',
+        'Understand dignity, privacy, and consent phrases for community support',
+      ],
+    },
+    5: {
+      goal: 'Build the digital, safety, tool, and systems foundations community support roles expect.',
+      outcomes: [
+        'Practice school computer tasks',
+        'Pass required privacy, hygiene, and safeguarding checks',
+        'Name support tools and community systems',
+      ],
+    },
+    6: {
+      goal: 'Prove readiness under observation, then connect to community-support employment.',
+      outcomes: [
+        'Rehearse competent support skill order',
+        'Make respectful placement decisions with people you support',
+        'Pass the final checks and open employment support',
+      ],
+    },
+  },
+  stepTitles: {
+    12: {
+      title: 'Support Language',
+      help: 'Hear a community-support phrase. Choose what it means.',
+      purpose: 'Useful English for dignity, privacy, consent, and escalation across community support settings.',
+    },
+    15: {
+      title: 'Support Tools & Materials',
+      help: 'Learn each support tool group. Answer one check.',
+      purpose: 'Safe naming before safe use with an instructor.',
+    },
+    16: {
+      title: 'Community Systems',
+      help: 'Learn each system. Answer one check.',
+      purpose: 'Your task helps people stay safe, informed, and supported with dignity.',
+    },
+    18: {
+      title: 'Placement Training',
+      help: 'Make community-support decisions and log the day like a real team member.',
+      purpose: 'Daily judgment, visit notes, and supervisor feedback.',
+    },
+  },
+  vocab: [...DAILY_CONVERSATION_VOCAB_200, ...COMMUNITY_SUPPORT_VOCAB],
   wordActions: [
     {
       id: 'wa-badge',

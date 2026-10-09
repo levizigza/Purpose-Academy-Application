@@ -101,7 +101,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Construction Workforce Readiness',
         category: 'construction',
         description:
-          'Construction foundations: 660-word visual vocabulary, safety, tools, materials, site English, and instructor-verified skill, with a clear path into apprenticeship.',
+          'Construction foundations: shared 200-word Daily Conversation Vocabulary, 660-word Construction Visual Vocabulary, safety, tools, materials, site English, and instructor-verified skill, with a clear path into apprenticeship.',
         duration: '12-16 weeks',
         skills: ['Visual vocabulary', 'Site safety', 'Hand & power tools', 'Drywall', 'Flooring', 'Painting'],
         active: true,
@@ -111,7 +111,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Logistics Foundations',
         category: 'logistics',
         description:
-          'Logistics foundations: 500-word visual vocabulary, warehouse safety, equipment, inventory systems, workplace English, and instructor-verified skill.',
+          'Logistics foundations: shared 200-word Daily Conversation Vocabulary, 500-word Logistics Visual Vocabulary, warehouse safety, equipment, inventory systems, workplace English, and instructor-verified skill.',
         duration: '12-16 weeks',
         skills: ['Visual vocabulary', 'Warehouse safety', 'Inventory', 'Scanning', 'Receiving', 'Shipping'],
         active: true,
@@ -121,7 +121,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Community Support Foundations',
         category: 'community',
         description:
-          'Community support foundations: disability & community living, older adults, settlement support, privacy, support plans, workplace English, and instructor-verified skill.',
+          'Community support foundations: shared 200-word Daily Conversation Vocabulary, disability & community living, older adults, settlement support, privacy, support plans, workplace English, and instructor-verified skill.',
         duration: '12-16 weeks',
         skills: [
           'Community communication',

@@ -101,7 +101,7 @@ export function HomePage() {
               </div>
               <h3>Construction Foundations</h3>
               <p>
-                660-word Construction Visual Vocabulary, safety, tools, materials, and site English, with instructor
+                shared 200-word Daily Conversation Vocabulary, 660-word Construction Visual Vocabulary, safety, tools, materials, and site English, with instructor
                 verification and an apprenticeship pathway.
               </p>
               <span className="badge ok">Enrolling now</span>
@@ -212,7 +212,7 @@ export function ProgramsPage() {
             employers in Alberta.
           </p>
           <ul className="school-bullets">
-            <li>660-word Construction Visual Vocabulary with workplace English</li>
+            <li>Shared 200-word Daily Conversation Vocabulary plus 660-word Construction Visual Vocabulary</li>
             <li>Foundation theory + shop practice</li>
             <li>Instructor observation and Skills Passport</li>
             <li>Apprenticeship orientation and employer connection</li>
@@ -235,7 +235,7 @@ export function ProgramsPage() {
             systems skills, then move toward warehouse and logistics roles with instructor checks.
           </p>
           <ul className="school-bullets">
-            <li>500-word Logistics Visual Vocabulary with workplace English</li>
+            <li>Shared 200-word Daily Conversation Vocabulary plus 500-word Logistics Visual Vocabulary</li>
             <li>Warehouse safety, scanning, receiving, put-away, picking, and shipping</li>
             <li>Same instructor observation and Skills Passport standard</li>
           </ul>
@@ -258,7 +258,7 @@ export function ProgramsPage() {
             before placement.
           </p>
           <ul className="school-bullets">
-            <li>Support communication and workplace English</li>
+            <li>Shared 200-word Daily Conversation Vocabulary plus community support workplace words</li>
             <li>Privacy, dignity, support plans, and community access</li>
             <li>Foundation-to-practice path with instructor checks</li>
           </ul>

@@ -1,11 +1,8 @@
 /**
  * Construction Foundations content pack.
- * Visual vocabulary (words 1–660) is sourced from the Purpose Academy
- * Construction Visual Vocabulary worksheet (30 pages): exact word-table
- * translations (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French),
- * workplace sentences, and worksheet object photos for every word.
- * Practice layers (Word → Action, Eye Spy, Workplace Instructions) use the
- * same worksheet ids and con-vv image keys.
+ * Vocabulary order: Daily Conversation (shared 200) → Construction Visual Vocabulary (660).
+ * Level-1 gate = Daily Conversation words 1–20. Practice layers (Word → Action, Eye Spy,
+ * Workplace Instructions) use Construction worksheet ids and con-vv image keys.
  */
 import {
   EMPLOYMENT_PREP,
@@ -25,6 +22,7 @@ import {
   CONSTRUCTION_WORKPLACE_INSTRUCTIONS,
 } from './constructionPractice'
 import { CONSTRUCTION_VOCAB_660 } from './constructionVocab660'
+import { DAILY_CONVERSATION_VOCAB_200 } from './dailyConversationVocab200'
 
 export const constructionPack: PathwayPack = {
   id: 'construction',
@@ -36,10 +34,10 @@ export const constructionPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn the Purpose Academy Construction Visual Vocabulary (660 words in pages of 20). Complete Level-1 (words 1–20) to continue; more pages stay open to practise.',
+      goal: 'Learn Daily Conversation Vocabulary (200 words shared across pathways), then Construction Visual Vocabulary (660). Complete Level-1 (words 1–20) to continue; more pages stay open to practise.',
       outcomes: [
-        'See a real photo of each object and hear English',
-        'Connect your language to the English word and a short workplace sentence',
+        'See a real photo of each word and hear English',
+        'Connect your language to the English word and a short example sentence',
         'Use worksheet pages so the app matches the class vocabulary table',
       ],
     },
@@ -96,7 +94,7 @@ export const constructionPack: PathwayPack = {
       purpose: 'Daily judgment, notes, and site feedback.',
     },
   },
-  vocab: CONSTRUCTION_VOCAB_660,
+  vocab: [...DAILY_CONVERSATION_VOCAB_200, ...CONSTRUCTION_VOCAB_660],
   wordActions: CONSTRUCTION_WORD_ACTIONS,
   eyeSpyScenes: CONSTRUCTION_EYE_SPY_SCENES,
   workplaceInstructions: CONSTRUCTION_WORKPLACE_INSTRUCTIONS,
