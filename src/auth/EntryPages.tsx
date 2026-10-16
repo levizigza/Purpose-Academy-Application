@@ -7,7 +7,7 @@ import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v29'
+const ENTERED_KEY = 'pa-crossed-threshold-v30'
 
 export function hasEnteredSite() {
   try {
@@ -46,61 +46,78 @@ type SplashStage =
 
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'breath' },
-  { at: 520, stage: 'closed' },
-  { at: 1100, stage: 'opening' },
-  /* Door chart ~2.6s — name lands after the settle, not during the swing. */
-  { at: 3850, stage: 'named' },
-  { at: 4550, stage: 'pathways' },
-  { at: 5450, stage: 'ready' },
+  { at: 420, stage: 'closed' },
+  { at: 900, stage: 'opening' },
+  /* Door chart ~2.25s — name after settle; tighter than v29 wait. */
+  { at: 3300, stage: 'named' },
+  { at: 3900, stage: 'pathways' },
+  { at: 4650, stage: 'ready' },
 ]
 
 const EXIT_STAGES = new Set<SplashStage>(['striking', 'crossing'])
 
-/** Sledgehammer CTA — weight first, ENTER on the head. */
+/** Sledgehammer CTA — tool mass first (head weight, tapered shaft), not a hanging plaque. */
 function EnterHammer({ className = '' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 120 300" aria-hidden>
+    <svg className={className} viewBox="0 0 140 320" aria-hidden>
       <defs>
         <linearGradient id="sledge-head" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#f3cc6a" />
-          <stop offset="42%" stopColor="#d99212" />
+          <stop offset="0%" stopColor="#f6d48a" />
+          <stop offset="35%" stopColor="#e0a020" />
           <stop offset="100%" stopColor="#6a4208" />
         </linearGradient>
-        <linearGradient id="sledge-steel" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#6d7682" />
-          <stop offset="40%" stopColor="#e8edf3" />
+        <linearGradient id="sledge-cheek" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#5a6570" />
+          <stop offset="40%" stopColor="#eef2f6" />
           <stop offset="100%" stopColor="#4a5562" />
         </linearGradient>
         <linearGradient id="sledge-shaft" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#2e1e08" />
-          <stop offset="40%" stopColor="#8b6914" />
+          <stop offset="0%" stopColor="#2a1a06" />
+          <stop offset="45%" stopColor="#9a7420" />
           <stop offset="100%" stopColor="#3d280c" />
         </linearGradient>
+        <filter id="sledge-soft" x="-20%" y="-10%" width="140%" height="130%">
+          <feDropShadow dx="0" dy="10" stdDeviation="6" floodColor="#3d280c" floodOpacity="0.35" />
+        </filter>
       </defs>
-      <rect x="18" y="10" width="84" height="62" rx="6" fill="url(#sledge-head)" stroke="#5c3d12" strokeWidth="2" />
-      <rect x="24" y="18" width="72" height="11" rx="2" fill="#f7db8f" opacity="0.4" />
-      <rect x="6" y="20" width="16" height="42" rx="3" fill="url(#sledge-steel)" />
-      <rect x="98" y="20" width="16" height="42" rx="3" fill="url(#sledge-steel)" />
-      <text
-        className="threshold-enter-word"
-        x="60"
-        y="45"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fill="#041526"
-        fontFamily="Montserrat, Arial Black, sans-serif"
-        fontSize="16"
-        fontWeight="800"
-        letterSpacing="0.2em"
-      >
-        ENTER
-      </text>
-      <rect x="48" y="68" width="24" height="16" rx="2" fill="#9aa3ad" stroke="#4a5562" strokeWidth="1" />
-      <path d="M60 78 V268" stroke="url(#sledge-shaft)" strokeWidth="20" strokeLinecap="round" />
-      <path d="M60 82 V262" stroke="#e4c988" strokeWidth="2.4" strokeLinecap="round" opacity="0.3" />
-      <rect x="50" y="178" width="20" height="5" rx="1.5" fill="#5c3d12" opacity="0.55" />
-      <rect x="50" y="200" width="20" height="5" rx="1.5" fill="#5c3d12" opacity="0.4" />
-      <ellipse cx="60" cy="274" rx="12" ry="8" fill="#2e1e08" />
+      <g filter="url(#sledge-soft)">
+        {/* Massive head — wider than shaft so it reads as weight */}
+        <rect x="22" y="8" width="96" height="72" rx="7" fill="url(#sledge-head)" stroke="#5c3d12" strokeWidth="2.2" />
+        <rect x="30" y="16" width="80" height="12" rx="2" fill="#fff1c2" opacity="0.35" />
+        <rect x="34" y="58" width="72" height="8" rx="2" fill="#5c3d12" opacity="0.25" />
+        {/* Steel cheeks */}
+        <rect x="8" y="22" width="18" height="44" rx="3" fill="url(#sledge-cheek)" stroke="#3a4450" strokeWidth="1" />
+        <rect x="114" y="22" width="18" height="44" rx="3" fill="url(#sledge-cheek)" stroke="#3a4450" strokeWidth="1" />
+        <rect x="11" y="28" width="4" height="30" rx="1" fill="#fff" opacity="0.35" />
+        <rect x="125" y="28" width="4" height="30" rx="1" fill="#fff" opacity="0.28" />
+        <text
+          className="threshold-enter-word"
+          x="70"
+          y="50"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill="#041526"
+          fontFamily="Montserrat, Arial Black, sans-serif"
+          fontSize="17"
+          fontWeight="800"
+          letterSpacing="0.18em"
+        >
+          ENTER
+        </text>
+        {/* Collar */}
+        <rect x="56" y="76" width="28" height="18" rx="2" fill="#9aa3ad" stroke="#4a5562" strokeWidth="1.2" />
+        {/* Tapered shaft — thick under head, thinner at grip */}
+        <path
+          d="M62 90 C58 140, 58 190, 60 250 C61 270, 62 285, 70 298 C78 285, 79 270, 80 250 C82 190, 82 140, 78 90 Z"
+          fill="url(#sledge-shaft)"
+        />
+        <path d="M70 92 V290" stroke="#e4c988" strokeWidth="2.2" strokeLinecap="round" opacity="0.28" />
+        <rect x="62" y="168" width="16" height="5" rx="1.5" fill="#5c3d12" opacity="0.5" />
+        <rect x="62" y="198" width="16" height="5" rx="1.5" fill="#5c3d12" opacity="0.4" />
+        {/* Grip butt */}
+        <ellipse cx="70" cy="300" rx="14" ry="8" fill="#1e1406" />
+        <ellipse cx="70" cy="297" rx="10" ry="4" fill="#8b6914" opacity="0.55" />
+      </g>
     </svg>
   )
 }
