@@ -347,7 +347,10 @@ export function FoundationPage() {
       <div>
         <p className="section-kicker">Foundation</p>
         <h1>Language and communication preparation</h1>
-        <p className="lede">Every learner starts here, the first step on the path to verified work readiness.</p>
+        <p className="lede">
+          Every learner starts here. Finish each station with pride — this is a crew path toward verified
+          work readiness, not a feed.
+        </p>
         <div className="progress" aria-label={`Foundation ${prog}%`}>
           <span style={{ width: `${prog}%` }} />
         </div>

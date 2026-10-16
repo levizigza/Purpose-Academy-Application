@@ -1,7 +1,7 @@
 /**
  * Mastery tracking for the Purpose Academy journey.
  * Pattern: Khan Academy style levels: attempted → familiar → proficient → mastered.
- * Plus Duolingo-style XP and day streak for Practice Mode / learner runs.
+ * Practice marks and “days showed up” serve craft (L4) — not streak FOMO.
  * Persisted in sessionStorage so Practice Mode and student runs keep progress.
  */
 

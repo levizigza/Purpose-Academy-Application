@@ -2,9 +2,10 @@
 
 Before changing UI, curriculum packs, brand copy, learning flow, sound, or public trust pages:
 
-1. Read **[`docs/CRAFTSMANSHIP.md`](docs/CRAFTSMANSHIP.md)** — the living craftsmanship doctrine (including **§6b attention ethics**).
-2. Follow its non-negotiables and active climbs.
-3. Ask: does this change pull people into mindless *more*, or walk them into a finished station?
-4. When your work changes product truth or craft rules, **update that document** (changelog + climbs). Do not treat it as fixed.
+1. Read **[`docs/CRAFTSMANSHIP.md`](docs/CRAFTSMANSHIP.md)** — living craftsmanship doctrine.
+2. Name which **craft layer(s)** you are touching (L1 truth, L2 content delivery, L3 aesthetic optics, L4 attention ethics, L5 trust, L6 systems spine).
+3. Apply the change **site-wide** for that layer — public, splash/enter, auth, Practice, School path, Learn — not only one page.
+4. Ask: does this pull people into mindless *more*, or walk them into a finished station?
+5. When product truth or craft rules change, **update** `docs/CRAFTSMANSHIP.md` (changelog + climbs). It is not fixed.
 
 Quality is a continuous journey. Challenge assumptions. Grow with the platform.

@@ -265,4 +265,4 @@ export function shouldHidePracticeFeedback(pathname: string, journeyStep?: numbe
 }
 
 export const PRACTICE_TRAY_HELP =
-  'Full learning path. Path home, XP, mastery gates, unit checkpoints, and the same drills the real student path will use. Skip registration, learn every station, and leave feedback as you go.'
+  'Full learning path. Path home, practice marks, mastery gates, unit checkpoints, and the same drills the real student path will use. Skip registration, finish one station at a time, and leave feedback as you go.'

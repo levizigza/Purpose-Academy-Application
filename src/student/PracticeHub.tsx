@@ -447,7 +447,7 @@ export function PracticeHub({
   )
 }
 
-/** Compact XP / streak strip inside the lesson shell. */
+/** Compact practice-marks strip inside the lesson shell. */
 export function PracticeStatsStrip({ step }: { step: number }) {
   const [, bump] = useState(0)
   useEffect(() => {

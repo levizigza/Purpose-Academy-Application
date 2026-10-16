@@ -336,7 +336,8 @@ export function WelcomePage() {
         <p className="section-kicker">{BRAND.name}</p>
         <h1>Welcome to training</h1>
         <p className="lede">
-          Sign in to continue your path, or create a student account to join {BRAND.name}.
+          Sign in to continue your crew path — one station at a time — or create a student account to
+          join {BRAND.name}.
         </p>
         <div className="hero-actions">
           <Link className="btn btn-primary" to="/login">

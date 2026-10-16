@@ -5,7 +5,7 @@ export const BRAND = {
   /** Hero-level school identity */
   theme: 'Build your future in the trades',
   promise:
-    'A Calgary school with three doors into work — Construction, Logistics, and Community Support — language, supervised practice, and a clear path forward.',
+    'A Calgary school with three doors into work — Construction, Logistics, and Community Support — language, supervised practice, and a clear station-by-station path forward.',
   audience:
     'Newcomers, career changers, and job seekers who want hands-on training with real instructors.',
   primaryCta: 'Apply now',

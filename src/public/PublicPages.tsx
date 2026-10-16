@@ -41,8 +41,9 @@ export function HomePage() {
           <p className="section-kicker">Why {BRAND.name}</p>
           <h2>A real school for real site work</h2>
           <p className="lede path-lede">
-            One school in Calgary with three doors into work: Construction, Logistics, and Community Support. Shared
-            language foundations, supervised practice, and a clear next step toward employment or apprenticeship.
+            One school in Calgary with three doors into work: Construction, Logistics, and Community Support.
+            Shared language foundations, supervised practice, and a finite crew path — stations you finish, not
+            a feed you scroll — toward employment or apprenticeship.
           </p>
           <div className="pillar-grid">
             <article className="pillar site-crate">
@@ -51,7 +52,10 @@ export function HomePage() {
             </article>
             <article className="pillar site-crate">
               <h3>Hands-on practice</h3>
-              <p>Instructors watch you work. You practise until the skill is real, not just a quiz score.</p>
+              <p>
+                Instructors watch you work. You practise one station until the skill is Familiar — then the next
+                door opens.
+              </p>
             </article>
             <article className="pillar site-crate">
               <h3>Path into work</h3>

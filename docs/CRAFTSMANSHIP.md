@@ -17,7 +17,7 @@ This doctrine exists so quality does not depend on memory. When we return months
 1. **Challenge assumptions.** Before shipping a “polish,” ask what we might be wrong about (audience, depth, honesty, load).
 2. **Grow with the platform.** When curriculum grows, doctrine grows. When a pathway is thinner, copy says so.
 3. **Protect what already sings.** Tool Chest, VocabSheet, Calgary voice, mother-tongue → English discipline — do not sand these into generic edtech.
-4. **Leave the trail better.** Every meaningful craft pass ends with a short entry in [§9 Changelog](#9-changelog-living).
+4. **Leave the trail better.** Every meaningful craft pass ends with a short entry in [§11 Changelog](#11-changelog-living).
 
 ---
 
@@ -25,17 +25,72 @@ This doctrine exists so quality does not depend on memory. When we return months
 
 | Who | Duty |
 |-----|------|
-| Cloud / coding agents | Read this file at the start of any UI, curriculum, brand, or learning-flow change. Cite relevant sections in the PR. Append a changelog line when craft rules or product truth change. |
+| Cloud / coding agents | Read this file at the start of any UI, curriculum, brand, or learning-flow change. Name which **craft layer(s)** you are touching. Append a changelog line when craft rules or product truth change. |
 | Humans | Treat edits here as product decisions, not docs chore. Prefer short, concrete rules over essays. |
 | Future selves | If a rule no longer matches the product, rewrite the rule — do not paper over the product. |
 
 **Pointer for agents:** root `AGENTS.md` requires this file. Do not invent a parallel style guide.
 
+**Site-wide rule:** Craft layers apply to *every* surface — public marketing, splash/enter, auth, Practice `/journey`, portal School path, Learn/LMS, instructor, and admin — not only the last page we polished.
+
 ---
 
-## 3. Non-negotiables (protect first)
+## 3. Craft layers (multiple levels — keep them distinct)
 
-These are load-bearing. Improve around them; do not replace them with trend templates.
+Craftsmanship is not one blob. Different work needs different chisels. Always know **which layer** you are carving.
+
+| Layer | Job | Success looks like | Failure looks like |
+|-------|-----|--------------------|--------------------|
+| **L1 · Truth & story** | One school, three doors, honest depth | Home / Programs / Admissions / portal agree | Construction-only copy while three doors are open |
+| **L2 · Content delivery** | Curriculum, vocab, drills, gates, mother-tongue → English | Specialty distractors; Level-1 = 20; instructor Competent honesty | Hammer vs Hi/Hello; fake “busy scene”; quiz = job ready |
+| **L3 · Aesthetic optics** | How it *looks* and feels to walk in | Cool trades gravity; shop-floor stage; proud to be seen here | Cheap homework-app chrome; casino glow; purple SaaS |
+| **L4 · Attention ethics** | How human attention is treated | Finite stations; Done for now; metrics serve craft | Infinite feed, streak FOMO, soft-pulse addiction, “one more” |
+| **L5 · Trust & people** | Founding builders, claims, ops honesty | Interim roles framed honestly | Invented bios, inflated enrollment badges |
+| **L6 · Systems spine** | Practice ↔ portal ↔ Learn mental model | School path visible in-account; Learn is extra when built | Two unrelated products; false “caught up” |
+
+### How layers interact
+
+- **L3 (optics) ≠ L2 (content).** Different chisels, different tests. Aesthetic craft asks: *does this feel like a real trades school people are proud to walk into?* Content-delivery craft asks: *is the drill honest, the gate correct, the vocabulary deep enough for this pathway?* A beautiful empty page still fails content craft. A correct distractor pool with chaotic chrome still fails optics.
+- **Expect multiple levels inside a layer.** Construction flagship depth, Logistics warehouse craft, and Community dignity craft will each need their own content-delivery standards as packs grow — same spine, different specialty chisels. Optics may also shift (site bed vs warehouse bed vs soft community stage) without abandoning the shared navy/amber/crew grammar.
+- **L4 (attention) sits under both.** Pretty or correct content can still farm people — refuse that.
+- **L1 binds the site.** Every surface must tell the same true story.
+- When you ship a change, say which layers moved (e.g. “L3+L4 School path stage”).
+
+### Human nature (feeds L3 + L4)
+
+| Source | Take the insight | Refuse the harm |
+|--------|------------------|-----------------|
+| **Bernays / mass persuasion** | Symbols, belonging, and clear desire shape action | False scarcity, fake social proof, prestige lies |
+| **Social media loops** | Variable reward + infinite feed capture attention | Invert: finite stations, mastery gates, dignified exits |
+| **Spiral Dynamics (~serve 5 and below first)** | Order, belonging, respect, concrete win before abstract self-authoring | Shame; childish gamification; chaos that pride rejects |
+
+UX translation (not SD colour cosplay):
+
+| Need | Product move |
+|------|----------------|
+| Belonging / crew | Pathway identity, Calgary voice, crew-path language |
+| Order | Numbered 20-step spine, Level-1 gates, clear “you are here” |
+| Dignity | Adult tone, tool photos, no casino chrome |
+| Achievement | One **Today’s station**; Skills Passport; marks = skill |
+| Ascent | After Familiar, next station — never endless novelty |
+
+### Anti-doomscroll rules (site-wide)
+
+1. **One station in focus** on training surfaces — not a wall of metrics.
+2. **Finite session** copy — name the finish.
+3. **Mastery before more** — gates over swipe.
+4. **Dignified exit** — **Done for now** (or calm equivalent) on training surfaces.
+5. **Metrics serve craft** — practice marks, not addiction loops; no infinite notification theatre.
+6. **Optics = respect** — cool for construction culture is a trust signal.
+7. **No attention spam motion** — avoid endless soft-pulse / glow on chrome meant for calm work.
+
+Ask on every UI change: *Does this pull someone into mindless more, or walk them into a finished station?*
+
+---
+
+## 4. Non-negotiables (protect first)
+
+These are load-bearing across all layers.
 
 1. **Calgary trades-school voice** — concrete, respectful, short sentences. Not startup hype. Not purple SaaS.
 2. **Mother tongue → English discipline** — home languages support understanding; English is the workplace word.
@@ -46,7 +101,7 @@ These are load-bearing. Improve around them; do not replace them with trend temp
 
 ---
 
-## 4. Product story (one school, three doors)
+## 5. Product story (one school, three doors) — Layer L1
 
 **Brand-level story:** Purpose Academy is one school with three open doors into work:
 
@@ -59,34 +114,34 @@ These are load-bearing. Improve around them; do not replace them with trend temp
 **Rules:**
 
 - Marketing may call Construction the flagship **depth**, not the only door.
-- Home, Programs, Admissions, and student portal must agree: learners **choose a pathway**, not “Construction only.”
-- Student LMS chrome labels progress with the **active pathway name**, never a hard-coded “Construction” when another path is selected.
+- Home, Programs, Admissions, splash, and student portal must agree: learners **choose a pathway**.
+- Student LMS chrome labels progress with the **active pathway name**.
 - Shared layer first: Daily Conversation Vocabulary is shared; specialty visual vocabulary and Word→Action are pathway craft.
 
 ---
 
-## 5. Learning craft standards
+## 6. Content delivery craft — Layer L2
 
-### 5.1 Distractors and drills
+### 6.1 Distractors and drills
 
 - Word→Action and Supported Matching distractors must come from the **specialty-domain pool** (not Daily Conversation greetings/phrases), unless the specialty pool is too thin (&lt; 4 terms).
 - Prefer other Word→Action `termId`s when building Word→Action choices.
 - Never ship a drill where “Hammer” is opposed by “Hi / Hello / Hey.”
 - Shuffle distractors; do not always take array head.
 
-### 5.2 Lesson-first chrome
+### 6.2 Lesson-first chrome
 
-- Inside a lesson, the Learning Path Map is **compact**. Full path lives on Path home / hub.
+- Inside a lesson, the Learning Path Map is **compact**. Full path lives on Path home / School path.
 - Header: brand of the step (title, help, progress) before secondary meta.
 - Practice Mode and LMS share the same spine language; Practice may skip early admin steps but must not invent a second curriculum.
 
-### 5.3 Vocabulary honesty
+### 6.3 Vocabulary honesty
 
 - Level-1 continue gate = Daily Conversation words 1–20 across streams.
 - Specialty packs may grow; copy and badges must track **actual counts**.
 - Eye Spy and photo scenes need real photography before we claim “busy job-site scenes.” Until then, document as a climb — do not fake richness in copy.
 
-### 5.4 Sound (foley)
+### 6.4 Sound (foley)
 
 - Current procedural foley is **construction-site flavoured** (hammer, wood, saw, ambient bed).
 - Construction may use site one-shots on transitions; Logistics / Community should prefer soft UI cues (`correct` / `wrong` / `whoosh`) until pathway beds exist.
@@ -95,150 +150,107 @@ These are load-bearing. Improve around them; do not replace them with trend temp
 
 ---
 
-## 6. Visual and interaction craft
+## 7. Aesthetic optics craft — Layer L3
 
 1. **One composition** on public heroes — brand first, one headline, one short promise, one CTA group, one dominant visual plane.
 2. **No fake dashboard** on marketing pages.
 3. **Cards only for interaction** — not decoration.
-4. **Pathway accents** must match CSS tokens (`--path-construction|logistics|community`) and `PATHWAY_META.accent` — never drift teal/purple off-token.
-5. **Motion with purpose** — reveals and transitions serve hierarchy; respect `prefers-reduced-motion`.
-6. **Mobile and desktop** both load clean; splash/gate must not trap screenshot or learner entry forever without an obvious continue.
-7. **Cool for the trades** — shop-floor gravity (navy, amber, material photos, crew order). Look like a school people are proud to be seen in — not a homework app, not a casino.
+4. **Pathway accents** must match CSS tokens (`--path-construction|logistics|community`) and `PATHWAY_META.accent`.
+5. **Motion with purpose** — serves hierarchy; respect `prefers-reduced-motion`; no endless attention-spam pulses on work chrome.
+6. **Mobile and desktop** both load clean; splash/gate must not trap entry without an obvious continue.
+7. **Cool for the trades** — shop-floor gravity (navy, amber, material photos, crew order). Proud to be seen here — not homework app, not casino.
+8. **Training stages** (School path / Practice hub) sit on a dark material stage when embedded in the light portal so light text never dies on paper.
 
 ---
 
-## 6b. Human nature, attention ethics, and ascent (living)
+## 8. Trust craft — Layer L5
 
-Purpose Academy must understand how people actually move — and refuse to farm them.
-
-### What we study (and refuse)
-
-| Source | Take the insight | Refuse the harm |
-|--------|------------------|-----------------|
-| **Bernays / mass persuasion** | Symbols, belonging, and clear desire shape action more than raw facts | Never manufacture false scarcity, fake social proof, or prestige lies |
-| **Social media loops** | Variable reward, infinite feed, and “one more” capture attention | Invert: finite stations, mastery gates, dignified **Done for now** exits |
-| **Spiral Dynamics (serve ~5 and below first)** | Many learners need **order, belonging, respect, and concrete win** before abstract self-authoring | Do not shame stage; design rails that help people climb toward responsibility and craft pride |
-
-Rough UX translation (not SD color cosplay on the UI):
-
-| Need | Product move |
-|------|----------------|
-| Belonging / crew | Pathway identity, Calgary voice, “you are on a crew path,” founding builders honesty |
-| Order / authority that earns trust | Numbered 20-step spine, Level-1 gates, instructor Competent ≠ quiz complete |
-| Power / dignity | Adult tone, tool photos, no childish gamification chrome |
-| Achievement | One **Today’s station**, visible mastery, Skills Passport — marks mean skill, not dopamine |
-| Ascent | After Familiar, invite the next station; never an endless feed of empty novelty |
-
-### Anti-doomscroll rules (ship these)
-
-1. **One station in focus** — hero CTA is the next lesson, not a wall of metrics.
-2. **Finite session** — copy names a clear finish (“Level-1 words,” “this Word→Action set”), not infinite scroll.
-3. **Mastery before more** — advance gates over “keep swiping.”
-4. **Dignified exit** — every training surface offers **Done for now** back to account home without guilt.
-5. **Metrics serve craft** — XP/streak may exist as practice marks; they must not outrank the station or invent addiction loops (no infinite notifications, no fake FOMO).
-6. **Optics = respect** — if it looks cheap or chaotic, people of pride disengage. Cool is a trust signal in construction culture.
-
-Agents: when changing UI, ask *“Does this pull someone into mindless more, or walk them into a finished station?”*
-
----
-
-## 7. Trust craft (About, people, claims)
-
-- Team section may list **founding builders** with interim honesty (“roles and portraits forthcoming”) rather than hollow “Role forthcoming” emptiness without framing.
+- Team section may list **founding builders** with interim honesty (“roles and portraits forthcoming”).
 - Do not invent bios, credentials, or placement rates.
-- Contact and admissions promises must be fulfillable by the school ops reality.
+- Contact and admissions promises must be fulfillable.
 - Prefer “we are building” over “we are complete” when depth is still climbing.
+- Community enrollment language: “Open · specialty depth growing” until depth earns “Enrolling now” parity.
 
 ---
 
-## 8. Aims vs shortfalls (honest audit)
+## 9. Aims vs shortfalls (honest audit)
 
 Revisit when aims change. Ranked by learner / trust harm.
 
 | Aim | Where we stand | Shortfall |
 |-----|----------------|-----------|
-| Three doors into work | Marketing + Practice packs open for all three | LMS specialty modules exist mainly for Construction; Logistics/Community account courses can look “caught up” with zero lessons |
-| Language → practice → verify | VocabSheet + drills + instructor Competent honesty | Community Level-1 gate once required the full 200+ deck (fixed); Eye Spy is still a photo collage, not a photographed scene |
-| Shared Daily Conversation Level-1 | Doctrine + Construction/Logistics | Must stay identical for Community (fixed this climb) |
-| Apprenticeship / work readiness | Copy + Skills Passport disclaimers | Do not over-claim placement rates or “Enrolling now” depth where specialty is still thin |
-| One school spine | Practice `/journey` drills + portal **School path** (`/app/student/path`) show the same hub | Learn (LMS modules) remains extra depth where built; never fake completion when empty |
+| Three doors into work | Marketing + Practice packs open for all three | LMS specialty modules exist mainly for Construction |
+| Language → practice → verify | VocabSheet + drills + instructor Competent honesty | Eye Spy still collage; Community specialty set still thin |
+| Shared Daily Conversation Level-1 | All pathways gate at 20 | Keep watching regressions when packs merge |
+| Apprenticeship / work readiness | Copy + Skills Passport disclaimers | Do not over-claim placement rates |
+| One school spine | Portal **School path** + `/journey` drills | Learn (LMS) still thinner for Logistics/Community |
+| Site-wide attention ethics | School path + lessons have Done for now / today’s station | Keep sweeping public, Learn, instructor chrome for leftover feed patterns |
 
 **Protect:** VocabSheet, Tool Chest, Calgary voice, instructor-Competent truth, three-door story.
 
 ---
 
-## 9. Active climbs (challenge these next)
+## 10. Active climbs (challenge these next)
 
-Living backlog — reorder as evidence appears. Strike or move items into the changelog when done.
-
-| Climb | Why it matters | Status |
-|-------|----------------|--------|
-| Specialty distractors in Word→Action / match | Domain integrity of drills | Done (craft pass) |
-| Three-door marketing + portal labels | Story coherence | Done (craft pass) |
-| Accent token alignment | Visual identity coherence | Done (craft pass) |
-| Lesson-first compact path map | Attention on the lesson | Done (craft pass) |
-| About founding-builders framing | Trust without fake bios | Done (craft pass) |
-| Community Level-1 gate = Daily Conversation 1–20 | Non-negotiable gate parity | Done (honesty climb) |
-| LMS honesty when specialty lessons missing | Stop false “caught up”; bridge to Practice | Done (partial — portal next-step + progress copy) |
-| Fuller one-spine UX (Practice ↔ LMS) | First-week mental model | Done (portal School path hosts PracticeHub; nav + home) |
-| Pathway-aware foley beds | Sound matches craft | Open |
-| Eye Spy photography upgrade | Memorable scene craft | Open — needs assets; copy softened to “among photos” |
-| Community specialty vocab growth | Honest depth toward usefulness | Open |
-| Deeper Logistics/Community LMS modules | Account path matches Practice depth | Open |
-| Portal School path polish (mobile density, mastery sync) | Keep challenging the one-spine assumption | Open |
-| Optics + attention ethics (cool trades UI, anti-doomscroll) | Pride, order, finite stations | Done (this climb) — keep iterating |
-
-When closing a climb: update Status, add a changelog line, and write the **new assumption to challenge next**.
+| Climb | Layer | Status |
+|-------|-------|--------|
+| Specialty distractors | L2 | Done |
+| Three-door marketing + portal labels | L1 | Done |
+| Accent token alignment | L3 | Done |
+| Lesson-first compact path map | L2/L3 | Done |
+| About founding-builders framing | L5 | Done |
+| Community Level-1 gate = 20 | L2 | Done |
+| LMS honesty when specialty lessons missing | L1/L6 | Done (partial) |
+| Fuller one-spine UX (School path in portal) | L6 | Done |
+| Optics + attention ethics (path stage) | L3/L4 | Done — iterate |
+| Site-wide craft layers (doctrine + sweep) | L1–L6 | Done (this climb) — keep sweeping |
+| Pathway-aware foley beds | L2/L3 | Open |
+| Eye Spy photography upgrade | L2/L3 | Open — needs assets |
+| Community specialty vocab growth | L2 | Open |
+| Deeper Logistics/Community LMS modules | L2/L6 | Open |
+| Portal School path polish (mobile density) | L3/L6 | Open |
 
 ---
 
-## 10. Changelog (living)
+## 11. Changelog (living)
 
 Newest first.
 
+### 2026-10-16 — Layered craft + site-wide attention sweep
+
+- Documented **craft layers L1–L6** (truth, content delivery, aesthetic optics, attention ethics, trust, systems spine) — different chisels for different jobs; L2 content delivery and L3 aesthetic optics stay distinct and will deepen by pathway.
+- Site-wide rule: layers apply to public, splash, auth, Practice, School path, Learn — not only the last surface polished.
+- Calm Practice banner (no soft-pulse); Done for now / School path links; Learning path “practice marks”; Welcome + Foundation + Home pillars speak finite crew path.
+- Brand promise carries station-by-station path language; Practice tray help matches.
+- **Assumption to challenge next:** whether learners feel one coherent school across marketing → splash → portal → lesson without a “mode switch” shock — and whether pathway-specific L2/L3 standards need their own climb rows soon.
+
 ### 2026-03-27 — Optics climb: cool trades UI + attention ethics
 
-- Added §6b: Bernays/symbol clarity (ethical), Spiral Dynamics UX needs (~order/belonging/achievement), anti-doomscroll rules.
-- School path portal sits in a dark shop-floor **stage**; **Today’s station** leads; XP/streak demoted; **Done for now** exit.
-- Student home School path card becomes a photo-forward workbench invitation, not a bland panel.
-- Practice hub copy: “Learning dashboard” → path language; metrics framed as practice marks.
-- **Assumption to challenge next:** whether “Today’s station” + Done for now actually shortens sessions toward completion — or whether we still leak attention into secondary chrome.
+- Added attention ethics (Bernays/Spiral/anti-doomscroll).
+- School path shop-floor stage; Today’s station; Done for now; home workbench card.
+- **Assumption challenged next:** session length vs secondary chrome leak.
 
 ### 2026-03-27 — One-spine climb: School path inside the account
 
-- Added `/app/student/path` — PracticeHub embedded in the student portal (same 20-step curriculum).
-- Desktop/mobile nav: **School path** / **Path** (was a raw `/journey` jump out of the account shell).
-- Student home always surfaces the spine card; empty Learn pathways and “caught up” Construction both route to School path.
-- Opening a station uses `enterPracticeLesson` so `/journey` lands on the lesson (no double hub).
-- **Assumption to challenge next:** whether learners still confuse **School path** (spine) with **Learn** (LMS modules) — watch first-week language; rename or merge if needed.
+- `/app/student/path` hosts PracticeHub; nav School path; `enterPracticeLesson` avoids double hub.
 
 ### 2026-03-27 — Honesty climb: Level-1 gate + LMS truth
 
-- Community (all pathways) Level-1 continue gate = Daily Conversation words **1–20**; full tables stay open to practise.
-- Student portal no longer claims “caught up” when Logistics/Community have zero LMS lessons — next step opens Practice spine with pathway set.
-- Community marketing badge: “Open · specialty depth growing” (not identical “Enrolling now” depth).
-- Eye Spy help copy softened to match collage reality until photography lands.
-- README aligned to three open Practice doors + honest LMS depth note.
-- **Assumption to challenge next:** whether pointing LMS → Practice is enough, or learners still need a single visible spine inside `/app/student` itself.
+- Level-1 = 20 for all pathways; portal honesty when Learn is empty; Community badge depth honesty.
 
 ### 2026-03-27 — Craft pass: statue from the stone
 
-- Created this living doctrine + `AGENTS.md` pointer.
-- Fixed specialty distractors so Daily Conversation terms no longer pollute Word→Action / Supported Matching.
-- Aligned Home, Programs, Admissions, brand promise, and student portal to the three-door story; pathway-named progress.
-- Matched `PATHWAY_META` accents to CSS path tokens; Community copy states focused specialty set honestly.
-- Forced compact Learning Path Map in lessons; About reframed as founding builders; foley labeled as practice sounds with construction transition cues gated to Construction.
-- **Assumption to challenge next:** whether Practice Mode and LMS still feel like one school in a learner’s first week — measure confusion, don’t assume the spine diagram is enough.
+- Created living doctrine + `AGENTS.md`; specialty distractors; three-door story; accents; compact lesson map; founding builders; foley awareness.
 
 ---
 
-## 11. Ritual for every future craft pass
+## 12. Ritual for every future craft pass
 
-1. Read this file (especially §8 shortfalls and §9 climbs).
-2. Name the one composition or one drill you are improving (not ten).
-3. Chisel the product.
-4. Verify on desktop and mobile for touched surfaces.
-5. Update §9 / §10 with what changed and what assumption you will challenge next.
-6. Leave the school more honest than you found it.
+1. Read this file — especially **§3 Craft layers** and active climbs.
+2. Name the **layer(s)** and the one composition or drill you are improving.
+3. Chisel the product **site-wide** for that layer (don’t leave orphan surfaces telling a different story).
+4. Verify desktop and mobile on touched surfaces.
+5. Update §10 / §11 with what changed and what assumption you will challenge next.
+6. Leave the school more honest — and more respectful of attention — than you found it.
 
 *— Purpose Academy craft lineage. Carry it forward.*
