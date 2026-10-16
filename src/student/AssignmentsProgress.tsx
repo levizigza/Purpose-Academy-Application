@@ -8,6 +8,8 @@ import {
   useDb,
   submitAssignment,
 } from '../data/store'
+import { courseIdForPathway, pathwayMeta, setActivePathway } from '../pathways'
+import { openPracticeSpine } from '../practice/PracticeMode'
 
 function formatWhen(iso: string) {
   return new Date(iso).toLocaleString(undefined, {
@@ -130,11 +132,30 @@ export function SubmissionPage() {
 }
 
 export function StudentProgressPage() {
-  const { student } = useSession()
+  const { user, student } = useSession()
   const db = useDb()
-  if (!student) return null
+  if (!student || !user) return null
   const f = foundationProgress(student.id)
-  const c = constructionProgress(student.id)
+  const pathwayLabel = student.pathway ? pathwayMeta(student.pathway).label : null
+  const pathwayCourseId = student.pathway ? courseIdForPathway(student.pathway) : null
+  const pathwayModules = pathwayCourseId
+    ? db.modules.filter((m) => m.course_id === pathwayCourseId)
+    : []
+  const pathwayLessons = pathwayCourseId
+    ? db.lessons.filter((l) => pathwayModules.some((m) => m.id === l.module_id))
+    : []
+  const hasPathwayLessons = pathwayLessons.length > 0
+  const pathPct = hasPathwayLessons
+    ? Math.round(
+        (pathwayLessons.filter((l) =>
+          db.lesson_progress.some((p) => p.student_id === student.id && p.lesson_id === l.id && p.completed),
+        ).length /
+          pathwayLessons.length) *
+          100,
+      )
+    : student.pathway === 'construction'
+      ? constructionProgress(student.id)
+      : 0
   const progress = db.lesson_progress.filter((p) => p.student_id === student.id && p.completed)
   const subs = db.submissions.filter((s) => s.student_id === student.id)
 
@@ -142,7 +163,7 @@ export function StudentProgressPage() {
     <div className="stack">
       <PageHeader
         title="Progress"
-        help="See how far you are in foundation and Construction."
+        help="See how far you are in foundation and your chosen pathway."
         backTo="/app/student"
         backLabel="Home"
       />
@@ -157,11 +178,40 @@ export function StudentProgressPage() {
           </p>
         </div>
         <div className="panel stack">
-          <h2>Specialization</h2>
-          <div className="progress" aria-label={`Construction ${student.pathway ? c : 0}%`}>
-            <span style={{ width: `${student.pathway ? c : 0}%` }} />
-          </div>
-          <p>{student.pathway ? <strong>{c}% Construction</strong> : 'Not selected yet'}</p>
+          <h2>{pathwayLabel ?? 'Pathway'}</h2>
+          {student.pathway && !hasPathwayLessons ? (
+            <>
+              <p>
+                Portal lessons for {pathwayLabel} are not built yet. Train on the shared 20-step path in Student
+                Practice.
+              </p>
+              <Link
+                className="btn btn-primary"
+                to="/journey"
+                onClick={() => {
+                  if (student.pathway) setActivePathway(student.pathway)
+                  openPracticeSpine(user.full_name)
+                }}
+              >
+                Open Practice path
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="progress" aria-label={`${pathwayLabel ?? 'Pathway'} ${student.pathway ? pathPct : 0}%`}>
+                <span style={{ width: `${student.pathway ? pathPct : 0}%` }} />
+              </div>
+              <p>
+                {student.pathway ? (
+                  <strong>
+                    {pathPct}% {pathwayLabel}
+                  </strong>
+                ) : (
+                  'Not selected yet'
+                )}
+              </p>
+            </>
+          )}
         </div>
       </div>
       <div className="panel stack">

@@ -18,7 +18,7 @@ export const JOURNEY_STEPS = [
   { n: 7, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English.', purpose: 'All five home languages stay visible. You choose the bridge to English.', unit: 3 },
   { n: 8, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
   { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
-  { n: 10, title: 'English Eye Spy', help: 'Find the real tool in a site scene. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
+  { n: 10, title: 'English Eye Spy', help: 'Find the real object among other photos. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
   { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   { n: 12, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
   { n: 13, title: 'Digital Skills', help: 'Practice real computer tasks: click, type, forms, uploads.', purpose: 'This may be someone’s first computer. Every step is a hands-on micro-lesson.', unit: 5 },
@@ -66,7 +66,7 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     goal: 'Use English with support, then prove you can find and follow workplace language.',
     outcomes: [
       'Match pictures to English words',
-      'Find objects in a busy scene',
+      'Find objects among other workplace photos',
       'Follow short workplace instructions',
       'Understand common workplace phrases',
     ],

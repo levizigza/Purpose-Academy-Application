@@ -110,6 +110,26 @@ export function setPracticeName(fullName: string) {
   }
 }
 
+/**
+ * Open the shared 20-step Practice spine from the student portal without wiping
+ * existing journey progress. Used when LMS specialty lessons are not built yet.
+ */
+export function openPracticeSpine(fullName: string) {
+  const name = fullName.trim()
+  try {
+    sessionStorage.setItem(FLAG_KEY, '1')
+    if (name) sessionStorage.setItem(NAME_KEY, name)
+    const raw = sessionStorage.getItem('pa-student-journey-step-v1')
+    const step = Number(raw)
+    if (!raw || !Number.isFinite(step) || step < PRACTICE_ENTRY_STEP) {
+      sessionStorage.setItem('pa-student-journey-step-v1', String(PRACTICE_ENTRY_STEP))
+    }
+    window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
+  } catch {
+    /* ignore */
+  }
+}
+
 export function clearPracticeMode() {
   try {
     sessionStorage.removeItem(FLAG_KEY)

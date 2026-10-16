@@ -1,13 +1,15 @@
 # Purpose Academy — Trades School
 
-Calgary trades school platform:
+Calgary school platform with **three doors into work**: Construction, Logistics, and Community Support Foundations.
 
-- **Foundations + apprenticeship pathway** for construction learners
+- **Shared spine:** Daily Conversation Vocabulary + the same 20-step Practice path (`/journey`)
+- **Flagship depth today:** Construction Visual Vocabulary (660) + shop/site craft; Logistics VV (500); Community focused specialty set (growing)
 - **Frontend:** Vite + React + TypeScript
 - **Backend:** Express (Node) + persistent JSON database
 - **Auth:** JWT + bcrypt password hashes
+- **Craft doctrine (living):** [docs/CRAFTSMANSHIP.md](./docs/CRAFTSMANSHIP.md)
 
-Public site structure (inspired by Alberta trade schools such as SAIT): Programs · Admissions · About · Give · Contact.
+Public site: Programs · Admissions · About · Give · Contact.
 
 ## Security & UX
 
@@ -97,5 +99,5 @@ Server data file is created on first boot from the Construction-first curriculum
 ## Notes
 
 - Competent status still requires instructor observation (PA-TECH-003 rule).
-- Construction is the active pathway; Logistics / Community remain gated.
+- All three pathway doors are open in Practice. Account/LMS specialty lessons are richest for Construction; Logistics and Community portal lessons are still climbing — the student home tells the truth and points to Practice.
 - For true production later: swap JSON file for Postgres, add HTTPS hosting, MFA, and PIPA controls.

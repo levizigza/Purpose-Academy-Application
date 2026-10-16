@@ -1478,14 +1478,11 @@ export function StudentSequencePage() {
       (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
     ).length
     /**
-     * Large worksheet tables (Logistics 500, Construction 660) unlock the
-     * shared journey after Level-1 (words 1–20 / page 1); remaining pages stay
-     * available to practise. Community keeps the full small deck as the gate.
+     * All pathways share Daily Conversation first. Level-1 gate = words 1–20.
+     * Specialty rows (Construction 660 / Logistics 500 / Community focused set)
+     * stay open to practise after Continue unlocks.
      */
-    const journeyGateCount =
-      pathwayId === 'logistics' || pathwayId === 'construction'
-        ? Math.min(20, VOCAB_UNIT.length)
-        : VOCAB_UNIT.length
+    const journeyGateCount = Math.min(20, VOCAB_UNIT.length)
     const gateLinked = VOCAB_UNIT.slice(0, journeyGateCount).filter(
       (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
     ).length
@@ -1513,13 +1510,9 @@ export function StudentSequencePage() {
           onMarkKnown={(term) => markCurrentVocabKnown(term)}
         />
         <p className="train-vocab-counter">
-          {pathwayId === 'logistics' || pathwayId === 'construction'
-            ? ready
-              ? `Level-1 complete (${journeyGateCount} words) · Full table ${linkedCount} of ${VOCAB_UNIT.length} · Ready to continue`
-              : `Level-1 ${gateLinked} of ${journeyGateCount} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
-            : ready
-              ? `Linked all ${VOCAB_UNIT.length} words to English · Ready to continue`
-              : `Linked ${linkedCount} of ${VOCAB_UNIT.length} words${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
+          {ready
+            ? `Level-1 complete (${journeyGateCount} words) · Full table ${linkedCount} of ${VOCAB_UNIT.length} · Ready to continue`
+            : `Level-1 ${gateLinked} of ${journeyGateCount} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
         </p>
       </Shell>
     )

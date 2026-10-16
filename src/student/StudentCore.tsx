@@ -9,7 +9,19 @@ import {
   foundationProgress,
   useDb,
 } from '../data/store'
-import { pathwayMeta } from '../pathways'
+import { courseIdForPathway, pathwayMeta, setActivePathway } from '../pathways'
+import { openPracticeSpine } from '../practice/PracticeMode'
+import type { AppDatabase } from '../data/types'
+
+function courseLessonStats(db: AppDatabase, studentId: string, courseId: string) {
+  const modules = db.modules.filter((m) => m.course_id === courseId)
+  const lessons = db.lessons.filter((l) => modules.some((m) => m.id === l.module_id))
+  if (!lessons.length) return { lessonCount: 0, pct: 0 }
+  const done = lessons.filter((l) =>
+    db.lesson_progress.some((p) => p.student_id === studentId && p.lesson_id === l.id && p.completed),
+  ).length
+  return { lessonCount: lessons.length, pct: Math.round((done / lessons.length) * 100) }
+}
 
 export function StudentRegistrationStatusPage() {
   const { student, user } = useSession()
@@ -71,17 +83,22 @@ export function StudentHomePage() {
   if (!user || !student) return null
 
   const fProg = foundationProgress(student.id)
-  const cProg = constructionProgress(student.id)
   const pathwayLabel = student.pathway ? pathwayMeta(student.pathway).label : null
+  const pathwayCourseId = student.pathway
+    ? courseIdForPathway(student.pathway)
+    : 'course-foundation'
+  const pathwayStats = courseLessonStats(db, student.id, pathwayCourseId)
+  const constructionStats = courseLessonStats(db, student.id, 'course-construction')
+  /* Prefer live course stats; fall back to meta construction meter for Construction only. */
+  const pathProg =
+    student.pathway === 'construction'
+      ? pathwayStats.lessonCount
+        ? pathwayStats.pct
+        : constructionProgress(student.id) || constructionStats.pct
+      : pathwayStats.pct
+  const hasPathwayLessons = Boolean(student.pathway && pathwayStats.lessonCount > 0)
   const nextLesson = (() => {
-    const courseId =
-      student.pathway === 'logistics'
-        ? 'course-logistics'
-        : student.pathway === 'community'
-          ? 'course-community'
-          : student.pathway === 'construction'
-            ? 'course-construction'
-            : 'course-foundation'
+    const courseId = student.pathway ? pathwayCourseId : 'course-foundation'
     const modules = db.modules.filter((m) => m.course_id === courseId).sort((a, b) => a.order - b.order)
     for (const mod of modules) {
       const lessons = db.lessons.filter((l) => l.module_id === mod.id).sort((a, b) => a.order - b.order)
@@ -105,6 +122,12 @@ export function StudentHomePage() {
 
   function formatWhen(iso: string) {
     return new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+  }
+  const enrolledPathway = student.pathway
+  const learnerName = user.full_name
+  function openPathwayPractice() {
+    if (enrolledPathway) setActivePathway(enrolledPathway)
+    openPracticeSpine(learnerName)
   }
   const nextStep = !student.foundation_complete
     ? nextLesson
@@ -130,16 +153,24 @@ export function StudentHomePage() {
       : nextLesson
         ? {
             title: nextLesson.title,
-            body: `${pathwayLabel} progress ${cProg}%. Keep going with the next lesson.`,
+            body: `${pathwayLabel} progress ${pathProg}%. Keep going with the next lesson.`,
             to: `/app/student/lessons/${nextLesson.id}`,
             cta: 'Continue lesson',
           }
-        : {
-            title: 'Review your courses',
-            body: 'You are caught up on lessons. Check assignments or your skills passport.',
-            to: '/app/student/courses',
-            cta: 'Open courses',
-          }
+        : !hasPathwayLessons
+          ? {
+              title: `Continue ${pathwayLabel} in Practice`,
+              body: `Account lessons for ${pathwayLabel} are not in this portal yet. Your real 20-step school path — vocabulary, drills, and checks — lives in Student Practice.`,
+              to: '/journey',
+              cta: 'Open Practice path',
+              onBeforeNavigate: openPathwayPractice,
+            }
+          : {
+              title: 'Review your courses',
+              body: 'You are caught up on lessons. Check assignments or your skills passport.',
+              to: '/app/student/courses',
+              cta: 'Open courses',
+            }
 
   return (
     <div className="stack">
@@ -161,11 +192,27 @@ export function StudentHomePage() {
             <span style={{ width: `${fProg}%` }} />
           </div>
           <p>
-            {pathwayLabel ?? 'Pathway'}: <strong>{student.pathway ? `${cProg}%` : 'Not started'}</strong>
+            {pathwayLabel ?? 'Pathway'}:{' '}
+            <strong>
+              {!student.pathway
+                ? 'Not started'
+                : hasPathwayLessons
+                  ? `${pathProg}%`
+                  : 'Practice path (portal lessons coming)'}
+            </strong>
           </p>
           <div className="progress" aria-hidden>
-            <span style={{ width: `${student.pathway ? cProg : 0}%` }} />
+            <span style={{ width: `${hasPathwayLessons ? pathProg : 0}%` }} />
           </div>
+          {!hasPathwayLessons && student.pathway && (
+            <p className="muted" style={{ margin: 0 }}>
+              Train on the shared 20-step path in{' '}
+              <Link className="inline-link" to="/journey" onClick={openPathwayPractice}>
+                Student Practice
+              </Link>
+              .
+            </p>
+          )}
           <Link className="btn btn-secondary on-light" to="/app/student/progress">
             See full progress
           </Link>

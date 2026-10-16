@@ -115,7 +115,23 @@ These are load-bearing. Improve around them; do not replace them with trend temp
 
 ---
 
-## 8. Active climbs (challenge these next)
+## 8. Aims vs shortfalls (honest audit)
+
+Revisit when aims change. Ranked by learner / trust harm.
+
+| Aim | Where we stand | Shortfall |
+|-----|----------------|-----------|
+| Three doors into work | Marketing + Practice packs open for all three | LMS specialty modules exist mainly for Construction; Logistics/Community account courses can look “caught up” with zero lessons |
+| Language → practice → verify | VocabSheet + drills + instructor Competent honesty | Community Level-1 gate once required the full 200+ deck (fixed); Eye Spy is still a photo collage, not a photographed scene |
+| Shared Daily Conversation Level-1 | Doctrine + Construction/Logistics | Must stay identical for Community (fixed this climb) |
+| Apprenticeship / work readiness | Copy + Skills Passport disclaimers | Do not over-claim placement rates or “Enrolling now” depth where specialty is still thin |
+| One school spine | Practice `/journey` is the rich spine | Portal home must point at Practice when LMS lessons are missing — never fake completion |
+
+**Protect:** VocabSheet, Tool Chest, Calgary voice, instructor-Competent truth, three-door story.
+
+---
+
+## 9. Active climbs (challenge these next)
 
 Living backlog — reorder as evidence appears. Strike or move items into the changelog when done.
 
@@ -126,19 +142,30 @@ Living backlog — reorder as evidence appears. Strike or move items into the ch
 | Accent token alignment | Visual identity coherence | Done (craft pass) |
 | Lesson-first compact path map | Attention on the lesson | Done (craft pass) |
 | About founding-builders framing | Trust without fake bios | Done (craft pass) |
+| Community Level-1 gate = Daily Conversation 1–20 | Non-negotiable gate parity | Done (honesty climb) |
+| LMS honesty when specialty lessons missing | Stop false “caught up”; bridge to Practice | Done (partial — portal next-step + progress copy) |
 | Pathway-aware foley beds | Sound matches craft | Open |
-| Eye Spy photography upgrade | Memorable scene craft | Open — needs assets |
-| Community specialty vocab growth | Honest depth toward parity of usefulness (not fake count parity) | Open |
-| Deeper Logistics/Community practice layers | Same spine, richer craft | Open |
-| Unified “one spine” learner mental model (Practice ↔ LMS) | Reduce two-door confusion inside the product | Open — revisit assumptions |
+| Eye Spy photography upgrade | Memorable scene craft | Open — needs assets; copy softened to “among photos” |
+| Community specialty vocab growth | Honest depth toward usefulness | Open |
+| Deeper Logistics/Community LMS modules | Account path matches Practice depth | Open |
+| Fuller one-spine UX (Practice ↔ LMS) | First-week mental model | Open — portal bridge started; keep challenging |
 
 When closing a climb: update Status, add a changelog line, and write the **new assumption to challenge next**.
 
 ---
 
-## 9. Changelog (living)
+## 10. Changelog (living)
 
 Newest first.
+
+### 2026-03-27 — Honesty climb: Level-1 gate + LMS truth
+
+- Community (all pathways) Level-1 continue gate = Daily Conversation words **1–20**; full tables stay open to practise.
+- Student portal no longer claims “caught up” when Logistics/Community have zero LMS lessons — next step opens Practice spine with pathway set.
+- Community marketing badge: “Open · specialty depth growing” (not identical “Enrolling now” depth).
+- Eye Spy help copy softened to match collage reality until photography lands.
+- README aligned to three open Practice doors + honest LMS depth note.
+- **Assumption to challenge next:** whether pointing LMS → Practice is enough, or learners still need a single visible spine inside `/app/student` itself.
 
 ### 2026-03-27 — Craft pass: statue from the stone
 
@@ -151,13 +178,13 @@ Newest first.
 
 ---
 
-## 10. Ritual for every future craft pass
+## 11. Ritual for every future craft pass
 
-1. Read this file.
+1. Read this file (especially §8 shortfalls and §9 climbs).
 2. Name the one composition or one drill you are improving (not ten).
 3. Chisel the product.
 4. Verify on desktop and mobile for touched surfaces.
-5. Update §8 / §9 with what changed and what assumption you will challenge next.
+5. Update §9 / §10 with what changed and what assumption you will challenge next.
 6. Leave the school more honest than you found it.
 
 *— Purpose Academy craft lineage. Carry it forward.*

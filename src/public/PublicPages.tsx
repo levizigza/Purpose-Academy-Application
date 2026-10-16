@@ -128,7 +128,7 @@ export function HomePage() {
                 Shared Daily Conversation Vocabulary plus a focused set of community-support workplace words — dignity,
                 privacy, support plans, and front-line English on the same foundation-to-practice model.
               </p>
-              <span className="badge ok">Enrolling now</span>
+              <span className="badge brand">Open · specialty depth growing</span>
             </Reveal>
           </div>
           <div className="hero-actions" style={{ marginTop: '1.25rem' }}>
@@ -249,7 +249,7 @@ export function ProgramsPage() {
 
       <Reveal as="article" className="school-program-feature site-crate" delay={180}>
         <div className="school-program-copy">
-          <span className="badge ok">Enrolling now</span>
+          <span className="badge brand">Open · specialty depth growing</span>
           <h2>Community Support Foundations</h2>
           <p>
             Same progression, different craft: community support work across disability services, older adults,
