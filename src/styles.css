@@ -1550,8 +1550,29 @@ table.data th {
     max(0.75rem, env(safe-area-inset-right))
     max(0.55rem, env(safe-area-inset-bottom))
     max(0.75rem, env(safe-area-inset-left));
-  background: #ffffff;
+  /* Shop-floor atmosphere — not flat paper, not casino glow */
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 38%, rgba(232, 163, 23, 0.12), transparent 62%),
+    radial-gradient(ellipse 90% 80% at 50% 100%, rgba(11, 47, 92, 0.1), transparent 55%),
+    linear-gradient(165deg, #f7f4ec 0%, #eef2f7 42%, #e4eaf2 100%);
   color: #0b2f5c;
+}
+
+.threshold::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image:
+    repeating-linear-gradient(
+      -18deg,
+      transparent,
+      transparent 11px,
+      rgba(11, 47, 92, 0.35) 11px,
+      rgba(11, 47, 92, 0.35) 12px
+    );
+  z-index: 0;
 }
 
 .threshold-stage {
@@ -1685,7 +1706,7 @@ table.data th {
   transform-origin: left center;
   transform-style: preserve-3d;
   transform: rotateY(0deg);
-  transition: transform 4.6s cubic-bezier(0.22, 0.7, 0.25, 1);
+  transition: transform 2.15s cubic-bezier(0.22, 0.7, 0.25, 1);
 }
 
 /* Stop short of edge-on so the open leaf still reads like logo-full */
@@ -1694,37 +1715,21 @@ table.data th {
   transform: rotateY(-78deg);
 }
 
-.doorway-open .doorway-leaf {
-  animation: door-idle-sway 3.4s ease-in-out infinite;
-}
-
-/* Settled opening: P stays static — motion lives in the accents */
+/* Settled opening: P stays static — no idle sway / glow pulse (L3 + L4) */
 .threshold.is-ready .doorway-open .doorway-leaf,
 .threshold.is-pathways .doorway-open .doorway-leaf,
 .threshold.is-smashing .doorway-open .doorway-leaf {
-  animation: none;
   transform: rotateY(-78deg);
 }
 
 .threshold.is-ready .doorway-open .doorway-prelight,
 .threshold.is-pathways .doorway-open .doorway-prelight,
 .threshold.is-smashing .doorway-open .doorway-prelight {
-  animation: none;
   opacity: 1;
 }
 
 .doorway-open .doorway-prelight {
-  animation: door-glow-pulse 2.8s ease-in-out infinite;
-}
-
-@keyframes door-idle-sway {
-  0%, 100% { transform: rotateY(-78deg); }
-  50% { transform: rotateY(-86deg); }
-}
-
-@keyframes door-glow-pulse {
-  0%, 100% { opacity: 0.85; }
-  50% { opacity: 1; }
+  opacity: 1;
 }
 
 .doorway-leaf-face {
@@ -1758,20 +1763,38 @@ table.data th {
 
 .threshold-pathways {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.55rem;
-  width: min(78vw, 320px);
-  margin-top: 0.2rem;
+  justify-items: center;
+  gap: 0.45rem;
+  width: min(82vw, 340px);
+  margin-top: 0.35rem;
   opacity: 0;
   transform: translateY(12px);
   pointer-events: none;
-  transition: opacity 0.55s ease, transform 0.55s ease;
+  transition: opacity 0.65s ease, transform 0.65s ease;
 }
 
 .threshold-pathways.is-live {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+.threshold-path-lede {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(11, 47, 92, 0.62);
+  text-align: center;
+}
+
+.threshold-path-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  width: 100%;
 }
 
 .threshold-brand,
@@ -1783,12 +1806,13 @@ table.data th {
   margin: 0;
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(1.35rem, 4.2vw, 1.85rem);
-  letter-spacing: 0.08em;
+  font-size: clamp(1.55rem, 5vw, 2.15rem);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #0b2f5c;
   text-align: center;
-  animation: fade-rise 0.7s ease 0.15s both;
+  animation: fade-rise 0.85s ease 0.1s both;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .threshold-door-stage {
@@ -1796,13 +1820,14 @@ table.data th {
   width: min(58vw, 320px);
   aspect-ratio: 1 / 1;
   margin: 0.1rem 0 0.15rem;
+  filter: drop-shadow(0 18px 36px rgba(11, 47, 92, 0.18));
 }
 
 .threshold-door-zoom {
   position: absolute;
   inset: 0;
   transform-origin: 50% 42%;
-  transition: transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 1.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .threshold-door-zoom.is-closed { transform: scale(1.85); }
@@ -1829,34 +1854,35 @@ table.data th {
 .threshold-path {
   display: grid;
   justify-items: center;
-  gap: 0.28rem;
-  padding: 0.55rem 0.4rem 0.6rem;
-  border-radius: 12px;
-  border: 1px solid rgba(11, 47, 92, 0.12);
-  background: linear-gradient(180deg, #fff, #f3f7fc);
-  box-shadow: 0 8px 18px rgba(11, 47, 92, 0.08);
+  gap: 0.32rem;
+  padding: 0.5rem 0.35rem 0.55rem;
+  border-radius: 0;
+  border: 0;
+  border-top: 3px solid transparent;
+  background: transparent;
+  box-shadow: none;
   text-align: center;
   opacity: 0;
-  transform: translateY(14px) scale(0.94);
+  transform: translateY(10px);
   min-width: 0;
 }
 
 .threshold-pathways.is-live .threshold-path {
-  animation: threshold-path-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: threshold-path-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .threshold-pathways.is-live .path-construction { animation-delay: 0.05s; }
-.threshold-pathways.is-live .path-logistics { animation-delay: 0.15s; }
-.threshold-pathways.is-live .path-community { animation-delay: 0.25s; }
+.threshold-pathways.is-live .path-logistics { animation-delay: 0.16s; }
+.threshold-pathways.is-live .path-community { animation-delay: 0.27s; }
 
 @keyframes threshold-path-in {
   from {
     opacity: 0;
-    transform: translateY(14px) scale(0.94);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -1864,14 +1890,15 @@ table.data th {
   font-family: var(--display);
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: #041526;
 }
 
 .threshold-path-art {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
 }
@@ -1882,97 +1909,42 @@ table.data th {
   object-fit: contain;
 }
 
-.path-icon-bounce {
-  animation: path-hat-bounce 1.15s ease-in-out infinite;
-  transform-origin: 50% 80%;
-  filter: drop-shadow(0 6px 8px rgba(232, 163, 23, 0.35));
+/* One-shot settle — hierarchy, not endless novelty */
+.path-icon-settle {
+  opacity: 0.92;
+  transform: translateY(4px);
 }
 
-.path-icon-drive {
-  animation: path-drive 2.2s ease-in-out infinite;
-  filter: drop-shadow(0 6px 8px rgba(47, 107, 176, 0.35));
+.threshold-pathways.is-live .path-icon-settle {
+  animation: path-icon-settle 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.path-icon-talk {
-  animation: path-talk 1.6s ease-in-out infinite;
-  filter: drop-shadow(0 6px 8px rgba(92, 155, 53, 0.35));
+.threshold-pathways.is-live .path-construction .path-icon-settle { animation-delay: 0.08s; }
+.threshold-pathways.is-live .path-logistics .path-icon-settle { animation-delay: 0.18s; }
+.threshold-pathways.is-live .path-community .path-icon-settle { animation-delay: 0.28s; }
+
+@keyframes path-icon-settle {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.path-drive-dust {
-  position: absolute;
-  left: 4px;
-  right: 4px;
-  bottom: 2px;
-  height: 6px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, transparent, rgba(47, 107, 176, 0.35), transparent);
-  animation: path-dust 2.2s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.path-talk-dots {
-  position: absolute;
-  top: -2px;
-  right: -4px;
-  display: flex;
-  gap: 3px;
-  pointer-events: none;
-}
-
-.path-talk-dots span {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--path-community);
-  opacity: 0.35;
-  animation: path-dot 1.2s ease-in-out infinite;
-}
-
-.path-talk-dots span:nth-child(2) { animation-delay: 0.15s; }
-.path-talk-dots span:nth-child(3) { animation-delay: 0.3s; }
-
-@keyframes path-hat-bounce {
-  0%, 100% { transform: translateY(0) rotate(-6deg); }
-  25% { transform: translateY(-12px) rotate(8deg) scale(1.05); }
-  50% { transform: translateY(-2px) rotate(-3deg); }
-  75% { transform: translateY(-8px) rotate(5deg); }
-}
-
-@keyframes path-drive {
-  0% { transform: translateX(-12px) rotate(-2deg); }
-  40% { transform: translateX(10px) rotate(2deg); }
-  55% { transform: translateX(12px) rotate(1deg); }
-  100% { transform: translateX(-12px) rotate(-2deg); }
-}
-
-@keyframes path-dust {
-  0%, 100% { opacity: 0.2; transform: scaleX(0.6); }
-  50% { opacity: 0.85; transform: scaleX(1.15); }
-}
-
-@keyframes path-talk {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  30% { transform: scale(1.1) translateY(-3px) rotate(-3deg); }
-  60% { transform: scale(0.96) rotate(2deg); }
-}
-
-@keyframes path-dot {
-  0%, 100% { opacity: 0.25; transform: translateY(0); }
-  50% { opacity: 1; transform: translateY(-4px); }
-}
-
-.threshold-path.path-construction { border-top: 3px solid var(--path-construction); }
-.threshold-path.path-logistics { border-top: 3px solid var(--path-logistics); }
-.threshold-path.path-community { border-top: 3px solid var(--path-community); }
+.threshold-path.path-construction { border-top-color: var(--path-construction); }
+.threshold-path.path-logistics { border-top-color: var(--path-logistics); }
+.threshold-path.path-community { border-top-color: var(--path-community); }
 
 @media (max-width: 640px) {
   .threshold-pathways {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     width: min(86vw, 300px);
   }
 
   .threshold-path strong {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
   }
 
   /* Keep the doorway P at the settled size the user liked */
@@ -2027,6 +1999,10 @@ table.data th {
 
   .threshold-pathways {
     width: min(70vw, 280px);
+    gap: 0.35rem;
+  }
+
+  .threshold-path-row {
     gap: 0.4rem;
   }
 
@@ -2037,9 +2013,11 @@ table.data th {
 
 @media (max-width: 420px) and (max-height: 740px) {
   .threshold-pathways {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.35rem;
     width: min(88vw, 280px);
+  }
+
+  .threshold-path-row {
+    gap: 0.35rem;
   }
 }
 
@@ -2104,10 +2082,11 @@ table.data th {
 }
 
 .threshold-hammer-icon .threshold-enter-word {
-  animation: enter-flash 1.15s ease-in-out infinite;
+  /* Calm tool label — no glow flash (L3/L4) */
   paint-order: stroke fill;
-  stroke: rgba(255, 248, 210, 0.35);
-  stroke-width: 0.45px;
+  stroke: rgba(255, 248, 210, 0.28);
+  stroke-width: 0.4px;
+  fill: #041526;
 }
 
 .threshold-hammer.is-smashing {
@@ -2252,25 +2231,6 @@ table.data th {
   to {
     opacity: 1;
     transform: translateY(-50%) translateX(0) rotate(6deg);
-  }
-}
-
-@keyframes enter-flash {
-  0%,
-  100% {
-    fill: #041526;
-    opacity: 1;
-    filter: drop-shadow(0 0 0 rgba(255, 248, 210, 0));
-  }
-  45% {
-    fill: #ffffff;
-    opacity: 1;
-    filter: drop-shadow(0 0 5px rgba(255, 248, 210, 0.95));
-  }
-  55% {
-    fill: #fff6d0;
-    opacity: 1;
-    filter: drop-shadow(0 0 8px rgba(245, 197, 66, 0.9));
   }
 }
 
@@ -8753,11 +8713,7 @@ video {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .path-icon-bounce,
-  .path-icon-drive,
-  .path-icon-talk,
-  .path-talk-dots span,
-  .path-drive-dust,
+  .path-icon-settle,
   .page-motion-smooth,
   .toolbox-flyout-chest,
   .doorway-open .doorway-leaf,
