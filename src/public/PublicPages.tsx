@@ -41,21 +41,21 @@ export function HomePage() {
           <p className="section-kicker">Why {BRAND.name}</p>
           <h2>A real school for real site work</h2>
           <p className="lede path-lede">
-            We teach construction foundations in Calgary: language for the job site, safety, tools, and supervised
-            practice. Then we guide learners into apprenticeship with employers and Alberta trade pathways.
+            One school in Calgary with three doors into work: Construction, Logistics, and Community Support. Shared
+            language foundations, supervised practice, and a clear next step toward employment or apprenticeship.
           </p>
           <div className="pillar-grid">
             <article className="pillar site-crate">
               <h3>Foundations</h3>
-              <p>Classroom and shop basics: safety gear, tools, measurement, and short workplace English.</p>
+              <p>Daily Conversation Vocabulary, specialty workplace words, safety, and short English for the job.</p>
             </article>
             <article className="pillar site-crate">
               <h3>Hands-on practice</h3>
               <p>Instructors watch you work. You practise until the skill is real, not just a quiz score.</p>
             </article>
             <article className="pillar site-crate">
-              <h3>Apprenticeship path</h3>
-              <p>We prepare you for registered apprenticeship and connect you with hiring partners in Alberta.</p>
+              <h3>Path into work</h3>
+              <p>We prepare you for apprenticeship or placement and connect you with hiring partners in Alberta.</p>
             </article>
           </div>
         </Reveal>
@@ -85,10 +85,10 @@ export function HomePage() {
 
         <Reveal as="section" className="section" delay={80}>
           <p className="section-kicker">Programs</p>
-          <h2>Construction first, then more trades pathways</h2>
+          <h2>Three doors. One school path.</h2>
           <p className="lede path-lede">
-            Our flagship program builds construction foundations and apprenticeship readiness. Related pathways follow
-            the same school model.
+            Choose Construction, Logistics, or Community Support. Every door shares Daily Conversation Vocabulary and
+            the same 20-step spine; specialty craft and depth differ by pathway.
           </p>
           <div className="signal-row">
             <Reveal as="article" className="signal construction featured" delay={100}>
@@ -101,8 +101,8 @@ export function HomePage() {
               </div>
               <h3>Construction Foundations</h3>
               <p>
-                shared 200-word Daily Conversation Vocabulary, 660-word Construction Visual Vocabulary, safety, tools, materials, and site English, with instructor
-                verification and an apprenticeship pathway.
+                Flagship depth: shared 200-word Daily Conversation Vocabulary, 660-word Construction Visual Vocabulary,
+                safety, tools, materials, and site English — with instructor verification and apprenticeship readiness.
               </p>
               <span className="badge ok">Enrolling now</span>
             </Reveal>
@@ -113,8 +113,8 @@ export function HomePage() {
               </div>
               <h3>Logistics Foundations</h3>
               <p>
-                Visual vocabulary, warehouse safety, equipment, inventory systems, and workplace English on the same
-                20-step school path.
+                Shared Daily Conversation Vocabulary plus 500-word Logistics Visual Vocabulary, warehouse safety,
+                equipment, inventory systems, and workplace English on the same 20-step path.
               </p>
               <span className="badge ok">Enrolling now</span>
             </Reveal>
@@ -125,8 +125,8 @@ export function HomePage() {
               </div>
               <h3>Community Support Foundations</h3>
               <p>
-                Front-line community support: disability and community living, older adults, settlement support,
-                privacy and dignity, and workplace English on the same foundation-to-practice model.
+                Shared Daily Conversation Vocabulary plus a focused set of community-support workplace words — dignity,
+                privacy, support plans, and front-line English on the same foundation-to-practice model.
               </p>
               <span className="badge ok">Enrolling now</span>
             </Reveal>
@@ -144,7 +144,7 @@ export function HomePage() {
           <div className="audience-grid">
             <article className="audience-card site-crate">
               <h3>Students</h3>
-              <p>Apply for Construction Foundations. Learn with support. Move toward apprenticeship.</p>
+              <p>Apply, choose your pathway, learn with support, and move toward work or apprenticeship.</p>
               <Link className="btn btn-primary" to="/admissions">
                 Apply now
               </Link>
@@ -169,11 +169,10 @@ export function HomePage() {
         <Reveal as="section" className="section visual-stage visual-stage-photo" delay={100}>
           <div className="visual-stage-inner">
             <p className="section-kicker on-dark">Our promise</p>
-            <h2>Foundations that lead to apprenticeship</h2>
+            <h2>Foundations that lead somewhere real</h2>
             <p className="lede on-dark">
-              {BRAND.name} is a trades school in {BRAND.place}. We provide foundation training, practical
-              instruction, and a supported path into apprenticeship, with employers and Alberta trade systems in view
-              from day one.
+              {BRAND.name} is a school in {BRAND.place}. We provide foundation training, practical instruction, and a
+              supported path into work or apprenticeship — with employers and Alberta systems in view from day one.
             </p>
             <div className="hero-actions">
               <Link className="btn btn-primary" to="/about">
@@ -195,10 +194,10 @@ export function ProgramsPage() {
     <div className="shell-main stack">
       <Reveal as="header" className="page-header stack" delay={0}>
         <p className="section-kicker">Programs</p>
-        <h1>Construction training that leads somewhere</h1>
+        <h1>Three pathways that lead somewhere</h1>
         <p className="lede">
-          Start with Construction Foundations. Build language, safety, and shop skill. Then move into apprenticeship
-          readiness with instructor support and employer partners.
+          Construction, Logistics, and Community Support share one school spine. Build language and safety, practise
+          with instructors, then move toward work or apprenticeship with employer partners.
         </p>
       </Reveal>
 
@@ -258,9 +257,9 @@ export function ProgramsPage() {
             before placement.
           </p>
           <ul className="school-bullets">
-            <li>Shared 200-word Daily Conversation Vocabulary plus community support workplace words</li>
+            <li>Shared 200-word Daily Conversation Vocabulary plus a focused community-support workplace word set</li>
             <li>Privacy, dignity, support plans, and community access</li>
-            <li>Foundation-to-practice path with instructor checks</li>
+            <li>Foundation-to-practice path with instructor checks (specialty depth still growing)</li>
           </ul>
           <Link className="btn btn-primary" to="/admissions">
             Ask about Community Support
@@ -291,9 +290,9 @@ export function AdmissionsPage() {
           <ol className="path-steps on-dark">
             <li>Create your student account</li>
             <li>Complete registration. Admin confirms your place</li>
-            <li>Start Construction Foundations (language, safety, tools)</li>
+            <li>Choose your pathway — Construction, Logistics, or Community Support</li>
             <li>Practise with instructors and earn verified skills</li>
-            <li>Enter apprenticeship readiness and employer connection</li>
+            <li>Move into work readiness and employer connection</li>
           </ol>
           <div className="hero-actions">
             <Link className="btn btn-primary" to="/register">
@@ -309,8 +308,8 @@ export function AdmissionsPage() {
       <Reveal className="band stack" delay={120}>
         <h2>What you need to begin</h2>
         <ul className="school-bullets">
-          <li>Willingness to learn safety and site English</li>
-          <li>Interest in construction work in Alberta</li>
+          <li>Willingness to learn safety and workplace English</li>
+          <li>Interest in Construction, Logistics, or Community Support work in Alberta</li>
           <li>A way to reach us by email or phone</li>
         </ul>
         <p className="muted">
@@ -336,8 +335,8 @@ export function AboutPage() {
         <p className="section-kicker">About</p>
         <h1>A trades school rooted in Calgary</h1>
         <p className="lede">
-          {BRAND.name} exists so people can learn foundations, practise with real instructors, and step into
-          apprenticeship. Not as a side project, but as a school built for the trades.
+          {BRAND.name} exists so people can learn foundations, practise with real instructors, and step into work or
+          apprenticeship. Not as a side project, but as a school built for real pathways.
         </p>
       </Reveal>
 
@@ -345,14 +344,13 @@ export function AboutPage() {
         <div className="serve-copy">
           <h2>Our story</h2>
           <p className="lede">
-            We started with a clear need: newcomers and job seekers who want construction careers need more than a
-            video library. They need language support, shop practice, safety discipline, and a real path into Alberta
-            apprenticeship.
+            We started with a clear need: newcomers and job seekers need more than a video library. They need language
+            support, supervised practice, safety discipline, and a real path into Alberta work — Construction,
+            Logistics, or Community Support.
           </p>
           <p>
-            Today {BRAND.name} operates as a trades school in {BRAND.place}. Construction, Logistics, and Community
-            Support Foundations are open. Instructors verify skill. Partners help learners move into work and
-            apprenticeship.
+            Today {BRAND.name} operates as a school in {BRAND.place}. All three Foundations doors are open. Instructors
+            verify skill. Partners help learners move into work and apprenticeship.
           </p>
         </div>
         <figure className="serve-figure">
@@ -363,9 +361,10 @@ export function AboutPage() {
 
       <Reveal as="section" className="section team-section" delay={100}>
         <p className="section-kicker">People</p>
-        <h2>Our team</h2>
+        <h2>Founding builders</h2>
         <p className="lede path-lede">
-          The people building Purpose Academy. Names first; roles and photos will follow as the school grows.
+          The people building Purpose Academy. We name them now with honesty: full roles, bios, and portraits will be
+          published as the school grows — we will not invent titles to fill a page.
         </p>
         <div className="team-stack" role="list">
           {SCHOOL_TEAM.map((person) => {

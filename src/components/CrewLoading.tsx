@@ -109,13 +109,13 @@ export function FoleyToggle({ className = '', compact = false }: { className?: s
       type="button"
       className={`foley-toggle${muted ? ' is-muted' : ''}${compact ? ' is-compact' : ''} ${className}`.trim()}
       aria-pressed={!muted}
-      aria-label={muted ? 'Turn construction sounds on' : 'Turn construction sounds off'}
+      aria-label={muted ? 'Turn practice sounds on' : 'Turn practice sounds off'}
       onClick={() => {
         const next = !muted
         if (!next) {
           void unlockFoley().then(() => {
             setFoleyMuted(false)
-            playFoley('hammer')
+            playFoley('whoosh')
           })
         } else {
           setFoleyMuted(true)
@@ -141,7 +141,7 @@ export function FoleyToggle({ className = '', compact = false }: { className?: s
           </svg>
         )}
       </span>
-      {!compact && <span>{muted ? 'Sounds off' : 'Site sounds'}</span>}
+      {!compact && <span>{muted ? 'Sounds off' : 'Practice sounds'}</span>}
     </button>
   )
 }

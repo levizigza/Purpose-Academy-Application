@@ -1,11 +1,13 @@
 /**
- * Construction foley for Purpose Academy.
- * Procedural Web Audio — no large sample files. Short, site-real, never noisy.
+ * Practice foley for Purpose Academy.
+ * Procedural Web Audio — no large sample files. Short, never noisy.
  *
  * Design:
  * - Soft by default; mute remembered in localStorage
- * - No looping hammer spam — one-shots and quiet ambient beds
- * - Unlock AudioContext on first user gesture (Enter hammer / Sound on)
+ * - Construction may use site one-shots (hammer, wood, ambient bed) on transitions
+ * - Logistics / Community prefer soft UI cues until pathway beds exist (see docs/CRAFTSMANSHIP.md)
+ * - No looping spam — one-shots and quiet ambient beds
+ * - Unlock AudioContext on first user gesture
  * - Respects prefers-reduced-motion for ambient beds
  */
 

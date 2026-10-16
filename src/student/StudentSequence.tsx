@@ -31,6 +31,7 @@ import {
   type QuizItem,
   type VocabTerm,
 } from './journeyCurriculum'
+import { pickSpecialtyDistractors, shuffleChoices } from './vocabDistractors'
 import {
   CareerAssessmentResult,
   CareerInterestAssessment,
@@ -319,7 +320,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         <LearningPathMap
           currentStep={step}
           practice={practice}
-          compact={!practice}
+          compact
           onOpenHub={onOpenHub}
           onSelectLesson={practice ? onJumpLesson : undefined}
         />
@@ -644,8 +645,8 @@ export function StudentSequencePage() {
   const [matchCorrect, setMatchCorrect] = useState(false)
   const [matchOptions, setMatchOptions] = useState<VocabTerm[]>(() => {
     const term = VOCAB_UNIT[0]
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    return [term, ...distractors].sort(() => Math.random() - 0.5)
+    if (!term) return []
+    return shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)])
   })
 
   /* Step 11 workplace instructions */
@@ -723,16 +724,14 @@ export function StudentSequencePage() {
     const deck = unknown.length >= 4 ? unknown : VOCAB_UNIT
     const term = deck[0]
     if (!term) return
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+    setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
   }, [step, pathwayId])
 
   useEffect(() => {
     /* When pathway changes, reset lesson-local drills so content matches the pack. */
     const term = VOCAB_UNIT[0]
     if (!term) return
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+    setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
     setVocabIdx(0)
     setVocabHeard({})
     setVocabConnected({})
@@ -875,14 +874,19 @@ export function StudentSequencePage() {
     setTransitionMsg(message || `Moving to step ${target}…`)
     setTransitioning(true)
     void unlockFoley().then(() => {
-      playFoley('ambient-start')
-      playFoley('hammer')
+      /* Construction-site beds only on Construction; other pathways keep soft UI cues. */
+      if (pathwayId === 'construction') {
+        playFoley('ambient-start')
+        playFoley('hammer')
+      } else {
+        playFoley('whoosh')
+      }
     })
     window.setTimeout(() => {
       setStep(target)
       setPracticeView('lesson')
       setTransitioning(false)
-      playFoley('ambient-stop')
+      if (pathwayId === 'construction') playFoley('ambient-stop')
       playFoley('whoosh')
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }, 900)
@@ -1181,8 +1185,11 @@ export function StudentSequencePage() {
     setMatchAnswer(null)
     setMatchCorrect(false)
     const term = VOCAB_UNIT[0]
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+    if (!term) {
+      setMatchOptions([])
+      return
+    }
+    setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
   }
   function resetInstr() { setInstrIdx(0); setInstrHeard(false); setInstrAnswer(null); setInstrCorrect(false) }
 
@@ -1536,10 +1543,11 @@ export function StudentSequencePage() {
     const term = VOCAB_UNIT.find((t) => t.id === item.termId)
     const alreadyKnown = knownSet.has(item.termId)
     const isLast = safeIdx >= safeDeck.length - 1
-    const options = [
+    const actionTermIds = WORD_ACTIONS.map((a) => a.termId)
+    const options = shuffleChoices([
       term?.english || item.termId,
-      ...VOCAB_UNIT.filter((t) => t.id !== item.termId).slice(0, 3).map((t) => t.english),
-    ]
+      ...pickSpecialtyDistractors(VOCAB_UNIT, item.termId, 3, actionTermIds).map((t) => t.english),
+    ])
 
     function pickAction(opt: string) {
       if (actionAnswer) return
@@ -1656,8 +1664,7 @@ export function StudentSequencePage() {
           setMatchAnswer(null)
           setMatchCorrect(false)
           const first = matchDeck[0]
-          const distractors = VOCAB_UNIT.filter((t) => t.id !== first.id).slice(0, 3)
-          setMatchOptions([first, ...distractors].sort(() => Math.random() - 0.5))
+          setMatchOptions(shuffleChoices([first, ...pickSpecialtyDistractors(VOCAB_UNIT, first.id, 3)]))
           playFoley('whoosh')
           return
         }
@@ -1669,8 +1676,7 @@ export function StudentSequencePage() {
       setMatchAnswer(null)
       setMatchCorrect(false)
       const nextTerm = matchDeck[next]
-      const distractors = VOCAB_UNIT.filter((t) => t.id !== nextTerm.id).slice(0, 3)
-      setMatchOptions([nextTerm, ...distractors].sort(() => Math.random() - 0.5))
+      setMatchOptions(shuffleChoices([nextTerm, ...pickSpecialtyDistractors(VOCAB_UNIT, nextTerm.id, 3)]))
     }
 
     return (

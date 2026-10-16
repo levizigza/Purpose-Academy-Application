@@ -19,8 +19,9 @@ export const PATHWAY_META: Record<PathwayId, PathwayMeta> = {
     label: 'Logistics',
     programTitle: 'Logistics Foundations',
     tagline: 'Move People, Move Opportunities.',
-    accent: '#3d8f6e',
-    soft: 'rgba(61, 143, 110, 0.14)',
+    /* Match CSS --path-logistics */
+    accent: '#2f6bb0',
+    soft: 'rgba(47, 107, 176, 0.14)',
     courseId: 'course-logistics',
     photo: 'photoLogistics',
     icon: 'iconLogistics',
@@ -31,8 +32,9 @@ export const PATHWAY_META: Record<PathwayId, PathwayMeta> = {
     label: 'Community Support',
     programTitle: 'Community Support Foundations',
     tagline: 'Help People. Strengthen Community.',
-    accent: '#7c5cbf',
-    soft: 'rgba(124, 92, 191, 0.14)',
+    /* Match CSS --path-community */
+    accent: '#5c9b35',
+    soft: 'rgba(92, 155, 53, 0.14)',
     courseId: 'course-community',
     photo: 'photoCommunity',
     icon: 'iconCommunity',

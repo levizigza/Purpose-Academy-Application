@@ -9,6 +9,7 @@ import {
   foundationProgress,
   useDb,
 } from '../data/store'
+import { pathwayMeta } from '../pathways'
 
 export function StudentRegistrationStatusPage() {
   const { student, user } = useSession()
@@ -71,6 +72,7 @@ export function StudentHomePage() {
 
   const fProg = foundationProgress(student.id)
   const cProg = constructionProgress(student.id)
+  const pathwayLabel = student.pathway ? pathwayMeta(student.pathway).label : null
   const nextLesson = (() => {
     const courseId =
       student.pathway === 'logistics'
@@ -120,15 +122,15 @@ export function StudentHomePage() {
         }
     : !student.pathway
       ? {
-          title: 'Choose Construction',
-          body: 'Foundation is complete. Select the Construction pathway to continue.',
+          title: 'Choose your pathway',
+          body: 'Foundation is complete. Select Construction, Logistics, or Community Support to continue.',
           to: '/app/student/programs',
           cta: 'Select program',
         }
       : nextLesson
         ? {
             title: nextLesson.title,
-            body: `Construction progress ${cProg}%. Keep going with the next lesson.`,
+            body: `${pathwayLabel} progress ${cProg}%. Keep going with the next lesson.`,
             to: `/app/student/lessons/${nextLesson.id}`,
             cta: 'Continue lesson',
           }
@@ -159,7 +161,7 @@ export function StudentHomePage() {
             <span style={{ width: `${fProg}%` }} />
           </div>
           <p>
-            Construction: <strong>{student.pathway ? `${cProg}%` : 'Not started'}</strong>
+            {pathwayLabel ?? 'Pathway'}: <strong>{student.pathway ? `${cProg}%` : 'Not started'}</strong>
           </p>
           <div className="progress" aria-hidden>
             <span style={{ width: `${student.pathway ? cProg : 0}%` }} />
@@ -243,7 +245,10 @@ export function StudentProfilePage() {
         <p>Phone: {student.phone}</p>
         <p>Address: {student.address}</p>
         <p>Preferred language: {student.preferred_language}</p>
-        <p>Program: {student.pathway ?? 'Foundation (no specialization yet)'}</p>
+        <p>
+          Program:{' '}
+          {student.pathway ? pathwayMeta(student.pathway).programTitle : 'Foundation (no specialization yet)'}
+        </p>
         <RegistrationStatusLabel status={student.registration_status} />
       </div>
       <div className="panel stack">

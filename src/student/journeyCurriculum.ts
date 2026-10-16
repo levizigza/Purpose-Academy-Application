@@ -56,19 +56,19 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   3: {
-    goal: 'Learn the Level-1 tool words you will hear on a Calgary job site.',
+    goal: 'Learn Daily Conversation Vocabulary, then the specialty workplace words for your pathway.',
     outcomes: [
-      'See each tool and hear English',
+      'See each word and hear English',
       'Connect the English word to the real action',
     ],
   },
   4: {
-    goal: 'Use English with support, then prove you can find and follow job-site language.',
+    goal: 'Use English with support, then prove you can find and follow workplace language.',
     outcomes: [
       'Match pictures to English words',
-      'Find tools in a busy scene',
+      'Find objects in a busy scene',
       'Follow short workplace instructions',
-      'Understand common site phrases',
+      'Understand common workplace phrases',
     ],
   },
   5: {
