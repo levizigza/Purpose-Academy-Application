@@ -1,7 +1,9 @@
 /**
  * Doorway mark — the stem of the P is a hinged shop door.
- * Pose-to-pose craft: opening runs a timing-chart keyframe (anticipate inside
- * the spacing). Light spill lags as overlapping action (Keane / follow-through).
+ *
+ * Readability rule (master climb): when open, the leaf must still read as a
+ * *door* (panels, edge, knob) — never a gold pillar. Gold is room light
+ * through the cavity, not the leaf material.
  */
 export function OpeningDoorMark({
   stage,
@@ -12,14 +14,14 @@ export function OpeningDoorMark({
     <div className={`doorway doorway-${stage}`} aria-hidden>
       <svg className="doorway-frame" viewBox="0 0 128 128" role="presentation">
         <defs>
-          <radialGradient id="doorway-room" cx="48%" cy="42%" r="55%">
-            <stop offset="0%" stopColor="#FFF4C4" />
-            <stop offset="45%" stopColor="#F0C45A" />
-            <stop offset="100%" stopColor="#8A5A12" />
+          <radialGradient id="doorway-room" cx="42%" cy="40%" r="58%">
+            <stop offset="0%" stopColor="#FFF6D0" />
+            <stop offset="40%" stopColor="#F0C45A" />
+            <stop offset="100%" stopColor="#7A4E12" />
           </radialGradient>
-          <linearGradient id="doorway-spill" x1="0.55" y1="0" x2="0.2" y2="1">
-            <stop offset="0%" stopColor="#F5D76E" stopOpacity="0.7" />
-            <stop offset="55%" stopColor="#E8A317" stopOpacity="0.28" />
+          <linearGradient id="doorway-spill" x1="0.55" y1="0" x2="0.15" y2="1">
+            <stop offset="0%" stopColor="#F5D76E" stopOpacity="0.75" />
+            <stop offset="55%" stopColor="#E8A317" stopOpacity="0.3" />
             <stop offset="100%" stopColor="#0B2F5C" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="doorway-p-ink" x1="0" y1="0" x2="1" y2="1">
@@ -27,17 +29,24 @@ export function OpeningDoorMark({
             <stop offset="55%" stopColor="#0B2F5C" />
             <stop offset="100%" stopColor="#071E3D" />
           </linearGradient>
+          {/* Jamb thickness so the open cavity reads as architecture */}
+          <linearGradient id="doorway-jamb" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#071E3D" />
+            <stop offset="55%" stopColor="#163E72" />
+            <stop offset="100%" stopColor="#0B2F5C" />
+          </linearGradient>
         </defs>
 
-        {/* Room / light revealed as the leaf swings — secondary action after the hinge. */}
         <g className="doorway-prelight">
-          <ellipse cx="72" cy="52" rx="30" ry="38" fill="url(#doorway-room)" opacity="0.85" />
-          <polygon points="46,96 70,96 58,128 4,128" fill="url(#doorway-spill)" />
+          <ellipse cx="70" cy="50" rx="26" ry="34" fill="url(#doorway-room)" opacity="0.9" />
+          <polygon points="46,96 68,96 56,128 6,128" fill="url(#doorway-spill)" />
           <rect x="46" y="22" width="18" height="96" fill="url(#doorway-room)" />
-          <rect x="61" y="22" width="2" height="96" fill="#FFF8E8" opacity="0.45" />
+          {/* Inner jamb lip — keeps the opening reading as a doorway */}
+          <rect x="46" y="22" width="3.5" height="96" fill="url(#doorway-jamb)" opacity="0.85" />
+          <rect x="60.5" y="22" width="3.5" height="96" fill="url(#doorway-jamb)" opacity="0.55" />
+          <rect x="61" y="22" width="1.5" height="96" fill="#FFF8E8" opacity="0.4" />
         </g>
 
-        {/* Same P path as logo-mark — stem is the doorway cavity */}
         <path
           className="doorway-p-body"
           fill="url(#doorway-p-ink)"
@@ -52,14 +61,21 @@ export function OpeningDoorMark({
 
       <div className="doorway-hinge">
         <div className="doorway-leaf">
+          {/* Leading edge thickness — visible in foreshortening when open */}
+          <div className="doorway-leaf-edge" />
           <div className="doorway-leaf-face doorway-leaf-front">
             <span className="doorway-panel doorway-panel-top" />
             <span className="doorway-panel doorway-panel-bot" />
+            <span className="doorway-rail" />
             <span className="doorway-hinge-pin doorway-hinge-pin-a" />
             <span className="doorway-hinge-pin doorway-hinge-pin-b" />
             <span className="doorway-knob" />
           </div>
-          <div className="doorway-leaf-face doorway-leaf-back" />
+          {/* Interior face: navy shop door, not gold — gold belongs to the room */}
+          <div className="doorway-leaf-face doorway-leaf-back">
+            <span className="doorway-panel doorway-panel-top" />
+            <span className="doorway-panel doorway-panel-bot" />
+          </div>
         </div>
       </div>
 

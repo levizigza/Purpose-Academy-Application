@@ -210,7 +210,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Done — cell timing-chart climb (v29) |
+| Splash opening aesthetic craft | L3/L4 | Done — door-readability + hammer mass (v30) |
 
 ---
 
@@ -218,13 +218,17 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-16 — Splash door-readability + hammer mass (L3)
+
+- Open settle ~82° (not −105°) so foreshortened leaf still reads as a door; navy interior + edge thickness; gold is room light only (no gold-pillar leaf).
+- Wider leaf, stronger jamb lip, panel/rail detail on both faces.
+- Hammer redrawn as tool mass (heavy head, tapered shaft, soft shadow); timeline tightened (~4.65s to ready).
+- Session key `pa-crossed-threshold-v30`.
+- **Assumption to challenge next:** whether mid-swing still “loses” the door silhouette on mobile widths.
+
 ### 2026-10-16 — Splash cell timing-chart climb (L3)
 
-- Studied Thomas & Johnston (pose-to-pose, slow in/out spacing), Keane (what moves first / overlap), Lasseter (moving holds), classical timing charts → CSS.
-- Door, camera, light, spill, name, pathways, and hammer now use dense keyframe charts with **linear** playback so spacing lives in the poses — not one cubic-bezier smear.
-- Anticipation is inside the door chart; light/spill lag as overlapping action; open leaf uses a quiet moving hold; hammer strike follows an arc with wind-up hold.
-- Session key `pa-crossed-threshold-v29`.
-- **Assumption to challenge next:** whether the ~5.4s mark→ready rhythm reads as weight or as wait on small screens.
+- Pose-to-pose timing charts with linear playback (`v29`).
 
 ### 2026-10-16 — Splash cinematic door climb (L3)
 

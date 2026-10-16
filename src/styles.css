@@ -1681,23 +1681,19 @@ table.data th {
   opacity: 0.1;
 }
 
-/* Overlapping action: light lags the leaf (follow-through). linear = chart owns spacing. */
-.doorway-opening .doorway-prelight {
-  animation: pa-light-chart 2.6s linear forwards;
-}
-
 .doorway-open .doorway-prelight {
   opacity: 1;
 }
 
 .doorway-hinge {
   position: absolute;
-  left: 35.5%;
+  left: 35.2%;
   top: 16.5%;
-  width: 14.8%;
+  /* Slightly wider leaf so foreshortened open still reads as a door plane */
+  width: 16.5%;
   height: 76%;
-  perspective: 900px;
-  perspective-origin: 120% 45%;
+  perspective: 780px;
+  perspective-origin: 140% 42%;
   transform-style: preserve-3d;
   z-index: 3;
   pointer-events: none;
@@ -1712,20 +1708,24 @@ table.data th {
 }
 
 /*
-  Pose-to-pose door chart (Illusion of Life / timing chart):
-  - more “drawings” near extremes = slow out / slow in
-  - fewer in the middle = fast through the swing
-  - anticipation press, hold, reverse, overshoot, settle
-  animation-timing-function: linear — spacing is IN the key % stops
+  Pose-to-pose door chart — settle ~82° so the open leaf still reads as a door
+  (panels + edge + knob), not a gold pillar. linear = spacing in the keys.
 */
 .doorway-opening .doorway-leaf {
-  animation: pa-door-chart 2.6s linear forwards;
+  animation: pa-door-chart 2.25s linear forwards;
+}
+
+.doorway-opening .doorway-prelight {
+  animation: pa-light-chart 2.25s linear forwards;
+}
+
+.doorway-opening .doorway-floor-spill {
+  animation: pa-spill-chart 2.25s linear forwards;
 }
 
 .doorway-open .doorway-leaf {
-  transform: rotateY(-105deg);
-  /* Moving hold (Lasseter): never freeze dead — tiny residual drift, then rest. */
-  animation: pa-door-moving-hold 2.8s linear 1 forwards;
+  transform: rotateY(-82deg);
+  animation: pa-door-moving-hold 2.6s linear 1 forwards;
 }
 
 .doorway-leaf-face {
@@ -1736,54 +1736,88 @@ table.data th {
 
 .doorway-leaf-front {
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent 18%),
-    linear-gradient(180deg, #163e72 0%, #0b2f5c 55%, #071e3d 100%);
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12), transparent 22%),
+    linear-gradient(180deg, #1a457a 0%, #0b2f5c 52%, #06182f 100%);
   box-shadow:
-    inset -2px 0 0 rgba(255, 255, 255, 0.14),
-    inset 2px 0 0 rgba(0, 0, 0, 0.25),
-    6px 0 18px rgba(0, 0, 0, 0.35);
+    inset -2px 0 0 rgba(255, 255, 255, 0.16),
+    inset 2px 0 0 rgba(0, 0, 0, 0.28),
+    8px 0 20px rgba(0, 0, 0, 0.38);
 }
 
+/* Interior: stained shop door — never gold (gold = room light only) */
 .doorway-leaf-back {
-  background: linear-gradient(270deg, #5a3a10 0%, #8b6914 45%, #3d280c 100%);
+  background:
+    linear-gradient(270deg, rgba(255, 248, 210, 0.08), transparent 30%),
+    linear-gradient(180deg, #163e72 0%, #0a2748 55%, #06182f 100%);
   transform: rotateY(180deg);
-  box-shadow: inset 2px 0 0 rgba(255, 248, 210, 0.12);
+  box-shadow: inset 3px 0 0 rgba(232, 163, 23, 0.18);
+}
+
+/* Thickness strip at leading edge — sells foreshortened volume when open */
+.doorway-leaf-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -9%;
+  width: 10%;
+  background: linear-gradient(90deg, #071e3d, #2a4f7a 45%, #0b2f5c);
+  transform: rotateY(90deg) translateZ(1px);
+  transform-origin: left center;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.35);
 }
 
 .doorway-panel {
   position: absolute;
   left: 14%;
-  right: 18%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  right: 20%;
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
   border-radius: 2px;
-  background: rgba(7, 30, 61, 0.22);
+  background: rgba(7, 30, 61, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.doorway-panel-top { top: 10%; height: 34%; }
-.doorway-panel-bot { top: 50%; height: 36%; }
+.doorway-panel-top { top: 9%; height: 32%; }
+.doorway-panel-bot { top: 52%; height: 34%; }
+
+.doorway-rail {
+  position: absolute;
+  left: 12%;
+  right: 18%;
+  top: 44%;
+  height: 5%;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.doorway-leaf-back .doorway-panel {
+  border-color: rgba(232, 163, 23, 0.22);
+  background: rgba(4, 21, 38, 0.35);
+}
 
 .doorway-hinge-pin {
   position: absolute;
-  left: -8%;
-  width: 22%;
-  height: 7%;
+  left: -10%;
+  width: 24%;
+  height: 6.5%;
   border-radius: 2px;
-  background: linear-gradient(180deg, #d7dde5, #6d7682);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(180deg, #e8edf3, #6d7682 70%, #4a5562);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.doorway-hinge-pin-a { top: 14%; }
-.doorway-hinge-pin-b { bottom: 16%; }
+.doorway-hinge-pin-a { top: 12%; }
+.doorway-hinge-pin-b { bottom: 14%; }
 
 .doorway-knob {
   position: absolute;
   top: 50%;
-  right: 16%;
-  width: 24%;
+  right: 14%;
+  width: 26%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff8e8, #c4a35a 55%, #7a4e08);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+  background: radial-gradient(circle at 32% 28%, #fff8e8, #e8a317 48%, #7a4e08);
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.45),
+    inset 0 -2px 2px rgba(0, 0, 0, 0.25);
   transform: translateY(-50%);
 }
 
@@ -1801,10 +1835,6 @@ table.data th {
   z-index: 1;
 }
 
-.doorway-opening .doorway-floor-spill {
-  animation: pa-spill-chart 2.6s linear forwards;
-}
-
 .doorway-open .doorway-floor-spill {
   opacity: 1;
   transform: scaleX(1.12);
@@ -1815,33 +1845,31 @@ table.data th {
 @keyframes pa-door-chart {
   /* closed hold */
   0% { transform: rotateY(0deg); }
-  5% { transform: rotateY(0deg); }
-  /* slow out into anticipation (crowded drawings) */
-  9% { transform: rotateY(4deg); }
-  13% { transform: rotateY(9deg); }
-  16% { transform: rotateY(13deg); }
+  6% { transform: rotateY(0deg); }
+  /* slow out into anticipation */
+  10% { transform: rotateY(5deg); }
+  14% { transform: rotateY(10deg); }
+  18% { transform: rotateY(13deg); }
   /* moving hold on anticipate */
-  20% { transform: rotateY(14deg); }
-  23% { transform: rotateY(13.5deg); }
+  22% { transform: rotateY(13.5deg); }
+  25% { transform: rotateY(12.5deg); }
   /* reverse — accelerate through the arc */
-  27% { transform: rotateY(6deg); }
-  32% { transform: rotateY(-18deg); }
-  38% { transform: rotateY(-48deg); }
-  46% { transform: rotateY(-78deg); }
-  /* fast middle (sparse drawings) */
-  54% { transform: rotateY(-98deg); }
-  /* slow in + overshoot */
-  64% { transform: rotateY(-110deg); }
-  72% { transform: rotateY(-113deg); }
-  82% { transform: rotateY(-107deg); }
-  92% { transform: rotateY(-104deg); }
-  100% { transform: rotateY(-105deg); }
+  30% { transform: rotateY(4deg); }
+  36% { transform: rotateY(-22deg); }
+  44% { transform: rotateY(-48deg); }
+  /* fast middle */
+  54% { transform: rotateY(-70deg); }
+  /* slow in + slight overshoot — settle where door still reads */
+  66% { transform: rotateY(-86deg); }
+  76% { transform: rotateY(-88deg); }
+  88% { transform: rotateY(-81deg); }
+  100% { transform: rotateY(-82deg); }
 }
 
 @keyframes pa-door-moving-hold {
-  0% { transform: rotateY(-105deg); }
-  45% { transform: rotateY(-106.4deg); }
-  100% { transform: rotateY(-105deg); }
+  0% { transform: rotateY(-82deg); }
+  50% { transform: rotateY(-83.5deg); }
+  100% { transform: rotateY(-82deg); }
 }
 
 @keyframes pa-light-chart {
@@ -1878,14 +1906,12 @@ table.data th {
 }
 
 @keyframes pa-camera-chart {
-  /* start on the mark; pull back as the door commits — arc in scale */
   0% { transform: scale(2.35); }
-  12% { transform: scale(2.32); }
-  28% { transform: scale(2.05); }
-  42% { transform: scale(1.7); }
-  58% { transform: scale(1.35); }
-  72% { transform: scale(1.12); }
-  84% { transform: scale(0.985); }
+  14% { transform: scale(2.3); }
+  32% { transform: scale(1.95); }
+  48% { transform: scale(1.55); }
+  66% { transform: scale(1.2); }
+  82% { transform: scale(0.99); }
   100% { transform: scale(1); }
 }
 
@@ -2051,7 +2077,7 @@ table.data th {
 /* Staging: hold on the mark, then camera chart pulls back with the door. */
 .threshold-door-zoom.is-closed { transform: scale(2.35); }
 .threshold-door-zoom.is-opening {
-  animation: pa-camera-chart 2.6s linear forwards;
+  animation: pa-camera-chart 2.25s linear forwards;
 }
 .threshold-door-zoom.is-ready { transform: scale(1); }
 
@@ -2272,12 +2298,12 @@ table.data th {
 
 .threshold-hammer {
   position: fixed;
-  right: clamp(4.5rem, 22vw, 15rem);
-  top: 48%;
+  right: clamp(3.5rem, 20vw, 13.5rem);
+  top: 47%;
   z-index: 12;
   display: grid;
   justify-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   width: auto;
   margin: 0;
   padding: 0.35rem;
@@ -2288,9 +2314,10 @@ table.data th {
   box-shadow: none;
   cursor: pointer;
   opacity: 0;
-  transform: translateY(-50%) translateX(28px) rotate(12deg);
+  /* Tool rests at a work angle — not a hanging sign */
+  transform: translateY(-50%) translateX(28px) rotate(8deg);
   transition: transform 0.28s ease, filter 0.28s ease;
-  filter: drop-shadow(0 16px 30px rgba(90, 55, 8, 0.48));
+  filter: drop-shadow(0 18px 28px rgba(40, 24, 4, 0.5));
 }
 
 .threshold-hammer.is-visible {
@@ -2307,7 +2334,7 @@ table.data th {
 }
 
 .threshold-hammer-icon {
-  width: clamp(6.6rem, 17vw, 9rem);
+  width: clamp(7.2rem, 18vw, 9.6rem);
   height: auto;
   display: block;
 }
@@ -2398,9 +2425,9 @@ table.data th {
 }
 
 @keyframes pa-door-cross {
-  0% { transform: rotateY(-105deg); }
-  40% { transform: rotateY(-118deg); }
-  100% { transform: rotateY(-128deg); }
+  0% { transform: rotateY(-82deg); }
+  45% { transform: rotateY(-98deg); }
+  100% { transform: rotateY(-112deg); }
 }
 
 /* Arc path into frame (not a straight slide). */
@@ -2558,7 +2585,7 @@ table.data th {
 
   .doorway-opening .doorway-leaf,
   .doorway-open .doorway-leaf {
-    transform: rotateY(-105deg);
+    transform: rotateY(-82deg);
   }
 
   .doorway-prelight,
