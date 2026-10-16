@@ -2542,10 +2542,11 @@ table.data th {
   }
 }
 
+/* Handoff contract: veil matches splash/home cool floor — not a warm cream hard cut */
 @keyframes threshold-cross-veil {
   0% { opacity: 0; background: transparent; }
-  35% { opacity: 1; background: rgba(255, 248, 232, 0.35); }
-  100% { opacity: 1; background: #f7f4ec; }
+  40% { opacity: 1; background: rgba(232, 238, 245, 0.55); }
+  100% { opacity: 1; background: #eef2f7; }
 }
 
 @keyframes threshold-cross-beam {
@@ -2554,12 +2555,12 @@ table.data th {
     transform: translate(-50%, -50%) scale(0.2);
   }
   40% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1.35);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(3.2);
+    transform: translate(-50%, -50%) scale(3);
   }
 }
 
