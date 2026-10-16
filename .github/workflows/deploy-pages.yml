@@ -34,6 +34,10 @@ jobs:
         run: npm ci --prefix server
 
       - name: Bake Edge neural TTS for Practice Mode (static Pages audio)
+        # Skip force re-bake of Logistics clips on every deploy — use cached public/tts.
+        # Set BAKE_FORCE_LOGISTICS=1 manually when intentionally refreshing worksheet audio.
+        env:
+          BAKE_FORCE_LOGISTICS: '0'
         run: npm run bake:tts
         continue-on-error: true
 

@@ -6,7 +6,8 @@ import { OpeningDoorMark } from '../components/OpeningDoor'
 import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
-const ENTERED_KEY = 'pa-crossed-threshold-v26'
+/** Bump when splash craft changes so returning visitors see the new opening. */
+const ENTERED_KEY = 'pa-crossed-threshold-v27'
 
 export function hasEnteredSite() {
   try {
@@ -26,12 +27,15 @@ export function markEnteredSite() {
 
 type SplashStage = 'closed' | 'opening' | 'pathways' | 'ready' | 'smashing' | 'shattering'
 
-/** Big P opens and settles static; accents arrive after. */
+/**
+ * Deliberate shop-floor pacing (L3): door opens and settles before pathway marks,
+ * then the hammer CTA — no rush, no looping chrome.
+ */
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'closed' },
-  { at: 700, stage: 'opening' },
-  { at: 2000, stage: 'pathways' },
-  { at: 3000, stage: 'ready' },
+  { at: 550, stage: 'opening' },
+  { at: 2600, stage: 'pathways' },
+  { at: 3600, stage: 'ready' },
 ]
 
 /** Full-screen irregular mirror shards — content stays painted on the glass. */
@@ -115,30 +119,27 @@ function EnterHammer({ className = '' }: { className?: string }) {
 function PathwayStage({ active }: { active: boolean }) {
   return (
     <div className={`threshold-pathways${active ? ' is-live' : ''}`} aria-hidden={!active}>
-      <article className="threshold-path path-construction">
-        <div className="threshold-path-art">
-          <img src={BRAND_ASSETS.iconConstruction} alt="" className="path-icon-bounce" />
-        </div>
-        <strong>Construction</strong>
-      </article>
-      <article className="threshold-path path-logistics">
-        <div className="threshold-path-art">
-          <img src={BRAND_ASSETS.iconLogistics} alt="" className="path-icon-drive" />
-          <span className="path-drive-dust" aria-hidden />
-        </div>
-        <strong>Logistics</strong>
-      </article>
-      <article className="threshold-path path-community">
-        <div className="threshold-path-art">
-          <img src={BRAND_ASSETS.iconCommunity} alt="" className="path-icon-talk" />
-          <span className="path-talk-dots" aria-hidden>
-            <span />
-            <span />
-            <span />
-          </span>
-        </div>
-        <strong>Community</strong>
-      </article>
+      <p className="threshold-path-lede">Three doors into work</p>
+      <div className="threshold-path-row">
+        <article className="threshold-path path-construction">
+          <div className="threshold-path-art">
+            <img src={BRAND_ASSETS.iconConstruction} alt="" className="path-icon-settle" />
+          </div>
+          <strong>Construction</strong>
+        </article>
+        <article className="threshold-path path-logistics">
+          <div className="threshold-path-art">
+            <img src={BRAND_ASSETS.iconLogistics} alt="" className="path-icon-settle" />
+          </div>
+          <strong>Logistics</strong>
+        </article>
+        <article className="threshold-path path-community">
+          <div className="threshold-path-art">
+            <img src={BRAND_ASSETS.iconCommunity} alt="" className="path-icon-settle" />
+          </div>
+          <strong>Community</strong>
+        </article>
+      </div>
     </div>
   )
 }
