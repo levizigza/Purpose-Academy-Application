@@ -87,6 +87,7 @@ function AppRoutes() {
     }
   }, [bypassSplash])
 
+  /* Gateway module: splash owns first entry; session key = idempotent re-entry. */
   if (!entered && !bypassSplash) {
     return <SplashPage onEnter={() => setEntered(true)} />
   }

@@ -86,6 +86,37 @@ UX translation (not SD colour cosplay):
 
 Ask on every UI change: *Does this pull someone into mindless more, or walk them into a finished station?*
 
+### 3.1 Systems thinking (isolation + connection)
+
+Study trail: [awesome-system-design-resources](https://github.com/ashishps1/awesome-system-design-resources) (core concepts, APIs, tradeoffs, patterns). We translate those ideas into **product and experience architecture** — not only servers.
+
+Every surface is a **module**. Modules must be excellent in isolation *and* speak a shared contract so the whole school feels like one organism.
+
+| System idea | Meaning in distributed systems | Purpose Academy translation |
+|-------------|--------------------------------|------------------------------|
+| **High cohesion** | One module, one job | Splash opens the school; Home orients; Practice runs a station; Learn deepens — do not dump every job into one page |
+| **Low coupling / narrow interfaces** | Depend on contracts, not guts | Shared contracts: three-door story, pathway accents, navy grammar, 20-step spine language, session “crossed threshold” |
+| **API / gateway** | One entry that routes cleanly | Splash (and `/enter/*` bypass) is the gateway — strike → cross → Home must land on the same visual/language contract as the rest of the site |
+| **Idempotency** | Same action twice is safe | Re-entering after splash (session key) must not trap or re-force the open; deep links bypass without breaking state |
+| **Single source of truth** | One owner per fact | Pathway name, Level-1 = 20, vocab counts, brand copy live in packs/`BRAND` — UI reads them, does not invent parallel numbers |
+| **Latency vs throughput** | Feel fast without flooding | One focal motion at a time (staging); no attention-spam loops; finite stations over infinite feed |
+| **Failover / graceful degradation** | Partial failure still serves | Missing specialty LMS → honesty, not fake “caught up”; reduced-motion → still enter; TTS bake skip must not block Pages |
+| **Event-driven handoffs** | Clear events between parts | Splash stages (build/breathe/resolve) → `markEnteredSite` → Home hero continues three doors; Practice marks ↔ portal School path |
+| **Tradeoffs** | Name what you give up | Wider architectural door vs exact logo slit; cinematic open vs instant entry — document the choice in changelog |
+
+**Flow law:** map the learner journey as a system before polishing a screen.
+
+```
+Splash (gateway) → Home (orient) → Admissions/Enter (identity)
+        → Portal School path (spine) ↔ Practice /journey (station)
+        → Learn/LMS (depth when built) → Skills Passport (proof)
+```
+
+When you change one node, ask: *What contract did neighbors rely on? Did the handoff still feel continuous?*
+
+**Isolation test:** Could this module still make sense if the rest of the site were missing?  
+**Connection test:** Does walking splash → home → programs feel like one school, or three different products?
+
 ---
 
 ## 4. Non-negotiables (protect first)
@@ -260,14 +291,22 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Climbing — architectural door + perspective (v34) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — systems handoff + door craft (v35) |
 | Site-wide composition (thirds / hierarchy) | L3 | Open — after splash locks |
+| Systems thinking (journey as architecture) | L6 | Climbing — doctrine §3.1; apply node-by-node |
 
 ---
 
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-16 — Systems thinking + splash→site handoff (L6/L3)
+
+- Documented §3.1 systems thinking (cohesion, contracts, gateway, idempotency, handoffs, tradeoffs) from [awesome-system-design-resources](https://github.com/ashishps1/awesome-system-design-resources) translated to the learner journey.
+- Cross-veil lands on cool shop-floor grey (same family as splash/home), not a warm cream cut — interface contract between gateway and Home.
+- Session key `pa-crossed-threshold-v35`.
+- **Assumption to challenge next:** whether Home hero should inherit a quieter “just crossed” beat for first paint after splash.
 
 ### 2026-10-16 — Splash architectural door + perspective (L3)
 
