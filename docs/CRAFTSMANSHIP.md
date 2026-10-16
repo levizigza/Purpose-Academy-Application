@@ -160,7 +160,7 @@ These are load-bearing across all layers.
 6. **Mobile and desktop** both load clean; splash/gate must not trap entry without an obvious continue.
 7. **Cool for the trades** — shop-floor gravity (navy, amber, material photos, crew order). Proud to be seen here — not homework app, not casino.
 8. **Training stages** (School path / Practice hub) sit on a dark material stage when embedded in the light portal so light text never dies on paper.
-9. **Opening / splash is L3 too** — brand-first doorway, deliberate pacing, warm shop light (not casino glow), pathway marks as one-shot settle (not looping bounce/drive/talk), calm ENTER hammer. Atmosphere over flat white.
+9. **Opening / splash is L3 too** — treat it as a short film: staging (one focus), anticipation before the door swing, follow-through light spill, brand name after the mark settles, pathway cascade, then hammer CTA. Exit is a walk-through (strike → dolly), not glass-shatter gimmick. Warm shop light, not casino glow.
 
 ---
 
@@ -210,7 +210,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Done (this climb) — iterate |
+| Splash opening aesthetic craft | L3/L4 | Done — cinematic door climb (v28) |
 
 ---
 
@@ -218,12 +218,17 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-16 — Splash cinematic door climb (L3)
+
+- Researched brand-intro motion (Disney staging / anticipation / follow-through; logo reveal patterns; CSS 3D door + light spill).
+- New choreography: breath → closed mark → anticipate → open → name → pathways → ready → strike → walk-through cross.
+- Stronger 3D leaf (panels, hinge pins, back face, floor spill); camera pull-back staging; brand letter-spacing settle; replaced glass shatter with hammer strike + dolly through the door.
+- Session key `pa-crossed-threshold-v28`.
+- **Assumption to challenge next:** whether ~4.8s to ready feels right on mobile, or a tighter “short film” cut lands better.
+
 ### 2026-10-16 — Splash opening aesthetic craft (L3)
 
-- Opening animation brought under the same craft layers: shop-floor atmosphere, warmer non-pulsing door light, deliberate door→pathways→ENTER pacing, pathway marks as one-shot settle (removed bounce/drive/talk loops and ENTER glow flash).
-- Brand name hierarchy strengthened; “Three doors into work” under the P.
-- Session key bumped to `pa-crossed-threshold-v27` so returning visitors see the refined opening.
-- **Assumption to challenge next:** whether smash-enter still earns its drama, or a quieter threshold exit serves trades gravity better.
+- First pass: shop-floor atmosphere, calmer light, pathway one-shot settle, no ENTER glow flash (`v27`).
 
 ### 2026-10-16 — Layered craft + site-wide attention sweep
 
