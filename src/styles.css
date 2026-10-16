@@ -1550,11 +1550,10 @@ table.data th {
     max(0.75rem, env(safe-area-inset-right))
     max(0.55rem, env(safe-area-inset-bottom))
     max(0.75rem, env(safe-area-inset-left));
-  /* Shop-floor atmosphere — not flat paper, not casino glow */
+  /* Cool shop floor — gold lives only inside the open doorway, not the page */
   background:
-    radial-gradient(ellipse 70% 55% at 50% 38%, rgba(232, 163, 23, 0.12), transparent 62%),
     radial-gradient(ellipse 90% 80% at 50% 100%, rgba(11, 47, 92, 0.1), transparent 55%),
-    linear-gradient(165deg, #f7f4ec 0%, #eef2f7 42%, #e4eaf2 100%);
+    linear-gradient(165deg, #f4f6f9 0%, #eef2f7 42%, #e4eaf2 100%);
   color: #0b2f5c;
 }
 
@@ -1667,36 +1666,53 @@ table.data th {
   aspect-ratio: 1 / 1;
   max-width: 100%;
   transform: translate(-50%, -50%);
+  /* Clip anything that would paint above the P lintel */
+  overflow: hidden;
 }
 
 .doorway-frame {
   width: 100%;
   height: 100%;
   display: block;
-  overflow: visible;
-  filter: drop-shadow(0 14px 28px rgba(11, 47, 92, 0.22));
+  overflow: hidden;
+  /* No SVG-wide filter — drop-shadow on light layers causes top poke */
 }
 
 .doorway-prelight {
-  opacity: 0.1;
+  opacity: 0.06;
 }
 
 .doorway-open .doorway-prelight {
   opacity: 1;
 }
 
+/* Hinge aligned to logo stem cavity (viewBox 48→62 × 28→118) */
 .doorway-hinge {
   position: absolute;
-  left: 35.2%;
-  top: 16.5%;
-  /* Slightly wider leaf so foreshortened open still reads as a door plane */
-  width: 16.5%;
-  height: 76%;
+  left: 37.5%;
+  /* Inset under lintel so perspective cannot lift the leaf above the P */
+  top: 22.5%;
+  width: 12.5%;
+  height: 69.5%;
   perspective: 780px;
-  perspective-origin: 140% 42%;
+  perspective-origin: 120% 40%;
   transform-style: preserve-3d;
   z-index: 3;
   pointer-events: none;
+}
+
+/* Caps the stem top above the swinging leaf — kills the “light poke” */
+.doorway-lintel {
+  position: absolute;
+  left: 35.5%;
+  top: 16.8%;
+  width: 15%;
+  /* Overlap into the cavity top so no bright hairline can sit on the lintel edge */
+  height: 7.2%;
+  background: #0b2f5c;
+  z-index: 6;
+  pointer-events: none;
+  box-shadow: 0 1px 0 rgba(7, 30, 61, 0.9);
 }
 
 .doorway-leaf {
@@ -1708,24 +1724,24 @@ table.data th {
 }
 
 /*
-  Pose-to-pose door chart — settle ~82° so the open leaf still reads as a door
-  (panels + edge + knob), not a gold pillar. linear = spacing in the keys.
+  Creative open (not purely literal): crack of daylight → hesitation →
+  commit → soft overshoot → settle. linear playback; spacing = the acting.
 */
 .doorway-opening .doorway-leaf {
-  animation: pa-door-chart 2.25s linear forwards;
+  animation: pa-door-chart 2.85s linear forwards;
 }
 
 .doorway-opening .doorway-prelight {
-  animation: pa-light-chart 2.25s linear forwards;
-}
-
-.doorway-opening .doorway-floor-spill {
-  animation: pa-spill-chart 2.25s linear forwards;
+  animation: pa-light-chart 2.85s linear forwards;
 }
 
 .doorway-open .doorway-leaf {
-  transform: rotateY(-82deg);
-  animation: pa-door-moving-hold 2.6s linear 1 forwards;
+  transform: rotateY(-52deg);
+  animation: pa-door-moving-hold 3.2s ease-in-out 1 forwards;
+}
+
+.doorway-open .doorway-motes {
+  animation: pa-mote-drift 4.5s ease-in-out infinite;
 }
 
 .doorway-leaf-face {
@@ -1747,10 +1763,10 @@ table.data th {
 /* Interior: stained shop door — never gold (gold = room light only) */
 .doorway-leaf-back {
   background:
-    linear-gradient(270deg, rgba(255, 248, 210, 0.08), transparent 30%),
+    linear-gradient(270deg, rgba(255, 254, 248, 0.14), transparent 34%),
     linear-gradient(180deg, #163e72 0%, #0a2748 55%, #06182f 100%);
   transform: rotateY(180deg);
-  box-shadow: inset 3px 0 0 rgba(232, 163, 23, 0.18);
+  box-shadow: inset 3px 0 0 rgba(232, 238, 245, 0.22);
 }
 
 /* Thickness strip at leading edge — sells foreshortened volume when open */
@@ -1814,95 +1830,58 @@ table.data th {
   width: 26%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle at 32% 28%, #fff8e8, #e8a317 48%, #7a4e08);
+  background: radial-gradient(circle at 32% 28%, #f4f0e6, #c4a574 52%, #6a5430);
   box-shadow:
     0 2px 3px rgba(0, 0, 0, 0.45),
     inset 0 -2px 2px rgba(0, 0, 0, 0.25);
   transform: translateY(-50%);
 }
 
-.doorway-floor-spill {
-  position: absolute;
-  left: 28%;
-  right: 18%;
-  bottom: 2%;
-  height: 14%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 40%, rgba(245, 215, 110, 0.55), transparent 70%);
-  opacity: 0;
-  transform: scaleX(0.35) translateY(0);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.doorway-open .doorway-floor-spill {
-  opacity: 1;
-  transform: scaleX(1.12);
-}
-
 /* —— Timing charts (linear playback; crowding = slow) —— */
 
 @keyframes pa-door-chart {
-  /* closed hold */
-  0% { transform: rotateY(0deg); }
-  6% { transform: rotateY(0deg); }
-  /* slow out into anticipation */
-  10% { transform: rotateY(5deg); }
-  14% { transform: rotateY(10deg); }
-  18% { transform: rotateY(13deg); }
-  /* moving hold on anticipate */
-  22% { transform: rotateY(13.5deg); }
-  25% { transform: rotateY(12.5deg); }
-  /* reverse — accelerate through the arc */
-  30% { transform: rotateY(4deg); }
-  36% { transform: rotateY(-22deg); }
-  44% { transform: rotateY(-48deg); }
-  /* fast middle */
-  54% { transform: rotateY(-70deg); }
-  /* slow in + slight overshoot — settle where door still reads */
-  66% { transform: rotateY(-86deg); }
-  76% { transform: rotateY(-88deg); }
-  88% { transform: rotateY(-81deg); }
-  100% { transform: rotateY(-82deg); }
+  /* still */
+  0%, 8% { transform: rotateY(0deg); }
+  /* crack — invite the light before the full swing */
+  14% { transform: rotateY(-6deg); }
+  20% { transform: rotateY(-8deg); }
+  /* hesitation (the door thinks) */
+  28% { transform: rotateY(-7deg); }
+  34% { transform: rotateY(-10deg); }
+  /* commit — accelerate through the arc */
+  42% { transform: rotateY(-22deg); }
+  52% { transform: rotateY(-38deg); }
+  62% { transform: rotateY(-50deg); }
+  /* soft overshoot, then settle like a held breath */
+  72% { transform: rotateY(-58deg); }
+  82% { transform: rotateY(-54deg); }
+  92% { transform: rotateY(-51deg); }
+  100% { transform: rotateY(-52deg); }
 }
 
 @keyframes pa-door-moving-hold {
-  0% { transform: rotateY(-82deg); }
-  50% { transform: rotateY(-83.5deg); }
-  100% { transform: rotateY(-82deg); }
+  0% { transform: rotateY(-52deg); }
+  40% { transform: rotateY(-53.5deg); }
+  70% { transform: rotateY(-51.5deg); }
+  100% { transform: rotateY(-52deg); }
 }
 
 @keyframes pa-light-chart {
-  0%, 18% { opacity: 0.1; }
-  26% { opacity: 0.22; }
-  38% { opacity: 0.4; }
-  52% { opacity: 0.62; }
-  68% { opacity: 0.82; }
-  86% { opacity: 0.95; }
+  /* Light leads slightly — a crack of day before the leaf commits */
+  0%, 10% { opacity: 0.04; }
+  16% { opacity: 0.28; }
+  24% { opacity: 0.38; }
+  34% { opacity: 0.42; }
+  48% { opacity: 0.62; }
+  62% { opacity: 0.82; }
+  78% { opacity: 0.94; }
   100% { opacity: 1; }
 }
 
-@keyframes pa-spill-chart {
-  0%, 22% {
-    opacity: 0;
-    transform: scaleX(0.35) translateY(4px);
-  }
-  40% {
-    opacity: 0.35;
-    transform: scaleX(0.7) translateY(2px);
-  }
-  58% {
-    opacity: 0.7;
-    transform: scaleX(1.05) translateY(0);
-  }
-  78% {
-    opacity: 0.95;
-    transform: scaleX(1.18) translateY(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1.12) translateY(0);
-  }
+@keyframes pa-mote-drift {
+  0%, 100% { transform: translateY(0); opacity: 0.45; }
+  35% { transform: translateY(-2px); opacity: 0.7; }
+  65% { transform: translateY(1px); opacity: 0.55; }
 }
 
 @keyframes pa-camera-chart {
@@ -2022,9 +2001,9 @@ table.data th {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  /* No gold sun behind the mark — light exits only through the door cavity */
   background:
-    radial-gradient(ellipse 55% 45% at 50% 42%, rgba(232, 163, 23, 0.16), transparent 70%),
-    radial-gradient(ellipse 80% 55% at 50% 105%, rgba(11, 47, 92, 0.18), transparent 60%);
+    radial-gradient(ellipse 80% 55% at 50% 105%, rgba(11, 47, 92, 0.16), transparent 60%);
   opacity: 0.55;
   transition: opacity 1.2s ease;
 }
@@ -2077,7 +2056,7 @@ table.data th {
 /* Staging: hold on the mark, then camera chart pulls back with the door. */
 .threshold-door-zoom.is-closed { transform: scale(2.35); }
 .threshold-door-zoom.is-opening {
-  animation: pa-camera-chart 2.25s linear forwards;
+  animation: pa-camera-chart 2.85s linear forwards;
 }
 .threshold-door-zoom.is-ready { transform: scale(1); }
 
@@ -2104,12 +2083,12 @@ table.data th {
 
 .threshold-door-ground {
   position: absolute;
-  left: 18%;
-  right: 18%;
-  bottom: -2%;
-  height: 12%;
+  left: 28%;
+  right: 28%;
+  bottom: -1%;
+  height: 8%;
   border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 40%, rgba(11, 47, 92, 0.22), transparent 72%);
+  background: radial-gradient(ellipse at 50% 40%, rgba(11, 47, 92, 0.18), transparent 72%);
   z-index: 0;
   pointer-events: none;
 }
@@ -2561,7 +2540,6 @@ table.data th {
   .threshold-door-zoom,
   .doorway-leaf,
   .doorway-prelight,
-  .doorway-floor-spill,
   .threshold-path,
   .path-icon-settle,
   .threshold-hammer {
@@ -2585,11 +2563,14 @@ table.data th {
 
   .doorway-opening .doorway-leaf,
   .doorway-open .doorway-leaf {
-    transform: rotateY(-82deg);
+    transform: rotateY(-52deg);
+  }
+
+  .doorway-open .doorway-motes {
+    animation: none;
   }
 
   .doorway-prelight,
-  .doorway-floor-spill,
   .threshold-path,
   .path-icon-settle {
     opacity: 1;

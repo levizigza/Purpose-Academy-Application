@@ -1,9 +1,9 @@
 /**
  * Doorway mark — the stem of the P is a hinged shop door.
  *
- * Readability rule (master climb): when open, the leaf must still read as a
- * *door* (panels, edge, knob) — never a gold pillar. Gold is room light
- * through the cavity, not the leaf material.
+ * Daylight through architecture: soft morning light clipped to the open
+ * stem cavity (logo P proportions). No harsh gold sun, no bowl glow,
+ * no top poke. Creative license on the open (crack → breathe → commit).
  */
 export function OpeningDoorMark({
   stage,
@@ -14,14 +14,19 @@ export function OpeningDoorMark({
     <div className={`doorway doorway-${stage}`} aria-hidden>
       <svg className="doorway-frame" viewBox="0 0 128 128" role="presentation">
         <defs>
-          <radialGradient id="doorway-room" cx="42%" cy="40%" r="58%">
-            <stop offset="0%" stopColor="#FFF6D0" />
-            <stop offset="40%" stopColor="#F0C45A" />
-            <stop offset="100%" stopColor="#7A4E12" />
+          <clipPath id="doorway-cavity-clip">
+            <rect x="48" y="28" width="14" height="90" rx="0.4" />
+          </clipPath>
+          {/* Natural morning light — soft white with cool sky + warm wall bounce */}
+          <radialGradient id="doorway-day" cx="38%" cy="32%" r="78%">
+            <stop offset="0%" stopColor="#FFFEFA" />
+            <stop offset="35%" stopColor="#F3F0E8" />
+            <stop offset="70%" stopColor="#E4EAF2" />
+            <stop offset="100%" stopColor="#C5D0DE" />
           </radialGradient>
-          <linearGradient id="doorway-spill" x1="0.55" y1="0" x2="0.15" y2="1">
-            <stop offset="0%" stopColor="#F5D76E" stopOpacity="0.75" />
-            <stop offset="55%" stopColor="#E8A317" stopOpacity="0.3" />
+          <linearGradient id="doorway-beam" x1="0.35" y1="0" x2="0.7" y2="1">
+            <stop offset="0%" stopColor="#FFFEF8" stopOpacity="0.55" />
+            <stop offset="55%" stopColor="#F0E8D8" stopOpacity="0.12" />
             <stop offset="100%" stopColor="#0B2F5C" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="doorway-p-ink" x1="0" y1="0" x2="1" y2="1">
@@ -29,22 +34,34 @@ export function OpeningDoorMark({
             <stop offset="55%" stopColor="#0B2F5C" />
             <stop offset="100%" stopColor="#071E3D" />
           </linearGradient>
-          {/* Jamb thickness so the open cavity reads as architecture */}
-          <linearGradient id="doorway-jamb" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#071E3D" />
-            <stop offset="55%" stopColor="#163E72" />
-            <stop offset="100%" stopColor="#0B2F5C" />
+          <linearGradient id="doorway-spill" x1="0.5" y1="0" x2="0.35" y2="1">
+            <stop offset="0%" stopColor="#FFFEF8" stopOpacity="0.7" />
+            <stop offset="40%" stopColor="#E8EEF5" stopOpacity="0.28" />
+            <stop offset="100%" stopColor="#0B2F5C" stopOpacity="0" />
           </linearGradient>
         </defs>
 
-        <g className="doorway-prelight">
-          <ellipse cx="70" cy="50" rx="26" ry="34" fill="url(#doorway-room)" opacity="0.9" />
-          <polygon points="46,96 68,96 56,128 6,128" fill="url(#doorway-spill)" />
-          <rect x="46" y="22" width="18" height="96" fill="url(#doorway-room)" />
-          {/* Inner jamb lip — keeps the opening reading as a doorway */}
-          <rect x="46" y="22" width="3.5" height="96" fill="url(#doorway-jamb)" opacity="0.85" />
-          <rect x="60.5" y="22" width="3.5" height="96" fill="url(#doorway-jamb)" opacity="0.55" />
-          <rect x="61" y="22" width="1.5" height="96" fill="#FFF8E8" opacity="0.4" />
+        {/* Soft pool from the mouth — daylight on the floor, not a yellow sun */}
+        <g className="doorway-prelight doorway-spill-layer">
+          <polygon points="48,118 62,118 68,128 34,128" fill="url(#doorway-spill)" />
+        </g>
+
+        <g className="doorway-prelight" clipPath="url(#doorway-cavity-clip)">
+          <rect x="48" y="30" width="14" height="88" fill="url(#doorway-day)" />
+          {/* Soft volumetric streaks — creative, not literal geometry */}
+          <polygon points="50,30 54,30 58,118 49,118" fill="url(#doorway-beam)" opacity="0.85" />
+          <polygon points="55,30 59,30 62,118 56,118" fill="url(#doorway-beam)" opacity="0.45" />
+          {/* Dust motes — tiny living light inside the empty space */}
+          <g className="doorway-motes" opacity="0.55">
+            <circle cx="52.5" cy="48" r="0.55" fill="#FFFEF8" />
+            <circle cx="56" cy="62" r="0.4" fill="#FFFEF8" />
+            <circle cx="53" cy="78" r="0.5" fill="#F5F0E6" />
+            <circle cx="57.5" cy="92" r="0.35" fill="#FFFEF8" />
+            <circle cx="54" cy="105" r="0.45" fill="#E8EEF5" />
+          </g>
+          <rect x="48" y="28" width="14" height="2.4" fill="#071E3D" opacity="0.45" />
+          <rect x="60.2" y="30" width="1.5" height="88" fill="#FFFEF8" opacity="0.28" />
+          <rect x="48" y="30" width="1.4" height="88" fill="#071E3D" opacity="0.35" />
         </g>
 
         <path
@@ -54,14 +71,16 @@ export function OpeningDoorMark({
           d="
             M46 22h34c20 0 34 13 34 32s-14 32-34 32H64v42H46V22z
             M64 70h16c8 0 14-5 14-12s-6-12-14-12H64v24z
-            M46 22h18v96H46z
+            M48 28h14v90H48z
           "
         />
+        <rect x="46" y="22" width="18" height="6.5" fill="#0B2F5C" />
+        <rect x="46" y="22" width="2.15" height="96" fill="#0B2F5C" />
+        <rect x="61.85" y="22" width="2.15" height="96" fill="#0B2F5C" />
       </svg>
 
       <div className="doorway-hinge">
         <div className="doorway-leaf">
-          {/* Leading edge thickness — visible in foreshortening when open */}
           <div className="doorway-leaf-edge" />
           <div className="doorway-leaf-face doorway-leaf-front">
             <span className="doorway-panel doorway-panel-top" />
@@ -71,7 +90,6 @@ export function OpeningDoorMark({
             <span className="doorway-hinge-pin doorway-hinge-pin-b" />
             <span className="doorway-knob" />
           </div>
-          {/* Interior face: navy shop door, not gold — gold belongs to the room */}
           <div className="doorway-leaf-face doorway-leaf-back">
             <span className="doorway-panel doorway-panel-top" />
             <span className="doorway-panel doorway-panel-bot" />
@@ -79,7 +97,7 @@ export function OpeningDoorMark({
         </div>
       </div>
 
-      <div className="doorway-floor-spill" />
+      <div className="doorway-lintel" />
     </div>
   )
 }

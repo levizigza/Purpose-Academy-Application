@@ -7,7 +7,7 @@ import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v30'
+const ENTERED_KEY = 'pa-crossed-threshold-v32'
 
 export function hasEnteredSite() {
   try {
@@ -46,12 +46,12 @@ type SplashStage =
 
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'breath' },
-  { at: 420, stage: 'closed' },
-  { at: 900, stage: 'opening' },
-  /* Door chart ~2.25s — name after settle; tighter than v29 wait. */
-  { at: 3300, stage: 'named' },
-  { at: 3900, stage: 'pathways' },
-  { at: 4650, stage: 'ready' },
+  { at: 480, stage: 'closed' },
+  { at: 1000, stage: 'opening' },
+  /* Door chart ~2.85s — crack → hesitate → commit; name after settle. */
+  { at: 4000, stage: 'named' },
+  { at: 4650, stage: 'pathways' },
+  { at: 5450, stage: 'ready' },
 ]
 
 const EXIT_STAGES = new Set<SplashStage>(['striking', 'crossing'])
