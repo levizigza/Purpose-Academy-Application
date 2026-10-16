@@ -5,9 +5,9 @@ export const BRAND = {
   /** Hero-level school identity */
   theme: 'Build your future in the trades',
   promise:
-    'A Calgary trades school for foundations, language for the job site, and a clear path into apprenticeship.',
+    'A Calgary school with three doors into work — Construction, Logistics, and Community Support — language, supervised practice, and a clear station-by-station path forward.',
   audience:
-    'Newcomers, career changers, and job seekers who want hands-on trades training with real instructors.',
+    'Newcomers, career changers, and job seekers who want hands-on training with real instructors.',
   primaryCta: 'Apply now',
   primaryCtaTo: '/admissions',
   secondaryCta: 'Sign in',
@@ -18,34 +18,34 @@ export const BRAND = {
   trainingTo: '/welcome',
   contactEmail: 'hello@purposeacademy.ca',
   domain: 'purposeacademy.ca',
-  tagline: 'Foundations. Practice. Apprenticeship.',
+  tagline: 'Foundations. Practice. Work.',
 } as const
 
-/** About page — founding team (roles and bios forthcoming). */
+/** About page — founding builders (roles and bios forthcoming). */
 export const SCHOOL_TEAM = [
   {
     name: 'Saba Teklu',
-    role: 'Role forthcoming',
-    focus: 'Details will be added as Purpose Academy grows.',
+    role: 'Founding builder',
+    focus: 'Role, portrait, and bio will be published as the school grows.',
   },
   {
     name: 'Kinfe Desta',
-    role: 'Role forthcoming',
-    focus: 'Details will be added as Purpose Academy grows.',
+    role: 'Founding builder',
+    focus: 'Role, portrait, and bio will be published as the school grows.',
   },
   {
     name: 'ChuChu Asemelash',
-    role: 'Role forthcoming',
-    focus: 'Details will be added as Purpose Academy grows.',
+    role: 'Founding builder',
+    focus: 'Role, portrait, and bio will be published as the school grows.',
   },
   {
     name: 'Yonas Tesfagabr',
-    role: 'Role forthcoming',
-    focus: 'Details will be added as Purpose Academy grows.',
+    role: 'Founding builder',
+    focus: 'Role, portrait, and bio will be published as the school grows.',
   },
   {
     name: 'Levi Zigza',
-    role: 'Role forthcoming',
-    focus: 'Details will be added as Purpose Academy grows.',
+    role: 'Founding builder',
+    focus: 'Role, portrait, and bio will be published as the school grows.',
   },
 ] as const

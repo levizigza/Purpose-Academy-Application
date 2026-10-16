@@ -14,11 +14,11 @@ export const JOURNEY_STEPS = [
   { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the career assessment.', purpose: 'The full assessment runs in a language you understand. Later job-site steps use English.', unit: 2 },
   { n: 4, title: 'Career Assessment', help: 'Rate work activities in your language.', purpose: 'A professional interest inventory, not a pass/fail quiz.', unit: 2 },
   { n: 5, title: 'Work Style', help: 'How you like to work, in your language.', purpose: 'Work-style choices refine your pathway fit.', unit: 2 },
-  { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction is open now.', unit: 2 },
+  { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction, Logistics, and Community Support are open now.', unit: 2 },
   { n: 7, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English.', purpose: 'All five home languages stay visible. You choose the bridge to English.', unit: 3 },
   { n: 8, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
   { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
-  { n: 10, title: 'English Eye Spy', help: 'Find the real tool in a site scene. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
+  { n: 10, title: 'English Eye Spy', help: 'Find the real object among other photos. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
   { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   { n: 12, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
   { n: 13, title: 'Digital Skills', help: 'Practice real computer tasks: click, type, forms, uploads.', purpose: 'This may be someone’s first computer. Every step is a hands-on micro-lesson.', unit: 5 },
@@ -56,19 +56,19 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   3: {
-    goal: 'Learn the Level-1 tool words you will hear on a Calgary job site.',
+    goal: 'Learn Daily Conversation Vocabulary, then the specialty workplace words for your pathway.',
     outcomes: [
-      'See each tool and hear English',
+      'See each word and hear English',
       'Connect the English word to the real action',
     ],
   },
   4: {
-    goal: 'Use English with support, then prove you can find and follow job-site language.',
+    goal: 'Use English with support, then prove you can find and follow workplace language.',
     outcomes: [
       'Match pictures to English words',
-      'Find tools in a busy scene',
+      'Find objects among other workplace photos',
       'Follow short workplace instructions',
-      'Understand common site phrases',
+      'Understand common workplace phrases',
     ],
   },
   5: {
@@ -484,7 +484,7 @@ export const INTEREST_PATHS = [
     id: 'logistics' as const,
     title: 'Logistics',
     line: 'Move People, Move Opportunities.',
-    detail: 'Warehouse, loading, and moving goods. Opens after Construction.',
+    detail: 'Warehouse, loading, and moving goods. Open now.',
     skills: [
       { id: 'l1', label: 'I can read simple labels on boxes', weight: 2 },
       { id: 'l2', label: 'I can lift and place items carefully', weight: 1 },

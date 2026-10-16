@@ -354,19 +354,18 @@ export function PracticeModeBanner() {
   }
 
   return (
-    <div className="practice-banner motion-soft-pulse" role="status">
+    <div className="practice-banner" role="status">
       <span>
-        Practice{name ? ` · ${name}` : ''}. Registration skipped. Use Back anytime, or Start over to run
-        the path from the top.
+        Practice{name ? ` · ${name}` : ''}. Finite school path — one station at a time. Registration
+        skipped.
       </span>
       <span className="practice-banner-actions">
-        {onJourney ? (
-          <Link className="practice-banner-cta" to="/">
-            Review website
-          </Link>
-        ) : (
+        <Link className="practice-banner-cta" to="/">
+          Done for now
+        </Link>
+        {!onJourney && (
           <Link className="practice-banner-cta" to="/journey">
-            Continue practice
+            School path
           </Link>
         )}
         <button type="button" className="practice-banner-cta" onClick={startOver}>

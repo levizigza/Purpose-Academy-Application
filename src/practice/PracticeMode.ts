@@ -9,6 +9,9 @@ export const PRACTICE_ENTRY_STEP = 3
 const FLAG_KEY = 'pa-practice-mode-v1'
 const NAME_KEY = 'pa-practice-name-v1'
 const ACK_KEY = 'pa-practice-feedback-ack-v1'
+const JOURNEY_STEP_KEY = 'pa-student-journey-step-v1'
+/** When set, /journey opens the lesson view instead of the Practice hub. */
+const FORCE_LESSON_KEY = 'pa-practice-force-lesson-v1'
 /** Migrate older developer-preview keys once. */
 const LEGACY_FLAG = 'pa-dev-preview-v1'
 const LEGACY_NAME = 'pa-dev-preview-name-v1'
@@ -54,7 +57,7 @@ export function resetPracticeProgress() {
     sessionStorage.removeItem('pa-vocab-known-v1')
     sessionStorage.removeItem('pa-learning-mastery-v1')
     sessionStorage.removeItem('pa-learning-stats-v1')
-    sessionStorage.setItem('pa-student-journey-step-v1', String(PRACTICE_ENTRY_STEP))
+    sessionStorage.setItem(JOURNEY_STEP_KEY, String(PRACTICE_ENTRY_STEP))
     window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: PRACTICE_ENTRY_STEP } }))
     window.dispatchEvent(new CustomEvent('pa-employment-followup-changed'))
     window.dispatchEvent(new CustomEvent('pa-vocab-known-changed'))
@@ -108,6 +111,76 @@ export function setPracticeName(fullName: string) {
   } catch {
     /* ignore */
   }
+}
+
+export function getJourneyStep(): number {
+  try {
+    const n = Number(sessionStorage.getItem(JOURNEY_STEP_KEY) || '0')
+    return Number.isFinite(n) && n > 0 ? Math.min(20, Math.max(1, Math.floor(n))) : PRACTICE_ENTRY_STEP
+  } catch {
+    return PRACTICE_ENTRY_STEP
+  }
+}
+
+export function setJourneyStep(step: number) {
+  const target = Math.min(20, Math.max(PRACTICE_ENTRY_STEP, Math.floor(step)))
+  try {
+    sessionStorage.setItem(JOURNEY_STEP_KEY, String(target))
+    window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: target } }))
+  } catch {
+    /* ignore */
+  }
+}
+
+/**
+ * Open the shared 20-step Practice spine from the student portal without wiping
+ * existing journey progress.
+ */
+export function openPracticeSpine(fullName: string) {
+  const name = fullName.trim()
+  try {
+    sessionStorage.setItem(FLAG_KEY, '1')
+    if (name) sessionStorage.setItem(NAME_KEY, name)
+    const raw = sessionStorage.getItem(JOURNEY_STEP_KEY)
+    const step = Number(raw)
+    if (!raw || !Number.isFinite(step) || step < PRACTICE_ENTRY_STEP) {
+      sessionStorage.setItem(JOURNEY_STEP_KEY, String(PRACTICE_ENTRY_STEP))
+    }
+    window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Enter a specific spine lesson from the portal School path (skip double hub). */
+export function enterPracticeLesson(fullName: string, step: number) {
+  openPracticeSpine(fullName)
+  setJourneyStep(step)
+  try {
+    sessionStorage.setItem(FORCE_LESSON_KEY, '1')
+  } catch {
+    /* ignore */
+  }
+}
+
+export function peekForcePracticeLesson(): boolean {
+  try {
+    return sessionStorage.getItem(FORCE_LESSON_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+export function consumeForcePracticeLesson(): boolean {
+  try {
+    if (sessionStorage.getItem(FORCE_LESSON_KEY) === '1') {
+      sessionStorage.removeItem(FORCE_LESSON_KEY)
+      return true
+    }
+  } catch {
+    /* ignore */
+  }
+  return false
 }
 
 export function clearPracticeMode() {
@@ -192,4 +265,4 @@ export function shouldHidePracticeFeedback(pathname: string, journeyStep?: numbe
 }
 
 export const PRACTICE_TRAY_HELP =
-  'Full learning path. Path home, XP, mastery gates, unit checkpoints, and the same drills the real student path will use. Skip registration, learn every station, and leave feedback as you go.'
+  'Full learning path. Path home, practice marks, mastery gates, unit checkpoints, and the same drills the real student path will use. Skip registration, finish one station at a time, and leave feedback as you go.'

@@ -19,9 +19,11 @@
  * 10. Mastery without fluff: checkpoints recycle earlier skills into later judgment.
  *
  * Depth bar (match Construction Foundations craft):
- *   vocab ~16–88 in the journey gate (Logistics Level-1 = words 1–20; full table = 500
- *   in worksheet pages of 20) · Eye Spy ≥8 · instructions ≥8 · phrases ≥8 · safety ≥7 ·
- *   observation ≥5 · site decisions ≥6 · final ≥7 · employment ≥6
+ *   vocab Level-1 gate = words 1–20 (Daily Conversation page 1) on every open pathway;
+ *   then shared Daily Conversation (200) + stream specialty deck.
+ *   Construction specialty 660 · Logistics specialty 500 · Community support objects.
+ *   Eye Spy ≥8 · instructions ≥8 · phrases ≥8 · safety ≥7 · observation ≥5 ·
+ *   site decisions ≥6 · final ≥7 · employment ≥6
  *
  * Visual vocabulary interaction (updated from early plan):
  *   Show all five home languages (Amharic, Tigrinya, Arabic, Spanish, Hindi — no French).
@@ -29,6 +31,8 @@
  *   Do not present post-assessment vocab as a single mother-tongue-only card.
  *
  * Pathway sources used to strengthen packs (without changing the skeleton):
+ *   Shared — Purpose Academy Daily Conversation Vocabulary (words 1–200).
+ *   Construction — Purpose Academy Construction Visual Vocabulary (words 1–660).
  *   Logistics — Purpose Academy Logistics Visual Vocabulary (words 1–500);
  *               MSSC CLA/CLT flow; OSHA pedestrian/MHE awareness.
  *   Community — Alberta Community Support Worker foundations (NorQuest-style streams):

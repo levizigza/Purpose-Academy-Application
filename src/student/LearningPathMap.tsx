@@ -23,8 +23,8 @@ function levelClass(level: MasteryLevel) {
 }
 
 /**
- * Duolingo-style linear learning path.
- * Shows units as stations and lessons as a clear “you are here” trail.
+ * Linear learning path — units as stations, lessons as a clear “you are here” trail.
+ * Practice marks serve craft (L4), not streak FOMO.
  */
 export function LearningPathMap({ currentStep, practice, compact, onSelectLesson, onOpenHub }: Props) {
   const [, bump] = useState(0)
@@ -51,13 +51,13 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
             Unit mastery <strong>{unitMasteryPercent(stepsInUnit(currentUnit.id))}%</strong>
           </p>
           {practice && (
-            <p className="lp-xp" aria-label="XP and streak">
-              <strong>{stats.xp}</strong> XP · <strong>{stats.dayStreak}</strong> day streak
+            <p className="lp-xp" aria-label="Practice marks">
+              <strong>{stats.xp}</strong> practice marks · <strong>{stats.dayStreak}</strong> days showed up
             </p>
           )}
           {practice && onOpenHub && (
             <button type="button" className="lp-hub-btn" onClick={onOpenHub}>
-              Full path home
+              Path home
             </button>
           )}
         </div>

@@ -30,7 +30,7 @@ function pickGroups(all: EyeSpyScene[]): string[] {
 }
 
 /**
- * Eye Spy: find the target object in a busy site scene.
+ * Eye Spy: find the target object among workplace photos (collage stage until full-scene photography lands).
  * Wrong answer loses a point; scene rotates AFTER feedback.
  * Pass requires 100% (no misses). Exercises unlimited; exams limited.
  */
@@ -224,7 +224,7 @@ export function EyeSpyQuiz({
       <p className="eye-spy-instruction">{scene.instruction}</p>
       <p className="eye-spy-scene-title">{scene.title}</p>
 
-      <div className="eye-spy-stage" role="group" aria-label="Site scene. Tap the correct tool">
+      <div className="eye-spy-stage" role="group" aria-label="Photo board. Tap the correct object">
         <div className="eye-spy-grid" aria-hidden>
           {Array.from({ length: 12 }).map((_, i) => (
             <span key={i} className="eye-spy-tile" />

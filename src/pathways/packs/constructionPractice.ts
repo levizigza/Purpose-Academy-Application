@@ -1,0 +1,286 @@
+/**
+ * Construction Foundations practice layers aligned to Construction Visual Vocabulary.
+ * termIds / Eye Spy hotspot ids / WI imageKeys use con-vv worksheet tiles and
+ * CONSTRUCTION_VOCAB_660 ids (e.g. hammer-011), not the legacy 7-term curriculum.
+ */
+import type { EyeSpyScene } from '../../student/journeyCurriculum'
+import { hint } from '../packHelpers'
+import type { WordAction, WorkplaceInstruction } from '../types'
+
+/** Level-1 tools + core materials drive Word → Action. */
+export const CONSTRUCTION_WORD_ACTIONS: WordAction[] = [
+  { id: 'wa-hammer', termId: 'hammer-011', title: 'Hammer in action', body: 'Hold the hammer at the end. Drive the nail with control. Keep hands clear of the strike.', actionCue: 'End grip. Controlled strike. Hands clear.' },
+  { id: 'wa-tape', termId: 'tape-measure-012', title: 'Tape measure in action', body: 'Hook the end firmly. Measure twice. Mark once before you cut.', actionCue: 'Hook firm. Measure twice. Mark once.' },
+  { id: 'wa-saw', termId: 'circular-saw-013', title: 'Circular saw in action', body: 'Set the blade depth. Keep hands away from the blade. Let the blade stop before you set it down.', actionCue: 'Depth set. Hands clear. Blade stop.' },
+  { id: 'wa-drill', termId: 'drill-014', title: 'Drill in action', body: 'Hold the drill with two hands. Start on low speed. Keep the bit straight.', actionCue: 'Two hands. Low speed. Straight bit.' },
+  { id: 'wa-impact', termId: 'impact-driver-015', title: 'Impact driver in action', body: 'Seat the bit fully. Drive the screw straight. Stop when the head sits flush.', actionCue: 'Bit seated. Straight drive. Flush head.' },
+  { id: 'wa-grinder', termId: 'grinder-016', title: 'Grinder in action', body: 'Keep the guard on. Wear eye protection. Grind with both hands.', actionCue: 'Guard on. Eyes protected. Two hands.' },
+  { id: 'wa-nail-gun', termId: 'nail-gun-017', title: 'Nail gun in action', body: 'Point the nail gun down when you are not firing. Keep your finger off the trigger until ready.', actionCue: 'Point down. Finger off until ready.' },
+  { id: 'wa-level', termId: 'level-018', title: 'Level in action', body: 'Press the level on the surface. Watch the bubble sit in the middle.', actionCue: 'Firm contact. Bubble centered.' },
+  { id: 'wa-square', termId: 'square-019', title: 'Square in action', body: 'Hold the square tight to the edge. Mark a straight cut line.', actionCue: 'Tight to edge. Straight mark.' },
+  { id: 'wa-knife', termId: 'utility-knife-020', title: 'Utility knife in action', body: 'Cut away from your body. Close the blade when you finish.', actionCue: 'Cut away. Blade closed after.' },
+  { id: 'wa-concrete', termId: 'concrete-003', title: 'Concrete in action', body: 'Pour the concrete into the form. Do not walk on wet concrete.', actionCue: 'Pour into form. Stay off wet concrete.' },
+  { id: 'wa-brick', termId: 'brick-004', title: 'Brick in action', body: 'Lay the brick on a full mortar bed. Keep the line straight.', actionCue: 'Full bed. Straight line.' },
+  { id: 'wa-block', termId: 'block-005', title: 'Block in action', body: 'Stack the blocks level. Check with the level as you go.', actionCue: 'Level stack. Check often.' },
+  { id: 'wa-joist', termId: 'joist-008', title: 'Joist in action', body: 'Set the joist on the beam. Keep spacing even before you fasten.', actionCue: 'Set true. Even spacing. Fasten.' },
+  { id: 'wa-truss', termId: 'truss-010', title: 'Truss in action', body: 'Lift the truss with the crew or crane. Brace it before you release the lift.', actionCue: 'Lift together. Brace first.' },
+  { id: 'wa-hard-hat', termId: 'hard-hat-234', title: 'Hard hat before entry', body: 'Put the hard hat on before you enter the site. Replace it if it is cracked.', actionCue: 'Hard hat on before entry.' },
+  { id: 'wa-gloves', termId: 'work-gloves-064', title: 'Work gloves in action', body: 'Wear gloves when you carry wood or rough materials. Pick gloves for the job.', actionCue: 'Right gloves. Hands protected.' },
+  { id: 'wa-ladder', termId: 'ladder-041', title: 'Ladder in action', body: 'Face the ladder when you climb. Keep three points of contact. Do not stand on the top step.', actionCue: 'Face ladder. Three points. No top step.' },
+  { id: 'wa-scaffold', termId: 'scaffold-040', title: 'Scaffold in action', body: 'Lock the scaffold wheels before you climb. Never ride a moving scaffold.', actionCue: 'Wheels locked. No riding.' },
+  { id: 'wa-foundation', termId: 'foundation-002', title: 'Foundation awareness', body: 'Keep the foundation forms clear. Report cracks or voids to your supervisor.', actionCue: 'Forms clear. Report problems.' },
+]
+
+export const CONSTRUCTION_EYE_SPY_SCENES: EyeSpyScene[] = [
+  {
+    id: 'shop-a-hammer',
+    title: 'Shop floor A',
+    instruction: 'Find the hammer. Tap it in the scene, then confirm the English name.',
+    targetId: 'hammer-011',
+    distractors: ['Circular saw', 'Level', 'Hard hat'],
+    variantGroup: 'shop-hammer',
+    hotspots: [
+      { id: 'hammer-011', label: 'Hammer', answer: 'Hammer', imageKey: 'con-vv-011', x: 12, y: 55, w: 22, h: 28 },
+      { id: 'circular-saw-013', label: 'Circular saw', answer: 'Circular saw', imageKey: 'con-vv-013', x: 58, y: 48, w: 28, h: 22 },
+      { id: 'hard-hat-234', label: 'Hard hat', answer: 'Hard hat', imageKey: 'con-vv-234', x: 38, y: 12, w: 20, h: 22 },
+      { id: 'level-018', label: 'Level', answer: 'Level', imageKey: 'con-vv-018', x: 70, y: 18, w: 24, h: 14 },
+    ],
+  },
+  {
+    id: 'shop-b-hammer',
+    title: 'Shop floor B',
+    instruction: 'Find the hammer. Tap it in the scene, then confirm the English name.',
+    targetId: 'hammer-011',
+    distractors: ['Drill', 'Tape measure', 'Work gloves'],
+    variantGroup: 'shop-hammer',
+    hotspots: [
+      { id: 'drill-014', label: 'Drill', answer: 'Drill', imageKey: 'con-vv-014', x: 10, y: 20, w: 22, h: 30 },
+      { id: 'hammer-011', label: 'Hammer', answer: 'Hammer', imageKey: 'con-vv-011', x: 62, y: 50, w: 24, h: 30 },
+      { id: 'tape-measure-012', label: 'Tape measure', answer: 'Tape measure', imageKey: 'con-vv-012', x: 40, y: 58, w: 18, h: 22 },
+      { id: 'work-gloves-064', label: 'Work gloves', answer: 'Work gloves', imageKey: 'con-vv-064', x: 72, y: 10, w: 22, h: 26 },
+    ],
+  },
+  {
+    id: 'bay-a-drill',
+    title: 'Work bay A',
+    instruction: 'Find the drill. Tap it in the scene, then confirm the English name.',
+    targetId: 'drill-014',
+    distractors: ['Hammer', 'Circular saw', 'Level'],
+    variantGroup: 'bay-drill',
+    hotspots: [
+      { id: 'circular-saw-013', label: 'Circular saw', answer: 'Circular saw', imageKey: 'con-vv-013', x: 8, y: 50, w: 30, h: 20 },
+      { id: 'drill-014', label: 'Drill', answer: 'Drill', imageKey: 'con-vv-014', x: 48, y: 28, w: 22, h: 34 },
+      { id: 'hammer-011', label: 'Hammer', answer: 'Hammer', imageKey: 'con-vv-011', x: 76, y: 55, w: 18, h: 28 },
+      { id: 'level-018', label: 'Level', answer: 'Level', imageKey: 'con-vv-018', x: 20, y: 14, w: 28, h: 12 },
+    ],
+  },
+  {
+    id: 'bay-b-drill',
+    title: 'Work bay B',
+    instruction: 'Find the drill. Tap it in the scene, then confirm the English name.',
+    targetId: 'drill-014',
+    distractors: ['Hard hat', 'Tape measure', 'Work gloves'],
+    variantGroup: 'bay-drill',
+    hotspots: [
+      { id: 'hard-hat-234', label: 'Hard hat', answer: 'Hard hat', imageKey: 'con-vv-234', x: 14, y: 10, w: 20, h: 24 },
+      { id: 'tape-measure-012', label: 'Tape measure', answer: 'Tape measure', imageKey: 'con-vv-012', x: 68, y: 60, w: 18, h: 22 },
+      { id: 'drill-014', label: 'Drill', answer: 'Drill', imageKey: 'con-vv-014', x: 40, y: 40, w: 24, h: 36 },
+      { id: 'work-gloves-064', label: 'Work gloves', answer: 'Work gloves', imageKey: 'con-vv-064', x: 74, y: 12, w: 20, h: 26 },
+    ],
+  },
+  {
+    id: 'rack-a-level',
+    title: 'Tool rack A',
+    instruction: 'Find the level. Tap it in the scene, then confirm the English name.',
+    targetId: 'level-018',
+    distractors: ['Hammer', 'Circular saw', 'Drill'],
+    variantGroup: 'rack-level',
+    hotspots: [
+      { id: 'level-018', label: 'Level', answer: 'Level', imageKey: 'con-vv-018', x: 30, y: 40, w: 40, h: 16 },
+      { id: 'hammer-011', label: 'Hammer', answer: 'Hammer', imageKey: 'con-vv-011', x: 8, y: 55, w: 18, h: 28 },
+      { id: 'circular-saw-013', label: 'Circular saw', answer: 'Circular saw', imageKey: 'con-vv-013', x: 58, y: 58, w: 30, h: 18 },
+      { id: 'drill-014', label: 'Drill', answer: 'Drill', imageKey: 'con-vv-014', x: 78, y: 18, w: 18, h: 30 },
+    ],
+  },
+  {
+    id: 'rack-b-level',
+    title: 'Tool rack B',
+    instruction: 'Find the level. Tap it in the scene, then confirm the English name.',
+    targetId: 'level-018',
+    distractors: ['Tape measure', 'Hard hat', 'Square'],
+    variantGroup: 'rack-level',
+    hotspots: [
+      { id: 'tape-measure-012', label: 'Tape measure', answer: 'Tape measure', imageKey: 'con-vv-012', x: 10, y: 50, w: 18, h: 24 },
+      { id: 'level-018', label: 'Level', answer: 'Level', imageKey: 'con-vv-018', x: 42, y: 22, w: 36, h: 14 },
+      { id: 'hard-hat-234', label: 'Hard hat', answer: 'Hard hat', imageKey: 'con-vv-234', x: 72, y: 48, w: 20, h: 24 },
+      { id: 'square-019', label: 'Square', answer: 'Square', imageKey: 'con-vv-019', x: 20, y: 12, w: 20, h: 26 },
+    ],
+  },
+  {
+    id: 'bench-a-tape',
+    title: 'Bench A',
+    instruction: 'Find the tape measure. Tap it in the scene, then confirm the English name.',
+    targetId: 'tape-measure-012',
+    distractors: ['Hammer', 'Level', 'Circular saw'],
+    variantGroup: 'bench-tape',
+    hotspots: [
+      { id: 'hammer-011', label: 'Hammer', answer: 'Hammer', imageKey: 'con-vv-011', x: 12, y: 40, w: 20, h: 30 },
+      { id: 'tape-measure-012', label: 'Tape measure', answer: 'Tape measure', imageKey: 'con-vv-012', x: 48, y: 52, w: 20, h: 24 },
+      { id: 'level-018', label: 'Level', answer: 'Level', imageKey: 'con-vv-018', x: 68, y: 18, w: 26, h: 14 },
+      { id: 'circular-saw-013', label: 'Circular saw', answer: 'Circular saw', imageKey: 'con-vv-013', x: 20, y: 70, w: 28, h: 18 },
+    ],
+  },
+  {
+    id: 'bench-b-tape',
+    title: 'Bench B',
+    instruction: 'Find the tape measure. Tap it in the scene, then confirm the English name.',
+    targetId: 'tape-measure-012',
+    distractors: ['Drill', 'Hard hat', 'Utility knife'],
+    variantGroup: 'bench-tape',
+    hotspots: [
+      { id: 'drill-014', label: 'Drill', answer: 'Drill', imageKey: 'con-vv-014', x: 10, y: 22, w: 22, h: 32 },
+      { id: 'hard-hat-234', label: 'Hard hat', answer: 'Hard hat', imageKey: 'con-vv-234', x: 70, y: 12, w: 20, h: 24 },
+      { id: 'tape-measure-012', label: 'Tape measure', answer: 'Tape measure', imageKey: 'con-vv-012', x: 42, y: 48, w: 20, h: 26 },
+      { id: 'utility-knife-020', label: 'Utility knife', answer: 'Utility knife', imageKey: 'con-vv-020', x: 72, y: 55, w: 20, h: 26 },
+    ],
+  },
+  {
+    id: 'cut-a-saw',
+    title: 'Cut station A',
+    instruction: 'Find the circular saw. Tap it in the scene, then confirm the English name.',
+    targetId: 'circular-saw-013',
+    distractors: ['Hammer', 'Drill', 'Level'],
+    variantGroup: 'cut-saw',
+    hotspots: [
+      { id: 'circular-saw-013', label: 'Circular saw', answer: 'Circular saw', imageKey: 'con-vv-013', x: 36, y: 48, w: 34, h: 22 },
+      { id: 'hammer-011', label: 'Hammer', answer: 'Hammer', imageKey: 'con-vv-011', x: 8, y: 50, w: 18, h: 28 },
+      { id: 'drill-014', label: 'Drill', answer: 'Drill', imageKey: 'con-vv-014', x: 74, y: 30, w: 18, h: 30 },
+      { id: 'level-018', label: 'Level', answer: 'Level', imageKey: 'con-vv-018', x: 20, y: 16, w: 28, h: 12 },
+    ],
+  },
+  {
+    id: 'cut-b-saw',
+    title: 'Cut station B',
+    instruction: 'Find the circular saw. Tap it in the scene, then confirm the English name.',
+    targetId: 'circular-saw-013',
+    distractors: ['Tape measure', 'Hard hat', 'Nail gun'],
+    variantGroup: 'cut-saw',
+    hotspots: [
+      { id: 'tape-measure-012', label: 'Tape measure', answer: 'Tape measure', imageKey: 'con-vv-012', x: 12, y: 58, w: 18, h: 22 },
+      { id: 'circular-saw-013', label: 'Circular saw', answer: 'Circular saw', imageKey: 'con-vv-013', x: 44, y: 40, w: 32, h: 22 },
+      { id: 'hard-hat-234', label: 'Hard hat', answer: 'Hard hat', imageKey: 'con-vv-234', x: 72, y: 12, w: 20, h: 24 },
+      { id: 'nail-gun-017', label: 'Nail gun', answer: 'Nail gun', imageKey: 'con-vv-017', x: 70, y: 55, w: 22, h: 26 },
+    ],
+  },
+]
+
+export const CONSTRUCTION_WORKPLACE_INSTRUCTIONS: WorkplaceInstruction[] = [
+  {
+    text: 'Bring the tape measure.',
+    correct: 'Bring the tape measure',
+    imageKey: 'con-vv-012',
+    options: [
+      'Bring the tape measure',
+      'Bring the hammer',
+      'Put on a hard hat',
+      'Start cutting wood',
+    ],
+    supportHint: hint('Bring the tape measure.', 'Trae la cinta métrica.', 'أحضر شريط القياس.', 'टेप मेज़र लाओ।', 'ሜትሩን አምጡ።', 'ሜትሮ ኣምጽኡ።'),
+  },
+  {
+    text: 'Pass me the level.',
+    correct: 'Pass me the level',
+    imageKey: 'con-vv-018',
+    options: [
+      'Pass me the level',
+      'Pass the hammer',
+      'Open the door',
+      'Put on boots',
+    ],
+    supportHint: hint('Pass me the level.', 'Pásame el nivel.', 'ناولني الميزان.', 'मुझे लेवल दो।', 'ሊቬሉን ስጡኝ።', 'ሊቬል ሃቡኒ።'),
+  },
+  {
+    text: 'Check the wall with the level.',
+    correct: 'Check the wall with the level',
+    imageKey: 'con-vv-018',
+    options: [
+      'Check the wall with the level',
+      'Check the floor with a hammer',
+      'Bring the drill',
+      'Remove your hard hat',
+    ],
+    supportHint: hint('Check the wall with the level.', 'Revisa la pared con el nivel.', 'افحص الجدار بالميزان.', 'लेवल से दीवार जाँचो।', 'በሊቬል ግድግዳውን ያረጋግጡ።', 'ብሊቬል ንመንደቅ ኣረጋግጹ።'),
+  },
+  {
+    text: 'Put on your hard hat before you enter.',
+    correct: 'Put on your hard hat before you enter',
+    imageKey: 'con-vv-234',
+    options: [
+      'Put on your hard hat before you enter',
+      'Leave your hard hat in the truck',
+      'Start the saw first',
+      'Remove all safety gear',
+    ],
+    supportHint: hint('Put on your hard hat before you enter.', 'Ponte el casco antes de entrar.', 'ارتدِ الخوذة قبل الدخول.', 'अंदर जाने से पहले हार्ड हैट पहनो।', 'ከመግባት በፊት ቆብ ያድርጉ።', 'ቅድሚ ምእታው ኮፍያ ኣስድጉ።'),
+  },
+  {
+    text: 'Keep hands clear of the circular saw.',
+    correct: 'Keep hands clear of the circular saw',
+    imageKey: 'con-vv-013',
+    options: [
+      'Keep hands clear of the circular saw',
+      'Hold the blade while it spins',
+      'Remove eye protection',
+      'Stand on the board',
+    ],
+    supportHint: hint('Keep hands clear of the circular saw.', 'Mantén las manos lejos de la sierra circular.', 'أبقِ يديك بعيداً عن المنشار الدائري.', 'गोल आरी से हाथ दूर रखो।', 'እጆቻችሁን ከክብ መጋዝ ርቀው ያድርጉ።', 'ኢድኩም ካብ ክብ መጋዝ ርሑቅ ግበሩ።'),
+  },
+  {
+    text: 'Wear your work gloves before you carry wood.',
+    correct: 'Wear your work gloves before you carry wood',
+    imageKey: 'con-vv-064',
+    options: [
+      'Wear your work gloves before you carry wood',
+      'Wear gloves only at lunch',
+      'Skip gloves if it is hot',
+      'Share one hard hat with a friend',
+    ],
+    supportHint: hint('Wear your work gloves before you carry wood.', 'Ponte los guantes antes de cargar madera.', 'ارتدِ القفازات قبل حمل الخشب.', 'लकड़ी उठाने से पहले दस्ताने पहनो।', 'እንጨት ከመሸከም በፊት ጋንት ያድርጉ።', 'ቅድሚ ምሽካም ዕንጨይቲ ጋንቲ ኣስድጉ።'),
+  },
+  {
+    text: 'Bring the drill to bay one.',
+    correct: 'Bring the drill to bay one',
+    imageKey: 'con-vv-014',
+    options: [
+      'Bring the drill to bay one',
+      'Bring the saw to bay three',
+      'Leave the drill in the truck',
+      'Start cutting without the drill',
+    ],
+    supportHint: hint('Bring the drill to bay one.', 'Trae el taladro a la bahía uno.', 'أحضر المثقاب إلى المكان الأول.', 'ड्रिल बे एक पर लाओ।', 'መሰርሰሪያውን ወደ ቤይ አንድ አምጡ።', 'መሰርሰሪ ናብ ቤይ ሓደ ኣምጽኡ።'),
+  },
+  {
+    text: 'Measure the board twice.',
+    correct: 'Measure the board twice',
+    imageKey: 'con-vv-012',
+    options: [
+      'Measure the board twice',
+      'Guess the length once',
+      'Cut before measuring',
+      'Throw the tape measure',
+    ],
+    supportHint: hint('Measure the board twice.', 'Mide la tabla dos veces.', 'قِس اللوح مرتين.', 'बोर्ड को दो बार मापो।', 'ሰሌዳውን ሁለት ጊዜ ይለኩ።', 'ንሰሌዳ ክልተ ጊዜ ይለኩ።'),
+  },
+  {
+    text: 'Clean the bay before you leave.',
+    correct: 'Clean the bay before you leave',
+    imageKey: 'con-vv-001',
+    options: [
+      'Clean the bay before you leave',
+      'Leave scrap on the floor',
+      'Hide damaged tools',
+      'Skip cleanup if you are tired',
+    ],
+    supportHint: hint('Clean the bay before you leave.', 'Limpia la bahía antes de irte.', 'نظّف المكان قبل أن تغادر.', 'जाने से पहले बे साफ़ करो।', 'ከመሄድ በፊት ቤዩን ያጵዱ።', 'ቅድሚ ምኻድ ንቤይ ኣጽርዩ።'),
+  },
+]

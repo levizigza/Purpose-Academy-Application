@@ -17,6 +17,9 @@ const outDir = path.join(root, 'public', 'tts')
 const SOURCE_FILES = [
   'src/student/journeyCurriculum.ts',
   'src/pathways/packs/construction.ts',
+  'src/pathways/packs/constructionPractice.ts',
+  'src/pathways/packs/constructionVocab660.ts',
+  'src/pathways/packs/dailyConversationVocab200.ts',
   'src/pathways/packs/logistics.ts',
   'src/pathways/packs/logisticsVocab500.ts',
   'src/pathways/packs/community.ts',

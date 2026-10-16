@@ -4846,6 +4846,196 @@ table.data th {
   animation: ph-enter 0.55s ease both;
 }
 
+/* Embedded in /app/student — shop-floor stage so light text never sits on paper */
+.practice-hub.is-portal {
+  max-width: none;
+  margin: 0;
+  padding: 1.25rem 1.15rem 2.25rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(ellipse 90% 70% at 100% 0%, color-mix(in srgb, var(--ph-stream, var(--accent)) 22%, transparent), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 0% 100%, rgba(11, 47, 92, 0.55), transparent 50%),
+    linear-gradient(165deg, #0c1828 0%, #07101c 55%, #050b14 100%);
+  box-shadow: 0 28px 60px rgba(4, 21, 38, 0.28);
+}
+
+.school-path-page {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.school-path-stage-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(12rem, 0.85fr);
+  gap: 1rem;
+  align-items: stretch;
+  padding: 1.35rem 1.35rem 1.25rem;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+  background:
+    radial-gradient(ellipse 80% 100% at 0% 0%, rgba(232, 163, 23, 0.16), transparent 55%),
+    linear-gradient(145deg, #0b2f5c 0%, #041526 70%);
+  color: #f4f7fb;
+  box-shadow: 0 22px 48px rgba(4, 21, 38, 0.2);
+}
+
+.school-path-stage-copy {
+  display: grid;
+  align-content: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.school-path-stage-copy h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.85rem, 3.4vw, 2.45rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.school-path-stage-lede {
+  margin: 0;
+  max-width: 34rem;
+  color: rgba(244, 247, 251, 0.82);
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.school-path-back {
+  width: fit-content;
+  font-weight: 700;
+  color: var(--accent-bright);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.school-path-back:hover {
+  color: #fff;
+}
+
+.school-path-stage-media {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+  min-height: 10.5rem;
+}
+
+.school-path-stage-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  min-height: 10.5rem;
+}
+
+.school-path-stage-media figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: #fff;
+  background: linear-gradient(180deg, transparent, rgba(4, 21, 38, 0.85));
+}
+
+.school-path-home-card {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.85fr) minmax(0, 1.35fr);
+  gap: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--line));
+  background: var(--panel);
+  box-shadow: 0 18px 44px rgba(4, 21, 38, 0.1);
+}
+
+.school-path-home-media {
+  min-height: 11rem;
+  background: var(--brand-deep);
+}
+
+.school-path-home-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  min-height: 11rem;
+}
+
+.school-path-home-copy {
+  padding: 1.15rem 1.25rem 1.2rem;
+  justify-content: center;
+}
+
+.school-path-home-copy h2 {
+  margin: 0.1rem 0 0.35rem;
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+  letter-spacing: 0.01em;
+}
+
+.ph-today-line {
+  margin: 0.35rem 1.15rem 0;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--ph-accent) 85%, #fff);
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.ph-resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+  margin: 0.85rem 1.15rem 1.1rem;
+}
+
+.ph-resume-actions .ph-resume-btn {
+  margin: 0;
+}
+
+.ph-done-btn {
+  color: rgba(244, 247, 251, 0.88) !important;
+}
+
+.ph-metric-quiet {
+  opacity: 0.88;
+}
+
+.ph-footnote-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+@media (max-width: 820px) {
+  .school-path-stage-head,
+  .school-path-home-card {
+    grid-template-columns: 1fr;
+  }
+
+  .school-path-stage-media,
+  .school-path-home-media {
+    min-height: 8.5rem;
+  }
+
+  .school-path-stage-media img,
+  .school-path-home-media img {
+    min-height: 8.5rem;
+  }
+}
+
 @keyframes ph-enter {
   from {
     opacity: 0;
@@ -4965,18 +5155,13 @@ table.data th {
 .ph-resume-top,
 .ph-resume h2,
 .ph-resume-lesson,
-.ph-resume-progress,
-.ph-resume-btn {
+.ph-resume-progress {
   margin-left: 1.15rem;
   margin-right: 1.15rem;
 }
 
 .ph-resume-top {
   margin-top: 0.95rem;
-}
-
-.ph-resume-btn {
-  margin-bottom: 1.1rem;
 }
 
 .ph-domains {

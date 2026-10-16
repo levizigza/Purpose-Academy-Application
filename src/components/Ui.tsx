@@ -78,18 +78,20 @@ export function NextStepCard({
   body,
   to,
   cta,
+  onBeforeNavigate,
 }: {
   title: string
   body: string
   to: string
   cta: string
+  onBeforeNavigate?: () => void
 }) {
   return (
     <Reveal className="panel next-step stack" delay={60}>
       <p className="section-kicker">Your next step</p>
       <h2>{title}</h2>
       <p>{body}</p>
-      <Link className="btn btn-primary" to={to}>
+      <Link className="btn btn-primary" to={to} onClick={() => onBeforeNavigate?.()}>
         {cta}
       </Link>
     </Reveal>

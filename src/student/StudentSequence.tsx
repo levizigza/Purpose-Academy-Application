@@ -31,6 +31,7 @@ import {
   type QuizItem,
   type VocabTerm,
 } from './journeyCurriculum'
+import { pickSpecialtyDistractors, shuffleChoices } from './vocabDistractors'
 import {
   CareerAssessmentResult,
   CareerInterestAssessment,
@@ -80,10 +81,12 @@ import {
   SKILL_BY_STEP,
 } from './learningMastery'
 import {
+  consumeForcePracticeLesson,
   hasPracticeFeedbackAck,
   isPracticeMode,
   markPracticeFeedbackAck,
   openPracticeChat,
+  peekForcePracticeLesson,
   PRACTICE_ENTRY_STEP,
   practiceFeedbackKey,
   resetPracticeProgress,
@@ -289,6 +292,11 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
                 Path home
               </button>
             )}
+            {practice && (
+              <Link className="btn btn-ghost train-hub-btn" to="/app/student">
+                Done for now
+              </Link>
+            )}
             <FoleyToggle compact />
           </div>
         </div>
@@ -319,7 +327,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         <LearningPathMap
           currentStep={step}
           practice={practice}
-          compact={!practice}
+          compact
           onOpenHub={onOpenHub}
           onSelectLesson={practice ? onJumpLesson : undefined}
         />
@@ -611,9 +619,14 @@ export function StudentSequencePage() {
   const [practiceAdvancePrompt, setPracticeAdvancePrompt] = useState(false)
   const [advanceGateMsg, setAdvanceGateMsg] = useState<string | null>(null)
   const practiceAdvanceRef = useRef<(() => void) | null>(null)
-  const [practiceView, setPracticeView] = useState<'hub' | 'lesson' | 'passport'>(() =>
-    isPracticeMode() ? 'hub' : 'lesson',
-  )
+  const [practiceView, setPracticeView] = useState<'hub' | 'lesson' | 'passport'>(() => {
+    if (!isPracticeMode()) return 'lesson'
+    /* Portal School path can open a lesson without showing the hub twice. Peek only — consume once on mount. */
+    return peekForcePracticeLesson() ? 'lesson' : 'hub'
+  })
+  useEffect(() => {
+    consumeForcePracticeLesson()
+  }, [])
   const [checkpointUnit, setCheckpointUnit] = useState<number | null>(null)
   const [matchRound, setMatchRound] = useState(1)
   const [empDone, setEmpDone] = useState(() => {
@@ -644,8 +657,8 @@ export function StudentSequencePage() {
   const [matchCorrect, setMatchCorrect] = useState(false)
   const [matchOptions, setMatchOptions] = useState<VocabTerm[]>(() => {
     const term = VOCAB_UNIT[0]
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    return [term, ...distractors].sort(() => Math.random() - 0.5)
+    if (!term) return []
+    return shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)])
   })
 
   /* Step 11 workplace instructions */
@@ -723,16 +736,14 @@ export function StudentSequencePage() {
     const deck = unknown.length >= 4 ? unknown : VOCAB_UNIT
     const term = deck[0]
     if (!term) return
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+    setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
   }, [step, pathwayId])
 
   useEffect(() => {
     /* When pathway changes, reset lesson-local drills so content matches the pack. */
     const term = VOCAB_UNIT[0]
     if (!term) return
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+    setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
     setVocabIdx(0)
     setVocabHeard({})
     setVocabConnected({})
@@ -875,14 +886,19 @@ export function StudentSequencePage() {
     setTransitionMsg(message || `Moving to step ${target}…`)
     setTransitioning(true)
     void unlockFoley().then(() => {
-      playFoley('ambient-start')
-      playFoley('hammer')
+      /* Construction-site beds only on Construction; other pathways keep soft UI cues. */
+      if (pathwayId === 'construction') {
+        playFoley('ambient-start')
+        playFoley('hammer')
+      } else {
+        playFoley('whoosh')
+      }
     })
     window.setTimeout(() => {
       setStep(target)
       setPracticeView('lesson')
       setTransitioning(false)
-      playFoley('ambient-stop')
+      if (pathwayId === 'construction') playFoley('ambient-stop')
       playFoley('whoosh')
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }, 900)
@@ -1181,8 +1197,11 @@ export function StudentSequencePage() {
     setMatchAnswer(null)
     setMatchCorrect(false)
     const term = VOCAB_UNIT[0]
-    const distractors = VOCAB_UNIT.filter((t) => t.id !== term.id).slice(0, 3)
-    setMatchOptions([term, ...distractors].sort(() => Math.random() - 0.5))
+    if (!term) {
+      setMatchOptions([])
+      return
+    }
+    setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
   }
   function resetInstr() { setInstrIdx(0); setInstrHeard(false); setInstrAnswer(null); setInstrCorrect(false) }
 
@@ -1471,11 +1490,11 @@ export function StudentSequencePage() {
       (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
     ).length
     /**
-     * Logistics carries the full 500-word worksheet table. Unlock the shared
-     * journey after Level-1 (words 1–20 / page 1) so Practice stays even with
-     * Construction and Community; remaining pages stay available to practise.
+     * All pathways share Daily Conversation first. Level-1 gate = words 1–20.
+     * Specialty rows (Construction 660 / Logistics 500 / Community focused set)
+     * stay open to practise after Continue unlocks.
      */
-    const journeyGateCount = pathwayId === 'logistics' ? Math.min(20, VOCAB_UNIT.length) : VOCAB_UNIT.length
+    const journeyGateCount = Math.min(20, VOCAB_UNIT.length)
     const gateLinked = VOCAB_UNIT.slice(0, journeyGateCount).filter(
       (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
     ).length
@@ -1503,13 +1522,9 @@ export function StudentSequencePage() {
           onMarkKnown={(term) => markCurrentVocabKnown(term)}
         />
         <p className="train-vocab-counter">
-          {pathwayId === 'logistics'
-            ? ready
-              ? `Level-1 complete (${journeyGateCount} words) · Full table ${linkedCount} of ${VOCAB_UNIT.length} · Ready to continue`
-              : `Level-1 ${gateLinked} of ${journeyGateCount} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
-            : ready
-              ? `Linked all ${VOCAB_UNIT.length} words to English · Ready to continue`
-              : `Linked ${linkedCount} of ${VOCAB_UNIT.length} words${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
+          {ready
+            ? `Level-1 complete (${journeyGateCount} words) · Full table ${linkedCount} of ${VOCAB_UNIT.length} · Ready to continue`
+            : `Level-1 ${gateLinked} of ${journeyGateCount} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
         </p>
       </Shell>
     )
@@ -1533,10 +1548,11 @@ export function StudentSequencePage() {
     const term = VOCAB_UNIT.find((t) => t.id === item.termId)
     const alreadyKnown = knownSet.has(item.termId)
     const isLast = safeIdx >= safeDeck.length - 1
-    const options = [
+    const actionTermIds = WORD_ACTIONS.map((a) => a.termId)
+    const options = shuffleChoices([
       term?.english || item.termId,
-      ...VOCAB_UNIT.filter((t) => t.id !== item.termId).slice(0, 3).map((t) => t.english),
-    ]
+      ...pickSpecialtyDistractors(VOCAB_UNIT, item.termId, 3, actionTermIds).map((t) => t.english),
+    ])
 
     function pickAction(opt: string) {
       if (actionAnswer) return
@@ -1579,7 +1595,13 @@ export function StudentSequencePage() {
             <p className="vocab-known-note">Already known — quick confirm the action, then continue.</p>
           )}
           <p className="word-action-cue"><strong>Action cue:</strong> {item.actionCue}</p>
-          <p className="train-check-prompt">Which tool is this action for?</p>
+          <p className="train-check-prompt">
+            {pathwayId === 'community'
+              ? 'Which support item is this action for?'
+              : pathwayId === 'logistics'
+                ? 'Which warehouse item is this action for?'
+                : 'Which tool or material is this action for?'}
+          </p>
           <div className="train-choice-grid">
             {options.map((opt) => (
               <ChoiceButton
@@ -1647,8 +1669,7 @@ export function StudentSequencePage() {
           setMatchAnswer(null)
           setMatchCorrect(false)
           const first = matchDeck[0]
-          const distractors = VOCAB_UNIT.filter((t) => t.id !== first.id).slice(0, 3)
-          setMatchOptions([first, ...distractors].sort(() => Math.random() - 0.5))
+          setMatchOptions(shuffleChoices([first, ...pickSpecialtyDistractors(VOCAB_UNIT, first.id, 3)]))
           playFoley('whoosh')
           return
         }
@@ -1660,8 +1681,7 @@ export function StudentSequencePage() {
       setMatchAnswer(null)
       setMatchCorrect(false)
       const nextTerm = matchDeck[next]
-      const distractors = VOCAB_UNIT.filter((t) => t.id !== nextTerm.id).slice(0, 3)
-      setMatchOptions([nextTerm, ...distractors].sort(() => Math.random() - 0.5))
+      setMatchOptions(shuffleChoices([nextTerm, ...pickSpecialtyDistractors(VOCAB_UNIT, nextTerm.id, 3)]))
     }
 
     return (

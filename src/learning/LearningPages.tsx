@@ -347,7 +347,10 @@ export function FoundationPage() {
       <div>
         <p className="section-kicker">Foundation</p>
         <h1>Language and communication preparation</h1>
-        <p className="lede">Every learner starts here, the first step on the path to verified work readiness.</p>
+        <p className="lede">
+          Every learner starts here. Finish each station with pride — this is a crew path toward verified
+          work readiness, not a feed.
+        </p>
         <div className="progress" aria-label={`Foundation ${prog}%`}>
           <span style={{ width: `${prog}%` }} />
         </div>
@@ -408,7 +411,7 @@ export function ProgramSelectionPage() {
     <div className="stack">
       <p className="section-kicker">Pathway</p>
       <h1>Choose your specialization</h1>
-      <p className="lede">After foundation, select one pathway. Construction is the live path you can prove.</p>
+      <p className="lede">After foundation, select one pathway. Construction, Logistics, and Community Support are open to prove.</p>
       {!student.foundation_complete && (
         <div className="alert warn">Complete foundation learning before selecting a program.</div>
       )}

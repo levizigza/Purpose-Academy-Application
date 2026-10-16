@@ -1,11 +1,11 @@
 /**
  * Construction Foundations content pack.
- * Source of truth remains journeyCurriculum — this pack wraps it into the
- * shared three-stream PathwayPack shape.
+ * Vocabulary order: Daily Conversation (shared 200) → Construction Visual Vocabulary (660).
+ * Level-1 gate = Daily Conversation words 1–20. Practice layers (Word → Action, Eye Spy,
+ * Workplace Instructions) use Construction worksheet ids and con-vv image keys.
  */
 import {
   EMPLOYMENT_PREP,
-  EYE_SPY_SCENES,
   FINAL_QUIZ,
   OBSERVATION_SCENARIOS,
   SAFETY_QUIZ,
@@ -14,11 +14,15 @@ import {
   SYSTEM_TOPICS,
   TOOL_CATEGORIES,
   UNIT_CHECKPOINTS,
-  VOCAB_UNIT,
-  WORD_ACTIONS,
-  WORKPLACE_INSTRUCTIONS,
 } from '../../student/journeyCurriculum'
 import type { PathwayPack } from '../types'
+import {
+  CONSTRUCTION_EYE_SPY_SCENES,
+  CONSTRUCTION_WORD_ACTIONS,
+  CONSTRUCTION_WORKPLACE_INSTRUCTIONS,
+} from './constructionPractice'
+import { CONSTRUCTION_VOCAB_660 } from './constructionVocab660'
+import { DAILY_CONVERSATION_VOCAB_200 } from './dailyConversationVocab200'
 
 export const constructionPack: PathwayPack = {
   id: 'construction',
@@ -28,7 +32,47 @@ export const constructionPack: PathwayPack = {
     tools: 'Tools',
     systems: 'Construction skills',
   },
+  unitGoals: {
+    3: {
+      goal: 'Learn Daily Conversation Vocabulary (200 words shared across pathways), then Construction Visual Vocabulary (660). Complete Level-1 (words 1–20) to continue; more pages stay open to practise.',
+      outcomes: [
+        'See a real photo of each word and hear English',
+        'Connect your language to the English word and a short example sentence',
+        'Use worksheet pages so the app matches the class vocabulary table',
+      ],
+    },
+    4: {
+      goal: 'Use English with support, then prove you can find and follow construction-site language.',
+      outcomes: [
+        'Match pictures to English words',
+        'Find tools and materials in a busy shop scene',
+        'Follow short workplace instructions',
+        'Understand common job-site phrases',
+      ],
+    },
+    5: {
+      goal: 'Build the digital, safety, tool, and systems foundations Alberta construction sites expect.',
+      outcomes: [
+        'Practice school computer tasks',
+        'Pass required safety checks',
+        'Name tool groups and construction systems',
+      ],
+    },
+    6: {
+      goal: 'Prove site readiness under observation, then connect to construction employment support.',
+      outcomes: [
+        'Rehearse competent skill order with measurable steps',
+        'Make safe site decisions, including stop-work',
+        'Pass the final checks and open employment support',
+      ],
+    },
+  },
   stepTitles: {
+    8: {
+      title: 'Word → Action',
+      help: 'See a site action. Choose which tool or material it uses.',
+      purpose: 'Connect each Construction Visual Vocabulary word to a real job-site action.',
+    },
     12: {
       title: 'Site Language',
       help: 'Hear a job-site phrase. Choose what it means.',
@@ -50,10 +94,10 @@ export const constructionPack: PathwayPack = {
       purpose: 'Daily judgment, notes, and site feedback.',
     },
   },
-  vocab: VOCAB_UNIT,
-  wordActions: WORD_ACTIONS,
-  eyeSpyScenes: EYE_SPY_SCENES,
-  workplaceInstructions: WORKPLACE_INSTRUCTIONS,
+  vocab: [...DAILY_CONVERSATION_VOCAB_200, ...CONSTRUCTION_VOCAB_660],
+  wordActions: CONSTRUCTION_WORD_ACTIONS,
+  eyeSpyScenes: CONSTRUCTION_EYE_SPY_SCENES,
+  workplaceInstructions: CONSTRUCTION_WORKPLACE_INSTRUCTIONS,
   sitePhrases: SITE_PHRASES,
   safetyQuiz: SAFETY_QUIZ,
   toolCategories: TOOL_CATEGORIES,
