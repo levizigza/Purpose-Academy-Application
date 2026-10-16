@@ -1704,13 +1704,15 @@ table.data th {
 /* Caps the stem top above the swinging leaf — kills the “light poke” */
 .doorway-lintel {
   position: absolute;
-  left: 35.9%;
-  top: 17.2%;
-  width: 14.1%;
-  height: 5.5%;
-  background: linear-gradient(180deg, #0e3a6e 0%, #0b2f5c 55%, #0b2f5c 100%);
+  left: 35.5%;
+  top: 16.8%;
+  width: 15%;
+  /* Overlap into the cavity top so no bright hairline can sit on the lintel edge */
+  height: 7.2%;
+  background: #0b2f5c;
   z-index: 6;
   pointer-events: none;
+  box-shadow: 0 1px 0 rgba(7, 30, 61, 0.9);
 }
 
 .doorway-leaf {
