@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
@@ -7,7 +7,7 @@ import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v27'
+const ENTERED_KEY = 'pa-crossed-threshold-v28'
 
 export function hasEnteredSite() {
   try {
@@ -25,93 +25,79 @@ export function markEnteredSite() {
   }
 }
 
-type SplashStage = 'closed' | 'opening' | 'pathways' | 'ready' | 'smashing' | 'shattering'
-
 /**
- * Deliberate shop-floor pacing (L3): door opens and settles before pathway marks,
- * then the hammer CTA — no rush, no looping chrome.
+ * Cinematic threshold stages (L3 motion craft):
+ * breath → mark → anticipate → open → name → pathways → ready → strike → cross.
+ * Principles: staging (one focus), anticipation, follow-through, slow-in/out.
  */
+type SplashStage =
+  | 'breath'
+  | 'closed'
+  | 'anticipate'
+  | 'opening'
+  | 'named'
+  | 'pathways'
+  | 'ready'
+  | 'striking'
+  | 'crossing'
+
 const TIMELINE: { at: number; stage: SplashStage }[] = [
-  { at: 0, stage: 'closed' },
-  { at: 550, stage: 'opening' },
-  { at: 2600, stage: 'pathways' },
-  { at: 3600, stage: 'ready' },
+  { at: 0, stage: 'breath' },
+  { at: 480, stage: 'closed' },
+  { at: 1180, stage: 'anticipate' },
+  { at: 1520, stage: 'opening' },
+  { at: 3100, stage: 'named' },
+  { at: 3850, stage: 'pathways' },
+  { at: 4750, stage: 'ready' },
 ]
 
-/** Full-screen irregular mirror shards — content stays painted on the glass. */
-const MIRROR_SHARDS: { clip: string; dx: string; dy: string; rot: string; delay: string }[] = [
-  { clip: 'polygon(0% 0%, 38% 0%, 28% 34%, 0% 42%)', dx: '-14vw', dy: '18vh', rot: '-14deg', delay: '0ms' },
-  { clip: 'polygon(38% 0%, 72% 0%, 64% 28%, 28% 34%)', dx: '2vw', dy: '22vh', rot: '8deg', delay: '40ms' },
-  { clip: 'polygon(72% 0%, 100% 0%, 100% 36%, 64% 28%)', dx: '18vw', dy: '14vh', rot: '16deg', delay: '20ms' },
-  { clip: 'polygon(0% 42%, 28% 34%, 36% 62%, 0% 70%)', dx: '-22vw', dy: '28vh', rot: '-22deg', delay: '70ms' },
-  { clip: 'polygon(28% 34%, 64% 28%, 58% 58%, 36% 62%)', dx: '-4vw', dy: '34vh', rot: '4deg', delay: '90ms' },
-  { clip: 'polygon(64% 28%, 100% 36%, 100% 68%, 58% 58%)', dx: '24vw', dy: '26vh', rot: '20deg', delay: '55ms' },
-  { clip: 'polygon(0% 70%, 36% 62%, 44% 100%, 0% 100%)', dx: '-16vw', dy: '42vh', rot: '-10deg', delay: '110ms' },
-  { clip: 'polygon(36% 62%, 58% 58%, 70% 100%, 44% 100%)', dx: '6vw', dy: '46vh', rot: '12deg', delay: '130ms' },
-  { clip: 'polygon(58% 58%, 100% 68%, 100% 100%, 70% 100%)', dx: '20vw', dy: '40vh', rot: '18deg', delay: '100ms' },
-  { clip: 'polygon(22% 18%, 48% 12%, 52% 40%, 30% 46%)', dx: '-8vw', dy: '30vh', rot: '-6deg', delay: '150ms' },
-  { clip: 'polygon(48% 12%, 78% 16%, 74% 44%, 52% 40%)', dx: '10vw', dy: '32vh', rot: '10deg', delay: '160ms' },
-  { clip: 'polygon(30% 46%, 52% 40%, 56% 72%, 34% 76%)', dx: '0vw', dy: '48vh', rot: '-4deg', delay: '180ms' },
-]
+const EXIT_STAGES = new Set<SplashStage>(['striking', 'crossing'])
 
-/** Large sledgehammer — ENTER on the head. */
+/** Sledgehammer CTA — weight first, ENTER on the head. */
 function EnterHammer({ className = '' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 110 280" aria-hidden>
+    <svg className={className} viewBox="0 0 120 300" aria-hidden>
       <defs>
         <linearGradient id="sledge-head" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#f3cc6a" />
-          <stop offset="40%" stopColor="#d99212" />
-          <stop offset="100%" stopColor="#7a4e08" />
+          <stop offset="42%" stopColor="#d99212" />
+          <stop offset="100%" stopColor="#6a4208" />
         </linearGradient>
         <linearGradient id="sledge-steel" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#7d8794" />
-          <stop offset="35%" stopColor="#e8edf3" />
-          <stop offset="70%" stopColor="#b7c0cb" />
-          <stop offset="100%" stopColor="#5f6a78" />
+          <stop offset="0%" stopColor="#6d7682" />
+          <stop offset="40%" stopColor="#e8edf3" />
+          <stop offset="100%" stopColor="#4a5562" />
         </linearGradient>
         <linearGradient id="sledge-shaft" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#3d280c" />
-          <stop offset="35%" stopColor="#8b6914" />
-          <stop offset="65%" stopColor="#c4a35a" />
-          <stop offset="100%" stopColor="#4a300e" />
-        </linearGradient>
-        <linearGradient id="sledge-band" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#d7dde5" />
-          <stop offset="100%" stopColor="#6d7682" />
+          <stop offset="0%" stopColor="#2e1e08" />
+          <stop offset="40%" stopColor="#8b6914" />
+          <stop offset="100%" stopColor="#3d280c" />
         </linearGradient>
       </defs>
-
-      <rect x="16" y="8" width="78" height="58" rx="5" fill="url(#sledge-head)" stroke="#5c3d12" strokeWidth="1.8" />
-      <rect x="22" y="16" width="66" height="10" rx="2" fill="#f7db8f" opacity="0.45" />
-      <rect x="28" y="48" width="54" height="6" rx="1.5" fill="#5c3d12" opacity="0.28" />
-      <rect x="8" y="18" width="14" height="38" rx="2.5" fill="url(#sledge-steel)" stroke="#4a5562" strokeWidth="1" />
-      <rect x="88" y="18" width="14" height="38" rx="2.5" fill="url(#sledge-steel)" stroke="#4a5562" strokeWidth="1" />
-      <rect x="10" y="24" width="4" height="26" rx="1" fill="#ffffff" opacity="0.35" />
-      <rect x="96" y="24" width="4" height="26" rx="1" fill="#ffffff" opacity="0.28" />
+      <rect x="18" y="10" width="84" height="62" rx="6" fill="url(#sledge-head)" stroke="#5c3d12" strokeWidth="2" />
+      <rect x="24" y="18" width="72" height="11" rx="2" fill="#f7db8f" opacity="0.4" />
+      <rect x="6" y="20" width="16" height="42" rx="3" fill="url(#sledge-steel)" />
+      <rect x="98" y="20" width="16" height="42" rx="3" fill="url(#sledge-steel)" />
       <text
         className="threshold-enter-word"
-        x="55"
-        y="41"
+        x="60"
+        y="45"
         textAnchor="middle"
         dominantBaseline="middle"
         fill="#041526"
         fontFamily="Montserrat, Arial Black, sans-serif"
-        fontSize="15"
+        fontSize="16"
         fontWeight="800"
-        letterSpacing="0.22em"
+        letterSpacing="0.2em"
       >
         ENTER
       </text>
-      <rect x="44" y="62" width="22" height="14" rx="2" fill="url(#sledge-band)" stroke="#4a5562" strokeWidth="1" />
-      <path d="M55 70 V248" stroke="url(#sledge-shaft)" strokeWidth="18" strokeLinecap="round" />
-      <path d="M55 74 V244" stroke="#e4c988" strokeWidth="2.2" strokeLinecap="round" opacity="0.28" />
-      <path d="M49 90 V230" stroke="#3d280c" strokeWidth="1.2" opacity="0.25" />
-      <path d="M61 95 V225" stroke="#3d280c" strokeWidth="1" opacity="0.18" />
-      <rect x="46" y="168" width="18" height="5" rx="1.5" fill="#5c3d12" opacity="0.55" />
-      <rect x="46" y="188" width="18" height="5" rx="1.5" fill="#5c3d12" opacity="0.45" />
-      <ellipse cx="55" cy="254" rx="11" ry="7" fill="#3d280c" />
-      <ellipse cx="55" cy="252" rx="8" ry="4" fill="#8b6914" opacity="0.55" />
+      <rect x="48" y="68" width="24" height="16" rx="2" fill="#9aa3ad" stroke="#4a5562" strokeWidth="1" />
+      <path d="M60 78 V268" stroke="url(#sledge-shaft)" strokeWidth="20" strokeLinecap="round" />
+      <path d="M60 82 V262" stroke="#e4c988" strokeWidth="2.4" strokeLinecap="round" opacity="0.3" />
+      <rect x="50" y="178" width="20" height="5" rx="1.5" fill="#5c3d12" opacity="0.55" />
+      <rect x="50" y="200" width="20" height="5" rx="1.5" fill="#5c3d12" opacity="0.4" />
+      <ellipse cx="60" cy="274" rx="12" ry="8" fill="#2e1e08" />
     </svg>
   )
 }
@@ -144,78 +130,48 @@ function PathwayStage({ active }: { active: boolean }) {
   )
 }
 
-function OpeningGlass({
+function doorStageFor(stage: SplashStage): 'closed' | 'anticipate' | 'opening' | 'open' {
+  if (stage === 'breath' || stage === 'closed') return 'closed'
+  if (stage === 'anticipate') return 'anticipate'
+  if (stage === 'opening') return 'opening'
+  return 'open'
+}
+
+function OpeningComposition({
   stage,
-  showDoor,
   showPathways,
+  showName,
 }: {
   stage: SplashStage
-  showDoor: boolean
   showPathways: boolean
+  showName: boolean
 }) {
-  const doorStage = stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'open'
-  const zoomStage = stage === 'smashing' || stage === 'shattering' ? 'ready' : stage
+  const zoomStage =
+    stage === 'breath' || stage === 'closed' || stage === 'anticipate'
+      ? 'closed'
+      : stage === 'opening'
+        ? 'opening'
+        : 'ready'
 
   return (
     <div className="threshold-stage">
-      <p className="threshold-school-name">{BRAND.name}</p>
+      <p className={`threshold-school-name${showName ? ' is-live' : ''}`}>{BRAND.name}</p>
       <div className={`threshold-door-stage is-${stage}`} aria-hidden>
         <div className={`threshold-door-zoom is-${zoomStage}`}>
-          <div className={`threshold-door-slot${showDoor ? ' is-active' : ' is-open-stay'}`}>
-            <OpeningDoorMark stage={doorStage} />
+          <div className="threshold-door-slot is-active">
+            <OpeningDoorMark stage={doorStageFor(stage)} />
           </div>
         </div>
+        <div className="threshold-door-ground" />
       </div>
       <PathwayStage active={showPathways} />
     </div>
   )
 }
 
-function MirrorBreak({ children, active }: { children: ReactNode; active: boolean }) {
-  return (
-    <div className={`mirror-break${active ? ' is-active' : ''}`} aria-hidden>
-      <svg className="mirror-cracks" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path className="crack c1" d="M50 48 L36 22 L18 8" />
-        <path className="crack c2" d="M50 48 L62 20 L84 6" />
-        <path className="crack c3" d="M50 48 L28 54 L6 48" />
-        <path className="crack c4" d="M50 48 L74 52 L96 44" />
-        <path className="crack c5" d="M50 48 L40 72 L22 94" />
-        <path className="crack c6" d="M50 48 L66 74 L88 96" />
-        <path className="crack c7" d="M50 48 L50 10" />
-        <path className="crack c8" d="M50 48 L50 94" />
-        <path className="crack c9" d="M50 48 L34 60 L12 78" />
-        <path className="crack c10" d="M50 48 L70 62 L94 76" />
-        <path className="crack c11" d="M42 40 L24 28" />
-        <path className="crack c12" d="M58 40 L78 26" />
-      </svg>
-      <div className="mirror-impact" />
-      <div className="mirror-shards">
-        {MIRROR_SHARDS.map((shard, i) => (
-          <div
-            key={i}
-            className="mirror-shard"
-            style={
-              {
-                clipPath: shard.clip,
-                WebkitClipPath: shard.clip,
-                '--dx': shard.dx,
-                '--dy': shard.dy,
-                '--rot': shard.rot,
-                '--delay': shard.delay,
-              } as CSSProperties
-            }
-          >
-            <div className="mirror-shard-face">{children}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   const navigate = useNavigate()
-  const [stage, setStage] = useState<SplashStage>('closed')
+  const [stage, setStage] = useState<SplashStage>('breath')
 
   const finishEnter = useCallback(() => {
     markEnteredSite()
@@ -224,21 +180,20 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
   }, [navigate, onEnter])
 
   const enter = useCallback(() => {
-    if (stage === 'smashing' || stage === 'shattering') return
+    if (EXIT_STAGES.has(stage)) return
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     void unlockFoley().then(() => {
       playFoley('hammer')
-      window.setTimeout(() => playFoley('wood'), 160)
-      window.setTimeout(() => playFoley('metal'), 320)
-      window.setTimeout(() => playFoley('whoosh'), 520)
+      window.setTimeout(() => playFoley('wood'), 180)
+      window.setTimeout(() => playFoley('whoosh'), 480)
     })
     if (reduce) {
       finishEnter()
       return
     }
-    setStage('smashing')
-    window.setTimeout(() => setStage('shattering'), 480)
-    window.setTimeout(finishEnter, 2100)
+    setStage('striking')
+    window.setTimeout(() => setStage('crossing'), 620)
+    window.setTimeout(finishEnter, 1550)
   }, [stage, finishEnter])
 
   useEffect(() => {
@@ -249,7 +204,8 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
     }
     const timers = TIMELINE.filter((s) => s.at > 0).map((s) =>
       window.setTimeout(() => {
-        setStage((prev) => (prev === 'smashing' || prev === 'shattering' ? prev : s.stage))
+        setStage((prev) => (EXIT_STAGES.has(prev) ? prev : s.stage))
+        if (s.stage === 'anticipate') void unlockFoley().then(() => playFoley('wood'))
         if (s.stage === 'opening') void unlockFoley().then(() => playFoley('wood'))
         if (s.stage === 'pathways') void unlockFoley().then(() => playFoley('metal'))
       }, s.at),
@@ -269,30 +225,27 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
     return () => window.removeEventListener('keydown', onKey)
   }, [stage, enter])
 
-  const showDoor = stage === 'closed' || stage === 'opening'
-  const showPathways = stage === 'pathways' || stage === 'ready' || stage === 'smashing' || stage === 'shattering'
-  const showEnter = stage === 'ready' || stage === 'smashing' || stage === 'shattering'
-  const isSmashing = stage === 'smashing' || stage === 'shattering'
-  const isShattering = stage === 'shattering'
-  const glassLive = !isShattering
-
-  const glass = (
-    <OpeningGlass
-      stage={stage === 'shattering' ? 'ready' : stage}
-      showDoor={showDoor}
-      showPathways={showPathways && !isShattering}
-    />
-  )
+  const showName =
+    stage === 'named' ||
+    stage === 'pathways' ||
+    stage === 'ready' ||
+    stage === 'striking' ||
+    stage === 'crossing'
+  const showPathways =
+    stage === 'pathways' || stage === 'ready' || stage === 'striking' || stage === 'crossing'
+  const showEnter = stage === 'ready' || stage === 'striking' || stage === 'crossing'
+  const exiting = EXIT_STAGES.has(stage)
 
   return (
     <div
       className={[
         'threshold',
         `threshold-stage-${stage}`,
+        showName ? 'is-named' : '',
         showPathways ? 'is-pathways' : '',
         showEnter ? 'is-ready' : '',
-        isSmashing ? 'is-smashing' : '',
-        isShattering ? 'is-shattering' : '',
+        stage === 'striking' ? 'is-striking' : '',
+        stage === 'crossing' ? 'is-crossing' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -300,27 +253,29 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}
     >
-      <div className={`threshold-glass${glassLive ? ' is-live' : ' is-gone'}`}>{glass}</div>
+      <div className="threshold-atmosphere" aria-hidden />
+      <div className="threshold-glass is-live">
+        <OpeningComposition stage={stage} showPathways={showPathways} showName={showName} />
+      </div>
 
-      {isSmashing && (
-        <MirrorBreak active={isShattering}>
-          <OpeningGlass stage="ready" showDoor={false} showPathways />
-        </MirrorBreak>
-      )}
+      <div className={`threshold-cross${stage === 'crossing' ? ' is-active' : ''}`} aria-hidden>
+        <div className="threshold-cross-beam" />
+      </div>
 
       {showEnter && (
         <button
           type="button"
-          className={`threshold-hammer is-visible${isSmashing ? ' is-smashing' : ''}`}
+          className={`threshold-hammer is-visible${exiting ? ' is-striking' : ''}`}
           onClick={enter}
           aria-label="Enter Purpose Academy"
-          disabled={isSmashing}
+          disabled={exiting}
         >
           <EnterHammer className="threshold-hammer-icon" />
+          <span className="threshold-hammer-hint">Strike to enter</span>
         </button>
       )}
 
-      {showEnter && !isSmashing && (
+      {showEnter && !exiting && (
         <div className="threshold-foley">
           <FoleyToggle compact />
         </div>
