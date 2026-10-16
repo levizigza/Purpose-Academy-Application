@@ -210,13 +210,22 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Done — door-readability + hammer mass (v30) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — cavity-contained light (v31) |
 
 ---
 
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-16 — Splash cavity light = logo P doorway (L3)
+
+- Room light clipped strictly to the open stem cavity (logo proportions: equal jamb lips, thick lintel).
+- Killed page-level gold sun (threshold atmosphere + stage radial) — sunshine only through the empty doorway + a wedge from its mouth.
+- Explicit navy lintel/jamb caps so light cannot anti-alias above the letter; doorway overflow clipped.
+- Open settle ~55° (brand-lockup angle) so the leaf reads as a door and the cavity stays the light source.
+- Session key `pa-crossed-threshold-v31`.
+- **Assumption to challenge next:** whether ~55° still feels decisive on first watch vs the prior deeper swing.
 
 ### 2026-10-16 — Splash door-readability + hammer mass (L3)
 
