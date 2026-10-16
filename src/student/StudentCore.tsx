@@ -9,7 +9,7 @@ import {
   foundationProgress,
   useDb,
 } from '../data/store'
-import { courseIdForPathway, pathwayMeta, setActivePathway } from '../pathways'
+import { courseIdForPathway, pathwayMeta, pathwayPhoto, setActivePathway } from '../pathways'
 import { openPracticeSpine } from '../practice/PracticeMode'
 import type { AppDatabase } from '../data/types'
 
@@ -178,27 +178,35 @@ export function StudentHomePage() {
       <PageHeader
         kicker="Your training"
         title={`Hello, ${user.full_name.split(' ')[0]}`}
-        help="One school spine in this account. School path is the 20-step training; Learn holds extra account lessons when available."
+        help="One clear next step. Finish a station — then stop with pride. This is a crew path, not a feed."
       />
 
       <NextStepCard {...nextStep} />
 
-      <div className="panel stack school-path-home-card">
-        <p className="section-kicker">School path</p>
-        <h2>Your 20-step spine</h2>
-        <p>
-          The same path as Practice — units, vocabulary, and checks
-          {pathwayLabel ? ` for ${pathwayLabel}` : ''}. Visible here so your account and training stay one school.
-        </p>
-        <div className="hero-actions">
-          <Link className="btn btn-primary" to="/app/student/path" onClick={openPathwayPractice}>
-            Open School path
-          </Link>
-          <Link className="btn btn-secondary on-light" to="/app/student/programs">
-            {student.pathway ? 'Change pathway' : 'Choose pathway'}
-          </Link>
+      <article className="school-path-home-card">
+        <div className="school-path-home-media" aria-hidden>
+          <img
+            src={pathwayPhoto(student.pathway ?? 'construction')}
+            alt=""
+          />
         </div>
-      </div>
+        <div className="school-path-home-copy stack">
+          <p className="section-kicker">School path</p>
+          <h2>Your 20-step spine</h2>
+          <p>
+            {pathwayLabel ? `${pathwayLabel} Foundations` : 'Your pathway'} — units, vocabulary, and checks in clear
+            order. One station today. Done for now when you have finished it.
+          </p>
+          <div className="hero-actions">
+            <Link className="btn btn-primary" to="/app/student/path" onClick={openPathwayPractice}>
+              Enter School path
+            </Link>
+            <Link className="btn btn-secondary on-light" to="/app/student/programs">
+              {student.pathway ? 'Change pathway' : 'Choose pathway'}
+            </Link>
+          </div>
+        </div>
+      </article>
 
       <div className="grid-2">
         <div className="panel stack">
@@ -236,7 +244,10 @@ export function StudentHomePage() {
           </Link>
         </div>
         <div className="panel stack">
-          <h2>Today</h2>
+          <h2>This session</h2>
+          <p className="muted" style={{ marginTop: 0 }}>
+            Finite checklist — not an endless scroll.
+          </p>
           <ul className="list-plain">
             <li>
               Next class:{' '}

@@ -34,6 +34,8 @@ type Props = {
   onContinue: () => void
   onOpenPassport?: () => void
   onRestart?: () => void
+  /** Dignified exit — anti-doomscroll. */
+  onDoneForNow?: () => void
 }
 
 type UnitState = 'done' | 'current' | 'locked' | 'skipped'
@@ -95,6 +97,7 @@ export function PracticeHub({
   onContinue,
   onOpenPassport,
   onRestart,
+  onDoneForNow,
 }: Props) {
   const portal = surface === 'portal'
   const [, bump] = useState(0)
@@ -157,15 +160,18 @@ export function PracticeHub({
   const resumeLabel = pathComplete
     ? 'Review employment step'
     : freshStart
-      ? 'Start path'
-      : 'Resume lesson'
-  const resumeChip = pathComplete ? 'Path complete' : `Step ${resumeStep} of 20`
+      ? "Open today's station"
+      : "Enter today's station"
+  const resumeChip = pathComplete ? 'Path complete' : `Station ${resumeStep} of 20`
   const resumeHeading = pathComplete
-    ? 'Practice path complete'
+    ? 'Path complete — review with pride'
     : `Unit ${unit.id}: ${unit.label}`
   const resumeLesson = pathComplete
     ? `Skills Passport + ${followSummary.label}`
     : resumeMeta?.title
+  const todayLine = pathComplete
+    ? 'You finished the spine. Open employment follow-up when ready — no rush to scroll.'
+    : `Finish this station before opening more: ${resumeMeta?.title ?? 'next lesson'}.`
 
   return (
     <div
@@ -174,12 +180,12 @@ export function PracticeHub({
     >
       <header className="ph-hero">
         <div className="ph-hero-copy">
-          <p className="ph-kicker">{portal ? 'School path' : 'Practice'}</p>
-          <h1>{portal ? 'Your 20-step path' : 'Learning dashboard'}</h1>
+          <p className="ph-kicker">{portal ? 'School path · crew order' : 'Practice · crew order'}</p>
+          <h1>{portal ? 'Your 20-step path' : 'Your training path'}</h1>
           <p className="ph-lede">
             {portal
-              ? `${practiceName || 'Learner'}, this is the same school spine as Practice — vocabulary, drills, and checks for ${meta.programTitle}. Account lessons (Learn) are extra when available.`
-              : `${practiceName ? `${practiceName}, your` : 'Your'} ${meta.programTitle} path: units, drills, mastery gates, and checkpoints. Reach Familiar on each station before advancing.`}
+              ? `${practiceName || 'Learner'} — ${meta.programTitle}. One spine. One station at a time. Learn lessons are extra when built.`
+              : `${practiceName ? `${practiceName}, ` : ''}${meta.programTitle}: clear stations, mastery gates, then the next unit. Reach Familiar before you advance.`}
           </p>
           <div className="ph-pathway-badge">
             <img src={pathwayIcon(pathwayId)} alt="" />
@@ -195,11 +201,12 @@ export function PracticeHub({
             <img src={pathwayPhoto(pathwayId)} alt="" />
           </div>
           <div className="ph-resume-top">
-            <p className="ph-resume-label">{pathComplete ? 'Finished' : freshStart ? 'Begin here' : 'Up next'}</p>
+            <p className="ph-resume-label">{pathComplete ? 'Finished' : freshStart ? 'Begin here' : "Today's station"}</p>
             <span className="ph-resume-chip">{resumeChip}</span>
           </div>
           <h2>{resumeHeading}</h2>
           <p className="ph-resume-lesson">{resumeLesson}</p>
+          <p className="ph-today-line">{todayLine}</p>
           <div className="ph-resume-progress" aria-label={`${unitPct}% unit mastery`}>
             <div className="ph-resume-progress-track">
               <span style={{ width: `${pathComplete ? 100 : unitPct}%` }} />
@@ -207,13 +214,18 @@ export function PracticeHub({
             <em>
               {pathComplete
                 ? 'All units open for review · follow-up schedule active'
-                : `${unitDoneCount}/${unitSteps.length} lessons started · ${unitPct}% mastery`}
+                : `${unitDoneCount}/${unitSteps.length} lessons in this unit · ${unitPct}% mastery`}
             </em>
           </div>
           <div className="ph-resume-actions">
             <button type="button" className="btn btn-primary ph-resume-btn" onClick={onContinue}>
               {resumeLabel}
             </button>
+            {onDoneForNow && (
+              <button type="button" className="btn btn-ghost ph-done-btn" onClick={onDoneForNow}>
+                Done for now
+              </button>
+            )}
             {pathComplete && onOpenPassport && (
               <button type="button" className="btn btn-secondary on-light" onClick={onOpenPassport}>
                 Skills Passport
@@ -228,23 +240,23 @@ export function PracticeHub({
         </div>
       </header>
 
-      <section className="ph-overview" aria-label="Progress overview">
+      <section className="ph-overview" aria-label="Practice marks">
         <MasteryMeter percent={overall} label={`Path mastery ${overall} percent`} />
         <div className="ph-metrics">
           <article className="ph-metric">
-            <span className="ph-metric-label">Experience</span>
+            <span className="ph-metric-label">Practice marks</span>
             <strong>{stats.xp}</strong>
-            <span className="ph-metric-hint">XP earned</span>
+            <span className="ph-metric-hint">Earned by finishing stations</span>
           </article>
-          <article className="ph-metric">
-            <span className="ph-metric-label">Streak</span>
+          <article className="ph-metric ph-metric-quiet">
+            <span className="ph-metric-label">Days showed up</span>
             <strong>{stats.dayStreak}</strong>
-            <span className="ph-metric-hint">Active days</span>
+            <span className="ph-metric-hint">Consistency — not a streak trap</span>
           </article>
           <article className="ph-metric">
-            <span className="ph-metric-label">Lessons</span>
+            <span className="ph-metric-label">Stations done</span>
             <strong>{stats.lessonsCompleted}</strong>
-            <span className="ph-metric-hint">Completed</span>
+            <span className="ph-metric-hint">Completed lessons</span>
           </article>
           <article className="ph-metric">
             <span className="ph-metric-label">Units</span>
@@ -256,11 +268,11 @@ export function PracticeHub({
         </div>
       </section>
 
-      <section className="ph-domains" aria-label="My progress">
+      <section className="ph-domains" aria-label="Skill domains">
         <div className="ph-section-head">
           <div>
-            <h2>My progress</h2>
-            <p>Skill domains for {meta.programTitle} — same structure on every pathway.</p>
+            <h2>Craft strength</h2>
+            <p>Skill domains for {meta.programTitle} — same order on every pathway.</p>
           </div>
         </div>
         <ul className="ph-domain-list">
@@ -278,11 +290,11 @@ export function PracticeHub({
         </ul>
       </section>
 
-      <section className="ph-curriculum" aria-label="Curriculum">
+      <section className="ph-curriculum" aria-label="Station map">
         <div className="ph-section-head">
           <div>
-            <h2>Curriculum path</h2>
-            <p>Expand a unit to open lessons. Locked stations unlock as you advance.</p>
+            <h2>Station map</h2>
+            <p>Expand a unit. Locked doors open when the station before is Familiar — not by scrolling past.</p>
           </div>
           <ul className="ph-legend" aria-label="Mastery levels">
             <li>
@@ -302,8 +314,8 @@ export function PracticeHub({
 
         <p className="ph-skip-note">
           {portal
-            ? 'Registration (Unit 1) is skipped here — you already have an account. Training starts at language support.'
-            : 'Registration (Unit 1) is skipped in Practice. You start at Unit 2.'}
+            ? 'Registration (Unit 1) is skipped — you already belong here. Training starts at language support.'
+            : 'Registration (Unit 1) is skipped in Practice. You start at language support.'}
         </p>
 
         <ol className="ph-units">
@@ -416,13 +428,20 @@ export function PracticeHub({
         <div>
           <h3>How progress works</h3>
           <p>
-            Learn, practise, get feedback, and retry until a skill is Familiar. Unit checkpoints confirm the block,
-            then the next unit unlocks.
+            Learn, practise, get feedback, and retry until a skill is Familiar. Finish the station. Then the next door
+            opens. Leaving mid-path is fine — use Done for now.
           </p>
         </div>
-        <button type="button" className="btn btn-primary" onClick={onContinue}>
-          {resumeLabel}
-        </button>
+        <div className="ph-footnote-actions">
+          <button type="button" className="btn btn-primary" onClick={onContinue}>
+            {resumeLabel}
+          </button>
+          {onDoneForNow && (
+            <button type="button" className="btn btn-ghost" onClick={onDoneForNow}>
+              Done for now
+            </button>
+          )}
+        </div>
       </aside>
     </div>
   )
@@ -440,12 +459,12 @@ export function PracticeStatsStrip({ step }: { step: number }) {
   const overall = overallMasteryPercent()
   const ready = canAdvanceFromStep(step)
   return (
-    <div className="practice-stats-strip" aria-label="Practice stats">
+    <div className="practice-stats-strip" aria-label="Practice marks">
       <span>
-        <strong>{stats.xp}</strong> XP
+        <strong>{stats.xp}</strong> marks
       </span>
       <span>
-        <strong>{stats.dayStreak}</strong> streak
+        <strong>{stats.dayStreak}</strong> days
       </span>
       <span>
         <strong>{overall}%</strong> mastery

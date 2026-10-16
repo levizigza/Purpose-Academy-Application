@@ -292,6 +292,11 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
                 Path home
               </button>
             )}
+            {practice && (
+              <Link className="btn btn-ghost train-hub-btn" to="/app/student">
+                Done for now
+              </Link>
+            )}
             <FoleyToggle compact />
           </div>
         </div>

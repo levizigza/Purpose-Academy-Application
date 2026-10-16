@@ -103,6 +103,42 @@ These are load-bearing. Improve around them; do not replace them with trend temp
 4. **Pathway accents** must match CSS tokens (`--path-construction|logistics|community`) and `PATHWAY_META.accent` — never drift teal/purple off-token.
 5. **Motion with purpose** — reveals and transitions serve hierarchy; respect `prefers-reduced-motion`.
 6. **Mobile and desktop** both load clean; splash/gate must not trap screenshot or learner entry forever without an obvious continue.
+7. **Cool for the trades** — shop-floor gravity (navy, amber, material photos, crew order). Look like a school people are proud to be seen in — not a homework app, not a casino.
+
+---
+
+## 6b. Human nature, attention ethics, and ascent (living)
+
+Purpose Academy must understand how people actually move — and refuse to farm them.
+
+### What we study (and refuse)
+
+| Source | Take the insight | Refuse the harm |
+|--------|------------------|-----------------|
+| **Bernays / mass persuasion** | Symbols, belonging, and clear desire shape action more than raw facts | Never manufacture false scarcity, fake social proof, or prestige lies |
+| **Social media loops** | Variable reward, infinite feed, and “one more” capture attention | Invert: finite stations, mastery gates, dignified **Done for now** exits |
+| **Spiral Dynamics (serve ~5 and below first)** | Many learners need **order, belonging, respect, and concrete win** before abstract self-authoring | Do not shame stage; design rails that help people climb toward responsibility and craft pride |
+
+Rough UX translation (not SD color cosplay on the UI):
+
+| Need | Product move |
+|------|----------------|
+| Belonging / crew | Pathway identity, Calgary voice, “you are on a crew path,” founding builders honesty |
+| Order / authority that earns trust | Numbered 20-step spine, Level-1 gates, instructor Competent ≠ quiz complete |
+| Power / dignity | Adult tone, tool photos, no childish gamification chrome |
+| Achievement | One **Today’s station**, visible mastery, Skills Passport — marks mean skill, not dopamine |
+| Ascent | After Familiar, invite the next station; never an endless feed of empty novelty |
+
+### Anti-doomscroll rules (ship these)
+
+1. **One station in focus** — hero CTA is the next lesson, not a wall of metrics.
+2. **Finite session** — copy names a clear finish (“Level-1 words,” “this Word→Action set”), not infinite scroll.
+3. **Mastery before more** — advance gates over “keep swiping.”
+4. **Dignified exit** — every training surface offers **Done for now** back to account home without guilt.
+5. **Metrics serve craft** — XP/streak may exist as practice marks; they must not outrank the station or invent addiction loops (no infinite notifications, no fake FOMO).
+6. **Optics = respect** — if it looks cheap or chaotic, people of pride disengage. Cool is a trust signal in construction culture.
+
+Agents: when changing UI, ask *“Does this pull someone into mindless more, or walk them into a finished station?”*
 
 ---
 
@@ -150,6 +186,7 @@ Living backlog — reorder as evidence appears. Strike or move items into the ch
 | Community specialty vocab growth | Honest depth toward usefulness | Open |
 | Deeper Logistics/Community LMS modules | Account path matches Practice depth | Open |
 | Portal School path polish (mobile density, mastery sync) | Keep challenging the one-spine assumption | Open |
+| Optics + attention ethics (cool trades UI, anti-doomscroll) | Pride, order, finite stations | Done (this climb) — keep iterating |
 
 When closing a climb: update Status, add a changelog line, and write the **new assumption to challenge next**.
 
@@ -158,6 +195,14 @@ When closing a climb: update Status, add a changelog line, and write the **new a
 ## 10. Changelog (living)
 
 Newest first.
+
+### 2026-03-27 — Optics climb: cool trades UI + attention ethics
+
+- Added §6b: Bernays/symbol clarity (ethical), Spiral Dynamics UX needs (~order/belonging/achievement), anti-doomscroll rules.
+- School path portal sits in a dark shop-floor **stage**; **Today’s station** leads; XP/streak demoted; **Done for now** exit.
+- Student home School path card becomes a photo-forward workbench invitation, not a bland panel.
+- Practice hub copy: “Learning dashboard” → path language; metrics framed as practice marks.
+- **Assumption to challenge next:** whether “Today’s station” + Done for now actually shortens sessions toward completion — or whether we still leak attention into secondary chrome.
 
 ### 2026-03-27 — One-spine climb: School path inside the account
 
