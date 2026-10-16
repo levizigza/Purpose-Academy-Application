@@ -210,13 +210,21 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Climbing — cavity-contained light (v31) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — natural daylight + cinematic open (v32) |
 
 ---
 
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-16 — Splash natural daylight + cinematic open (L3/L4)
+
+- Replaced harsh gold fill with soft morning daylight (cool sky + warm wall bounce) clipped to the stem cavity.
+- Creative open acting: crack of light → hesitation → commit → soft overshoot; light leads the leaf slightly.
+- Soft volumetric streaks + drifting dust motes inside the cavity; floor pool is pale daylight, not yellow sun.
+- Session key `pa-crossed-threshold-v32`.
+- **Assumption to challenge next:** whether the quieter light still reads as “invitation” on first watch.
 
 ### 2026-10-16 — Splash cavity light = logo P doorway (L3)
 
