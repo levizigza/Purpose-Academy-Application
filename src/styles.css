@@ -1705,29 +1705,31 @@ table.data th {
   opacity: 1;
 }
 
-/* Hinge aligned to logo stem cavity (viewBox 48→62 × 28→118) */
+/*
+  Hinge = cavity (viewBox 41→69 × 34→108).
+  Perspective on the PARENT; origin to the RIGHT so the open leaf keeps
+  visible face (does not foreshorten into a knife-edge). See craft §7.3.
+*/
 .doorway-hinge {
   position: absolute;
-  left: 37.5%;
-  /* Inset under lintel so perspective cannot lift the leaf above the P */
-  top: 22.5%;
-  width: 12.5%;
-  height: 69.5%;
-  perspective: 780px;
-  perspective-origin: 120% 40%;
+  left: 32%;
+  top: 26.6%;
+  width: 21.9%;
+  height: 57.8%;
+  perspective: 920px;
+  perspective-origin: 155% 42%;
   transform-style: preserve-3d;
   z-index: 3;
   pointer-events: none;
 }
 
-/* Caps the stem top above the swinging leaf — kills the “light poke” */
+/* Caps the stem lintel above the swinging leaf */
 .doorway-lintel {
   position: absolute;
-  left: 35.5%;
-  top: 16.8%;
-  width: 15%;
-  /* Overlap into the cavity top so no bright hairline can sit on the lintel edge */
-  height: 7.2%;
+  left: 29.5%;
+  top: 17.2%;
+  width: 26.6%;
+  height: 10%;
   background: #0b2f5c;
   z-index: 6;
   pointer-events: none;
@@ -1755,7 +1757,8 @@ table.data th {
 }
 
 .doorway-open .doorway-leaf {
-  transform: rotateY(-52deg);
+  /* ~68°: enough open to show cavity + enough face to read as a door slab */
+  transform: rotateY(-68deg);
   animation: pa-door-moving-hold 3.2s ease-in-out 1 forwards;
 }
 
@@ -1788,15 +1791,15 @@ table.data th {
   box-shadow: inset 3px 0 0 rgba(232, 238, 245, 0.22);
 }
 
-/* Thickness strip at leading edge — sells foreshortened volume when open */
+/* Leading-edge thickness — solid drawing: a door has depth, not paper */
 .doorway-leaf-edge {
   position: absolute;
   top: 0;
   bottom: 0;
-  right: -9%;
-  width: 10%;
+  right: -7%;
+  width: 8%;
   background: linear-gradient(90deg, #071e3d, #2a4f7a 45%, #0b2f5c);
-  transform: rotateY(90deg) translateZ(1px);
+  transform: rotateY(90deg) translateZ(2px);
   transform-origin: left center;
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.35);
 }
@@ -1862,27 +1865,27 @@ table.data th {
   /* still */
   0%, 8% { transform: rotateY(0deg); }
   /* crack — invite the light before the full swing */
-  14% { transform: rotateY(-6deg); }
-  20% { transform: rotateY(-8deg); }
-  /* hesitation (the door thinks) */
-  28% { transform: rotateY(-7deg); }
-  34% { transform: rotateY(-10deg); }
-  /* commit — accelerate through the arc */
-  42% { transform: rotateY(-22deg); }
-  52% { transform: rotateY(-38deg); }
-  62% { transform: rotateY(-50deg); }
-  /* soft overshoot, then settle like a held breath */
-  72% { transform: rotateY(-58deg); }
-  82% { transform: rotateY(-54deg); }
-  92% { transform: rotateY(-51deg); }
-  100% { transform: rotateY(-52deg); }
+  14% { transform: rotateY(-8deg); }
+  20% { transform: rotateY(-11deg); }
+  /* hesitation */
+  28% { transform: rotateY(-9deg); }
+  34% { transform: rotateY(-14deg); }
+  /* commit — arc through space (perspective does the foreshortening) */
+  42% { transform: rotateY(-28deg); }
+  52% { transform: rotateY(-46deg); }
+  62% { transform: rotateY(-60deg); }
+  /* soft overshoot, settle where slab + cavity both read */
+  72% { transform: rotateY(-74deg); }
+  82% { transform: rotateY(-70deg); }
+  92% { transform: rotateY(-66deg); }
+  100% { transform: rotateY(-68deg); }
 }
 
 @keyframes pa-door-moving-hold {
-  0% { transform: rotateY(-52deg); }
-  40% { transform: rotateY(-53.5deg); }
-  70% { transform: rotateY(-51.5deg); }
-  100% { transform: rotateY(-52deg); }
+  0% { transform: rotateY(-68deg); }
+  40% { transform: rotateY(-70deg); }
+  70% { transform: rotateY(-67deg); }
+  100% { transform: rotateY(-68deg); }
 }
 
 @keyframes pa-light-chart {
@@ -2086,8 +2089,8 @@ table.data th {
 .threshold-door-zoom {
   position: absolute;
   inset: 0;
-  /* Origin on the doorway cavity — staging the focal point */
-  transform-origin: 42% 40%;
+  /* Origin on the wider doorway cavity — staging the focal point */
+  transform-origin: 43% 48%;
   will-change: transform;
 }
 
@@ -2454,9 +2457,9 @@ table.data th {
 }
 
 @keyframes pa-door-cross {
-  0% { transform: rotateY(-82deg); }
-  45% { transform: rotateY(-98deg); }
-  100% { transform: rotateY(-112deg); }
+  0% { transform: rotateY(-68deg); }
+  45% { transform: rotateY(-88deg); }
+  100% { transform: rotateY(-105deg); }
 }
 
 /* Arc into the lower-right third — anticipation dip, then settle */
@@ -2623,7 +2626,7 @@ table.data th {
 
   .doorway-opening .doorway-leaf,
   .doorway-open .doorway-leaf {
-    transform: rotateY(-52deg);
+    transform: rotateY(-68deg);
   }
 
   .doorway-open .doorway-motes {

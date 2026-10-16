@@ -196,6 +196,22 @@ Priority for our craft (90% of quality): **slow-in/out, timing, anticipation, st
 
 **Choreography = hierarchy:** the element that moves first is perceived as most important. Stagger by importance, not DOM order. Vary easing and direction across elements — do not ease everything the same way.
 
+### 7.3 Door architecture & perspective (master craft)
+
+The splash door is **architecture inside a letter**, not a hairline slit. If it does not read as a door a carpenter would hang, it fails.
+
+| Law | Number / rule | Why |
+|-----|---------------|-----|
+| **Real door ratio** | Metric ≈ **900 × 2100 mm** → height÷width ≈ **2.33**; Palladio main doors often ~2:1 | Ratio survives perspective; absolute px do not ([perspectivegrids](https://perspectivegrids.com/references/figure-and-door/)) |
+| **Splash cavity target** | height÷width ≈ **2.5–2.8** (v34: 74÷28 ≈ **2.64**) | Was ~6.4 — a letter-slot, not a door. Wider stem so the P can hold architecture |
+| **Verticals stay vertical** | Hinge axis = upright; no tipped posts | One-/two-point interior perspective keeps uprights upright |
+| **Perspective on the parent** | `perspective` + `perspective-origin` on `.doorway-hinge`, not the leaf | Origin biased **right** (~155%) so the open slab keeps a readable face instead of collapsing to a knife-edge |
+| **Foreshortening** | Open angle ~**68°** settle | Farther open → narrower face; too open = edge-on stick; too closed = no cavity. Show slab + empty space together |
+| **Solid drawing** | Leaf thickness edge + lintel + sill + jamb lips | A door has depth and a frame; paper cutouts read fake |
+| **Light through the void** | Daylight clipped to the cavity mouth only | Sunshine comes from the empty opening, not a glow behind the whole letter |
+
+**Study trail:** standard door sizes; open-door perspective (hinge fixed, free edge swings, top/bottom edges follow the rotated plane); CSS 3D door patterns (perspective on frame, `transform-origin: left`, `preserve-3d`).
+
 ---
 
 ## 8. Trust craft — Layer L5
@@ -244,7 +260,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Climbing — composition + motion doctrine (v33) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — architectural door + perspective (v34) |
 | Site-wide composition (thirds / hierarchy) | L3 | Open — after splash locks |
 
 ---
@@ -252,6 +268,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-16 — Splash architectural door + perspective (L3)
+
+- Cavity rebuilt from letter-slot (~1:6.4) to door-like (~1:2.64); wider P stem holds real jambs, lintel, sill.
+- Perspective on hinge parent with right-biased origin; settle ~68° so slab face + cavity both read.
+- Documented §7.3 door architecture & perspective laws (metric door ratio, foreshortening, solid drawing).
+- Session key `pa-crossed-threshold-v34`.
+- **Assumption to challenge next:** whether the wider stem still reads instantly as the brand P at a glance.
 
 ### 2026-10-16 — Splash composition + motion doctrine (L3)
 
