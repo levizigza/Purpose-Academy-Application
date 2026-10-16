@@ -160,7 +160,7 @@ These are load-bearing across all layers.
 6. **Mobile and desktop** both load clean; splash/gate must not trap entry without an obvious continue.
 7. **Cool for the trades** — shop-floor gravity (navy, amber, material photos, crew order). Proud to be seen here — not homework app, not casino.
 8. **Training stages** (School path / Practice hub) sit on a dark material stage when embedded in the light portal so light text never dies on paper.
-9. **Opening / splash is L3 too** — treat it as a short film: staging (one focus), anticipation before the door swing, follow-through light spill, brand name after the mark settles, pathway cascade, then hammer CTA. Exit is a walk-through (strike → dolly), not glass-shatter gimmick. Warm shop light, not casino glow.
+9. **Opening / splash is L3 too** — treat it as classical pose-to-pose animation (Illusion of Life): timing charts with crowded drawings at extremes (slow in/out), anticipation inside the door chart, overlapping light spill, moving hold on the open leaf, arcs on the hammer. Prefer dense keyframe spacing with *linear* playback over a single cubic-bezier smear. Exit is walk-through (strike → dolly), not shatter.
 
 ---
 
@@ -210,7 +210,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Done — cinematic door climb (v28) |
+| Splash opening aesthetic craft | L3/L4 | Done — cell timing-chart climb (v29) |
 
 ---
 
@@ -218,13 +218,17 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-16 — Splash cell timing-chart climb (L3)
+
+- Studied Thomas & Johnston (pose-to-pose, slow in/out spacing), Keane (what moves first / overlap), Lasseter (moving holds), classical timing charts → CSS.
+- Door, camera, light, spill, name, pathways, and hammer now use dense keyframe charts with **linear** playback so spacing lives in the poses — not one cubic-bezier smear.
+- Anticipation is inside the door chart; light/spill lag as overlapping action; open leaf uses a quiet moving hold; hammer strike follows an arc with wind-up hold.
+- Session key `pa-crossed-threshold-v29`.
+- **Assumption to challenge next:** whether the ~5.4s mark→ready rhythm reads as weight or as wait on small screens.
+
 ### 2026-10-16 — Splash cinematic door climb (L3)
 
-- Researched brand-intro motion (Disney staging / anticipation / follow-through; logo reveal patterns; CSS 3D door + light spill).
-- New choreography: breath → closed mark → anticipate → open → name → pathways → ready → strike → walk-through cross.
-- Stronger 3D leaf (panels, hinge pins, back face, floor spill); camera pull-back staging; brand letter-spacing settle; replaced glass shatter with hammer strike + dolly through the door.
-- Session key `pa-crossed-threshold-v28`.
-- **Assumption to challenge next:** whether ~4.8s to ready feels right on mobile, or a tighter “short film” cut lands better.
+- First cinematic pass: 3D leaf, walk-through enter, shatter removed (`v28`).
 
 ### 2026-10-16 — Splash opening aesthetic craft (L3)
 
