@@ -81,10 +81,12 @@ import {
   SKILL_BY_STEP,
 } from './learningMastery'
 import {
+  consumeForcePracticeLesson,
   hasPracticeFeedbackAck,
   isPracticeMode,
   markPracticeFeedbackAck,
   openPracticeChat,
+  peekForcePracticeLesson,
   PRACTICE_ENTRY_STEP,
   practiceFeedbackKey,
   resetPracticeProgress,
@@ -612,9 +614,14 @@ export function StudentSequencePage() {
   const [practiceAdvancePrompt, setPracticeAdvancePrompt] = useState(false)
   const [advanceGateMsg, setAdvanceGateMsg] = useState<string | null>(null)
   const practiceAdvanceRef = useRef<(() => void) | null>(null)
-  const [practiceView, setPracticeView] = useState<'hub' | 'lesson' | 'passport'>(() =>
-    isPracticeMode() ? 'hub' : 'lesson',
-  )
+  const [practiceView, setPracticeView] = useState<'hub' | 'lesson' | 'passport'>(() => {
+    if (!isPracticeMode()) return 'lesson'
+    /* Portal School path can open a lesson without showing the hub twice. Peek only — consume once on mount. */
+    return peekForcePracticeLesson() ? 'lesson' : 'hub'
+  })
+  useEffect(() => {
+    consumeForcePracticeLesson()
+  }, [])
   const [checkpointUnit, setCheckpointUnit] = useState<number | null>(null)
   const [matchRound, setMatchRound] = useState(1)
   const [empDone, setEmpDone] = useState(() => {

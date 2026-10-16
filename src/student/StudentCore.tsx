@@ -159,17 +159,18 @@ export function StudentHomePage() {
           }
         : !hasPathwayLessons
           ? {
-              title: `Continue ${pathwayLabel} in Practice`,
-              body: `Account lessons for ${pathwayLabel} are not in this portal yet. Your real 20-step school path — vocabulary, drills, and checks — lives in Student Practice.`,
-              to: '/journey',
-              cta: 'Open Practice path',
+              title: `Continue ${pathwayLabel} on School path`,
+              body: `Account lessons for ${pathwayLabel} are not in Learn yet. Your real 20-step school path — vocabulary, drills, and checks — is under School path.`,
+              to: '/app/student/path',
+              cta: 'Open School path',
               onBeforeNavigate: openPathwayPractice,
             }
           : {
-              title: 'Review your courses',
-              body: 'You are caught up on lessons. Check assignments or your skills passport.',
-              to: '/app/student/courses',
-              cta: 'Open courses',
+              title: 'Keep training on School path',
+              body: 'Account lessons look current. Keep building vocabulary and drills on the shared 20-step School path.',
+              to: '/app/student/path',
+              cta: 'Open School path',
+              onBeforeNavigate: openPathwayPractice,
             }
 
   return (
@@ -177,10 +178,27 @@ export function StudentHomePage() {
       <PageHeader
         kicker="Your training"
         title={`Hello, ${user.full_name.split(' ')[0]}`}
-        help="One clear next step on your path. Follow the button below."
+        help="One school spine in this account. School path is the 20-step training; Learn holds extra account lessons when available."
       />
 
       <NextStepCard {...nextStep} />
+
+      <div className="panel stack school-path-home-card">
+        <p className="section-kicker">School path</p>
+        <h2>Your 20-step spine</h2>
+        <p>
+          The same path as Practice — units, vocabulary, and checks
+          {pathwayLabel ? ` for ${pathwayLabel}` : ''}. Visible here so your account and training stay one school.
+        </p>
+        <div className="hero-actions">
+          <Link className="btn btn-primary" to="/app/student/path" onClick={openPathwayPractice}>
+            Open School path
+          </Link>
+          <Link className="btn btn-secondary on-light" to="/app/student/programs">
+            {student.pathway ? 'Change pathway' : 'Choose pathway'}
+          </Link>
+        </div>
+      </div>
 
       <div className="grid-2">
         <div className="panel stack">
@@ -198,7 +216,7 @@ export function StudentHomePage() {
                 ? 'Not started'
                 : hasPathwayLessons
                   ? `${pathProg}%`
-                  : 'Practice path (portal lessons coming)'}
+                  : 'School path (Learn lessons coming)'}
             </strong>
           </p>
           <div className="progress" aria-hidden>
@@ -206,9 +224,9 @@ export function StudentHomePage() {
           </div>
           {!hasPathwayLessons && student.pathway && (
             <p className="muted" style={{ margin: 0 }}>
-              Train on the shared 20-step path in{' '}
-              <Link className="inline-link" to="/journey" onClick={openPathwayPractice}>
-                Student Practice
+              Train on the shared spine under{' '}
+              <Link className="inline-link" to="/app/student/path" onClick={openPathwayPractice}>
+                School path
               </Link>
               .
             </p>
@@ -301,6 +319,9 @@ export function StudentProfilePage() {
       <div className="panel stack">
         <h2>More pages</h2>
         <ul className="list-plain">
+          <li>
+            <Link to="/app/student/path">School path (20 steps)</Link>
+          </li>
           <li>
             <Link to="/app/student/foundation">Foundation lessons</Link>
           </li>

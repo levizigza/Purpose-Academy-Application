@@ -28,6 +28,8 @@ type Props = {
   currentStep: number
   /** True after Employment Connection is finished in this practice run. */
   pathComplete?: boolean
+  /** Portal embeds the hub inside /app/student without a second shell-main. */
+  surface?: 'practice' | 'portal'
   onOpenLesson: (step: number) => void
   onContinue: () => void
   onOpenPassport?: () => void
@@ -88,11 +90,13 @@ function MasteryMeter({ percent, label }: { percent: number; label: string }) {
 export function PracticeHub({
   currentStep,
   pathComplete = false,
+  surface = 'practice',
   onOpenLesson,
   onContinue,
   onOpenPassport,
   onRestart,
 }: Props) {
+  const portal = surface === 'portal'
   const [, bump] = useState(0)
   const [openUnits, setOpenUnits] = useState<Record<number, boolean>>(() => {
     const initial: Record<number, boolean> = {}
@@ -165,16 +169,17 @@ export function PracticeHub({
 
   return (
     <div
-      className={`shell-main practice-hub is-${pathwayId}${pathComplete ? ' is-complete' : ''}`}
+      className={`${portal ? '' : 'shell-main '}practice-hub${portal ? ' is-portal' : ''} is-${pathwayId}${pathComplete ? ' is-complete' : ''}`}
       style={{ '--ph-stream': meta.accent, '--ph-stream-soft': meta.soft } as CSSProperties}
     >
       <header className="ph-hero">
         <div className="ph-hero-copy">
-          <p className="ph-kicker">Practice</p>
-          <h1>Learning dashboard</h1>
+          <p className="ph-kicker">{portal ? 'School path' : 'Practice'}</p>
+          <h1>{portal ? 'Your 20-step path' : 'Learning dashboard'}</h1>
           <p className="ph-lede">
-            {practiceName ? `${practiceName}, your` : 'Your'} {meta.programTitle} path: units, drills, mastery gates,
-            and checkpoints. Reach Familiar on each station before advancing.
+            {portal
+              ? `${practiceName || 'Learner'}, this is the same school spine as Practice — vocabulary, drills, and checks for ${meta.programTitle}. Account lessons (Learn) are extra when available.`
+              : `${practiceName ? `${practiceName}, your` : 'Your'} ${meta.programTitle} path: units, drills, mastery gates, and checkpoints. Reach Familiar on each station before advancing.`}
           </p>
           <div className="ph-pathway-badge">
             <img src={pathwayIcon(pathwayId)} alt="" />
@@ -295,7 +300,11 @@ export function PracticeHub({
           </ul>
         </div>
 
-        <p className="ph-skip-note">Registration (Unit 1) is skipped in Practice. You start at Unit 2.</p>
+        <p className="ph-skip-note">
+          {portal
+            ? 'Registration (Unit 1) is skipped here — you already have an account. Training starts at language support.'
+            : 'Registration (Unit 1) is skipped in Practice. You start at Unit 2.'}
+        </p>
 
         <ol className="ph-units">
           {LEARNING_UNITS.map((u) => {

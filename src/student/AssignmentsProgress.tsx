@@ -182,18 +182,18 @@ export function StudentProgressPage() {
           {student.pathway && !hasPathwayLessons ? (
             <>
               <p>
-                Portal lessons for {pathwayLabel} are not built yet. Train on the shared 20-step path in Student
-                Practice.
+                Learn lessons for {pathwayLabel} are not built yet. Train on the shared 20-step spine under School
+                path.
               </p>
               <Link
                 className="btn btn-primary"
-                to="/journey"
+                to="/app/student/path"
                 onClick={() => {
                   if (student.pathway) setActivePathway(student.pathway)
                   openPracticeSpine(user.full_name)
                 }}
               >
-                Open Practice path
+                Open School path
               </Link>
             </>
           ) : (

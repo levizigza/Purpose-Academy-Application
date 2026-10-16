@@ -125,7 +125,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Language → practice → verify | VocabSheet + drills + instructor Competent honesty | Community Level-1 gate once required the full 200+ deck (fixed); Eye Spy is still a photo collage, not a photographed scene |
 | Shared Daily Conversation Level-1 | Doctrine + Construction/Logistics | Must stay identical for Community (fixed this climb) |
 | Apprenticeship / work readiness | Copy + Skills Passport disclaimers | Do not over-claim placement rates or “Enrolling now” depth where specialty is still thin |
-| One school spine | Practice `/journey` is the rich spine | Portal home must point at Practice when LMS lessons are missing — never fake completion |
+| One school spine | Practice `/journey` drills + portal **School path** (`/app/student/path`) show the same hub | Learn (LMS modules) remains extra depth where built; never fake completion when empty |
 
 **Protect:** VocabSheet, Tool Chest, Calgary voice, instructor-Competent truth, three-door story.
 
@@ -144,11 +144,12 @@ Living backlog — reorder as evidence appears. Strike or move items into the ch
 | About founding-builders framing | Trust without fake bios | Done (craft pass) |
 | Community Level-1 gate = Daily Conversation 1–20 | Non-negotiable gate parity | Done (honesty climb) |
 | LMS honesty when specialty lessons missing | Stop false “caught up”; bridge to Practice | Done (partial — portal next-step + progress copy) |
+| Fuller one-spine UX (Practice ↔ LMS) | First-week mental model | Done (portal School path hosts PracticeHub; nav + home) |
 | Pathway-aware foley beds | Sound matches craft | Open |
 | Eye Spy photography upgrade | Memorable scene craft | Open — needs assets; copy softened to “among photos” |
 | Community specialty vocab growth | Honest depth toward usefulness | Open |
 | Deeper Logistics/Community LMS modules | Account path matches Practice depth | Open |
-| Fuller one-spine UX (Practice ↔ LMS) | First-week mental model | Open — portal bridge started; keep challenging |
+| Portal School path polish (mobile density, mastery sync) | Keep challenging the one-spine assumption | Open |
 
 When closing a climb: update Status, add a changelog line, and write the **new assumption to challenge next**.
 
@@ -157,6 +158,14 @@ When closing a climb: update Status, add a changelog line, and write the **new a
 ## 10. Changelog (living)
 
 Newest first.
+
+### 2026-03-27 — One-spine climb: School path inside the account
+
+- Added `/app/student/path` — PracticeHub embedded in the student portal (same 20-step curriculum).
+- Desktop/mobile nav: **School path** / **Path** (was a raw `/journey` jump out of the account shell).
+- Student home always surfaces the spine card; empty Learn pathways and “caught up” Construction both route to School path.
+- Opening a station uses `enterPracticeLesson` so `/journey` lands on the lesson (no double hub).
+- **Assumption to challenge next:** whether learners still confuse **School path** (spine) with **Learn** (LMS modules) — watch first-week language; rename or merge if needed.
 
 ### 2026-03-27 — Honesty climb: Level-1 gate + LMS truth
 

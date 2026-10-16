@@ -47,6 +47,7 @@ import {
   StudentProfilePage,
   StudentRegistrationStatusPage,
 } from './student/StudentCore'
+import { StudentSchoolPathPage } from './student/StudentSchoolPathPage'
 
 function AppHomeRedirect() {
   const { user, student } = useSession()
@@ -176,6 +177,14 @@ function AppRoutes() {
           element={
             <RequireApprovedStudent>
               <ProgramSelectionPage />
+            </RequireApprovedStudent>
+          }
+        />
+        <Route
+          path="path"
+          element={
+            <RequireApprovedStudent>
+              <StudentSchoolPathPage />
             </RequireApprovedStudent>
           }
         />

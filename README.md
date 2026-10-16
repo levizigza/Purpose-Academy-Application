@@ -99,5 +99,5 @@ Server data file is created on first boot from the Construction-first curriculum
 ## Notes
 
 - Competent status still requires instructor observation (PA-TECH-003 rule).
-- All three pathway doors are open in Practice. Account/LMS specialty lessons are richest for Construction; Logistics and Community portal lessons are still climbing — the student home tells the truth and points to Practice.
+- All three pathway doors are open on the shared **School path** (`/app/student/path` → drills on `/journey`). Account/LMS specialty lessons under Learn are richest for Construction; Logistics and Community Learn modules are still climbing — the portal tells the truth and keeps the 20-step spine visible in-account.
 - For true production later: swap JSON file for Postgres, add HTTPS hosting, MFA, and PIPA controls.
