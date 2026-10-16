@@ -7,7 +7,7 @@ import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v28'
+const ENTERED_KEY = 'pa-crossed-threshold-v29'
 
 export function hasEnteredSite() {
   try {
@@ -26,14 +26,17 @@ export function markEnteredSite() {
 }
 
 /**
- * Cinematic threshold stages (L3 motion craft):
- * breath → mark → anticipate → open → name → pathways → ready → strike → cross.
- * Principles: staging (one focus), anticipation, follow-through, slow-in/out.
+ * Pose-to-pose threshold (Illusion of Life craft):
+ * breath → closed mark → door chart (anticipate built into spacing) → name →
+ * pathways → ready → strike → cross.
+ *
+ * Door/camera motion uses dense keyframe *timing charts* with linear CSS
+ * interpolation so spacing lives in the poses (Thomas & Johnston slow-in/out),
+ * not in a single cubic-bezier smear.
  */
 type SplashStage =
   | 'breath'
   | 'closed'
-  | 'anticipate'
   | 'opening'
   | 'named'
   | 'pathways'
@@ -43,12 +46,12 @@ type SplashStage =
 
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'breath' },
-  { at: 480, stage: 'closed' },
-  { at: 1180, stage: 'anticipate' },
-  { at: 1520, stage: 'opening' },
-  { at: 3100, stage: 'named' },
-  { at: 3850, stage: 'pathways' },
-  { at: 4750, stage: 'ready' },
+  { at: 520, stage: 'closed' },
+  { at: 1100, stage: 'opening' },
+  /* Door chart ~2.6s — name lands after the settle, not during the swing. */
+  { at: 3850, stage: 'named' },
+  { at: 4550, stage: 'pathways' },
+  { at: 5450, stage: 'ready' },
 ]
 
 const EXIT_STAGES = new Set<SplashStage>(['striking', 'crossing'])
@@ -130,9 +133,8 @@ function PathwayStage({ active }: { active: boolean }) {
   )
 }
 
-function doorStageFor(stage: SplashStage): 'closed' | 'anticipate' | 'opening' | 'open' {
+function doorStageFor(stage: SplashStage): 'closed' | 'opening' | 'open' {
   if (stage === 'breath' || stage === 'closed') return 'closed'
-  if (stage === 'anticipate') return 'anticipate'
   if (stage === 'opening') return 'opening'
   return 'open'
 }
@@ -147,11 +149,7 @@ function OpeningComposition({
   showName: boolean
 }) {
   const zoomStage =
-    stage === 'breath' || stage === 'closed' || stage === 'anticipate'
-      ? 'closed'
-      : stage === 'opening'
-        ? 'opening'
-        : 'ready'
+    stage === 'breath' || stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'ready'
 
   return (
     <div className="threshold-stage">
@@ -205,8 +203,12 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
     const timers = TIMELINE.filter((s) => s.at > 0).map((s) =>
       window.setTimeout(() => {
         setStage((prev) => (EXIT_STAGES.has(prev) ? prev : s.stage))
-        if (s.stage === 'anticipate') void unlockFoley().then(() => playFoley('wood'))
-        if (s.stage === 'opening') void unlockFoley().then(() => playFoley('wood'))
+        if (s.stage === 'opening') {
+          void unlockFoley().then(() => {
+            playFoley('wood')
+            window.setTimeout(() => playFoley('wood'), 420)
+          })
+        }
         if (s.stage === 'pathways') void unlockFoley().then(() => playFoley('metal'))
       }, s.at),
     )

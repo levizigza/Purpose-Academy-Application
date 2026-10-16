@@ -1,12 +1,12 @@
 /**
  * Doorway mark — the stem of the P is a hinged shop door.
- * Motion craft (L3): anticipation → swing → light spill + follow-through.
- * Perspective lives on the hinge parent; leaf rotates on the left edge.
+ * Pose-to-pose craft: opening runs a timing-chart keyframe (anticipate inside
+ * the spacing). Light spill lags as overlapping action (Keane / follow-through).
  */
 export function OpeningDoorMark({
   stage,
 }: {
-  stage: 'closed' | 'anticipate' | 'opening' | 'open'
+  stage: 'closed' | 'opening' | 'open'
 }) {
   return (
     <div className={`doorway doorway-${stage}`} aria-hidden>
