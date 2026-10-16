@@ -7,7 +7,7 @@ import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v32'
+const ENTERED_KEY = 'pa-crossed-threshold-v33'
 
 export function hasEnteredSite() {
   try {
@@ -26,13 +26,10 @@ export function markEnteredSite() {
 }
 
 /**
- * Pose-to-pose threshold (Illusion of Life craft):
- * breath → closed mark → door chart (anticipate built into spacing) → name →
- * pathways → ready → strike → cross.
- *
- * Door/camera motion uses dense keyframe *timing charts* with linear CSS
- * interpolation so spacing lives in the poses (Thomas & Johnston slow-in/out),
- * not in a single cubic-bezier smear.
+ * Composition + motion threshold (v33):
+ * Build → Breathe → Resolve.
+ * Focal point = doorway cavity. Hierarchy in time = who moves first.
+ * Door/camera use pose charts; name/paths/CTA use varied ease-out entrances.
  */
 type SplashStage =
   | 'breath'
@@ -46,12 +43,14 @@ type SplashStage =
 
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'breath' },
-  { at: 480, stage: 'closed' },
-  { at: 1000, stage: 'opening' },
-  /* Door chart ~2.85s — crack → hesitate → commit; name after settle. */
-  { at: 4000, stage: 'named' },
-  { at: 4650, stage: 'pathways' },
-  { at: 5450, stage: 'ready' },
+  /* Build — mark arrives before anything else speaks */
+  { at: 550, stage: 'closed' },
+  { at: 1200, stage: 'opening' },
+  /* Breathe — door + daylight alone (~2.85s chart); name waits */
+  { at: 4300, stage: 'named' },
+  /* Resolve — secondary then CTA (choreography = hierarchy) */
+  { at: 5000, stage: 'pathways' },
+  { at: 5750, stage: 'ready' },
 ]
 
 const EXIT_STAGES = new Set<SplashStage>(['striking', 'crossing'])
@@ -169,8 +168,8 @@ function OpeningComposition({
     stage === 'breath' || stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'ready'
 
   return (
-    <div className="threshold-stage">
-      <p className={`threshold-school-name${showName ? ' is-live' : ''}`}>{BRAND.name}</p>
+    <div className="threshold-compose" data-stage={stage}>
+      {/* Focal plane — stem/cavity weighted toward left-third × mid intersection */}
       <div className={`threshold-door-stage is-${stage}`} aria-hidden>
         <div className={`threshold-door-zoom is-${zoomStage}`}>
           <div className="threshold-door-slot is-active">
@@ -179,6 +178,9 @@ function OpeningComposition({
         </div>
         <div className="threshold-door-ground" />
       </div>
+      {/* Upper third — brand after the door has breathed */}
+      <p className={`threshold-school-name${showName ? ' is-live' : ''}`}>{BRAND.name}</p>
+      {/* Lower third — secondary paths (enter from left, not the same rise as the name) */}
       <PathwayStage active={showPathways} />
     </div>
   )

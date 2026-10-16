@@ -160,7 +160,41 @@ These are load-bearing across all layers.
 6. **Mobile and desktop** both load clean; splash/gate must not trap entry without an obvious continue.
 7. **Cool for the trades** — shop-floor gravity (navy, amber, material photos, crew order). Proud to be seen here — not homework app, not casino.
 8. **Training stages** (School path / Practice hub) sit on a dark material stage when embedded in the light portal so light text never dies on paper.
-9. **Opening / splash is L3 too** — treat it as classical pose-to-pose animation (Illusion of Life): timing charts with crowded drawings at extremes (slow in/out), anticipation inside the door chart, overlapping light spill, moving hold on the open leaf, arcs on the hammer. Prefer dense keyframe spacing with *linear* playback over a single cubic-bezier smear. Exit is walk-through (strike → dolly), not shatter.
+9. **Opening / splash is L3 too** — composition + motion doctrine below. Exit is walk-through (strike → dolly), not shatter.
+
+### 7.1 Composition foundations (splash first → then site-wide)
+
+These are not decoration tips. They decide where the eye lands. Sources we study and apply: NN/g visual design principles, Interaction Design Foundation (rule of thirds / focal point), [Design Systems Repo](https://designsystemsrepo.com/) (systems discipline for later site-wide), open motion craft notes (Hyperframes / twelve-principles translations).
+
+| Principle | Meaning here | Splash application (v33+) |
+|-----------|--------------|---------------------------|
+| **Focal point** | One primary center of interest; everything else supports it | The open **doorway cavity / daylight** is the hero — camera transform-origin sits on the stem, not the bowl |
+| **Rule of thirds** | Divide the frame 3×3; put weight on lines/intersections | Name sits on the **upper third**; pathways on the **lower third**; hammer CTA on the **lower-right intersection**; P biased so the stem reads near the left-vertical third |
+| **Visual hierarchy** | Size, contrast, order, and *who moves first* = importance | Door moves first → name → pathways → hammer. Never animate all at once |
+| **Balance** | Visual weight distributed (symmetry = calm; asymmetry = energy) | Asymmetric: mark + paths left/center, tool CTA right — dynamic, not a dead stack |
+| **Framing / staging** | Negative space and vignette tell the eye where to look | During the open, periphery dims slightly so only the doorway reads; then the frame breathes open |
+| **Negative space** | Empty area is structure, not leftover | Keep air between name / mark / paths / hammer — no cramped card stack |
+
+**Site-wide later (same laws):** public heroes, portal School path, Practice — apply thirds + hierarchy once splash is right. Design-system discipline (tokens, pattern reuse) comes from studying systems at designsystemsrepo.com without copying their chrome.
+
+### 7.2 Motion foundations (Illusion of Life → screen)
+
+Priority for our craft (90% of quality): **slow-in/out, timing, anticipation, staging, follow-through/overlap, arcs**. Personality: restrained exaggeration + secondary action.
+
+| Principle | Splash law |
+|-----------|------------|
+| **Staging** | One idea per beat. Dim the rest when the door acts. |
+| **Anticipation** | Crack of daylight + tiny leaf dip *before* the commit swing. |
+| **Timing / weight** | Door = cinematic (slow). Paths = medium. Hammer hint = light/fast. |
+| **Slow in / out** | Spatial moves use ease-out entrances; exits accelerate. Pose charts keep dense keys at extremes. |
+| **Follow-through / overlap** | Light leads the leaf; icons lag labels; shadow settles after the mark. |
+| **Arcs** | Camera and hammer travel with a slight curve, not a mechanical slide. |
+| **Secondary action** | Dust motes + soft floor pool support the open — never steal focus. |
+| **Appeal** | Soft natural daylight, readable door leaf, confident settle — remove competing glow. |
+
+**Scene structure (every opening):** **Build** (mark arrives) → **Breathe** (door + light live alone) → **Resolve** (name, paths, CTA land in hierarchy order).
+
+**Choreography = hierarchy:** the element that moves first is perceived as most important. Stagger by importance, not DOM order. Vary easing and direction across elements — do not ease everything the same way.
 
 ---
 
@@ -210,13 +244,22 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Climbing — natural daylight + cinematic open (v32) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — composition + motion doctrine (v33) |
+| Site-wide composition (thirds / hierarchy) | L3 | Open — after splash locks |
 
 ---
 
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-16 — Splash composition + motion doctrine (L3)
+
+- Documented composition foundations (focal point, thirds, hierarchy, balance, framing) and motion foundations (12 principles → screen) in §7.1–7.2; splash applies first, site-wide next.
+- Rebuilt opening frame on a rule-of-thirds stage: cavity as focal origin, name on upper third, pathways on lower third, hammer on lower-right intersection; staging vignette during the open.
+- Hierarchy in time: door breathes alone → name → paths (from left) → CTA; varied easing/direction; camera ease-out pullback.
+- Session key `pa-crossed-threshold-v33`.
+- **Assumption to challenge next:** whether asymmetric hammer placement still reads on narrow phones without crowding the mark.
 
 ### 2026-10-16 — Splash natural daylight + cinematic open (L3/L4)
 
