@@ -7,7 +7,7 @@ import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v38'
+const ENTERED_KEY = 'pa-crossed-threshold-v39'
 
 export function hasEnteredSite() {
   try {
