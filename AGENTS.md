@@ -2,12 +2,13 @@
 
 Before changing UI, curriculum packs, brand copy, learning flow, sound, or public trust pages:
 
-1. Read **[`docs/CRAFTSMANSHIP.md`](docs/CRAFTSMANSHIP.md)** — living craftsmanship doctrine (§3.1 systems, §7.1–7.3 composition/motion/door).
-2. Name which **craft layer(s)** you are touching (L1 truth, L2 content delivery, L3 aesthetic optics, L4 attention ethics, L5 trust, L6 systems spine).
-3. **Systems test:** excellent in isolation *and* continuous with neighbors (gateway → Home → path → Practice). Name the contract you touch.
-4. For splash/opening work: composition + door architecture + motion foundations first; then site-wide chrome.
-5. Apply the change **site-wide** for that layer when the climb is past splash lock — public, splash/enter, auth, Practice, School path, Learn.
-6. Ask: does this pull someone into mindless *more*, or walk them into a finished station?
-7. When product truth or craft rules change, **update** `docs/CRAFTSMANSHIP.md` (changelog + climbs). It is not fixed.
+1. Read **[`docs/CRAFTSMANSHIP.md`](docs/CRAFTSMANSHIP.md)** — living craftsmanship doctrine (§1 builder+critic, §3.1 systems, §7 composition/motion/door).
+2. Name which **craft layer(s)** you are touching (L1–L6).
+3. **Be the critic of your own build** — relentless, never toxic. Customer first. Build → destroy → question → improve. No version is the final destination.
+4. **Systems test:** excellent in isolation *and* continuous with neighbors (gateway → Home → path → Practice).
+5. For splash/opening: composition + door architecture + motion first; then site-wide chrome.
+6. Apply the change **site-wide** for that layer when past splash lock.
+7. Ask: does this pull someone into mindless *more*, or walk them into a finished station?
+8. Update `docs/CRAFTSMANSHIP.md` when truth or craft rules change — including when the critic overturned a prior choice.
 
-Study: [Design Systems Repo](https://designsystemsrepo.com/); [awesome-system-design-resources](https://github.com/ashishps1/awesome-system-design-resources) (translate to learner-journey architecture); Illusion of Life + perspective for the door. Quality is a continuous journey.
+Study: [Design Systems Repo](https://designsystemsrepo.com/); [awesome-system-design-resources](https://github.com/ashishps1/awesome-system-design-resources); Illusion of Life + perspective. Quality is a continuous journey.
