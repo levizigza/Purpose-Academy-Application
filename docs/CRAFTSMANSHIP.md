@@ -315,7 +315,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Climbing — phone CTA lane + settle mass (v38) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — phone stacked path legend (v39) |
 | Site-wide composition (thirds / hierarchy) | L3 | Open — after splash locks |
 | Systems thinking (journey as architecture) | L6 | Climbing — doctrine §3.1; apply node-by-node |
 
@@ -325,13 +325,19 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-17 — Critic pass: phone stacked path legend (L3)
+
+- **Critic overturned 3-col phone labels:** at ~58vw, CONSTRUCTION mid-word wrapped (CONSTRUCTI/ON) — cheap. Stacked one-column legend: icon + nowrap label, color on the left rail; left lane narrowed so hammer stays clear.
+- Session key `pa-crossed-threshold-v39`.
+- **Assumption to challenge next:** whether the stacked legend still reads as “three doors” at a glance, or needs a quieter lede / smaller icons.
+
 ### 2026-10-17 — Critic pass: phone CTA lane + door mass (L3)
 
 - **Phone collision:** ENTER hammer sat on COMMUNITY / path row. Pathways capped to left ~54vw; hammer pinned to right edge and shrunk — two jobs, two lanes.
 - **Settle:** desktop/tablet ~90° (cavity + readable slab; pure ~96° was a thin bar). Phone stays ~78°.
 - Desktop hammer clamp quieted again (was still a second hero at ~26vh).
 - Session key `pa-crossed-threshold-v38`.
-- **Assumption to challenge next:** whether phone path labels at ~58vw stay readable, or need a stacked one-column legend.
+- **Assumption challenged next:** phone path label wrap — addressed in v39 with stacked legend.
 
 ### 2026-10-17 — Critic pass: phone door mass at settle (L3)
 

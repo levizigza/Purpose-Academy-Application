@@ -2231,9 +2231,9 @@ table.data th {
 
 @media (max-width: 640px) {
   /*
-    Critic v37/v38: phone needs shallower settle for door mass,
-    AND pathways must not collide with the strike CTA.
-    Left ~55% = path legend; right third = hammer only.
+    Critic v37–v39: phone settle for door mass; left lane for paths;
+    right lane for hammer. v39: stacked one-column legend so
+    CONSTRUCTION never mid-word wraps in a skinny 3-col grid.
   */
   .doorway-leaf {
     --door-settle: -78deg;
@@ -2251,27 +2251,49 @@ table.data th {
   }
 
   .threshold-pathways {
-    width: min(58vw, 220px);
+    width: min(48vw, 168px);
     left: max(3%, env(safe-area-inset-left));
-    bottom: max(11%, calc(env(safe-area-inset-bottom) + 1.75rem));
+    bottom: max(10%, calc(env(safe-area-inset-bottom) + 1.5rem));
+    gap: 0.28rem;
+  }
+
+  .threshold-path-lede {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
+
+  .threshold-path-row {
+    grid-template-columns: 1fr;
+    gap: 0.18rem;
   }
 
   .threshold-path {
-    padding: 0.35rem 0.12rem 0.4rem;
-    gap: 0.22rem;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-items: start;
+    gap: 0.4rem;
+    padding: 0.22rem 0.2rem 0.22rem 0.35rem;
+    text-align: left;
+    border-top: 0;
+    border-left: 3px solid transparent;
     overflow: hidden;
   }
 
+  .threshold-path.path-construction { border-left-color: var(--path-construction); }
+  .threshold-path.path-logistics { border-left-color: var(--path-logistics); }
+  .threshold-path.path-community { border-left-color: var(--path-community); }
+
   .threshold-path-art {
-    width: 34px;
-    height: 34px;
+    width: 28px;
+    height: 28px;
   }
 
   .threshold-path strong {
-    font-size: 0.52rem;
-    letter-spacing: 0.01em;
-    white-space: normal;
-    overflow-wrap: anywhere;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .threshold-door-stage {
@@ -2338,13 +2360,9 @@ table.data th {
   }
 
   .threshold-pathways {
-    width: min(56vw, 210px);
-    gap: 0.3rem;
-    bottom: max(10%, calc(env(safe-area-inset-bottom) + 1.5rem));
-  }
-
-  .threshold-path-row {
-    gap: 0.28rem;
+    width: min(46vw, 160px);
+    gap: 0.22rem;
+    bottom: max(9%, calc(env(safe-area-inset-bottom) + 1.35rem));
   }
 
   .threshold-hammer-icon {
@@ -2353,13 +2371,8 @@ table.data th {
 }
 
 @media (max-width: 420px) and (max-height: 740px) {
-  /* Critic: 88vw pathways ran under the hammer — keep left lane clear */
   .threshold-pathways {
-    width: min(56vw, 210px);
-  }
-
-  .threshold-path-row {
-    gap: 0.25rem;
+    width: min(46vw, 160px);
   }
 }
 
