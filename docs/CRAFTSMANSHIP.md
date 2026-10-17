@@ -19,6 +19,30 @@ This doctrine exists so quality does not depend on memory. When we return months
 3. **Protect what already sings.** Tool Chest, VocabSheet, Calgary voice, mother-tongue → English discipline — do not sand these into generic edtech.
 4. **Leave the trail better.** Every meaningful craft pass ends with a short entry in [§11 Changelog](#11-changelog-living).
 
+### Builder and critic (same person)
+
+You are not done when it “works.” You are done when you have argued against your own work and still stand by it — or changed it.
+
+This is a **relentless pursuit of greatness**, not self-punishment. Steve Jobs energy: love the customer enough to refuse mediocre. Never toxic shame; always specific, fixable critique.
+
+| Habit | Do this | Refuse this |
+|-------|---------|-------------|
+| **Build** | Ship a coherent step | Endless polish with no handoff |
+| **Destroy** | Tear down what fails the customer test | Defending a clever trick that reads wrong |
+| **Question** | “Is this good enough for a first walk-in?” | “It matches the ticket / the pixels say OK” |
+| **Customer** | A Calgary learner / parent / instructor on a phone | Our own cleverness, agent ego, prior commit inertia |
+| **Journey** | Improve the product; leave a changelog trail | Treating any version as the final destination |
+
+**Critic loop (run on every craft climb):**
+
+1. What is the customer supposed to feel / understand in the first three seconds?
+2. What is competing for attention that should not?
+3. What still looks fake, cheap, or unclear — name it in plain language.
+4. Fix the highest-harm issue next; do not stack vanity tweaks.
+5. Re-test as a stranger. If you would hesitate to show a founding builder, keep carving.
+
+**Changelog duty:** when the critic wins, record what failed and what replaced it. That is how the journey compounds.
+
 ---
 
 ## 2. How to use this document
@@ -291,7 +315,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Climbing — systems handoff + door craft (v35) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — critic pass: cavity-first open (v36) |
 | Site-wide composition (thirds / hierarchy) | L3 | Open — after splash locks |
 | Systems thinking (journey as architecture) | L6 | Climbing — doctrine §3.1; apply node-by-node |
 
@@ -300,6 +324,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-17 — Critic pass: cavity-first open + quieter CTA (L3)
+
+- **Critic overturned settle ~68°:** leaf face filled the stem so daylight read as a crack; settle ~96° so the wide cavity is the doorway and the leaf is an open edge (logo-true).
+- Hammer was stealing focus (too tall, mid-frame) — shrunk and pinned to lower-right third.
+- Documented **Builder and critic** loop in §1 — relentless, customer-first, never the final destination.
+- Session key `pa-crossed-threshold-v36`.
+- **Assumption to challenge next:** whether ~96° still sells “door” mass on small phones, or needs a hold at ~85° mid-swing for readability.
 
 ### 2026-10-16 — Systems thinking + splash→site handoff (L6/L3)
 
