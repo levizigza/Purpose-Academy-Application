@@ -14,7 +14,10 @@
     "start:api": "npm run start --prefix server",
     "smoke:auth": "node ./scripts/smoke-auth.mjs",
     "test:e2e": "node ./scripts/e2e-auth.mjs http://127.0.0.1:5173",
-    "test:site": "node ./scripts/e2e-site.mjs http://127.0.0.1:5173"
+    "test:site": "node ./scripts/e2e-site.mjs http://127.0.0.1:5173",
+    "splash:list": "node ./scripts/splash-version.mjs list",
+    "splash:snapshot": "node ./scripts/splash-version.mjs snapshot",
+    "splash:restore": "node ./scripts/splash-version.mjs restore"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.3.0",

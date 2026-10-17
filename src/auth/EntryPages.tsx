@@ -7,7 +7,7 @@ import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v40'
+const ENTERED_KEY = 'pa-crossed-threshold-v41'
 
 export function hasEnteredSite() {
   try {
@@ -270,6 +270,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       ]
         .filter(Boolean)
         .join(' ')}
+      data-splash-version="v41"
       role="dialog"
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}

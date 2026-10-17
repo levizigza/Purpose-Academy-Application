@@ -10,5 +10,6 @@ Before changing UI, curriculum packs, brand copy, learning flow, sound, or publi
 6. Apply the change **site-wide** for that layer when past splash lock.
 7. Ask: does this pull someone into mindless *more*, or walk them into a finished station?
 8. Update `docs/CRAFTSMANSHIP.md` when truth or craft rules change — including when the critic overturned a prior choice.
+9. **Splash versions:** before overturning a loved composition, snapshot it (`node scripts/splash-version.mjs snapshot vN --note "..."`). Restore with `restore vN`. See [`docs/splash-versions/`](docs/splash-versions/).
 
 Study: [Design Systems Repo](https://designsystemsrepo.com/); [awesome-system-design-resources](https://github.com/ashishps1/awesome-system-design-resources); Illusion of Life + perspective. Quality is a continuous journey.
