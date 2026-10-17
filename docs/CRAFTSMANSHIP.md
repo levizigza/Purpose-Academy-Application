@@ -43,6 +43,18 @@ This is a **relentless pursuit of greatness**, not self-punishment. Steve Jobs e
 
 **Changelog duty:** when the critic wins, record what failed and what replaced it. That is how the journey compounds.
 
+### Splash version backups (revert feedback decisions)
+
+Composition choices get overturned. Keep restore points so a climb can walk back without archaeology.
+
+| Command | Purpose |
+|---------|---------|
+| `node scripts/splash-version.mjs snapshot vN --note "..."` | Freeze current splash (CSS block + door + entry) |
+| `node scripts/splash-version.mjs restore vN` | Put that version back into `src/` |
+| `node scripts/splash-version.mjs list` | See what we can walk back to |
+
+Archives live in [`docs/splash-versions/`](splash-versions/). Snapshot **before** a risky overturn and **after** a live-confirmed win. Bump `ENTERED_KEY` after restore if visitors should replay.
+
 ---
 
 ## 2. How to use this document
@@ -315,7 +327,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Climbing — centered paths + doorway spill (v40) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — dusk stage for light pop (v41) + version archive |
 | Site-wide composition (thirds / hierarchy) | L3 | Open — after splash locks |
 | Systems thinking (journey as architecture) | L6 | Climbing — doctrine §3.1; apply node-by-node |
 
@@ -325,12 +337,19 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-17 — Critic pass: dusk stage + splash version archive (L3/L6)
+
+- **Stage:** cool light floor hid doorway glow. Dusk slate/navy shop stage so cavity daylight is obvious; type/labels lifted for contrast. v40 frozen in `docs/splash-versions/v40/` before the overturn.
+- **Mechanism:** `scripts/splash-version.mjs` snapshot/restore/list — revert feedback decisions without git archaeology.
+- Session key `pa-crossed-threshold-v41`.
+- **Assumption to challenge next:** whether dusk handoff into cool Home grey still feels continuous, or the cross veil needs a beat of shared dusk.
+
 ### 2026-10-17 — Critic pass: centered paths + doorway light spill (L3)
 
 - **Critic overturned left-stacked legend:** felt unnatural, cut Construction, broke the middle composition. Three doors restored centered under the P (3-across); hammer stays quiet lower-right CTA.
 - **Light:** cavity core brightened, wider floor spill + soft bloom outside the mouth so daylight reads as coming *out* of the doorway (not a flat panel).
-- Session key `pa-crossed-threshold-v40`.
-- **Assumption to challenge next:** whether the heightened spill still stays cool daylight on phones, or needs a softer bloom at small sizes.
+- Session key `pa-crossed-threshold-v40`. Archived as restore point `v40`.
+- **Assumption challenged next:** light still too quiet on white floor — addressed in v41 dusk stage.
 
 ### 2026-10-17 — Critic pass: phone stacked path legend (L3)
 

@@ -1,0 +1,29 @@
+{
+  "versions": [
+    {
+      "id": "v41",
+      "note": "dusk shop stage so doorway daylight pops; version archive live",
+      "sessionKey": "v41",
+      "commit": "242af82",
+      "createdAt": "2026-10-17T22:07:54.317Z",
+      "files": [
+        "splash.css",
+        "OpeningDoor.tsx",
+        "EntryPages.tsx"
+      ]
+    },
+    {
+      "id": "v40",
+      "note": "centered three doors + light spill on cool light floor (pre-dusk)",
+      "sessionKey": "v40",
+      "commit": "242af82",
+      "createdAt": "2026-10-17T22:06:56.294Z",
+      "files": [
+        "splash.css",
+        "OpeningDoor.tsx",
+        "EntryPages.tsx"
+      ]
+    }
+  ],
+  "updatedAt": "2026-10-17T22:07:54.317Z"
+}
