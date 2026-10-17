@@ -99,7 +99,7 @@ export function HomePage() {
               <div className="signal-media">
                 <img
                   src={BRAND_ASSETS.photoConstruction}
-                  alt="Apartment building for Construction Foundations"
+                  alt="Builders framing a home under construction"
                 />
                 <img className="signal-icon" src={BRAND_ASSETS.iconConstruction} alt="" />
               </div>
@@ -124,7 +124,10 @@ export function HomePage() {
             </Reveal>
             <Reveal as="article" className="signal community" delay={220}>
               <div className="signal-media">
-                <img src={BRAND_ASSETS.photoCommunity} alt="Caregiver supporting an older adult" />
+                <img
+                  src={BRAND_ASSETS.photoCommunity}
+                  alt="Community support worker helping an older adult with a walker"
+                />
                 <img className="signal-icon" src={BRAND_ASSETS.iconCommunity} alt="" />
               </div>
               <h3>Community Support Foundations</h3>
@@ -225,7 +228,10 @@ export function ProgramsPage() {
           </Link>
         </div>
         <figure className="school-program-media">
-          <img src={BRAND_ASSETS.photoConstruction} alt="Apartment building for Construction Foundations at Purpose Academy" />
+          <img
+            src={BRAND_ASSETS.photoConstruction}
+            alt="Builders framing a home for Construction Foundations at Purpose Academy"
+          />
         </figure>
       </Reveal>
 
@@ -270,7 +276,10 @@ export function ProgramsPage() {
           </Link>
         </div>
         <figure className="school-program-media">
-          <img src={BRAND_ASSETS.photoCommunity} alt="Community support worker helping someone with care and dignity" />
+          <img
+            src={BRAND_ASSETS.photoCommunity}
+            alt="Community support worker helping an older adult with mobility and care"
+          />
         </figure>
       </Reveal>
     </div>
