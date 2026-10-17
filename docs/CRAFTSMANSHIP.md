@@ -315,7 +315,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Climbing — phone stacked path legend (v39) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — centered paths + doorway spill (v40) |
 | Site-wide composition (thirds / hierarchy) | L3 | Open — after splash locks |
 | Systems thinking (journey as architecture) | L6 | Climbing — doctrine §3.1; apply node-by-node |
 
@@ -325,11 +325,18 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-17 — Critic pass: centered paths + doorway light spill (L3)
+
+- **Critic overturned left-stacked legend:** felt unnatural, cut Construction, broke the middle composition. Three doors restored centered under the P (3-across); hammer stays quiet lower-right CTA.
+- **Light:** cavity core brightened, wider floor spill + soft bloom outside the mouth so daylight reads as coming *out* of the doorway (not a flat panel).
+- Session key `pa-crossed-threshold-v40`.
+- **Assumption to challenge next:** whether the heightened spill still stays cool daylight on phones, or needs a softer bloom at small sizes.
+
 ### 2026-10-17 — Critic pass: phone stacked path legend (L3)
 
 - **Critic overturned 3-col phone labels:** at ~58vw, CONSTRUCTION mid-word wrapped (CONSTRUCTI/ON) — cheap. Stacked one-column legend: icon + nowrap label, color on the left rail; left lane narrowed so hammer stays clear.
 - Session key `pa-crossed-threshold-v39`.
-- **Assumption to challenge next:** whether the stacked legend still reads as “three doors” at a glance, or needs a quieter lede / smaller icons.
+- **Assumption challenged next:** stacked legend felt unnatural — overturned in v40 (centered three-across).
 
 ### 2026-10-17 — Critic pass: phone CTA lane + door mass (L3)
 

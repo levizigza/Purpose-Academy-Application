@@ -1705,6 +1705,48 @@ table.data th {
   opacity: 1;
 }
 
+/* Critic v40: light must feel like it exits the doorway — soft stage bloom */
+.doorway-open::after {
+  content: '';
+  position: absolute;
+  left: 24%;
+  top: 30%;
+  width: 42%;
+  height: 62%;
+  border-radius: 42% 50% 58% 48%;
+  background:
+    radial-gradient(ellipse 72% 82% at 48% 50%, rgba(255, 254, 248, 0.72) 0%, rgba(255, 248, 230, 0.34) 32%, rgba(245, 236, 210, 0.12) 55%, transparent 74%);
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
+  filter: blur(2px);
+}
+
+.doorway-open .doorway-leaf-back {
+  box-shadow:
+    inset -10px 0 18px rgba(255, 252, 240, 0.35),
+    inset 0 0 12px rgba(255, 248, 230, 0.18);
+}
+
+.doorway-spill-layer {
+  mix-blend-mode: screen;
+}
+
+.threshold-door-stage:has(.doorway-open)::before {
+  content: '';
+  position: absolute;
+  left: 30%;
+  top: 38%;
+  width: 38%;
+  height: 48%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 45% 55%, rgba(255, 252, 240, 0.45), transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+  filter: blur(6px);
+}
+
 /*
   Hinge = cavity (viewBox 41→69 × 34→108).
   Perspective on the PARENT; origin to the RIGHT so the open leaf keeps
@@ -1898,14 +1940,14 @@ table.data th {
 }
 
 @keyframes pa-light-chart {
-  /* Light leads slightly — a crack of day before the leaf commits */
-  0%, 10% { opacity: 0.04; }
-  16% { opacity: 0.28; }
-  24% { opacity: 0.38; }
-  34% { opacity: 0.42; }
-  48% { opacity: 0.62; }
-  62% { opacity: 0.82; }
-  78% { opacity: 0.94; }
+  /* Light leads — crack brightens early so spill reads before the leaf settles */
+  0%, 8% { opacity: 0.05; }
+  14% { opacity: 0.38; }
+  22% { opacity: 0.55; }
+  34% { opacity: 0.68; }
+  48% { opacity: 0.84; }
+  62% { opacity: 0.94; }
+  80% { opacity: 1; }
   100% { opacity: 1; }
 }
 
@@ -1978,25 +2020,29 @@ table.data th {
   }
 }
 
-/* Lower third, left-weighted — secondary hierarchy under the mark */
+/*
+  Critic v40: left-stacked legend felt unnatural and cut Construction.
+  Three doors sit centered under the mark again — middle of the lower third.
+  Hammer stays lower-right CTA; pathways own the center.
+*/
 .threshold-pathways {
   position: absolute;
-  left: max(4%, env(safe-area-inset-left));
-  bottom: max(11%, calc(env(safe-area-inset-bottom) + 2.5rem));
+  left: 50%;
+  bottom: max(10%, calc(env(safe-area-inset-bottom) + 2.25rem));
   display: grid;
-  justify-items: start;
+  justify-items: center;
   gap: 0.4rem;
-  width: min(72vw, 320px);
+  width: min(78vw, 340px);
   margin: 0;
   opacity: 0;
-  transform: translateX(-16px);
+  transform: translate(-50%, 14px);
   pointer-events: none;
   z-index: 4;
 }
 
 .threshold-pathways.is-live {
   opacity: 1;
-  transform: translateX(0);
+  transform: translate(-50%, 0);
   pointer-events: auto;
   transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -2009,7 +2055,7 @@ table.data th {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgba(11, 47, 92, 0.62);
-  text-align: left;
+  text-align: center;
 }
 
 .threshold-path-row {
@@ -2171,13 +2217,12 @@ table.data th {
 
 .threshold-path strong {
   font-family: var(--display);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: #041526;
   max-width: 100%;
-  overflow: hidden;
   line-height: 1.15;
   white-space: nowrap;
 }
@@ -2231,9 +2276,8 @@ table.data th {
 
 @media (max-width: 640px) {
   /*
-    Critic v37–v39: phone settle for door mass; left lane for paths;
-    right lane for hammer. v39: stacked one-column legend so
-    CONSTRUCTION never mid-word wraps in a skinny 3-col grid.
+    Critic v40: restore three-across centered under the P.
+    Keep phone door settle; hammer stays a quiet corner CTA.
   */
   .doorway-leaf {
     --door-settle: -78deg;
@@ -2251,55 +2295,44 @@ table.data th {
   }
 
   .threshold-pathways {
-    width: min(48vw, 168px);
-    left: max(3%, env(safe-area-inset-left));
-    bottom: max(10%, calc(env(safe-area-inset-bottom) + 1.5rem));
+    left: 50%;
+    width: min(78vw, 270px);
+    /* Centered under the P; clear air above the corner hammer */
+    bottom: max(28%, calc(env(safe-area-inset-bottom) + 11.5rem));
     gap: 0.28rem;
   }
 
   .threshold-path-lede {
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+    text-align: center;
   }
 
   .threshold-path-row {
-    grid-template-columns: 1fr;
-    gap: 0.18rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
   }
 
   .threshold-path {
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    justify-items: start;
-    gap: 0.4rem;
-    padding: 0.22rem 0.2rem 0.22rem 0.35rem;
-    text-align: left;
-    border-top: 0;
-    border-left: 3px solid transparent;
-    overflow: hidden;
+    padding: 0.4rem 0.2rem 0.45rem;
+    gap: 0.28rem;
   }
 
-  .threshold-path.path-construction { border-left-color: var(--path-construction); }
-  .threshold-path.path-logistics { border-left-color: var(--path-logistics); }
-  .threshold-path.path-community { border-left-color: var(--path-community); }
-
   .threshold-path-art {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
   }
 
   .threshold-path strong {
-    font-size: 0.62rem;
-    letter-spacing: 0.04em;
+    font-size: 0.58rem;
+    letter-spacing: 0.02em;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .threshold-door-stage {
     width: min(56vw, 280px);
     left: 48%;
-    top: 44%;
+    top: 42%;
   }
 
   .threshold-school-name {
@@ -2308,17 +2341,17 @@ table.data th {
   }
 
   .threshold-hammer {
-    right: max(3.5%, env(safe-area-inset-right));
-    bottom: max(7%, calc(env(safe-area-inset-bottom) + 0.65rem));
-    max-width: 28vw;
+    right: max(3%, env(safe-area-inset-right));
+    bottom: max(5%, calc(env(safe-area-inset-bottom) + 0.5rem));
+    max-width: 26vw;
   }
 
   .threshold-hammer-icon {
-    width: clamp(2.9rem, 12vw, 3.8rem);
+    width: clamp(2.7rem, 11vw, 3.6rem);
   }
 
   .threshold-hammer-hint {
-    font-size: 0.55rem;
+    font-size: 0.52rem;
     letter-spacing: 0.1em;
   }
 }
@@ -2360,19 +2393,24 @@ table.data th {
   }
 
   .threshold-pathways {
-    width: min(46vw, 160px);
-    gap: 0.22rem;
-    bottom: max(9%, calc(env(safe-area-inset-bottom) + 1.35rem));
+    width: min(76vw, 260px);
+    gap: 0.28rem;
+    bottom: max(27%, calc(env(safe-area-inset-bottom) + 11.25rem));
   }
 
   .threshold-hammer-icon {
-    width: clamp(2.8rem, 11vw, 3.6rem);
+    width: clamp(2.6rem, 10vw, 3.4rem);
   }
 }
 
 @media (max-width: 420px) and (max-height: 740px) {
   .threshold-pathways {
-    width: min(46vw, 160px);
+    width: min(78vw, 270px);
+    bottom: max(26%, calc(env(safe-area-inset-bottom) + 10.75rem));
+  }
+
+  .threshold-path strong {
+    font-size: 0.55rem;
   }
 }
 
@@ -2678,7 +2716,7 @@ table.data th {
   .threshold-pathways,
   .threshold-pathways.is-live {
     opacity: 1;
-    transform: none;
+    transform: translate(-50%, 0);
   }
 
   .threshold-hammer,
