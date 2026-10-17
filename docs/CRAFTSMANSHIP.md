@@ -315,7 +315,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
-| Splash opening aesthetic craft | L3/L4 | Climbing — critic pass: cavity-first open (v36) |
+| Splash opening aesthetic craft | L3/L4 | Climbing — phone door-mass settle (v37) |
 | Site-wide composition (thirds / hierarchy) | L3 | Open — after splash locks |
 | Systems thinking (journey as architecture) | L6 | Climbing — doctrine §3.1; apply node-by-node |
 
@@ -325,13 +325,20 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-17 — Critic pass: phone door mass at settle (L3)
+
+- **Critic overturned uniform ~96°:** on 390px phones the leaf collapsed to a hairline — cavity won, door mass vanished. Settle is now a CSS variable: desktop ~96° (cavity-first), ≤640px ~78° (foreshortened face + thicker edge).
+- A later mobile rule was re-inflating the hammer after v36 — clamped quiet again.
+- Session key `pa-crossed-threshold-v37`.
+- **Assumption to challenge next:** whether tablet widths (641–900) still want desktop edge-on, or a mid settle (~90°).
+
 ### 2026-10-17 — Critic pass: cavity-first open + quieter CTA (L3)
 
 - **Critic overturned settle ~68°:** leaf face filled the stem so daylight read as a crack; settle ~96° so the wide cavity is the doorway and the leaf is an open edge (logo-true).
 - Hammer was stealing focus (too tall, mid-frame) — shrunk and pinned to lower-right third.
 - Documented **Builder and critic** loop in §1 — relentless, customer-first, never the final destination.
 - Session key `pa-crossed-threshold-v36`.
-- **Assumption to challenge next:** whether ~96° still sells “door” mass on small phones, or needs a hold at ~85° mid-swing for readability.
+- **Assumption challenged next:** phone door mass — addressed in v37.
 
 ### 2026-10-16 — Systems thinking + splash→site handoff (L6/L3)
 
