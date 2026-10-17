@@ -1737,13 +1737,17 @@ table.data th {
 }
 
 .doorway-leaf {
-  /* Desktop: cavity-first edge-on. Narrow viewports override — see ≤640px. */
-  --door-settle: -96deg;
-  --door-overshoot: -102deg;
-  --door-hold-a: -98deg;
-  --door-hold-b: -95deg;
-  --door-cross-mid: -112deg;
-  --door-cross-end: -128deg;
+  /*
+    Critic v38: pure ~96° sold cavity but erased door mass (thin bar).
+    Desktop/tablet settle ~90° — cavity still owns the stem, leaf still a slab.
+    Narrow phones override further open/closed — see ≤640px.
+  */
+  --door-settle: -90deg;
+  --door-overshoot: -96deg;
+  --door-hold-a: -92deg;
+  --door-hold-b: -88deg;
+  --door-cross-mid: -108deg;
+  --door-cross-end: -124deg;
   width: 100%;
   height: 100%;
   transform-origin: left center;
@@ -1764,11 +1768,7 @@ table.data th {
 }
 
 .doorway-open .doorway-leaf {
-  /*
-    Critic: ~68° filled the stem (crack). Desktop settles near edge-on (~96°)
-    so cavity owns the doorway. Narrow phones use a shallower settle via
-    --door-settle so a sliver of leaf face still sells “door” mass.
-  */
+  /* Settle angle from --door-settle (desktop ~90°, phone ~78°). */
   transform: rotateY(var(--door-settle));
   animation: pa-door-moving-hold 3.2s ease-in-out 1 forwards;
 }
@@ -2173,9 +2173,13 @@ table.data th {
   font-family: var(--display);
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   color: #041526;
+  max-width: 100%;
+  overflow: hidden;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 .threshold-path-art {
@@ -2227,9 +2231,9 @@ table.data th {
 
 @media (max-width: 640px) {
   /*
-    Critic v37: at ~96° on a phone the leaf collapses to a hairline —
-    cavity wins but “door” mass disappears. Hold ~78° so foreshortened
-    face + thickness still sell a slab, while daylight still owns the stem.
+    Critic v37/v38: phone needs shallower settle for door mass,
+    AND pathways must not collide with the strike CTA.
+    Left ~55% = path legend; right third = hammer only.
   */
   .doorway-leaf {
     --door-settle: -78deg;
@@ -2247,13 +2251,27 @@ table.data th {
   }
 
   .threshold-pathways {
-    width: min(78vw, 280px);
+    width: min(58vw, 220px);
     left: max(3%, env(safe-area-inset-left));
-    bottom: max(10%, calc(env(safe-area-inset-bottom) + 2rem));
+    bottom: max(11%, calc(env(safe-area-inset-bottom) + 1.75rem));
+  }
+
+  .threshold-path {
+    padding: 0.35rem 0.12rem 0.4rem;
+    gap: 0.22rem;
+    overflow: hidden;
+  }
+
+  .threshold-path-art {
+    width: 34px;
+    height: 34px;
   }
 
   .threshold-path strong {
-    font-size: 0.68rem;
+    font-size: 0.52rem;
+    letter-spacing: 0.01em;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .threshold-door-stage {
@@ -2268,12 +2286,18 @@ table.data th {
   }
 
   .threshold-hammer {
-    right: max(4%, env(safe-area-inset-right));
-    bottom: max(10%, calc(env(safe-area-inset-bottom) + 1rem));
+    right: max(3.5%, env(safe-area-inset-right));
+    bottom: max(7%, calc(env(safe-area-inset-bottom) + 0.65rem));
+    max-width: 28vw;
   }
 
   .threshold-hammer-icon {
-    width: clamp(4.2rem, 20vw, 5.4rem);
+    width: clamp(2.9rem, 12vw, 3.8rem);
+  }
+
+  .threshold-hammer-hint {
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
   }
 }
 
@@ -2293,7 +2317,7 @@ table.data th {
   }
 
   .threshold-hammer-icon {
-    width: clamp(5.6rem, 18vh, 7rem);
+    width: clamp(3.4rem, 12vh, 4.6rem);
   }
 }
 
@@ -2314,27 +2338,28 @@ table.data th {
   }
 
   .threshold-pathways {
-    width: min(68vw, 260px);
+    width: min(56vw, 210px);
     gap: 0.3rem;
-    bottom: max(9%, calc(env(safe-area-inset-bottom) + 1.5rem));
+    bottom: max(10%, calc(env(safe-area-inset-bottom) + 1.5rem));
   }
 
   .threshold-path-row {
-    gap: 0.35rem;
+    gap: 0.28rem;
   }
 
   .threshold-hammer-icon {
-    width: clamp(3.8rem, 16vw, 5rem);
+    width: clamp(2.8rem, 11vw, 3.6rem);
   }
 }
 
 @media (max-width: 420px) and (max-height: 740px) {
+  /* Critic: 88vw pathways ran under the hammer — keep left lane clear */
   .threshold-pathways {
-    width: min(88vw, 280px);
+    width: min(56vw, 210px);
   }
 
   .threshold-path-row {
-    gap: 0.35rem;
+    gap: 0.25rem;
   }
 }
 
@@ -2357,21 +2382,20 @@ table.data th {
 }
 
 /*
-  Critic fix: hammer was stealing the focal point (too tall, mid-frame).
-  CTA stays on the lower-right third — clear, smaller, secondary to the doorway.
+  Critic: hammer is CTA, not a second hero. Lower-right third, quiet mass.
 */
 .threshold-hammer {
   position: fixed;
-  right: max(7%, env(safe-area-inset-right));
+  right: max(6%, env(safe-area-inset-right));
   top: auto;
-  bottom: max(7%, calc(env(safe-area-inset-bottom) + 0.75rem));
+  bottom: max(6%, calc(env(safe-area-inset-bottom) + 0.65rem));
   z-index: 12;
   display: grid;
   justify-items: center;
-  gap: 0.28rem;
+  gap: 0.22rem;
   width: auto;
   margin: 0;
-  padding: 0.25rem;
+  padding: 0.2rem;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -2381,7 +2405,7 @@ table.data th {
   opacity: 0;
   transform: translateX(28px) rotate(8deg);
   transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), filter 0.28s ease;
-  filter: drop-shadow(0 12px 20px rgba(40, 24, 4, 0.42));
+  filter: drop-shadow(0 10px 16px rgba(40, 24, 4, 0.38));
 }
 
 .threshold-hammer.is-visible {
@@ -2398,7 +2422,7 @@ table.data th {
 }
 
 .threshold-hammer-icon {
-  width: clamp(4.6rem, 11vw, 6.2rem);
+  width: clamp(3.2rem, 7vw, 4.4rem);
   height: auto;
   display: block;
 }
@@ -2597,19 +2621,19 @@ table.data th {
 }
 
 @media (max-width: 640px) {
+  /* Keep hammer pinned to the right edge — never pull it left into pathways */
   .threshold-hammer {
-    right: clamp(2rem, 12vw, 5.5rem);
+    right: max(3.5%, env(safe-area-inset-right));
   }
 
-  /* Critic: later rule was re-inflating the hammer after v36 shrink — keep quiet */
   .threshold-hammer-icon {
-    width: clamp(3.8rem, 16vw, 5rem);
+    width: clamp(2.9rem, 12vw, 3.8rem);
   }
 }
 
 @media (max-height: 620px) {
   .threshold-hammer-icon {
-    width: clamp(4.8rem, 17vh, 6rem);
+    width: clamp(3.4rem, 12vh, 4.6rem);
   }
 }
 
