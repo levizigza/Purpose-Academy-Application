@@ -40,7 +40,7 @@ export const constructionPack: PathwayPack = {
       outcomes: [
         'See a real photo of each word and hear English spoken every time',
         'Connect your language to the English word and a short example sentence',
-        'Complete Construction English sentences — one try, word slides into the blank',
+        'Complete Construction English on a site stage — one try, word locks on the job board; wrong guesses show absurd crew consequences',
         'Use worksheet pages so the app matches the class vocabulary table',
       ],
     },
@@ -74,8 +74,8 @@ export const constructionPack: PathwayPack = {
   stepTitles: {
     8: {
       title: 'Sentence Structure',
-      help: 'Complete the Construction English sentence. One try — the right word slides into the blank.',
-      purpose: 'After Visual Vocabulary: put specialty words into real sentences, then connect word → action.',
+      help: 'Watch the job board. One try — the right word locks in. Wrong words bounce; the crew pays (SITEWISE-style stage).',
+      purpose: 'Different from VocabSheet: live sentence stage with motion and memorable consequences, then Word → Action.',
     },
     12: {
       title: 'Site Language',

@@ -209,12 +209,15 @@ These are load-bearing across all layers.
 - Specialty packs may grow; copy and badges must track **actual counts**.
 - Eye Spy and photo scenes need real photography before we claim “busy job-site scenes.” Until then, document as a climb — do not fake richness in copy.
 
-### 6.3a Sentence Structure (Construction)
+### 6.3a Sentence Structure (Construction) — not VocabSheet
 
 - After Visual Vocabulary, Construction opens **Sentence Structure** (cloze bank from Construction Questions 1–560) before Word → Action.
-- **One attempt per item** — no answer shopping. Wrong → teach the right word → move on.
-- Correct word **animates into the blank**; page pass shows a clear success state.
+- **Different interaction mold from vocabulary:** SITEWISE-style **site stage** + job board (sentence is the visual), not a VocabSheet photo card.
+- **One attempt per item** — no answer shopping.
+- Correct: word **locks onto the job board** with motion; crew celebrates.
+- Wrong: word **bounces off**; an absurd, sentence-tied consequence plays (anvil drop, collapse, splash, slip, spark, crush) so guessing sticks in memory — then teach the right word and move on.
 - Level-1 sentence gate = first page of 20 with ≥16 first-try correct (+ repair for misses). More pages stay open to practise.
+- Feedback text must meet contrast on the stage chrome (do not reuse washed-out train `.alert.ok` greens on light panels).
 - Language ladder: gloss → picture → **sentence** → action → instruction → phrase.
 
 ### 6.3b Photos show the whole object
@@ -414,6 +417,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-18 — Sentence Structure site stage (SITEWISE motion) (L2/L3)
+
+- Rebuilt Construction Sentence Structure as a **site stage** (job board + crew SVG), not VocabSheet chrome.
+- Wrong answers: absurd consequence animations tied to sentence keywords (anvil / collapse / splash / slip / spark / crush).
+- Correct: word locks on the board; crew win motion. High-contrast feedback. Path map collapses while stage is active.
+- **Assumption to challenge next:** whether consequence kinds feel fair/readable on mobile reduced-motion.
 
 ### 2026-10-18 — Aesthetics doctrine: site-wide coherence + information display (L3)
 

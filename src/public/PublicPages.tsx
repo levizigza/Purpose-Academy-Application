@@ -220,7 +220,7 @@ export function ProgramsPage() {
           </p>
           <ul className="school-bullets">
             <li>Shared 200-word Daily Conversation Vocabulary plus 660-word Construction Visual Vocabulary</li>
-            <li>560 Sentence Structure drills — one honest try, word into the blank</li>
+            <li>560 Sentence Structure drills — site-stage motion; wrong guesses show crew consequences</li>
             <li>Foundation theory + shop practice</li>
             <li>Instructor observation and Skills Passport</li>
             <li>Apprenticeship orientation and employer connection</li>
