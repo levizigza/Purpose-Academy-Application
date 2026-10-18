@@ -99,7 +99,7 @@ export function HomePage() {
               <div className="signal-media">
                 <img
                   src={BRAND_ASSETS.photoConstruction}
-                  alt="Construction team standing in front of a finished home"
+                  alt="Black construction crew in hard hats and safety gear on a job site"
                 />
                 <img className="signal-icon" src={BRAND_ASSETS.iconConstruction} alt="" />
               </div>
@@ -230,7 +230,7 @@ export function ProgramsPage() {
         <figure className="school-program-media">
           <img
             src={BRAND_ASSETS.photoConstruction}
-            alt="Construction team in front of a finished home for Construction Foundations at Purpose Academy"
+            alt="Black construction crew in hard hats and safety gear for Construction Foundations at Purpose Academy"
           />
         </figure>
       </Reveal>
