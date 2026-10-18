@@ -58,6 +58,7 @@ import {
   stopSpeech,
 } from './speech'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
+import { SentenceClozeDrill } from './SentenceClozeDrill'
 import { VocabSheet } from './VocabSheet'
 import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
 import { PracticeHub, PracticeStatsStrip } from './PracticeHub'
@@ -574,6 +575,7 @@ export function StudentSequencePage() {
   const meta = pathwayMeta(pathwayId)
   const VOCAB_UNIT = pack.vocab
   const WORD_ACTIONS = pack.wordActions
+  const SENTENCE_CLOZE = pack.sentenceCloze || []
   const EYE_SPY_SCENES = pack.eyeSpyScenes
   const WORKPLACE_INSTRUCTIONS = pack.workplaceInstructions
   const SITE_PHRASES = pack.sitePhrases
@@ -611,6 +613,9 @@ export function StudentSequencePage() {
   const [actionIdx, setActionIdx] = useState(0)
   const [actionAnswer, setActionAnswer] = useState<string | null>(null)
   const [actionCorrect, setActionCorrect] = useState(false)
+  /** Construction: Sentence Structure first, then Word → Action inside step 8. */
+  const [step8Phase, setStep8Phase] = useState<'sentences' | 'actions'>('sentences')
+  const [sentenceLevel1, setSentenceLevel1] = useState(false)
   const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -751,6 +756,8 @@ export function StudentSequencePage() {
     setActionIdx(0)
     setActionAnswer(null)
     setActionCorrect(false)
+    setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
+    setSentenceLevel1(false)
     setMatchIdx(0)
     setMatchAnswer(null)
     setMatchCorrect(false)
@@ -1170,10 +1177,12 @@ export function StudentSequencePage() {
   async function playVocabEnglish(term: (typeof VOCAB_UNIT)[number]) {
     setVocabSpeakingId(term.id)
     stopSpeech()
-    await speakEnglish(term.english)
+    const ok = await speakEnglish(term.english)
     setVocabSpeakingId(null)
-    setVocabHeard((h) => ({ ...h, [term.id]: true }))
-    recordSkillAttempt('vocab', true, 8)
+    if (ok) {
+      setVocabHeard((h) => ({ ...h, [term.id]: true }))
+      recordSkillAttempt('vocab', true, 8)
+    }
   }
 
   async function connectVocabLang(term: (typeof VOCAB_UNIT)[number], lang: HomeLang) {
@@ -1181,6 +1190,13 @@ export function StudentSequencePage() {
     setVocabSpeakingId(term.id)
     stopSpeech()
     await speakSupport(term.gloss[lang], lang)
+    /* Always speak the English workplace word after the home-language bridge. */
+    await new Promise((r) => setTimeout(r, 220))
+    const heard = await speakEnglish(term.english)
+    if (heard) {
+      setVocabHeard((h) => ({ ...h, [term.id]: true }))
+      recordSkillAttempt('vocab', true, 8)
+    }
     setVocabSpeakingId(null)
   }
 
@@ -1504,8 +1520,21 @@ export function StudentSequencePage() {
       <Shell
         step={7}
         onBack={() => go(6)}
-        onNext={ready ? () => { setActionIdx(0); setActionAnswer(null); setActionCorrect(false); go(8) } : undefined}
-        nextLabel="Continue to Word → Action"
+        onNext={
+          ready
+            ? () => {
+                setActionIdx(0)
+                setActionAnswer(null)
+                setActionCorrect(false)
+                setStep8Phase(SENTENCE_CLOZE.length ? 'sentences' : 'actions')
+                setSentenceLevel1(false)
+                go(8)
+              }
+            : undefined
+        }
+        nextLabel={
+          SENTENCE_CLOZE.length ? 'Continue to Sentence Structure' : 'Continue to Word → Action'
+        }
         nextDisabled={!ready}
       >
         <VocabSheet
@@ -1530,8 +1559,33 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 8: Word → Action — see action, check which tool */
+  /* Step 8: Construction = Sentence Structure → Word → Action; other pathways = Word → Action */
   if (step === 8) {
+    if (SENTENCE_CLOZE.length && step8Phase === 'sentences') {
+      return (
+        <Shell step={8} onBack={() => { resetVocab(); go(7) }}>
+          <SentenceClozeDrill
+            items={SENTENCE_CLOZE}
+            onLevel1Passed={() => {
+              setSentenceLevel1(true)
+              recordSkillAttempt('sentence-cloze', true, 20)
+            }}
+            onContinueToActions={() => {
+              if (!sentenceLevel1) {
+                setSentenceLevel1(true)
+                recordSkillAttempt('sentence-cloze', true, 20)
+              }
+              setActionIdx(0)
+              setActionAnswer(null)
+              setActionCorrect(false)
+              setStep8Phase('actions')
+              playFoley('whoosh')
+            }}
+          />
+        </Shell>
+      )
+    }
+
     const knownSet = new Set(vocabKnownIds)
     const unknownActions = WORD_ACTIONS.filter((a) => !knownSet.has(a.termId))
     /* Adaptive: drill unknowns first; keep a short known review only if the deck would be too thin. */
@@ -1579,7 +1633,20 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={8} onBack={() => { resetVocab(); go(7) }}>
+      <Shell
+        step={8}
+        onBack={() => {
+          if (SENTENCE_CLOZE.length) {
+            setStep8Phase('sentences')
+            return
+          }
+          resetVocab()
+          go(7)
+        }}
+      >
+        {SENTENCE_CLOZE.length ? (
+          <p className="train-vocab-counter">Word → Action · after Sentence Structure</p>
+        ) : null}
         <p className="train-vocab-counter">
           Action {safeIdx + 1} of {safeDeck.length}
           {knownSet.size ? ` · ${knownSet.size} already known skipped or quick-checked` : ''}
@@ -1587,7 +1654,7 @@ export function StudentSequencePage() {
         <article className="word-action-card">
           <PictureCard
             image={pathwayImage(term?.imageKey)}
-            fit="cover"
+            fit="contain"
             label={item.title}
             caption={item.body}
           />
@@ -1694,7 +1761,7 @@ export function StudentSequencePage() {
         </p>
         <PictureCard
           image={pathwayImage(term.imageKey)}
-          fit="cover"
+          fit="contain"
           label="Match the English word to the picture"
           caption="All five languages stay visible. Press any language for help, then choose the English word."
         />

@@ -9,7 +9,7 @@
  * 1. Duty → task → criterion (DACUM / occupational analysis), not topic trivia.
  * 2. Know it → Do it → Solve it before “Competent” (Alberta AIT pattern).
  * 3. Climb psychomotor depth: see/hear → act → ordered SOP → judgment under variation.
- * 4. Language is load-bearing (LINCS IET): gloss → picture → action → instruction → phrase → interview.
+ * 4. Language is load-bearing (LINCS IET): gloss → picture → sentence → action → instruction → phrase → interview.
  * 5. Safety is stop-work competence, not a soft module.
  * 6. Tools teach naming, limits, and authorization (never fake certification).
  * 7. Systems show how one task feeds the whole flow (MSSC receive→store→pick→ship;
@@ -51,6 +51,7 @@ import {
   SITE_DECISIONS,
   EMPLOYMENT_PREP,
 } from '../student/journeyCurriculum'
+import type { SentenceClozeItem } from './packs/constructionSentenceCloze560'
 
 export type PathwayId = 'construction' | 'logistics' | 'community'
 
@@ -100,6 +101,11 @@ export type PathwayPack = {
   /** Optional overrides for shared UNIT_GOALS (keyed by unit id). */
   unitGoals?: Partial<Record<number, PathwayUnitGoal>>
   vocab: VocabTerm[]
+  /**
+   * Optional sentence-structure cloze bank (Construction Questions model).
+   * When present, Practice step 8 opens Sentence Structure before Word → Action.
+   */
+  sentenceCloze?: SentenceClozeItem[]
   wordActions: WordAction[]
   eyeSpyScenes: EyeSpyScene[]
   workplaceInstructions: WorkplaceInstruction[]
@@ -113,5 +119,7 @@ export type PathwayPack = {
   employmentPrep: EmploymentItem[]
   unitCheckpoints: Record<number, QuizItem[]>
 }
+
+export type { SentenceClozeItem }
 
 export type { SupportLang, VocabTerm, QuizItem, EyeSpyScene }

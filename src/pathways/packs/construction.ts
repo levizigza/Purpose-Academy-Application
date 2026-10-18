@@ -1,8 +1,9 @@
 /**
  * Construction Foundations content pack.
- * Vocabulary order: Daily Conversation (shared 200) → Construction Visual Vocabulary (660).
- * Level-1 gate = Daily Conversation words 1–20. Practice layers (Word → Action, Eye Spy,
- * Workplace Instructions) use Construction worksheet ids and con-vv image keys.
+ * Vocabulary order: Daily Conversation (shared 200) → Construction Visual Vocabulary (660)
+ * → Sentence Structure (560 cloze) → Word → Action → Eye Spy → Workplace Instructions.
+ * Level-1 vocab gate = Daily Conversation words 1–20. Practice layers use Construction
+ * worksheet ids and con-vv image keys.
  */
 import {
   EMPLOYMENT_PREP,
@@ -21,6 +22,7 @@ import {
   CONSTRUCTION_WORD_ACTIONS,
   CONSTRUCTION_WORKPLACE_INSTRUCTIONS,
 } from './constructionPractice'
+import { CONSTRUCTION_SENTENCE_CLOZE_560 } from './constructionSentenceCloze560'
 import { CONSTRUCTION_VOCAB_660 } from './constructionVocab660'
 import { DAILY_CONVERSATION_VOCAB_200 } from './dailyConversationVocab200'
 
@@ -34,16 +36,18 @@ export const constructionPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn Daily Conversation Vocabulary (200 words shared across pathways), then Construction Visual Vocabulary (660). Complete Level-1 (words 1–20) to continue; more pages stay open to practise.',
+      goal: 'Learn Daily Conversation Vocabulary (200), Construction Visual Vocabulary (660), then Sentence Structure (560 cloze). Complete Level-1 vocab (words 1–20) and one honest sentence page to continue; more pages stay open to practise.',
       outcomes: [
-        'See a real photo of each word and hear English',
+        'See a real photo of each word and hear English spoken every time',
         'Connect your language to the English word and a short example sentence',
+        'Complete Construction English sentences — one try, word slides into the blank',
         'Use worksheet pages so the app matches the class vocabulary table',
       ],
     },
     4: {
       goal: 'Use English with support, then prove you can find and follow construction-site language.',
       outcomes: [
+        'Connect word → site action',
         'Match pictures to English words',
         'Find tools and materials in a busy shop scene',
         'Follow short workplace instructions',
@@ -69,9 +73,9 @@ export const constructionPack: PathwayPack = {
   },
   stepTitles: {
     8: {
-      title: 'Word → Action',
-      help: 'See a site action. Choose which tool or material it uses.',
-      purpose: 'Connect each Construction Visual Vocabulary word to a real job-site action.',
+      title: 'Sentence Structure',
+      help: 'Complete the Construction English sentence. One try — the right word slides into the blank.',
+      purpose: 'After Visual Vocabulary: put specialty words into real sentences, then connect word → action.',
     },
     12: {
       title: 'Site Language',
@@ -95,6 +99,7 @@ export const constructionPack: PathwayPack = {
     },
   },
   vocab: [...DAILY_CONVERSATION_VOCAB_200, ...CONSTRUCTION_VOCAB_660],
+  sentenceCloze: CONSTRUCTION_SENTENCE_CLOZE_560,
   wordActions: CONSTRUCTION_WORD_ACTIONS,
   eyeSpyScenes: CONSTRUCTION_EYE_SPY_SCENES,
   workplaceInstructions: CONSTRUCTION_WORKPLACE_INSTRUCTIONS,

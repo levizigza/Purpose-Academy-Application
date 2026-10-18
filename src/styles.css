@@ -1117,7 +1117,8 @@ p {
   display: block;
   width: 100%;
   aspect-ratio: 5 / 4;
-  object-fit: cover;
+  object-fit: contain;
+  background: #0f1c2c;
   border-radius: 4px 22px 22px 22px;
   box-shadow: 0 22px 48px rgba(4, 21, 38, 0.18);
 }
@@ -1172,8 +1173,8 @@ p {
   display: block;
   width: 100%;
   height: 210px;
-  object-fit: cover;
-  background: var(--brand-soft);
+  object-fit: contain;
+  background: #0f1c2c;
   transition: transform 0.6s ease;
 }
 
@@ -1197,9 +1198,9 @@ p {
 .signal img {
   width: 100%;
   height: 180px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 18px;
-  background: var(--brand-soft);
+  background: #0f1c2c;
   box-shadow: 0 14px 32px rgba(4, 21, 38, 0.1);
 }
 
@@ -7077,10 +7078,10 @@ table.data th {
 }
 
 .train-picture.is-object .train-picture-img {
-  height: 220px;
+  height: min(280px, 52vw);
   object-fit: contain;
   object-position: center;
-  padding: 0.75rem 1rem 0.35rem;
+  padding: 0.85rem 1rem 0.4rem;
 }
 
 .train-picture.has-photo figcaption {
@@ -7190,14 +7191,20 @@ table.data th {
 }
 
 .vocab-sheet-photo-focus {
-  min-height: 16rem;
+  min-height: 18rem;
   aspect-ratio: 4 / 3;
   position: relative;
+  overflow: hidden;
+  background: #111820;
 }
 
 .vocab-sheet-photo-focus img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  object-position: center;
   background: #111820;
+  padding: 0.5rem;
 }
 
 /* Logistics Visual Vocabulary — white studio mat so the object reads clearly */
@@ -8174,7 +8181,8 @@ table.data th {
 .school-program-media img {
   width: 100%;
   height: min(320px, 50vw);
-  object-fit: cover;
+  object-fit: contain;
+  background: #0f1c2c;
   border-radius: 14px;
   display: block;
 }
@@ -9668,4 +9676,221 @@ video {
 
 .train-advance-gate {
   margin: 0.5rem 0;
+}
+
+/* ---- Sentence Structure (Construction cloze) ---- */
+.sentence-cloze-card {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.15rem 1.2rem 1.35rem;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--brand, #0b2f5c) 22%, #d5dde8);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 248, 252, 0.98)),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 11px,
+      rgba(11, 47, 92, 0.03) 11px,
+      rgba(11, 47, 92, 0.03) 12px
+    );
+  box-shadow: 0 16px 36px rgba(4, 21, 38, 0.08);
+}
+
+.sentence-cloze-help {
+  margin: 0;
+  max-width: 40rem;
+}
+
+.sentence-cloze-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.4rem;
+  font-family: var(--display, Georgia, serif);
+  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+  font-weight: 700;
+  color: #0b2f5c;
+  line-height: 1.45;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #d7e3ef;
+  min-height: 4.5rem;
+}
+
+.sentence-cloze-line.is-correct {
+  border-color: color-mix(in srgb, #2a7a4b 55%, #d7e3ef);
+  background: color-mix(in srgb, #2a7a4b 8%, #fff);
+}
+
+.sentence-cloze-line.is-wrong {
+  border-color: color-mix(in srgb, #b45309 45%, #d7e3ef);
+  background: color-mix(in srgb, #b45309 7%, #fff);
+}
+
+.sentence-cloze-blank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 6.5rem;
+  min-height: 2.1rem;
+  padding: 0.1rem 0.45rem;
+  border-bottom: 3px solid #e8a317;
+  margin: 0 0.1rem;
+}
+
+.sentence-cloze-blank.has-word {
+  border-bottom-color: #2a7a4b;
+}
+
+.sentence-cloze-slot {
+  color: #8aa0b8;
+  letter-spacing: 0.08em;
+  font-weight: 650;
+}
+
+.sentence-cloze-word {
+  display: inline-block;
+  color: #0b2f5c;
+  font-weight: 800;
+}
+
+.sentence-cloze-word.is-landing {
+  animation: sentence-word-land 0.42s cubic-bezier(0.2, 0.85, 0.25, 1.15) both;
+}
+
+.sentence-cloze-word.is-set {
+  animation: sentence-word-settle 0.35s ease both;
+}
+
+@keyframes sentence-word-land {
+  from {
+    opacity: 0;
+    transform: translateY(1.1rem) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sentence-word-settle {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.sentence-cloze-choices {
+  margin-top: 0.15rem;
+}
+
+.sentence-cloze-chip {
+  appearance: none;
+  border: 1px solid #c9d8e8;
+  background: #fff;
+  color: #0b2f5c;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+}
+
+.sentence-cloze-chip:hover:not(:disabled) {
+  border-color: #e8a317;
+  transform: translateY(-1px);
+}
+
+.sentence-cloze-chip:disabled {
+  cursor: default;
+}
+
+.sentence-cloze-chip.state-correct {
+  border-color: #2a7a4b;
+  background: color-mix(in srgb, #2a7a4b 12%, #fff);
+}
+
+.sentence-cloze-chip.state-wrong {
+  border-color: #b45309;
+  background: color-mix(in srgb, #b45309 10%, #fff);
+  animation: sentence-chip-shake 0.35s ease;
+}
+
+.sentence-cloze-chip.is-flying {
+  animation: sentence-chip-fly 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.sentence-cloze-chip.is-dim {
+  opacity: 0.45;
+}
+
+@keyframes sentence-chip-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes sentence-chip-fly {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  55% {
+    transform: translateY(-0.55rem) scale(1.04);
+  }
+  100% {
+    transform: translateY(-0.15rem) scale(0.98);
+    opacity: 0.85;
+  }
+}
+
+.sentence-cloze-pass {
+  text-align: center;
+  justify-items: center;
+}
+
+.sentence-cloze-pass-badge {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(160deg, #2a7a4b, #1f5c38);
+  box-shadow: 0 10px 24px rgba(42, 122, 75, 0.35);
+  animation: sentence-pass-pop 0.55s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
+}
+
+@keyframes sentence-pass-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sentence-cloze-pass h2 {
+  margin: 0.15rem 0 0;
+  font-family: var(--display, Georgia, serif);
+  color: #0b2f5c;
+}
+
+.sentence-cloze-pass .hero-actions {
+  justify-content: center;
 }

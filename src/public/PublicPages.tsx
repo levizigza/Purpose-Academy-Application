@@ -106,7 +106,8 @@ export function HomePage() {
               <h3>Construction Foundations</h3>
               <p>
                 Flagship depth: shared 200-word Daily Conversation Vocabulary, 660-word Construction Visual Vocabulary,
-                safety, tools, materials, and site English — with instructor verification and apprenticeship readiness.
+                560 Sentence Structure drills, safety, tools, materials, and site English — with instructor verification
+                and apprenticeship readiness.
               </p>
               <span className="badge ok">Enrolling now</span>
             </Reveal>
@@ -219,6 +220,7 @@ export function ProgramsPage() {
           </p>
           <ul className="school-bullets">
             <li>Shared 200-word Daily Conversation Vocabulary plus 660-word Construction Visual Vocabulary</li>
+            <li>560 Sentence Structure drills — one honest try, word into the blank</li>
             <li>Foundation theory + shop practice</li>
             <li>Instructor observation and Skills Passport</li>
             <li>Apprenticeship orientation and employer connection</li>

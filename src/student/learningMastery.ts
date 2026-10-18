@@ -11,6 +11,7 @@ export type SkillId =
   | 'language'
   | 'career-assessment'
   | 'vocab'
+  | 'sentence-cloze'
   | 'word-action'
   | 'matching'
   | 'eye-spy'
@@ -51,6 +52,7 @@ const EMPTY: Record<SkillId, SkillRecord> = {
   language: EMPTY_SKILL(),
   'career-assessment': EMPTY_SKILL(),
   vocab: EMPTY_SKILL(),
+  'sentence-cloze': EMPTY_SKILL(),
   'word-action': EMPTY_SKILL(),
   matching: EMPTY_SKILL(),
   'eye-spy': EMPTY_SKILL(),
@@ -73,6 +75,7 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   5: 'career-assessment',
   6: 'career-assessment',
   7: 'vocab',
+  /** Shared spine skill. Construction also runs Sentence Structure in-station first. */
   8: 'word-action',
   9: 'matching',
   10: 'eye-spy',
@@ -187,7 +190,7 @@ export function domainMasteryPercent(skills: SkillId[]): number {
 }
 
 export const SKILL_DOMAINS = {
-  vocabulary: ['vocab', 'word-action', 'matching'] as SkillId[],
+  vocabulary: ['vocab', 'sentence-cloze', 'word-action', 'matching'] as SkillId[],
   safety: ['safety', 'eye-spy', 'instructions'] as SkillId[],
   tools: ['tools', 'site-phrases'] as SkillId[],
   systems: ['systems', 'observation', 'site-log', 'digital'] as SkillId[],
