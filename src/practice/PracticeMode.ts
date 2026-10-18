@@ -1,6 +1,6 @@
 /** Practice: full-site student path preview (no registration). */
 
-export const PRACTICE_REVIEWERS = ['ChuChu', 'Yonas', 'Kinfe', 'Saba', 'Levi'] as const
+export const PRACTICE_REVIEWERS = ['ChuChu', 'Yonas', 'Kinfe', 'Saba', 'Levi', 'Teklish', 'Henok'] as const
 export type PracticeReviewer = (typeof PRACTICE_REVIEWERS)[number] | string
 
 /** First training step after skipping registration (Language). */
