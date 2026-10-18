@@ -18,6 +18,7 @@ const SOURCE_FILES = [
   'src/student/journeyCurriculum.ts',
   'src/pathways/packs/construction.ts',
   'src/pathways/packs/constructionPractice.ts',
+  'src/pathways/packs/constructionSentenceCloze560.ts',
   'src/pathways/packs/constructionVocab660.ts',
   'src/pathways/packs/dailyConversationVocab200.ts',
   'src/pathways/packs/logistics.ts',
@@ -46,6 +47,8 @@ function extractFromSource(filePath) {
   for (const m of src.matchAll(/sentence:\s*'((?:\\'|[^'])*)'/g)) add('en', m[1].replace(/\\'/g, "'"))
   for (const m of src.matchAll(/\ben:\s*'((?:\\'|[^'])*)'/g)) add('en', m[1].replace(/\\'/g, "'"))
   for (const m of src.matchAll(/text:\s*'((?:\\'|[^'])*)'/g)) add('en', m[1].replace(/\\'/g, "'"))
+  /* Sentence Structure cloze answers (words spoken when the blank fills). */
+  for (const m of src.matchAll(/answer:\s*'((?:\\'|[^'])*)'/g)) add('en', m[1].replace(/\\'/g, "'"))
 
   for (const m of src.matchAll(/Amharic:\s*'((?:\\'|[^'])*)'/g)) add('am', m[1].replace(/\\'/g, "'"))
   for (const m of src.matchAll(/Tigrinya:\s*'((?:\\'|[^'])*)'/g)) add('ti', m[1].replace(/\\'/g, "'"))

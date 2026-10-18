@@ -208,6 +208,25 @@ These are load-bearing across all layers.
 - Specialty packs may grow; copy and badges must track **actual counts**.
 - Eye Spy and photo scenes need real photography before we claim “busy job-site scenes.” Until then, document as a climb — do not fake richness in copy.
 
+### 6.3a Sentence Structure (Construction)
+
+- After Visual Vocabulary, Construction opens **Sentence Structure** (cloze bank from Construction Questions 1–560) before Word → Action.
+- **One attempt per item** — no answer shopping. Wrong → teach the right word → move on.
+- Correct word **animates into the blank**; page pass shows a clear success state.
+- Level-1 sentence gate = first page of 20 with ≥16 first-try correct (+ repair for misses). More pages stay open to practise.
+- Language ladder: gloss → picture → **sentence** → action → instruction → phrase.
+
+### 6.3b Photos show the whole object
+
+- Training object photos and pathway program cards use **`object-fit: contain`** so royalty-free imagery is fully readable.
+- Do not crop tool/vocab photos with `cover` on drill surfaces. Full-bleed marketing heroes may still use cover when the composition is intentionally edge-to-edge.
+
+### 6.3c Vocabulary audio
+
+- Every vocabulary English word must speak when the learner bridges or presses Hear English.
+- Priority stays: baked neural → live neural → Free Dictionary (works without our API) → browser `speechSynthesis`.
+- After a home-language connect, auto-speak the English workplace word.
+
 ### 6.4 Sound (foley)
 
 - Current procedural foley is **construction-site flavoured** (hammer, wood, saw, ambient bed).
@@ -219,6 +238,10 @@ These are load-bearing across all layers.
 
 ## 7. Aesthetic optics craft — Layer L3
 
+This section is the **site-wide aesthetics + information-display template**. Apply the same laws on public marketing, splash/enter, Practice `/journey`, portal School path, Learn, instructor, and admin — not only the last surface polished. When a new drill or page ships, it must inherit this template so the school feels one coherent organism.
+
+### 7.0 Non-negotiable optics checklist (every surface)
+
 1. **One composition** on public heroes — brand first, one headline, one short promise, one CTA group, one dominant visual plane.
 2. **No fake dashboard** on marketing pages.
 3. **Cards only for interaction** — not decoration.
@@ -228,6 +251,22 @@ These are load-bearing across all layers.
 7. **Cool for the trades** — shop-floor gravity (navy, amber, material photos, crew order). Proud to be seen here — not homework app, not casino.
 8. **Training stages** (School path / Practice hub) sit on a dark material stage when embedded in the light portal so light text never dies on paper.
 9. **Opening / splash is L3 too** — composition + motion doctrine below. Exit is walk-through (strike → dolly), not shatter.
+10. **Information first** — the learner must understand the task, the picture, and the result in three seconds. If the image is cropped so the object is unclear, or feedback is ambiguous, the surface fails.
+11. **Whole-object photos** — pathway cards, VocabSheet, Word→Action, Matching, and similar object drills use `object-fit: contain` with a calm mat. Mystery crops are a craft defect.
+12. **Success is visible** — when a station or page is passed, show a clear, calm success state (badge / filled sentence / advance). Do not rely on a silent score tick.
+13. **Shared grammar** — navy/amber/crew type, section kickers, `alert ok|warn`, choice grids, and finite “Done for now” exits stay consistent across pathways.
+
+### 7.0a Information display (user quality)
+
+| Need | Product move |
+|------|----------------|
+| Know what to do | One kicker + one task line above the interaction |
+| See the thing | Full object in frame (`contain`); caption names the job |
+| Hear the word | English audio on every vocab bridge / Hear English |
+| Know if it worked | Immediate visual (word into blank, correct chip, pass badge) + short plain sentence |
+| Know what next | One primary continue; secondary “keep practising” only when more bank pages exist |
+
+**Critic test:** Remove the nav. Can a Calgary walk-in still tell which school this is, what the station wants, and whether they succeeded? If not, keep carving.
 
 ### 7.1 Composition foundations (splash first → then site-wide)
 
@@ -336,6 +375,15 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-18 — Construction Sentence Structure + site-wide photo/audio craft (L2/L3)
+
+- **L2:** Imported Construction Questions 1–560 as Sentence Structure cloze after Visual Vocabulary; Duolingo one-attempt model; word lands in the blank; page-pass badge; Level-1 = first 20 with ≥16 first-try (+ repair).
+- **L2:** Vocab English auto-speaks after home-language connect; Free Dictionary works without API; browser TTS hardened.
+- **L3:** Pathway/program/drill photos use `object-fit: contain` so royalty-free images are fully visible (no mystery crops).
+- **L3:** Doctrine §7.0 / §7.0a — site-wide aesthetics + information-display template (whole-object photos, visible success, shared grammar). Apply on every future surface.
+- Language ladder updated: gloss → picture → **sentence** → action.
+- **Assumption to challenge next:** whether 16/20 + repair is the right honesty bar vs a stricter perfect first page.
 
 ### 2026-10-17 — Critic pass: dusk stage + splash version archive (L3/L6)
 

@@ -185,19 +185,37 @@ async function speakNeural(text: string, langCode: string): Promise<boolean> {
   return playAudioUrl(url)
 }
 
-/** Optional Free Dictionary recording — never block neural TTS if the API is slow. */
+/** Optional Free Dictionary recording — works on static Pages without our API. */
 async function speakDictionaryEnglish(word: string): Promise<boolean> {
   const clean = word.trim()
   if (!clean || /\s/.test(clean)) return false
   try {
-    const res = await fetch(
-      `${apiBase()}/api/enrich/pronounce/${encodeURIComponent(clean.toLowerCase())}`,
-      { signal: AbortSignal.timeout(2000) },
+    const base = apiBase()
+    if (base) {
+      const res = await fetch(
+        `${base}/api/enrich/pronounce/${encodeURIComponent(clean.toLowerCase())}`,
+        { signal: AbortSignal.timeout(2000) },
+      )
+      if (res.ok) {
+        const data = (await res.json()) as { audio?: string | null; found?: boolean }
+        if (data.audio) return playAudioUrl(data.audio)
+      }
+    }
+    /* Direct dictionary lookup for GitHub Pages / offline API. */
+    const dict = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(clean.toLowerCase())}`,
+      { signal: AbortSignal.timeout(3500) },
     )
-    if (!res.ok) return false
-    const data = (await res.json()) as { audio?: string | null; found?: boolean }
-    if (!data.audio) return false
-    return playAudioUrl(data.audio)
+    if (!dict.ok) return false
+    const rows = (await dict.json()) as Array<{
+      phonetics?: Array<{ audio?: string }>
+    }>
+    const audio = rows
+      .flatMap((row) => row.phonetics || [])
+      .map((p) => p.audio)
+      .find((url) => !!url)
+    if (!audio) return false
+    return playAudioUrl(audio)
   } catch {
     return false
   }
@@ -210,17 +228,37 @@ function speakBrowser(text: string, lang: string): Promise<boolean> {
       return
     }
     void loadVoices().then((voices) => {
-      stopSpeech()
+      /* Cancel only synthesis — keep baked/neural audio path independent. */
+      try {
+        window.speechSynthesis.cancel()
+      } catch {
+        /* ignore */
+      }
       const u = new SpeechSynthesisUtterance(text)
       u.lang = lang
-      const voice = pickVoice(voices, lang)
+      const voice = pickVoice(voices, lang) || pickVoice(voices, 'en-US') || voices[0]
       if (voice) u.voice = voice
       /* Slightly slower / lower pitch softens the default robotic cadence. */
       u.rate = 0.92
       u.pitch = 1
-      u.onend = () => resolve(true)
-      u.onerror = () => resolve(false)
-      window.speechSynthesis.speak(u)
+      let settled = false
+      const done = (ok: boolean) => {
+        if (settled) return
+        settled = true
+        resolve(ok)
+      }
+      u.onend = () => done(true)
+      u.onerror = () => done(false)
+      /* Some browsers fire neither end nor error after cancel races — time out as success if speaking. */
+      window.setTimeout(() => {
+        if (!settled && window.speechSynthesis.speaking) done(true)
+        else if (!settled) done(false)
+      }, 8000)
+      try {
+        window.speechSynthesis.speak(u)
+      } catch {
+        done(false)
+      }
     })
   })
 }
