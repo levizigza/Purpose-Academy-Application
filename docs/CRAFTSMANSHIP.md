@@ -65,9 +65,9 @@ Archives live in [`docs/splash-versions/`](splash-versions/). Snapshot **before*
 | Humans | Treat edits here as product decisions, not docs chore. Prefer short, concrete rules over essays. |
 | Future selves | If a rule no longer matches the product, rewrite the rule — do not paper over the product. |
 
-**Pointer for agents:** root `AGENTS.md` requires this file. Do not invent a parallel style guide.
+**Pointer for agents:** root `AGENTS.md` requires this file. Do not invent a parallel style guide. For UI work, **§7.0–7.0b is the aesthetics + information-display template** — inherit it; do not fork it.
 
-**Site-wide rule:** Craft layers apply to *every* surface — public marketing, splash/enter, auth, Practice `/journey`, portal School path, Learn/LMS, instructor, and admin — not only the last page we polished.
+**Site-wide rule:** Craft layers apply to *every* surface — public marketing, splash/enter, auth, Practice `/journey`, portal School path, Learn/LMS, instructor, and admin — not only the last page we polished. Coherence beats local cleverness.
 
 ---
 
@@ -79,7 +79,7 @@ Craftsmanship is not one blob. Different work needs different chisels. Always kn
 |-------|-----|--------------------|--------------------|
 | **L1 · Truth & story** | One school, three doors, honest depth | Home / Programs / Admissions / portal agree | Construction-only copy while three doors are open |
 | **L2 · Content delivery** | Curriculum, vocab, drills, gates, mother-tongue → English | Specialty distractors; Level-1 = 20; instructor Competent honesty | Hammer vs Hi/Hello; fake “busy scene”; quiz = job ready |
-| **L3 · Aesthetic optics** | How it *looks* and feels to walk in | Cool trades gravity; shop-floor stage; proud to be seen here | Cheap homework-app chrome; casino glow; purple SaaS |
+| **L3 · Aesthetic optics + information display** | How it *looks*, and whether the user can **read the job** | Cool trades gravity; whole-object photos; task → result clear in 3s; shared grammar site-wide | Cheap chrome; mystery crops; silent success; each page invents its own UI dialect |
 | **L4 · Attention ethics** | How human attention is treated | Finite stations; Done for now; metrics serve craft | Infinite feed, streak FOMO, soft-pulse addiction, “one more” |
 | **L5 · Trust & people** | Founding builders, claims, ops honesty | Interim roles framed honestly | Invented bios, inflated enrollment badges |
 | **L6 · Systems spine** | Practice ↔ portal ↔ Learn mental model | School path visible in-account; Learn is extra when built | Two unrelated products; false “caught up” |
@@ -165,6 +165,7 @@ These are load-bearing across all layers.
 4. **One learning spine** — same 20-step school path across pathways; pathway packs change craft, not the spine shape.
 5. **Instructor truth** — skills are verified; do not sell “finish the quiz = job ready.”
 6. **Honesty over symmetry** — if Community has ~16 specialty workplace words and Construction has 660 visual vocab rows, marketing and UI must not pretend they are the same depth.
+7. **Solid information output** — every training and marketing surface must make the task, the picture/media, and the result unmistakable. Ambiguous feedback, cropped objects, or silent “success” are craft defects (see §7.0).
 
 ---
 
@@ -238,7 +239,11 @@ These are load-bearing across all layers.
 
 ## 7. Aesthetic optics craft — Layer L3
 
-This section is the **site-wide aesthetics + information-display template**. Apply the same laws on public marketing, splash/enter, Practice `/journey`, portal School path, Learn, instructor, and admin — not only the last surface polished. When a new drill or page ships, it must inherit this template so the school feels one coherent organism.
+This section is the **site-wide aesthetics + information-display template** — the contract for how Purpose Academy looks *and* how information reaches the user.
+
+**Moving forward (non-optional):** every new page, drill, pathway card, or portal surface must inherit this template. Do not invent a parallel visual language for one feature. Prefer reuse of kickers, alerts, choice grids, contain-mats, and pass states over one-off chrome. If a surface cannot meet §7.0 / §7.0a, it is not ready to ship.
+
+**Surfaces in scope:** public marketing · splash/enter · auth · Practice `/journey` · portal School path · Learn/LMS · instructor · admin.
 
 ### 7.0 Non-negotiable optics checklist (every surface)
 
@@ -252,25 +257,57 @@ This section is the **site-wide aesthetics + information-display template**. App
 8. **Training stages** (School path / Practice hub) sit on a dark material stage when embedded in the light portal so light text never dies on paper.
 9. **Opening / splash is L3 too** — composition + motion doctrine below. Exit is walk-through (strike → dolly), not shatter.
 10. **Information first** — the learner must understand the task, the picture, and the result in three seconds. If the image is cropped so the object is unclear, or feedback is ambiguous, the surface fails.
-11. **Whole-object photos** — pathway cards, VocabSheet, Word→Action, Matching, and similar object drills use `object-fit: contain` with a calm mat. Mystery crops are a craft defect.
+11. **Whole-object photos** — pathway cards, VocabSheet, Word→Action, Matching, Sentence Structure imagery, and similar object drills use `object-fit: contain` with a calm mat. Mystery crops are a craft defect. Full-bleed marketing heroes may use `cover` only when the composition is intentionally edge-to-edge.
 12. **Success is visible** — when a station or page is passed, show a clear, calm success state (badge / filled sentence / advance). Do not rely on a silent score tick.
 13. **Shared grammar** — navy/amber/crew type, section kickers, `alert ok|warn`, choice grids, and finite “Done for now” exits stay consistent across pathways.
 
-### 7.0a Information display (user quality)
+### 7.0a Information display (user quality — utmost importance)
 
-| Need | Product move |
-|------|----------------|
-| Know what to do | One kicker + one task line above the interaction |
-| See the thing | Full object in frame (`contain`); caption names the job |
-| Hear the word | English audio on every vocab bridge / Hear English |
-| Know if it worked | Immediate visual (word into blank, correct chip, pass badge) + short plain sentence |
-| Know what next | One primary continue; secondary “keep practising” only when more bank pages exist |
+Solid information output is not polish after the fact. It is the product. A Calgary walk-in on a phone must never guess what to do, what they are looking at, or whether they succeeded.
+
+| Need | Product move | Failure (refuse) |
+|------|----------------|------------------|
+| Know what to do | One kicker + one task line above the interaction | Walls of instructions; competing CTAs |
+| See the thing | Full object in frame (`contain`); caption names the job | Cropped tools/people; decorative filler photos |
+| Hear the word | English audio on every vocab bridge / Hear English | Silent speaker buttons; language-only with no English |
+| Know if it worked | Immediate visual + short plain sentence (`alert ok\|warn`, pass badge, word-in-blank) | Score ticks only; green with no explanation |
+| Know what next | One primary continue; secondary “keep practising” only when more bank pages exist | Multiple equal primaries; dead ends |
+
+**Display laws (site-wide):**
+
+1. **One job per section** — one headline, one supporting line, one primary action.
+2. **Hierarchy over density** — station task beats path map chrome; path map stays compact inside a lesson.
+3. **Media serves meaning** — if removing the image would make the word/task unclear, the image must show the whole object.
+4. **Feedback in the same glance** — correct/wrong state appears on the control *and* in a short sentence; no scavenger hunt.
+5. **Same dialect everywhere** — Practice, portal, and Learn should feel like one school’s worksheets, not three apps.
+6. **Desktop and mobile** — information order stays the same; nothing essential hides behind hover-only chrome.
+
+**Pre-ship critic (run before merge on any UI/curriculum surface):**
+
+1. What is the customer supposed to feel / understand in the first three seconds?
+2. Can they name the task, the object/media, and the outcome without help?
+3. What is competing for attention that should not?
+4. Does this surface reuse shared grammar, or invent a one-off dialect?
+5. Would you show this to a founding builder without apologizing?
 
 **Critic test:** Remove the nav. Can a Calgary walk-in still tell which school this is, what the station wants, and whether they succeeded? If not, keep carving.
 
+### 7.0b Surface coherence matrix
+
+| Surface | Must inherit | Extra duty |
+|---------|--------------|------------|
+| Splash / enter | Brand-first composition; purposeful motion | Door architecture §7.3; walk-through exit |
+| Home / Programs / Give | Three-door story; whole pathway photos; one job per section | Honest depth counts; no fake dashboards |
+| Practice `/journey` | Kickers, alerts, choice grids, contain object mats, visible pass | Finite stations; Done for now; mastery gates |
+| Portal School path | Same spine language + dark stage for light text | Today’s station; no feed chrome |
+| Learn / LMS | Same pathway accents + honesty when empty | Never fake “caught up” |
+| Instructor / admin | Calm work chrome; clear status language | No casino metrics theatre |
+
+When you add a feature to one row, check the neighbors. *Connection test:* splash → home → programs → Practice must feel like one organism.
+
 ### 7.1 Composition foundations (splash first → then site-wide)
 
-These are not decoration tips. They decide where the eye lands. Sources we study and apply: NN/g visual design principles, Interaction Design Foundation (rule of thirds / focal point), [Design Systems Repo](https://designsystemsrepo.com/) (systems discipline for later site-wide), open motion craft notes (Hyperframes / twelve-principles translations).
+These are not decoration tips. They decide where the eye lands. Sources we study and apply: NN/g visual design principles, Interaction Design Foundation (rule of thirds / focal point), [Design Systems Repo](https://designsystemsrepo.com/) (systems discipline for site-wide reuse), open motion craft notes (Hyperframes / twelve-principles translations).
 
 | Principle | Meaning here | Splash application (v33+) |
 |-----------|--------------|---------------------------|
@@ -281,7 +318,7 @@ These are not decoration tips. They decide where the eye lands. Sources we study
 | **Framing / staging** | Negative space and vignette tell the eye where to look | During the open, periphery dims slightly so only the doorway reads; then the frame breathes open |
 | **Negative space** | Empty area is structure, not leftover | Keep air between name / mark / paths / hammer — no cramped card stack |
 
-**Site-wide later (same laws):** public heroes, portal School path, Practice — apply thirds + hierarchy once splash is right. Design-system discipline (tokens, pattern reuse) comes from studying systems at designsystemsrepo.com without copying their chrome.
+**Site-wide (same laws — required now, not “later”):** public heroes, pathway cards, Practice stations, and portal School path apply focal point + hierarchy + air. Design-system discipline (tokens, pattern reuse) comes from studying systems at designsystemsrepo.com without copying their chrome. New UI reuses existing patterns before inventing new ones.
 
 ### 7.2 Motion foundations (Illusion of Life → screen)
 
@@ -342,8 +379,9 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Apprenticeship / work readiness | Copy + Skills Passport disclaimers | Do not over-claim placement rates |
 | One school spine | Portal **School path** + `/journey` drills | Learn (LMS) still thinner for Logistics/Community |
 | Site-wide attention ethics | School path + lessons have Done for now / today’s station | Keep sweeping public, Learn, instructor chrome for leftover feed patterns |
+| Site-wide aesthetics + solid info display | Doctrine §7.0–7.0b; contain photos; Sentence Structure pass states | Keep sweeping Learn / instructor / admin for one-off dialects and weak feedback |
 
-**Protect:** VocabSheet, Tool Chest, Calgary voice, instructor-Competent truth, three-door story.
+**Protect:** VocabSheet, Tool Chest, Calgary voice, instructor-Competent truth, three-door story, §7 information-display template.
 
 ---
 
@@ -367,7 +405,8 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
 | Splash opening aesthetic craft | L3/L4 | Climbing — dusk stage for light pop (v41) + version archive |
-| Site-wide composition (thirds / hierarchy) | L3 | Open — after splash locks |
+| Site-wide composition (thirds / hierarchy) | L3 | Climbing — §7.0 template locked; apply node-by-node |
+| Site-wide information display (solid user output) | L3 | Climbing — §7.0a/b; every new surface inherits |
 | Systems thinking (journey as architecture) | L6 | Climbing — doctrine §3.1; apply node-by-node |
 
 ---
@@ -375,6 +414,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-18 — Aesthetics doctrine: site-wide coherence + information display (L3)
+
+- Elevated L3 to **aesthetic optics + information display**; non-negotiable #7 = solid information output.
+- Expanded §7: moving-forward contract, §7.0a display laws + pre-ship critic, §7.0b surface coherence matrix.
+- Composition foundations are **required site-wide now**, not deferred after splash.
+- Active climb + aims table track information-display coherence across Learn / instructor / admin.
+- **Assumption to challenge next:** whether Learn and admin still speak a different UI dialect than Practice — sweep next.
 
 ### 2026-10-18 — Construction Sentence Structure + site-wide photo/audio craft (L2/L3)
 
@@ -518,11 +565,12 @@ Newest first.
 
 ## 12. Ritual for every future craft pass
 
-1. Read this file — especially **§3 Craft layers** and active climbs.
+1. Read this file — especially **§3 Craft layers**, **§7.0–7.0b** (aesthetics + information display), and active climbs.
 2. Name the **layer(s)** and the one composition or drill you are improving.
 3. Chisel the product **site-wide** for that layer (don’t leave orphan surfaces telling a different story).
-4. Verify desktop and mobile on touched surfaces.
-5. Update §10 / §11 with what changed and what assumption you will challenge next.
-6. Leave the school more honest — and more respectful of attention — than you found it.
+4. Run the **§7.0a pre-ship critic** — task, media, and result must be solid for the user.
+5. Verify desktop and mobile on touched surfaces.
+6. Update §10 / §11 with what changed and what assumption you will challenge next.
+7. Leave the school more honest, more coherent, and clearer to read than you found it.
 
 *— Purpose Academy craft lineage. Carry it forward.*
