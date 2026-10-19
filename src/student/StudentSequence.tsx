@@ -1608,6 +1608,7 @@ export function StudentSequencePage() {
         <Shell step={8} onBack={() => { resetVocab(); go(7) }}>
           <SentenceClozeDrill
             items={SENTENCE_CLOZE}
+            picturedAnswers={VOCAB_UNIT.map((t) => t.english)}
             onLevel1Passed={() => {
               setSentenceLevel1(true)
               recordSkillAttempt('sentence-cloze', true, 20)

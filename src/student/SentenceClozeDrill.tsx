@@ -39,8 +39,37 @@ function fillBlank(prompt: string, word: string) {
 
 type Phase = 'drill' | 'result' | 'repair' | 'passed'
 
+function normWord(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+}
+
+function answerPictured(answer: string, pictured: Set<string>) {
+  const n = normWord(answer)
+  if (pictured.has(n)) return true
+  if (n.endsWith('s') && pictured.has(n.slice(0, -1))) return true
+  if (pictured.has(`${n}s`)) return true
+  return false
+}
+
+/** Prefer pictured Visual Vocabulary answers on early pages (ladder honesty). */
+function orderForLadder(items: SentenceClozeItem[], picturedAnswers?: string[]) {
+  if (!picturedAnswers?.length) return items
+  const pictured = new Set(picturedAnswers.map(normWord))
+  const hit: SentenceClozeItem[] = []
+  const miss: SentenceClozeItem[] = []
+  for (const item of items) {
+    ;(answerPictured(item.answer, pictured) ? hit : miss).push(item)
+  }
+  return hit.length >= SENTENCE_PAGE_SIZE ? [...hit, ...miss] : items
+}
+
 type Props = {
   items: SentenceClozeItem[]
+  /**
+   * English terms the learner has already seen as pictures (Visual Vocabulary).
+   * When provided, Level-1 pages prefer these answers so sentences follow pictures.
+   */
+  picturedAnswers?: string[]
   /** First honest page pass — unlocks Word → Action (more pages stay open). */
   onLevel1Passed: () => void
   onContinueToActions: () => void
@@ -60,12 +89,14 @@ type Props = {
  */
 export function SentenceClozeDrill({
   items,
+  picturedAnswers,
   onLevel1Passed,
   onContinueToActions,
   continueLabel = 'Continue to Word → Action',
   onSkipToActions,
 }: Props) {
-  const pageCount = Math.max(1, Math.ceil(items.length / SENTENCE_PAGE_SIZE))
+  const bank = useMemo(() => orderForLadder(items, picturedAnswers), [items, picturedAnswers])
+  const pageCount = Math.max(1, Math.ceil(bank.length / SENTENCE_PAGE_SIZE))
   const [page, setPage] = useState(0)
   const [phase, setPhase] = useState<Phase>('drill')
   const [idx, setIdx] = useState(0)
@@ -86,8 +117,8 @@ export function SentenceClozeDrill({
 
   const pageItems = useMemo(() => {
     const start = page * SENTENCE_PAGE_SIZE
-    return items.slice(start, start + SENTENCE_PAGE_SIZE)
-  }, [items, page])
+    return bank.slice(start, start + SENTENCE_PAGE_SIZE)
+  }, [bank, page])
 
   const deck = phase === 'repair' ? repairDeck : pageItems
   const item = deck[Math.min(idx, Math.max(0, deck.length - 1))]
@@ -251,7 +282,7 @@ export function SentenceClozeDrill({
     playFoley('whoosh')
   }
 
-  if (!items.length) {
+  if (!bank.length) {
     return (
       <div className="alert warn">Sentence Structure is not loaded for this pathway yet.</div>
     )
@@ -259,7 +290,7 @@ export function SentenceClozeDrill({
 
   if (phase === 'passed') {
     const from = page * SENTENCE_PAGE_SIZE + 1
-    const to = Math.min((page + 1) * SENTENCE_PAGE_SIZE, items.length)
+    const to = Math.min((page + 1) * SENTENCE_PAGE_SIZE, bank.length)
     return (
       <article className="sentence-site sentence-site-pass" aria-live="polite">
         <p className="section-kicker">Sentence Structure · Site stage</p>
@@ -334,6 +365,8 @@ export function SentenceClozeDrill({
           {idx + 1}/{deck.length}
           {' · '}
           Page {page + 1}/{pageCount}
+          {' · '}
+          Bank 1–{bank.length}
           {phase === 'drill' ? ` · ${scoreCorrect} first-try` : ''}
           {level1Unlocked ? ' · Level-1 open' : ''}
         </p>
