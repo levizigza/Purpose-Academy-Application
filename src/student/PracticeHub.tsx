@@ -371,11 +371,10 @@ export function PracticeHub({
                         const stepMeta = journeySteps[n - 1]
                         const skill = SKILL_BY_STEP[n]
                         const level = skill ? getMasteryLevel(skill) : 'locked'
-                        const unlocked =
-                          state === 'done' ||
-                          (state === 'current' && n <= Math.max(currentStep, PRACTICE_ENTRY_STEP))
+                        /* Practice hub: all lessons open for aesthetic / quality review jumps. */
+                        const unlocked = true
                         const isCurrent = n === currentStep
-                        const shownLevel = unlocked ? (level === 'locked' ? 'attempted' : level) : 'locked'
+                        const shownLevel = level === 'locked' ? 'attempted' : level
                         return (
                           <li
                             key={n}
@@ -395,13 +394,11 @@ export function PracticeHub({
                                 <span>
                                   {isCurrent
                                     ? 'Current lesson'
-                                    : unlocked
-                                      ? masteryLabel(shownLevel)
-                                      : 'Locked until previous lessons are complete'}
+                                    : masteryLabel(shownLevel)}
                                 </span>
                               </span>
                               <span className="ph-lesson-action">
-                                {unlocked ? (isCurrent ? 'Resume' : 'Open') : 'Locked'}
+                                {isCurrent ? 'Resume' : 'Open'}
                               </span>
                             </button>
                           </li>

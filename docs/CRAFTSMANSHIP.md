@@ -418,6 +418,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-19 — Sentence station meets §7.0a display bar + practice section skip (L2/L3)
+
+- Chrome diet on Sentence Structure: path map, mastery beads, unit pill, duplicate help hidden so the job board owns the first viewport.
+- Wrong word **bounces off** the blank (never written into the sentence); teach-lock + TTS only after the consequence.
+- Practice **Jump to section** / Prev–Next skip so quality review can open every station without finishing quizzes; hub + path map unlock all lessons in Practice.
+- Unit 3 label → **Words → Sentences**.
+- **Assumption to challenge next:** whether theme-tagged consequences (kill default-anvil skew) should land before ladder/orphan-bank retag.
+
 ### 2026-10-18 — Sentence Structure site stage (SITEWISE motion) (L2/L3)
 
 - Rebuilt Construction Sentence Structure as a **site stage** (job board + crew SVG), not VocabSheet chrome.

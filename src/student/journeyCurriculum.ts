@@ -35,7 +35,7 @@ export const JOURNEY_STEPS = [
 export const LEARNING_UNITS = [
   { id: 1, label: 'Start', range: '1–2' },
   { id: 2, label: 'Find your path', range: '3–6' },
-  { id: 3, label: 'Learn the words', range: '7–8' },
+  { id: 3, label: 'Words → Sentences', range: '7–8' },
   { id: 4, label: 'Practice English', range: '9–12' },
   { id: 5, label: 'Site ready', range: '13–16' },
   { id: 6, label: 'Work ready', range: '17–20' },
@@ -56,9 +56,10 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   3: {
-    goal: 'Learn Daily Conversation Vocabulary, then the specialty workplace words for your pathway.',
+    goal: 'Learn Daily Conversation and specialty workplace words, then put them into job-site sentences.',
     outcomes: [
       'See each word and hear English',
+      'Build English sentences on a site stage (Construction)',
       'Connect the English word to the real action',
     ],
   },

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { SentenceClozeItem } from '../pathways/packs/constructionSentenceCloze560'
+import { isPracticeMode } from '../practice/PracticeMode'
 import { speakEnglish } from './speech'
 import { playFoley } from '../audio/foley'
 import { recordSkillAttempt } from './learningMastery'
@@ -18,7 +19,10 @@ const PASS_SCORE = 16
 
 /** Hold the stage so SITEWISE-style consequence motion can land. */
 const ADVANCE_OK_MS = 1100
-const ADVANCE_FAIL_MS = 2400
+/** Fail: bounce + consequence, then teach-lock correct word, then advance. */
+const FAIL_CONSEQUENCE_MS = 1200
+const FAIL_TEACH_MS = 1100
+const ADVANCE_FAIL_MS = FAIL_CONSEQUENCE_MS + FAIL_TEACH_MS
 
 function shuffle<T>(items: T[]): T[] {
   const next = [...items]
@@ -41,6 +45,8 @@ type Props = {
   onLevel1Passed: () => void
   onContinueToActions: () => void
   continueLabel?: string
+  /** Practice quality-review: leave Sentence Structure without finishing the page. */
+  onSkipToActions?: () => void
 }
 
 /**
@@ -49,7 +55,7 @@ type Props = {
  * Different from vocabulary:
  * - Sentence lives on a SITEWISE-style job board + crew stage
  * - Correct word locks into the board with motion
- * - Wrong word bounces off; absurd consequence animation tied to the sentence
+ * - Wrong word bounces off (never written into the sentence); absurd consequence; then teach the right word
  * - One attempt per item (no answer shopping)
  */
 export function SentenceClozeDrill({
@@ -57,6 +63,7 @@ export function SentenceClozeDrill({
   onLevel1Passed,
   onContinueToActions,
   continueLabel = 'Continue to Word → Action',
+  onSkipToActions,
 }: Props) {
   const pageCount = Math.max(1, Math.ceil(items.length / SENTENCE_PAGE_SIZE))
   const [page, setPage] = useState(0)
@@ -68,11 +75,14 @@ export function SentenceClozeDrill({
   const [flying, setFlying] = useState(false)
   const [mood, setMood] = useState<StageMood>('idle')
   const [consequence, setConsequence] = useState<Consequence | null>(null)
+  /** After a miss: correct word locked for the teach beat (board never shows the wrong word). */
+  const [teachWord, setTeachWord] = useState<string | null>(null)
   const [scoreCorrect, setScoreCorrect] = useState(0)
   const [missed, setMissed] = useState<SentenceClozeItem[]>([])
   const [repairDeck, setRepairDeck] = useState<SentenceClozeItem[]>([])
   const [options, setOptions] = useState<string[]>([])
   const [level1Unlocked, setLevel1Unlocked] = useState(false)
+  const practice = isPracticeMode()
 
   const pageItems = useMemo(() => {
     const start = page * SENTENCE_PAGE_SIZE
@@ -92,6 +102,7 @@ export function SentenceClozeDrill({
     setFlying(false)
     setMood('idle')
     setConsequence(null)
+    setTeachWord(null)
   }, [item?.id, phase, page])
 
   function finishPagePass(finalScore: number) {
@@ -115,6 +126,7 @@ export function SentenceClozeDrill({
           setFlying(false)
           setMood('idle')
           setConsequence(null)
+          setTeachWord(null)
           return
         }
 
@@ -129,6 +141,7 @@ export function SentenceClozeDrill({
             setFlying(false)
             setMood('idle')
             setConsequence(null)
+            setTeachWord(null)
             playFoley('whoosh')
             return
           }
@@ -153,6 +166,7 @@ export function SentenceClozeDrill({
           setFlying(false)
           setMood('idle')
           setConsequence(null)
+          setTeachWord(null)
           playFoley('whoosh')
           return
         }
@@ -168,6 +182,7 @@ export function SentenceClozeDrill({
     setPicked(opt)
     setCorrect(ok)
     setFlying(true)
+    setTeachWord(null)
     recordSkillAttempt('sentence-cloze', ok, ok ? 12 : 0)
     playFoley(ok ? 'correct' : 'wrong')
 
@@ -188,11 +203,15 @@ export function SentenceClozeDrill({
       const c = consequenceFor(item.prompt, opt, item.answer)
       setConsequence(c)
       setMood('fail')
+      setFlying(false)
+      /* Consequence first — blank stays empty. Then lock the true word + speak it. */
       window.setTimeout(() => {
+        setTeachWord(item.answer)
         setFilled(true)
-        setFlying(false)
+        setMood('success')
+        setConsequence(null)
         void speakEnglish(fillBlank(item.prompt, item.answer))
-      }, 480)
+      }, FAIL_CONSEQUENCE_MS)
     }
 
     advanceAfterResolve(ok, newScore, nextMissed)
@@ -206,6 +225,7 @@ export function SentenceClozeDrill({
     setFlying(false)
     setMood('idle')
     setConsequence(null)
+    setTeachWord(null)
     setScoreCorrect(0)
     setMissed([])
     setRepairDeck([])
@@ -223,6 +243,7 @@ export function SentenceClozeDrill({
     setFlying(false)
     setMood('idle')
     setConsequence(null)
+    setTeachWord(null)
     setScoreCorrect(0)
     setMissed([])
     setRepairDeck([])
@@ -247,8 +268,7 @@ export function SentenceClozeDrill({
         </div>
         <h2>Page passed</h2>
         <p className="lede">
-          Sentences {from}–{to} complete. First-try score {scoreCorrect} of {pageItems.length}. Wrong guesses
-          showed consequences — right words locked on the job board.
+          Sentences {from}–{to} complete. First-try score {scoreCorrect} of {pageItems.length}.
         </p>
         <div className="hero-actions">
           <button type="button" className="btn btn-primary" onClick={onContinueToActions}>
@@ -271,11 +291,16 @@ export function SentenceClozeDrill({
         <h2>Keep learning this page</h2>
         <p className="lede">
           Score {scoreCorrect} of {pageItems.length}. You need {PASS_SCORE} correct on the first try to pass.
-          One try each — wrong words bounce off the board and the crew pays for it.
+          One try each — wrong words bounce off the board.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>
           Retry this page
         </button>
+        {practice && onSkipToActions ? (
+          <button type="button" className="btn btn-secondary on-light" onClick={onSkipToActions}>
+            Skip to Word → Action
+          </button>
+        ) : null}
       </article>
     )
   }
@@ -284,26 +309,33 @@ export function SentenceClozeDrill({
     return <div className="alert warn">Loading sentences…</div>
   }
 
-  const lockedWord = filled && correct ? item.answer : mood === 'success' ? item.answer : null
-  const rejectedWord = mood === 'fail' && picked && !correct ? picked : null
+  const lockedWord =
+    teachWord || (filled && correct ? item.answer : mood === 'success' ? item.answer : null)
+  const rejectedWord = mood === 'fail' && picked && !correct && !teachWord ? picked : null
+  const showingTeach = Boolean(teachWord && picked && !correct)
 
   return (
     <article className="sentence-site">
       <header className="sentence-site-head">
-        <p className="section-kicker">Sentence Structure · Site stage</p>
+        <div className="sentence-site-head-row">
+          <p className="section-kicker">Sentence Structure · Site stage</p>
+          {practice && onSkipToActions ? (
+            <button
+              type="button"
+              className="btn btn-ghost sentence-site-skip"
+              onClick={onSkipToActions}
+            >
+              Skip to Word → Action
+            </button>
+          ) : null}
+        </div>
         <p className="train-vocab-counter">
-          {phase === 'repair' ? 'Repair round · ' : ''}
-          Sentence {idx + 1} of {deck.length}
+          {phase === 'repair' ? 'Repair · ' : ''}
+          {idx + 1}/{deck.length}
           {' · '}
-          Page {page + 1} of {pageCount}
-          {' · '}
-          Bank 1–{items.length}
-          {phase === 'drill' ? ` · First-try ${scoreCorrect}` : ''}
-          {level1Unlocked ? ' · Level-1 unlocked' : ''}
-        </p>
-        <p className="lede sentence-cloze-help">
-          This is not vocabulary flashcards. Watch the job board, pick the word that belongs, and see the
-          crew react. One try — wrong words bounce; the site shows why guessing hurts.
+          Page {page + 1}/{pageCount}
+          {phase === 'drill' ? ` · ${scoreCorrect} first-try` : ''}
+          {level1Unlocked ? ' · Level-1 open' : ''}
         </p>
       </header>
 
@@ -320,7 +352,7 @@ export function SentenceClozeDrill({
         {options.map((opt) => {
           const isPick = picked === opt
           const showAnswer = !!picked && opt === item.answer
-          const state = isPick ? (correct ? 'correct' : 'wrong') : showAnswer ? 'correct' : 'idle'
+          const state = !picked ? 'idle' : showAnswer ? 'correct' : isPick ? 'wrong' : 'idle'
           return (
             <button
               key={opt}
@@ -340,8 +372,10 @@ export function SentenceClozeDrill({
       {picked && (
         <div className={`sentence-site-feedback ${correct ? 'is-ok' : 'is-bad'}`} role="status">
           {correct
-            ? 'Yes — the word locks on the job board. The crew keeps building.'
-            : `Not “${picked}.” The sentence needs “${item.answer}.” Watch what guessing cost the crew.`}
+            ? 'Yes — the word locks on the job board.'
+            : showingTeach
+              ? `Not “${picked}.” The sentence needs “${item.answer}.”`
+              : `Not “${picked}.” Watch what guessing cost the crew.`}
         </div>
       )}
     </article>

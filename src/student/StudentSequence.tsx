@@ -278,6 +278,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
     openPracticeChat()
   }
 
+  const jumpSteps = journeySteps.filter((s) => s.n >= PRACTICE_ENTRY_STEP)
+
   return (
     <div className="shell-main train-shell">
       <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
@@ -301,6 +303,40 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             <FoleyToggle compact />
           </div>
         </div>
+        {practice && onJumpLesson && (
+          <nav className="practice-section-skip" aria-label="Skip between sections for quality review">
+            <button
+              type="button"
+              className="btn btn-ghost practice-section-skip-btn"
+              disabled={step <= PRACTICE_ENTRY_STEP}
+              onClick={() => onJumpLesson(Math.max(PRACTICE_ENTRY_STEP, step - 1))}
+            >
+              Prev section
+            </button>
+            <label className="practice-section-skip-jump">
+              <span>Jump to section</span>
+              <select
+                value={step}
+                onChange={(e) => onJumpLesson(Number(e.target.value))}
+                aria-label="Jump to any practice section"
+              >
+                {jumpSteps.map((s) => (
+                  <option key={s.n} value={s.n}>
+                    {s.n}. {s.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              type="button"
+              className="btn btn-ghost practice-section-skip-btn"
+              disabled={step >= 20}
+              onClick={() => onJumpLesson(Math.min(20, step + 1))}
+            >
+              Next section
+            </button>
+          </nav>
+        )}
         <h1 className="train-title">{title}</h1>
         <p className="train-simple-line">{help}</p>
         {practice && <PracticeStatsStrip step={step} />}
@@ -883,10 +919,15 @@ export function StudentSequencePage() {
     setAdvanceGateMsg(null)
     const target = Math.min(20, Math.max(1, next))
     if (target !== step) resetDrillLocals()
+    /* Quality-review jumps land on Sentence Structure (not mid Word→Action) when opening step 8. */
+    if (target === 8) {
+      setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
+    }
     if (target === step) {
       resetDrillLocals()
       setStep(target)
       setPracticeView('lesson')
+      saveStep(target)
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
@@ -903,6 +944,7 @@ export function StudentSequencePage() {
     })
     window.setTimeout(() => {
       setStep(target)
+      saveStep(target)
       setPracticeView('lesson')
       setTransitioning(false)
       if (pathwayId === 'construction') playFoley('ambient-stop')
@@ -1575,6 +1617,13 @@ export function StudentSequencePage() {
                 setSentenceLevel1(true)
                 recordSkillAttempt('sentence-cloze', true, 20)
               }
+              setActionIdx(0)
+              setActionAnswer(null)
+              setActionCorrect(false)
+              setStep8Phase('actions')
+              playFoley('whoosh')
+            }}
+            onSkipToActions={() => {
               setActionIdx(0)
               setActionAnswer(null)
               setActionCorrect(false)

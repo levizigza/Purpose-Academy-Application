@@ -69,7 +69,7 @@ export function consequenceFor(prompt: string, wrongWord: string, answer: string
 type Props = {
   mood: StageMood
   consequence: Consequence | null
-  /** Wrong chip text briefly shown bouncing off the blank */
+  /** Wrong chip text briefly shown bouncing off the blank — never written into the sentence */
   rejectedWord?: string | null
   /** Correct word settling into the scene board */
   lockedWord?: string | null
@@ -93,36 +93,61 @@ export function SentenceSiteStage({
   const before = prompt.split('______')[0] ?? ''
   const after = prompt.split('______')[1] ?? ''
   const showWord = lockedWord || null
+  const showReject = Boolean(rejectedWord && mood === 'fail' && !showWord)
+
+  const caption =
+    mood === 'fail' && consequence
+      ? consequence.caption
+      : mood === 'success'
+        ? 'Word locked. The crew keeps building.'
+        : 'Watch the job board. Choose the word that belongs.'
 
   return (
     <div
       className={`sentence-site-stage is-${mood}${flying ? ' is-flying' : ''}${
-        consequence ? ` fail-${kind}` : ''
+        consequence && mood === 'fail' ? ` fail-${kind}` : ''
       }`}
-      aria-hidden
     >
-      <div className="sentence-site-sky" />
-      <div className="sentence-site-ground" />
+      <div className="sentence-site-sky" aria-hidden />
+      <div className="sentence-site-ground" aria-hidden />
 
       {/* Sentence board — the visual showcase of the sentence */}
-      <div className="sentence-site-board" role="presentation">
+      <div className="sentence-site-board">
         <p className="sentence-site-board-kicker">On the job board</p>
-        <p className={`sentence-site-board-line${showWord ? ' has-word' : ''}${mood === 'fail' ? ' is-shake' : ''}`}>
-          <span>{before}</span>
-          <span className={`sentence-site-blank${showWord ? ' filled' : ''}${mood === 'fail' ? ' rejected' : ''}`}>
-            {showWord ? (
-              <span className={`sentence-site-lock${flying ? ' landing' : ' set'}`}>{showWord}</span>
-            ) : rejectedWord && mood === 'fail' ? (
-              <span className="sentence-site-reject">{rejectedWord}</span>
-            ) : (
-              <span className="sentence-site-slot">______</span>
-            )}
-          </span>
-          <span>{after}</span>
-        </p>
+        <div className="sentence-site-board-stage">
+          {showReject ? (
+            <span className="sentence-site-reject-float" aria-hidden>
+              {rejectedWord}
+            </span>
+          ) : null}
+          <p
+            className={`sentence-site-board-line${showWord ? ' has-word' : ''}${
+              mood === 'fail' && !showWord ? ' is-shake' : ''
+            }`}
+          >
+            <span>{before}</span>
+            <span
+              className={`sentence-site-blank${showWord ? ' filled' : ''}${
+                showReject ? ' rejected' : ''
+              }`}
+            >
+              {showWord ? (
+                <span className={`sentence-site-lock${flying ? ' landing' : ' set'}`}>{showWord}</span>
+              ) : (
+                <span className="sentence-site-slot">______</span>
+              )}
+            </span>
+            <span>{after}</span>
+          </p>
+        </div>
       </div>
 
-      <svg className="sentence-site-svg" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        className="sentence-site-svg"
+        viewBox="0 0 640 280"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden
+      >
         {/* Scaffold / frame backdrop */}
         <g className="sentence-site-frame" opacity="0.55">
           <rect x="40" y="70" width="18" height="160" fill="#5a6a7a" />
@@ -132,45 +157,31 @@ export function SentenceSiteStage({
         </g>
 
         {/* Beam that settles on success / tips on collapse */}
-        <g className={`sentence-site-beam ${mood === 'success' ? 'is-lock' : ''} ${kind === 'collapse' && mood === 'fail' ? 'is-tip' : ''}`}>
+        <g
+          className={`sentence-site-beam ${mood === 'success' ? 'is-lock' : ''} ${
+            kind === 'collapse' && mood === 'fail' ? 'is-tip' : ''
+          }`}
+        >
           <rect x="260" y="100" width="220" height="18" rx="3" fill="#c4a35a" />
           <rect x="270" y="104" width="200" height="4" fill="#e8d090" opacity="0.5" />
         </g>
 
         {/* Worker */}
-        <g className={`sentence-site-worker ${mood === 'success' ? 'is-win' : ''} ${mood === 'fail' ? 'is-hurt' : ''}`}>
-          {/* body */}
+        <g
+          className={`sentence-site-worker ${mood === 'success' ? 'is-win' : ''} ${
+            mood === 'fail' ? 'is-hurt' : ''
+          }`}
+        >
           <ellipse cx="340" cy="210" rx="28" ry="10" fill="#0a1624" opacity="0.35" className="sentence-site-shadow" />
           <rect x="322" y="150" width="36" height="52" rx="10" fill="#e8a317" />
           <rect x="318" y="148" width="44" height="14" rx="4" fill="#f0c14a" />
-          {/* hard hat */}
           <ellipse cx="340" cy="132" rx="22" ry="12" fill="#f5c542" />
           <rect x="318" y="132" width="44" height="8" rx="2" fill="#e8a317" />
-          {/* head */}
           <circle cx="340" cy="142" r="14" fill="#d4a574" />
-          {/* arms */}
-          <rect
-            className="sentence-site-arm-l"
-            x="300"
-            y="158"
-            width="24"
-            height="10"
-            rx="4"
-            fill="#e8a317"
-          />
-          <rect
-            className="sentence-site-arm-r"
-            x="356"
-            y="158"
-            width="24"
-            height="10"
-            rx="4"
-            fill="#e8a317"
-          />
-          {/* legs */}
+          <rect className="sentence-site-arm-l" x="300" y="158" width="24" height="10" rx="4" fill="#e8a317" />
+          <rect className="sentence-site-arm-r" x="356" y="158" width="24" height="10" rx="4" fill="#e8a317" />
           <rect x="326" y="198" width="12" height="28" rx="3" fill="#1e3a5f" />
           <rect x="342" y="198" width="12" height="28" rx="3" fill="#1e3a5f" />
-          {/* face dots */}
           <circle cx="335" cy="140" r="1.5" fill="#2a1a0a" />
           <circle cx="345" cy="140" r="1.5" fill="#2a1a0a" />
           {mood === 'success' && (
@@ -184,7 +195,6 @@ export function SentenceSiteStage({
           )}
         </g>
 
-        {/* Success sparkles */}
         {mood === 'success' && (
           <g className="sentence-site-sparkles">
             <circle cx="280" cy="90" r="4" fill="#f5c542" />
@@ -193,7 +203,6 @@ export function SentenceSiteStage({
           </g>
         )}
 
-        {/* Fail FX by kind */}
         {mood === 'fail' && kind === 'anvil' && (
           <g className="sentence-site-anvil">
             <path
@@ -246,15 +255,14 @@ export function SentenceSiteStage({
         )}
       </svg>
 
-      {mood === 'fail' && consequence && (
-        <p className="sentence-site-caption">{consequence.caption}</p>
-      )}
-      {mood === 'success' && (
-        <p className="sentence-site-caption is-ok">Word locked. The crew keeps building.</p>
-      )}
-      {mood === 'idle' && (
-        <p className="sentence-site-caption is-idle">Watch the job board. Choose the word that belongs.</p>
-      )}
+      <p
+        className={`sentence-site-caption${
+          mood === 'success' ? ' is-ok' : mood === 'idle' ? ' is-idle' : ''
+        }`}
+        aria-live="polite"
+      >
+        {caption}
+      </p>
     </div>
   )
 }

@@ -70,18 +70,21 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
           const last = steps[steps.length - 1]
           const state =
             currentStep > last ? 'done' : currentStep >= first && currentStep <= last ? 'current' : 'locked'
+          /* Practice quality review: every unit/lesson is open so reviewers can jump without grinding. */
+          const reviewOpen = Boolean(practice && onSelectLesson)
+          const showLessons = reviewOpen || ((!compact || state === 'current') && state !== 'locked')
           const pct = unitMasteryPercent(steps)
           return (
-            <li key={unit.id} className={`lp-unit is-${state}`}>
+            <li key={unit.id} className={`lp-unit is-${reviewOpen && state === 'locked' ? 'upcoming' : state}`}>
               <div className="lp-unit-badge" aria-hidden>
                 {state === 'done' ? '✓' : unit.id}
               </div>
               <div className="lp-unit-copy">
                 <strong>{unit.label}</strong>
                 <span>Steps {unit.range}</span>
-                {state !== 'locked' && <em>{pct}% mastery</em>}
+                {(state !== 'locked' || reviewOpen) && <em>{pct}% mastery</em>}
               </div>
-              {(!compact || state === 'current') && state !== 'locked' && (
+              {showLessons && (
                 <ol className="lp-lessons">
                   {steps.map((n) => {
                     const meta = getPathwayJourneySteps()[n - 1]
@@ -89,7 +92,7 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
                     const level = skill ? getMasteryLevel(skill) : 'locked'
                     const lessonState =
                       n === currentStep ? 'current' : n < currentStep ? 'done' : 'upcoming'
-                    const clickable = Boolean(onSelectLesson) && n <= currentStep
+                    const clickable = Boolean(onSelectLesson) && (reviewOpen || n <= currentStep)
                     const inner = (
                       <>
                         <span className={levelClass(n < currentStep ? (level === 'locked' ? 'attempted' : level) : n === currentStep ? 'attempted' : 'locked')} />
@@ -102,7 +105,9 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
                               ? 'You are here'
                               : n < currentStep
                                 ? masteryLabel(level === 'locked' ? 'attempted' : level)
-                                : 'Up next'}
+                                : reviewOpen
+                                  ? 'Open for review'
+                                  : 'Up next'}
                           </span>
                         </div>
                       </>
