@@ -418,6 +418,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-19 — Consequence themes + path to live display bar (L2/L3)
+
+- Consequence mapping is **answer-first** (then prompt, then soft admin/safety buckets, then rotated fallback) so anvil is no longer the default joke for abstract nouns.
+- Keeps the §7.0a chrome diet + Practice section skip from the prior carve on this climb.
+- **Assumption to challenge next:** gate/retag Level-1 cloze ⊆ pictured VV (ladder honesty).
+
 ### 2026-10-19 — Sentence station meets §7.0a display bar + practice section skip (L2/L3)
 
 - Chrome diet on Sentence Structure: path map, mastery beads, unit pill, duplicate help hidden so the job board owns the first viewport.

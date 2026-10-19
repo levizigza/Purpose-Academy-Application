@@ -20,50 +20,113 @@ export type Consequence = {
   caption: string
 }
 
+const CAPTIONS: Record<ConsequenceKind, (hint: string) => string> = {
+  anvil: (hint) =>
+    `Wrong word — a cartoon anvil drops from the ${hint || 'sky'}. Pay attention next time.`,
+  collapse: () =>
+    'Wrong word — the frame wobbles and the load drops. The sentence needed the right part.',
+  splash: () => 'Wrong word — wet mix erupts. The crew is stuck in the joke they chose.',
+  slip: () => 'Wrong word — the worker slips on a comedy banana of bad English.',
+  spark: () => 'Wrong word — a comic spark pops. Read the site sentence before you act.',
+  crush: () => 'Wrong word — a loose load tips. The blank needed the real material.',
+}
+
+/** Answer / prompt tokens → consequence kind (answer checked first). */
+const KIND_TOKENS: { kind: ConsequenceKind; tokens: RegExp }[] = [
+  {
+    kind: 'anvil',
+    tokens:
+      /\b(scaffold|scaffolds|ladder|crane|hoist|pulley|tower|height|roof|rafter|truss|shingle|shingles|gutter|flashing|attic|harness|safety harness|guardrail|guardrails|handrail)\b/,
+  },
+  {
+    kind: 'collapse',
+    tokens:
+      /\b(foundation|footing|pile|piles|pier|beam|column|columns|slab|frame|framework|girder|rebar|steel|wall|partition|joist|floor joists|formwork|shuttering|bracing|structure|structural drawings|load|load limit|load tests|deflection|shear|torsion|tension|compression|stability|retaining|lintel|stud|deck|bridge|building|elements|modules|modularization|assembly)\b/,
+  },
+  {
+    kind: 'splash',
+    tokens:
+      /\b(concrete|cement|mortar|grout|plaster|paint|primer|sealant|adhesive|caulk|putty|sand|gravel|aggregate|bitumen|asphalt|coating|waterproofing|damp-proofing|curing|pouring|mixing|screeding|troweling|floating|spraying|brushing|hardening|polishing|finishing|plaster|drywall|insulation|weather barrier)\b/,
+  },
+  {
+    kind: 'slip',
+    tokens:
+      /\b(floor|ramp|aisle|mud|ice|drain|drainage|pipe|plumbing|hose|water|water supply|sewer|faucet|valve|shutoff valve|trenching|excavation|excavator|backhoe|bulldozer|grader|grading|compactor|compacting|roller|soil|clay|silt|rock|bedrock|subgrade|subbase|basecourse|backfilling|leveling|filling|clearing|digging|erosion|slope|terrain|topography|sidewalk|pavement|curb|road|highway|crossing|intersection)\b/,
+  },
+  {
+    kind: 'spark',
+    tokens:
+      /\b(wire|wiring|electric|electrical|circuit|circuit breaker|breaker|fuse|switch|panel|voltage|current|spark|weld|welding|torch|saw|grinder|grinding|drill|blade|cutter|cutting|conduit|conductor|grounding|extension cord|generator|meter|thermostat|hvac|duct|ductwork|boiler|heating|cooling|ventilation|exhaust|radiator|airflow|air filter|soldering|brazing|automation|robotics|network|software|two-way radio)\b/,
+  },
+  {
+    kind: 'crush',
+    tokens:
+      /\b(brick|bricks|block|blocks|stone|tile|tiles|door|window|glass|nail|nailing|screw|screwing|bolt|bolting|nut|washer|rivet|anchor|anchoring|clamp|bracket|strap|hinge|handle|lock|lockout|threshold|sill|gate|fence|barricade|barrier|pallet|wheelbarrow|loader|loading|unloading|hauling|delivery|transport|crane|machinery|equipment|toolkit|toolset|wrench|spanner|pliers|chisel|mallet|hammer|vice|socket)\b/,
+  },
+]
+
+/** Admin / docs / people words — map to a fitting comic beat, not default anvil. */
+const SOFT_KIND_TOKENS: { kind: ConsequenceKind; tokens: RegExp }[] = [
+  {
+    kind: 'collapse',
+    tokens:
+      /\b(plan|blueprint|design|drafting|drawing|layout|schedule|timeline|deadline|budget|cost|estimate|bid|tender|contract|permit|approval|acceptance|compliance|code|specification|documentation|report|audit|inspection|checklist|punch list|closeout|handover|warranty|guarantee|insurance|liability|license|certification|quality|quality control|quality assurance|procurement|invoice|payment|inventory|warehouse|logistics|supply chain|project management|coordination|meeting|communication|teamwork|supervision|foreman|manager|engineer|architect|inspector|contractor|subcontractor|client|owner|investor)\b/,
+  },
+  {
+    kind: 'crush',
+    tokens:
+      /\b(safety|hazard|accident|incident|emergency|evacuation|first aid|fire extinguisher|hard hat|helmet|goggles|gloves|boots|vest|warning|signage|toolbox talk|risk|risk assessment|corrective action|deficiency|reinspection)\b/,
+  },
+  {
+    kind: 'spark',
+    tokens:
+      /\b(technology|innovation|simulation|modeling|database|file|archive|software|scheduling software|standardization|optimization|efficiency|productivity|training|skill|competence|expertise|knowledge|practice|technique|method|procedure|process control|monitoring|testing|calibration|measurement|tolerance|accuracy|benchmark|survey|stringline|alignment|dimension|elevation|marking)\b/,
+  },
+  {
+    kind: 'slip',
+    tokens:
+      /\b(cleanup|waste|recycling|disposal|demolition|demolition debris|removal|refurbishment|renovation|remodeling|restoration|upgrade|maintenance|repair|replacement|service|operation|workflow|assignment|task)\b/,
+  },
+]
+
+const FALLBACK_KINDS: ConsequenceKind[] = ['collapse', 'crush', 'splash', 'slip', 'spark', 'anvil']
+
+function norm(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+}
+
+function kindFromText(text: string, buckets: { kind: ConsequenceKind; tokens: RegExp }[]) {
+  const hay = ` ${norm(text)} `
+  for (const { kind, tokens } of buckets) {
+    if (tokens.test(hay)) return kind
+  }
+  return null
+}
+
+function fallbackKind(seed: string): ConsequenceKind {
+  let h = 0
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0
+  return FALLBACK_KINDS[h % FALLBACK_KINDS.length]
+}
+
 /** Map the sentence situation → a comic consequence that still “fits” the words. */
 export function consequenceFor(prompt: string, wrongWord: string, answer: string): Consequence {
-  const hay = `${prompt} ${wrongWord} ${answer}`.toLowerCase()
+  const answerKind =
+    kindFromText(answer, KIND_TOKENS) || kindFromText(answer, SOFT_KIND_TOKENS)
+  const promptKind =
+    kindFromText(prompt, KIND_TOKENS) || kindFromText(prompt, SOFT_KIND_TOKENS)
+  const wrongKind =
+    kindFromText(wrongWord, KIND_TOKENS) || kindFromText(wrongWord, SOFT_KIND_TOKENS)
 
-  if (/scaffold|ladder|crane|hoist|pulley|tower|height|roof|rafter|truss/.test(hay)) {
-    return {
-      kind: 'anvil',
-      caption: `Wrong word — a cartoon anvil drops from the ${/crane|hoist/.test(hay) ? 'crane' : 'sky'}. Pay attention next time.`,
-    }
-  }
-  if (/foundation|footing|pile|pier|beam|column|slab|frame|girder|rebar|steel|wall|partition/.test(hay)) {
-    return {
-      kind: 'collapse',
-      caption: 'Wrong word — the frame wobbles and the load drops. The sentence needed the right part.',
-    }
-  }
-  if (/concrete|cement|mortar|grout|plaster|paint|primer|sealant|adhesive|caulk|putty|sand|gravel|aggregate/.test(hay)) {
-    return {
-      kind: 'splash',
-      caption: 'Wrong word — wet mix erupts. The crew is stuck in the joke they chose.',
-    }
-  }
-  if (/floor|ramp|aisle|mud|ice|drain|pipe|hose|water/.test(hay)) {
-    return {
-      kind: 'slip',
-      caption: 'Wrong word — the worker slips on a comedy banana of bad English.',
-    }
-  }
-  if (/wire|electric|circuit|breaker|fuse|switch|panel|voltage|current|spark|weld|torch|saw|grinder/.test(hay)) {
-    return {
-      kind: 'spark',
-      caption: 'Wrong word — a comic spark pops. Read the site sentence before you act.',
-    }
-  }
-  if (/brick|block|stone|tile|door|window|glass|nail|screw|bolt/.test(hay)) {
-    return {
-      kind: 'crush',
-      caption: 'Wrong word — a loose load tips. The blank needed the real material.',
-    }
-  }
-  return {
-    kind: 'anvil',
-    caption: 'Wrong word — anvil drop. On site, guessing has consequences.',
-  }
+  const kind = answerKind || promptKind || wrongKind || fallbackKind(`${prompt}|${answer}`)
+
+  let hint = 'sky'
+  const hay = norm(`${prompt} ${answer}`)
+  if (/\b(crane|hoist)\b/.test(hay)) hint = 'crane'
+  else if (/\b(scaffold|scaffolds|ladder|tower)\b/.test(hay)) hint = 'scaffold'
+  else if (/\b(roof|rafter|truss)\b/.test(hay)) hint = 'roof'
+
+  return { kind, caption: CAPTIONS[kind](hint) }
 }
 
 type Props = {
@@ -111,7 +174,6 @@ export function SentenceSiteStage({
       <div className="sentence-site-sky" aria-hidden />
       <div className="sentence-site-ground" aria-hidden />
 
-      {/* Sentence board — the visual showcase of the sentence */}
       <div className="sentence-site-board">
         <p className="sentence-site-board-kicker">On the job board</p>
         <div className="sentence-site-board-stage">
@@ -148,7 +210,6 @@ export function SentenceSiteStage({
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden
       >
-        {/* Scaffold / frame backdrop */}
         <g className="sentence-site-frame" opacity="0.55">
           <rect x="40" y="70" width="18" height="160" fill="#5a6a7a" />
           <rect x="200" y="90" width="14" height="140" fill="#5a6a7a" />
@@ -156,7 +217,6 @@ export function SentenceSiteStage({
           <rect x="40" y="130" width="174" height="8" fill="#6a7a8a" />
         </g>
 
-        {/* Beam that settles on success / tips on collapse */}
         <g
           className={`sentence-site-beam ${mood === 'success' ? 'is-lock' : ''} ${
             kind === 'collapse' && mood === 'fail' ? 'is-tip' : ''
@@ -166,7 +226,6 @@ export function SentenceSiteStage({
           <rect x="270" y="104" width="200" height="4" fill="#e8d090" opacity="0.5" />
         </g>
 
-        {/* Worker */}
         <g
           className={`sentence-site-worker ${mood === 'success' ? 'is-win' : ''} ${
             mood === 'fail' ? 'is-hurt' : ''
