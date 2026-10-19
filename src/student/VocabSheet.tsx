@@ -183,6 +183,12 @@ type DeckProps = {
    * worksheet tables remain available page by page.
    */
   journeyGateCount?: number
+  /**
+   * Explicit gate term ids (e.g. DC Level-1 + specialty Level-1). When set,
+   * overrides prefix `journeyGateCount` so the ladder can skip the middle of
+   * the Daily Conversation table.
+   */
+  journeyGateIds?: string[]
 }
 
 function termLinked(
@@ -211,6 +217,7 @@ export function VocabSheet({
   onConnectLang,
   onMarkKnown,
   journeyGateCount,
+  journeyGateIds,
 }: DeckProps) {
   const knownSet = new Set(knownIds)
   const idx = Math.min(Math.max(0, index), Math.max(0, terms.length - 1))
@@ -234,9 +241,17 @@ export function VocabSheet({
     .filter((t) => termLinked(t, heard, connected, knownSet)).length
   const pageTotal = pageEnd - pageStart
 
-  const gate = Math.min(journeyGateCount ?? terms.length, terms.length)
-  const gateLinked = terms.slice(0, gate).filter((t) => termLinked(t, heard, connected, knownSet)).length
-  const gateReady = gateLinked >= gate
+  const gateIdSet =
+    journeyGateIds && journeyGateIds.length > 0 ? new Set(journeyGateIds) : null
+  const gateTerms = gateIdSet
+    ? terms.filter((t) => gateIdSet.has(t.id))
+    : terms.slice(0, Math.min(journeyGateCount ?? terms.length, terms.length))
+  const gate = gateTerms.length
+  const gateLinked = gateTerms.filter((t) => termLinked(t, heard, connected, knownSet)).length
+  const gateReady = gate > 0 && gateLinked >= gate
+  const gateLabel = gateIdSet
+    ? `Link Daily Conversation Level-1 and workplace Level-1 (${gateLinked} of ${gate})`
+    : `Link words 1–${gate} to continue the journey`
 
   function goPrev() {
     onIndexChange(Math.max(0, idx - 1))
@@ -269,10 +284,10 @@ export function VocabSheet({
         <div className="vocab-sheet-pages" role="navigation" aria-label="Vocabulary worksheet pages">
           <p className="vocab-sheet-page-label">
             Page {page + 1} of {pageCount} · Words {pageStart + 1}–{pageEnd}
-            {gate < terms.length
+            {gate > 0 && gate < terms.length
               ? gateReady
                 ? ' · Level-1 complete — journey unlocked; keep practising pages if you want'
-                : ` · Link words 1–${gate} to continue the journey`
+                : ` · ${gateLabel}`
               : ''}
           </p>
           <div className="vocab-sheet-page-nav">

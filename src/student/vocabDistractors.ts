@@ -1,5 +1,8 @@
 import type { VocabTerm } from './journeyCurriculum'
 
+/** Worksheet Level-1 page size (shared with VocabSheet / Sentence Structure). */
+export const LEVEL1_PAGE_SIZE = 20
+
 /** Daily Conversation rows use dc-vv-* studio mats — never use them as specialty distractors. */
 export function isDailyConversationTerm(term: VocabTerm): boolean {
   return typeof term.imageKey === 'string' && term.imageKey.startsWith('dc-vv-')
@@ -9,6 +12,24 @@ export function isDailyConversationTerm(term: VocabTerm): boolean {
 export function specialtyVocabPool(vocab: readonly VocabTerm[]): VocabTerm[] {
   const specialty = vocab.filter((t) => !isDailyConversationTerm(t))
   return specialty.length >= 4 ? specialty : [...vocab]
+}
+
+/**
+ * Ladder gate before Construction Sentence Structure:
+ * Daily Conversation Level-1 (greetings page) + specialty Visual Vocabulary Level-1
+ * (first workplace picture page). Sentences must not unlock on greetings alone.
+ */
+export function sentenceLadderGateTerms(vocab: readonly VocabTerm[]): VocabTerm[] {
+  const dc = vocab.filter(isDailyConversationTerm).slice(0, LEVEL1_PAGE_SIZE)
+  const specialty = specialtyVocabPool(vocab).slice(0, LEVEL1_PAGE_SIZE)
+  const seen = new Set<string>()
+  const out: VocabTerm[] = []
+  for (const term of [...dc, ...specialty]) {
+    if (seen.has(term.id)) continue
+    seen.add(term.id)
+    out.push(term)
+  }
+  return out.length ? out : vocab.slice(0, LEVEL1_PAGE_SIZE)
 }
 
 function shuffleInPlace<T>(items: T[]): T[] {

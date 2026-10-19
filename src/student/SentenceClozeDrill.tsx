@@ -51,8 +51,15 @@ function answerPictured(answer: string, pictured: Set<string>) {
   return false
 }
 
-/** Prefer pictured Visual Vocabulary answers on early pages (ladder honesty). */
-function orderForLadder(items: SentenceClozeItem[], picturedAnswers?: string[]) {
+/**
+ * Prefer pictured Visual Vocabulary answers (ladder honesty).
+ * When `picturedOnly`, orphan cloze rows (no VV picture) stay out of the drill bank.
+ */
+function orderForLadder(
+  items: SentenceClozeItem[],
+  picturedAnswers?: string[],
+  picturedOnly?: boolean,
+) {
   if (!picturedAnswers?.length) return items
   const pictured = new Set(picturedAnswers.map(normWord))
   const hit: SentenceClozeItem[] = []
@@ -60,6 +67,7 @@ function orderForLadder(items: SentenceClozeItem[], picturedAnswers?: string[]) 
   for (const item of items) {
     ;(answerPictured(item.answer, pictured) ? hit : miss).push(item)
   }
+  if (picturedOnly && hit.length >= SENTENCE_PAGE_SIZE) return hit
   return hit.length >= SENTENCE_PAGE_SIZE ? [...hit, ...miss] : items
 }
 
@@ -70,6 +78,8 @@ type Props = {
    * When provided, Level-1 pages prefer these answers so sentences follow pictures.
    */
   picturedAnswers?: string[]
+  /** Drop cloze rows whose answers are not in pictured Visual Vocabulary. */
+  picturedOnlyBank?: boolean
   /** First honest page pass — unlocks Word → Action (more pages stay open). */
   onLevel1Passed: () => void
   onContinueToActions: () => void
@@ -90,12 +100,16 @@ type Props = {
 export function SentenceClozeDrill({
   items,
   picturedAnswers,
+  picturedOnlyBank,
   onLevel1Passed,
   onContinueToActions,
   continueLabel = 'Continue to Word → Action',
   onSkipToActions,
 }: Props) {
-  const bank = useMemo(() => orderForLadder(items, picturedAnswers), [items, picturedAnswers])
+  const bank = useMemo(
+    () => orderForLadder(items, picturedAnswers, picturedOnlyBank),
+    [items, picturedAnswers, picturedOnlyBank],
+  )
   const pageCount = Math.max(1, Math.ceil(bank.length / SENTENCE_PAGE_SIZE))
   const [page, setPage] = useState(0)
   const [phase, setPhase] = useState<Phase>('drill')

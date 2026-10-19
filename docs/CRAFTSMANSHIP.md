@@ -212,6 +212,8 @@ These are load-bearing across all layers.
 ### 6.3a Sentence Structure (Construction) — not VocabSheet
 
 - After Visual Vocabulary, Construction opens **Sentence Structure** (cloze bank from Construction Questions 1–560) before Word → Action.
+- **Ladder gate (required):** Daily Conversation Level-1 **and** specialty Construction Visual Vocabulary Level-1 (first workplace picture page) before Sentence Structure unlocks. Greetings alone must not open specialty sentences.
+- Cloze bank prefers / keeps rows whose answers exist in pictured specialty VV (orphan PPTX rows stay out of the graded bank).
 - **Different interaction mold from vocabulary:** SITEWISE-style **site stage** + job board (sentence is the visual), not a VocabSheet photo card.
 - **One attempt per item** — no answer shopping.
 - Correct: word **locks onto the job board** with motion; crew celebrates.
@@ -417,6 +419,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-19 — Ladder gate: DC + specialty VV before Sentence Structure (L2)
+
+- Continue to Sentence Structure now requires **Daily Conversation Level-1 and specialty Construction VV Level-1** (not greetings alone).
+- Nudge + “Jump to workplace words” after DC Level-1; cloze bank drops orphan answers with no pictured VV match.
+- **Assumption to challenge next:** SITEWISE anticipation / fail Continue timing (motion craft pass).
 
 ### 2026-10-19 — Consequence themes + pictured-first Level-1 cloze (L2/L3)
 

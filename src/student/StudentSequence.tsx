@@ -31,7 +31,14 @@ import {
   type QuizItem,
   type VocabTerm,
 } from './journeyCurriculum'
-import { pickSpecialtyDistractors, shuffleChoices } from './vocabDistractors'
+import {
+  isDailyConversationTerm,
+  LEVEL1_PAGE_SIZE,
+  pickSpecialtyDistractors,
+  sentenceLadderGateTerms,
+  shuffleChoices,
+  specialtyVocabPool,
+} from './vocabDistractors'
 import {
   CareerAssessmentResult,
   CareerInterestAssessment,
@@ -1548,15 +1555,31 @@ export function StudentSequencePage() {
       (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
     ).length
     /**
-     * All pathways share Daily Conversation first. Level-1 gate = words 1–20.
-     * Specialty rows (Construction 660 / Logistics 500 / Community focused set)
-     * stay open to practise after Continue unlocks.
+     * Ladder: Daily Conversation Level-1, then specialty pictures.
+     * Construction Sentence Structure must not unlock on greetings alone —
+     * gate = DC Level-1 + specialty VV Level-1 (see §6.3a).
      */
-    const journeyGateCount = Math.min(20, VOCAB_UNIT.length)
-    const gateLinked = VOCAB_UNIT.slice(0, journeyGateCount).filter(
+    const usesSentenceLadder = SENTENCE_CLOZE.length > 0
+    const ladderGateTerms = usesSentenceLadder
+      ? sentenceLadderGateTerms(VOCAB_UNIT)
+      : VOCAB_UNIT.slice(0, Math.min(LEVEL1_PAGE_SIZE, VOCAB_UNIT.length))
+    const journeyGateIds = usesSentenceLadder ? ladderGateTerms.map((t) => t.id) : undefined
+    const journeyGateCount = usesSentenceLadder
+      ? undefined
+      : Math.min(LEVEL1_PAGE_SIZE, VOCAB_UNIT.length)
+    const gateLinked = ladderGateTerms.filter(
       (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
     ).length
-    const ready = gateLinked >= journeyGateCount
+    const ready = gateLinked >= ladderGateTerms.length
+    const dcGate = ladderGateTerms.filter(isDailyConversationTerm)
+    const specialtyGate = ladderGateTerms.filter((t) => !isDailyConversationTerm(t))
+    const dcLinked = dcGate.filter(
+      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
+    ).length
+    const specialtyLinked = specialtyGate.filter(
+      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
+    ).length
+    const firstSpecialtyIdx = VOCAB_UNIT.findIndex((t) => !isDailyConversationTerm(t))
 
     return (
       <Shell
@@ -1587,15 +1610,40 @@ export function StudentSequencePage() {
           connected={vocabConnected}
           knownIds={vocabKnownIds}
           journeyGateCount={journeyGateCount}
+          journeyGateIds={journeyGateIds}
           onIndexChange={setVocabIdx}
           onPlayEnglish={(term) => void playVocabEnglish(term)}
           onConnectLang={(term, lang) => void connectVocabLang(term, lang)}
           onMarkKnown={(term) => markCurrentVocabKnown(term)}
         />
+        {usesSentenceLadder && !ready && dcLinked >= dcGate.length && specialtyGate.length > 0 ? (
+          <p className="alert warn train-ladder-nudge" role="status">
+            Daily Conversation Level-1 is done. Next: link workplace pictures
+            ({specialtyLinked} of {specialtyGate.length})
+            {firstSpecialtyIdx >= 0 ? ' — open the Construction vocabulary pages.' : '.'}
+            {' '}
+            {firstSpecialtyIdx >= 0 ? (
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => {
+                  setVocabIdx(firstSpecialtyIdx)
+                  playFoley('whoosh')
+                }}
+              >
+                Jump to workplace words
+              </button>
+            ) : null}
+          </p>
+        ) : null}
         <p className="train-vocab-counter">
           {ready
-            ? `Level-1 complete (${journeyGateCount} words) · Full table ${linkedCount} of ${VOCAB_UNIT.length} · Ready to continue`
-            : `Level-1 ${gateLinked} of ${journeyGateCount} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
+            ? usesSentenceLadder
+              ? `Ladder ready · DC ${dcGate.length} + workplace ${specialtyGate.length} · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
+              : `Level-1 complete (${ladderGateTerms.length} words) · Full table ${linkedCount} of ${VOCAB_UNIT.length} · Ready to continue`
+            : usesSentenceLadder
+              ? `Ladder ${gateLinked} of ${ladderGateTerms.length} (DC ${dcLinked}/${dcGate.length} · workplace ${specialtyLinked}/${specialtyGate.length}) · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
+              : `Level-1 ${gateLinked} of ${ladderGateTerms.length} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
         </p>
       </Shell>
     )
@@ -1608,7 +1656,8 @@ export function StudentSequencePage() {
         <Shell step={8} onBack={() => { resetVocab(); go(7) }}>
           <SentenceClozeDrill
             items={SENTENCE_CLOZE}
-            picturedAnswers={VOCAB_UNIT.map((t) => t.english)}
+            picturedAnswers={specialtyVocabPool(VOCAB_UNIT).map((t) => t.english)}
+            picturedOnlyBank
             onLevel1Passed={() => {
               setSentenceLevel1(true)
               recordSkillAttempt('sentence-cloze', true, 20)
