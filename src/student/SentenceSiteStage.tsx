@@ -4,7 +4,7 @@
  * not a VocabSheet card. Wrong answers play absurd, memorable consequences.
  */
 
-export type StageMood = 'idle' | 'success' | 'fail'
+export type StageMood = 'idle' | 'anticipate' | 'success' | 'fail'
 
 export type ConsequenceKind =
   | 'anvil'
@@ -156,14 +156,17 @@ export function SentenceSiteStage({
   const before = prompt.split('______')[0] ?? ''
   const after = prompt.split('______')[1] ?? ''
   const showWord = lockedWord || null
-  const showReject = Boolean(rejectedWord && mood === 'fail' && !showWord)
+  const bracing = mood === 'anticipate'
+  const showReject = Boolean(rejectedWord && (mood === 'fail' || bracing) && !showWord)
 
   const caption =
     mood === 'fail' && consequence
       ? consequence.caption
-      : mood === 'success'
-        ? 'Word locked. The crew keeps building.'
-        : 'Watch the job board. Choose the word that belongs.'
+      : bracing
+        ? 'Wrong word — the crew braces…'
+        : mood === 'success'
+          ? 'Word locked. The crew keeps building.'
+          : 'Watch the job board. Choose the word that belongs.'
 
   return (
     <div
@@ -184,14 +187,14 @@ export function SentenceSiteStage({
           ) : null}
           <p
             className={`sentence-site-board-line${showWord ? ' has-word' : ''}${
-              mood === 'fail' && !showWord ? ' is-shake' : ''
+              bracing || (mood === 'fail' && !showWord) ? ' is-shake' : ''
             }`}
           >
             <span>{before}</span>
             <span
               className={`sentence-site-blank${showWord ? ' filled' : ''}${
                 showReject ? ' rejected' : ''
-              }`}
+              }${bracing ? ' bracing' : ''}`}
             >
               {showWord ? (
                 <span className={`sentence-site-lock${flying ? ' landing' : ' set'}`}>{showWord}</span>
@@ -219,8 +222,8 @@ export function SentenceSiteStage({
 
         <g
           className={`sentence-site-beam ${mood === 'success' ? 'is-lock' : ''} ${
-            kind === 'collapse' && mood === 'fail' ? 'is-tip' : ''
-          }`}
+            bracing ? 'is-tremble' : ''
+          } ${kind === 'collapse' && mood === 'fail' ? 'is-tip' : ''}`}
         >
           <rect x="260" y="100" width="220" height="18" rx="3" fill="#c4a35a" />
           <rect x="270" y="104" width="200" height="4" fill="#e8d090" opacity="0.5" />
@@ -228,8 +231,8 @@ export function SentenceSiteStage({
 
         <g
           className={`sentence-site-worker ${mood === 'success' ? 'is-win' : ''} ${
-            mood === 'fail' ? 'is-hurt' : ''
-          }`}
+            bracing ? 'is-brace' : ''
+          } ${mood === 'fail' ? 'is-hurt' : ''}`}
         >
           <ellipse cx="340" cy="210" rx="28" ry="10" fill="#0a1624" opacity="0.35" className="sentence-site-shadow" />
           <rect x="322" y="150" width="36" height="52" rx="10" fill="#e8a317" />
@@ -238,7 +241,11 @@ export function SentenceSiteStage({
           <rect x="318" y="132" width="44" height="8" rx="2" fill="#e8a317" />
           <circle cx="340" cy="142" r="14" fill="#d4a574" />
           <rect className="sentence-site-arm-l" x="300" y="158" width="24" height="10" rx="4" fill="#e8a317" />
-          <rect className="sentence-site-arm-r" x="356" y="158" width="24" height="10" rx="4" fill="#e8a317" />
+          <g className="sentence-site-hammer-arm">
+            <rect className="sentence-site-arm-r" x="356" y="158" width="24" height="10" rx="4" fill="#e8a317" />
+            <rect className="sentence-site-hammer" x="376" y="148" width="6" height="22" rx="1" fill="#6a5a3a" />
+            <rect className="sentence-site-hammer-head" x="372" y="144" width="14" height="8" rx="1" fill="#4a5560" />
+          </g>
           <rect x="326" y="198" width="12" height="28" rx="3" fill="#1e3a5f" />
           <rect x="342" y="198" width="12" height="28" rx="3" fill="#1e3a5f" />
           <circle cx="335" cy="140" r="1.5" fill="#2a1a0a" />
@@ -246,7 +253,7 @@ export function SentenceSiteStage({
           {mood === 'success' && (
             <path d="M333 148 Q340 154 347 148" fill="none" stroke="#2a1a0a" strokeWidth="2" />
           )}
-          {mood === 'fail' && (
+          {(mood === 'fail' || bracing) && (
             <path d="M333 152 Q340 146 347 152" fill="none" stroke="#2a1a0a" strokeWidth="2" />
           )}
           {mood === 'idle' && (

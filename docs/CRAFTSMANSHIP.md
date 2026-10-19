@@ -420,6 +420,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-19 — SITEWISE motion craft: anticipation + weight (L3)
+
+- Fail path is **anticipate → consequence → teach** (§7.2): ~280ms brace (beam tremble, worker flinch, reject float) before comic FX; consequence hold ~1.6s; teach-lock + TTS after.
+- Idle crew gets a quiet secondary hammer tap; success adds a short hammer follow-through.
+- Consequence FX timings slowed (slow-in/out) so weight reads; reduced-motion still kills stage animations.
+- **Assumption to challenge next:** whether Matching dump / Familiar theater should climb next, or orphan-bank purge.
+
 ### 2026-10-19 — Ladder gate: DC + specialty VV before Sentence Structure (L2)
 
 - Continue to Sentence Structure now requires **Daily Conversation Level-1 and specialty Construction VV Level-1** (not greetings alone).

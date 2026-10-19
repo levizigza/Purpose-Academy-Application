@@ -10011,6 +10011,10 @@ video {
   border-bottom-color: #c4543a;
 }
 
+.sentence-site-blank.bracing {
+  animation: sentence-blank-brace 0.28s ease both;
+}
+
 .sentence-site-slot {
   color: #8d8a7e;
   letter-spacing: 0.08em;
@@ -10119,12 +10123,29 @@ video {
   animation: sentence-worker-idle 2.4s ease-in-out infinite;
 }
 
+/* Secondary action: quiet hammer tap while waiting for a pick */
+.sentence-site-stage.is-idle .sentence-site-hammer-arm {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: sentence-hammer-idle 1.8s ease-in-out infinite;
+}
+
 .sentence-site-stage.is-success .sentence-site-worker.is-win {
-  animation: sentence-worker-win 0.7s cubic-bezier(0.2, 0.85, 0.25, 1.1) both;
+  animation: sentence-worker-win 0.85s cubic-bezier(0.2, 0.85, 0.25, 1.1) both;
+}
+
+.sentence-site-stage.is-success .sentence-site-hammer-arm {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: sentence-hammer-win 0.7s cubic-bezier(0.2, 0.85, 0.25, 1.1) both;
+}
+
+.sentence-site-stage.is-anticipate .sentence-site-worker.is-brace {
+  animation: sentence-worker-brace 0.28s ease both;
 }
 
 .sentence-site-stage.is-fail .sentence-site-worker.is-hurt {
-  animation: sentence-worker-hurt 0.7s ease both;
+  animation: sentence-worker-hurt 0.85s cubic-bezier(0.4, 0.05, 0.6, 1) both;
 }
 
 @keyframes sentence-worker-idle {
@@ -10134,6 +10155,46 @@ video {
   }
   50% {
     transform: translateY(-3px);
+  }
+}
+
+@keyframes sentence-hammer-idle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(-18deg);
+  }
+  55% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes sentence-hammer-win {
+  0% {
+    transform: rotate(0deg);
+  }
+  35% {
+    transform: rotate(-40deg);
+  }
+  70% {
+    transform: rotate(12deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes sentence-worker-brace {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  55% {
+    transform: translate(-4px, 2px) scale(0.97);
+  }
+  100% {
+    transform: translate(-2px, 1px) scale(0.98);
   }
 }
 
@@ -10161,12 +10222,27 @@ video {
   }
 }
 
+@keyframes sentence-blank-brace {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  40% {
+    transform: scaleX(1.04);
+  }
+}
+
 .sentence-site-beam.is-lock {
   animation: sentence-beam-lock 0.55s ease both;
 }
 
+.sentence-site-beam.is-tremble {
+  animation: sentence-beam-tremble 0.28s ease both;
+  transform-origin: 370px 109px;
+}
+
 .sentence-site-beam.is-tip {
-  animation: sentence-beam-tip 0.7s ease both;
+  animation: sentence-beam-tip 0.85s cubic-bezier(0.4, 0.05, 0.6, 1) both;
   transform-origin: 260px 109px;
 }
 
@@ -10181,6 +10257,19 @@ video {
   }
 }
 
+@keyframes sentence-beam-tremble {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  30% {
+    transform: rotate(-2.5deg) translateY(1px);
+  }
+  60% {
+    transform: rotate(2deg) translateY(-1px);
+  }
+}
+
 @keyframes sentence-beam-tip {
   to {
     transform: rotate(22deg) translateY(36px);
@@ -10189,25 +10278,28 @@ video {
 }
 
 .sentence-site-anvil {
-  animation: sentence-anvil-drop 0.55s cubic-bezier(0.55, 0.05, 0.9, 0.5) both;
+  animation: sentence-anvil-drop 0.75s cubic-bezier(0.55, 0.05, 0.85, 0.45) both;
   transform-origin: 340px 40px;
 }
 
 .sentence-site-crate {
-  animation: sentence-anvil-drop 0.5s cubic-bezier(0.55, 0.05, 0.9, 0.5) both;
+  animation: sentence-anvil-drop 0.7s cubic-bezier(0.55, 0.05, 0.85, 0.45) both;
 }
 
 @keyframes sentence-anvil-drop {
   0% {
-    transform: translateY(-120px);
+    transform: translateY(-140px);
     opacity: 0;
   }
-  70% {
+  55% {
     transform: translateY(0);
     opacity: 1;
   }
+  70% {
+    transform: translateY(-10px);
+  }
   85% {
-    transform: translateY(-8px);
+    transform: translateY(0);
   }
   100% {
     transform: translateY(0);
@@ -10215,13 +10307,17 @@ video {
 }
 
 .sentence-site-splash {
-  animation: sentence-splash-pop 0.55s ease both;
+  animation: sentence-splash-pop 0.7s cubic-bezier(0.2, 0.85, 0.3, 1.1) both;
 }
 
 @keyframes sentence-splash-pop {
   from {
-    transform: scale(0.4);
+    transform: scale(0.35) translateY(12px);
     opacity: 0;
+  }
+  60% {
+    transform: scale(1.06) translateY(-2px);
+    opacity: 1;
   }
   to {
     transform: scale(1);
@@ -10230,12 +10326,12 @@ video {
 }
 
 .sentence-site-rubble {
-  animation: sentence-rubble-fall 0.6s ease both;
+  animation: sentence-rubble-fall 0.75s cubic-bezier(0.4, 0.05, 0.6, 1) both;
 }
 
 @keyframes sentence-rubble-fall {
   from {
-    transform: translateY(-40px);
+    transform: translateY(-48px);
     opacity: 0;
   }
   to {
@@ -10245,7 +10341,7 @@ video {
 }
 
 .sentence-site-bolts {
-  animation: sentence-spark-flash 0.45s steps(2) both;
+  animation: sentence-spark-flash 0.65s steps(2) both;
 }
 
 @keyframes sentence-spark-flash {
@@ -10253,20 +10349,25 @@ video {
   100% {
     opacity: 0;
   }
-  20%,
-  60% {
+  15%,
+  45%,
+  70% {
     opacity: 1;
   }
 }
 
 .sentence-site-banana {
-  animation: sentence-slip-spin 0.7s ease both;
+  animation: sentence-slip-spin 0.85s cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
 
 @keyframes sentence-slip-spin {
   from {
-    transform: translateX(-40px) rotate(-20deg);
+    transform: translateX(-48px) rotate(-28deg);
     opacity: 0;
+  }
+  60% {
+    transform: translateX(4px) rotate(6deg);
+    opacity: 1;
   }
   to {
     transform: none;
@@ -10307,6 +10408,10 @@ video {
 
 .sentence-site-caption.is-idle {
   color: #b3b5a4;
+}
+
+.sentence-site-stage.is-anticipate .sentence-site-caption {
+  color: #f0c14a;
 }
 
 /* High-contrast feedback (fixes ~2.15:1 train alert on light cards) */

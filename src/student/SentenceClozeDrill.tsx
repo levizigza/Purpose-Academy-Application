@@ -18,11 +18,12 @@ export const SENTENCE_PAGE_SIZE = 20
 const PASS_SCORE = 16
 
 /** Hold the stage so SITEWISE-style consequence motion can land. */
-const ADVANCE_OK_MS = 1100
-/** Fail: bounce + consequence, then teach-lock correct word, then advance. */
-const FAIL_CONSEQUENCE_MS = 1200
-const FAIL_TEACH_MS = 1100
-const ADVANCE_FAIL_MS = FAIL_CONSEQUENCE_MS + FAIL_TEACH_MS
+const ADVANCE_OK_MS = 1200
+/** Fail: anticipate (brace) → consequence → teach-lock correct word → advance. */
+const FAIL_ANTICIPATE_MS = 280
+const FAIL_CONSEQUENCE_MS = 1600
+const FAIL_TEACH_MS = 1200
+const ADVANCE_FAIL_MS = FAIL_ANTICIPATE_MS + FAIL_CONSEQUENCE_MS + FAIL_TEACH_MS
 
 function shuffle<T>(items: T[]): T[] {
   const next = [...items]
@@ -94,7 +95,7 @@ type Props = {
  * Different from vocabulary:
  * - Sentence lives on a SITEWISE-style job board + crew stage
  * - Correct word locks into the board with motion
- * - Wrong word bounces off (never written into the sentence); absurd consequence; then teach the right word
+ * - Wrong word bounces off (never written into the sentence); brace anticipation → absurd consequence; then teach the right word
  * - One attempt per item (no answer shopping)
  */
 export function SentenceClozeDrill({
@@ -237,26 +238,31 @@ export function SentenceClozeDrill({
     setMissed(nextMissed)
 
     if (ok) {
+      /* Short success wind-up on the flying chip, then lock. */
       window.setTimeout(() => {
         setFilled(true)
         setFlying(false)
         setMood('success')
         setConsequence(null)
         void speakEnglish(fillBlank(item.prompt, item.answer))
-      }, 260)
+      }, 280)
     } else {
       const c = consequenceFor(item.prompt, opt, item.answer)
       setConsequence(c)
-      setMood('fail')
       setFlying(false)
-      /* Consequence first — blank stays empty. Then lock the true word + speak it. */
+      /* §7.2 anticipation: brace before the comic hit so weight reads. */
+      setMood('anticipate')
+      window.setTimeout(() => {
+        setMood('fail')
+      }, FAIL_ANTICIPATE_MS)
+      /* Blank stays empty through consequence. Then lock the true word + speak it. */
       window.setTimeout(() => {
         setTeachWord(item.answer)
         setFilled(true)
         setMood('success')
         setConsequence(null)
         void speakEnglish(fillBlank(item.prompt, item.answer))
-      }, FAIL_CONSEQUENCE_MS)
+      }, FAIL_ANTICIPATE_MS + FAIL_CONSEQUENCE_MS)
     }
 
     advanceAfterResolve(ok, newScore, nextMissed)
@@ -356,8 +362,10 @@ export function SentenceClozeDrill({
 
   const lockedWord =
     teachWord || (filled && correct ? item.answer : mood === 'success' ? item.answer : null)
-  const rejectedWord = mood === 'fail' && picked && !correct && !teachWord ? picked : null
+  const rejectedWord =
+    (mood === 'anticipate' || mood === 'fail') && picked && !correct && !teachWord ? picked : null
   const showingTeach = Boolean(teachWord && picked && !correct)
+  const bracing = mood === 'anticipate'
 
   return (
     <article className="sentence-site">
@@ -422,7 +430,9 @@ export function SentenceClozeDrill({
             ? 'Yes — the word locks on the job board.'
             : showingTeach
               ? `Not “${picked}.” The sentence needs “${item.answer}.”`
-              : `Not “${picked}.” Watch what guessing cost the crew.`}
+              : bracing
+                ? `Not “${picked}.” The crew braces…`
+                : `Not “${picked}.” Watch what guessing cost the crew.`}
         </div>
       )}
     </article>
