@@ -198,6 +198,31 @@ export const ASSESSMENT_COPY = {
     Amharic: 'ወደ የመንገድዎ ቃላት ቀጥል',
     Tigrinya: 'ናብ ናይ መንገድካ ቃላት ቀጽል',
   } satisfies LangText,
+  specializeLead: {
+    Spanish: 'Después de practicar, puedes confirmar tu camino o cambiarlo según tus intereses.',
+    English: 'After practice, confirm your path — or switch it based on your interests.',
+    Arabic: 'بعد الممارسة، أكّد مسارك أو غيّره حسب اهتماماتك.',
+    Hindi: 'अभ्यास के बाद अपना रास्ता पुष्टि करें — या रुचियों के हिसाब से बदलें।',
+    Amharic: 'በመልሶችዎ መሠረት፣ ዛሬ ለእርስዎ የሚስማማው መንገድ ይህ ነው።',
+    Tigrinya: 'ብመሰረት መልስታትካ፣ ሎሚ ዝሰማማዕካ መንገዲ እዚ እዩ።',
+  } satisfies LangText,
+  choosePath: {
+    Spanish: 'Elige tu camino',
+    English: 'Choose your path',
+    Arabic: 'اختر مسارك',
+    Hindi: 'अपना रास्ता चुनें',
+    Amharic: 'ከ Purpose Academy መንገዶች ጋር መስማማት',
+    Tigrinya: 'ምስ Purpose Academy መንገድታት ምስማማዕ',
+  } satisfies LangText,
+  recommended: {
+    Spanish: 'Recomendado',
+    English: 'Recommended',
+    Arabic: 'موصى به',
+    Hindi: 'सुझाया गया',
+    Amharic: 'ከ Purpose Academy መንገዶች ጋር መስማማት',
+    Tigrinya: 'ምስ Purpose Academy መንገድታት ምስማማዕ',
+  } satisfies LangText,
+
   yourCode: {
     Spanish: 'Tu código de intereses',
       English: 'Your interest code',

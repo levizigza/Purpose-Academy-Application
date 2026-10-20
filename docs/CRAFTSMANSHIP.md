@@ -420,6 +420,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-20 — Specialize: confirm or switch pathway after interest assessment (L2)
+
+- Step 12 results now let the learner **choose Construction / Logistics / Community** (recommended path highlighted) before site-ready skills.
+- Completes the path-quiz reorder: early 10-question style pick → practice → interest inventory → explicit specialize choice.
+- **Assumption to challenge next:** Matching dump / Familiar theater, or orphan-bank purge on the Sentence Structure ladder.
+
 ### 2026-10-20 — Path quiz early; interest assessment after practice (L2)
 
 - Moved the **30-item RIASEC interest inventory** from the start of the journey to **step 12** (after English practice), so learners specialize with some workplace practice already done.

@@ -9460,6 +9460,54 @@ video {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.career-path-switch {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.career-path-option {
+  appearance: none;
+  display: grid;
+  gap: 0.2rem;
+  text-align: left;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(8, 20, 32, 0.55);
+  color: #f4f7fb;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.career-path-option:hover:not(:disabled) {
+  border-color: #e8a317;
+  transform: translateY(-1px);
+}
+
+.career-path-option.is-selected {
+  border-color: #e8a317;
+  background: color-mix(in srgb, #e8a317 18%, rgba(8, 20, 32, 0.7));
+}
+
+.career-path-option.is-recommended:not(.is-selected) {
+  border-color: rgba(134, 181, 106, 0.55);
+}
+
+.career-path-option-title {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.career-path-option-meta {
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: rgba(244, 247, 251, 0.72);
+}
+
+.career-path-option.is-selected .career-path-option-meta {
+  color: #f5c542;
+}
+
 .career-section-title {
   margin-bottom: 0.15rem;
 }

@@ -2122,9 +2122,14 @@ export function StudentSequencePage() {
           pathwayScores={pathwayScores}
           ranked={ranked}
           showRiasec
+          allowPathwaySwitch
           continueLabel="continueSpecialize"
           busy={busy}
           error={error}
+          onPathwayChange={(id) => {
+            setInterest(id)
+            playFoley('whoosh')
+          }}
           onBack={() => setCareerInterestDone(false)}
           onContinue={() => {
             void (async () => {

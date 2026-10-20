@@ -186,9 +186,12 @@ type ResultProps = {
   ranked: (keyof AssessmentScores)[]
   /** Early path pick hides Holland code; later specialization shows full RIASEC. */
   showRiasec?: boolean
+  /** After practice: let the learner confirm or switch pathway. */
+  allowPathwaySwitch?: boolean
   continueLabel?: 'continueVocab' | 'continueSpecialize'
   busy?: boolean
   error?: string | null
+  onPathwayChange?: (id: PathwayId) => void
   onContinue: () => void
   onBack?: () => void
 }
@@ -201,9 +204,11 @@ export function CareerAssessmentResult({
   pathwayScores,
   ranked,
   showRiasec = true,
+  allowPathwaySwitch = false,
   continueLabel = 'continueVocab',
   busy,
   error,
+  onPathwayChange,
   onContinue,
   onBack,
 }: ResultProps) {
@@ -212,13 +217,16 @@ export function CareerAssessmentResult({
   const code = hollandCode(riasec)
   const fit = pathwayFitPercent(pathwayScores)
   const pathwayOrder = rankedPathways(pathwayScores)
+  const recommended = pathwayOrder[0]
 
   return (
     <div className="career-result">
       <header className="career-result-head">
         <p className="career-assess-kicker">{t(ASSESSMENT_COPY.resultTitle, lang)}</p>
         <h2 className="career-result-title">{t(result.title, lang)}</h2>
-        <p className="career-result-lead">{t(ASSESSMENT_COPY.resultLead, lang)}</p>
+        <p className="career-result-lead">
+          {t(allowPathwaySwitch ? ASSESSMENT_COPY.specializeLead : ASSESSMENT_COPY.resultLead, lang)}
+        </p>
       </header>
 
       {showRiasec ? (
@@ -243,16 +251,45 @@ export function CareerAssessmentResult({
       <div className="career-result-badge">{t(ASSESSMENT_COPY.openNow, lang)}</div>
 
       <section className="career-fit" aria-label={t(ASSESSMENT_COPY.pathwayFit, lang)}>
-        <h3 className="career-section-title">{t(ASSESSMENT_COPY.pathwayFit, lang)}</h3>
-        {pathwayOrder.map((id) => (
-          <div key={id} className={`career-profile-row${id === pathway ? ' is-top' : ''}`}>
-            <span className="career-profile-label">{t(PATHWAY_RESULT[id].title, lang)}</span>
-            <div className="career-profile-track">
-              <span style={{ width: `${fit[id]}%` }} />
-            </div>
-            <span className="career-profile-pct">{fit[id]}%</span>
+        <h3 className="career-section-title">
+          {t(allowPathwaySwitch ? ASSESSMENT_COPY.choosePath : ASSESSMENT_COPY.pathwayFit, lang)}
+        </h3>
+        {allowPathwaySwitch ? (
+          <div className="career-path-switch" role="radiogroup" aria-label={t(ASSESSMENT_COPY.choosePath, lang)}>
+            {pathwayOrder.map((id) => {
+              const selected = id === pathway
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  className={`career-path-option${selected ? ' is-selected' : ''}${
+                    id === recommended ? ' is-recommended' : ''
+                  }`}
+                  disabled={busy}
+                  onClick={() => onPathwayChange?.(id)}
+                >
+                  <span className="career-path-option-title">{t(PATHWAY_RESULT[id].title, lang)}</span>
+                  <span className="career-path-option-meta">
+                    {fit[id]}%
+                    {id === recommended ? ` · ${t(ASSESSMENT_COPY.recommended, lang)}` : ''}
+                  </span>
+                </button>
+              )
+            })}
           </div>
-        ))}
+        ) : (
+          pathwayOrder.map((id) => (
+            <div key={id} className={`career-profile-row${id === pathway ? ' is-top' : ''}`}>
+              <span className="career-profile-label">{t(PATHWAY_RESULT[id].title, lang)}</span>
+              <div className="career-profile-track">
+                <span style={{ width: `${fit[id]}%` }} />
+              </div>
+              <span className="career-profile-pct">{fit[id]}%</span>
+            </div>
+          ))
+        )}
       </section>
 
       {showRiasec ? (
