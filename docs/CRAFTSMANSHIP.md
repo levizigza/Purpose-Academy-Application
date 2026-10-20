@@ -420,6 +420,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-20 — Custom domain purposeacademy.ca (Cloudflare → Pages) (L6)
+
+- Pages build uses `base: /` + `public/CNAME` for apex `purposeacademy.ca`.
+- Render CORS allowlist includes `purposeacademy.ca` / `www`.
+- Operator steps: [docs/CLOUDFLARE_DOMAIN.md](./CLOUDFLARE_DOMAIN.md).
+- **Assumption to challenge next:** whether www should 301 to apex in Cloudflare once DNS is green.
+
 ### 2026-10-20 — Matching worksheet page + full orphan cloze purge (L2)
 
 - Supported Practice matching is a **20-word worksheet deck** (unknown specialty first), not the full ~800-word vocab dump.
