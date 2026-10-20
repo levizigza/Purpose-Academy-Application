@@ -44,13 +44,19 @@ jobs:
       - name: Build site
         env:
           GITHUB_PAGES: 'true'
+          # Apex custom domain (Cloudflare → GitHub Pages). Assets load from /.
+          PAGES_BASE: '/'
           # Live Render API; override with repo variable VITE_API_URL if needed.
           # Pages also ships baked /tts clips for instant vocab audio on cold starts.
           VITE_API_URL: ${{ vars.VITE_API_URL || 'https://purpose-academy-api.onrender.com' }}
         run: npm run build
 
       - name: Add SPA fallback for GitHub Pages
-        run: cp dist/index.html dist/404.html
+        run: |
+          cp dist/index.html dist/404.html
+          # Ensure custom domain file is present in the artifact
+          test -f dist/CNAME || echo 'purposeacademy.ca' > dist/CNAME
+          cat dist/CNAME
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

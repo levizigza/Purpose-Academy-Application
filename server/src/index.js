@@ -11,7 +11,16 @@ import {
 } from './security.js'
 
 const PORT = Number(process.env.PORT) || 8787
-const ALLOWED_ORIGINS = (process.env.CORS_ORIGINS || 'http://localhost:5173,http://127.0.0.1:5173')
+const ALLOWED_ORIGINS = (
+  process.env.CORS_ORIGINS ||
+  [
+    'https://purposeacademy.ca',
+    'https://www.purposeacademy.ca',
+    'https://levizigza.github.io',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+  ].join(',')
+)
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean)
