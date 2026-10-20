@@ -420,12 +420,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
-### 2026-10-20 — Custom domain purposeacademy.ca (Cloudflare → Pages) (L6)
+### 2026-10-20 — Cloudflare Workers host for purposeacademy.ca (L6)
 
-- Pages build uses `base: /` + `public/CNAME` for apex `purposeacademy.ca`.
+- `wrangler.jsonc` serves Vite `dist/` as an SPA (`not_found_handling: single-page-application`).
+- Workers Builds form: `npm run build` → `npx wrangler deploy` / `npx wrangler preview`.
 - Render CORS allowlist includes `purposeacademy.ca` / `www`.
 - Operator steps: [docs/CLOUDFLARE_DOMAIN.md](./CLOUDFLARE_DOMAIN.md).
-- **Assumption to challenge next:** whether www should 301 to apex in Cloudflare once DNS is green.
+- **Assumption to challenge next:** whether www should 301 to apex once the Workers custom domain is green.
 
 ### 2026-10-20 — Matching worksheet page + full orphan cloze purge (L2)
 

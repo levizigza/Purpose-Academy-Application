@@ -1,67 +1,73 @@
-# Connect purposeacademy.ca (Cloudflare → GitHub Pages)
+# Connect purposeacademy.ca (Cloudflare Workers)
 
-The site builds for the **apex domain** (`base: /`, `public/CNAME` → `purposeacademy.ca`).
-GitHub Actions still deploys the static build; Cloudflare only owns DNS + optional CDN proxy.
+The site is a **Vite SPA** deployed with **Wrangler** (`wrangler.jsonc` → `dist/`).
+The Express API stays on Render; Cloudflare only hosts the front end + DNS.
 
-## 1. Cloudflare DNS
+## Workers Builds — Create and deploy form
 
-Open: [Cloudflare → purposeacademy.ca](https://dash.cloudflare.com/8d69471dc50a4e0ac0e62180cb887eaa/purposeacademy.ca)
+Use these values on [Create an app → Create and deploy](https://dash.cloudflare.com/8d69471dc50a4e0ac0e62180cb887eaa/workers-and-pages/create):
 
-**DNS → Records** — add or edit:
+| Field | Value |
+|------|--------|
+| **Build command** | `npm run build` |
+| **Deploy command** | `npx wrangler deploy` |
+| **Preview command** | `npx wrangler preview` |
+| **Enable Preview builds** | On |
+| **Protect with Cloudflare Access** | Off (public student site) |
 
-| Type | Name | Target / content | Proxy |
-|------|------|------------------|-------|
-| **CNAME** | `@` | `levizigza.github.io` | Proxied (orange) — Cloudflare flattens apex |
-| **CNAME** | `www` | `levizigza.github.io` | Proxied (orange) |
+### Build variables (Workers Builds → Variables / Environment variables)
 
-If Cloudflare rejects apex CNAME, use GitHub Pages A records instead for `@`:
+Add for **Production** (and Preview if you want API calls there):
 
-| Type | Name | IPv4 |
-|------|------|------|
-| A | `@` | `185.199.108.153` |
-| A | `@` | `185.199.109.153` |
-| A | `@` | `185.199.110.153` |
-| A | `@` | `185.199.111.153` |
+| Name | Value |
+|------|--------|
+| `VITE_API_URL` | `https://purpose-academy-api.onrender.com` |
+| `PAGES_BASE` | `/` |
 
-Remove any old parking / placeholder A/AAAA records that conflict.
+Node: use **22** (or leave default if it is already 22+).
 
-**SSL/TLS → Overview:** set encryption mode to **Full** (or **Full (strict)** after GitHub finishes the cert).
+Then click **Deploy**.
 
-**Optional:** Rules → Redirect `www.purposeacademy.ca` → `https://purposeacademy.ca` (301).
+## After first deploy — custom domain
 
-## 2. GitHub Pages custom domain
+1. Workers & Pages → project **`purpose-academy`** → **Settings → Domains**
+2. Add `purposeacademy.ca` and optionally `www.purposeacademy.ca`
+3. Cloudflare will create/update DNS for the zone automatically when the zone is already on this account
 
-Repo: [Purpose-Academy-Application](https://github.com/levizigza/Purpose-Academy-Application) → **Settings → Pages**
+**SSL/TLS → Overview:** **Full** or **Full (strict)**.
 
-1. Under **Custom domain**, enter `purposeacademy.ca` → **Save**
-2. Wait until DNS check is green (can take a few minutes after Cloudflare records propagate)
-3. Enable **Enforce HTTPS**
+**Optional:** Redirect Rule `www.purposeacademy.ca` → `https://purposeacademy.ca` (301).
 
-`public/CNAME` in this repo keeps the domain attached on each deploy.
-
-## 3. Render API CORS
+## Render API CORS
 
 Live API: `https://purpose-academy-api.onrender.com`
 
 In the Render dashboard for `purpose-academy-api`, set:
 
 ```text
-CORS_ORIGINS=https://purposeacademy.ca,https://www.purposeacademy.ca,https://levizigza.github.io,http://localhost:5173,http://127.0.0.1:5173
+CORS_ORIGINS=https://purposeacademy.ca,https://www.purposeacademy.ca,https://purpose-academy.<your-subdomain>.workers.dev,https://levizigza.github.io,http://localhost:5173,http://127.0.0.1:5173
 ```
 
-(`render.yaml` already lists these for new Blueprint deploys.)
+Replace the `workers.dev` host with the exact URL shown after the first Workers deploy (or omit it once the custom domain is live).
 
-## 4. Verify
+(`render.yaml` already lists the apex / www origins for Blueprint deploys.)
+
+## Local check
+
+```bash
+npm run build
+npx wrangler deploy   # requires `npx wrangler login` once
+# or
+npm run deploy:cf
+```
 
 ```bash
 curl -sI https://purposeacademy.ca/ | head -5
-curl -sI https://www.purposeacademy.ca/ | head -5
-# HTML should reference /assets/... (not /Purpose-Academy-Application/assets/...)
+# HTML should reference /assets/... (site root)
 ```
-
-Open `https://purposeacademy.ca/` — splash, Practice, and API calls should work.
 
 ## Notes
 
-- Until the custom domain is saved in GitHub Pages, the old project URL `https://levizigza.github.io/Purpose-Academy-Application/` may 404 asset paths (build now uses `/`). Finish steps 1–2 soon after merging.
-- Baked `/tts` audio and the static SPA do not require Cloudflare Workers.
+- GitHub Pages may still deploy from `.github/workflows/deploy-pages.yml`; Cloudflare Workers is the intended production host for `purposeacademy.ca`.
+- Baked `/tts` audio ships inside `dist/` and does not need a Worker API.
+- Do **not** point DNS at `levizigza.github.io` if the custom domain is attached to this Workers project.
