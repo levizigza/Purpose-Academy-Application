@@ -73,14 +73,15 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   3: 'language',
   4: 'career-assessment',
   5: 'career-assessment',
-  6: 'career-assessment',
-  7: 'vocab',
+  6: 'vocab',
   /** Shared spine skill. Construction also runs Sentence Structure in-station first. */
-  8: 'word-action',
-  9: 'matching',
-  10: 'eye-spy',
-  11: 'instructions',
-  12: 'site-phrases',
+  7: 'word-action',
+  8: 'matching',
+  9: 'eye-spy',
+  10: 'instructions',
+  11: 'site-phrases',
+  /** After practice: RIASEC interest inventory for specialization. */
+  12: 'career-assessment',
   13: 'digital',
   14: 'safety',
   15: 'tools',
@@ -92,7 +93,7 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
 }
 
 /** Steps that need at least "familiar" mastery before Continue unlocks (real platform gate). */
-export const GATED_SKILL_STEPS = new Set([7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+export const GATED_SKILL_STEPS = new Set([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
 
 const LEVEL_WEIGHT: Record<MasteryLevel, number> = {
   locked: 0,

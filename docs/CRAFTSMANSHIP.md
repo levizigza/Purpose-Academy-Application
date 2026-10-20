@@ -420,6 +420,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-20 — Path quiz early; interest assessment after practice (L2)
+
+- Moved the **30-item RIASEC interest inventory** from the start of the journey to **step 12** (after English practice), so learners specialize with some workplace practice already done.
+- Early path choice is a **10-question work-style quiz** (step 4) → career profile (step 5) → vocabulary practice.
+- Step map shifts: vocab/Word→Action at 6–7; practice English at 8–11; specialize + site-ready at 12–16.
+- **Assumption to challenge next:** whether the later interest result should offer an explicit pathway switch UI, or only refine the Holland profile inside the locked path.
+
 ### 2026-10-19 — SITEWISE motion craft: anticipation + weight (L3)
 
 - Fail path is **anticipate → consequence → teach** (§7.2): ~280ms brace (beam tremble, worker flinch, reject float) before comic FX; consequence hold ~1.6s; teach-lock + TTS after.

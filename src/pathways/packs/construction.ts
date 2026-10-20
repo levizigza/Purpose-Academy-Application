@@ -72,12 +72,12 @@ export const constructionPack: PathwayPack = {
     },
   },
   stepTitles: {
-    8: {
+    7: {
       title: 'Sentence Structure',
       help: 'Watch the job board. One try — the right word locks in. Wrong words bounce; the crew pays (SITEWISE-style stage).',
       purpose: 'Different from VocabSheet: live sentence stage with motion and memorable consequences, then Word → Action.',
     },
-    12: {
+    11: {
       title: 'Site Language',
       help: 'Hear a job-site phrase. Choose what it means.',
       purpose: 'Useful English you will hear on Alberta construction sites.',

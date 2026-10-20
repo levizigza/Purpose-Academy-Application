@@ -217,7 +217,7 @@ export const communityPack: PathwayPack = {
     },
   },
   stepTitles: {
-    12: {
+    11: {
       title: 'Support Language',
       help: 'Hear a community-support phrase. Choose what it means.',
       purpose: 'Useful English for dignity, privacy, consent, and escalation across community support settings.',

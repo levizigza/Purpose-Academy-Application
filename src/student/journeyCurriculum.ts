@@ -1,8 +1,9 @@
 ﻿/**
  * Student journey — Purpose Academy sequence:
- * Login → Register → Language → Career Assessment → Work Style → Profile →
+ * Login → Register → Language → Work Style (path quiz) → Profile →
  * Vocab → Word→Action → Supported practice →
- * English Eye Spy → Instructions → Site language → Digital → Safety →
+ * English Eye Spy → Instructions → Site language →
+ * Interest assessment (specialize) → Digital → Safety →
  * Tools → Systems → Observation → On-site → Final exam/certificate → Employment
  *
  * Support languages: English, Spanish, Arabic, Hindi, Amharic, Tigrinya (no French).
@@ -11,16 +12,16 @@
 export const JOURNEY_STEPS = [
   { n: 1, title: 'Start as Student', help: 'Begin your learning path.', purpose: 'Students, instructors, and admins use different doors.', unit: 1 },
   { n: 2, title: 'Registration', help: 'Tell us who you are so we can support you.', purpose: 'Your profile opens learning after approval.', unit: 1 },
-  { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the career assessment.', purpose: 'The full assessment runs in a language you understand. Later job-site steps use English.', unit: 2 },
-  { n: 4, title: 'Career Assessment', help: 'Rate work activities in your language.', purpose: 'A professional interest inventory, not a pass/fail quiz.', unit: 2 },
-  { n: 5, title: 'Work Style', help: 'How you like to work, in your language.', purpose: 'Work-style choices refine your pathway fit.', unit: 2 },
-  { n: 6, title: 'Your Career Profile', help: 'See the path that fits your answers.', purpose: 'Interest profile → recommended pathway. Construction, Logistics, and Community Support are open now.', unit: 2 },
-  { n: 7, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English.', purpose: 'All five home languages stay visible. You choose the bridge to English.', unit: 3 },
-  { n: 8, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
-  { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
-  { n: 10, title: 'English Eye Spy', help: 'Find the real object among other photos. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
-  { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
-  { n: 12, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
+  { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the path quiz and later interest assessment.', purpose: 'Path and interest steps run in a language you understand. Job-site English comes with practice.', unit: 2 },
+  { n: 4, title: 'Work Style', help: 'Ten questions. Choose what sounds most like you.', purpose: 'A short path quiz opens Construction, Logistics, or Community Support.', unit: 2 },
+  { n: 5, title: 'Your Career Profile', help: 'See the path that fits your work-style answers.', purpose: 'Work style → recommended pathway. Later practice, then a deeper interest inventory for specialization.', unit: 2 },
+  { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English.', purpose: 'All five home languages stay visible. You choose the bridge to English.', unit: 3 },
+  { n: 7, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
+  { n: 8, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
+  { n: 9, title: 'English Eye Spy', help: 'Find the real object among other photos. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
+  { n: 10, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
+  { n: 11, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
+  { n: 12, title: 'Interest Assessment', help: 'After practice, rate work activities to specialize.', purpose: 'A professional interest inventory (Holland / RIASEC) once you have real practice — not a pass/fail quiz.', unit: 5 },
   { n: 13, title: 'Digital Skills', help: 'Practice real computer tasks: click, type, forms, uploads.', purpose: 'This may be someone’s first computer. Every step is a hands-on micro-lesson.', unit: 5 },
   { n: 14, title: 'Safety Training', help: 'Safety words with clear pictures. Required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 5 },
   { n: 15, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 5 },
@@ -34,10 +35,10 @@ export const JOURNEY_STEPS = [
 /** Path units — structured learning path on the existing train template. */
 export const LEARNING_UNITS = [
   { id: 1, label: 'Start', range: '1–2' },
-  { id: 2, label: 'Find your path', range: '3–6' },
-  { id: 3, label: 'Words → Sentences', range: '7–8' },
-  { id: 4, label: 'Practice English', range: '9–12' },
-  { id: 5, label: 'Site ready', range: '13–16' },
+  { id: 2, label: 'Find your path', range: '3–5' },
+  { id: 3, label: 'Words → Sentences', range: '6–7' },
+  { id: 4, label: 'Practice English', range: '8–11' },
+  { id: 5, label: 'Specialize & site ready', range: '12–16' },
   { id: 6, label: 'Work ready', range: '17–20' },
 ] as const
 
@@ -51,7 +52,7 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     goal: 'Discover the pathway that fits how you like to work.',
     outcomes: [
       'Choose a support language',
-      'Complete a professional career assessment',
+      'Complete a 10-question work-style path quiz',
       'See your Construction / Logistics / Community fit',
     ],
   },
@@ -73,8 +74,9 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   5: {
-    goal: 'Build the digital, safety, tool, and systems foundations every site expects.',
+    goal: 'Specialize with a deeper interest inventory, then build digital, safety, tool, and systems foundations.',
     outcomes: [
+      'Complete the interest assessment after practice',
       'Practice school computer tasks',
       'Pass required safety checks',
       'Name tool groups and building systems',

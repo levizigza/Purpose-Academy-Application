@@ -207,8 +207,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 }) {
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
-  const motherTongue = supportLang && step >= 3 && step <= 6
-  const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 6] : null
+  const motherTongue = supportLang && ((step >= 3 && step <= 5) || step === 12)
+  const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 12] : null
   const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
   const help = shellCopy ? assessT(shellCopy.help, supportLang!) : base.help
   const purpose = shellCopy ? assessT(shellCopy.purpose, supportLang!) : base.purpose
@@ -650,13 +650,14 @@ export function StudentSequencePage() {
     (student?.preferred_language as SupportLang) || 'Amharic',
   )
   const [interest, setInterest] = useState<PathwayId | null>(null)
+  const [careerInterestDone, setCareerInterestDone] = useState(false)
   const [careerInterestAnswers, setCareerInterestAnswers] = useState<Record<string, LikertValue>>({})
   const [careerStyleAnswers, setCareerStyleAnswers] = useState<Record<string, string>>({})
   const [riasecScores, setRiasecScores] = useState(() => scoreInterestAnswers({}))
   const [actionIdx, setActionIdx] = useState(0)
   const [actionAnswer, setActionAnswer] = useState<string | null>(null)
   const [actionCorrect, setActionCorrect] = useState(false)
-  /** Construction: Sentence Structure first, then Word → Action inside step 8. */
+  /** Construction: Sentence Structure first, then Word → Action inside step 7. */
   const [step8Phase, setStep8Phase] = useState<'sentences' | 'actions'>('sentences')
   const [sentenceLevel1, setSentenceLevel1] = useState(false)
   const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
@@ -776,9 +777,9 @@ export function StudentSequencePage() {
     if (skill) markSkillOpened(skill)
   }, [step, practiceView])
 
-  /* Seed matching options from the adaptive deck when entering step 9. */
+  /* Seed matching options from the adaptive deck when entering step 8. */
   useEffect(() => {
-    if (step !== 9) return
+    if (step !== 8) return
     const knownSet = new Set(getKnownVocabIds(pathwayId))
     const unknown = VOCAB_UNIT.filter((t) => !knownSet.has(t.id))
     const deck = unknown.length >= 4 ? unknown : VOCAB_UNIT
@@ -830,6 +831,7 @@ export function StudentSequencePage() {
     setEmpAnswer(null)
     setEmpCorrect(false)
     setEmpQuizDone(false)
+    setCareerInterestDone(false)
     setFinalPhase('eyespy')
   }, [pathwayId])
 
@@ -926,8 +928,8 @@ export function StudentSequencePage() {
     setAdvanceGateMsg(null)
     const target = Math.min(20, Math.max(1, next))
     if (target !== step) resetDrillLocals()
-    /* Quality-review jumps land on Sentence Structure (not mid Word→Action) when opening step 8. */
-    if (target === 8) {
+    /* Quality-review jumps land on Sentence Structure (not mid Word→Action) when opening step 7. */
+    if (target === 7) {
       setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
     }
     if (target === step) {
@@ -1286,7 +1288,7 @@ export function StudentSequencePage() {
     setPathwayId(chosen)
     const label = pathwayMeta(chosen).programTitle
     if (isPracticeMode()) {
-      go(7, `Opening ${label} vocabulary…`)
+      go(6, `Opening ${label} vocabulary…`)
       return
     }
     const ok = await ensureDemoStudent()
@@ -1297,10 +1299,10 @@ export function StudentSequencePage() {
         await selectPathway(sid, chosen)
         await refresh()
       }
-      go(7, `Opening ${label} vocabulary…`)
+      go(6, `Opening ${label} vocabulary…`)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not save pathway')
-      go(7, `Opening ${label} vocabulary…`)
+      go(6, `Opening ${label} vocabulary…`)
     }
   }
 
@@ -1477,65 +1479,45 @@ export function StudentSequencePage() {
     )
   }
 
+  /* Step 4: Work-style path quiz (10 questions, mother tongue) */
   if (step === 4) {
     return (
       <Shell step={4}>
-        <CareerInterestAssessment
-          lang={supportLang}
-          answers={careerInterestAnswers}
-          onChange={(id, value) => setCareerInterestAnswers((a) => ({ ...a, [id]: value }))}
-          onBack={() => go(3)}
-          onComplete={(finalAnswers) => {
-            setCareerInterestAnswers(finalAnswers)
-            setRiasecScores(scoreInterestAnswers(finalAnswers))
-            go(5)
-          }}
-        />
-      </Shell>
-    )
-  }
-
-  /* Step 5: Work-style fit (mother tongue) */
-  if (step === 5) {
-    return (
-      <Shell step={5}>
         <CareerStyleAssessment
           lang={supportLang}
           answers={careerStyleAnswers}
           onChange={(id, optionId) => setCareerStyleAnswers((a) => ({ ...a, [id]: optionId }))}
-          onBack={() => go(4)}
+          onBack={() => go(3)}
           onComplete={(finalStyle) => {
             setCareerStyleAnswers(finalStyle)
-            const interestPct = scoreInterestAnswers(careerInterestAnswers)
-            setRiasecScores(interestPct)
-            const combined = combinePathwayScores(pathwayFromRiasec(interestPct), scoreStyleAnswers(finalStyle))
-            setInterest(topPathway(combined))
-            go(6, assessT(ASSESSMENT_COPY.seeResults, supportLang))
+            const styleScores = scoreStyleAnswers(finalStyle)
+            setInterest(topPathway(styleScores))
+            recordSkillAttempt('career-assessment', true, 12)
+            go(5, assessT(ASSESSMENT_COPY.seeResults, supportLang))
           }}
         />
       </Shell>
     )
   }
 
-  /* Step 6: Career profile result (mother tongue) */
-  if (step === 6) {
+  /* Step 5: Career profile from work-style path quiz */
+  if (step === 5) {
     const pathway = interest || 'construction'
     const ranked = rankedRiasec(riasecScores)
-    const pathwayScores = combinePathwayScores(
-      pathwayFromRiasec(riasecScores),
-      scoreStyleAnswers(careerStyleAnswers),
-    )
+    const pathwayScores = scoreStyleAnswers(careerStyleAnswers)
     return (
-      <Shell step={6}>
+      <Shell step={5}>
         <CareerAssessmentResult
           lang={supportLang}
           pathway={pathway}
           riasec={riasecScores}
           pathwayScores={pathwayScores}
           ranked={ranked}
+          showRiasec={false}
+          continueLabel="continueVocab"
           busy={busy}
           error={error}
-          onBack={() => go(5)}
+          onBack={() => go(4)}
           onContinue={() => {
             void (async () => {
               setBusy(true)
@@ -1548,8 +1530,8 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 7: Visual Vocabulary — all five languages; press yours → connect to English */
-  if (step === 7) {
+  /* Step 6: Visual Vocabulary — all five languages; press yours → connect to English */
+  if (step === 6) {
     const knownSet = new Set(vocabKnownIds)
     const linkedCount = VOCAB_UNIT.filter(
       (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
@@ -1583,8 +1565,8 @@ export function StudentSequencePage() {
 
     return (
       <Shell
-        step={7}
-        onBack={() => go(6)}
+        step={6}
+        onBack={() => go(5)}
         onNext={
           ready
             ? () => {
@@ -1593,7 +1575,7 @@ export function StudentSequencePage() {
                 setActionCorrect(false)
                 setStep8Phase(SENTENCE_CLOZE.length ? 'sentences' : 'actions')
                 setSentenceLevel1(false)
-                go(8)
+                go(7)
               }
             : undefined
         }
@@ -1649,11 +1631,11 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 8: Construction = Sentence Structure → Word → Action; other pathways = Word → Action */
-  if (step === 8) {
+  /* Step 7: Construction = Sentence Structure → Word → Action; other pathways = Word → Action */
+  if (step === 7) {
     if (SENTENCE_CLOZE.length && step8Phase === 'sentences') {
       return (
-        <Shell step={8} onBack={() => { resetVocab(); go(7) }}>
+        <Shell step={7} onBack={() => { resetVocab(); go(6) }}>
           <SentenceClozeDrill
             items={SENTENCE_CLOZE}
             picturedAnswers={specialtyVocabPool(VOCAB_UNIT).map((t) => t.english)}
@@ -1723,7 +1705,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(8, 9, 'Opening supported practice…'))
+        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(7, 8, 'Opening supported practice…'))
         return
       }
       setActionIdx((i) => i + 1)
@@ -1733,14 +1715,14 @@ export function StudentSequencePage() {
 
     return (
       <Shell
-        step={8}
+        step={7}
         onBack={() => {
           if (SENTENCE_CLOZE.length) {
             setStep8Phase('sentences')
             return
           }
           resetVocab()
-          go(7)
+          go(6)
         }}
       >
         {SENTENCE_CLOZE.length ? (
@@ -1799,7 +1781,7 @@ export function StudentSequencePage() {
   }
 
   /* Step 9: Supported matching */
-  if (step === 9) {
+  if (step === 8) {
     const knownSet = new Set(vocabKnownIds)
     const unknownTerms = VOCAB_UNIT.filter((t) => !knownSet.has(t.id))
     const matchDeck =
@@ -1839,7 +1821,7 @@ export function StudentSequencePage() {
           playFoley('whoosh')
           return
         }
-        requestPracticeAdvance(() => go(10, 'Opening English Eye Spy…'))
+        requestPracticeAdvance(() => go(9, 'Opening English Eye Spy…'))
         return
       }
       const next = safeIdx + 1
@@ -1851,7 +1833,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={9} onBack={() => go(8)}>
+      <Shell step={8} onBack={() => go(7)}>
         <p className="train-vocab-counter">
           Round {matchRound} of {roundsNeeded} · Match {safeIdx + 1} of {matchDeck.length}
           {unknownTerms.length < VOCAB_UNIT.length
@@ -1916,18 +1898,18 @@ export function StudentSequencePage() {
   }
 
   /* Step 10: English Eye Spy exercise (unlimited) */
-  if (step === 10) {
+  if (step === 9) {
     return (
-      <Shell step={10} onBack={() => { resetMatch(); go(9) }}>
+      <Shell step={9} onBack={() => { resetMatch(); go(8) }}>
         <WhyWork>On a real site the tool sits among other objects. Prove you can find it.</WhyWork>
         <TeachNote>Exercise mode: unlimited tries. Pass requires 100% with no misses. Wrong answers change the scene.</TeachNote>
-        <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exercise" onComplete={() => { resetInstr(); go(11) }} />
+        <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exercise" onComplete={() => { resetInstr(); go(10) }} />
       </Shell>
     )
   }
 
   /* Step 11: Workplace instructions — English only */
-  if (step === 11) {
+  if (step === 10) {
     const instr = WORKPLACE_INSTRUCTIONS[instrIdx]
     const isLast = instrIdx >= WORKPLACE_INSTRUCTIONS.length - 1
 
@@ -1947,7 +1929,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => go(12, 'Opening site language…'))
+        requestPracticeAdvance(() => go(11, 'Opening site language…'))
         return
       }
       setInstrIdx((i) => i + 1)
@@ -1957,7 +1939,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={11} onBack={() => go(10)}>
+      <Shell step={10} onBack={() => go(9)}>
         <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
         <p className="train-vocab-counter">Instruction {instrIdx + 1} of {WORKPLACE_INSTRUCTIONS.length} · English only</p>
         <div className="train-instruction">
@@ -2024,8 +2006,8 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 12: Site language — hear phrase, choose meaning, one by one */
-  if (step === 12) {
+  /* Step 11: Site language — hear phrase, choose meaning, one by one */
+  if (step === 11) {
     const phrase = SITE_PHRASES[Math.min(phraseIdx, SITE_PHRASES.length - 1)]
     const isLast = phraseIdx >= SITE_PHRASES.length - 1
 
@@ -2045,7 +2027,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(12, 13, 'Opening digital skills…'))
+        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(11, 12, 'Opening interest assessment…'))
         return
       }
       setPhraseIdx((i) => i + 1)
@@ -2055,7 +2037,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={12} onBack={() => { resetInstr(); go(11) }}>
+      <Shell step={11} onBack={() => { resetInstr(); go(10) }}>
         <p className="train-vocab-counter">Phrase {phraseIdx + 1} of {SITE_PHRASES.length}</p>
         <article className="phrase-lesson-card">
           <p className="phrase-lesson-en">{phrase.en}</p>
@@ -2092,12 +2074,84 @@ export function StudentSequencePage() {
               </div>
               <button type="button" className="btn btn-primary" onClick={nextPhrase}>
                 {phraseCorrect
-                  ? (isLast ? 'Continue to digital skills' : 'Next phrase')
+                  ? (isLast ? 'Continue to interest assessment' : 'Next phrase')
                   : 'Try again'}
               </button>
             </>
           )}
         </article>
+      </Shell>
+    )
+  }
+
+  /* Step 12: Interest assessment (30) after practice — specialize */
+  if (step === 12) {
+    if (!careerInterestDone) {
+      return (
+        <Shell step={12}>
+          <CareerInterestAssessment
+            lang={supportLang}
+            answers={careerInterestAnswers}
+            onChange={(id, value) => setCareerInterestAnswers((a) => ({ ...a, [id]: value }))}
+            onBack={() => go(11)}
+            onComplete={(finalAnswers) => {
+              setCareerInterestAnswers(finalAnswers)
+              const interestPct = scoreInterestAnswers(finalAnswers)
+              setRiasecScores(interestPct)
+              const combined = combinePathwayScores(pathwayFromRiasec(interestPct), scoreStyleAnswers(careerStyleAnswers))
+              setInterest(topPathway(combined))
+              setCareerInterestDone(true)
+              recordSkillAttempt('career-assessment', true, 20)
+            }}
+          />
+        </Shell>
+      )
+    }
+    const pathway = interest || 'construction'
+    const ranked = rankedRiasec(riasecScores)
+    const pathwayScores = combinePathwayScores(
+      pathwayFromRiasec(riasecScores),
+      scoreStyleAnswers(careerStyleAnswers),
+    )
+    return (
+      <Shell step={12}>
+        <CareerAssessmentResult
+          lang={supportLang}
+          pathway={pathway}
+          riasec={riasecScores}
+          pathwayScores={pathwayScores}
+          ranked={ranked}
+          showRiasec
+          continueLabel="continueSpecialize"
+          busy={busy}
+          error={error}
+          onBack={() => setCareerInterestDone(false)}
+          onContinue={() => {
+            void (async () => {
+              setBusy(true)
+              const chosen = (interest || getActivePathway()) as StreamPathwayId
+              setRecommendedPathway(chosen)
+              setActivePathway(chosen)
+              setPathwayId(chosen)
+              if (!isPracticeMode()) {
+                const ok = await ensureDemoStudent()
+                if (ok) {
+                  try {
+                    const sid = student?.id
+                    if (sid) {
+                      await selectPathway(sid, chosen)
+                      await refresh()
+                    }
+                  } catch (e) {
+                    setError(e instanceof Error ? e.message : 'Could not save pathway')
+                  }
+                }
+              }
+              setBusy(false)
+              go(13, 'Opening digital skills…')
+            })()
+          }}
+        />
       </Shell>
     )
   }
@@ -2139,7 +2193,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={13} onBack={() => go(12)}>
+      <Shell step={13} onBack={() => { setCareerInterestDone(false); go(12) }}>
         <WhyWork>Many learners are new to computers. Practice the exact clicks and typing school work needs.</WhyWork>
         <TeachNote>Each card is a real micro-task: learn → try → feedback → next. Empty honesty is fine. Wrong answers teach.</TeachNote>
         <p className="train-vocab-counter">Digital skill {digIdx + 1} of {DIGITAL_PRACTICE.length}</p>

@@ -56,7 +56,7 @@ export const logisticsPack: PathwayPack = {
     },
   },
   stepTitles: {
-    12: {
+    11: {
       title: 'Warehouse Language',
       help: 'Hear a warehouse phrase. Choose what it means.',
       purpose: 'Useful English you will hear in Alberta logistics workplaces.',

@@ -184,6 +184,9 @@ type ResultProps = {
   riasec: AssessmentScores
   pathwayScores: PathwayScores
   ranked: (keyof AssessmentScores)[]
+  /** Early path pick hides Holland code; later specialization shows full RIASEC. */
+  showRiasec?: boolean
+  continueLabel?: 'continueVocab' | 'continueSpecialize'
   busy?: boolean
   error?: string | null
   onContinue: () => void
@@ -197,6 +200,8 @@ export function CareerAssessmentResult({
   riasec,
   pathwayScores,
   ranked,
+  showRiasec = true,
+  continueLabel = 'continueVocab',
   busy,
   error,
   onContinue,
@@ -216,20 +221,22 @@ export function CareerAssessmentResult({
         <p className="career-result-lead">{t(ASSESSMENT_COPY.resultLead, lang)}</p>
       </header>
 
-      <section className="career-code" aria-label={t(ASSESSMENT_COPY.yourCode, lang)}>
-        <p className="career-code-label">{t(ASSESSMENT_COPY.yourCode, lang)}</p>
-        <p className="career-code-value" aria-live="polite">
-          {code}
-        </p>
-        <p className="career-code-hint">{t(ASSESSMENT_COPY.codeHint, lang)}</p>
-        <ul className="career-code-areas">
-          {top3.map((area) => (
-            <li key={area}>
-              <strong>{area}</strong>: {t(RIASEC_LABELS[area], lang)}
-            </li>
-          ))}
-        </ul>
-      </section>
+      {showRiasec ? (
+        <section className="career-code" aria-label={t(ASSESSMENT_COPY.yourCode, lang)}>
+          <p className="career-code-label">{t(ASSESSMENT_COPY.yourCode, lang)}</p>
+          <p className="career-code-value" aria-live="polite">
+            {code}
+          </p>
+          <p className="career-code-hint">{t(ASSESSMENT_COPY.codeHint, lang)}</p>
+          <ul className="career-code-areas">
+            {top3.map((area) => (
+              <li key={area}>
+                <strong>{area}</strong>: {t(RIASEC_LABELS[area], lang)}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <p className="career-result-summary">{t(result.summary, lang)}</p>
 
@@ -248,18 +255,20 @@ export function CareerAssessmentResult({
         ))}
       </section>
 
-      <section className="career-profile" aria-label={t(ASSESSMENT_COPY.profileAreas, lang)}>
-        <h3 className="career-section-title">{t(ASSESSMENT_COPY.profileAreas, lang)}</h3>
-        {(Object.keys(riasec) as (keyof AssessmentScores)[]).map((area) => (
-          <div key={area} className={`career-profile-row${top3.includes(area) ? ' is-top' : ''}`}>
-            <span className="career-profile-label">{t(RIASEC_LABELS[area], lang)}</span>
-            <div className="career-profile-track">
-              <span style={{ width: `${riasec[area]}%` }} />
+      {showRiasec ? (
+        <section className="career-profile" aria-label={t(ASSESSMENT_COPY.profileAreas, lang)}>
+          <h3 className="career-section-title">{t(ASSESSMENT_COPY.profileAreas, lang)}</h3>
+          {(Object.keys(riasec) as (keyof AssessmentScores)[]).map((area) => (
+            <div key={area} className={`career-profile-row${top3.includes(area) ? ' is-top' : ''}`}>
+              <span className="career-profile-label">{t(RIASEC_LABELS[area], lang)}</span>
+              <div className="career-profile-track">
+                <span style={{ width: `${riasec[area]}%` }} />
+              </div>
+              <span className="career-profile-pct">{riasec[area]}%</span>
             </div>
-            <span className="career-profile-pct">{riasec[area]}%</span>
-          </div>
-        ))}
-      </section>
+          ))}
+        </section>
+      ) : null}
 
       <section aria-label={t(ASSESSMENT_COPY.strengthsTitle, lang)}>
         <h3 className="career-section-title">{t(ASSESSMENT_COPY.strengthsTitle, lang)}</h3>
@@ -279,7 +288,7 @@ export function CareerAssessmentResult({
           </button>
         )}
         <button type="button" className="btn btn-primary" disabled={busy} onClick={onContinue}>
-          {busy ? '…' : t(ASSESSMENT_COPY.continueVocab, lang)}
+          {busy ? '…' : t(ASSESSMENT_COPY[continueLabel], lang)}
         </button>
       </div>
     </div>
