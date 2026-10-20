@@ -428,6 +428,12 @@ Newest first.
 - Operator steps: [docs/CLOUDFLARE_DOMAIN.md](./CLOUDFLARE_DOMAIN.md).
 - **Assumption to challenge next:** whether www should 301 to apex once the Workers custom domain is green.
 
+### 2026-10-20 — Familiar theater when a skill clears Familiar (L2/L3)
+
+- First time a skill reaches Familiar (or better), a brief **Familiar theater** beat lands: station name, stamp, “next door can open,” latch foley.
+- Fired from `recordSkillAttempt` / `markLessonCompleted` via `pa-familiar-earned`; reduced-motion kills the stage motion.
+- **Assumption to challenge next:** pathway-aware foley beds, or Portal School path mobile density.
+
 ### 2026-10-20 — Matching worksheet page + full orphan cloze purge (L2)
 
 - Supported Practice matching is a **20-word worksheet deck** (unknown specialty first), not the full ~800-word vocab dump.

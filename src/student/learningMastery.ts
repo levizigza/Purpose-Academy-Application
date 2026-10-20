@@ -201,9 +201,14 @@ export function getPlatformStats(): PlatformStats {
   return loadStats()
 }
 
+function isFamiliarOrBetter(level: MasteryLevel) {
+  return level === 'familiar' || level === 'proficient' || level === 'mastered'
+}
+
 export function recordSkillAttempt(id: SkillId, correct: boolean, xpAward = 10) {
   const all = loadAll()
   const rec = { ...all[id] }
+  const prevLevel = rec.level
   if (correct) {
     rec.correct += 1
     rec.streak += 1
@@ -222,6 +227,17 @@ export function recordSkillAttempt(id: SkillId, correct: boolean, xpAward = 10) 
     if (rec.streak >= 5) stats.perfectRounds += 1
     saveStats(stats)
   }
+
+  /* First time this skill clears the Familiar gate — theater cue for the journey shell. */
+  if (!isFamiliarOrBetter(prevLevel) && isFamiliarOrBetter(rec.level)) {
+    try {
+      window.dispatchEvent(
+        new CustomEvent('pa-familiar-earned', { detail: { skill: id, level: rec.level } }),
+      )
+    } catch {
+      /* ignore */
+    }
+  }
   return rec
 }
 
@@ -234,6 +250,7 @@ export function markLessonCompleted(step: number) {
   if (skill) {
     const all = loadAll()
     const rec = { ...all[skill] }
+    const prevLevel = rec.level
     rec.xp += 25
     if (rec.level === 'locked' || rec.level === 'attempted') {
       rec.correct = Math.max(rec.correct, 3)
@@ -241,6 +258,15 @@ export function markLessonCompleted(step: number) {
     }
     all[skill] = rec
     saveAll(all)
+    if (!isFamiliarOrBetter(prevLevel) && isFamiliarOrBetter(rec.level)) {
+      try {
+        window.dispatchEvent(
+          new CustomEvent('pa-familiar-earned', { detail: { skill, level: rec.level } }),
+        )
+      } catch {
+        /* ignore */
+      }
+    }
   }
 }
 
@@ -277,6 +303,50 @@ export function masteryLabel(level: MasteryLevel): string {
       return 'Started'
     default:
       return 'Locked'
+  }
+}
+
+/** Short station name for Familiar theater / mastery chrome. */
+export function skillStationLabel(id: SkillId): string {
+  switch (id) {
+    case 'language':
+      return 'Your Language'
+    case 'career-assessment':
+      return 'Career Path'
+    case 'vocab':
+      return 'Visual Vocabulary'
+    case 'sentence-cloze':
+      return 'Sentence Structure'
+    case 'word-action':
+      return 'Word → Action'
+    case 'matching':
+      return 'Supported Practice'
+    case 'eye-spy':
+      return 'English Eye Spy'
+    case 'instructions':
+      return 'Workplace Instructions'
+    case 'site-phrases':
+      return 'Site Language'
+    case 'digital':
+      return 'Digital Skills'
+    case 'safety':
+      return 'Safety Training'
+    case 'tools':
+      return 'Tools & Equipment'
+    case 'systems':
+      return 'Construction Systems'
+    case 'observation':
+      return 'Instructor Observation'
+    case 'site-log':
+      return 'On-Site Training'
+    case 'final-exam':
+      return 'Final Exam'
+    case 'employment':
+      return 'Employment'
+    case 'unit-checkpoint':
+      return 'Unit Checkpoint'
+    default:
+      return 'This skill'
   }
 }
 

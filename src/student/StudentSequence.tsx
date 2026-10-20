@@ -66,6 +66,7 @@ import {
   stopSpeech,
 } from './speech'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
+import { FamiliarTheater } from './FamiliarTheater'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
 import { VocabSheet } from './VocabSheet'
 import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
@@ -1035,7 +1036,9 @@ export function StudentSequencePage() {
           {...props}
           transitioning={transitioning}
           transitionMsg={transitionMsg}
-          supportLang={props.step >= 3 && props.step <= 6 ? supportLang : undefined}
+          supportLang={
+            (props.step >= 3 && props.step <= 5) || props.step === 12 ? supportLang : undefined
+          }
           onOpenHub={isPracticeMode() ? () => setPracticeView('hub') : undefined}
           onJumpLesson={(n) => go(n, `Opening step ${n}…`)}
         />
@@ -1058,35 +1061,39 @@ export function StudentSequencePage() {
             </div>
           </div>
         )}
+        <FamiliarTheater />
       </>
     )
   }
 
   if (isPracticeMode() && practiceView === 'hub') {
     return (
-      <PracticeHub
-        currentStep={step}
-        pathComplete={empDone && step >= 20}
-        onContinue={() => {
-          setPracticeView('lesson')
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-        }}
-        onOpenLesson={(n) => go(n, `Opening step ${n}…`)}
-        onOpenPassport={() => {
-          setPracticeView('passport')
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-        }}
-        onRestart={() => {
-          resetPracticeProgress()
-          setEmpDone(false)
-          setEmpQuizDone(false)
-          setFollowUp(null)
-          setVocabKnownIds([])
-          setPracticeView('hub')
-          setStep(PRACTICE_ENTRY_STEP)
-          saveStep(PRACTICE_ENTRY_STEP)
-        }}
-      />
+      <>
+        <PracticeHub
+          currentStep={step}
+          pathComplete={empDone && step >= 20}
+          onContinue={() => {
+            setPracticeView('lesson')
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
+          onOpenLesson={(n) => go(n, `Opening step ${n}…`)}
+          onOpenPassport={() => {
+            setPracticeView('passport')
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
+          onRestart={() => {
+            resetPracticeProgress()
+            setEmpDone(false)
+            setEmpQuizDone(false)
+            setFollowUp(null)
+            setVocabKnownIds([])
+            setPracticeView('hub')
+            setStep(PRACTICE_ENTRY_STEP)
+            saveStep(PRACTICE_ENTRY_STEP)
+          }}
+        />
+        <FamiliarTheater />
+      </>
     )
   }
 
