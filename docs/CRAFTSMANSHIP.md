@@ -428,6 +428,12 @@ Newest first.
 - Operator steps: [docs/CLOUDFLARE_DOMAIN.md](./CLOUDFLARE_DOMAIN.md).
 - **Assumption to challenge next:** whether www should 301 to apex once the Workers custom domain is green.
 
+### 2026-10-20 — Restore GitHub Pages project base path (L6)
+
+- Pages builds again with `PAGES_BASE=/Purpose-Academy-Application/` so JS/CSS load (root `/assets` 404s had blanked the site).
+- Removed `CNAME` from the Pages artifact so the project URL is the live host again.
+- **Assumption to challenge next:** keep verifying the 10-question path quiz opens early and the 30-item interest assessment stays at step 12.
+
 ### 2026-10-20 — Familiar theater when a skill clears Familiar (L2/L3)
 
 - First time a skill reaches Familiar (or better), a brief **Familiar theater** beat lands: station name, stamp, “next door can open,” latch foley.

@@ -2,10 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 /**
- * Custom domain (purposeacademy.ca) serves from site root.
- * Override with PAGES_BASE=/Purpose-Academy-Application/ only for project-page previews.
+ * GitHub project Pages: https://levizigza.github.io/Purpose-Academy-Application/
+ * Override with PAGES_BASE=/ for a root-domain host if needed.
  */
-const pagesBase = process.env.PAGES_BASE || '/'
+const pagesBase = process.env.PAGES_BASE || '/Purpose-Academy-Application/'
 
 export default defineConfig({
   base: pagesBase,
