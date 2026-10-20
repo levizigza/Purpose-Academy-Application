@@ -76,6 +76,30 @@ export function pickSpecialtyDistractors(
   return out
 }
 
+/**
+ * Supported Practice matching deck — worksheet-sized, not the full ~800-word dump.
+ * Prefer unknown specialty pictures; fall back to unknown then specialty Level-1.
+ */
+export function matchPracticeDeck(
+  vocab: readonly VocabTerm[],
+  knownIds: readonly string[],
+  pageSize = LEVEL1_PAGE_SIZE,
+): VocabTerm[] {
+  const known = new Set(knownIds)
+  const specialty = specialtyVocabPool(vocab)
+  const unknownSpecialty = specialty.filter((t) => !known.has(t.id))
+  const unknown = vocab.filter((t) => !known.has(t.id))
+  const pool =
+    unknownSpecialty.length >= 4
+      ? unknownSpecialty
+      : unknown.length >= 4
+        ? unknown
+        : specialty.length
+          ? specialty
+          : vocab
+  return pool.slice(0, Math.min(pageSize, pool.length))
+}
+
 /** Shuffle a choice list for display (correct + distractors). */
 export function shuffleChoices<T>(items: readonly T[]): T[] {
   return shuffleInPlace([...items])

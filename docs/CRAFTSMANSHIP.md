@@ -420,6 +420,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-20 — Matching worksheet page + full orphan cloze purge (L2)
+
+- Supported Practice matching is a **20-word worksheet deck** (unknown specialty first), not the full ~800-word vocab dump.
+- Construction Sentence Structure **purges orphan cloze rows** whose answers have no pictured Visual Vocabulary — they never appear on later pages.
+- **Assumption to challenge next:** Familiar theater (mastery celebration when a skill hits Familiar).
+
 ### 2026-10-20 — Specialize: confirm or switch pathway after interest assessment (L2)
 
 - Step 12 results now let the learner **choose Construction / Logistics / Community** (recommended path highlighted) before site-ready skills.

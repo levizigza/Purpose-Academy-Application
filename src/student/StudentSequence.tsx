@@ -36,6 +36,7 @@ import {
   LEVEL1_PAGE_SIZE,
   pickSpecialtyDistractors,
   sentenceLadderGateTerms,
+  matchPracticeDeck,
   shuffleChoices,
   specialtyVocabPool,
 } from './vocabDistractors'
@@ -777,12 +778,10 @@ export function StudentSequencePage() {
     if (skill) markSkillOpened(skill)
   }, [step, practiceView])
 
-  /* Seed matching options from the adaptive deck when entering step 8. */
+  /* Seed matching options from the worksheet-sized deck when entering step 8. */
   useEffect(() => {
     if (step !== 8) return
-    const knownSet = new Set(getKnownVocabIds(pathwayId))
-    const unknown = VOCAB_UNIT.filter((t) => !knownSet.has(t.id))
-    const deck = unknown.length >= 4 ? unknown : VOCAB_UNIT
+    const deck = matchPracticeDeck(VOCAB_UNIT, getKnownVocabIds(pathwayId))
     const term = deck[0]
     if (!term) return
     setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
@@ -1780,20 +1779,24 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 9: Supported matching */
+  /* Step 8: Supported matching — worksheet page, not the full vocab dump */
   if (step === 8) {
     const knownSet = new Set(vocabKnownIds)
     const unknownTerms = VOCAB_UNIT.filter((t) => !knownSet.has(t.id))
-    const matchDeck =
-      unknownTerms.length >= 4
-        ? unknownTerms
-        : VOCAB_UNIT
-    const safeIdx = Math.min(matchIdx, matchDeck.length - 1)
+    const matchDeck = matchPracticeDeck(VOCAB_UNIT, vocabKnownIds)
+    const safeIdx = Math.min(matchIdx, Math.max(0, matchDeck.length - 1))
     const term = matchDeck[safeIdx]
+    if (!term) {
+      return (
+        <Shell step={8} onBack={() => go(7)} onNext={() => go(9, 'Opening English Eye Spy…')}>
+          <div className="alert ok">Matching page ready — continue to English Eye Spy.</div>
+        </Shell>
+      )
+    }
     const alreadyKnown = knownSet.has(term.id)
     const isLast = safeIdx >= matchDeck.length - 1
     const roundsNeeded =
-      isPracticeMode() && unknownTerms.length <= 3 ? 1 : isPracticeMode() ? MATCH_PRACTICE_ROUNDS : 1
+      isPracticeMode() && matchDeck.length <= 3 ? 1 : isPracticeMode() ? MATCH_PRACTICE_ROUNDS : 1
 
     function pickMatch(opt: string) {
       if (matchAnswer) return
@@ -1836,15 +1839,17 @@ export function StudentSequencePage() {
       <Shell step={8} onBack={() => go(7)}>
         <p className="train-vocab-counter">
           Round {matchRound} of {roundsNeeded} · Match {safeIdx + 1} of {matchDeck.length}
-          {unknownTerms.length < VOCAB_UNIT.length
-            ? ` · Focusing on ${unknownTerms.length || matchDeck.length} words to strengthen`
+          {' · '}
+          Worksheet page (not the full {VOCAB_UNIT.length}-word table)
+          {unknownTerms.length
+            ? ` · ${Math.min(unknownTerms.length, matchDeck.length)} to strengthen`
             : ''}
         </p>
         <PictureCard
           image={pathwayImage(term.imageKey)}
           fit="contain"
           label="Match the English word to the picture"
-          caption="All five languages stay visible. Press any language for help, then choose the English word."
+          caption="One worksheet page at a time. Press any language for help, then choose the English word."
         />
         {alreadyKnown && (
           <p className="vocab-known-note">Already known — quick confirm, then continue.</p>

@@ -54,7 +54,8 @@ function answerPictured(answer: string, pictured: Set<string>) {
 
 /**
  * Prefer pictured Visual Vocabulary answers (ladder honesty).
- * When `picturedOnly`, orphan cloze rows (no VV picture) stay out of the drill bank.
+ * When `picturedOnly`, orphan cloze rows (no VV picture) are purged from the bank —
+ * never shown on later pages either.
  */
 function orderForLadder(
   items: SentenceClozeItem[],
@@ -68,7 +69,7 @@ function orderForLadder(
   for (const item of items) {
     ;(answerPictured(item.answer, pictured) ? hit : miss).push(item)
   }
-  if (picturedOnly && hit.length >= SENTENCE_PAGE_SIZE) return hit
+  if (picturedOnly) return hit.length ? hit : items
   return hit.length >= SENTENCE_PAGE_SIZE ? [...hit, ...miss] : items
 }
 
