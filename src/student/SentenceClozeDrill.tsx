@@ -376,8 +376,7 @@ export function SentenceClozeDrill({
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
         Choose the correct word to complete each sentence. Every item from the Construction Questions
-        PowerPoint (1–{bank.length}) is here, with its worksheet picture. One try — if it is wrong, we show
-        the answer and move on.
+        PowerPoint (1–{bank.length}) is here. One try — if it is wrong, we show the answer and move on.
       </p>
 
       <div
@@ -387,11 +386,10 @@ export function SentenceClozeDrill({
       >
         <figure className="sentence-cloze-photo">
           {imageSrc ? (
-            <img src={imageSrc} alt={`Worksheet picture for sentence ${item.n}`} />
+            <img src={imageSrc} alt="" />
           ) : (
             <span className="sentence-cloze-photo-fallback">{item.answer}</span>
           )}
-          <figcaption>Worksheet picture · {item.n}</figcaption>
         </figure>
 
         <div

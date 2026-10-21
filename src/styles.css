@@ -9947,16 +9947,6 @@ video {
   image-rendering: auto;
 }
 
-.sentence-cloze-photo figcaption {
-  margin: 0.35rem 0 0;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #5a7390;
-  text-align: center;
-}
-
 .sentence-cloze-photo-fallback {
   font-weight: 800;
   color: #8aa0b8;
