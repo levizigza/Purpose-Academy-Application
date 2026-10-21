@@ -1635,14 +1635,8 @@ export function StudentSequencePage() {
     }
     return (
       <Shell step={7} onBack={() => go(6)}>
-        <WhyWork>
-          On a crew, the same tool has one English name and many home-language names. See every
-          version of the word together, then match that group to the picture.
-        </WhyWork>
-        <TeachNote>
-          Each section already lists every language version of one word. Pictures are jumbled at the
-          top. Tap a picture, then tap the section that holds all of that word. Four matches pass.
-        </TeachNote>
+        <WhyWork>The same tool has one English name and many home-language names. Match the picture to that word.</WhyWork>
+        <TeachNote>Each card is the word plus its other-language names. Tap a picture, then tap the word it belongs to.</TeachNote>
         <VocabOrganizeQuiz
           terms={organizeTerms}
           onPassed={() => go(8, 'Opening English Eye Spy…')}
