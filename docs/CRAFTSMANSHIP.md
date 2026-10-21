@@ -427,6 +427,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-21 — Full Construction Questions 1–560 reachable (L2)
+
+- Verified PPTX 1–560 matches the in-app bank (prompts + options + images). Build throws if any number is missing.
+- Worksheet page jumper opens every deck page (1–10 … 551–560).
+- **Assumption to challenge next:** whether last-page Q551–560 pictures stay readable on a phone.
+
+
 ### 2026-10-21 — Sentence Structure follows PPTX page order (L2)
 
 - Bank stays Construction Questions 1–560 (no VV reorder). Pages are 10 items; A–D stay in deck order.

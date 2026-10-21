@@ -9811,6 +9811,33 @@ video {
   max-width: 40rem;
 }
 
+.sentence-cloze-page-jump {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5a7390;
+}
+
+.sentence-cloze-page-jump select {
+  appearance: auto;
+  min-width: 11rem;
+  border-radius: 8px;
+  border: 1px solid #c9d8e8;
+  background: #fff;
+  color: #0b2f5c;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0.35rem 0.5rem;
+}
+
 .sentence-cloze-doc-kicker {
   margin: 0.15rem 0 0;
   font-size: 0.78rem;

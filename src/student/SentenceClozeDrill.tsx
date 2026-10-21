@@ -240,8 +240,12 @@ export function SentenceClozeDrill({
   }
 
   function nextPage() {
-    if (page + 1 >= pageCount) return
-    setPage((p) => p + 1)
+    jumpToPage(page + 1)
+  }
+
+  function jumpToPage(next: number) {
+    if (next < 0 || next >= pageCount) return
+    setPage(next)
     setIdx(0)
     setPicked(null)
     setCorrect(false)
@@ -252,6 +256,30 @@ export function SentenceClozeDrill({
     setRepairDeck([])
     setPhase('drill')
     playFoley('whoosh')
+  }
+
+  function WorksheetPageJump({ id }: { id: string }) {
+    return (
+      <label className="sentence-cloze-page-jump" htmlFor={id}>
+        <span>Worksheet page</span>
+        <select
+          id={id}
+          value={page}
+          onChange={(e) => jumpToPage(Number(e.target.value))}
+          aria-label="Jump to any Construction Questions page"
+        >
+          {Array.from({ length: pageCount }, (_, i) => {
+            const from = i * SENTENCE_PAGE_SIZE + 1
+            const to = Math.min((i + 1) * SENTENCE_PAGE_SIZE, bank.length)
+            return (
+              <option key={i} value={i}>
+                {from}–{to} / {bank.length}
+              </option>
+            )
+          })}
+        </select>
+      </label>
+    )
   }
 
   if (!bank.length) {
@@ -280,10 +308,11 @@ export function SentenceClozeDrill({
           </button>
           {page + 1 < pageCount ? (
             <button type="button" className="btn btn-secondary on-light" onClick={nextPage}>
-              Keep practising · page {page + 2} of {pageCount}
+              Keep practising · questions {page * SENTENCE_PAGE_SIZE + 11}–{Math.min((page + 2) * SENTENCE_PAGE_SIZE, bank.length)}
             </button>
           ) : null}
         </div>
+        <WorksheetPageJump id="sentence-page-jump-pass" />
       </article>
     )
   }
@@ -305,6 +334,7 @@ export function SentenceClozeDrill({
             Skip to Word → Action
           </button>
         ) : null}
+        <WorksheetPageJump id="sentence-page-jump-result" />
       </article>
     )
   }
@@ -339,15 +369,15 @@ export function SentenceClozeDrill({
       </div>
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
-        {page * SENTENCE_PAGE_SIZE + 1}–{Math.min((page + 1) * SENTENCE_PAGE_SIZE, bank.length)} / {bank.length}
-        {' · '}
-        Item {idx + 1} of {deck.length}
+        All {bank.length} Construction Questions · Item {idx + 1} of {deck.length}
         {phase === 'drill' ? ` · First-try ${scoreCorrect}` : ''}
         {level1Unlocked ? ' · Level-1 unlocked' : ''}
       </p>
+      <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
-        Choose the correct word to complete each sentence. The picture is the same one from the Construction
-        Questions worksheet. One try — if it is wrong, we show the answer and move on.
+        Choose the correct word to complete each sentence. Every item from the Construction Questions
+        PowerPoint (1–{bank.length}) is here, with its worksheet picture. One try — if it is wrong, we show
+        the answer and move on.
       </p>
 
       <div

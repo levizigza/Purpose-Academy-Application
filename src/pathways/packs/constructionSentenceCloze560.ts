@@ -580,3 +580,16 @@ export const CONSTRUCTION_SENTENCE_CLOZE_560: SentenceClozeItem[] = [
   { id: 'cs-559', n: 559, prompt: 'Leave the required ______ around the window before applying sealant.', options: ['Joint gap', 'Pipe slope', 'Wire gauge', 'Concrete slump'], answer: 'Joint gap', imageFile: 'cs-559.png' },
   { id: 'cs-560', n: 560, prompt: 'The supervisor checks the ______ to confirm that the framing matches the design.', options: ['Delivery receipt', 'Structural drawings', 'Paint sample', 'Cleaning schedule'], answer: 'Structural drawings', imageFile: 'cs-560.png' },
 ]
+
+/** Full Construction Questions 1–560 deck. Fail build if a page is dropped. */
+if (CONSTRUCTION_SENTENCE_CLOZE_560.length !== 560) {
+  throw new Error(
+    `Construction sentence bank must be 560 items (PPTX 1–560); got ${CONSTRUCTION_SENTENCE_CLOZE_560.length}`,
+  )
+}
+const SENTENCE_BANK_NUMBERS = new Set(CONSTRUCTION_SENTENCE_CLOZE_560.map((item) => item.n))
+for (let n = 1; n <= 560; n += 1) {
+  if (!SENTENCE_BANK_NUMBERS.has(n)) {
+    throw new Error(`Construction sentence bank is missing PPTX question ${n}`)
+  }
+}
