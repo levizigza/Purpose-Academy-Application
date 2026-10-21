@@ -38,7 +38,6 @@ import {
   sentenceLadderGateTerms,
   matchPracticeDeck,
   shuffleChoices,
-  specialtyVocabPool,
 } from './vocabDistractors'
 import {
   CareerAssessmentResult,
@@ -1693,7 +1692,6 @@ export function StudentSequencePage() {
         <Shell step={7} onBack={() => { resetVocab(); go(6) }}>
           <SentenceClozeDrill
             items={SENTENCE_CLOZE}
-            picturedAnswers={specialtyVocabPool(VOCAB_UNIT).map((t) => t.english)}
             onLevel1Passed={() => {
               setSentenceLevel1(true)
               recordSkillAttempt('sentence-cloze', true, 20)

@@ -12,11 +12,11 @@ function sentenceImageUrl(file?: string) {
   return `${base}sentence-cloze/${file}`
 }
 
-/** Worksheet-sized pages — same bank size as visual vocabulary PDFs. */
-export const SENTENCE_PAGE_SIZE = 20
+/** Construction Questions PPTX: 10 items per worksheet page (1–10, 11–20, …). */
+export const SENTENCE_PAGE_SIZE = 10
 
-/** Pass a page with honest effort — not by tapping every choice. */
-const PASS_SCORE = 16
+/** Pass a page with honest effort — 8 of 10 first-try (same 80% bar as the old 16/20). */
+const PASS_SCORE = 8
 
 function shuffle<T>(items: T[]): T[] {
   const next = [...items]
@@ -92,7 +92,7 @@ type Props = {
  * - One attempt per item (no answer shopping)
  * - Correct word slides into the blank
  * - Wrong → show the answer, then move on
- * - Level-1 = first page of 20 with ≥16 first-try correct (+ repair for misses)
+ * - Level-1 = first PPTX page (items 1–10) with ≥8 first-try correct (+ repair for misses)
  */
 export function SentenceClozeDrill({
   items,
@@ -103,8 +103,12 @@ export function SentenceClozeDrill({
   continueLabel = 'Continue to Word → Action',
   onSkipToActions,
 }: Props) {
+  /** Docs order is PPTX 1–560. Only reorder when a caller explicitly asks. */
   const bank = useMemo(
-    () => orderForLadder(items, picturedAnswers, picturedOnlyBank),
+    () =>
+      picturedAnswers?.length || picturedOnlyBank
+        ? orderForLadder(items, picturedAnswers, picturedOnlyBank)
+        : items,
     [items, picturedAnswers, picturedOnlyBank],
   )
   const pageCount = Math.max(1, Math.ceil(bank.length / SENTENCE_PAGE_SIZE))
@@ -133,7 +137,7 @@ export function SentenceClozeDrill({
 
   useEffect(() => {
     if (!item || phase === 'passed' || phase === 'result') return
-    setOptions(shuffle([...item.options]))
+    setOptions([...item.options])
     setPicked(null)
     setCorrect(false)
     setFilled(false)
@@ -335,17 +339,15 @@ export function SentenceClozeDrill({
       </div>
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
-        Sentence {idx + 1} of {deck.length}
+        {page * SENTENCE_PAGE_SIZE + 1}–{Math.min((page + 1) * SENTENCE_PAGE_SIZE, bank.length)} / {bank.length}
         {' · '}
-        Page {page + 1} of {pageCount}
-        {' · '}
-        Bank 1–{bank.length}
+        Item {idx + 1} of {deck.length}
         {phase === 'drill' ? ` · First-try ${scoreCorrect}` : ''}
         {level1Unlocked ? ' · Level-1 unlocked' : ''}
       </p>
       <p className="lede sentence-cloze-help">
-        Choose the correct word to complete each sentence. One try — if it is wrong, we show the answer and
-        move on. Correct words slide into the blank.
+        Choose the correct word to complete each sentence. The picture is the same one from the Construction
+        Questions worksheet. One try — if it is wrong, we show the answer and move on.
       </p>
 
       <div
@@ -353,15 +355,13 @@ export function SentenceClozeDrill({
           picked && !correct && filled ? ' is-wrong' : ''
         }`}
       >
-        <figure className="sentence-cloze-photo" aria-hidden={!imageSrc}>
+        <figure className="sentence-cloze-photo">
           {imageSrc ? (
-            <img src={imageSrc} alt="" />
+            <img src={imageSrc} alt={`Worksheet picture for sentence ${item.n}`} />
           ) : (
             <span className="sentence-cloze-photo-fallback">{item.answer}</span>
           )}
-          <figcaption className="sr-only">
-            Illustration for sentence {item.n}: {item.answer}
-          </figcaption>
+          <figcaption>Worksheet picture · {item.n}</figcaption>
         </figure>
 
         <div

@@ -9821,10 +9821,10 @@ video {
 
 .sentence-cloze-item {
   display: grid;
-  grid-template-columns: minmax(6.5rem, 9.5rem) minmax(0, 1fr);
-  gap: 0.85rem 1rem;
-  align-items: stretch;
-  padding: 0.75rem;
+  grid-template-columns: minmax(8.5rem, 13rem) minmax(0, 1fr);
+  gap: 1rem 1.15rem;
+  align-items: center;
+  padding: 1rem 1.05rem;
   border-radius: 14px;
   border: 1px solid #d7e3ef;
   background: #fff;
@@ -9838,21 +9838,32 @@ video {
 
 .sentence-cloze-photo {
   margin: 0;
-  border-radius: 10px;
-  border: 1px solid #d7e3ef;
-  background: #f4f7fb;
+  border-radius: 12px;
+  border: 1px solid #c9d8e8;
+  background: #eef3f8;
   display: grid;
   place-items: center;
-  min-height: 7.5rem;
+  min-height: 10rem;
   overflow: hidden;
-  padding: 0.35rem;
+  padding: 0.55rem;
 }
 
 .sentence-cloze-photo img {
   width: 100%;
-  height: 100%;
-  max-height: 9rem;
+  height: auto;
+  max-height: 12rem;
   object-fit: contain;
+  image-rendering: auto;
+}
+
+.sentence-cloze-photo figcaption {
+  margin: 0.35rem 0 0;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5a7390;
+  text-align: center;
 }
 
 .sentence-cloze-photo-fallback {

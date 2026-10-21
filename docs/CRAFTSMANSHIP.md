@@ -218,7 +218,7 @@ These are load-bearing across all layers.
 - **One attempt per item** — no answer shopping.
 - Correct: word **slides into the blank**; short success line; TTS reads the full sentence.
 - Wrong: reveal the right word in the blank, brief teach line, then move on (Duolingo one-try).
-- Level-1 sentence gate = first page of 20 with ≥16 first-try correct (+ repair for misses). More pages stay open to practise.
+- Level-1 sentence gate = first PPTX page (items 1–10) with ≥8 first-try correct (+ repair for misses). More pages stay open to practise. Bank stays in Construction Questions order.
 - Clear page-pass badge when the worksheet page is cleared.
 - Language ladder: gloss → picture → **sentence** → action → instruction → phrase.
 
@@ -426,6 +426,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-21 — Sentence Structure follows PPTX page order (L2)
+
+- Bank stays Construction Questions 1–560 (no VV reorder). Pages are 10 items; A–D stay in deck order.
+- Illustration is larger beside the stem so the PPTX picture is the first thing on the card.
+- **Assumption to challenge next:** whether a full 10-item worksheet view (all ten on one screen) beats one-item-at-a-time on phones.
 
 ### 2026-10-21 — Sentence Structure shows PPTX question images (L2)
 

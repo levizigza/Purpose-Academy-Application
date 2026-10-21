@@ -36,7 +36,7 @@ export const constructionPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn Daily Conversation Vocabulary (200), Construction Visual Vocabulary (660), organize four words across five languages, then Sentence Structure (560 cloze). Complete Level-1 vocab and one honest sentence page to continue; more pages stay open to practise.',
+      goal: 'Learn Daily Conversation Vocabulary (200), Construction Visual Vocabulary (660), organize four words across five languages, then Sentence Structure (560 cloze, PPTX order, 10 per page). Complete Level-1 vocab and one honest sentence page to continue; more pages stay open to practise.',
       outcomes: [
         'See a real photo of each word and hear English spoken every time',
         'Connect your language to the English word and a short example sentence',
