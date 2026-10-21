@@ -80,8 +80,8 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   7: 'vocab-organize',
   /** After Visual Vocabulary + language organize: find every picture again. */
   8: 'eye-spy',
-  /** Construction runs Sentence Structure in-station first, then Word → Action. */
-  9: 'word-action',
+  /** Sentence Structure first when the pack has a cloze bank; Word → Action follows in-station. */
+  9: 'sentence-cloze',
   10: 'matching',
   11: 'instructions',
   12: 'site-phrases',
@@ -333,7 +333,7 @@ export function skillStationLabel(id: SkillId): string {
     case 'instructions':
       return 'Workplace Instructions'
     case 'site-phrases':
-      return 'Site Language'
+      return 'Workplace Language'
     case 'digital':
       return 'Digital Skills'
     case 'safety':
@@ -341,11 +341,11 @@ export function skillStationLabel(id: SkillId): string {
     case 'tools':
       return 'Tools & Equipment'
     case 'systems':
-      return 'Construction Systems'
+      return 'Workplace Systems'
     case 'observation':
       return 'Instructor Observation'
     case 'site-log':
-      return 'On-Site Training'
+      return 'Floor Training'
     case 'final-exam':
       return 'Final Exam'
     case 'employment':

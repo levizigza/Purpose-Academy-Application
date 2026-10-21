@@ -22,6 +22,8 @@ const SOURCE_FILES = [
   'src/pathways/packs/constructionVocab660.ts',
   'src/pathways/packs/dailyConversationVocab200.ts',
   'src/pathways/packs/logistics.ts',
+  'src/pathways/packs/logisticsPractice.ts',
+  'src/pathways/packs/logisticsSentenceCloze560.ts',
   'src/pathways/packs/logisticsVocab500.ts',
   'src/pathways/packs/community.ts',
 ]

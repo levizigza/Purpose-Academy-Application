@@ -1643,7 +1643,11 @@ export function StudentSequencePage() {
     }
     return (
       <Shell step={7} onBack={() => go(6)}>
-        <WhyWork>The same tool has one English name and many home-language names. Hear a language, then drop the picture on that word.</WhyWork>
+        <WhyWork>
+          {pathwayId === 'logistics'
+            ? 'The same warehouse word has one English name and many home-language names. Hear a language, then drop the picture on that word.'
+            : 'The same tool has one English name and many home-language names. Hear a language, then drop the picture on that word.'}
+        </WhyWork>
         <TeachNote>Five rounds. Each card already lists the word in every language. Move the matching picture into the empty box. Hear any language if you want help.</TeachNote>
         <VocabOrganizeQuiz
           terms={organizeTerms}
@@ -1661,7 +1665,11 @@ export function StudentSequencePage() {
         step={8}
         onBack={() => go(7)}
       >
-        <WhyWork>On a real site every tool sits among other objects. Prove you can name each one until the board is clear.</WhyWork>
+        <WhyWork>
+          {pathwayId === 'logistics'
+            ? 'On a real warehouse floor every object sits among other goods and equipment. Prove you can name each one until the board is clear.'
+            : 'On a real site every tool sits among other objects. Prove you can name each one until the board is clear.'}
+        </WhyWork>
         <TeachNote>Exercise mode: unlimited tries. Tap a picture and its English name. A correct pair disappears. Clear the whole board, then the next scene. Pass requires 100% with no misses.</TeachNote>
         <EyeSpyQuiz
           scenes={EYE_SPY_SCENES}
@@ -1693,6 +1701,7 @@ export function StudentSequencePage() {
             documentLabel={
               pathwayId === 'logistics' ? 'Logistics Questions' : 'Construction Questions'
             }
+            picturedAnswers={VOCAB_UNIT.filter((t) => t.imageKey).map((t) => t.english)}
             onLevel1Passed={() => {
               setSentenceLevel1(true)
               recordSkillAttempt('sentence-cloze', true, 20)
