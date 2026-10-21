@@ -42,7 +42,7 @@ export const SEQUENCE_CATALOG: {
   {
     id: 'student',
     label: 'Student sequence',
-    help: '20 steps from login to employment connection',
+    help: '21 steps from login to employment connection',
     to: '/journey',
     group: 'student',
   },

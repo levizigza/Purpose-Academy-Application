@@ -72,32 +72,32 @@ export const constructionPack: PathwayPack = {
     },
   },
   stepTitles: {
-    7: {
+    8: {
       title: 'English Eye Spy',
       help: 'Ten scenes. Tap a picture and its English name. Correct pairs disappear until the board is empty.',
       purpose: 'Connect Visual Vocabulary again in a busy scene before Sentence Structure.',
     },
-    8: {
+    9: {
       title: 'Sentence Structure',
       help: 'Choose the word that completes the sentence. One try — if it is wrong, we show the answer and move on. Correct words slide into the blank.',
       purpose: 'Construction Questions worksheet mold (blank + four choices), then Word → Action.',
     },
-    11: {
+    12: {
       title: 'Site Language',
       help: 'Hear a job-site phrase. Choose what it means.',
       purpose: 'Useful English you will hear on Alberta construction sites.',
     },
-    15: {
+    16: {
       title: 'Tools & Equipment',
       help: 'Learn each tool group. Answer one check.',
       purpose: 'Safe naming before safe use with an instructor.',
     },
-    16: {
+    17: {
       title: 'Construction Systems',
       help: 'Learn each system. Answer one check.',
       purpose: 'Your task feeds the whole building.',
     },
-    18: {
+    19: {
       title: 'On-Site Training',
       help: 'Make site decisions and log the day like a real crew member.',
       purpose: 'Daily judgment, notes, and site feedback.',

@@ -2,7 +2,7 @@
 
 Calgary school platform with **three doors into work**: Construction, Logistics, and Community Support Foundations.
 
-- **Shared spine:** Daily Conversation Vocabulary + the same 20-step Practice path (`/journey`)
+- **Shared spine:** Daily Conversation Vocabulary + the same 21-step Practice path (`/journey`)
 - **Flagship depth today:** Construction Visual Vocabulary (660) + shop/site craft; Logistics VV (500); Community focused specialty set (growing)
 - **Frontend:** Vite + React + TypeScript
 - **Backend:** Express (Node) + persistent JSON database
@@ -101,5 +101,5 @@ Server data file is created on first boot from the Construction-first curriculum
 ## Notes
 
 - Competent status still requires instructor observation (PA-TECH-003 rule).
-- All three pathway doors are open on the shared **School path** (`/app/student/path` → drills on `/journey`). Account/LMS specialty lessons under Learn are richest for Construction; Logistics and Community Learn modules are still climbing — the portal tells the truth and keeps the 20-step spine visible in-account.
+- All three pathway doors are open on the shared **School path** (`/app/student/path` → drills on `/journey`). Account/LMS specialty lessons under Learn are richest for Construction; Logistics and Community Learn modules are still climbing — the portal tells the truth and keeps the 21-step spine visible in-account.
 - For true production later: swap JSON file for Postgres, add HTTPS hosting, MFA, and PIPA controls.

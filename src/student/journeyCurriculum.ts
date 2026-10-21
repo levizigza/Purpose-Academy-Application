@@ -1,7 +1,7 @@
 ﻿/**
  * Student journey — Purpose Academy sequence:
  * Login → Register → Language → Work Style (path quiz) → Profile →
- * Vocab → language organize → English Eye Spy → Sentences / Word→Action →
+ * Vocab → Language Organize → English Eye Spy → Sentences / Word→Action →
  * Supported practice → Instructions → Site language →
  * Interest assessment (specialize) → Digital → Safety →
  * Tools → Systems → Observation → On-site → Final exam/certificate → Employment
@@ -15,31 +15,35 @@ export const JOURNEY_STEPS = [
   { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the path quiz and later interest assessment.', purpose: 'Path and interest steps run in a language you understand. Job-site English comes with practice.', unit: 2 },
   { n: 4, title: 'Work Style', help: 'Ten questions. Choose what sounds most like you.', purpose: 'A short path quiz opens Construction, Logistics, or Community Support.', unit: 2 },
   { n: 5, title: 'Your Career Profile', help: 'See the path that fits your work-style answers.', purpose: 'Work style → recommended pathway. Later practice, then a deeper interest inventory for specialization.', unit: 2 },
-  { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English. Then organize four words: picture box + five language names below it.', purpose: 'Learn the pictures first. Then prove you can place each picture and its five language names together.', unit: 3 },
-  { n: 7, title: 'English Eye Spy', help: 'Ten scenes. Tap a picture and its English name. Correct pairs disappear until the board is empty.', purpose: 'Connect the same vocabulary again in a busy scene before you write sentences.', unit: 3 },
-  { n: 8, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'After pictures are solid, link English words to real movement.', unit: 4 },
-  { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
-  { n: 10, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
-  { n: 11, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
-  { n: 12, title: 'Interest Assessment', help: 'After practice, rate work activities to specialize.', purpose: 'A professional interest inventory (Holland / RIASEC) once you have real practice — not a pass/fail quiz.', unit: 5 },
-  { n: 13, title: 'Digital Skills', help: 'Practice real computer tasks: click, type, forms, uploads.', purpose: 'This may be someone’s first computer. Every step is a hands-on micro-lesson.', unit: 5 },
-  { n: 14, title: 'Safety Training', help: 'Safety words with clear pictures. Required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 5 },
-  { n: 15, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 5 },
-  { n: 16, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 5 },
-  { n: 17, title: 'Instructor Observation', help: 'Rehearse competent skill order before a real instructor check.', purpose: 'Learned → Practised → Competent under real observation.', unit: 6 },
-  { n: 18, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Daily judgment, notes, and site feedback.', unit: 6 },
-  { n: 19, title: 'Final Exam & Certificate', help: 'Written + practical checks. Pass to open your certificate.', purpose: 'Eye Spy needs 100%. Exam tries are limited.', unit: 6 },
-  { n: 20, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 6 },
+  { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English.', purpose: 'Learn the pictures first, in your language and in English.', unit: 3 },
+  { n: 7, title: 'Language Organize', help: 'Pictures and five-language words are jumbled at the top. Place each visual in its empty picture box, then put every language version of the word in the boxes below it.', purpose: 'Prove you can group each picture with its English name and all five language words before you hunt in a busy scene.', unit: 3 },
+  { n: 8, title: 'English Eye Spy', help: 'Ten scenes. Tap a picture and its English name. Correct pairs disappear until the board is empty.', purpose: 'Connect the same vocabulary again in a busy scene before you write sentences.', unit: 3 },
+  { n: 9, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'After pictures are solid, link English words to real movement.', unit: 4 },
+  { n: 10, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
+  { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
+  { n: 12, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
+  { n: 13, title: 'Interest Assessment', help: 'After practice, rate work activities to specialize.', purpose: 'A professional interest inventory (Holland / RIASEC) once you have real practice — not a pass/fail quiz.', unit: 5 },
+  { n: 14, title: 'Digital Skills', help: 'Practice real computer tasks: click, type, forms, uploads.', purpose: 'This may be someone’s first computer. Every step is a hands-on micro-lesson.', unit: 5 },
+  { n: 15, title: 'Safety Training', help: 'Safety words with clear pictures. Required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 5 },
+  { n: 16, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 5 },
+  { n: 17, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 5 },
+  { n: 18, title: 'Instructor Observation', help: 'Rehearse competent skill order before a real instructor check.', purpose: 'Learned → Practised → Competent under real observation.', unit: 6 },
+  { n: 19, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Daily judgment, notes, and site feedback.', unit: 6 },
+  { n: 20, title: 'Final Exam & Certificate', help: 'Written + practical checks. Pass to open your certificate.', purpose: 'Eye Spy needs 100%. Exam tries are limited.', unit: 6 },
+  { n: 21, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 6 },
 ] as const
+
+/** Total stations on the shared school path (Visual Vocabulary → Language Organize → Eye Spy → …). */
+export const JOURNEY_STEP_COUNT = JOURNEY_STEPS.length
 
 /** Path units — structured learning path on the existing train template. */
 export const LEARNING_UNITS = [
   { id: 1, label: 'Start', range: '1–2' },
   { id: 2, label: 'Find your path', range: '3–5' },
-  { id: 3, label: 'Words → Pictures', range: '6–7' },
-  { id: 4, label: 'Sentences → Site English', range: '8–11' },
-  { id: 5, label: 'Specialize & site ready', range: '12–16' },
-  { id: 6, label: 'Work ready', range: '17–20' },
+  { id: 3, label: 'Words → Pictures', range: '6–8' },
+  { id: 4, label: 'Sentences → Site English', range: '9–12' },
+  { id: 5, label: 'Specialize & site ready', range: '13–17' },
+  { id: 6, label: 'Work ready', range: '18–21' },
 ] as const
 
 /** Unit goals — shown at the start of each learning unit (Duolingo/Khan clarity). */

@@ -1,5 +1,5 @@
 import { useEffect, useState, type CSSProperties } from 'react'
-import { LEARNING_UNITS, unitForStep } from './journeyCurriculum'
+import { JOURNEY_STEP_COUNT, LEARNING_UNITS, unitForStep } from './journeyCurriculum'
 import {
   canAdvanceFromStep,
   domainMasteryPercent,
@@ -162,7 +162,7 @@ export function PracticeHub({
     : freshStart
       ? "Open today's station"
       : "Enter today's station"
-  const resumeChip = pathComplete ? 'Path complete' : `Station ${resumeStep} of 20`
+  const resumeChip = pathComplete ? 'Path complete' : `Station ${resumeStep} of ${JOURNEY_STEP_COUNT}`
   const resumeHeading = pathComplete
     ? 'Path complete — review with pride'
     : `Unit ${unit.id}: ${unit.label}`
@@ -181,7 +181,7 @@ export function PracticeHub({
       <header className="ph-hero">
         <div className="ph-hero-copy">
           <p className="ph-kicker">{portal ? 'School path · crew order' : 'Practice · crew order'}</p>
-          <h1>{portal ? 'Your 20-step path' : 'Your training path'}</h1>
+          <h1>{portal ? `Your ${JOURNEY_STEP_COUNT}-step path` : 'Your training path'}</h1>
           <p className="ph-lede">
             {portal
               ? `${practiceName || 'Learner'} — ${meta.programTitle}. One spine. One station at a time. Learn lessons are extra when built.`

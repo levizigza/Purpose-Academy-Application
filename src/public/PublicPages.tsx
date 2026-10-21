@@ -6,6 +6,7 @@ import { HeroMotionLayer, Reveal } from '../components/Motion'
 import { SitePaMark } from '../components/SitePaMark'
 import { EnterBox } from '../gateway/EnterBox'
 import { markSequenceComplete } from '../gateway/sequenceProgress'
+import { JOURNEY_STEP_COUNT } from '../student/journeyCurriculum'
 
 export function HomePage() {
   return (
@@ -92,7 +93,7 @@ export function HomePage() {
           <h2>Three doors. One school path.</h2>
           <p className="lede path-lede">
             Choose Construction, Logistics, or Community Support. Every door shares Daily Conversation Vocabulary and
-            the same 20-step spine; specialty craft and depth differ by pathway.
+            the same {JOURNEY_STEP_COUNT}-step spine; specialty craft and depth differ by pathway.
           </p>
           <div className="signal-row">
             <Reveal as="article" className="signal construction featured" delay={100}>
@@ -119,7 +120,7 @@ export function HomePage() {
               <h3>Logistics Foundations</h3>
               <p>
                 Shared Daily Conversation Vocabulary plus 500-word Logistics Visual Vocabulary, warehouse safety,
-                equipment, inventory systems, and workplace English on the same 20-step path.
+                equipment, inventory systems, and workplace English on the same {JOURNEY_STEP_COUNT}-step path.
               </p>
               <span className="badge ok">Enrolling now</span>
             </Reveal>
@@ -242,7 +243,7 @@ export function ProgramsPage() {
           <span className="badge ok">Enrolling now</span>
           <h2>Logistics Foundations</h2>
           <p>
-            Same 20-step school path as Construction: assess fit, learn vocabulary, practise English, build safety and
+            Same {JOURNEY_STEP_COUNT}-step school path as Construction: assess fit, learn vocabulary, practise English, build safety and
             systems skills, then move toward warehouse and logistics roles with instructor checks.
           </p>
           <ul className="school-bullets">

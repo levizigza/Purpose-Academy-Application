@@ -10,6 +10,7 @@ import {
 } from '../data/store'
 import { courseIdForPathway, pathwayMeta, setActivePathway } from '../pathways'
 import { openPracticeSpine } from '../practice/PracticeMode'
+import { JOURNEY_STEP_COUNT } from './journeyCurriculum'
 
 function formatWhen(iso: string) {
   return new Date(iso).toLocaleString(undefined, {
@@ -182,7 +183,7 @@ export function StudentProgressPage() {
           {student.pathway && !hasPathwayLessons ? (
             <>
               <p>
-                Learn lessons for {pathwayLabel} are not built yet. Train on the shared 20-step spine under School
+                Learn lessons for {pathwayLabel} are not built yet. Train on the shared {JOURNEY_STEP_COUNT}-step spine under School
                 path.
               </p>
               <Link

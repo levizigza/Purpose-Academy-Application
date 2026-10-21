@@ -103,7 +103,7 @@ export type PathwayPack = {
   vocab: VocabTerm[]
   /**
    * Optional sentence-structure cloze bank (Construction Questions model).
-   * When present, Practice step 8 opens Sentence Structure before Word → Action.
+   * When present, Practice step 9 opens Sentence Structure before Word → Action.
    */
   sentenceCloze?: SentenceClozeItem[]
   wordActions: WordAction[]

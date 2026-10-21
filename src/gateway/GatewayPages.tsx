@@ -25,7 +25,7 @@ export function StudentEnterPage() {
         <p className="train-kicker">Student training path</p>
         <h1 className="train-welcome-title">Your path to work</h1>
         <p className="train-welcome-lede">
-          Twenty clear stations from registration to a job connection, with pictures, words, and practice.
+          {JOURNEY_STEPS.length} clear stations from registration to a job connection, with pictures, words, and practice.
         </p>
       </Reveal>
 
@@ -47,7 +47,7 @@ export function StudentEnterPage() {
       </Reveal>
 
       <Reveal className="train-step-list" delay={140}>
-        <h2 className="train-step-list-heading">All 20 training steps</h2>
+        <h2 className="train-step-list-heading">All {JOURNEY_STEPS.length} training steps</h2>
         <ol className="train-step-roster">
           {JOURNEY_STEPS.map((s) => (
             <li key={s.n}>

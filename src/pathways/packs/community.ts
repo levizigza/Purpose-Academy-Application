@@ -218,22 +218,22 @@ export const communityPack: PathwayPack = {
     },
   },
   stepTitles: {
-    11: {
+    12: {
       title: 'Support Language',
       help: 'Hear a community-support phrase. Choose what it means.',
       purpose: 'Useful English for dignity, privacy, consent, and escalation across community support settings.',
     },
-    15: {
+    16: {
       title: 'Support Tools & Materials',
       help: 'Learn each support tool group. Answer one check.',
       purpose: 'Safe naming before safe use with an instructor.',
     },
-    16: {
+    17: {
       title: 'Community Systems',
       help: 'Learn each system. Answer one check.',
       purpose: 'Your task helps people stay safe, informed, and supported with dignity.',
     },
-    18: {
+    19: {
       title: 'Placement Training',
       help: 'Make community-support decisions and log the day like a real team member.',
       purpose: 'Daily judgment, visit notes, and supervisor feedback.',

@@ -1,5 +1,6 @@
 import { useEffect, useState, type MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { JOURNEY_STEP_COUNT } from '../student/journeyCurriculum'
 import {
   SEQUENCE_CATALOG,
   clearSequenceProgress,
@@ -59,8 +60,8 @@ export function SequenceBoard({ compact = false }: { compact?: boolean }) {
           <h2>{compact ? 'Your sequences' : 'All sequences. Open and track'}</h2>
           <p className="lede">
             {done} of {total} live paths complete in this browser.
-            {studentStep > 0 && studentStep < 20
-              ? ` Student path is on step ${studentStep} of 20.`
+            {studentStep > 0 && studentStep < JOURNEY_STEP_COUNT
+              ? ` Student path is on step ${studentStep} of ${JOURNEY_STEP_COUNT}.`
               : ''}{' '}
             The Purpose Academy Application slot is reserved for later.
           </p>
@@ -86,7 +87,7 @@ export function SequenceBoard({ compact = false }: { compact?: boolean }) {
           const complete = !placeholder && isSequenceComplete(item.id)
           const record = records.find((r) => r.id === item.id)
           const studentInProgress =
-            item.id === 'student' && !complete && studentStep > 0 && studentStep < 20
+            item.id === 'student' && !complete && studentStep > 0 && studentStep < JOURNEY_STEP_COUNT
           return (
             <li
               key={item.id}
@@ -103,7 +104,7 @@ export function SequenceBoard({ compact = false }: { compact?: boolean }) {
                 {complete && record && (
                   <em>Completed {formatWhen(record.completedAt)}</em>
                 )}
-                {studentInProgress && <em>In progress. Step {studentStep} of 20</em>}
+                {studentInProgress && <em>In progress. Step {studentStep} of {JOURNEY_STEP_COUNT}</em>}
                 {placeholder && <em>Empty link for now. Destination comes later</em>}
               </div>
               {placeholder ? (

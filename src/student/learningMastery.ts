@@ -76,27 +76,29 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   4: 'career-assessment',
   5: 'career-assessment',
   6: 'vocab',
+  /** Standalone jumble: picture box + five language names. */
+  7: 'vocab-organize',
   /** After Visual Vocabulary + language organize: find every picture again. */
-  7: 'eye-spy',
+  8: 'eye-spy',
   /** Construction runs Sentence Structure in-station first, then Word → Action. */
-  8: 'word-action',
-  9: 'matching',
-  10: 'instructions',
-  11: 'site-phrases',
+  9: 'word-action',
+  10: 'matching',
+  11: 'instructions',
+  12: 'site-phrases',
   /** After practice: RIASEC interest inventory for specialization. */
-  12: 'career-assessment',
-  13: 'digital',
-  14: 'safety',
-  15: 'tools',
-  16: 'systems',
-  17: 'observation',
-  18: 'site-log',
-  19: 'final-exam',
-  20: 'employment',
+  13: 'career-assessment',
+  14: 'digital',
+  15: 'safety',
+  16: 'tools',
+  17: 'systems',
+  18: 'observation',
+  19: 'site-log',
+  20: 'final-exam',
+  21: 'employment',
 }
 
 /** Steps that need at least "familiar" mastery before Continue unlocks (real platform gate). */
-export const GATED_SKILL_STEPS = new Set([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+export const GATED_SKILL_STEPS = new Set([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
 
 const LEVEL_WEIGHT: Record<MasteryLevel, number> = {
   locked: 0,

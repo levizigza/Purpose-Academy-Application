@@ -1,4 +1,5 @@
 /** Practice: full-site student path preview (no registration). */
+import { JOURNEY_STEP_COUNT } from '../student/journeyCurriculum'
 
 export const PRACTICE_REVIEWERS = ['ChuChu', 'Yonas', 'Kinfe', 'Saba', 'Levi', 'Teklish', 'Henok'] as const
 export type PracticeReviewer = (typeof PRACTICE_REVIEWERS)[number] | string
@@ -69,7 +70,7 @@ export function resetPracticeProgress() {
 }
 
 /** Ask for reviewer feedback only at unit boundaries so learning stays continuous. */
-export const PRACTICE_FEEDBACK_STEPS = new Set([6, 8, 12, 16, 19, 20])
+export const PRACTICE_FEEDBACK_STEPS = new Set([6, 8, 9, 13, 17, 20, 21])
 
 export function shouldAskPracticeFeedback(step: number) {
   return PRACTICE_FEEDBACK_STEPS.has(step)
@@ -116,14 +117,14 @@ export function setPracticeName(fullName: string) {
 export function getJourneyStep(): number {
   try {
     const n = Number(sessionStorage.getItem(JOURNEY_STEP_KEY) || '0')
-    return Number.isFinite(n) && n > 0 ? Math.min(20, Math.max(1, Math.floor(n))) : PRACTICE_ENTRY_STEP
+    return Number.isFinite(n) && n > 0 ? Math.min(JOURNEY_STEP_COUNT, Math.max(1, Math.floor(n))) : PRACTICE_ENTRY_STEP
   } catch {
     return PRACTICE_ENTRY_STEP
   }
 }
 
 export function setJourneyStep(step: number) {
-  const target = Math.min(20, Math.max(PRACTICE_ENTRY_STEP, Math.floor(step)))
+  const target = Math.min(JOURNEY_STEP_COUNT, Math.max(PRACTICE_ENTRY_STEP, Math.floor(step)))
   try {
     sessionStorage.setItem(JOURNEY_STEP_KEY, String(target))
     window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: target } }))
@@ -133,7 +134,7 @@ export function setJourneyStep(step: number) {
 }
 
 /**
- * Open the shared 20-step Practice spine from the student portal without wiping
+ * Open the shared Practice spine from the student portal without wiping
  * existing journey progress.
  */
 export function openPracticeSpine(fullName: string) {

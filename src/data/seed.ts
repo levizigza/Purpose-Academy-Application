@@ -715,7 +715,7 @@ export function createSeedDatabase(): AppDatabase {
       {
         id: 'ann-1',
         title: 'Three pathways open',
-        body: 'Construction, Logistics, and Community Support Foundations are open. Start with the pathway that fits your goals; each uses the same 20-step school path with instructor checks.',
+        body: 'Construction, Logistics, and Community Support Foundations are open. Start with the pathway that fits your goals; each uses the same 21-step school path with instructor checks.',
         audience: 'all',
         created_at: now,
       },

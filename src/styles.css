@@ -6943,7 +6943,7 @@ table.data th {
   background: transparent;
 }
 
-/* Step roster (list of all 20 steps) */
+/* Step roster (list of all journey steps) */
 
 .train-step-list {
   background: var(--train-surface);

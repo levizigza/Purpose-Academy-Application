@@ -11,6 +11,7 @@ import {
 } from '../data/store'
 import { courseIdForPathway, pathwayMeta, pathwayPhoto, setActivePathway } from '../pathways'
 import { openPracticeSpine } from '../practice/PracticeMode'
+import { JOURNEY_STEP_COUNT } from './journeyCurriculum'
 import type { AppDatabase } from '../data/types'
 
 function courseLessonStats(db: AppDatabase, studentId: string, courseId: string) {
@@ -160,14 +161,14 @@ export function StudentHomePage() {
         : !hasPathwayLessons
           ? {
               title: `Continue ${pathwayLabel} on School path`,
-              body: `Account lessons for ${pathwayLabel} are not in Learn yet. Your real 20-step school path — vocabulary, drills, and checks — is under School path.`,
+              body: `Account lessons for ${pathwayLabel} are not in Learn yet. Your real ${JOURNEY_STEP_COUNT}-step school path — vocabulary, drills, and checks — is under School path.`,
               to: '/app/student/path',
               cta: 'Open School path',
               onBeforeNavigate: openPathwayPractice,
             }
           : {
               title: 'Keep training on School path',
-              body: 'Account lessons look current. Keep building vocabulary and drills on the shared 20-step School path.',
+              body: `Account lessons look current. Keep building vocabulary and drills on the shared ${JOURNEY_STEP_COUNT}-step School path.`,
               to: '/app/student/path',
               cta: 'Open School path',
               onBeforeNavigate: openPathwayPractice,
@@ -192,7 +193,7 @@ export function StudentHomePage() {
         </div>
         <div className="school-path-home-copy stack">
           <p className="section-kicker">School path</p>
-          <h2>Your 20-step spine</h2>
+          <h2>Your {JOURNEY_STEP_COUNT}-step spine</h2>
           <p>
             {pathwayLabel ? `${pathwayLabel} Foundations` : 'Your pathway'} — units, vocabulary, and checks in clear
             order. One station today. Done for now when you have finished it.
@@ -331,7 +332,7 @@ export function StudentProfilePage() {
         <h2>More pages</h2>
         <ul className="list-plain">
           <li>
-            <Link to="/app/student/path">School path (20 steps)</Link>
+            <Link to="/app/student/path">School path ({JOURNEY_STEP_COUNT} steps)</Link>
           </li>
           <li>
             <Link to="/app/student/foundation">Foundation lessons</Link>

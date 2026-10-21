@@ -57,22 +57,22 @@ export const logisticsPack: PathwayPack = {
     },
   },
   stepTitles: {
-    11: {
+    12: {
       title: 'Warehouse Language',
       help: 'Hear a warehouse phrase. Choose what it means.',
       purpose: 'Useful English you will hear in Alberta logistics workplaces.',
     },
-    15: {
+    16: {
       title: 'Equipment & Materials',
       help: 'Learn each equipment group. Answer one check.',
       purpose: 'Safe naming before safe use with an instructor.',
     },
-    16: {
+    17: {
       title: 'Logistics Systems',
       help: 'Learn each system. Answer one check.',
       purpose: 'Your task keeps goods moving safely and on time.',
     },
-    18: {
+    19: {
       title: 'Warehouse Floor Training',
       help: 'Make floor decisions and log the day like a real team member.',
       purpose: 'Daily judgment, notes, and supervisor feedback.',
