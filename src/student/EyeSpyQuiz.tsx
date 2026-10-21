@@ -14,7 +14,7 @@ import {
 type Mode = 'exercise' | 'exam'
 
 const CLEAR_ALL_INSTRUCTION =
-  'Identify every item in this scene. Tap the picture that matches the English word. Found items stay marked until the board is clear.'
+  'Tap a picture, then tap its English name. A correct pair disappears. Clear the whole board to move on.'
 
 export function findQueue(scene: EyeSpyScene): EyeSpyHotspot[] {
   if (scene.findOrder?.length) {
@@ -28,8 +28,8 @@ export function findQueue(scene: EyeSpyScene): EyeSpyHotspot[] {
 }
 
 /**
- * Eye Spy: clear every workplace photo in the scene.
- * One English word at a time; tap the matching picture to eliminate it.
+ * Eye Spy: pair each remaining picture with its English name.
+ * A correct pair vanishes. The scene is done when the board is empty.
  * Pass requires identifying every item with no misses.
  */
 export function EyeSpyQuiz({
@@ -47,9 +47,10 @@ export function EyeSpyQuiz({
     [boards],
   )
   const [sceneIdx, setSceneIdx] = useState(0)
-  const [findIdx, setFindIdx] = useState(0)
   const [foundIds, setFoundIds] = useState<string[]>([])
-  const [wrongId, setWrongId] = useState<string | null>(null)
+  const [pickedHotspot, setPickedHotspot] = useState<string | null>(null)
+  const [pickedName, setPickedName] = useState<string | null>(null)
+  const [wrongPair, setWrongPair] = useState(false)
   const [correctCount, setCorrectCount] = useState(0)
   const [misses, setMisses] = useState(0)
   const [attempt, setAttempt] = useState(1)
@@ -58,8 +59,12 @@ export function EyeSpyQuiz({
 
   const scene = boards[sceneIdx]
   const queue = scene ? findQueue(scene) : []
-  const target = queue[findIdx]
   const foundSet = useMemo(() => new Set(foundIds), [foundIds])
+  const remaining = queue.filter((h) => !foundSet.has(h.id))
+  const nameOptions = useMemo(
+    () => remaining.map((h) => h.answer).sort((a, b) => a.localeCompare(b)),
+    [remaining],
+  )
   const need = totalFinds
   const maxAttempts = mode === 'exam' ? ATTEMPT_POLICY.examMax : null
 
@@ -75,38 +80,39 @@ export function EyeSpyQuiz({
   }, [phase])
 
   useEffect(() => {
-    if (!wrongId) return
-    const t = window.setTimeout(() => setWrongId(null), 700)
+    if (!wrongPair) return
+    const t = window.setTimeout(() => setWrongPair(false), 700)
     return () => window.clearTimeout(t)
-  }, [wrongId])
+  }, [wrongPair])
 
-  function resetBoard() {
-    setFindIdx(0)
-    setFoundIds([])
-    setWrongId(null)
+  function resetPicks() {
+    setPickedHotspot(null)
+    setPickedName(null)
+    setWrongPair(false)
   }
 
-  function tapHotspot(id: string) {
-    if (phase !== 'play' || !target) return
-    if (foundSet.has(id)) return
-    const ok = id === target.id
+  function resetBoard() {
+    setFoundIds([])
+    resetPicks()
+  }
+
+  function confirm() {
+    if (phase !== 'play' || !pickedHotspot || !pickedName) return
+    const hotspot = remaining.find((h) => h.id === pickedHotspot)
+    const ok = Boolean(hotspot && hotspot.answer === pickedName)
     recordSkillAttempt(mode === 'exam' ? 'final-exam' : 'eye-spy', ok, ok ? 15 : 0)
-    if (ok) {
+    if (ok && hotspot) {
       playFoley('correct')
-      const nextFound = [...foundIds, id]
+      const nextFound = [...foundIds, hotspot.id]
       setFoundIds(nextFound)
       setCorrectCount((c) => c + 1)
-      setWrongId(null)
-      if (findIdx + 1 >= queue.length) {
-        setPhase('scene-clear')
-        return
-      }
-      setFindIdx((i) => i + 1)
+      resetPicks()
+      if (nextFound.length >= queue.length) setPhase('scene-clear')
       return
     }
     playFoley('wrong')
     setMisses((m) => m + 1)
-    setWrongId(id)
+    setWrongPair(true)
   }
 
   function nextAfterSceneClear() {
@@ -181,7 +187,7 @@ export function EyeSpyQuiz({
           {misses > 0 ? ` · ${misses} miss${misses === 1 ? '' : 'es'} (must be 0 to pass)` : ' · clean run'}
         </p>
         <p className="muted">
-          You must identify every item in every scene with no mistakes.
+          You must pair every picture with its English name until each board is empty.
         </p>
         {pass ? (
           <button type="button" className="btn btn-primary" onClick={handleComplete}>
@@ -195,7 +201,7 @@ export function EyeSpyQuiz({
           <button type="button" className="btn btn-primary" onClick={retryRun}>
             {mode === 'exam' && maxAttempts
               ? `Try exam again (${attempt + 1} of ${maxAttempts})`
-              : 'Try again. Identify every item with no mistakes'}
+              : 'Try again. Clear every board with no mistakes'}
           </button>
         )}
         {feedbackPrompt && (
@@ -230,40 +236,36 @@ export function EyeSpyQuiz({
       <p className="eye-spy-instruction">{CLEAR_ALL_INSTRUCTION}</p>
       <p className="eye-spy-scene-title">{scene.title}</p>
       <p className="eye-spy-progress" aria-live="polite">
-        {foundIds.length} of {queue.length} found in this scene
+        {remaining.length === 0
+          ? 'Board empty'
+          : `${remaining.length} left on this board · ${foundIds.length} of ${queue.length} cleared`}
       </p>
-
-      {phase === 'play' && target && (
-        <p className="eye-spy-word" aria-live="polite">
-          Find: <strong>{target.answer}</strong>
-        </p>
-      )}
 
       {phase === 'scene-clear' && (
         <p className="eye-spy-word is-clear" aria-live="polite">
-          Scene clear. Every item identified.
+          Board empty. Every pair matched.
         </p>
       )}
 
-      <div className="eye-spy-stage" role="group" aria-label="Photo board. Tap the picture that matches the English word">
+      <div className="eye-spy-stage" role="group" aria-label="Photo board. Tap a picture, then tap its English name">
         <div className="eye-spy-grid" aria-hidden>
           {Array.from({ length: 12 }).map((_, i) => (
             <span key={i} className="eye-spy-tile" />
           ))}
         </div>
         {scene.hotspots.map((h, index) => {
+          if (foundSet.has(h.id)) return null
           const img = pathwayImage(h.imageKey)
-          const found = foundSet.has(h.id)
-          const wrong = wrongId === h.id
+          const selected = pickedHotspot === h.id
           return (
             <button
               key={`${scene.id}-${h.id}`}
               type="button"
-              className={`eye-spy-hotspot${found ? ' is-found' : ''}${wrong ? ' is-wrong' : ''}`}
+              className={`eye-spy-hotspot${selected ? ' is-selected' : ''}${wrongPair && selected ? ' is-wrong' : ''}`}
               style={{ left: `${h.x}%`, top: `${h.y}%`, width: `${h.w}%`, height: `${h.h}%` }}
-              onClick={() => tapHotspot(h.id)}
-              disabled={phase !== 'play' || found}
-              aria-label={found ? `${h.answer}, found` : `Tool spot ${index + 1}`}
+              onClick={() => phase === 'play' && setPickedHotspot(h.id)}
+              disabled={phase !== 'play'}
+              aria-label={`Tool spot ${index + 1}`}
             >
               {img ? <img src={img} alt="" /> : <span>{h.label}</span>}
             </button>
@@ -271,13 +273,36 @@ export function EyeSpyQuiz({
         })}
       </div>
 
-      <ul className="eye-spy-cleared" aria-label="Items found">
-        {queue.map((h) => (
-          <li key={h.id} className={foundSet.has(h.id) ? 'is-found' : ''}>
-            {h.answer}
-          </li>
-        ))}
-      </ul>
+      {phase === 'play' && remaining.length > 0 && (
+        <>
+          <p className="eye-spy-prompt">What English name matches the picture you tapped?</p>
+          <div className="train-choice-grid">
+            {nameOptions.map((opt) => {
+              let cls = 'train-choice'
+              if (pickedName === opt) cls += wrongPair ? ' is-wrong' : ' is-selected'
+              return (
+                <button
+                  key={opt}
+                  type="button"
+                  className={cls}
+                  disabled={phase !== 'play'}
+                  onClick={() => setPickedName(opt)}
+                >
+                  {opt}
+                </button>
+              )
+            })}
+          </div>
+          <button
+            type="button"
+            className="btn btn-primary"
+            disabled={!pickedHotspot || !pickedName}
+            onClick={confirm}
+          >
+            Check pair
+          </button>
+        </>
+      )}
 
       {phase === 'scene-clear' && (
         <button type="button" className="btn btn-primary" onClick={nextAfterSceneClear}>

@@ -1679,7 +1679,7 @@ export function StudentSequencePage() {
         }}
       >
         <WhyWork>On a real site every tool sits among other objects. Prove you can name each one until the board is clear.</WhyWork>
-        <TeachNote>Exercise mode: unlimited tries. Each scene has several items. Match the English word to its picture, then the next word, until nothing is left. Pass requires 100% with no misses.</TeachNote>
+        <TeachNote>Exercise mode: unlimited tries. Tap a picture and its English name. A correct pair disappears. Clear the whole board, then the next scene. Pass requires 100% with no misses.</TeachNote>
         <EyeSpyQuiz
           scenes={EYE_SPY_SCENES}
           mode="exercise"
@@ -2659,7 +2659,7 @@ export function StudentSequencePage() {
     if (finalPhase === 'eyespy') {
       return (
         <Shell step={19} onBack={() => go(18)}>
-          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Identify every item in every scene." />
+          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Pair every picture with its word until each board is empty." />
           <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('written') }} />
         </Shell>
       )

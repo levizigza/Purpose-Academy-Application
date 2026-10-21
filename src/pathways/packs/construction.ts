@@ -74,7 +74,7 @@ export const constructionPack: PathwayPack = {
   stepTitles: {
     7: {
       title: 'English Eye Spy',
-      help: 'Ten scenes. Match each English word to its picture until every item on the board is cleared.',
+      help: 'Ten scenes. Tap a picture and its English name. Correct pairs disappear until the board is empty.',
       purpose: 'Connect Visual Vocabulary again in a busy scene before Sentence Structure.',
     },
     8: {
