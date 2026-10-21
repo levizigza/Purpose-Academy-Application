@@ -1594,7 +1594,15 @@ export function StudentSequencePage() {
           <p className="alert warn train-ladder-nudge" role="status">
             Daily Conversation Level-1 is done. Next: link workplace pictures
             ({specialtyLinked} of {specialtyGate.length})
-            {firstSpecialtyIdx >= 0 ? ' — open the Construction vocabulary pages.' : '.'}
+            {firstSpecialtyIdx >= 0
+              ? ` — open the ${
+                  pathwayId === 'logistics'
+                    ? 'Logistics'
+                    : pathwayId === 'community'
+                      ? 'Community'
+                      : 'Construction'
+                } vocabulary pages.`
+              : '.'}
             {' '}
             {firstSpecialtyIdx >= 0 ? (
               <button
