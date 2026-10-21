@@ -1675,13 +1675,16 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 9: Construction = Sentence Structure → Word → Action; other pathways = Word → Action */
+  /* Step 9: Construction/Logistics = Sentence Structure → Word → Action; others = Word → Action */
   if (step === 9) {
     if (SENTENCE_CLOZE.length && step8Phase === 'sentences') {
       return (
         <Shell step={9} onBack={() => go(8)}>
           <SentenceClozeDrill
             items={SENTENCE_CLOZE}
+            documentLabel={
+              pathwayId === 'logistics' ? 'Logistics Questions' : 'Construction Questions'
+            }
             onLevel1Passed={() => {
               setSentenceLevel1(true)
               recordSkillAttempt('sentence-cloze', true, 20)

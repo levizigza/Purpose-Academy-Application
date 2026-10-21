@@ -1,15 +1,21 @@
 import { useEffect, useMemo, useState } from 'react'
+import { pathwayImage } from '../pathways'
 import type { SentenceClozeItem } from '../pathways/packs/constructionSentenceCloze560'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { speakEnglish } from './speech'
 import { playFoley } from '../audio/foley'
 import { recordSkillAttempt } from './learningMastery'
 
-/** Construction Questions PPTX illustration from public/sentence-cloze/. */
+/** Worksheet tile from public/sentence-cloze/ when extracted from the PPTX. */
 function sentenceImageUrl(file?: string) {
   if (!file) return undefined
   const base = import.meta.env.BASE_URL || '/'
   return `${base}sentence-cloze/${file}`
+}
+
+/** Prefer PPTX tile; fall back to Visual Vocabulary photo (pathway imageKey). */
+function resolveClozeImage(item: SentenceClozeItem) {
+  return sentenceImageUrl(item.imageFile) || pathwayImage(item.imageKey)
 }
 
 /** Construction Questions PPTX: 10 items per worksheet page (1–10, 11–20, …). */
@@ -75,6 +81,11 @@ type Props = {
   picturedAnswers?: string[]
   /** Drop cloze rows whose answers are not in pictured Visual Vocabulary. */
   picturedOnlyBank?: boolean
+  /**
+   * Document brand shown in kickers / help copy
+   * (e.g. "Construction Questions" or "Logistics Questions").
+   */
+  documentLabel?: string
   /** First honest page pass — unlocks Word → Action (more pages stay open). */
   onLevel1Passed: () => void
   onContinueToActions: () => void
@@ -84,10 +95,10 @@ type Props = {
 }
 
 /**
- * Construction Sentence Structure — Construction Questions PPTX mold.
+ * Sentence Structure — Purpose Academy Questions PPTX mold (Construction / Logistics).
  *
- * Matches Purpose Academy Construction English • Multiple Choice:
- * - Object illustration beside the cloze sentence (PPTX image pair)
+ * Matches Purpose Academy English • Multiple Choice:
+ * - Object illustration beside the cloze sentence (PPTX tile or Visual Vocabulary photo)
  * - White worksheet card + four word choices
  * - One attempt per item (no answer shopping)
  * - Correct word slides into the blank
@@ -98,11 +109,13 @@ export function SentenceClozeDrill({
   items,
   picturedAnswers,
   picturedOnlyBank,
+  documentLabel = 'Construction Questions',
   onLevel1Passed,
   onContinueToActions,
   continueLabel = 'Continue to Word → Action',
   onSkipToActions,
 }: Props) {
+  const englishBrand = documentLabel.replace(/\s+Questions$/i, ' English')
   /** Docs order is PPTX 1–560. Only reorder when a caller explicitly asks. */
   const bank = useMemo(
     () =>
@@ -266,7 +279,7 @@ export function SentenceClozeDrill({
           id={id}
           value={page}
           onChange={(e) => jumpToPage(Number(e.target.value))}
-          aria-label="Jump to any Construction Questions page"
+          aria-label={`Jump to any ${documentLabel} page`}
         >
           {Array.from({ length: pageCount }, (_, i) => {
             const from = i * SENTENCE_PAGE_SIZE + 1
@@ -347,7 +360,7 @@ export function SentenceClozeDrill({
   const displayWord = showWord ? item.answer : null
   const before = item.prompt.split('______')[0] ?? ''
   const after = item.prompt.split('______')[1] ?? ''
-  const imageSrc = sentenceImageUrl(item.imageFile)
+  const imageSrc = resolveClozeImage(item)
   const choiceLetters = ['A', 'B', 'C', 'D'] as const
 
   return (
@@ -355,7 +368,7 @@ export function SentenceClozeDrill({
       <div className="sentence-cloze-head-row">
         <div>
           <p className="section-kicker">Sentence Structure</p>
-          <p className="sentence-cloze-doc-kicker">Construction English · Multiple Choice</p>
+          <p className="sentence-cloze-doc-kicker">{englishBrand} · Multiple Choice</p>
         </div>
         {practice && onSkipToActions ? (
           <button
@@ -369,13 +382,13 @@ export function SentenceClozeDrill({
       </div>
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
-        All {bank.length} Construction Questions · Item {idx + 1} of {deck.length}
+        All {bank.length} {documentLabel} · Item {idx + 1} of {deck.length}
         {phase === 'drill' ? ` · First-try ${scoreCorrect}` : ''}
         {level1Unlocked ? ' · Level-1 unlocked' : ''}
       </p>
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
-        Choose the correct word to complete each sentence. Every item from the Construction Questions
+        Choose the correct word to complete each sentence. Every item from the {documentLabel}{' '}
         PowerPoint (1–{bank.length}) is here. One try — if it is wrong, we show the answer and move on.
       </p>
 

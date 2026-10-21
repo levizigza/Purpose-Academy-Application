@@ -12,10 +12,15 @@ export type SentenceClozeItem = {
   options: [string, string, string, string]
   answer: string
   /**
-   * PPTX Construction Questions illustration for this item
+   * PPTX / worksheet illustration for this item
    * (served from public/sentence-cloze/).
    */
-  imageFile: string
+  imageFile?: string
+  /**
+   * Pathway Visual Vocabulary photo key (e.g. log-box, log-vv-021).
+   * Used when the worksheet tile is not yet extracted, or as a craft fallback.
+   */
+  imageKey?: string
 }
 
 export const CONSTRUCTION_SENTENCE_CLOZE_560: SentenceClozeItem[] = [

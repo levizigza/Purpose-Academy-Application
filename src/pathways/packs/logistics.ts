@@ -1,6 +1,7 @@
 import type { PathwayPack } from '../types'
 import { hint } from '../packHelpers'
 import { DAILY_CONVERSATION_VOCAB_200 } from './dailyConversationVocab200'
+import { LOGISTICS_SENTENCE_CLOZE_560 } from './logisticsSentenceCloze560'
 import { LOGISTICS_VOCAB_500 } from './logisticsVocab500'
 
 /**
@@ -9,7 +10,8 @@ import { LOGISTICS_VOCAB_500 } from './logisticsVocab500'
  * OSHA pedestrian / MHE awareness). Powered forklifts = awareness / stay clear
  * only — never claimed as certification.
  *
- * Vocabulary order: Daily Conversation (shared 200) → Logistics Visual Vocabulary (500).
+ * Vocabulary order: Daily Conversation (shared 200) → Logistics Visual Vocabulary (500)
+ * → language organize → Eye Spy → Sentence Structure (560 cloze) → Word → Action.
  * Level-1 gate = Daily Conversation words 1–20.
  */
 export const logisticsPack: PathwayPack = {
@@ -31,8 +33,9 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     4: {
-      goal: 'Connect words to warehouse actions, then follow warehouse language.',
+      goal: 'Put the words into Logistics Questions sentences, then follow warehouse language.',
       outcomes: [
+        'Complete Logistics English cloze worksheets — one try, correct word slides into the blank',
         'Connect word → floor action',
         'Match pictures to English words',
         'Follow short workplace instructions',
@@ -57,6 +60,16 @@ export const logisticsPack: PathwayPack = {
     },
   },
   stepTitles: {
+    8: {
+      title: 'English Eye Spy',
+      help: 'Ten scenes. Tap a picture and its English name. Correct pairs disappear until the board is empty.',
+      purpose: 'Connect Visual Vocabulary again in a busy scene before Sentence Structure.',
+    },
+    9: {
+      title: 'Sentence Structure',
+      help: 'Choose the word that completes the sentence. One try — if it is wrong, we show the answer and move on. Correct words slide into the blank.',
+      purpose: 'Logistics Questions worksheet mold (blank + four choices), then Word → Action.',
+    },
     12: {
       title: 'Warehouse Language',
       help: 'Hear a warehouse phrase. Choose what it means.',
@@ -82,6 +95,7 @@ export const logisticsPack: PathwayPack = {
    * Daily Conversation (shared 200) + Logistics Visual Vocabulary (500).
    */
   vocab: [...DAILY_CONVERSATION_VOCAB_200, ...LOGISTICS_VOCAB_500],
+  sentenceCloze: LOGISTICS_SENTENCE_CLOZE_560,
   wordActions: [
     {
       id: 'wa-box',
