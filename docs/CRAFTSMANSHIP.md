@@ -222,6 +222,13 @@ These are load-bearing across all layers.
 - Clear page-pass badge when the worksheet page is cleared.
 - Language ladder: gloss → picture → **sentence** → action → instruction → phrase.
 
+### 6.3a1 Language organize quiz (after five-language VocabSheet)
+
+- After Visual Vocabulary Level-1 is ready, learners face a **language organize** page before Sentence Structure / Word → Action.
+- One page = **four English stations**. Top tray is jumbled: pictures + five-language word chips.
+- For each English word (e.g. HAMMER): place the **picture**, then place language names in worksheet descending order (Amharic → Tigrinya → Arabic → Spanish → Hindi).
+- Pass requires all four stations complete (picture + all five glosses). Tap-to-place (mobile-safe).
+
 ### 6.3b Photos show the whole object
 
 - Training object photos and pathway program cards use **`object-fit: contain`** so royalty-free imagery is fully readable.
@@ -419,6 +426,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-21 — Language organize quiz after five-language vocab (L2)
+
+- After VocabSheet Level-1, a page of four English stations: jumbled pictures + five-language words; place picture then languages in descending worksheet order to pass.
+- Tap-to-place (no drag dependency). Practice can skip. Then Sentence Structure / Word → Action.
+- **Assumption to challenge next:** whether two organize pages beat one before Level-1 unlock.
+
 
 ### 2026-10-21 — Sentence Structure back to Construction Questions worksheet (L2)
 

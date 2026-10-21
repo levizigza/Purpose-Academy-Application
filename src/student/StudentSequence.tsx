@@ -68,6 +68,7 @@ import {
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
+import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
 import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
 import { PracticeHub, PracticeStatsStrip } from './PracticeHub'
@@ -661,6 +662,9 @@ export function StudentSequencePage() {
   const [actionCorrect, setActionCorrect] = useState(false)
   /** Construction: Sentence Structure first, then Word → Action inside step 7. */
   const [step8Phase, setStep8Phase] = useState<'sentences' | 'actions'>('sentences')
+  /** After five-language VocabSheet: organize picture + languages quiz. */
+  const [vocabPhase, setVocabPhase] = useState<'sheet' | 'organize'>('sheet')
+  const [organizeTerms, setOrganizeTerms] = useState<VocabTerm[]>([])
   const [sentenceLevel1, setSentenceLevel1] = useState(false)
   const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
   const [busy, setBusy] = useState(false)
@@ -801,6 +805,8 @@ export function StudentSequencePage() {
     setActionAnswer(null)
     setActionCorrect(false)
     setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
+    setVocabPhase('sheet')
+    setOrganizeTerms([])
     setSentenceLevel1(false)
     setMatchIdx(0)
     setMatchAnswer(null)
@@ -845,6 +851,8 @@ export function StudentSequencePage() {
   }, [step])
 
   function resetDrillLocals() {
+    setVocabPhase('sheet')
+    setOrganizeTerms([])
     setActionIdx(0)
     setActionAnswer(null)
     setActionCorrect(false)
@@ -931,6 +939,10 @@ export function StudentSequencePage() {
     /* Quality-review jumps land on Sentence Structure (not mid Word→Action) when opening step 7. */
     if (target === 7) {
       setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
+    }
+    if (target === 6) {
+      setVocabPhase('sheet')
+      setOrganizeTerms([])
     }
     if (target === step) {
       resetDrillLocals()
@@ -1536,7 +1548,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 6: Visual Vocabulary — all five languages; press yours → connect to English */
+  /* Step 6: Visual Vocabulary — five languages, then organize quiz */
   if (step === 6) {
     const knownSet = new Set(vocabKnownIds)
     const linkedCount = VOCAB_UNIT.filter(
@@ -1569,6 +1581,33 @@ export function StudentSequencePage() {
     ).length
     const firstSpecialtyIdx = VOCAB_UNIT.findIndex((t) => !isDailyConversationTerm(t))
 
+    function continueAfterVocabOrganize() {
+      setActionIdx(0)
+      setActionAnswer(null)
+      setActionCorrect(false)
+      setStep8Phase(SENTENCE_CLOZE.length ? 'sentences' : 'actions')
+      setSentenceLevel1(false)
+      setVocabPhase('sheet')
+      setOrganizeTerms([])
+      go(
+        7,
+        SENTENCE_CLOZE.length ? 'Opening Sentence Structure…' : 'Opening Word → Action…',
+      )
+    }
+
+    if (vocabPhase === 'organize') {
+      const deck = organizeTerms.length ? organizeTerms : pickOrganizeTerms(VOCAB_UNIT)
+      return (
+        <Shell step={6} onBack={() => setVocabPhase('sheet')}>
+          <VocabOrganizeQuiz
+            terms={deck}
+            onPassed={continueAfterVocabOrganize}
+            onSkip={isPracticeMode() ? continueAfterVocabOrganize : undefined}
+          />
+        </Shell>
+      )
+    }
+
     return (
       <Shell
         step={6}
@@ -1576,18 +1615,14 @@ export function StudentSequencePage() {
         onNext={
           ready
             ? () => {
-                setActionIdx(0)
-                setActionAnswer(null)
-                setActionCorrect(false)
-                setStep8Phase(SENTENCE_CLOZE.length ? 'sentences' : 'actions')
-                setSentenceLevel1(false)
-                go(7)
+                setOrganizeTerms(pickOrganizeTerms(VOCAB_UNIT))
+                setVocabPhase('organize')
+                playFoley('whoosh')
+                window.scrollTo({ top: 0, behavior: 'smooth' })
               }
             : undefined
         }
-        nextLabel={
-          SENTENCE_CLOZE.length ? 'Continue to Sentence Structure' : 'Continue to Word → Action'
-        }
+        nextLabel="Continue to language organize quiz"
         nextDisabled={!ready}
       >
         <VocabSheet
@@ -1627,12 +1662,26 @@ export function StudentSequencePage() {
         <p className="train-vocab-counter">
           {ready
             ? usesSentenceLadder
-              ? `Ladder ready · DC ${dcGate.length} + workplace ${specialtyGate.length} · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
-              : `Level-1 complete (${ladderGateTerms.length} words) · Full table ${linkedCount} of ${VOCAB_UNIT.length} · Ready to continue`
+              ? `Ladder ready · Next: organize 4 words (picture + five languages) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
+              : `Level-1 complete · Next: organize 4 words (picture + five languages) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
             : usesSentenceLadder
               ? `Ladder ${gateLinked} of ${ladderGateTerms.length} (DC ${dcLinked}/${dcGate.length} · workplace ${specialtyLinked}/${specialtyGate.length}) · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
               : `Level-1 ${gateLinked} of ${ladderGateTerms.length} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
         </p>
+        {isPracticeMode() && !ready ? (
+          <button
+            type="button"
+            className="btn btn-secondary on-light"
+            onClick={() => {
+              setOrganizeTerms(pickOrganizeTerms(VOCAB_UNIT))
+              setVocabPhase('organize')
+              playFoley('whoosh')
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
+          >
+            Open organize quiz (review)
+          </button>
+        ) : null}
       </Shell>
     )
   }

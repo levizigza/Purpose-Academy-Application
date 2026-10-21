@@ -36,12 +36,12 @@ export const constructionPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn Daily Conversation Vocabulary (200), Construction Visual Vocabulary (660), then Sentence Structure (560 cloze). Complete Level-1 vocab (words 1–20) and one honest sentence page to continue; more pages stay open to practise.',
+      goal: 'Learn Daily Conversation Vocabulary (200), Construction Visual Vocabulary (660), organize four words across five languages, then Sentence Structure (560 cloze). Complete Level-1 vocab and one honest sentence page to continue; more pages stay open to practise.',
       outcomes: [
         'See a real photo of each word and hear English spoken every time',
         'Connect your language to the English word and a short example sentence',
-        'Complete Construction English cloze worksheets — one try, correct word slides into the blank; wrong answers show the right word and move on',
-        'Use worksheet pages so the app matches the class vocabulary table',
+        'Organize four English stations: picture + five language names in worksheet order',
+        'Complete Construction English cloze worksheets — one try, correct word slides into the blank',
       ],
     },
     4: {

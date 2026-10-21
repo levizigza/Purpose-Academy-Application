@@ -11,6 +11,7 @@ export type SkillId =
   | 'language'
   | 'career-assessment'
   | 'vocab'
+  | 'vocab-organize'
   | 'sentence-cloze'
   | 'word-action'
   | 'matching'
@@ -52,6 +53,7 @@ const EMPTY: Record<SkillId, SkillRecord> = {
   language: EMPTY_SKILL(),
   'career-assessment': EMPTY_SKILL(),
   vocab: EMPTY_SKILL(),
+  'vocab-organize': EMPTY_SKILL(),
   'sentence-cloze': EMPTY_SKILL(),
   'word-action': EMPTY_SKILL(),
   matching: EMPTY_SKILL(),
@@ -191,7 +193,7 @@ export function domainMasteryPercent(skills: SkillId[]): number {
 }
 
 export const SKILL_DOMAINS = {
-  vocabulary: ['vocab', 'sentence-cloze', 'word-action', 'matching'] as SkillId[],
+  vocabulary: ['vocab', 'vocab-organize', 'sentence-cloze', 'word-action', 'matching'] as SkillId[],
   safety: ['safety', 'eye-spy', 'instructions'] as SkillId[],
   tools: ['tools', 'site-phrases'] as SkillId[],
   systems: ['systems', 'observation', 'site-log', 'digital'] as SkillId[],
@@ -315,6 +317,8 @@ export function skillStationLabel(id: SkillId): string {
       return 'Career Path'
     case 'vocab':
       return 'Visual Vocabulary'
+    case 'vocab-organize':
+      return 'Language Organize'
     case 'sentence-cloze':
       return 'Sentence Structure'
     case 'word-action':

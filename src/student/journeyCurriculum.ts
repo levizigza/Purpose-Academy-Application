@@ -15,7 +15,7 @@ export const JOURNEY_STEPS = [
   { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the path quiz and later interest assessment.', purpose: 'Path and interest steps run in a language you understand. Job-site English comes with practice.', unit: 2 },
   { n: 4, title: 'Work Style', help: 'Ten questions. Choose what sounds most like you.', purpose: 'A short path quiz opens Construction, Logistics, or Community Support.', unit: 2 },
   { n: 5, title: 'Your Career Profile', help: 'See the path that fits your work-style answers.', purpose: 'Work style → recommended pathway. Later practice, then a deeper interest inventory for specialization.', unit: 2 },
-  { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English.', purpose: 'All five home languages stay visible. You choose the bridge to English.', unit: 3 },
+  { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English. Then organize four words: picture + five languages in order.', purpose: 'All five home languages stay visible. After the sheet, prove you can place each picture and language name together.', unit: 3 },
   { n: 7, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
   { n: 8, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
   { n: 9, title: 'English Eye Spy', help: 'Find the real object among other photos. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
@@ -59,9 +59,9 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
   3: {
     goal: 'Learn Daily Conversation and specialty workplace words, then put them into job-site sentences.',
     outcomes: [
-      'See each word and hear English',
-      'Build English sentences on a site stage (Construction)',
-      'Connect the English word to the real action',
+      'See each word and hear English across five languages',
+      'Organize pictures with all five language names on a quiz page',
+      'Build English sentences (Construction) and connect words to actions',
     ],
   },
   4: {
