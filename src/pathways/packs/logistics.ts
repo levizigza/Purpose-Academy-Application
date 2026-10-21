@@ -26,7 +26,7 @@ export const logisticsPack: PathwayPack = {
       outcomes: [
         'See a real photo of each word and hear English',
         'Connect your language to the English word and a short example sentence',
-        'Organize four English stations: picture box + five language names below it',
+        'Match each complete language group (all versions of the word) to its picture',
         'Identify every object in a busy bay (Eye Spy)',
       ],
     },

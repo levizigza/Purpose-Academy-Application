@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { HomeLang, VocabTerm } from './journeyCurriculum'
+import type { VocabTerm } from './journeyCurriculum'
 import { pathwayImage } from '../pathways'
 import { VOCAB_SHEET_LANGS } from './VocabSheet'
 import { playFoley } from '../audio/foley'
@@ -7,26 +7,10 @@ import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { specialtyVocabPool } from './vocabDistractors'
 
-/** Four stations on one organize page — complete the page to pass. */
+/** Four language-group + picture matches on one organize page. */
 export const ORGANIZE_PAGE_SIZE = 4
 
-type ImagePiece = { kind: 'image'; termId: string; key: string }
-type GlossPiece = { kind: 'gloss'; termId: string; lang: HomeLang; key: string }
-type Piece = ImagePiece | GlossPiece
-
-type ImageSlot = { kind: 'image'; termId: string }
-type GlossSlot = { kind: 'gloss'; termId: string; lang: HomeLang }
-type Slot = ImageSlot | GlossSlot
-
-function slotKey(slot: Slot) {
-  return slot.kind === 'image' ? `${slot.termId}:image` : `${slot.termId}:${slot.lang}`
-}
-
-function pieceMatchesSlot(piece: Piece, slot: Slot) {
-  if (piece.termId !== slot.termId) return false
-  if (slot.kind === 'image') return piece.kind === 'image'
-  return piece.kind === 'gloss' && piece.lang === slot.lang
-}
+type Pick = { kind: 'image' | 'section'; termId: string }
 
 function shuffle<T>(items: T[]): T[] {
   const next = [...items]
@@ -44,17 +28,6 @@ export function pickOrganizeTerms(vocab: readonly VocabTerm[]): VocabTerm[] {
   return shuffle(pool).slice(0, ORGANIZE_PAGE_SIZE)
 }
 
-function buildPieces(terms: VocabTerm[]): Piece[] {
-  const pieces: Piece[] = []
-  for (const term of terms) {
-    pieces.push({ kind: 'image', termId: term.id, key: `img:${term.id}` })
-    for (const lang of VOCAB_SHEET_LANGS) {
-      pieces.push({ kind: 'gloss', termId: term.id, lang, key: `gloss:${term.id}:${lang}` })
-    }
-  }
-  return shuffle(pieces)
-}
-
 type Props = {
   terms: VocabTerm[]
   onPassed: () => void
@@ -63,108 +36,73 @@ type Props = {
 }
 
 /**
- * Post–Visual Vocabulary organize quiz.
- *
- * Top: jumbled photos + five-language words.
- * Board: four English stations. Place the picture, then language words
- * in worksheet descending order (Amharic → Tigrinya → Arabic → Spanish → Hindi).
- * All four stations must be complete to pass the page.
+ * Language Organize: each word is already a complete language section
+ * (English + Amharic, Tigrinya, Arabic, Spanish, Hindi).
+ * Match that whole section with its picture. Four correct matches pass the page.
  */
 export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
   const byId = useMemo(() => new Map(terms.map((t) => [t.id, t])), [terms])
-  const [pool, setPool] = useState(() => buildPieces(terms))
-  const [placements, setPlacements] = useState<Record<string, Piece>>({})
-  const [selectedKey, setSelectedKey] = useState<string | null>(null)
-  const [shakeSlot, setShakeSlot] = useState<string | null>(null)
+  const [imageOrder, setImageOrder] = useState(() => shuffle(terms.map((t) => t.id)))
+  const [matched, setMatched] = useState<Record<string, true>>({})
+  const [picked, setPicked] = useState<Pick | null>(null)
+  const [shakeId, setShakeId] = useState<string | null>(null)
   const [passed, setPassed] = useState(false)
   const practice = isPracticeMode()
 
-  const selected =
-    selectedKey == null
-      ? null
-      : pool.find((p) => p.key === selectedKey) ||
-        Object.values(placements).find((p) => p.key === selectedKey) ||
-        null
+  const matchedCount = Object.keys(matched).length
+  const leftoverImages = imageOrder.filter((id) => !matched[id])
+  const allMatched = terms.length > 0 && matchedCount === terms.length
 
-  const totalSlots = terms.length * (1 + VOCAB_SHEET_LANGS.length)
-  const filledCount = Object.keys(placements).length
-  const poolImages = pool.filter((p): p is ImagePiece => p.kind === 'image')
-  const poolGlosses = pool.filter((p): p is GlossPiece => p.kind === 'gloss')
-  const allCorrect =
-    filledCount === totalSlots &&
-    terms.every((term) => {
-      const img = placements[slotKey({ kind: 'image', termId: term.id })]
-      if (!img || img.kind !== 'image' || img.termId !== term.id) return false
-      return VOCAB_SHEET_LANGS.every((lang) => {
-        const g = placements[slotKey({ kind: 'gloss', termId: term.id, lang })]
-        return g?.kind === 'gloss' && g.termId === term.id && g.lang === lang
-      })
-    })
+  function choose(next: Pick) {
+    if (passed || matched[next.termId]) return
 
-  function selectPiece(piece: Piece) {
-    if (passed) return
-    setSelectedKey((cur) => (cur === piece.key ? null : piece.key))
-    playFoley('whoosh')
-  }
+    if (!picked) {
+      setPicked(next)
+      playFoley('whoosh')
+      return
+    }
 
-  function returnPieceToPool(piece: Piece) {
-    setPlacements((prev) => {
-      const next = { ...prev }
-      for (const [k, v] of Object.entries(next)) {
-        if (v.key === piece.key) delete next[k]
-      }
-      return next
-    })
-    setPool((prev) => (prev.some((p) => p.key === piece.key) ? prev : [...prev, piece]))
-  }
+    if (picked.kind === next.kind && picked.termId === next.termId) {
+      setPicked(null)
+      return
+    }
 
-  function placeOnSlot(slot: Slot) {
-    if (passed || !selected) return
-    const key = slotKey(slot)
-    if (!pieceMatchesSlot(selected, slot)) {
-      setShakeSlot(key)
+    if (picked.kind === next.kind) {
+      setPicked(next)
+      playFoley('whoosh')
+      return
+    }
+
+    const imageId = picked.kind === 'image' ? picked.termId : next.termId
+    const sectionId = picked.kind === 'section' ? picked.termId : next.termId
+    if (imageId !== sectionId) {
+      setShakeId(sectionId)
       playFoley('wrong')
       recordSkillAttempt('vocab-organize', false, 0)
-      window.setTimeout(() => setShakeSlot(null), 380)
+      window.setTimeout(() => setShakeId(null), 380)
+      setPicked(null)
       return
     }
 
-    const displaced = placements[key]
-    setPlacements((prev) => {
-      const next = { ...prev }
-      /* Remove selected from any previous slot */
-      for (const [k, v] of Object.entries(next)) {
-        if (v.key === selected.key) delete next[k]
-      }
-      next[key] = selected
-      return next
-    })
-    setPool((prev) => {
-      let next = prev.filter((p) => p.key !== selected.key)
-      if (displaced) next = [...next, displaced]
-      return next
-    })
-    setSelectedKey(null)
+    const nextMatched = { ...matched, [sectionId]: true as const }
+    setMatched(nextMatched)
+    setPicked(null)
     playFoley('correct')
-    recordSkillAttempt('vocab-organize', true, 4)
-  }
-
-  function checkPage() {
-    if (!allCorrect) {
-      playFoley('wrong')
-      return
+    recordSkillAttempt('vocab-organize', true, 8)
+    if (Object.keys(nextMatched).length === terms.length) {
+      window.setTimeout(() => {
+        setPassed(true)
+        recordSkillAttempt('vocab-organize', true, 24)
+      }, 480)
     }
-    setPassed(true)
-    playFoley('correct')
-    recordSkillAttempt('vocab-organize', true, 24)
   }
 
   function reshuffle() {
     if (passed) return
-    setPool(buildPieces(terms))
-    setPlacements({})
-    setSelectedKey(null)
-    setShakeSlot(null)
+    setImageOrder(shuffle(terms.map((t) => t.id)))
+    setMatched({})
+    setPicked(null)
+    setShakeId(null)
     playFoley('whoosh')
   }
 
@@ -179,9 +117,9 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
         <div className="vocab-organize-pass-badge" aria-hidden>
           ✓
         </div>
-        <h2>Four words organized</h2>
+        <h2>Four language groups matched</h2>
         <p className="lede">
-          Each English station has its picture and all five language names in order. Next you find the same words in Eye Spy.
+          Each picture sits with every language version of its word. Next you find the same words in Eye Spy.
         </p>
         <div className="hero-actions">
           <button type="button" className="btn btn-primary" onClick={onPassed}>
@@ -204,33 +142,38 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
           ) : null}
         </div>
         <p className="train-vocab-counter">
-          Place pictures + five languages · {filledCount}/{totalSlots} placed
-          {selected ? ' · Piece selected — tap a box' : ' · Tap a piece, then tap its box'}
+          Match each language group to its picture · {matchedCount}/{terms.length}
+          {picked
+            ? picked.kind === 'image'
+              ? ' · Picture selected — tap its language section'
+              : ' · Language section selected — tap its picture'
+            : ' · Tap a picture and the section with all of its language words'}
         </p>
         <p className="lede vocab-organize-help">
-          Pictures and five-language words are mixed up at the top. Each English station has an empty
-          picture box. Drop the matching visual in, then place each language version of the word in
-          the boxes below it (Amharic → Tigrinya → Arabic → Spanish → Hindi). Finish all four stations.
+          Each section already has every version of one word: English, Amharic, Tigrinya, Arabic,
+          Spanish, and Hindi. Pictures are mixed up at the top. Tap a picture, then tap the section
+          that holds all of that word. Four matches pass the page.
         </p>
       </header>
 
-      <section className="vocab-organize-pool" aria-label="Jumbled pictures and words">
-        <p className="vocab-organize-pool-label">Jumbled at the top</p>
-        {poolImages.length ? (
+      <section className="vocab-organize-pool" aria-label="Jumbled pictures">
+        <p className="vocab-organize-pool-label">Jumbled pictures</p>
+        {leftoverImages.length ? (
           <div className="vocab-organize-pool-grid is-images">
-            {poolImages.map((piece) => {
-              const term = byId.get(piece.termId)
+            {leftoverImages.map((termId) => {
+              const term = byId.get(termId)
               if (!term) return null
               const img = pathwayImage(term.imageKey)
-              const active = selectedKey === piece.key
+              const active = picked?.kind === 'image' && picked.termId === termId
               return (
                 <button
-                  key={piece.key}
+                  key={termId}
                   type="button"
                   className={`vocab-organize-piece is-image${active ? ' is-selected' : ''}`}
-                  onClick={() => selectPiece(piece)}
+                  data-term-id={termId}
+                  onClick={() => choose({ kind: 'image', termId })}
                   aria-pressed={active}
-                  aria-label={`Picture for ${term.english}`}
+                  aria-label="Picture to match"
                 >
                   {img ? (
                     <img src={img} alt="" />
@@ -243,129 +186,74 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
               )
             })}
           </div>
-        ) : null}
-        {poolGlosses.length ? (
-          <div className="vocab-organize-pool-grid is-glosses">
-            {poolGlosses.map((piece) => {
-              const term = byId.get(piece.termId)
-              if (!term) return null
-              const active = selectedKey === piece.key
-              return (
-                <button
-                  key={piece.key}
-                  type="button"
-                  className={`vocab-organize-piece is-gloss${active ? ' is-selected' : ''}`}
-                  onClick={() => selectPiece(piece)}
-                  aria-pressed={active}
-                  aria-label={`${piece.lang} word for ${term.english}`}
-                >
-                  <span className="vocab-organize-piece-lang">{piece.lang}</span>
-                  <span className="vocab-organize-piece-word">{term.gloss[piece.lang]}</span>
-                </button>
-              )
-            })}
-          </div>
-        ) : null}
-        {!pool.length ? (
-          <p className="alert ok">All pieces placed — check the stations, then pass the page.</p>
-        ) : null}
+        ) : (
+          <p className="alert ok">Every picture is on a language section.</p>
+        )}
       </section>
 
       <div className="vocab-organize-boards">
         {terms.map((term) => {
-          const imgSlot: ImageSlot = { kind: 'image', termId: term.id }
-          const imgKey = slotKey(imgSlot)
-          const imgPiece = placements[imgKey]
-          const imgSrc = pathwayImage(term.imageKey)
+          const done = Boolean(matched[term.id])
+          const selected = picked?.kind === 'section' && picked.termId === term.id
+          const img = pathwayImage(term.imageKey)
           return (
-            <section key={term.id} className="vocab-organize-board" aria-label={`Station ${term.english}`}>
-              <h3 className="vocab-organize-english">{term.english}</h3>
-
-              <button
-                type="button"
-                className={`vocab-organize-slot is-image${shakeSlot === imgKey ? ' is-shake' : ''}${
-                  imgPiece ? ' is-filled' : ''
-                }${selected ? ' is-target' : ''}`}
-                onClick={() => {
-                  if (imgPiece && !selected) {
-                    selectPiece(imgPiece)
-                    return
-                  }
-                  if (imgPiece && selected && selected.key === imgPiece.key) {
-                    returnPieceToPool(imgPiece)
-                    setSelectedKey(null)
-                    return
-                  }
-                  placeOnSlot(imgSlot)
-                }}
-                aria-label={`Picture box for ${term.english}`}
-              >
-                {imgPiece && imgPiece.kind === 'image' ? (
-                  imgSrc ? (
-                    <img src={imgSrc} alt="" />
+            <button
+              key={term.id}
+              type="button"
+              className={`vocab-organize-board${done ? ' is-matched' : ''}${
+                selected ? ' is-selected' : ''
+              }${shakeId === term.id ? ' is-shake' : ''}${picked ? ' is-target' : ''}`}
+              data-term-id={term.id}
+              onClick={() => choose({ kind: 'section', termId: term.id })}
+              aria-pressed={selected}
+              aria-label={
+                done
+                  ? `Matched language section for ${term.english}`
+                  : `Language section: ${term.english} and five home-language names. Tap to match a picture.`
+              }
+              disabled={done}
+            >
+              <span className={`vocab-organize-slot is-image${done ? ' is-filled' : ''}`}>
+                {done ? (
+                  img ? (
+                    <img src={img} alt="" />
                   ) : (
                     <span className="vocab-organize-emoji">{term.emoji}</span>
                   )
                 ) : (
-                  <span className="vocab-organize-slot-hint">Empty picture box</span>
+                  <span className="vocab-organize-slot-hint">Match the picture here</span>
                 )}
-              </button>
+              </span>
 
-              <ol className="vocab-organize-lang-list">
-                {VOCAB_SHEET_LANGS.map((lang, i) => {
-                  const slot: GlossSlot = { kind: 'gloss', termId: term.id, lang }
-                  const key = slotKey(slot)
-                  const piece = placements[key]
-                  return (
+              <span className="vocab-organize-lang-pack">
+                <span className="vocab-organize-lang-pack-label">All versions of this word</span>
+                <ol className="vocab-organize-lang-list">
+                  <li>
+                    <span className="vocab-organize-lang-order">EN</span>
+                    <span className="vocab-organize-lang-name">English</span>
+                    <span className="vocab-organize-slot-word">{term.english}</span>
+                  </li>
+                  {VOCAB_SHEET_LANGS.map((lang, i) => (
                     <li key={lang}>
                       <span className="vocab-organize-lang-order">{i + 1}</span>
                       <span className="vocab-organize-lang-name">{lang}</span>
-                      <button
-                        type="button"
-                        className={`vocab-organize-slot is-gloss${shakeSlot === key ? ' is-shake' : ''}${
-                          piece ? ' is-filled' : ''
-                        }${selected ? ' is-target' : ''}`}
-                        onClick={() => {
-                          if (piece && !selected) {
-                            selectPiece(piece)
-                            return
-                          }
-                          if (piece && selected && selected.key === piece.key) {
-                            returnPieceToPool(piece)
-                            setSelectedKey(null)
-                            return
-                          }
-                          placeOnSlot(slot)
-                        }}
-                        aria-label={`${lang} word box for ${term.english}`}
-                      >
-                        {piece && piece.kind === 'gloss' ? (
-                          <span className="vocab-organize-slot-word">{term.gloss[lang]}</span>
-                        ) : (
-                          <span className="vocab-organize-slot-hint">{lang} word</span>
-                        )}
-                      </button>
+                      <span className="vocab-organize-slot-word">{term.gloss[lang]}</span>
                     </li>
-                  )
-                })}
-              </ol>
-            </section>
+                  ))}
+                </ol>
+              </span>
+            </button>
           )
         })}
       </div>
 
       <div className="vocab-organize-actions">
         <button type="button" className="btn btn-secondary on-light" onClick={reshuffle}>
-          Re-jumble pieces
+          Re-jumble pictures
         </button>
-        <button
-          type="button"
-          className="btn btn-primary"
-          disabled={!allCorrect}
-          onClick={checkPage}
-        >
-          {allCorrect ? 'Pass this page' : `Organize all four (${filledCount}/${totalSlots})`}
-        </button>
+        <p className="train-vocab-counter" aria-live="polite">
+          {allMatched ? 'Page ready' : `${matchedCount} of ${terms.length} sections matched`}
+        </p>
       </div>
     </article>
   )

@@ -76,7 +76,7 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   4: 'career-assessment',
   5: 'career-assessment',
   6: 'vocab',
-  /** Standalone jumble: picture box + five language names. */
+  /** Standalone match: complete language group + picture. */
   7: 'vocab-organize',
   /** After Visual Vocabulary + language organize: find every picture again. */
   8: 'eye-spy',

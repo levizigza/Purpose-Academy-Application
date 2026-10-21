@@ -10326,6 +10326,7 @@ video {
 }
 
 .vocab-organize-board {
+  appearance: none;
   display: grid;
   gap: 0.55rem;
   padding: 0.85rem 0.9rem 1rem;
@@ -10334,6 +10335,46 @@ video {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 248, 252, 0.98));
   box-shadow: 0 12px 28px rgba(4, 21, 38, 0.07);
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.vocab-organize-board:disabled {
+  cursor: default;
+}
+
+.vocab-organize-board.is-target {
+  border-color: color-mix(in srgb, #e8a317 70%, #b7c7d8);
+}
+
+.vocab-organize-board.is-selected {
+  border-color: #e8a317;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #e8a317 45%, transparent);
+}
+
+.vocab-organize-board.is-matched {
+  border-color: #2a7a4b;
+  box-shadow: 0 10px 22px rgba(42, 122, 75, 0.16);
+}
+
+.vocab-organize-board.is-shake {
+  animation: vocab-organize-shake 0.35s ease;
+  border-color: #b45309;
+}
+
+.vocab-organize-lang-pack {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.vocab-organize-lang-pack-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a6a12;
 }
 
 .vocab-organize-english {
@@ -10440,9 +10481,12 @@ video {
 
 .vocab-organize-lang-list li {
   display: grid;
-  grid-template-columns: 1.4rem 5.2rem minmax(0, 1fr);
+  grid-template-columns: 1.6rem 5.2rem minmax(0, 1fr);
   align-items: center;
   gap: 0.35rem;
+  padding: 0.28rem 0.35rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, #0b2f5c 5%, #fff);
 }
 
 .vocab-organize-lang-order {

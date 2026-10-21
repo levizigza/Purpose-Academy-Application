@@ -1613,8 +1613,8 @@ export function StudentSequencePage() {
         <p className="train-vocab-counter">
           {ready
             ? usesSentenceLadder
-              ? `Ladder ready · Next: Language Organize (picture + five languages) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
-              : `Level-1 complete · Next: Language Organize (picture + five languages) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
+              ? `Ladder ready · Next: Language Organize (match each language group to its picture) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
+              : `Level-1 complete · Next: Language Organize (match each language group to its picture) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
             : usesSentenceLadder
               ? `Ladder ${gateLinked} of ${ladderGateTerms.length} (DC ${dcLinked}/${dcGate.length} · workplace ${specialtyLinked}/${specialtyGate.length}) · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
               : `Level-1 ${gateLinked} of ${ladderGateTerms.length} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
@@ -1636,13 +1636,12 @@ export function StudentSequencePage() {
     return (
       <Shell step={7} onBack={() => go(6)}>
         <WhyWork>
-          On a crew, the same tool has one English name and many home-language names. Put the picture
-          with every language word before you hunt it in a busy scene.
+          On a crew, the same tool has one English name and many home-language names. See every
+          version of the word together, then match that group to the picture.
         </WhyWork>
         <TeachNote>
-          Pictures and words are jumbled at the top. Each English station has an empty picture box.
-          Place the matching visual, then each language version below it (Amharic → Tigrinya → Arabic →
-          Spanish → Hindi). Finish all four stations.
+          Each section already lists every language version of one word. Pictures are jumbled at the
+          top. Tap a picture, then tap the section that holds all of that word. Four matches pass.
         </TeachNote>
         <VocabOrganizeQuiz
           terms={organizeTerms}
