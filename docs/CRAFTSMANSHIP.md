@@ -209,17 +209,17 @@ These are load-bearing across all layers.
 - Specialty packs may grow; copy and badges must track **actual counts**.
 - Eye Spy and photo scenes need real photography before we claim “busy job-site scenes.” Until then, document as a climb — do not fake richness in copy.
 
-### 6.3a Sentence Structure (Construction) — not VocabSheet
+### 6.3a Sentence Structure (Construction) — worksheet cloze (not VocabSheet)
 
 - After Visual Vocabulary, Construction opens **Sentence Structure** (cloze bank from Construction Questions 1–560) before Word → Action.
 - **Ladder gate (required):** Daily Conversation Level-1 **and** specialty Construction Visual Vocabulary Level-1 (first workplace picture page) before Sentence Structure unlocks. Greetings alone must not open specialty sentences.
 - Cloze bank prefers / keeps rows whose answers exist in pictured specialty VV (orphan PPTX rows stay out of the graded bank).
-- **Different interaction mold from vocabulary:** SITEWISE-style **site stage** + job board (sentence is the visual), not a VocabSheet photo card.
+- **Docs mold (Construction Questions MC):** white worksheet card — stem with `______` blank + four word choices (A–D style). Not a VocabSheet photo card; not a SITEWISE crew stage.
 - **One attempt per item** — no answer shopping.
-- Correct: word **locks onto the job board** with motion; crew celebrates.
-- Wrong: word **bounces off**; an absurd, sentence-tied consequence plays (anvil drop, collapse, splash, slip, spark, crush) so guessing sticks in memory — then teach the right word and move on.
+- Correct: word **slides into the blank**; short success line; TTS reads the full sentence.
+- Wrong: reveal the right word in the blank, brief teach line, then move on (Duolingo one-try).
 - Level-1 sentence gate = first page of 20 with ≥16 first-try correct (+ repair for misses). More pages stay open to practise.
-- Feedback text must meet contrast on the stage chrome (do not reuse washed-out train `.alert.ok` greens on light panels).
+- Clear page-pass badge when the worksheet page is cleared.
 - Language ladder: gloss → picture → **sentence** → action → instruction → phrase.
 
 ### 6.3b Photos show the whole object
@@ -419,6 +419,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-21 — Sentence Structure back to Construction Questions worksheet (L2)
+
+- Removed SITEWISE job-board / crew consequence theater from Sentence Structure.
+- Restored the docs mold: white cloze card, four choices, word slides into the blank, one-try Duolingo flow, page-pass badge.
+- Kept ladder honesty (DC + specialty VV gate, pictured-only bank, Practice skip).
+- **Assumption to challenge next:** whether Level-1 page size / pass score still match classroom pacing on phones.
+
 
 ### 2026-10-20 — Cloudflare Workers host for purposeacademy.ca (L6)
 
