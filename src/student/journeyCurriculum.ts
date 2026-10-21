@@ -18,7 +18,7 @@ export const JOURNEY_STEPS = [
   { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English. Then organize four words: picture + five languages in order.', purpose: 'All five home languages stay visible. After the sheet, prove you can place each picture and language name together.', unit: 3 },
   { n: 7, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
   { n: 8, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
-  { n: 9, title: 'English Eye Spy', help: 'Find the real object among other photos. English only.', purpose: 'Prove you know the object among other tools.', unit: 4 },
+  { n: 9, title: 'English Eye Spy', help: 'Ten scenes. Match each English word to its picture until every item is cleared.', purpose: 'Prove you can identify every tool and material in a busy scene.', unit: 4 },
   { n: 10, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   { n: 11, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
   { n: 12, title: 'Interest Assessment', help: 'After practice, rate work activities to specialize.', purpose: 'A professional interest inventory (Holland / RIASEC) once you have real practice — not a pass/fail quiz.', unit: 5 },
@@ -68,7 +68,7 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     goal: 'Use English with support, then prove you can find and follow workplace language.',
     outcomes: [
       'Match pictures to English words',
-      'Find objects among other workplace photos',
+      'Identify every object in busy workplace photo scenes',
       'Follow short workplace instructions',
       'Understand common workplace phrases',
     ],
@@ -254,11 +254,11 @@ export type QuizItem = {
   teachWrong: string
 }
 
-/** Eye Spy hotspot inside a construction scene (percent positions). */
+/** Eye Spy hotspot inside a workplace scene (percent positions). */
 export type EyeSpyHotspot = {
   id: string
   label: string
-  /** Correct English answer for this hotspot when it is the target. */
+  /** English name the learner must match to this picture. */
   answer: string
   imageKey: string
   x: number
@@ -272,17 +272,19 @@ export type EyeSpyScene = {
   title: string
   /** Instruction shown with the scene (English). */
   instruction: string
-  /** Which hotspot is the correct find target. */
-  targetId: string
-  distractors: string[]
+  /** First find when findOrder is omitted (older packs). */
+  targetId?: string
+  distractors?: string[]
   hotspots: EyeSpyHotspot[]
-  /** Alternate layout ids — rotate when the learner answers wrong. */
-  variantGroup: string
+  /** Unused in clear-all mode; kept so older packs still type-check. */
+  variantGroup?: string
+  /** Hotspot ids in the order the learner must identify them. Defaults to targetId first, then the rest. */
+  findOrder?: string[]
 }
 
 /**
- * Eye Spy scenes: find the named object in a busy site layout.
- * Wrong answer → next variant in the same group (scene changes).
+ * Legacy Eye Spy scenes (unused by pathway packs).
+ * Live quizzes use pack.eyeSpyScenes and clear every hotspot in each scene.
  */
 export const EYE_SPY_SCENES: EyeSpyScene[] = [
   {
@@ -1539,14 +1541,14 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
       emoji: 'D',
       imageKey: 'drill',
       options: [
-        'Spot the real tool among others',
+        'Name every item in a busy scene',
         'Skip English forever',
         'Ignore safety gear',
         'Guess without looking',
       ],
-      answer: 'Spot the real tool among others',
-      teachCorrect: 'You identify tools in a busy scene.',
-      teachWrong: 'Eye Spy is about finding the named tool.',
+      answer: 'Name every item in a busy scene',
+      teachCorrect: 'You identify each tool until the board is clear.',
+      teachWrong: 'Eye Spy is about identifying every item in the scene.',
     },
     {
       id: 'uc4-4',

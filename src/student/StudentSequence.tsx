@@ -1959,8 +1959,8 @@ export function StudentSequencePage() {
   if (step === 9) {
     return (
       <Shell step={9} onBack={() => { resetMatch(); go(8) }}>
-        <WhyWork>On a real site the tool sits among other objects. Prove you can find it.</WhyWork>
-        <TeachNote>Exercise mode: unlimited tries. Pass requires 100% with no misses. Wrong answers change the scene.</TeachNote>
+        <WhyWork>On a real site every tool sits among other objects. Prove you can name each one until the board is clear.</WhyWork>
+        <TeachNote>Exercise mode: unlimited tries. Each scene has several items. Match the English word to its picture, then the next word, until nothing is left. Pass requires 100% with no misses.</TeachNote>
         <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exercise" onComplete={() => { resetInstr(); go(10) }} />
       </Shell>
     )
@@ -2653,7 +2653,7 @@ export function StudentSequencePage() {
     if (finalPhase === 'eyespy') {
       return (
         <Shell step={19} onBack={() => go(18)}>
-          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Scenes change on misses." />
+          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Identify every item in every scene." />
           <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('written') }} />
         </Shell>
       )

@@ -72,6 +72,11 @@ export const constructionPack: PathwayPack = {
     },
   },
   stepTitles: {
+    9: {
+      title: 'English Eye Spy',
+      help: 'Ten scenes. Match each English word to its picture until every item on the board is cleared.',
+      purpose: 'Prove you can identify every tool and material in a busy construction scene.',
+    },
     7: {
       title: 'Sentence Structure',
       help: 'Choose the word that completes the sentence. One try — if it is wrong, we show the answer and move on. Correct words slide into the blank.',

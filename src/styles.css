@@ -7672,6 +7672,70 @@ table.data th {
   border-color: #c45c5c;
 }
 
+.eye-spy-hotspot.is-found {
+  border-color: #3da86c;
+  opacity: 0.42;
+  cursor: default;
+  transform: none;
+}
+
+.eye-spy-hotspot.is-found::after {
+  content: '✓';
+  position: absolute;
+  top: 0.2rem;
+  right: 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1d6b3f;
+  text-shadow: 0 0 6px #fff;
+}
+
+.eye-spy-progress {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--train-text-muted, rgba(255, 255, 255, 0.7));
+}
+
+.eye-spy-word {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+.eye-spy-word strong {
+  color: #e8a317;
+}
+
+.eye-spy-word.is-clear {
+  color: #7dcea0;
+  font-size: 1.15rem;
+}
+
+.eye-spy-cleared {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eye-spy-cleared li {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.eye-spy-cleared li.is-found {
+  border-color: #3da86c;
+  color: #d7f5e4;
+  background: rgba(61, 168, 108, 0.16);
+}
+
 .eye-spy-prompt {
   margin: 0.25rem 0 0;
   font-weight: 600;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ATTEMPT_POLICY, type EyeSpyScene } from './journeyCurriculum'
+import { ATTEMPT_POLICY, type EyeSpyHotspot, type EyeSpyScene } from './journeyCurriculum'
 import { pathwayImage } from '../pathways'
 import { playFoley } from '../audio/foley'
 import { recordSkillAttempt } from './learningMastery'
@@ -13,26 +13,24 @@ import {
 
 type Mode = 'exercise' | 'exam'
 
-function scenesForGroup(all: EyeSpyScene[], group: string) {
-  return all.filter((s) => s.variantGroup === group)
-}
+const CLEAR_ALL_INSTRUCTION =
+  'Identify every item in this scene. Tap the picture that matches the English word. Found items stay marked until the board is clear.'
 
-function pickGroups(all: EyeSpyScene[]): string[] {
-  const seen = new Set<string>()
-  const groups: string[] = []
-  for (const s of all) {
-    if (!seen.has(s.variantGroup)) {
-      seen.add(s.variantGroup)
-      groups.push(s.variantGroup)
-    }
+export function findQueue(scene: EyeSpyScene): EyeSpyHotspot[] {
+  if (scene.findOrder?.length) {
+    return scene.findOrder
+      .map((id) => scene.hotspots.find((h) => h.id === id))
+      .filter((h): h is EyeSpyHotspot => Boolean(h))
   }
-  return groups
+  const first = scene.targetId ? scene.hotspots.find((h) => h.id === scene.targetId) : undefined
+  const rest = scene.hotspots.filter((h) => h.id !== scene.targetId)
+  return first ? [first, ...rest] : scene.hotspots
 }
 
 /**
- * Eye Spy: find the target object among workplace photos (collage stage until full-scene photography lands).
- * Wrong answer loses a point; scene rotates AFTER feedback.
- * Pass requires 100% (no misses). Exercises unlimited; exams limited.
+ * Eye Spy: clear every workplace photo in the scene.
+ * One English word at a time; tap the matching picture to eliminate it.
+ * Pass requires identifying every item with no misses.
  */
 export function EyeSpyQuiz({
   scenes,
@@ -43,29 +41,27 @@ export function EyeSpyQuiz({
   mode: Mode
   onComplete: () => void
 }) {
-  const groups = useMemo(() => pickGroups(scenes), [scenes])
-  const [groupIdx, setGroupIdx] = useState(0)
-  const [variantIdx, setVariantIdx] = useState(0)
-  const [pickedHotspot, setPickedHotspot] = useState<string | null>(null)
-  const [pickedName, setPickedName] = useState<string | null>(null)
+  const boards = useMemo(() => scenes.filter((s) => s.hotspots.length > 0), [scenes])
+  const totalFinds = useMemo(
+    () => boards.reduce((n, s) => n + findQueue(s).length, 0),
+    [boards],
+  )
+  const [sceneIdx, setSceneIdx] = useState(0)
+  const [findIdx, setFindIdx] = useState(0)
+  const [foundIds, setFoundIds] = useState<string[]>([])
+  const [wrongId, setWrongId] = useState<string | null>(null)
   const [correctCount, setCorrectCount] = useState(0)
   const [misses, setMisses] = useState(0)
   const [attempt, setAttempt] = useState(1)
-  const [phase, setPhase] = useState<'play' | 'feedback' | 'summary'>('play')
-  const [lastOk, setLastOk] = useState(false)
+  const [phase, setPhase] = useState<'play' | 'scene-clear' | 'summary'>('play')
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
 
-  const group = groups[groupIdx]
-  const variants = scenesForGroup(scenes, group)
-  const scene = variants[variantIdx % Math.max(variants.length, 1)]
-  const target = scene.hotspots.find((h) => h.id === scene.targetId)!
-  const nameOptions = useMemo(() => {
-    const opts = [target.answer, ...scene.distractors]
-    return [...opts].sort(() => Math.random() - 0.5)
-  }, [scene.id, target.answer, scene.distractors])
-
+  const scene = boards[sceneIdx]
+  const queue = scene ? findQueue(scene) : []
+  const target = queue[findIdx]
+  const foundSet = useMemo(() => new Set(foundIds), [foundIds])
+  const need = totalFinds
   const maxAttempts = mode === 'exam' ? ATTEMPT_POLICY.examMax : null
-  const need = groups.length
 
   useEffect(() => {
     window.dispatchEvent(new Event('pa-quiz-start'))
@@ -78,51 +74,57 @@ export function EyeSpyQuiz({
     if (phase === 'summary') window.dispatchEvent(new Event('pa-quiz-complete'))
   }, [phase])
 
-  function resetPick() {
-    setPickedHotspot(null)
-    setPickedName(null)
+  useEffect(() => {
+    if (!wrongId) return
+    const t = window.setTimeout(() => setWrongId(null), 700)
+    return () => window.clearTimeout(t)
+  }, [wrongId])
+
+  function resetBoard() {
+    setFindIdx(0)
+    setFoundIds([])
+    setWrongId(null)
   }
 
-  function confirm() {
-    if (!pickedHotspot || !pickedName) return
-    const ok = pickedHotspot === scene.targetId && pickedName === target.answer
-    setLastOk(ok)
+  function tapHotspot(id: string) {
+    if (phase !== 'play' || !target) return
+    if (foundSet.has(id)) return
+    const ok = id === target.id
     recordSkillAttempt(mode === 'exam' ? 'final-exam' : 'eye-spy', ok, ok ? 15 : 0)
     if (ok) {
-      setCorrectCount((c) => c + 1)
       playFoley('correct')
-    } else {
-      setMisses((m) => m + 1)
-      playFoley('wrong')
-      // Keep the current scene + picks visible during feedback; rotate on continue.
-    }
-    setPhase('feedback')
-  }
-
-  function nextAfterFeedback() {
-    if (!lastOk) {
-      setVariantIdx((v) => v + 1)
-      resetPick()
-      setPhase('play')
+      const nextFound = [...foundIds, id]
+      setFoundIds(nextFound)
+      setCorrectCount((c) => c + 1)
+      setWrongId(null)
+      if (findIdx + 1 >= queue.length) {
+        setPhase('scene-clear')
+        return
+      }
+      setFindIdx((i) => i + 1)
       return
     }
-    if (groupIdx + 1 >= need) {
+    playFoley('wrong')
+    setMisses((m) => m + 1)
+    setWrongId(id)
+  }
+
+  function nextAfterSceneClear() {
+    if (sceneIdx + 1 >= boards.length) {
       setPhase('summary')
       return
     }
-    setGroupIdx((i) => i + 1)
-    setVariantIdx(0)
-    resetPick()
+    setSceneIdx((i) => i + 1)
+    resetBoard()
     setPhase('play')
   }
 
   function retryRun() {
     setAttempt((a) => a + 1)
-    setGroupIdx(0)
-    setVariantIdx(0)
+    setSceneIdx(0)
     setCorrectCount(0)
     setMisses(0)
-    resetPick()
+    resetBoard()
     setPhase('play')
   }
 
@@ -164,6 +166,10 @@ export function EyeSpyQuiz({
     openPracticeChat()
   }
 
+  if (!scene || !boards.length) {
+    return <p className="alert warn">No Eye Spy scenes are ready for this pathway.</p>
+  }
+
   if (phase === 'summary') {
     const pass = correctCount >= need && misses === 0
     const examLocked = mode === 'exam' && maxAttempts != null && attempt >= maxAttempts && !pass
@@ -171,11 +177,11 @@ export function EyeSpyQuiz({
     return (
       <div className="train-quiz-summary eye-spy-summary">
         <p className="train-score">
-          {correctCount} / {need} found
+          {correctCount} / {need} identified
           {misses > 0 ? ` · ${misses} miss${misses === 1 ? '' : 'es'} (must be 0 to pass)` : ' · clean run'}
         </p>
         <p className="muted">
-          You must find every tool with no mistakes. Wrong answers change the scene.
+          You must identify every item in every scene with no mistakes.
         </p>
         {pass ? (
           <button type="button" className="btn btn-primary" onClick={handleComplete}>
@@ -189,7 +195,7 @@ export function EyeSpyQuiz({
           <button type="button" className="btn btn-primary" onClick={retryRun}>
             {mode === 'exam' && maxAttempts
               ? `Try exam again (${attempt + 1} of ${maxAttempts})`
-              : 'Try again. Find every tool with no mistakes'}
+              : 'Try again. Identify every item with no mistakes'}
           </button>
         )}
         {feedbackPrompt && (
@@ -218,13 +224,28 @@ export function EyeSpyQuiz({
   return (
     <div className="eye-spy">
       <p className="train-quiz-counter">
-        Scene {groupIdx + 1} of {need}
+        Scene {sceneIdx + 1} of {boards.length}
         {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice (unlimited tries)'}
       </p>
-      <p className="eye-spy-instruction">{scene.instruction}</p>
+      <p className="eye-spy-instruction">{CLEAR_ALL_INSTRUCTION}</p>
       <p className="eye-spy-scene-title">{scene.title}</p>
+      <p className="eye-spy-progress" aria-live="polite">
+        {foundIds.length} of {queue.length} found in this scene
+      </p>
 
-      <div className="eye-spy-stage" role="group" aria-label="Photo board. Tap the correct object">
+      {phase === 'play' && target && (
+        <p className="eye-spy-word" aria-live="polite">
+          Find: <strong>{target.answer}</strong>
+        </p>
+      )}
+
+      {phase === 'scene-clear' && (
+        <p className="eye-spy-word is-clear" aria-live="polite">
+          Scene clear. Every item identified.
+        </p>
+      )}
+
+      <div className="eye-spy-stage" role="group" aria-label="Photo board. Tap the picture that matches the English word">
         <div className="eye-spy-grid" aria-hidden>
           {Array.from({ length: 12 }).map((_, i) => (
             <span key={i} className="eye-spy-tile" />
@@ -232,16 +253,17 @@ export function EyeSpyQuiz({
         </div>
         {scene.hotspots.map((h, index) => {
           const img = pathwayImage(h.imageKey)
-          const selected = pickedHotspot === h.id
+          const found = foundSet.has(h.id)
+          const wrong = wrongId === h.id
           return (
             <button
-              key={`${scene.id}-${h.id}-${variantIdx}`}
+              key={`${scene.id}-${h.id}`}
               type="button"
-              className={`eye-spy-hotspot${selected ? ' is-selected' : ''}${phase === 'feedback' && lastOk && h.id === scene.targetId ? ' is-target' : ''}${phase === 'feedback' && !lastOk && selected ? ' is-wrong' : ''}${phase === 'feedback' && !lastOk && h.id === scene.targetId ? ' is-target' : ''}`}
+              className={`eye-spy-hotspot${found ? ' is-found' : ''}${wrong ? ' is-wrong' : ''}`}
               style={{ left: `${h.x}%`, top: `${h.y}%`, width: `${h.w}%`, height: `${h.h}%` }}
-              onClick={() => phase === 'play' && setPickedHotspot(h.id)}
-              disabled={phase !== 'play'}
-              aria-label={`Tool spot ${index + 1}`}
+              onClick={() => tapHotspot(h.id)}
+              disabled={phase !== 'play' || found}
+              aria-label={found ? `${h.answer}, found` : `Tool spot ${index + 1}`}
             >
               {img ? <img src={img} alt="" /> : <span>{h.label}</span>}
             </button>
@@ -249,51 +271,18 @@ export function EyeSpyQuiz({
         })}
       </div>
 
-      <p className="eye-spy-prompt">What English name matches the tool you tapped?</p>
-      <div className="train-choice-grid">
-        {nameOptions.map((opt) => {
-          let cls = 'train-choice'
-          if (phase === 'play' && pickedName === opt) cls += ' is-selected'
-          if (phase === 'feedback') {
-            if (opt === target.answer) cls += ' is-correct'
-            else if (pickedName === opt) cls += ' is-wrong'
-          }
-          return (
-            <button
-              key={opt}
-              type="button"
-              className={cls}
-              disabled={phase !== 'play'}
-              onClick={() => setPickedName(opt)}
-            >
-              {opt}
-            </button>
-          )
-        })}
-      </div>
+      <ul className="eye-spy-cleared" aria-label="Items found">
+        {queue.map((h) => (
+          <li key={h.id} className={foundSet.has(h.id) ? 'is-found' : ''}>
+            {h.answer}
+          </li>
+        ))}
+      </ul>
 
-      {phase === 'play' && (
-        <button
-          type="button"
-          className="btn btn-primary"
-          disabled={!pickedHotspot || !pickedName}
-          onClick={confirm}
-        >
-          Check answer
+      {phase === 'scene-clear' && (
+        <button type="button" className="btn btn-primary" onClick={nextAfterSceneClear}>
+          {sceneIdx + 1 >= boards.length ? 'See results' : 'Next scene'}
         </button>
-      )}
-
-      {phase === 'feedback' && (
-        <>
-          <div className={`alert ${lastOk ? 'ok' : 'warn'}`}>
-            {lastOk
-              ? `Yes. That is the ${target.answer}.`
-              : `Not yet. The correct tool is the ${target.answer}. Next try uses a new scene.`}
-          </div>
-          <button type="button" className="btn btn-primary" onClick={nextAfterFeedback}>
-            {lastOk ? (groupIdx + 1 >= need ? 'See results' : 'Next scene') : 'Try the new scene'}
-          </button>
-        </>
       )}
     </div>
   )
