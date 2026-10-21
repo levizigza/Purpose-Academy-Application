@@ -291,7 +291,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const jumpSteps = journeySteps.filter((s) => s.n >= PRACTICE_ENTRY_STEP)
 
   return (
-    <div className="shell-main train-shell">
+    <div className={`shell-main train-shell${step === 7 ? ' is-organize-wide' : ''}`}>
       <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
       <header className="train-header">
         <div className="train-header-top">
