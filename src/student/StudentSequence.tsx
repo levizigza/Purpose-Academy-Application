@@ -1694,7 +1694,6 @@ export function StudentSequencePage() {
           <SentenceClozeDrill
             items={SENTENCE_CLOZE}
             picturedAnswers={specialtyVocabPool(VOCAB_UNIT).map((t) => t.english)}
-            picturedOnlyBank
             onLevel1Passed={() => {
               setSentenceLevel1(true)
               recordSkillAttempt('sentence-cloze', true, 20)

@@ -5,6 +5,13 @@ import { speakEnglish } from './speech'
 import { playFoley } from '../audio/foley'
 import { recordSkillAttempt } from './learningMastery'
 
+/** Construction Questions PPTX illustration from public/sentence-cloze/. */
+function sentenceImageUrl(file?: string) {
+  if (!file) return undefined
+  const base = import.meta.env.BASE_URL || '/'
+  return `${base}sentence-cloze/${file}`
+}
+
 /** Worksheet-sized pages — same bank size as visual vocabulary PDFs. */
 export const SENTENCE_PAGE_SIZE = 20
 
@@ -77,10 +84,11 @@ type Props = {
 }
 
 /**
- * Construction Sentence Structure — Construction Questions worksheet mold.
+ * Construction Sentence Structure — Construction Questions PPTX mold.
  *
- * Matches the Purpose Academy Construction English MC docs:
- * - White worksheet card with sentence blank + four word choices
+ * Matches Purpose Academy Construction English • Multiple Choice:
+ * - Object illustration beside the cloze sentence (PPTX image pair)
+ * - White worksheet card + four word choices
  * - One attempt per item (no answer shopping)
  * - Correct word slides into the blank
  * - Wrong → show the answer, then move on
@@ -305,11 +313,16 @@ export function SentenceClozeDrill({
   const displayWord = showWord ? item.answer : null
   const before = item.prompt.split('______')[0] ?? ''
   const after = item.prompt.split('______')[1] ?? ''
+  const imageSrc = sentenceImageUrl(item.imageFile)
+  const choiceLetters = ['A', 'B', 'C', 'D'] as const
 
   return (
     <article className="sentence-cloze-card">
       <div className="sentence-cloze-head-row">
-        <p className="section-kicker">Sentence Structure</p>
+        <div>
+          <p className="section-kicker">Sentence Structure</p>
+          <p className="sentence-cloze-doc-kicker">Construction English · Multiple Choice</p>
+        </div>
         {practice && onSkipToActions ? (
           <button
             type="button"
@@ -331,32 +344,51 @@ export function SentenceClozeDrill({
         {level1Unlocked ? ' · Level-1 unlocked' : ''}
       </p>
       <p className="lede sentence-cloze-help">
-        Choose the word that completes the sentence. One try — if it is wrong, we show the answer and move on.
-        Correct words slide into the blank.
+        Choose the correct word to complete each sentence. One try — if it is wrong, we show the answer and
+        move on. Correct words slide into the blank.
       </p>
 
       <div
-        className={`sentence-cloze-line${showWord ? ' is-filled' : ''}${correct && showWord ? ' is-correct' : ''}${
+        className={`sentence-cloze-item${showWord ? ' is-filled' : ''}${correct && showWord ? ' is-correct' : ''}${
           picked && !correct && filled ? ' is-wrong' : ''
         }`}
-        aria-live="polite"
       >
-        <span>{before}</span>
-        <span className={`sentence-cloze-blank${displayWord ? ' has-word' : ''}`}>
-          {displayWord ? (
-            <span className={`sentence-cloze-word${flying ? ' is-landing' : ' is-set'}`}>{displayWord}</span>
+        <figure className="sentence-cloze-photo" aria-hidden={!imageSrc}>
+          {imageSrc ? (
+            <img src={imageSrc} alt="" />
           ) : (
-            <span className="sentence-cloze-slot">______</span>
+            <span className="sentence-cloze-photo-fallback">{item.answer}</span>
           )}
-        </span>
-        <span>{after}</span>
+          <figcaption className="sr-only">
+            Illustration for sentence {item.n}: {item.answer}
+          </figcaption>
+        </figure>
+
+        <div
+          className={`sentence-cloze-line${showWord ? ' is-filled' : ''}${correct && showWord ? ' is-correct' : ''}${
+            picked && !correct && filled ? ' is-wrong' : ''
+          }`}
+          aria-live="polite"
+        >
+          <span className="sentence-cloze-num">{item.n}.</span>
+          <span>{before}</span>
+          <span className={`sentence-cloze-blank${displayWord ? ' has-word' : ''}`}>
+            {displayWord ? (
+              <span className={`sentence-cloze-word${flying ? ' is-landing' : ' is-set'}`}>{displayWord}</span>
+            ) : (
+              <span className="sentence-cloze-slot">______</span>
+            )}
+          </span>
+          <span>{after}</span>
+        </div>
       </div>
 
-      <div className="train-choice-grid sentence-cloze-choices">
-        {options.map((opt) => {
+      <div className="train-choice-grid sentence-cloze-choices" role="group" aria-label="Answer choices">
+        {options.map((opt, i) => {
           const isPick = picked === opt
           const showAnswer = !!picked && opt === item.answer
           const state = isPick ? (correct ? 'correct' : 'wrong') : showAnswer ? 'correct' : 'idle'
+          const letter = choiceLetters[i] ?? String(i + 1)
           return (
             <button
               key={opt}
@@ -367,7 +399,8 @@ export function SentenceClozeDrill({
               disabled={!!picked}
               onClick={() => pick(opt)}
             >
-              {opt}
+              <span className="sentence-cloze-chip-letter">{letter}.</span>{' '}
+              <span>{opt}</span>
             </button>
           )
         })}

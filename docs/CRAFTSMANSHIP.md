@@ -214,7 +214,7 @@ These are load-bearing across all layers.
 - After Visual Vocabulary, Construction opens **Sentence Structure** (cloze bank from Construction Questions 1–560) before Word → Action.
 - **Ladder gate (required):** Daily Conversation Level-1 **and** specialty Construction Visual Vocabulary Level-1 (first workplace picture page) before Sentence Structure unlocks. Greetings alone must not open specialty sentences.
 - Cloze bank prefers / keeps rows whose answers exist in pictured specialty VV (orphan PPTX rows stay out of the graded bank).
-- **Docs mold (Construction Questions MC):** white worksheet card — stem with `______` blank + four word choices (A–D style). Not a VocabSheet photo card; not a SITEWISE crew stage.
+- **Docs mold (Construction Questions PPTX):** each item pairs the **PPTX illustration** with the cloze stem (`______`) and four A–D choices. Images live in `public/sentence-cloze/cs-{n}.*`. Not a VocabSheet photo card; not a SITEWISE crew stage.
 - **One attempt per item** — no answer shopping.
 - Correct: word **slides into the blank**; short success line; TTS reads the full sentence.
 - Wrong: reveal the right word in the blank, brief teach line, then move on (Duolingo one-try).
@@ -426,6 +426,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-21 — Sentence Structure shows PPTX question images (L2)
+
+- Extracted all 560 Construction Questions illustrations and paired each cloze item with its PPTX image.
+- UI: illustration beside the sentence + A–D choices (docs mold). Prefer pictured VV answers for Level-1 order; bank keeps full PPTX set.
+- **Assumption to challenge next:** whether Level-1 should stay specialty-VV-first or follow PPTX page order 1–20.
+
 
 ### 2026-10-21 — Language organize quiz after five-language vocab (L2)
 
