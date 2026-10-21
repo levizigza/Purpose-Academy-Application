@@ -10260,6 +10260,15 @@ video {
   gap: 0.45rem;
 }
 
+.vocab-organize-pool-grid.is-images {
+  grid-template-columns: repeat(auto-fill, minmax(6.4rem, 1fr));
+  margin-bottom: 0.65rem;
+}
+
+.vocab-organize-pool-grid.is-glosses {
+  grid-template-columns: repeat(auto-fill, minmax(6.8rem, 1fr));
+}
+
 .vocab-organize-piece {
   appearance: none;
   border: 1px solid #c9d8e8;
@@ -10360,10 +10369,20 @@ video {
 }
 
 .vocab-organize-slot.is-image {
-  min-height: 7.5rem;
+  aspect-ratio: 1;
+  min-height: 8.5rem;
   display: grid;
   place-items: center;
   overflow: hidden;
+  border-width: 2px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(138, 160, 184, 0.08) 0,
+      rgba(138, 160, 184, 0.08) 8px,
+      transparent 8px,
+      transparent 16px
+    );
 }
 
 .vocab-organize-slot.is-image img {

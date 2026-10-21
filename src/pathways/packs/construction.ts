@@ -1,7 +1,7 @@
 /**
  * Construction Foundations content pack.
  * Vocabulary order: Daily Conversation (shared 200) → Construction Visual Vocabulary (660)
- * → Sentence Structure (560 cloze) → Word → Action → Eye Spy → Workplace Instructions.
+ * → language organize → Eye Spy → Sentence Structure (560 cloze) → Word → Action → Workplace Instructions.
  * Level-1 vocab gate = Daily Conversation words 1–20. Practice layers use Construction
  * worksheet ids and con-vv image keys.
  */
@@ -36,20 +36,20 @@ export const constructionPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn Daily Conversation Vocabulary (200), Construction Visual Vocabulary (660), organize four words across five languages, then Sentence Structure (560 cloze, PPTX order, 10 per page). Complete Level-1 vocab and one honest sentence page to continue; more pages stay open to practise.',
+      goal: 'Learn Daily Conversation Vocabulary (200) and Construction Visual Vocabulary (660), organize four words across five languages, then find every picture again in Eye Spy.',
       outcomes: [
         'See a real photo of each word and hear English spoken every time',
         'Connect your language to the English word and a short example sentence',
-        'Organize four English stations: picture + five language names in worksheet order',
-        'Complete Construction English cloze worksheets — one try, correct word slides into the blank',
+        'Organize four English stations: picture box + five language names below it',
+        'Identify every tool and material in busy shop scenes',
       ],
     },
     4: {
-      goal: 'Use English with support, then prove you can find and follow construction-site language.',
+      goal: 'Put the words into Construction Questions sentences, then follow construction-site language.',
       outcomes: [
+        'Complete Construction English cloze worksheets — one try, correct word slides into the blank',
         'Connect word → site action',
         'Match pictures to English words',
-        'Find tools and materials in a busy shop scene',
         'Follow short workplace instructions',
         'Understand common job-site phrases',
       ],
@@ -72,12 +72,12 @@ export const constructionPack: PathwayPack = {
     },
   },
   stepTitles: {
-    9: {
+    7: {
       title: 'English Eye Spy',
       help: 'Ten scenes. Match each English word to its picture until every item on the board is cleared.',
-      purpose: 'Prove you can identify every tool and material in a busy construction scene.',
+      purpose: 'Connect Visual Vocabulary again in a busy scene before Sentence Structure.',
     },
-    7: {
+    8: {
       title: 'Sentence Structure',
       help: 'Choose the word that completes the sentence. One try — if it is wrong, we show the answer and move on. Correct words slide into the blank.',
       purpose: 'Construction Questions worksheet mold (blank + four choices), then Word → Action.',

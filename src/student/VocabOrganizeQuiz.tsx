@@ -88,6 +88,8 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
 
   const totalSlots = terms.length * (1 + VOCAB_SHEET_LANGS.length)
   const filledCount = Object.keys(placements).length
+  const poolImages = pool.filter((p): p is ImagePiece => p.kind === 'image')
+  const poolGlosses = pool.filter((p): p is GlossPiece => p.kind === 'gloss')
   const allCorrect =
     filledCount === totalSlots &&
     terms.every((term) => {
@@ -179,11 +181,11 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
         </div>
         <h2>Four words organized</h2>
         <p className="lede">
-          Each English station has its picture and all five language names in order. You can continue.
+          Each English station has its picture and all five language names in order. Next you find the same words in Eye Spy.
         </p>
         <div className="hero-actions">
           <button type="button" className="btn btn-primary" onClick={onPassed}>
-            Continue
+            Continue to English Eye Spy
           </button>
         </div>
       </article>
@@ -206,21 +208,21 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
           {selected ? ' · Piece selected — tap a box' : ' · Tap a piece, then tap its box'}
         </p>
         <p className="lede vocab-organize-help">
-          At the top everything is mixed up. For each English word, put the picture in the picture box,
-          then put the five language names in descending order (Amharic → Hindi). Finish all four
-          stations to pass the page.
+          Pictures and five-language words are mixed up at the top. Each English station has an empty
+          picture box. Drop the matching visual in, then place each language version of the word in
+          the boxes below it (Amharic → Tigrinya → Arabic → Spanish → Hindi). Finish all four stations.
         </p>
       </header>
 
       <section className="vocab-organize-pool" aria-label="Jumbled pictures and words">
-        <p className="vocab-organize-pool-label">Jumbled pieces</p>
-        <div className="vocab-organize-pool-grid">
-          {pool.map((piece) => {
-            const term = byId.get(piece.termId)
-            if (!term) return null
-            const active = selectedKey === piece.key
-            if (piece.kind === 'image') {
+        <p className="vocab-organize-pool-label">Jumbled at the top</p>
+        {poolImages.length ? (
+          <div className="vocab-organize-pool-grid is-images">
+            {poolImages.map((piece) => {
+              const term = byId.get(piece.termId)
+              if (!term) return null
               const img = pathwayImage(term.imageKey)
+              const active = selectedKey === piece.key
               return (
                 <button
                   key={piece.key}
@@ -239,22 +241,31 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   )}
                 </button>
               )
-            }
-            return (
-              <button
-                key={piece.key}
-                type="button"
-                className={`vocab-organize-piece is-gloss${active ? ' is-selected' : ''}`}
-                onClick={() => selectPiece(piece)}
-                aria-pressed={active}
-                aria-label={`${piece.lang} word for ${term.english}`}
-              >
-                <span className="vocab-organize-piece-lang">{piece.lang}</span>
-                <span className="vocab-organize-piece-word">{term.gloss[piece.lang]}</span>
-              </button>
-            )
-          })}
-        </div>
+            })}
+          </div>
+        ) : null}
+        {poolGlosses.length ? (
+          <div className="vocab-organize-pool-grid is-glosses">
+            {poolGlosses.map((piece) => {
+              const term = byId.get(piece.termId)
+              if (!term) return null
+              const active = selectedKey === piece.key
+              return (
+                <button
+                  key={piece.key}
+                  type="button"
+                  className={`vocab-organize-piece is-gloss${active ? ' is-selected' : ''}`}
+                  onClick={() => selectPiece(piece)}
+                  aria-pressed={active}
+                  aria-label={`${piece.lang} word for ${term.english}`}
+                >
+                  <span className="vocab-organize-piece-lang">{piece.lang}</span>
+                  <span className="vocab-organize-piece-word">{term.gloss[piece.lang]}</span>
+                </button>
+              )
+            })}
+          </div>
+        ) : null}
         {!pool.length ? (
           <p className="alert ok">All pieces placed — check the stations, then pass the page.</p>
         ) : null}
@@ -296,7 +307,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                     <span className="vocab-organize-emoji">{term.emoji}</span>
                   )
                 ) : (
-                  <span className="vocab-organize-slot-hint">Drop picture</span>
+                  <span className="vocab-organize-slot-hint">Empty picture box</span>
                 )}
               </button>
 
@@ -331,7 +342,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                         {piece && piece.kind === 'gloss' ? (
                           <span className="vocab-organize-slot-word">{term.gloss[lang]}</span>
                         ) : (
-                          <span className="vocab-organize-slot-hint">Word</span>
+                          <span className="vocab-organize-slot-hint">{lang} word</span>
                         )}
                       </button>
                     </li>

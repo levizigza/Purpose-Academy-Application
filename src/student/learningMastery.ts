@@ -76,10 +76,11 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   4: 'career-assessment',
   5: 'career-assessment',
   6: 'vocab',
-  /** Shared spine skill. Construction also runs Sentence Structure in-station first. */
-  7: 'word-action',
-  8: 'matching',
-  9: 'eye-spy',
+  /** After Visual Vocabulary + language organize: find every picture again. */
+  7: 'eye-spy',
+  /** Construction runs Sentence Structure in-station first, then Word → Action. */
+  8: 'word-action',
+  9: 'matching',
   10: 'instructions',
   11: 'site-phrases',
   /** After practice: RIASEC interest inventory for specialization. */
@@ -193,8 +194,8 @@ export function domainMasteryPercent(skills: SkillId[]): number {
 }
 
 export const SKILL_DOMAINS = {
-  vocabulary: ['vocab', 'vocab-organize', 'sentence-cloze', 'word-action', 'matching'] as SkillId[],
-  safety: ['safety', 'eye-spy', 'instructions'] as SkillId[],
+  vocabulary: ['vocab', 'vocab-organize', 'eye-spy', 'sentence-cloze', 'word-action', 'matching'] as SkillId[],
+  safety: ['safety', 'instructions'] as SkillId[],
   tools: ['tools', 'site-phrases'] as SkillId[],
   systems: ['systems', 'observation', 'site-log', 'digital'] as SkillId[],
 }

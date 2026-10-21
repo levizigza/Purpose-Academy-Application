@@ -659,7 +659,7 @@ export function StudentSequencePage() {
   const [actionIdx, setActionIdx] = useState(0)
   const [actionAnswer, setActionAnswer] = useState<string | null>(null)
   const [actionCorrect, setActionCorrect] = useState(false)
-  /** Construction: Sentence Structure first, then Word → Action inside step 7. */
+  /** Construction: Sentence Structure first, then Word → Action inside step 8. */
   const [step8Phase, setStep8Phase] = useState<'sentences' | 'actions'>('sentences')
   /** After five-language VocabSheet: organize picture + languages quiz. */
   const [vocabPhase, setVocabPhase] = useState<'sheet' | 'organize'>('sheet')
@@ -782,9 +782,9 @@ export function StudentSequencePage() {
     if (skill) markSkillOpened(skill)
   }, [step, practiceView])
 
-  /* Seed matching options from the worksheet-sized deck when entering step 8. */
+  /* Seed matching options from the worksheet-sized deck when entering step 9. */
   useEffect(() => {
-    if (step !== 8) return
+    if (step !== 9) return
     const deck = matchPracticeDeck(VOCAB_UNIT, getKnownVocabIds(pathwayId))
     const term = deck[0]
     if (!term) return
@@ -935,11 +935,12 @@ export function StudentSequencePage() {
     setAdvanceGateMsg(null)
     const target = Math.min(20, Math.max(1, next))
     if (target !== step) resetDrillLocals()
-    /* Quality-review jumps land on Sentence Structure (not mid Word→Action) when opening step 7. */
-    if (target === 7) {
+    /* Quality-review jumps land on Sentence Structure (not mid Word→Action) when opening step 8. */
+    if (target === 8) {
       setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
     }
-    if (target === 6) {
+    /* Back from Eye Spy keeps the organize quiz; other entries reset to the sheet. */
+    if (target === 6 && step !== 7) {
       setVocabPhase('sheet')
       setOrganizeTerms([])
     }
@@ -1216,15 +1217,6 @@ export function StudentSequencePage() {
         </div>
       </Shell>
     )
-  }
-
-  function resetVocab() {
-    setVocabHeard({})
-    setVocabConnected({})
-    setVocabSpeakingId(null)
-    setVocabIdx(0)
-    setSpeaking(null)
-    stopSpeech()
   }
 
   async function playEnglish(text: string) {
@@ -1581,17 +1573,8 @@ export function StudentSequencePage() {
     const firstSpecialtyIdx = VOCAB_UNIT.findIndex((t) => !isDailyConversationTerm(t))
 
     function continueAfterVocabOrganize() {
-      setActionIdx(0)
-      setActionAnswer(null)
-      setActionCorrect(false)
-      setStep8Phase(SENTENCE_CLOZE.length ? 'sentences' : 'actions')
-      setSentenceLevel1(false)
       setVocabPhase('sheet')
-      setOrganizeTerms([])
-      go(
-        7,
-        SENTENCE_CLOZE.length ? 'Opening Sentence Structure…' : 'Opening Word → Action…',
-      )
+      go(7, 'Opening English Eye Spy…')
     }
 
     if (vocabPhase === 'organize') {
@@ -1685,11 +1668,43 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 7: Construction = Sentence Structure → Word → Action; other pathways = Word → Action */
+  /* Step 7: English Eye Spy — after Visual Vocabulary + language organize */
   if (step === 7) {
+    return (
+      <Shell
+        step={7}
+        onBack={() => {
+          setVocabPhase('organize')
+          go(6)
+        }}
+      >
+        <WhyWork>On a real site every tool sits among other objects. Prove you can name each one until the board is clear.</WhyWork>
+        <TeachNote>Exercise mode: unlimited tries. Each scene has several items. Match the English word to its picture, then the next word, until nothing is left. Pass requires 100% with no misses.</TeachNote>
+        <EyeSpyQuiz
+          scenes={EYE_SPY_SCENES}
+          mode="exercise"
+          onComplete={() => {
+            setStep8Phase(SENTENCE_CLOZE.length ? 'sentences' : 'actions')
+            setSentenceLevel1(false)
+            setActionIdx(0)
+            setActionAnswer(null)
+            setActionCorrect(false)
+            advanceWithOptionalCheckpoint(
+              7,
+              8,
+              SENTENCE_CLOZE.length ? 'Opening Sentence Structure…' : 'Opening Word → Action…',
+            )
+          }}
+        />
+      </Shell>
+    )
+  }
+
+  /* Step 8: Construction = Sentence Structure → Word → Action; other pathways = Word → Action */
+  if (step === 8) {
     if (SENTENCE_CLOZE.length && step8Phase === 'sentences') {
       return (
-        <Shell step={7} onBack={() => { resetVocab(); go(6) }}>
+        <Shell step={8} onBack={() => go(7)}>
           <SentenceClozeDrill
             items={SENTENCE_CLOZE}
             onLevel1Passed={() => {
@@ -1757,7 +1772,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(7, 8, 'Opening supported practice…'))
+        requestPracticeAdvance(() => go(9, 'Opening supported practice…'))
         return
       }
       setActionIdx((i) => i + 1)
@@ -1767,14 +1782,13 @@ export function StudentSequencePage() {
 
     return (
       <Shell
-        step={7}
+        step={8}
         onBack={() => {
           if (SENTENCE_CLOZE.length) {
             setStep8Phase('sentences')
             return
           }
-          resetVocab()
-          go(6)
+          go(7)
         }}
       >
         {SENTENCE_CLOZE.length ? (
@@ -1832,8 +1846,8 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 8: Supported matching — worksheet page, not the full vocab dump */
-  if (step === 8) {
+  /* Step 9: Supported matching — worksheet page, not the full vocab dump */
+  if (step === 9) {
     const knownSet = new Set(vocabKnownIds)
     const unknownTerms = VOCAB_UNIT.filter((t) => !knownSet.has(t.id))
     const matchDeck = matchPracticeDeck(VOCAB_UNIT, vocabKnownIds)
@@ -1841,8 +1855,8 @@ export function StudentSequencePage() {
     const term = matchDeck[safeIdx]
     if (!term) {
       return (
-        <Shell step={8} onBack={() => go(7)} onNext={() => go(9, 'Opening English Eye Spy…')}>
-          <div className="alert ok">Matching page ready — continue to English Eye Spy.</div>
+        <Shell step={9} onBack={() => go(8)} onNext={() => go(10, 'Opening workplace instructions…')}>
+          <div className="alert ok">Matching page ready — continue to workplace instructions.</div>
         </Shell>
       )
     }
@@ -1877,7 +1891,10 @@ export function StudentSequencePage() {
           playFoley('whoosh')
           return
         }
-        requestPracticeAdvance(() => go(9, 'Opening English Eye Spy…'))
+        requestPracticeAdvance(() => {
+          resetMatch()
+          go(10, 'Opening workplace instructions…')
+        })
         return
       }
       const next = safeIdx + 1
@@ -1889,7 +1906,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={8} onBack={() => go(7)}>
+      <Shell step={9} onBack={() => go(8)}>
         <p className="train-vocab-counter">
           Round {matchRound} of {roundsNeeded} · Match {safeIdx + 1} of {matchDeck.length}
           {' · '}
@@ -1946,7 +1963,7 @@ export function StudentSequencePage() {
             <AdvanceGateNote />
             <button type="button" className="btn btn-primary" onClick={nextMatch}>
               {matchCorrect
-                ? (isLast && matchRound >= roundsNeeded ? 'Continue to English Eye Spy' : isLast ? 'Next round' : 'Next match')
+                ? (isLast && matchRound >= roundsNeeded ? 'Continue to workplace instructions' : isLast ? 'Next round' : 'Next match')
                 : 'Try again'}
             </button>
           </>
@@ -1955,18 +1972,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 10: English Eye Spy exercise (unlimited) */
-  if (step === 9) {
-    return (
-      <Shell step={9} onBack={() => { resetMatch(); go(8) }}>
-        <WhyWork>On a real site every tool sits among other objects. Prove you can name each one until the board is clear.</WhyWork>
-        <TeachNote>Exercise mode: unlimited tries. Each scene has several items. Match the English word to its picture, then the next word, until nothing is left. Pass requires 100% with no misses.</TeachNote>
-        <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exercise" onComplete={() => { resetInstr(); go(10) }} />
-      </Shell>
-    )
-  }
-
-  /* Step 11: Workplace instructions — English only */
+  /* Step 10: Workplace instructions — English only */
   if (step === 10) {
     const instr = WORKPLACE_INSTRUCTIONS[instrIdx]
     const isLast = instrIdx >= WORKPLACE_INSTRUCTIONS.length - 1
@@ -1997,7 +2003,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={10} onBack={() => go(9)}>
+      <Shell step={10} onBack={() => { resetMatch(); go(9) }}>
         <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
         <p className="train-vocab-counter">Instruction {instrIdx + 1} of {WORKPLACE_INSTRUCTIONS.length} · English only</p>
         <div className="train-instruction">

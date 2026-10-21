@@ -1,8 +1,8 @@
 ﻿/**
  * Student journey — Purpose Academy sequence:
  * Login → Register → Language → Work Style (path quiz) → Profile →
- * Vocab → Word→Action → Supported practice →
- * English Eye Spy → Instructions → Site language →
+ * Vocab → language organize → English Eye Spy → Sentences / Word→Action →
+ * Supported practice → Instructions → Site language →
  * Interest assessment (specialize) → Digital → Safety →
  * Tools → Systems → Observation → On-site → Final exam/certificate → Employment
  *
@@ -15,10 +15,10 @@ export const JOURNEY_STEPS = [
   { n: 3, title: 'Your Language', help: 'Choose your mother tongue for the path quiz and later interest assessment.', purpose: 'Path and interest steps run in a language you understand. Job-site English comes with practice.', unit: 2 },
   { n: 4, title: 'Work Style', help: 'Ten questions. Choose what sounds most like you.', purpose: 'A short path quiz opens Construction, Logistics, or Community Support.', unit: 2 },
   { n: 5, title: 'Your Career Profile', help: 'See the path that fits your work-style answers.', purpose: 'Work style → recommended pathway. Later practice, then a deeper interest inventory for specialization.', unit: 2 },
-  { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English. Then organize four words: picture + five languages in order.', purpose: 'All five home languages stay visible. After the sheet, prove you can place each picture and language name together.', unit: 3 },
-  { n: 7, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'Link English words to real movement with a quick check.', unit: 3 },
-  { n: 8, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
-  { n: 9, title: 'English Eye Spy', help: 'Ten scenes. Match each English word to its picture until every item is cleared.', purpose: 'Prove you can identify every tool and material in a busy scene.', unit: 4 },
+  { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English. Then organize four words: picture box + five language names below it.', purpose: 'Learn the pictures first. Then prove you can place each picture and its five language names together.', unit: 3 },
+  { n: 7, title: 'English Eye Spy', help: 'Ten scenes. Match each English word to its picture until every item is cleared.', purpose: 'Connect the same vocabulary again in a busy scene before you write sentences.', unit: 3 },
+  { n: 8, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'After pictures are solid, link English words to real movement.', unit: 4 },
+  { n: 9, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
   { n: 10, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   { n: 11, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
   { n: 12, title: 'Interest Assessment', help: 'After practice, rate work activities to specialize.', purpose: 'A professional interest inventory (Holland / RIASEC) once you have real practice — not a pass/fail quiz.', unit: 5 },
@@ -36,8 +36,8 @@ export const JOURNEY_STEPS = [
 export const LEARNING_UNITS = [
   { id: 1, label: 'Start', range: '1–2' },
   { id: 2, label: 'Find your path', range: '3–5' },
-  { id: 3, label: 'Words → Sentences', range: '6–7' },
-  { id: 4, label: 'Practice English', range: '8–11' },
+  { id: 3, label: 'Words → Pictures', range: '6–7' },
+  { id: 4, label: 'Sentences → Site English', range: '8–11' },
   { id: 5, label: 'Specialize & site ready', range: '12–16' },
   { id: 6, label: 'Work ready', range: '17–20' },
 ] as const
@@ -57,18 +57,18 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   3: {
-    goal: 'Learn Daily Conversation and specialty workplace words, then put them into job-site sentences.',
+    goal: 'Learn Daily Conversation and specialty workplace words, then prove you can find every picture again.',
     outcomes: [
       'See each word and hear English across five languages',
       'Organize pictures with all five language names on a quiz page',
-      'Build English sentences (Construction) and connect words to actions',
+      'Identify every object in busy workplace photo scenes',
     ],
   },
   4: {
-    goal: 'Use English with support, then prove you can find and follow workplace language.',
+    goal: 'Put the words into job-site sentences, then follow workplace language.',
     outcomes: [
-      'Match pictures to English words',
-      'Identify every object in busy workplace photo scenes',
+      'Build English sentences (Construction) and connect words to actions',
+      'Match pictures to English words with help',
       'Follow short workplace instructions',
       'Understand common workplace phrases',
     ],
@@ -1508,6 +1508,21 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
       teachCorrect: 'Gear on before you enter.',
       teachWrong: 'Hard hat and required PPE first.',
     },
+    {
+      id: 'uc3-4',
+      prompt: 'Find-the-tool practice (Eye Spy) proves you can…',
+      emoji: 'D',
+      imageKey: 'drill',
+      options: [
+        'Name every item in a busy scene',
+        'Skip English forever',
+        'Ignore safety gear',
+        'Guess without looking',
+      ],
+      answer: 'Name every item in a busy scene',
+      teachCorrect: 'You identify each tool until the board is clear.',
+      teachWrong: 'Eye Spy is about identifying every item in the scene.',
+    },
   ],
   4: [
     {
@@ -1537,18 +1552,18 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
     },
     {
       id: 'uc4-3',
-      prompt: 'Find-the-tool practice (Eye Spy) proves you can…',
-      emoji: 'D',
-      imageKey: 'drill',
+      prompt: 'Sentence practice proves you can…',
+      emoji: 'S',
+      imageKey: 'saw',
       options: [
-        'Name every item in a busy scene',
+        'Choose the English word that completes a job-site sentence',
         'Skip English forever',
-        'Ignore safety gear',
-        'Guess without looking',
+        'Ignore the picture',
+        'Guess without reading',
       ],
-      answer: 'Name every item in a busy scene',
-      teachCorrect: 'You identify each tool until the board is clear.',
-      teachWrong: 'Eye Spy is about identifying every item in the scene.',
+      answer: 'Choose the English word that completes a job-site sentence',
+      teachCorrect: 'You pick the word that fits the sentence.',
+      teachWrong: 'Sentence Structure is about completing the English sentence.',
     },
     {
       id: 'uc4-4',

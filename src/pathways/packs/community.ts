@@ -187,14 +187,15 @@ export const communityPack: PathwayPack = {
       outcomes: [
         'See a real photo of each word and hear English',
         'Connect your language to the English word and a short example sentence',
-        'Connect support objects to real community-support actions',
+        'Organize four English stations: picture box + five language names below it',
+        'Identify every support object in a busy scene (Eye Spy)',
       ],
     },
     4: {
-      goal: 'Use English with support, then prove you can find and follow person-centred language with the people you support.',
+      goal: 'Connect words to support actions, then follow person-centred language with the people you support.',
       outcomes: [
+        'Connect support objects to real community-support actions',
         'Match pictures to English words',
-        'Find objects in agencies, homes, and community settings',
         'Follow short workplace instructions',
         'Understand dignity, privacy, and consent phrases for community support',
       ],

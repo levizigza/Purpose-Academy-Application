@@ -26,14 +26,15 @@ export const logisticsPack: PathwayPack = {
       outcomes: [
         'See a real photo of each word and hear English',
         'Connect your language to the English word and a short example sentence',
-        'Use worksheet pages so the app matches the class vocabulary table',
+        'Organize four English stations: picture box + five language names below it',
+        'Identify every object in a busy bay (Eye Spy)',
       ],
     },
     4: {
-      goal: 'Use English with support, then prove you can find and follow warehouse language.',
+      goal: 'Connect words to warehouse actions, then follow warehouse language.',
       outcomes: [
+        'Connect word → floor action',
         'Match pictures to English words',
-        'Find objects in a busy bay',
         'Follow short workplace instructions',
         'Understand common warehouse phrases',
       ],
@@ -1215,6 +1216,21 @@ export const logisticsPack: PathwayPack = {
         teachCorrect: 'Use a dolly or cart for heavy boxes.',
         teachWrong: 'Move heavy boxes with a dolly or cart — never rush with open arms.',
       },
+      {
+        id: 'uc3-l4',
+        prompt: 'Find-the-object practice (Eye Spy) proves you can…',
+        emoji: 'PJ',
+        imageKey: 'log-jack',
+        options: [
+          'Spot the real object among others',
+          'Skip English forever',
+          'Ignore safety gear',
+          'Guess without looking',
+        ],
+        answer: 'Spot the real object among others',
+        teachCorrect: 'You identify warehouse objects in a busy scene.',
+        teachWrong: 'Eye Spy is about finding the named object.',
+      },
     ],
     4: [
       {
@@ -1249,18 +1265,18 @@ export const logisticsPack: PathwayPack = {
       },
       {
         id: 'uc4-l3',
-        prompt: 'Find-the-object practice (Eye Spy) proves you can…',
+        prompt: 'Word → Action practice proves you can…',
         emoji: 'PJ',
         imageKey: 'log-jack',
         options: [
-          'Spot the real object among others',
+          'Match a warehouse action to the right English word',
           'Skip English forever',
           'Ignore safety gear',
           'Guess without looking',
         ],
-        answer: 'Spot the real object among others',
-        teachCorrect: 'You identify warehouse objects in a busy scene.',
-        teachWrong: 'Eye Spy is about finding the named object.',
+        answer: 'Match a warehouse action to the right English word',
+        teachCorrect: 'You connect the action to the named object.',
+        teachWrong: 'Word → Action links the movement to the English word.',
       },
       {
         id: 'uc4-l4',
