@@ -1635,8 +1635,8 @@ export function StudentSequencePage() {
     }
     return (
       <Shell step={7} onBack={() => go(6)}>
-        <WhyWork>The same tool has one English name and many home-language names. Match the picture to that word.</WhyWork>
-        <TeachNote>Each card is the word plus its other-language names. Tap a picture, then tap the word it belongs to.</TeachNote>
+        <WhyWork>The same tool has one English name and many home-language names. Hear a language, then drop the picture on that word.</WhyWork>
+        <TeachNote>Five rounds. Each card already lists the word in every language. Move the matching picture into the empty box. Hear any language if you want help.</TeachNote>
         <VocabOrganizeQuiz
           terms={organizeTerms}
           onPassed={() => go(8, 'Opening English Eye Spy…')}

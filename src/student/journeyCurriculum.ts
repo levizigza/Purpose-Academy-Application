@@ -16,7 +16,7 @@ export const JOURNEY_STEPS = [
   { n: 4, title: 'Work Style', help: 'Ten questions. Choose what sounds most like you.', purpose: 'A short path quiz opens Construction, Logistics, or Community Support.', unit: 2 },
   { n: 5, title: 'Your Career Profile', help: 'See the path that fits your work-style answers.', purpose: 'Work style → recommended pathway. Later practice, then a deeper interest inventory for specialization.', unit: 2 },
   { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Press the language you understand. Connect it to English.', purpose: 'Learn the pictures first, in your language and in English.', unit: 3 },
-  { n: 7, title: 'Language Organize', help: 'Each card is the English word plus its other-language names. Match the picture to that word.', purpose: 'Connect the picture to the word you already saw in every language.', unit: 3 },
+  { n: 7, title: 'Language Organize', help: 'Five rounds. Each card is the word plus its other-language names. Hear a language if you want, then drop the picture into the empty box.', purpose: 'Connect the picture to the word you already saw in every language.', unit: 3 },
   { n: 8, title: 'English Eye Spy', help: 'Ten scenes. Tap a picture and its English name. Correct pairs disappear until the board is empty.', purpose: 'Connect the same vocabulary again in a busy scene before you write sentences.', unit: 3 },
   { n: 9, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'After pictures are solid, link English words to real movement.', unit: 4 },
   { n: 10, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
