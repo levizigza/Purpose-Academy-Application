@@ -292,7 +292,11 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const jumpSteps = journeySteps.filter((s) => s.n >= PRACTICE_ENTRY_STEP)
 
   return (
-    <div className={`shell-main train-shell${step === 7 ? ' is-organize-wide' : ''}`}>
+    <div
+      className={`shell-main train-shell${step === 7 ? ' is-organize-wide' : ''}${
+        step === 18 ? ' is-equipment-video' : ''
+      }`}
+    >
       <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
       <header className="train-header">
         <div className="train-header-top">
@@ -2494,23 +2498,37 @@ export function StudentSequencePage() {
         ) : (
           <article className="topic-lesson-card">
             <p className="section-kicker">Equipment Familiarization</p>
-            <h2>Practise equipment with your instructor</h2>
+            <h2>Warehouse equipment videos live on Logistics</h2>
             <p className="lede">
-              Your pathway covers tools in the previous station. Hands-on equipment checks happen under instructor
-              observation next — continue when you are ready.
+              The fourteen machine lessons (forklift, pallet jack, scanner, and more) are part of{' '}
+              <strong>Logistics Foundations</strong>. Switch pathways to watch them, or continue this pathway to
+              instructor observation.
             </p>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => {
-                recordSkillAttempt('equipment-videos', true, 15)
-                requestPracticeAdvance(() =>
-                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
-                )
-              }}
-            >
-              Continue to observation
-            </button>
+            <div className="hero-actions">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                  setActivePathway('logistics')
+                  setPathwayId('logistics')
+                  playFoley('whoosh')
+                }}
+              >
+                Open Logistics · Warehouse Equipment
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary on-light"
+                onClick={() => {
+                  recordSkillAttempt('equipment-videos', true, 15)
+                  requestPracticeAdvance(() =>
+                    advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                  )
+                }}
+              >
+                Stay on this pathway · Continue
+              </button>
+            </div>
           </article>
         )}
       </Shell>

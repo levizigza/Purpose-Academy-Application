@@ -10682,3 +10682,77 @@ video {
 .equip-video-actions {
   margin-top: 0.15rem;
 }
+
+/* Practice hub — pathway switcher (Warehouse Equipment is Logistics-only) */
+.ph-pathway-switch {
+  margin-top: 0.85rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.ph-pathway-switch-label {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--ph-stream, #2f6bb0) 80%, #fff);
+}
+
+.ph-pathway-switch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ph-pathway-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #fff 22%, transparent);
+  background: color-mix(in srgb, #000 18%, transparent);
+  color: #f2f5f8;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ph-pathway-switch-btn img {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+}
+
+.ph-pathway-switch-btn.is-active {
+  border-color: var(--ph-stream, #2f6bb0);
+  background: color-mix(in srgb, var(--ph-stream, #2f6bb0) 28%, #0b1c2e);
+}
+
+.ph-pathway-switch-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  color: color-mix(in srgb, #fff 72%, transparent);
+}
+
+.ph-pathway-switch-hint strong {
+  color: #fff;
+}
+
+.ph-equip-cta {
+  justify-self: start;
+  margin-top: 0.15rem;
+}
+
+/* Equipment video station — keep the player above the fold */
+.train-shell.is-equipment-video .learning-path-map,
+.train-shell.is-equipment-video .train-path-map {
+  max-height: 9.5rem;
+  overflow: auto;
+}
+
+.train-shell.is-equipment-video .equip-video-card {
+  scroll-margin-top: 1rem;
+}

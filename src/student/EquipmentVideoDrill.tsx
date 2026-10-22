@@ -66,6 +66,12 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     }
   }, [lesson.id])
 
+  useEffect(() => {
+    // Practice chrome is tall — bring the player into view when the station opens.
+    const node = document.querySelector('.equip-video-card')
+    node?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [])
+
   const familyLessons = useMemo(
     () => lessons.filter((l) => l.family === lesson.family),
     [lessons, lesson.family],
