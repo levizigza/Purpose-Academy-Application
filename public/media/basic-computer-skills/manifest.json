@@ -2,61 +2,85 @@
   {
     "file": "01_Turn_computer_on_off.mp4",
     "title": "Turn the computer on and off",
-    "bytes": 16539541
+    "bytes": 1835835,
+    "seconds": 34.9,
+    "has_audio": true
   },
   {
     "file": "02_Use_the_mouse.mp4",
     "title": "Use the mouse",
-    "bytes": 5496111
+    "bytes": 4996543,
+    "seconds": 40.6,
+    "has_audio": true
   },
   {
     "file": "03_Use_the_keyboard.mp4",
     "title": "Use the keyboard",
-    "bytes": 8898317
+    "bytes": 2139106,
+    "seconds": 34.6,
+    "has_audio": true
   },
   {
     "file": "04_Create_a_folder.mp4",
     "title": "Create a folder",
-    "bytes": 3553664
+    "bytes": 529424,
+    "seconds": 30.3,
+    "has_audio": true
   },
   {
     "file": "05_Create_a_subfolder.mp4",
     "title": "Create a subfolder",
-    "bytes": 7097675
+    "bytes": 715128,
+    "seconds": 34.9,
+    "has_audio": true
   },
   {
     "file": "06_Save_file_with_name.mp4",
     "title": "Save a file with a name",
-    "bytes": 5588607
+    "bytes": 642409,
+    "seconds": 32.4,
+    "has_audio": true
   },
   {
     "file": "07_Write_short_paragraph.mp4",
     "title": "Write a short paragraph",
-    "bytes": 9887355
+    "bytes": 661356,
+    "seconds": 34.7,
+    "has_audio": true
   },
   {
     "file": "08_Save_your_document.mp4",
     "title": "Save your document",
-    "bytes": 8572464
+    "bytes": 685016,
+    "seconds": 33.3,
+    "has_audio": true
   },
   {
     "file": "09_Write_and_send_email.mp4",
     "title": "Write and send an email",
-    "bytes": 12835324
+    "bytes": 615639,
+    "seconds": 32.3,
+    "has_audio": true
   },
   {
     "file": "10_Reply_to_email.mp4",
     "title": "Reply to an email",
-    "bytes": 7097544
+    "bytes": 571367,
+    "seconds": 28.8,
+    "has_audio": true
   },
   {
     "file": "11_Attach_and_save_files.mp4",
     "title": "Attach a file and save an attachment",
-    "bytes": 4091030
+    "bytes": 826724,
+    "seconds": 38.4,
+    "has_audio": true
   },
   {
     "file": "12_Stay_safe_online.mp4",
     "title": "Stay safe online",
-    "bytes": 14533440
+    "bytes": 761309,
+    "seconds": 33.5,
+    "has_audio": true
   }
 ]

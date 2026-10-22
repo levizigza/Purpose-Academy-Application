@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BCS Demo Desktop</title>
+    <style>
+      :root {
+        --desk: #1a3348;
+        --panel: #0f2436;
+        --accent: #f5c542;
+        --ok: #3d8fd1;
+        --text: #f4f7fb;
+        --muted: #a8b7c7;
+        --win: #eef3f8;
+        --win-text: #0b1c2e;
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        font-family: "Segoe UI", "Noto Sans", sans-serif;
+        background: var(--desk);
+        color: var(--text);
+      }
+      #stage {
+        position: relative;
+        width: 1280px;
+        height: 720px;
+        background:
+          radial-gradient(circle at 20% 10%, #24506f 0%, transparent 40%),
+          linear-gradient(160deg, #123049, #0b1c2e 60%, #071422);
+      }
+      .taskbar {
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        height: 48px;
+        background: #071422ee;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 14px;
+        border-top: 1px solid #2a4a66;
+      }
+      .start {
+        background: var(--accent);
+        color: #0b1c2e;
+        border: 0;
+        border-radius: 8px;
+        font-weight: 800;
+        padding: 8px 14px;
+        cursor: pointer;
+      }
+      .desktop-icons {
+        position: absolute;
+        top: 40px;
+        left: 36px;
+        display: grid;
+        gap: 22px;
+      }
+      .icon {
+        width: 96px;
+        text-align: center;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .icon .glyph {
+        width: 56px;
+        height: 44px;
+        margin: 0 auto 8px;
+        border-radius: 6px 10px 8px 8px;
+        background: linear-gradient(180deg, #f0c14b, #c9a227);
+        position: relative;
+        box-shadow: 0 6px 14px rgba(0,0,0,.25);
+      }
+      .icon .glyph::before {
+        content: "";
+        position: absolute;
+        left: 4px; top: -8px;
+        width: 22px; height: 10px;
+        border-radius: 3px 3px 0 0;
+        background: #e0b03a;
+      }
+      .icon.doc .glyph {
+        background: linear-gradient(180deg, #fff, #dce7f2);
+        border: 1px solid #9bb4cc;
+        border-radius: 4px;
+      }
+      .icon.doc .glyph::before { display: none; }
+      .window {
+        position: absolute;
+        top: 70px;
+        left: 220px;
+        width: 820px;
+        height: 500px;
+        background: var(--win);
+        color: var(--win-text);
+        border-radius: 12px;
+        box-shadow: 0 24px 50px rgba(0,0,0,.35);
+        display: none;
+        overflow: hidden;
+      }
+      .window.open { display: flex; flex-direction: column; }
+      .titlebar {
+        background: #d9e4ef;
+        padding: 10px 14px;
+        font-weight: 700;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .body { padding: 18px 20px; flex: 1; overflow: auto; }
+      .menu {
+        position: absolute;
+        background: #fff;
+        color: #0b1c2e;
+        border-radius: 10px;
+        box-shadow: 0 12px 28px rgba(0,0,0,.28);
+        min-width: 210px;
+        display: none;
+        z-index: 20;
+      }
+      .menu.open { display: block; }
+      .menu button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .menu button:hover, .menu button.hot { background: #dceaf8; }
+      .field { margin: 0 0 12px; }
+      .field label { display: block; font-size: 13px; margin-bottom: 4px; font-weight: 700; }
+      .field input, .field textarea {
+        width: 100%;
+        border: 1px solid #9bb4cc;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 16px;
+      }
+      .btn {
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-weight: 800;
+        cursor: pointer;
+        background: var(--accent);
+        color: #0b1c2e;
+      }
+      .btn.ghost { background: #d7e3ef; }
+      .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+      .folder-row {
+        display: flex;
+        gap: 18px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        min-height: 120px;
+      }
+      .folder-card {
+        width: 110px;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+      }
+      .folder-card.selected { outline: 3px solid var(--ok); background: #e7f2fb; }
+      .folder-card .glyph {
+        width: 64px; height: 48px; margin: 0 auto 8px;
+        border-radius: 6px 12px 8px 8px;
+        background: linear-gradient(180deg, #f0c14b, #c9a227);
+      }
+      .start-menu {
+        position: absolute;
+        left: 14px;
+        bottom: 56px;
+        width: 280px;
+        background: #102536;
+        border: 1px solid #2a4a66;
+        border-radius: 12px;
+        display: none;
+        overflow: hidden;
+        z-index: 30;
+      }
+      .start-menu.open { display: block; }
+      .start-menu button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        color: var(--text);
+        padding: 12px 16px;
+        cursor: pointer;
+      }
+      .start-menu button:hover, .start-menu button.hot { background: #1a4f8a; }
+      .banner {
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        background: #0b1c2ecc;
+        border: 1px solid #3d8fd1;
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 10px;
+        max-width: 360px;
+        font-size: 15px;
+        z-index: 40;
+      }
+      .cursor {
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        border-left: 3px solid #fff;
+        border-top: 3px solid #fff;
+        transform: rotate(-20deg);
+        filter: drop-shadow(0 2px 2px rgba(0,0,0,.6));
+        z-index: 100;
+        pointer-events: none;
+        left: 640px;
+        top: 360px;
+        transition: left .45s ease, top .45s ease;
+      }
+      .cursor.clicking { transform: rotate(-20deg) scale(.85); }
+      .blackout {
+        position: absolute;
+        inset: 0;
+        background: #000;
+        opacity: 0;
+        transition: opacity .8s ease;
+        z-index: 50;
+        pointer-events: none;
+      }
+      .blackout.on { opacity: 1; }
+      .attach-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #e7f2fb;
+        border: 1px solid #9bb4cc;
+        border-radius: 999px;
+        padding: 6px 12px;
+        margin-top: 8px;
+      }
+      .doc-page {
+        background: #fff;
+        border: 1px solid #c5d3e0;
+        min-height: 280px;
+        padding: 18px;
+        font-size: 18px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+      .saved-toast {
+        position: absolute;
+        bottom: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #163b22;
+        color: #d7ffe6;
+        padding: 10px 16px;
+        border-radius: 10px;
+        display: none;
+        z-index: 45;
+      }
+      .saved-toast.show { display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="stage">
+      <div class="banner" id="banner">Demo desktop</div>
+      <div class="desktop-icons" id="icons"></div>
+      <div class="window" id="explorer">
+        <div class="titlebar"><span id="explorer-title">School Work</span><span>×</span></div>
+        <div class="body">
+          <div class="folder-row" id="explorer-body"></div>
+        </div>
+      </div>
+      <div class="window" id="word">
+        <div class="titlebar"><span>Document — Safety Notes</span><span>×</span></div>
+        <div class="body">
+          <div class="row" style="margin-bottom:12px">
+            <button class="btn ghost" id="file-menu-btn">File</button>
+            <button class="btn" id="save-btn">Save</button>
+          </div>
+          <div class="doc-page" id="doc-page" contenteditable="true"></div>
+        </div>
+      </div>
+      <div class="window" id="email">
+        <div class="titlebar"><span id="email-title">New message</span><span>×</span></div>
+        <div class="body">
+          <div class="field"><label>To</label><input id="email-to" /></div>
+          <div class="field"><label>Subject</label><input id="email-subject" /></div>
+          <div class="field"><label>Message</label><textarea id="email-body" rows="5"></textarea></div>
+          <div id="attach-area"></div>
+          <div class="row" style="margin-top:12px">
+            <button class="btn ghost" id="attach-btn">Attach</button>
+            <button class="btn" id="send-btn">Send</button>
+            <button class="btn ghost" id="reply-btn" style="display:none">Reply</button>
+          </div>
+        </div>
+      </div>
+      <div class="window" id="inbox">
+        <div class="titlebar"><span>Inbox</span><span>×</span></div>
+        <div class="body">
+          <article style="background:#fff;border:1px solid #c5d3e0;border-radius:10px;padding:14px">
+            <p><strong>From:</strong> instructor@school.ca</p>
+            <p><strong>Subject:</strong> Welcome</p>
+            <p>Please reply and tell me you are ready.</p>
+            <p><button class="btn" id="inbox-reply">Reply</button>
+            <button class="btn ghost" id="save-attachment">Save attachment · Safety Notes</button></p>
+          </article>
+        </div>
+      </div>
+      <div class="menu" id="context-menu"></div>
+      <div class="start-menu" id="start-menu">
+        <button data-act="power">Power</button>
+        <button data-act="shutdown">Shut down</button>
+      </div>
+      <div class="taskbar">
+        <button class="start" id="start-btn">Start</button>
+        <span style="color:#a8b7c7">Purpose Academy · Practice desktop</span>
+      </div>
+      <div class="saved-toast" id="toast">Saved</div>
+      <div class="blackout" id="blackout"></div>
+      <div class="cursor" id="cursor"></div>
+    </div>
+    <script>
+      const params = new URLSearchParams(location.search)
+      const demo = params.get('demo') || 'folder'
+      const banner = document.getElementById('banner')
+      const cursor = document.getElementById('cursor')
+      const toast = document.getElementById('toast')
+
+      function sleep(ms) { return new Promise((r) => setTimeout(r, ms)) }
+      async function moveTo(el, offsetX = 20, offsetY = 12) {
+        const r = el.getBoundingClientRect()
+        cursor.style.left = `${r.left + offsetX}px`
+        cursor.style.top = `${r.top + offsetY}px`
+        await sleep(500)
+      }
+      async function clickEl(el) {
+        await moveTo(el)
+        cursor.classList.add('clicking')
+        el.classList?.add?.('hot')
+        await sleep(120)
+        el.click?.()
+        cursor.classList.remove('clicking')
+        el.classList?.remove?.('hot')
+        await sleep(250)
+      }
+      function showToast(msg) {
+        toast.textContent = msg
+        toast.classList.add('show')
+      }
+      function typeInto(el, text, delay = 45) {
+        return new Promise(async (resolve) => {
+          el.focus()
+          el.value = ''
+          el.textContent = ''
+          for (const ch of text) {
+            if ('value' in el) el.value += ch
+            else el.textContent += ch
+            await sleep(delay)
+          }
+          resolve()
+        })
+      }
+
+      async function demoKeyboard() {
+        banner.textContent = 'Letters and numbers type words on the screen'
+        const word = document.getElementById('word')
+        word.classList.add('open')
+        document.querySelector('#word .titlebar span').textContent = 'Keyboard practice'
+        const page = document.getElementById('doc-page')
+        page.textContent = ''
+        await sleep(1200)
+        banner.textContent = 'Type letters. Space bar makes a space.'
+        await clickEl(page)
+        await typeInto(page, 'hello', 90)
+        await sleep(400)
+        page.textContent += ' '
+        await sleep(500)
+        page.textContent += 'world'
+        await sleep(700)
+        banner.textContent = 'Enter = go to the next line'
+        page.textContent += '\n'
+        await sleep(600)
+        page.textContent += 'OK'
+        await sleep(900)
+        banner.textContent = 'Backspace = erase the letter behind the cursor'
+        page.textContent = page.textContent.slice(0, -1)
+        await sleep(500)
+        page.textContent = page.textContent.slice(0, -1)
+        await sleep(700)
+        banner.textContent = 'Shift + letter = make a CAPITAL letter'
+        page.textContent += '\nHello'
+        await sleep(1200)
+        banner.textContent = 'Remember: Type. Space. Enter. Backspace.'
+        await sleep(2200)
+      }
+
+      async function demoPower() {
+        banner.textContent = 'Turn OFF the safe way — use Shut down'
+        const start = document.getElementById('start-btn')
+        const menu = document.getElementById('start-menu')
+        await sleep(1200)
+        banner.textContent = 'Click the Start button'
+        await clickEl(start)
+        menu.classList.add('open')
+        await sleep(900)
+        banner.textContent = 'Click Power'
+        const power = menu.querySelector('[data-act="power"]')
+        await clickEl(power)
+        await sleep(700)
+        banner.textContent = 'Click Shut down'
+        const shut = menu.querySelector('[data-act="shutdown"]')
+        await clickEl(shut)
+        menu.classList.remove('open')
+        showToast('Shutting down… Do not pull the plug.')
+        banner.textContent = 'Screen will go dark. Do not pull the plug.'
+        // Soft dim — keep UI visible so loops never freeze on a black frame
+        document.getElementById('blackout').style.opacity = '0.45'
+        document.getElementById('blackout').classList.add('on')
+        await sleep(1600)
+        document.getElementById('blackout').classList.remove('on')
+        document.getElementById('blackout').style.opacity = ''
+        banner.textContent = 'Remember: On with the button. Off with Shut down.'
+        await sleep(2400)
+      }
+
+      async function demoFolder() {
+        banner.textContent = 'A folder holds your files in one place'
+        const icons = document.getElementById('icons')
+        const menu = document.getElementById('context-menu')
+        await sleep(1400)
+        banner.textContent = 'Right-click on an empty place on the desktop'
+        cursor.style.left = '420px'
+        cursor.style.top = '240px'
+        await sleep(900)
+        menu.style.left = '420px'
+        menu.style.top = '240px'
+        menu.innerHTML = '<button id="m-new">New</button><button id="m-folder">Folder</button>'
+        menu.classList.add('open')
+        await sleep(600)
+        banner.textContent = 'Click New, then click Folder'
+        await clickEl(document.getElementById('m-new'))
+        await sleep(500)
+        await clickEl(document.getElementById('m-folder'))
+        menu.classList.remove('open')
+        const icon = document.createElement('div')
+        icon.className = 'icon'
+        icon.innerHTML = '<div class="glyph"></div><div id="folder-name">New folder</div>'
+        icons.appendChild(icon)
+        await sleep(700)
+        banner.textContent = 'Type a clear name. Example: School Work'
+        const name = document.getElementById('folder-name')
+        name.textContent = ''
+        await typeInto(name, 'School Work', 90)
+        banner.textContent = 'Press Enter to keep the name — folder ready'
+        await sleep(2200)
+      }
+
+      async function demoSubfolder() {
+        banner.textContent = 'A subfolder is a folder inside another folder'
+        const icons = document.getElementById('icons')
+        const parent = document.createElement('div')
+        parent.className = 'icon'
+        parent.innerHTML = '<div class="glyph"></div><div>School Work</div>'
+        icons.appendChild(parent)
+        await sleep(1400)
+        banner.textContent = 'Open your main folder — School Work'
+        await clickEl(parent)
+        const explorer = document.getElementById('explorer')
+        explorer.classList.add('open')
+        document.getElementById('explorer-title').textContent = 'School Work'
+        const body = document.getElementById('explorer-body')
+        body.innerHTML = ''
+        await sleep(900)
+        banner.textContent = 'Right-click inside. Click New, then Folder'
+        const menu = document.getElementById('context-menu')
+        menu.style.left = '480px'
+        menu.style.top = '260px'
+        menu.innerHTML = '<button id="m-new">New</button><button id="m-folder">Folder</button>'
+        menu.classList.add('open')
+        cursor.style.left = '500px'
+        cursor.style.top = '280px'
+        await sleep(700)
+        await clickEl(document.getElementById('m-new'))
+        await sleep(400)
+        await clickEl(document.getElementById('m-folder'))
+        menu.classList.remove('open')
+        const card = document.createElement('div')
+        card.className = 'folder-card selected'
+        card.innerHTML = '<div class="glyph"></div><div id="sub-name">New folder</div>'
+        body.appendChild(card)
+        await sleep(500)
+        banner.textContent = 'Name it Week 1'
+        const name = document.getElementById('sub-name')
+        name.textContent = ''
+        await typeInto(name, 'Week 1', 90)
+        banner.textContent = 'Week 1 now lives inside School Work'
+        await sleep(2200)
+      }
+
+      async function demoSaveName() {
+        banner.textContent = 'Saving keeps your work so you can find it later'
+        const explorer = document.getElementById('explorer')
+        explorer.classList.add('open')
+        document.getElementById('explorer-title').textContent = 'Save As'
+        const body = document.getElementById('explorer-body')
+        body.innerHTML = `
+          <div style="width:100%">
+            <div class="field"><label>Folder</label><input id="save-folder" value="" /></div>
+            <div class="field"><label>File name</label><input id="save-file" value="" /></div>
+            <button class="btn" id="do-save">Save</button>
+          </div>`
+        await sleep(1400)
+        banner.textContent = 'Choose a folder — School Work'
+        await clickEl(document.getElementById('save-folder'))
+        await typeInto(document.getElementById('save-folder'), 'School Work', 70)
+        await sleep(500)
+        banner.textContent = 'Type a clear name — Safety Notes'
+        await clickEl(document.getElementById('save-file'))
+        await typeInto(document.getElementById('save-file'), 'Safety Notes', 70)
+        await sleep(400)
+        banner.textContent = 'Click Save'
+        await clickEl(document.getElementById('do-save'))
+        showToast('Saved: School Work / Safety Notes')
+        banner.textContent = 'File saved with a clear name'
+        await sleep(2200)
+      }
+
+      async function demoParagraph() {
+        banner.textContent = 'Open a document. Click in the white page.'
+        const word = document.getElementById('word')
+        word.classList.add('open')
+        const page = document.getElementById('doc-page')
+        await sleep(1400)
+        banner.textContent = 'Type slowly. Write 2 or 3 short sentences.'
+        await clickEl(page)
+        await typeInto(page, 'Today I learned about computers. I can save my work.', 55)
+        await sleep(800)
+        banner.textContent = 'Check spelling. Fix mistakes with Backspace.'
+        await sleep(2200)
+      }
+
+      async function demoSaveDoc() {
+        banner.textContent = 'Save often so you do not lose your work'
+        const word = document.getElementById('word')
+        word.classList.add('open')
+        document.getElementById('doc-page').textContent = 'Wear your hard hat on site.'
+        await sleep(1400)
+        banner.textContent = 'Click File, Save — or press Ctrl and S'
+        await clickEl(document.getElementById('save-btn'))
+        showToast('Document saved · Safety Notes')
+        await sleep(1000)
+        banner.textContent = 'Look at the top — you should see the name'
+        await sleep(1600)
+        banner.textContent = 'Save again after you add more words'
+        await clickEl(document.getElementById('save-btn'))
+        showToast('Saved again')
+        await sleep(2000)
+      }
+
+      async function demoEmailSend() {
+        banner.textContent = 'Open email. Click Compose or New.'
+        const email = document.getElementById('email')
+        email.classList.add('open')
+        await sleep(1400)
+        banner.textContent = 'To: type the other person\'s email address'
+        await clickEl(document.getElementById('email-to'))
+        await typeInto(document.getElementById('email-to'), 'instructor@school.ca', 50)
+        await sleep(400)
+        banner.textContent = 'Subject: write a short title'
+        await clickEl(document.getElementById('email-subject'))
+        await typeInto(document.getElementById('email-subject'), 'Homework', 70)
+        await sleep(400)
+        banner.textContent = 'Type your message in clear, short sentences'
+        await clickEl(document.getElementById('email-body'))
+        await typeInto(document.getElementById('email-body'), 'Hello. Here is my work.', 50)
+        await sleep(400)
+        banner.textContent = 'Click Send'
+        await clickEl(document.getElementById('send-btn'))
+        showToast('Email sent')
+        banner.textContent = 'To → Subject → message → Send'
+        await sleep(2200)
+      }
+
+      async function demoEmailReply() {
+        banner.textContent = 'Open the email you want to answer'
+        const inbox = document.getElementById('inbox')
+        inbox.classList.add('open')
+        await sleep(1600)
+        banner.textContent = 'Click Reply — do not start a brand new email'
+        await clickEl(document.getElementById('inbox-reply'))
+        inbox.classList.remove('open')
+        const email = document.getElementById('email')
+        email.classList.add('open')
+        document.getElementById('email-title').textContent = 'Reply · Welcome'
+        document.getElementById('email-to').value = 'instructor@school.ca'
+        document.getElementById('email-subject').value = 'Re: Welcome'
+        await sleep(800)
+        banner.textContent = 'Type your answer under their message'
+        await clickEl(document.getElementById('email-body'))
+        await typeInto(document.getElementById('email-body'), 'Hello. I am ready.', 55)
+        await sleep(500)
+        banner.textContent = 'Check To, then click Send'
+        await clickEl(document.getElementById('send-btn'))
+        showToast('Reply sent')
+        banner.textContent = 'Open → Reply → type → Send'
+        await sleep(2200)
+      }
+
+      async function demoAttachSave() {
+        banner.textContent = 'To send a file: click Attach or the paperclip'
+        const email = document.getElementById('email')
+        email.classList.add('open')
+        document.getElementById('email-to').value = 'instructor@school.ca'
+        document.getElementById('email-subject').value = 'My file'
+        document.getElementById('email-body').value = 'Please see the attached file.'
+        await sleep(1400)
+        await clickEl(document.getElementById('attach-btn'))
+        document.getElementById('attach-area').innerHTML = '<div class="attach-chip">Safety Notes</div>'
+        banner.textContent = 'Choose your file. Wait until you see its name.'
+        await sleep(1400)
+        banner.textContent = 'Then click Send'
+        await clickEl(document.getElementById('send-btn'))
+        showToast('Email sent with attachment')
+        await sleep(1200)
+        email.classList.remove('open')
+        const inbox = document.getElementById('inbox')
+        inbox.classList.add('open')
+        banner.textContent = 'To keep a file: open the email, click Download or Save'
+        await sleep(1000)
+        await clickEl(document.getElementById('save-attachment'))
+        showToast('Saved to School Work')
+        banner.textContent = 'Attach before Send. Save attachments to a folder.'
+        await sleep(2200)
+      }
+
+      async function demoSafe() {
+        banner.textContent = 'Keep your password private. Do not share it.'
+        const explorer = document.getElementById('explorer')
+        explorer.classList.add('open')
+        document.getElementById('explorer-title').textContent = 'Safe habits'
+        document.getElementById('explorer-body').innerHTML = `
+          <div style="width:100%;display:grid;gap:12px">
+            <button class="btn" id="safe-ok">Keep password private</button>
+            <button class="btn ghost" id="safe-bad1">Click a strange email link</button>
+            <button class="btn ghost" id="safe-bad2">Share password with strangers</button>
+            <button class="btn ghost" id="safe-logout">Log out on a shared computer</button>
+          </div>`
+        await sleep(1600)
+        banner.textContent = 'Do not click strange links in email'
+        cursor.style.left = '520px'
+        cursor.style.top = '280px'
+        await sleep(1200)
+        banner.textContent = 'Choose the safe habit'
+        await clickEl(document.getElementById('safe-ok'))
+        showToast('Good habit')
+        await sleep(900)
+        banner.textContent = 'Log out when you finish on a shared computer'
+        await clickEl(document.getElementById('safe-logout'))
+        showToast('Logged out')
+        banner.textContent = 'Private password. Careful clicks. Ask for help.'
+        await sleep(2400)
+      }
+
+      const runners = {
+        power: demoPower,
+        keyboard: demoKeyboard,
+        folder: demoFolder,
+        subfolder: demoSubfolder,
+        'save-name': demoSaveName,
+        paragraph: demoParagraph,
+        'save-doc': demoSaveDoc,
+        'email-send': demoEmailSend,
+        'email-reply': demoEmailReply,
+        'attach-save': demoAttachSave,
+        safe: demoSafe,
+      }
+      window.__bcsReady = false
+      window.__bcsDone = false
+      ;(async () => {
+        await sleep(300)
+        window.__bcsReady = true
+        const run = runners[demo]
+        if (run) await run()
+        window.__bcsDone = true
+      })()
+    </script>
+  </body>
+</html>
