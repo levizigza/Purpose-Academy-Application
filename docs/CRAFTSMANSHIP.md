@@ -430,8 +430,8 @@ Newest first.
 ### 2026-10-22 — Site-wide royalty-free image framing (L3)
 
 - **Defect:** VV extractors letterboxed photos onto oversized white canvases (often &lt;10% fill for Logistics/Daily Conversation). Drills used `cover` or wrong aspect mats, so objects looked cropped or unreadably small.
-- **Fix:** Autocrop + upscale all Construction/Logistics/Daily Conversation VV tiles, logistics pathway photos, and Sentence Structure cloze art (`scripts/fix-training-image-framing.py`). Pad ultra-wide tool photos onto square mats. Display CSS defaults to `object-fit: contain` with larger mats (VocabSheet, train pictures, Eye Spy, Organize, Practice resume, school-path cards). Extract scripts no longer over-letterbox.
-- **Assumption to challenge next:** whether soft upscales of original ~200px logistics stamps need true higher-res source replacements for print-quality readability.
+- **Fix:** Autocrop + upscale all Construction/Logistics/Daily Conversation VV tiles, logistics pathway photos, and Sentence Structure cloze art (`scripts/fix-training-image-framing.py`). Pad ultra-wide tool photos onto square mats. Display CSS defaults to `object-fit: contain` with larger mats (VocabSheet photo-first full width, train pictures, Eye Spy natural-aspect tiles, Organize, Practice resume, school-path cards). Knocked out dark studio BGs on tool photos; sharpened cloze after upscale. Extract scripts no longer over-letterbox.
+- **Assumption to challenge next:** some worksheet tiles (e.g. circular saw close-ups) are intrinsically incomplete in the source PDF — replace those assets when better royalty-free wholes become available.
 
 
 ### 2026-10-21 — Full Construction Questions 1–560 reachable (L2)
