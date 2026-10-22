@@ -192,25 +192,25 @@ export const communityPack: PathwayPack = {
       ],
     },
     4: {
-      goal: 'Connect words to support actions, then follow person-centred language with the people you support.',
+      goal: 'Connect words to support actions, then follow workplace instructions with the people you support.',
       outcomes: [
         'Connect support objects to real community-support actions',
         'Match pictures to English words',
         'Follow short workplace instructions',
-        'Understand dignity, privacy, and consent phrases for community support',
       ],
     },
     5: {
-      goal: 'Specialize with a deeper interest inventory after Community practice.',
+      goal: 'Learn support language, then specialize with a deeper interest inventory after Community practice.',
       outcomes: [
+        'Understand dignity, privacy, and consent phrases for community support',
         'Complete the interest assessment after practice',
         'See how your interests fit Community Support specialization',
       ],
     },
     6: {
-      goal: 'Unit 6 · Basic Computer Skills — same station on Construction, Logistics, and Community.',
+      goal: 'Unit 6 · Basic Computer Skills (step 12) — same station on Construction, Logistics, and Community.',
       outcomes: [
-        'Open Basic Computer Skills (step 14) on this pathway',
+        'Open Basic Computer Skills at step 12 on this pathway',
         'Watch, try, and check: power, mouse, folders, save, Word, and email',
         'Use simple English — Watch → Try → Remember → one check',
       ],
@@ -240,14 +240,14 @@ export const communityPack: PathwayPack = {
   },
   stepTitles: {
     12: {
+      title: 'Basic Computer Skills',
+      help: 'Unit 6 · step 12 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      purpose: 'Curriculum map position 12. Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
+    },
+    13: {
       title: 'Support Language',
       help: 'Hear a community-support phrase. Choose what it means.',
       purpose: 'Useful English for dignity, privacy, consent, and escalation across community support settings.',
-    },
-    14: {
-      title: 'Basic Computer Skills',
-      help: 'Unit 6 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
-      purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
     },
     16: {
       title: 'Support Tools & Materials',

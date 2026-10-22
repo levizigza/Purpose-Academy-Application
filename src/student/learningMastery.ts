@@ -86,10 +86,11 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   9: 'sentence-cloze',
   10: 'matching',
   11: 'instructions',
-  12: 'site-phrases',
+  /** Curriculum map step 12 — Basic Computer Skills (Unit 6), all pathways. */
+  12: 'digital',
+  13: 'site-phrases',
   /** After practice: RIASEC interest inventory for specialization. */
-  13: 'career-assessment',
-  14: 'digital',
+  14: 'career-assessment',
   15: 'safety',
   16: 'tools',
   17: 'systems',

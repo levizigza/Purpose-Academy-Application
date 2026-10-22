@@ -3,8 +3,8 @@
  * Login → Register → Language → Work Style (path quiz) → Profile →
  * Vocab → Language Organize → English Eye Spy → Sentences / Word→Action →
  * Supported practice → Instructions → Site language →
- * Interest assessment (specialize) → Basic Computer Skills (own unit) → Safety →
- * Tools → Systems → Warehouse Video → Observation → On-site → Final exam/certificate → Employment
+ * Workplace Instructions → Basic Computer Skills (step 12 / Unit 6) → Site Language →
+ * Interest assessment → Safety → Tools → Systems → Warehouse Video → Observation → Employment
  *
  * Support languages: English, Spanish, Arabic, Hindi, Amharic, Tigrinya (no French).
  */
@@ -21,15 +21,15 @@ export const JOURNEY_STEPS = [
   { n: 9, title: 'Word → Action', help: 'See the action. Prove which tool it uses.', purpose: 'After pictures are solid, link English words to real movement.', unit: 4 },
   { n: 10, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes teach.', unit: 4 },
   { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
-  { n: 12, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
-  { n: 13, title: 'Interest Assessment', help: 'After practice, rate work activities to specialize.', purpose: 'A professional interest inventory (Holland / RIASEC) once you have real practice — not a pass/fail quiz.', unit: 5 },
   {
-    n: 14,
+    n: 12,
     title: 'Basic Computer Skills',
     help: 'Watch short videos, then try: power, mouse, folders, save, Word, and email — in simple English.',
     purpose: 'This may be someone’s first computer. Watch → Try → Remember → check.',
     unit: 6,
   },
+  { n: 13, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 5 },
+  { n: 14, title: 'Interest Assessment', help: 'After practice, rate work activities to specialize.', purpose: 'A professional interest inventory (Holland / RIASEC) once you have real practice — not a pass/fail quiz.', unit: 5 },
   { n: 15, title: 'Safety Training', help: 'Safety words with clear pictures. Required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 7 },
   { n: 16, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 7 },
   { n: 17, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 7 },
@@ -50,13 +50,14 @@ export const JOURNEY_STEPS = [
 export const JOURNEY_STEP_COUNT = JOURNEY_STEPS.length
 
 /** Path units — structured learning path on the existing train template. */
+/** Ordered by journey position (Unit 6 · Basic Computer Skills sits at step 12 per curriculum map). */
 export const LEARNING_UNITS = [
   { id: 1, label: 'Start', range: '1–2' },
   { id: 2, label: 'Find your path', range: '3–5' },
   { id: 3, label: 'Words → Pictures', range: '6–8' },
-  { id: 4, label: 'Sentences → Site English', range: '9–12' },
-  { id: 5, label: 'Specialize', range: '13' },
-  { id: 6, label: 'Basic Computer Skills', range: '14' },
+  { id: 4, label: 'Sentences → Site English', range: '9–11' },
+  { id: 6, label: 'Basic Computer Skills', range: '12' },
+  { id: 5, label: 'Site language & specialize', range: '13–14' },
   { id: 7, label: 'Site ready', range: '15–17' },
   { id: 8, label: 'Video · Warehouse Equipment', range: '18' },
   { id: 9, label: 'Work ready', range: '19–22' },
@@ -85,25 +86,25 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   4: {
-    goal: 'Put the words into job-site sentences, then follow workplace language.',
+    goal: 'Put the words into job-site sentences, then follow workplace instructions.',
     outcomes: [
       'Build English sentences (Construction) and connect words to actions',
       'Match pictures to English words with help',
       'Follow short workplace instructions',
-      'Understand common workplace phrases',
     ],
   },
   5: {
-    goal: 'Specialize with a deeper interest inventory after real practice.',
+    goal: 'Learn common site phrases, then specialize with a deeper interest inventory.',
     outcomes: [
+      'Understand common workplace phrases',
       'Complete the interest assessment after practice',
       'See how your interests fit Construction, Logistics, or Community Support',
     ],
   },
   6: {
-    goal: 'Basic Computer Skills — first-computer lessons shared on every pathway.',
+    goal: 'Basic Computer Skills — first-computer lessons shared on every pathway (step 12).',
     outcomes: [
-      'Open Unit 6: Basic Computer Skills (step 14) on Construction, Logistics, or Community',
+      'Open Unit 6: Basic Computer Skills (step 12) on Construction, Logistics, or Community',
       'Watch, try, and check: power, mouse, folders, save, Word, and email',
       'Use simple English — Watch → Try → Remember → one check',
     ],

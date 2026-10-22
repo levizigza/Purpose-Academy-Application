@@ -45,26 +45,26 @@ export const constructionPack: PathwayPack = {
       ],
     },
     4: {
-      goal: 'Put the words into Construction Questions sentences, then follow construction-site language.',
+      goal: 'Put the words into Construction Questions sentences, then follow workplace instructions.',
       outcomes: [
         'Complete Construction English cloze worksheets — one try, correct word slides into the blank',
         'Connect word → site action',
         'Match pictures to English words',
         'Follow short workplace instructions',
-        'Understand common job-site phrases',
       ],
     },
     5: {
-      goal: 'Specialize with a deeper interest inventory after Construction practice.',
+      goal: 'Learn site phrases, then specialize with a deeper interest inventory after Construction practice.',
       outcomes: [
+        'Understand common job-site phrases',
         'Complete the interest assessment after practice',
         'See how your interests fit Construction specialization',
       ],
     },
     6: {
-      goal: 'Unit 6 · Basic Computer Skills — same station on Construction, Logistics, and Community.',
+      goal: 'Unit 6 · Basic Computer Skills (step 12) — same station on Construction, Logistics, and Community.',
       outcomes: [
-        'Open Basic Computer Skills (step 14) on this pathway',
+        'Open Basic Computer Skills at step 12 on this pathway',
         'Watch, try, and check: power, mouse, folders, save, Word, and email',
         'Use simple English — Watch → Try → Remember → one check',
       ],
@@ -104,14 +104,14 @@ export const constructionPack: PathwayPack = {
       purpose: 'Construction Questions worksheet mold (blank + four choices), then Word → Action.',
     },
     12: {
+      title: 'Basic Computer Skills',
+      help: 'Unit 6 · step 12 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      purpose: 'Curriculum map position 12. Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
+    },
+    13: {
       title: 'Site Language',
       help: 'Hear a job-site phrase. Choose what it means.',
       purpose: 'Useful English you will hear on Alberta construction sites.',
-    },
-    14: {
-      title: 'Basic Computer Skills',
-      help: 'Unit 6 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
-      purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
     },
     16: {
       title: 'Tools & Equipment',

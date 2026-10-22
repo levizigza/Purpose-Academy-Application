@@ -1,6 +1,7 @@
 /**
  * Shared Basic Computer Skills — Purpose Academy video + try-it collection.
- * Placed at journey step 14 (all pathways), before Safety Training.
+ * Placed at journey step 12 / Unit 6 (all pathways) — curriculum map position
+ * after Workplace Instructions, before Site Language and Safety.
  *
  * Audience: Level-4 English; may be a learner’s first computer.
  * Each MP4: royalty-free Mixkit B-roll + large burned-in captions (Level-4 English).

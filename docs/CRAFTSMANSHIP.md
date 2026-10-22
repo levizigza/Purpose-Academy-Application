@@ -427,12 +427,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
-### 2026-10-22 — Basic Computer Skills is its own unit on all three pathways (L2)
+### 2026-10-22 — Basic Computer Skills at curriculum step 12 (Unit 6, all pathways) (L2)
 
-- **Unit 6 · Basic Computer Skills** (step 14) is a dedicated shared unit on Construction, Logistics, and Community — not buried inside Specialize.
-- Unit map: Specialize (5 / step 13) → Basic Computer Skills (6 / 14) → Site ready (7 / 15–17) → Video · Warehouse Equipment (8 / 18) → Work ready (9 / 19–22).
-- Practice hub card + station-map badge call out the shared unit; Warehouse Equipment copy updated to Unit 8.
-- **Assumption to challenge next:** whether some Try panels should become OS-specific screen simulators (Windows vs Chromebook) once classroom hardware is fixed.
+- Moved **Unit 6 · Basic Computer Skills** to **step 12** to match the Purpose Academy 20-step curriculum map (after Workplace Instructions; Safety follows later).
+- Sequence: Workplace Instructions (11) → Basic Computer Skills (12) → Site Language (13) → Interest Assessment (14) → Safety (15).
+- Unit map order in the hub: … Unit 4 (9–11) → **Unit 6 (12)** → Unit 5 site language & specialize (13–14) → Site ready (7 / 15–17) → …
+- **Assumption to challenge next:** whether Site Language should return to sit with Unit 4 English before computers once the team locks the map.
 
 
 ### 2026-10-22 — Basic Computer Skills (step 14) for first-time computer users (L2)

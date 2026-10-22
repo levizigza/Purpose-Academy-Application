@@ -317,7 +317,7 @@ export const LANG_NATIVE: LangText = {
 
 /** Shell chrome for assessment steps — mother tongue only. */
 export const ASSESSMENT_SHELL: Record<
-  3 | 4 | 5 | 13,
+  3 | 4 | 5 | 14,
   { title: LangText; help: LangText; purpose: LangText }
 > = {
   3: {
@@ -398,7 +398,7 @@ export const ASSESSMENT_SHELL: Record<
       Tigrinya: 'ናይ ፍቓድ መግለጺ → ዝምከር መንገዲ። ህንጻ፣ ሎጂስቲክስን ናይ ማሕበረሰብ ድጋፍን ክፉታት እዮም።',
     },
   },
-  13: {
+  14: {
     title: {
       Spanish: 'Evaluación de intereses',
       English: 'Interest assessment',

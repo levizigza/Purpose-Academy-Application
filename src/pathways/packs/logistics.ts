@@ -37,26 +37,26 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     4: {
-      goal: 'Put the words into Logistics Questions sentences, then follow warehouse language.',
+      goal: 'Put the words into Logistics Questions sentences, then follow workplace instructions.',
       outcomes: [
         'Complete Logistics English cloze worksheets — one try, correct word slides into the blank',
         'Connect word → floor action',
         'Match pictures to English words',
         'Follow short workplace instructions',
-        'Understand common warehouse phrases',
       ],
     },
     5: {
-      goal: 'Specialize with a deeper interest inventory after Logistics practice.',
+      goal: 'Learn warehouse phrases, then specialize with a deeper interest inventory after Logistics practice.',
       outcomes: [
+        'Understand common warehouse phrases',
         'Complete the interest assessment after practice',
         'See how your interests fit Logistics specialization',
       ],
     },
     6: {
-      goal: 'Unit 6 · Basic Computer Skills — same station on Construction, Logistics, and Community.',
+      goal: 'Unit 6 · Basic Computer Skills (step 12) — same station on Construction, Logistics, and Community.',
       outcomes: [
-        'Open Basic Computer Skills (step 14) on this pathway',
+        'Open Basic Computer Skills at step 12 on this pathway',
         'Watch, try, and check: power, mouse, folders, save, Word, and email',
         'Use simple English — Watch → Try → Remember → one check',
       ],
@@ -97,14 +97,14 @@ export const logisticsPack: PathwayPack = {
       purpose: 'Logistics Questions worksheet mold (blank + four choices), then Word → Action.',
     },
     12: {
+      title: 'Basic Computer Skills',
+      help: 'Unit 6 · step 12 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      purpose: 'Curriculum map position 12. Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
+    },
+    13: {
       title: 'Warehouse Language',
       help: 'Hear a warehouse phrase. Choose what it means.',
       purpose: 'Useful English you will hear in Alberta logistics workplaces.',
-    },
-    14: {
-      title: 'Basic Computer Skills',
-      help: 'Unit 6 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
-      purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
     },
     16: {
       title: 'Equipment & Materials',

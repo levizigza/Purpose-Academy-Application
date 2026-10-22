@@ -273,13 +273,14 @@ export function PracticeHub({
           <h2>Basic Computer Skills</h2>
           <p>
             Its own unit on <strong>Construction, Logistics, and Community</strong> —{' '}
-            <strong>Unit 6 · Basic Computer Skills</strong> (step 14). Twelve short lessons: turn on/off, mouse,
-            folders, save, Word, and email. Watch, try, then one check.
+            <strong>Unit 6 · Basic Computer Skills</strong> at <strong>step 12</strong> (after Workplace
+            Instructions, before Safety). Twelve short lessons: turn on/off, mouse, folders, save, Word, and
+            email. Watch, try, then one check.
           </p>
           <button
             type="button"
             className="btn btn-primary ph-video-section-btn"
-            onClick={() => onOpenLesson(14)}
+            onClick={() => onOpenLesson(12)}
           >
             Open Unit 6 · Basic Computer Skills
           </button>

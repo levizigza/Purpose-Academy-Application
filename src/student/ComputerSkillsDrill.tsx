@@ -180,7 +180,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
         </div>
         {practice && onSkip ? (
           <button type="button" className="btn btn-ghost" onClick={onSkip}>
-            Skip to safety
+            Skip to site language
           </button>
         ) : null}
       </div>
@@ -315,7 +315,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
                     {checkCorrect
                       ? idx >= lessons.length - 1
                         ? allDone || done.has(lesson.id)
-                          ? 'Continue to safety'
+                          ? 'Continue to site language'
                           : 'Finish this lesson'
                         : `Next · ${lessons[idx + 1]?.title}`
                       : 'Try again'}

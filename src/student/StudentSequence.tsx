@@ -211,8 +211,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 }) {
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
-  const motherTongue = supportLang && ((step >= 3 && step <= 5) || step === 13)
-  const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 13] : null
+  const motherTongue = supportLang && ((step >= 3 && step <= 5) || step === 14)
+  const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 14] : null
   const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
   const help = shellCopy ? assessT(shellCopy.help, supportLang!) : base.help
   const purpose = shellCopy ? assessT(shellCopy.purpose, supportLang!) : base.purpose
@@ -294,7 +294,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   return (
     <div
       className={`shell-main train-shell${step === 7 ? ' is-organize-wide' : ''}${
-        step === 14 ? ' is-computer-skills' : ''
+        step === 12 ? ' is-computer-skills' : ''
       }${step === 18 ? ' is-equipment-video' : ''}`}
     >
       <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
@@ -1040,7 +1040,7 @@ export function StudentSequencePage() {
           transitioning={transitioning}
           transitionMsg={transitionMsg}
           supportLang={
-            (props.step >= 3 && props.step <= 5) || props.step === 13 ? supportLang : undefined
+            (props.step >= 3 && props.step <= 5) || props.step === 14 ? supportLang : undefined
           }
           onOpenHub={isPracticeMode() ? () => setPracticeView('hub') : undefined}
           onJumpLesson={(n) => go(n, `Opening step ${n}…`)}
@@ -1984,7 +1984,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => go(12, 'Opening site language…'))
+        requestPracticeAdvance(() => go(12, 'Opening Basic Computer Skills…'))
         return
       }
       setInstrIdx((i) => i + 1)
@@ -2052,7 +2052,7 @@ export function StudentSequencePage() {
             </div>
             <button type="button" className="btn btn-primary" onClick={nextInstr}>
               {instrCorrect
-                ? (isLast ? 'Continue to site language' : 'Next instruction')
+                ? (isLast ? 'Continue to Basic Computer Skills' : 'Next instruction')
                 : 'Try again'}
             </button>
           </>
@@ -2061,8 +2061,37 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 11: Site language — hear phrase, choose meaning, one by one */
+  /* Step 12: Basic Computer Skills — curriculum map position (Unit 6, all pathways) */
   if (step === 12) {
+    return (
+      <Shell step={12} onBack={() => { resetInstr(); go(11) }}>
+        <WhyWork>
+          This may be your first computer. Short videos. Simple English. Then you try each step yourself.
+        </WhyWork>
+        <TeachNote>
+          Pattern for every lesson: Watch → Try → Remember → one check. Wrong answers teach. Take your time.
+        </TeachNote>
+        <ComputerSkillsDrill
+          onComplete={() =>
+            requestPracticeAdvance(() =>
+              advanceWithOptionalCheckpoint(12, 13, 'Opening site language…'),
+            )
+          }
+          onSkip={
+            isPracticeMode()
+              ? () =>
+                  requestPracticeAdvance(() =>
+                    advanceWithOptionalCheckpoint(12, 13, 'Opening site language…'),
+                  )
+              : undefined
+          }
+        />
+      </Shell>
+    )
+  }
+
+  /* Step 13: Site language — hear phrase, choose meaning, one by one */
+  if (step === 13) {
     const phrase = SITE_PHRASES[Math.min(phraseIdx, SITE_PHRASES.length - 1)]
     const isLast = phraseIdx >= SITE_PHRASES.length - 1
 
@@ -2082,9 +2111,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(
-              12,
-              13, 'Opening interest assessment…'))
+        requestPracticeAdvance(() => go(14, 'Opening interest assessment…'))
         return
       }
       setPhraseIdx((i) => i + 1)
@@ -2094,7 +2121,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={12} onBack={() => { resetInstr(); go(11) }}>
+      <Shell step={13} onBack={() => go(12)}>
         <p className="train-vocab-counter">Phrase {phraseIdx + 1} of {SITE_PHRASES.length}</p>
         <article className="phrase-lesson-card">
           <p className="phrase-lesson-en">{phrase.en}</p>
@@ -2141,16 +2168,16 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 12: Interest assessment (30) after practice — specialize */
-  if (step === 13) {
+  /* Step 14: Interest assessment (30) after practice — specialize */
+  if (step === 14) {
     if (!careerInterestDone) {
       return (
-        <Shell step={13}>
+        <Shell step={14}>
           <CareerInterestAssessment
             lang={supportLang}
             answers={careerInterestAnswers}
             onChange={(id, value) => setCareerInterestAnswers((a) => ({ ...a, [id]: value }))}
-            onBack={() => go(12)}
+            onBack={() => go(13)}
             onComplete={(finalAnswers) => {
               setCareerInterestAnswers(finalAnswers)
               const interestPct = scoreInterestAnswers(finalAnswers)
@@ -2171,7 +2198,7 @@ export function StudentSequencePage() {
       scoreStyleAnswers(careerStyleAnswers),
     )
     return (
-      <Shell step={13}>
+      <Shell step={14}>
         <CareerAssessmentResult
           lang={supportLang}
           pathway={pathway}
@@ -2210,7 +2237,9 @@ export function StudentSequencePage() {
                 }
               }
               setBusy(false)
-              go(14, 'Opening digital skills…')
+              requestPracticeAdvance(() =>
+                advanceWithOptionalCheckpoint(14, 15, 'Opening safety…'),
+              )
             })()
           }}
         />
@@ -2218,30 +2247,9 @@ export function StudentSequencePage() {
     )
   }
 
-  if (step === 14) {
-    return (
-      <Shell step={14} onBack={() => { setCareerInterestDone(false); go(13) }}>
-        <WhyWork>
-          This may be your first computer. Short videos. Simple English. Then you try each step yourself.
-        </WhyWork>
-        <TeachNote>
-          Pattern for every lesson: Watch → Try → Remember → one check. Wrong answers teach. Take your time.
-        </TeachNote>
-        <ComputerSkillsDrill
-          onComplete={() => go(15, 'Opening safety…')}
-          onSkip={
-            isPracticeMode()
-              ? () => requestPracticeAdvance(() => go(15, 'Opening safety…'))
-              : undefined
-          }
-        />
-      </Shell>
-    )
-  }
-
   if (step === 15) {
     return (
-      <Shell step={15} onBack={() => go(14)}>
+      <Shell step={15} onBack={() => { setCareerInterestDone(false); go(14) }}>
         <QuizRunner items={SAFETY_QUIZ} onComplete={() => { setToolIdx(0); setToolAnswer(null); setToolCorrect(false); go(16) }} gated />
       </Shell>
     )
