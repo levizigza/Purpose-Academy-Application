@@ -77,13 +77,22 @@ def lang_panel_box(r: int, c: int):
 
 
 def studio_pad(im: Image.Image, tw=720, th=720, margin=0.06) -> Image.Image:
+    """Tight studio mat — subject fills the card (no tiny center stamp)."""
     im = im.convert("RGB")
-    canvas = Image.new("RGB", (tw, th), (255, 255, 255))
     max_w = int(tw * (1 - 2 * margin))
     max_h = int(th * (1 - 2 * margin))
     img = im.copy()
     img.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
-    canvas.paste(img, ((tw - img.width) // 2, (th - img.height) // 2))
+    pad = max(10, int(max(img.width, img.height) * margin))
+    canvas = Image.new("RGB", (img.width + pad * 2, img.height + pad * 2), (255, 255, 255))
+    canvas.paste(img, (pad, pad))
+    long = max(canvas.size)
+    if long < tw:
+        scale = tw / long
+        canvas = canvas.resize(
+            (max(1, int(canvas.width * scale)), max(1, int(canvas.height * scale))),
+            Image.Resampling.LANCZOS,
+        )
     return canvas
 
 

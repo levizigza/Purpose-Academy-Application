@@ -79,12 +79,18 @@ def studio_pad(photo: Image.Image) -> Image.Image:
                 min(photo.height, bbox[3] + pad),
             )
         )
-    canvas = Image.new("RGB", (TILE_W, TILE_H), (255, 255, 255))
-    max_w, max_h = int(TILE_W * 0.86), int(TILE_H * 0.82)
-    scale = min(max_w / max(1, photo.width), max_h / max(1, photo.height))
+    # Tight mat around the subject — oversized 960×1170 letterboxing
+    # made worksheet photos unreadably small in VocabSheet / drills.
+    max_w, max_h = int(TILE_W * 0.92), int(TILE_H * 0.92)
+    scale = min(max_w / max(1, photo.width), max_h / max(1, photo.height), 1.0)
+    # Prefer upscaling soft worksheet crops to a readable long edge
+    if max(photo.width, photo.height) < 720:
+        scale = max(scale, 720 / max(photo.width, photo.height))
     nw, nh = max(1, int(photo.width * scale)), max(1, int(photo.height * scale))
     photo = photo.resize((nw, nh), Image.Resampling.LANCZOS)
-    canvas.paste(photo, ((TILE_W - nw) // 2, (TILE_H - nh) // 2))
+    pad = max(16, int(max(nw, nh) * 0.05))
+    canvas = Image.new("RGB", (nw + pad * 2, nh + pad * 2), (255, 255, 255))
+    canvas.paste(photo, (pad, pad))
     return canvas
 
 

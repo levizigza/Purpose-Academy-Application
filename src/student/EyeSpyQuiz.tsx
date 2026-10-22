@@ -247,12 +247,11 @@ export function EyeSpyQuiz({
         </p>
       )}
 
-      <div className="eye-spy-stage" role="group" aria-label="Photo board. Tap a picture, then tap its English name">
-        <div className="eye-spy-grid" aria-hidden>
-          {Array.from({ length: 12 }).map((_, i) => (
-            <span key={i} className="eye-spy-tile" />
-          ))}
-        </div>
+      <div
+        className="eye-spy-stage is-tiles"
+        role="group"
+        aria-label="Photo board. Tap a picture, then tap its English name"
+      >
         {scene.hotspots.map((h, index) => {
           if (foundSet.has(h.id)) return null
           const img = pathwayImage(h.imageKey)
@@ -262,10 +261,9 @@ export function EyeSpyQuiz({
               key={`${scene.id}-${h.id}`}
               type="button"
               className={`eye-spy-hotspot${selected ? ' is-selected' : ''}${wrongPair && selected ? ' is-wrong' : ''}`}
-              style={{ left: `${h.x}%`, top: `${h.y}%`, width: `${h.w}%`, height: `${h.h}%` }}
               onClick={() => phase === 'play' && setPickedHotspot(h.id)}
               disabled={phase !== 'play'}
-              aria-label={`Tool spot ${index + 1}`}
+              aria-label={h.label || `Tool spot ${index + 1}`}
             >
               {img ? <img src={img} alt="" /> : <span>{h.label}</span>}
             </button>

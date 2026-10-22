@@ -149,14 +149,14 @@ function PictureCard({
   sub,
   caption,
   image,
-  fit = 'cover',
+  fit = 'contain',
 }: {
   emoji?: string
   label: string
   sub?: string
   caption?: string
   image?: string
-  /** Use contain for single-object tool photos so the whole tool stays visible. */
+  /** Contain keeps royalty-free objects whole; cover only for intentional scene crops. */
   fit?: 'cover' | 'contain'
 }) {
   return (

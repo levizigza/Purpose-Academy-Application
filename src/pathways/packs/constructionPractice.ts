@@ -54,10 +54,11 @@ export const CONSTRUCTION_EYE_SPY_SCENES: EyeSpyScene[] = [
     instruction: CLEAR_ALL,
     findOrder: ['hammer-011', 'level-018', 'circular-saw-013', 'hard-hat-234'],
     hotspots: [
-      spot('hammer-011', 'Hammer', 'con-vv-011', 12, 55, 22, 28),
+      /* Prefer clear whole-object tool photos over edge-tight VV crops */
+      spot('hammer-011', 'Hammer', 'hammer', 12, 55, 22, 28),
       spot('circular-saw-013', 'Circular saw', 'con-vv-013', 58, 48, 28, 22),
-      spot('hard-hat-234', 'Hard hat', 'con-vv-234', 38, 12, 20, 22),
-      spot('level-018', 'Level', 'con-vv-018', 70, 18, 24, 14),
+      spot('hard-hat-234', 'Hard hat', 'hard-hat', 38, 12, 20, 22),
+      spot('level-018', 'Level', 'level', 70, 18, 24, 14),
     ],
   },
   {
@@ -66,9 +67,9 @@ export const CONSTRUCTION_EYE_SPY_SCENES: EyeSpyScene[] = [
     instruction: CLEAR_ALL,
     findOrder: ['drill-014', 'tape-measure-012', 'work-gloves-064', 'square-019'],
     hotspots: [
-      spot('drill-014', 'Drill', 'con-vv-014', 10, 18, 22, 32),
+      spot('drill-014', 'Drill', 'drill', 10, 18, 22, 32),
       spot('square-019', 'Square', 'con-vv-019', 68, 12, 22, 26),
-      spot('tape-measure-012', 'Tape measure', 'con-vv-012', 40, 52, 20, 26),
+      spot('tape-measure-012', 'Tape measure', 'tape-measure', 40, 52, 20, 26),
       spot('work-gloves-064', 'Work gloves', 'con-vv-064', 72, 50, 20, 28),
     ],
   },
@@ -81,7 +82,7 @@ export const CONSTRUCTION_EYE_SPY_SCENES: EyeSpyScene[] = [
       spot('circular-saw-013', 'Circular saw', 'con-vv-013', 36, 40, 34, 22),
       spot('utility-knife-020', 'Utility knife', 'con-vv-020', 8, 48, 20, 28),
       spot('nail-gun-017', 'Nail gun', 'con-vv-017', 72, 52, 22, 26),
-      spot('tape-measure-012', 'Tape measure', 'con-vv-012', 14, 14, 20, 24),
+      spot('tape-measure-012', 'Tape measure', 'tape-measure', 14, 14, 20, 24),
     ],
   },
   {
@@ -90,7 +91,7 @@ export const CONSTRUCTION_EYE_SPY_SCENES: EyeSpyScene[] = [
     instruction: CLEAR_ALL,
     findOrder: ['hammer-011', 'nail-022', 'screw-021', 'impact-driver-015'],
     hotspots: [
-      spot('hammer-011', 'Hammer', 'con-vv-011', 10, 42, 22, 32),
+      spot('hammer-011', 'Hammer', 'hammer', 10, 42, 22, 32),
       spot('nail-022', 'Nail', 'con-vv-022', 40, 14, 18, 26),
       spot('screw-021', 'Screw', 'con-vv-021', 68, 16, 20, 26),
       spot('impact-driver-015', 'Impact driver', 'con-vv-015', 52, 50, 24, 32),
@@ -102,7 +103,7 @@ export const CONSTRUCTION_EYE_SPY_SCENES: EyeSpyScene[] = [
     instruction: CLEAR_ALL,
     findOrder: ['drill-014', 'grinder-016', 'impact-driver-015', 'circular-saw-013'],
     hotspots: [
-      spot('drill-014', 'Drill', 'con-vv-014', 8, 16, 22, 34),
+      spot('drill-014', 'Drill', 'drill', 8, 16, 22, 34),
       spot('grinder-016', 'Grinder', 'con-vv-016', 70, 14, 22, 30),
       spot('impact-driver-015', 'Impact driver', 'con-vv-015', 14, 54, 22, 30),
       spot('circular-saw-013', 'Circular saw', 'con-vv-013', 52, 52, 30, 24),
@@ -114,9 +115,9 @@ export const CONSTRUCTION_EYE_SPY_SCENES: EyeSpyScene[] = [
     instruction: CLEAR_ALL,
     findOrder: ['level-018', 'square-019', 'tape-measure-012', 'stud-028'],
     hotspots: [
-      spot('level-018', 'Level', 'con-vv-018', 28, 16, 40, 14),
+      spot('level-018', 'Level', 'level', 28, 16, 40, 14),
       spot('square-019', 'Square', 'con-vv-019', 8, 40, 22, 28),
-      spot('tape-measure-012', 'Tape measure', 'con-vv-012', 40, 48, 20, 26),
+      spot('tape-measure-012', 'Tape measure', 'tape-measure', 40, 48, 20, 26),
       spot('stud-028', 'Stud', 'con-vv-028', 70, 38, 22, 36),
     ],
   },
@@ -126,7 +127,7 @@ export const CONSTRUCTION_EYE_SPY_SCENES: EyeSpyScene[] = [
     instruction: CLEAR_ALL,
     findOrder: ['hard-hat-234', 'safety-glasses-235', 'ladder-041', 'scaffold-040'],
     hotspots: [
-      spot('hard-hat-234', 'Hard hat', 'con-vv-234', 12, 12, 20, 24),
+      spot('hard-hat-234', 'Hard hat', 'hard-hat', 12, 12, 20, 24),
       spot('safety-glasses-235', 'Safety glasses', 'con-vv-235', 68, 12, 22, 24),
       spot('ladder-041', 'Ladder', 'con-vv-041', 10, 46, 22, 36),
       spot('scaffold-040', 'Scaffold', 'con-vv-040', 52, 44, 30, 34),
@@ -150,7 +151,7 @@ export const CONSTRUCTION_EYE_SPY_SCENES: EyeSpyScene[] = [
     instruction: CLEAR_ALL,
     findOrder: ['hammer-011', 'nail-gun-017', 'joist-008', 'lumber-027'],
     hotspots: [
-      spot('hammer-011', 'Hammer', 'con-vv-011', 8, 48, 20, 30),
+      spot('hammer-011', 'Hammer', 'hammer', 8, 48, 20, 30),
       spot('nail-gun-017', 'Nail gun', 'con-vv-017', 70, 46, 22, 30),
       spot('joist-008', 'Joist', 'con-vv-008', 14, 12, 28, 26),
       spot('lumber-027', 'Lumber', 'con-vv-027', 52, 14, 30, 26),
@@ -174,7 +175,7 @@ export const CONSTRUCTION_WORKPLACE_INSTRUCTIONS: WorkplaceInstruction[] = [
   {
     text: 'Bring the tape measure.',
     correct: 'Bring the tape measure',
-    imageKey: 'con-vv-012',
+    imageKey: 'tape-measure',
     options: [
       'Bring the tape measure',
       'Bring the hammer',
@@ -186,7 +187,7 @@ export const CONSTRUCTION_WORKPLACE_INSTRUCTIONS: WorkplaceInstruction[] = [
   {
     text: 'Pass me the level.',
     correct: 'Pass me the level',
-    imageKey: 'con-vv-018',
+    imageKey: 'level',
     options: [
       'Pass me the level',
       'Pass the hammer',
@@ -198,7 +199,7 @@ export const CONSTRUCTION_WORKPLACE_INSTRUCTIONS: WorkplaceInstruction[] = [
   {
     text: 'Check the wall with the level.',
     correct: 'Check the wall with the level',
-    imageKey: 'con-vv-018',
+    imageKey: 'level',
     options: [
       'Check the wall with the level',
       'Check the floor with a hammer',
@@ -210,7 +211,7 @@ export const CONSTRUCTION_WORKPLACE_INSTRUCTIONS: WorkplaceInstruction[] = [
   {
     text: 'Put on your hard hat before you enter.',
     correct: 'Put on your hard hat before you enter',
-    imageKey: 'con-vv-234',
+    imageKey: 'hard-hat',
     options: [
       'Put on your hard hat before you enter',
       'Leave your hard hat in the truck',
@@ -246,7 +247,7 @@ export const CONSTRUCTION_WORKPLACE_INSTRUCTIONS: WorkplaceInstruction[] = [
   {
     text: 'Bring the drill to bay one.',
     correct: 'Bring the drill to bay one',
-    imageKey: 'con-vv-014',
+    imageKey: 'drill',
     options: [
       'Bring the drill to bay one',
       'Bring the saw to bay three',
@@ -258,7 +259,7 @@ export const CONSTRUCTION_WORKPLACE_INSTRUCTIONS: WorkplaceInstruction[] = [
   {
     text: 'Measure the board twice.',
     correct: 'Measure the board twice',
-    imageKey: 'con-vv-012',
+    imageKey: 'tape-measure',
     options: [
       'Measure the board twice',
       'Guess the length once',

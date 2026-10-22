@@ -68,9 +68,12 @@ export function VocabSheetCard({
   const img = pathwayImage(term.imageKey)
   const bridged = !!connectedLang || alreadyKnown
   const ready = bridged && heardEnglish
-  /** Worksheet / studio-white object cards — keep the mat light (Logistics, Daily Conversation). */
+  /** Worksheet / studio-white object cards — keep the mat light for all VV streams. */
   const studioPhoto =
-    term.imageKey.startsWith('log-') || term.imageKey.startsWith('dc-vv-')
+    term.imageKey.startsWith('log-') ||
+    term.imageKey.startsWith('dc-vv-') ||
+    term.imageKey.startsWith('con-vv-') ||
+    term.imageKey.startsWith('con-')
 
   return (
     <article

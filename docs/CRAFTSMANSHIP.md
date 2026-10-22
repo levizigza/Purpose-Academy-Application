@@ -412,13 +412,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Optics + attention ethics (path stage) | L3/L4 | Done — iterate |
 | Site-wide craft layers (doctrine + sweep) | L1–L6 | Done (this climb) — keep sweeping |
 | Pathway-aware foley beds | L2/L3 | Open |
-| Eye Spy photography upgrade | L2/L3 | Open — needs assets |
+| Eye Spy photography upgrade | L2/L3 | Climbing — hotspot floors + larger stage; still wants true scene photos |
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
 | Splash opening aesthetic craft | L3/L4 | Climbing — dusk stage for light pop (v41) + version archive |
 | Site-wide composition (thirds / hierarchy) | L3 | Climbing — §7.0 template locked; apply node-by-node |
-| Site-wide information display (solid user output) | L3 | Climbing — §7.0a/b; every new surface inherits |
+| Site-wide information display (solid user output) | L3 | Climbing — §7.0a/b; VV letterbox crop pass 2026-10-22 |
 | Systems thinking (journey as architecture) | L6 | Climbing — doctrine §3.1; apply node-by-node |
 
 ---
@@ -426,6 +426,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-22 — Site-wide royalty-free image framing (L3)
+
+- **Defect:** VV extractors letterboxed photos onto oversized white canvases (often &lt;10% fill for Logistics/Daily Conversation). Drills used `cover` or wrong aspect mats, so objects looked cropped or unreadably small.
+- **Fix:** Autocrop + upscale all Construction/Logistics/Daily Conversation VV tiles, logistics pathway photos, and Sentence Structure cloze art (`scripts/fix-training-image-framing.py`). Pad ultra-wide tool photos onto square mats. Display CSS defaults to `object-fit: contain` with larger mats (VocabSheet, train pictures, Eye Spy, Organize, Practice resume, school-path cards). Extract scripts no longer over-letterbox.
+- **Assumption to challenge next:** whether soft upscales of original ~200px logistics stamps need true higher-res source replacements for print-quality readability.
+
 
 ### 2026-10-21 — Full Construction Questions 1–560 reachable (L2)
 

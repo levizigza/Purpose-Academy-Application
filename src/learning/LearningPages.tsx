@@ -137,21 +137,11 @@ function VocabPractice({
         </span>
       </div>
       <p className="muted">{layer.help}</p>
-      <div
-        className="vocab-visual"
-        aria-hidden
-        style={
-          enrich?.imageUrl
-            ? {
-                backgroundImage: `linear-gradient(145deg, rgba(217,235,226,0.75), rgba(240,223,196,0.7)), url(${enrich.imageUrl})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                color: 'var(--brand-deep)',
-              }
-            : undefined
-        }
-      >
-        {term.image_hint}
+      <div className={`vocab-visual${enrich?.imageUrl ? ' has-photo' : ''}`} aria-hidden>
+        {enrich?.imageUrl ? (
+          <img className="vocab-visual-img" src={enrich.imageUrl} alt="" />
+        ) : null}
+        <span className="vocab-visual-hint">{term.image_hint}</span>
       </div>
       {enrich?.sources && (
         <p className="muted" style={{ fontSize: '0.8rem' }}>

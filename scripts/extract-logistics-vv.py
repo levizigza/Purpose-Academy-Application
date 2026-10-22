@@ -163,13 +163,28 @@ def make_definition(english: str, sentence: str) -> str:
 
 
 def studio_pad(im: Image.Image, tw=960, th=1170, margin=0.06) -> Image.Image:
+    """Tight studio mat — keep the subject large (no oversized letterbox).
+
+    Historical 960×1170 letterboxing made objects unreadably small in drills.
+    Prefer a modest margin around the natural photo aspect.
+    """
     im = im.convert("RGB")
-    canvas = Image.new("RGB", (tw, th), (255, 255, 255))
+    # Fit inside target with margin, then crop canvas to the padded photo
     max_w = int(tw * (1 - 2 * margin))
     max_h = int(th * (1 - 2 * margin))
     img = im.copy()
     img.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
-    canvas.paste(img, ((tw - img.width) // 2, (th - img.height) // 2))
+    pad = max(12, int(max(img.width, img.height) * margin))
+    canvas = Image.new("RGB", (img.width + pad * 2, img.height + pad * 2), (255, 255, 255))
+    canvas.paste(img, (pad, pad))
+    # Upscale so the long edge stays near the historical tile size
+    long = max(canvas.size)
+    if long < 960:
+        scale = 960 / long
+        canvas = canvas.resize(
+            (max(1, int(canvas.width * scale)), max(1, int(canvas.height * scale))),
+            Image.Resampling.LANCZOS,
+        )
     return canvas
 
 
