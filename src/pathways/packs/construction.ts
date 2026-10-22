@@ -63,6 +63,13 @@ export const constructionPack: PathwayPack = {
       ],
     },
     6: {
+      goal: 'Open the Video section (Warehouse Equipment) when training on Logistics — Construction continues to observation.',
+      outcomes: [
+        'Know where the dedicated Video · Warehouse Equipment station lives (Logistics · step 18)',
+        'Continue Construction into instructor observation when ready',
+      ],
+    },
+    7: {
       goal: 'Prove site readiness under observation, then connect to construction employment support.',
       outcomes: [
         'Rehearse competent skill order with measurable steps',

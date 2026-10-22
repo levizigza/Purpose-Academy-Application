@@ -47,15 +47,22 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Build the digital, safety, equipment, systems, and machine-familiarization foundations every warehouse expects.',
+      goal: 'Build the digital, safety, equipment, and systems foundations every warehouse expects.',
       outcomes: [
         'Practice school computer tasks',
         'Pass required safety checks',
         'Name equipment groups and logistics systems (receive → store → pick → ship)',
-        'Watch warehouse equipment lessons — know, inspect, protect — before floor training',
       ],
     },
     6: {
+      goal: 'Video section — watch warehouse equipment familiarization before floor training.',
+      outcomes: [
+        'Open Unit 6: Video · Warehouse Equipment (step 18)',
+        'Watch each machine lesson: know, inspect, protect',
+        'Stay clear of powered lift trucks unless certified elsewhere',
+      ],
+    },
+    7: {
       goal: 'Prove floor readiness under observation, then connect to logistics employment support.',
       outcomes: [
         'Rehearse competent skill order with measurable steps',
@@ -91,9 +98,9 @@ export const logisticsPack: PathwayPack = {
       purpose: 'Your task keeps goods moving safely and on time.',
     },
     18: {
-      title: 'Warehouse Equipment',
-      help: 'Fourteen short lessons. Watch each machine: know it, inspect it, protect the area. Powered lift trucks are stay-clear awareness only.',
-      purpose: 'Equipment familiarization after systems — before observation and floor training.',
+      title: 'Video · Warehouse Equipment',
+      help: 'Video section — fourteen short lessons. Watch each machine: know it, inspect it, protect the area. Powered lift trucks are stay-clear awareness only.',
+      purpose: 'Dedicated Video unit after systems — before observation and floor training.',
     },
     20: {
       title: 'Warehouse Floor Training',
@@ -920,7 +927,7 @@ export const logisticsPack: PathwayPack = {
         teachWrong: 'You can stop work when something looks unsafe.',
       },
     ],
-    6: [
+    7: [
       {
         id: 'uc6-l1',
         prompt: 'Competent observation means…',

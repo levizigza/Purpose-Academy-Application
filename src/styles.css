@@ -10879,9 +10879,62 @@ video {
   color: #fff;
 }
 
-.ph-equip-cta {
+.ph-video-section {
+  margin: 0 0 1.25rem;
+  padding: 0 0.15rem;
+}
+
+.ph-video-section-inner {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1.15rem 1.25rem 1.3rem;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, #c9a227 55%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #c9a227 18%, #0b1c2e), color-mix(in srgb, #1a4f8a 35%, #0b1c2e));
+  box-shadow: 0 14px 32px rgba(4, 21, 38, 0.18);
+}
+
+.ph-video-section-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #f5c542;
+}
+
+.ph-video-section-inner h2 {
+  margin: 0;
+  font-family: var(--display, Georgia, serif);
+  font-size: clamp(1.45rem, 2.6vw, 1.85rem);
+  color: #fff;
+}
+
+.ph-video-section-inner p {
+  margin: 0;
+  max-width: 40rem;
+  color: color-mix(in srgb, #fff 82%, transparent);
+  line-height: 1.45;
+}
+
+.ph-video-section-inner strong {
+  color: #fff;
+}
+
+.ph-video-section-btn {
   justify-self: start;
-  margin-top: 0.15rem;
+  margin-top: 0.25rem;
+}
+
+.ph-unit.is-video-unit {
+  border-color: color-mix(in srgb, #c9a227 50%, transparent);
+  box-shadow: 0 10px 24px rgba(201, 162, 39, 0.12);
+}
+
+.ph-unit.is-video-unit .ph-unit-badge {
+  background: color-mix(in srgb, #c9a227 35%, #0b1c2e);
+  color: #f5c542;
 }
 
 /* Equipment video station — keep the player above the fold */

@@ -2498,11 +2498,11 @@ export function StudentSequencePage() {
         ) : (
           <article className="topic-lesson-card">
             <p className="section-kicker">Equipment Familiarization</p>
-            <h2>Warehouse equipment videos live on Logistics</h2>
+            <h2>Video section · Warehouse Equipment</h2>
             <p className="lede">
-              The fourteen machine lessons (forklift, pallet jack, scanner, and more) are part of{' '}
-              <strong>Logistics Foundations</strong>. Switch pathways to watch them, or continue this pathway to
-              instructor observation.
+              The fourteen machine lessons (forklift, pallet jack, scanner, and more) are their own unit —{' '}
+              <strong>Unit 6 · Video · Warehouse Equipment</strong> on <strong>Logistics</strong>. Switch pathways
+              to watch them, or continue this pathway to instructor observation.
             </p>
             <div className="hero-actions">
               <button
@@ -2514,7 +2514,7 @@ export function StudentSequencePage() {
                   playFoley('whoosh')
                 }}
               >
-                Open Logistics · Warehouse Equipment
+                Open Video section · Logistics
               </button>
               <button
                 type="button"

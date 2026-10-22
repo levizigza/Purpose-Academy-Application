@@ -427,6 +427,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-22 — Video · Warehouse Equipment is its own unit (L2)
+
+- Step 18 is now **Unit 6 · Video · Warehouse Equipment** (not buried inside Specialize). Work ready is Unit 7 (steps 19–22).
+- Practice hub shows a dedicated **Video section** card that opens Logistics step 18.
+- **Assumption to challenge next:** whether Construction/Community should eventually get their own video units or keep the Logistics-only station.
+
+
 ### 2026-10-22 — Site-wide royalty-free image framing (L3)
 
 - **Defect:** VV extractors letterboxed photos onto oversized white canvases (often &lt;10% fill for Logistics/Daily Conversation). Drills used `cover` or wrong aspect mats, so objects looked cropped or unreadably small.

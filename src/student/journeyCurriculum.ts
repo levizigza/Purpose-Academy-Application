@@ -29,15 +29,15 @@ export const JOURNEY_STEPS = [
   { n: 17, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 5 },
   {
     n: 18,
-    title: 'Equipment Familiarization',
-    help: 'Watch each equipment lesson. Know it, inspect it, protect the area — then continue to hands-on training.',
-    purpose: 'See real equipment habits before supervised practice on the floor.',
-    unit: 5,
+    title: 'Video · Warehouse Equipment',
+    help: 'Open the Video section. Watch each equipment lesson. Know it, inspect it, protect the area — then continue to hands-on training.',
+    purpose: 'Dedicated video station — real equipment habits before supervised practice.',
+    unit: 6,
   },
-  { n: 19, title: 'Instructor Observation', help: 'Rehearse competent skill order before a real instructor check.', purpose: 'Learned → Practised → Competent under real observation.', unit: 6 },
-  { n: 20, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Daily judgment, notes, and site feedback.', unit: 6 },
-  { n: 21, title: 'Final Exam & Certificate', help: 'Written + practical checks. Pass to open your certificate.', purpose: 'Eye Spy needs 100%. Exam tries are limited.', unit: 6 },
-  { n: 22, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 6 },
+  { n: 19, title: 'Instructor Observation', help: 'Rehearse competent skill order before a real instructor check.', purpose: 'Learned → Practised → Competent under real observation.', unit: 7 },
+  { n: 20, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Daily judgment, notes, and site feedback.', unit: 7 },
+  { n: 21, title: 'Final Exam & Certificate', help: 'Written + practical checks. Pass to open your certificate.', purpose: 'Eye Spy needs 100%. Exam tries are limited.', unit: 7 },
+  { n: 22, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 7 },
 ] as const
 
 /** Total stations on the shared school path (Visual Vocabulary → Language Organize → Eye Spy → …). */
@@ -49,8 +49,9 @@ export const LEARNING_UNITS = [
   { id: 2, label: 'Find your path', range: '3–5' },
   { id: 3, label: 'Words → Pictures', range: '6–8' },
   { id: 4, label: 'Sentences → Site English', range: '9–12' },
-  { id: 5, label: 'Specialize & site ready', range: '13–18' },
-  { id: 6, label: 'Work ready', range: '19–22' },
+  { id: 5, label: 'Specialize & site ready', range: '13–17' },
+  { id: 6, label: 'Video · Warehouse Equipment', range: '18' },
+  { id: 7, label: 'Work ready', range: '19–22' },
 ] as const
 
 /** Unit goals — shown at the start of each learning unit (Duolingo/Khan clarity). */
@@ -94,6 +95,14 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   6: {
+    goal: 'Watch the Video section — warehouse equipment familiarization before hands-on training.',
+    outcomes: [
+      'Open the dedicated Video · Warehouse Equipment station',
+      'Watch each machine lesson: know, inspect, protect',
+      'Stay clear of powered equipment unless certified elsewhere',
+    ],
+  },
+  7: {
     goal: 'Show ready-for-work habits: observation, site notes, exam, and employment next steps.',
     outcomes: [
       'Prepare for instructor observation',
@@ -1644,7 +1653,7 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
       teachWrong: 'Framing is the building skeleton.',
     },
   ],
-  6: [
+  7: [
     {
       id: 'uc6-1',
       prompt: 'Competent observation means…',

@@ -135,7 +135,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     <article className="equip-video-card">
       <div className="equip-video-head">
         <div>
-          <p className="section-kicker">Warehouse Equipment</p>
+          <p className="section-kicker">Video section · Warehouse Equipment</p>
           <h2 className="equip-video-title">{lesson.title}</h2>
           <p className="lede equip-video-purpose">{lesson.purpose}</p>
         </div>

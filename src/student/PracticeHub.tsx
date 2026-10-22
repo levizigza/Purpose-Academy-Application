@@ -220,21 +220,6 @@ export function PracticeHub({
                 )
               })}
             </div>
-            <p className="ph-pathway-switch-hint">
-              Warehouse Equipment videos are on <strong>Logistics</strong> · step 18.
-            </p>
-            <button
-              type="button"
-              className="btn btn-secondary on-light ph-equip-cta"
-              onClick={() => {
-                if (pathwayId !== 'logistics') setActivePathway('logistics')
-                onOpenLesson(18)
-              }}
-            >
-              {pathwayId === 'logistics'
-                ? 'Open Warehouse Equipment · step 18'
-                : 'Switch to Logistics · open Warehouse Equipment'}
-            </button>
           </div>
         </div>
 
@@ -281,6 +266,29 @@ export function PracticeHub({
           </div>
         </div>
       </header>
+
+      <section className="ph-video-section" aria-label="Video section">
+        <div className="ph-video-section-inner">
+          <p className="ph-video-section-kicker">Video section</p>
+          <h2>Warehouse Equipment</h2>
+          <p>
+            Fourteen machine lessons live in their own unit — <strong>Unit 6 · Video · Warehouse Equipment</strong>{' '}
+            (step 18) on the <strong>Logistics</strong> pathway. Watch each video before hands-on training.
+          </p>
+          <button
+            type="button"
+            className="btn btn-primary ph-video-section-btn"
+            onClick={() => {
+              if (pathwayId !== 'logistics') setActivePathway('logistics')
+              onOpenLesson(18)
+            }}
+          >
+            {pathwayId === 'logistics'
+              ? 'Open Video section · Warehouse Equipment'
+              : 'Switch to Logistics · open Video section'}
+          </button>
+        </div>
+      </section>
 
       <section className="ph-overview" aria-label="Practice marks">
         <MasteryMeter percent={overall} label={`Path mastery ${overall} percent`} />
@@ -374,7 +382,10 @@ export function PracticeHub({
               state === 'current' ? 'In progress' : state === 'done' ? 'Complete' : 'Upcoming'
 
             return (
-              <li key={u.id} className={`ph-unit is-${state}${expanded ? ' is-open' : ''}`}>
+              <li
+                key={u.id}
+                className={`ph-unit is-${state}${expanded ? ' is-open' : ''}${u.id === 6 ? ' is-video-unit' : ''}`}
+              >
                 <button
                   type="button"
                   className="ph-unit-toggle"
@@ -382,12 +393,12 @@ export function PracticeHub({
                   onClick={() => toggleUnit(u.id)}
                 >
                   <span className="ph-unit-badge" aria-hidden>
-                    {state === 'done' ? '✓' : u.id}
+                    {state === 'done' ? '✓' : u.id === 6 ? '▶' : u.id}
                   </span>
                   <span className="ph-unit-titles">
                     <span className="ph-unit-title-row">
                       <strong>
-                        Unit {u.id}: {u.label}
+                        {u.id === 6 ? u.label : `Unit ${u.id}: ${u.label}`}
                       </strong>
                       <span className={`ph-status is-${state}`}>{statusLabel}</span>
                     </span>

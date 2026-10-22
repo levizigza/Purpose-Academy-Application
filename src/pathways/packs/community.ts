@@ -209,6 +209,13 @@ export const communityPack: PathwayPack = {
       ],
     },
     6: {
+      goal: 'Video section lives on Logistics (Warehouse Equipment). Community continues to observation.',
+      outcomes: [
+        'Know Unit 6: Video · Warehouse Equipment is the Logistics video station (step 18)',
+        'Continue Community into instructor observation when ready',
+      ],
+    },
+    7: {
       goal: 'Prove readiness under observation, then connect to community-support employment.',
       outcomes: [
         'Rehearse competent support skill order',
@@ -234,9 +241,9 @@ export const communityPack: PathwayPack = {
       purpose: 'Your task helps people stay safe, informed, and supported with dignity.',
     },
     18: {
-      title: 'Equipment Familiarization',
-      help: 'Community support equipment habits are practised with your supervisor after systems. Continue when you are ready for observation.',
-      purpose: 'Bridge from systems knowledge to supervised placement checks.',
+      title: 'Video · Warehouse Equipment',
+      help: 'The Video section (warehouse machine lessons) is on Logistics. Stay here for Community observation, or switch pathways to watch the videos.',
+      purpose: 'Bridge from systems knowledge — Video unit is Logistics; Community continues to observation.',
     },
     20: {
       title: 'Placement Training',
@@ -1620,7 +1627,7 @@ export const communityPack: PathwayPack = {
         teachWrong: 'Those tools are Care/hygiene supplies.',
       },
     ],
-    6: [
+    7: [
       {
         id: 'uc6-c1',
         prompt: 'Competent observation means…',
