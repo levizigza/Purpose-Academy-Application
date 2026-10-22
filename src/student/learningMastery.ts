@@ -22,6 +22,7 @@ export type SkillId =
   | 'safety'
   | 'tools'
   | 'systems'
+  | 'equipment-videos'
   | 'observation'
   | 'site-log'
   | 'final-exam'
@@ -64,6 +65,7 @@ const EMPTY: Record<SkillId, SkillRecord> = {
   safety: EMPTY_SKILL(),
   tools: EMPTY_SKILL(),
   systems: EMPTY_SKILL(),
+  'equipment-videos': EMPTY_SKILL(),
   observation: EMPTY_SKILL(),
   'site-log': EMPTY_SKILL(),
   'final-exam': EMPTY_SKILL(),
@@ -91,14 +93,16 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   15: 'safety',
   16: 'tools',
   17: 'systems',
-  18: 'observation',
-  19: 'site-log',
-  20: 'final-exam',
-  21: 'employment',
+  /** After systems: equipment familiarization videos, then hands-on observation. */
+  18: 'equipment-videos',
+  19: 'observation',
+  20: 'site-log',
+  21: 'final-exam',
+  22: 'employment',
 }
 
 /** Steps that need at least "familiar" mastery before Continue unlocks (real platform gate). */
-export const GATED_SKILL_STEPS = new Set([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
+export const GATED_SKILL_STEPS = new Set([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
 
 const LEVEL_WEIGHT: Record<MasteryLevel, number> = {
   locked: 0,
@@ -198,7 +202,7 @@ export function domainMasteryPercent(skills: SkillId[]): number {
 export const SKILL_DOMAINS = {
   vocabulary: ['vocab', 'vocab-organize', 'eye-spy', 'sentence-cloze', 'word-action', 'matching'] as SkillId[],
   safety: ['safety', 'instructions'] as SkillId[],
-  tools: ['tools', 'site-phrases'] as SkillId[],
+  tools: ['tools', 'equipment-videos', 'site-phrases'] as SkillId[],
   systems: ['systems', 'observation', 'site-log', 'digital'] as SkillId[],
 }
 
@@ -342,6 +346,8 @@ export function skillStationLabel(id: SkillId): string {
       return 'Tools & Equipment'
     case 'systems':
       return 'Workplace Systems'
+    case 'equipment-videos':
+      return 'Equipment Familiarization'
     case 'observation':
       return 'Instructor Observation'
     case 'site-log':

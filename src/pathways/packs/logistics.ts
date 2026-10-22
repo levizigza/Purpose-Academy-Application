@@ -47,11 +47,12 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Build the digital, safety, equipment, and systems foundations every warehouse expects.',
+      goal: 'Build the digital, safety, equipment, systems, and machine-familiarization foundations every warehouse expects.',
       outcomes: [
         'Practice school computer tasks',
         'Pass required safety checks',
         'Name equipment groups and logistics systems (receive → store → pick → ship)',
+        'Watch warehouse equipment lessons — know, inspect, protect — before floor training',
       ],
     },
     6: {
@@ -89,7 +90,12 @@ export const logisticsPack: PathwayPack = {
       help: 'Learn each system. Answer one check.',
       purpose: 'Your task keeps goods moving safely and on time.',
     },
-    19: {
+    18: {
+      title: 'Warehouse Equipment',
+      help: 'Fourteen short lessons. Watch each machine: know it, inspect it, protect the area. Powered lift trucks are stay-clear awareness only.',
+      purpose: 'Equipment familiarization after systems — before observation and floor training.',
+    },
+    20: {
       title: 'Warehouse Floor Training',
       help: 'Make floor decisions and log the day like a real team member.',
       purpose: 'Daily judgment, notes, and supervisor feedback.',

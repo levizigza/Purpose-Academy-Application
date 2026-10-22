@@ -70,7 +70,7 @@ export function resetPracticeProgress() {
 }
 
 /** Ask for reviewer feedback only at unit boundaries so learning stays continuous. */
-export const PRACTICE_FEEDBACK_STEPS = new Set([6, 8, 9, 13, 17, 20, 21])
+export const PRACTICE_FEEDBACK_STEPS = new Set([6, 8, 9, 13, 17, 18, 21, 22])
 
 export function shouldAskPracticeFeedback(step: number) {
   return PRACTICE_FEEDBACK_STEPS.has(step)

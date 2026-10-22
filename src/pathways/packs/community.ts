@@ -233,7 +233,12 @@ export const communityPack: PathwayPack = {
       help: 'Learn each system. Answer one check.',
       purpose: 'Your task helps people stay safe, informed, and supported with dignity.',
     },
-    19: {
+    18: {
+      title: 'Equipment Familiarization',
+      help: 'Community support equipment habits are practised with your supervisor after systems. Continue when you are ready for observation.',
+      purpose: 'Bridge from systems knowledge to supervised placement checks.',
+    },
+    20: {
       title: 'Placement Training',
       help: 'Make community-support decisions and log the day like a real team member.',
       purpose: 'Daily judgment, visit notes, and supervisor feedback.',

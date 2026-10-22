@@ -65,6 +65,7 @@ import {
   speakSupport,
   stopSpeech,
 } from './speech'
+import { EquipmentVideoDrill } from './EquipmentVideoDrill'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
@@ -1172,7 +1173,7 @@ export function StudentSequencePage() {
             className="btn btn-secondary on-light"
             onClick={() => {
               setPracticeView('lesson')
-              go(21)
+              go(22)
             }}
           >
             Open employment step
@@ -2415,7 +2416,7 @@ export function StudentSequencePage() {
       if (isLast) {
         requestPracticeAdvance(() => advanceWithOptionalCheckpoint(
               17,
-              18, 'Opening instructor observation…'))
+              18, 'Opening equipment familiarization…'))
         return
       }
       setSysIdx((i) => i + 1)
@@ -2461,6 +2462,62 @@ export function StudentSequencePage() {
   }
 
   if (step === 18) {
+    const hasWarehouseVideos = pathwayId === 'logistics'
+    return (
+      <Shell step={18} onBack={() => go(17)}>
+        {hasWarehouseVideos ? (
+          <>
+            <WhyWork>
+              After systems, watch each warehouse machine before hands-on training. Know it, inspect it, protect the
+              area — then practise with an instructor.
+            </WhyWork>
+            <TeachNote>
+              Fourteen short lessons in equipment families. Finish each video to unlock the next. Powered lift trucks
+              are stay-clear awareness only — not operator certification.
+            </TeachNote>
+            <EquipmentVideoDrill
+              onComplete={() =>
+                requestPracticeAdvance(() =>
+                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                )
+              }
+              onSkip={
+                isPracticeMode()
+                  ? () =>
+                      requestPracticeAdvance(() =>
+                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                      )
+                  : undefined
+              }
+            />
+          </>
+        ) : (
+          <article className="topic-lesson-card">
+            <p className="section-kicker">Equipment Familiarization</p>
+            <h2>Practise equipment with your instructor</h2>
+            <p className="lede">
+              Your pathway covers tools in the previous station. Hands-on equipment checks happen under instructor
+              observation next — continue when you are ready.
+            </p>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                recordSkillAttempt('equipment-videos', true, 15)
+                requestPracticeAdvance(() =>
+                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                )
+              }}
+            >
+              Continue to observation
+            </button>
+          </article>
+        )}
+      </Shell>
+    )
+  }
+
+    if (step === 19) {
     const scenario = OBSERVATION_SCENARIOS[obsIdx]
     const isLast = obsIdx >= OBSERVATION_SCENARIOS.length - 1
     const ordered = [...scenario.steps].sort((a, b) => a.correctOrder - b.correctOrder)
@@ -2490,7 +2547,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        go(19, 'Opening on-site decisions…')
+        go(20, 'Opening on-site decisions…')
         return
       }
       setObsIdx((i) => i + 1)
@@ -2500,7 +2557,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={18} onBack={() => go(17)}>
+      <Shell step={19} onBack={() => go(18)}>
         <WhyWork>Before a real instructor watches you, rehearse the competent order of a skill.</WhyWork>
         <div className="train-learn-grid">
           <LearnCard mark="L" title="Learned" body="Studied in the app or class." />
@@ -2561,7 +2618,7 @@ export function StudentSequencePage() {
     )
   }
 
-  if (step === 19) {
+  if (step === 20) {
     const item = SITE_DECISIONS[siteIdx]
     const isLast = siteIdx >= SITE_DECISIONS.length - 1
 
@@ -2590,7 +2647,7 @@ export function StudentSequencePage() {
           }))
         } catch { /* */ }
         setFinalPhase('eyespy')
-        go(20, 'Opening final exam…')
+        go(21, 'Opening final exam…')
         return
       }
       setSiteIdx((i) => i + 1)
@@ -2599,7 +2656,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={19} onBack={() => go(18)}>
+      <Shell step={20} onBack={() => go(19)}>
         <WhyWork>On-site days need judgment and a clear log. Practice both before the exam.</WhyWork>
         <p className="train-vocab-counter">Site decision {siteIdx + 1} of {SITE_DECISIONS.length}</p>
         <article className="topic-lesson-card">
@@ -2653,11 +2710,11 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 19: Final Eye Spy exam (up to 3 attempts) + written + certificate */
-  if (step === 20) {
+  /* Step 21: Final Eye Spy exam (up to 3 attempts) + written + certificate */
+  if (step === 21) {
     if (finalPhase === 'eyespy') {
       return (
-        <Shell step={20} onBack={() => go(19)}>
+        <Shell step={21} onBack={() => go(20)}>
           <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Pair every picture with its word until each board is empty." />
           <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('written') }} />
         </Shell>
@@ -2665,7 +2722,7 @@ export function StudentSequencePage() {
     }
     if (finalPhase === 'written') {
       return (
-        <Shell step={20} onBack={() => setFinalPhase('eyespy')}>
+        <Shell step={21} onBack={() => setFinalPhase('eyespy')}>
           <PictureCard emoji="W" label="Written & knowledge check" caption="Safety, measurement, language, and tools. Perfect score required." />
           <QuizRunner items={FINAL_QUIZ} onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('certificate') }} gated />
         </Shell>
@@ -2673,9 +2730,9 @@ export function StudentSequencePage() {
     }
     return (
       <Shell
-        step={20}
+        step={21}
         onBack={() => setFinalPhase('written')}
-        onNext={honestyChecked ? () => go(21, 'Opening employment…') : undefined}
+        onNext={honestyChecked ? () => go(22, 'Opening employment…') : undefined}
         nextLabel="Continue to employment"
         nextDisabled={!honestyChecked}
       >
@@ -2731,6 +2788,15 @@ export function StudentSequencePage() {
     playFoley('correct')
   }
 
+  /* Step 22: Employment connection */
+  if (step !== 22) {
+    return (
+      <Shell step={step} onBack={() => go(Math.max(1, step - 1))}>
+        <div className="alert warn">This station is not available yet.</div>
+      </Shell>
+    )
+  }
+
   if (!empQuizDone) {
     const item = EMPLOYMENT_PREP[empIdx]
     const isLast = empIdx >= EMPLOYMENT_PREP.length - 1
@@ -2760,7 +2826,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={21} onBack={() => go(20)}>
+      <Shell step={22} onBack={() => go(21)}>
         <WhyWork>Employment connection starts with clear interview answers, then partner matching.</WhyWork>
         <p className="train-vocab-counter">Interview prep {empIdx + 1} of {EMPLOYMENT_PREP.length}</p>
         <article className="topic-lesson-card">
@@ -2795,7 +2861,7 @@ export function StudentSequencePage() {
   }
 
   return (
-    <Shell step={21} onBack={() => { setEmpQuizDone(false); go(20) }}>
+    <Shell step={22} onBack={() => { setEmpQuizDone(false); go(21) }}>
       <PictureCard emoji="H" label="Employment Connection" caption="See hiring partners and enter work with support." />
       {!empDone ? (
         <form className="stack" onSubmit={handleComplete}>

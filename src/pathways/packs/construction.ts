@@ -97,7 +97,12 @@ export const constructionPack: PathwayPack = {
       help: 'Learn each system. Answer one check.',
       purpose: 'Your task feeds the whole building.',
     },
-    19: {
+    18: {
+      title: 'Equipment Familiarization',
+      help: 'Construction equipment habits are practised with your instructor after systems. Continue when you are ready for observation.',
+      purpose: 'Bridge from systems knowledge to supervised hands-on checks.',
+    },
+    20: {
       title: 'On-Site Training',
       help: 'Make site decisions and log the day like a real crew member.',
       purpose: 'Daily judgment, notes, and site feedback.',
