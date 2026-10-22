@@ -339,7 +339,7 @@ export function skillStationLabel(id: SkillId): string {
     case 'site-phrases':
       return 'Workplace Language'
     case 'digital':
-      return 'Digital Skills'
+      return 'Basic Computer Skills'
     case 'safety':
       return 'Safety Training'
     case 'tools':

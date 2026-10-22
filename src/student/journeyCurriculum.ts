@@ -23,7 +23,13 @@ export const JOURNEY_STEPS = [
   { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   { n: 12, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 4 },
   { n: 13, title: 'Interest Assessment', help: 'After practice, rate work activities to specialize.', purpose: 'A professional interest inventory (Holland / RIASEC) once you have real practice — not a pass/fail quiz.', unit: 5 },
-  { n: 14, title: 'Digital Skills', help: 'Practice real computer tasks: click, type, forms, uploads.', purpose: 'This may be someone’s first computer. Every step is a hands-on micro-lesson.', unit: 5 },
+  {
+    n: 14,
+    title: 'Basic Computer Skills',
+    help: 'Watch short videos, then try: power, mouse, folders, save, Word, and email — in simple English.',
+    purpose: 'This may be someone’s first computer. Watch → Try → Remember → check.',
+    unit: 5,
+  },
   { n: 15, title: 'Safety Training', help: 'Safety words with clear pictures. Required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 5 },
   { n: 16, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 5 },
   { n: 17, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 5 },
@@ -86,10 +92,10 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   5: {
-    goal: 'Specialize with a deeper interest inventory, then build digital, safety, tool, and systems foundations.',
+    goal: 'Specialize with a deeper interest inventory, then build Basic Computer Skills, safety, tool, and systems foundations.',
     outcomes: [
       'Complete the interest assessment after practice',
-      'Practice school computer tasks',
+      'Finish Basic Computer Skills — power, mouse, folders, save, Word, and email',
       'Pass required safety checks',
       'Name tool groups and building systems',
     ],

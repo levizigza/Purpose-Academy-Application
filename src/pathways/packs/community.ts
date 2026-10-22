@@ -201,9 +201,9 @@ export const communityPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Build the digital, safety, tool, and systems foundations community support roles expect.',
+      goal: 'Build Basic Computer Skills, safety, tool, and systems foundations community support roles expect.',
       outcomes: [
-        'Practice school computer tasks',
+        'Finish Basic Computer Skills — watch, try, and check each simple computer lesson',
         'Pass required privacy, hygiene, and safeguarding checks',
         'Name support tools and community systems',
       ],
@@ -229,6 +229,11 @@ export const communityPack: PathwayPack = {
       title: 'Support Language',
       help: 'Hear a community-support phrase. Choose what it means.',
       purpose: 'Useful English for dignity, privacy, consent, and escalation across community support settings.',
+    },
+    14: {
+      title: 'Basic Computer Skills',
+      help: 'Twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      purpose: 'First-computer friendly. Level-4 English. Same station on every pathway.',
     },
     16: {
       title: 'Support Tools & Materials',

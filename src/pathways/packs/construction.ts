@@ -55,9 +55,9 @@ export const constructionPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Build the digital, safety, tool, and systems foundations Alberta construction sites expect.',
+      goal: 'Build Basic Computer Skills, safety, tool, and systems foundations Alberta construction sites expect.',
       outcomes: [
-        'Practice school computer tasks',
+        'Finish Basic Computer Skills — watch, try, and check each simple computer lesson',
         'Pass required safety checks',
         'Name tool groups and construction systems',
       ],
@@ -93,6 +93,11 @@ export const constructionPack: PathwayPack = {
       title: 'Site Language',
       help: 'Hear a job-site phrase. Choose what it means.',
       purpose: 'Useful English you will hear on Alberta construction sites.',
+    },
+    14: {
+      title: 'Basic Computer Skills',
+      help: 'Twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      purpose: 'First-computer friendly. Level-4 English. Same station on every pathway.',
     },
     16: {
       title: 'Tools & Equipment',

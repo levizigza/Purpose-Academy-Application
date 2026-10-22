@@ -267,6 +267,24 @@ export function PracticeHub({
         </div>
       </header>
 
+      <section className="ph-video-section ph-computer-section" aria-label="Basic Computer Skills">
+        <div className="ph-video-section-inner ph-computer-section-inner">
+          <p className="ph-video-section-kicker">Basic Computer Skills</p>
+          <h2>First computer? Start here</h2>
+          <p>
+            Twelve short lessons on <strong>every pathway</strong> — step 14. Turn on/off, mouse, folders, save,
+            Word, and email. Watch a captioned video, try it yourself, then one check.
+          </p>
+          <button
+            type="button"
+            className="btn btn-primary ph-video-section-btn"
+            onClick={() => onOpenLesson(14)}
+          >
+            Open Basic Computer Skills
+          </button>
+        </div>
+      </section>
+
       <section className="ph-video-section" aria-label="Video section">
         <div className="ph-video-section-inner">
           <p className="ph-video-section-kicker">Video section</p>

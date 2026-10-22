@@ -22,7 +22,6 @@ import {
 import {
   SUPPORT_LANGUAGES,
   LEARNING_UNITS,
-  DIGITAL_PRACTICE,
   MATCH_PRACTICE_ROUNDS,
   JOURNEY_STEP_COUNT,
   unitForStep,
@@ -65,6 +64,7 @@ import {
   speakSupport,
   stopSpeech,
 } from './speech'
+import { ComputerSkillsDrill } from './ComputerSkillsDrill'
 import { EquipmentVideoDrill } from './EquipmentVideoDrill'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
@@ -294,8 +294,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   return (
     <div
       className={`shell-main train-shell${step === 7 ? ' is-organize-wide' : ''}${
-        step === 18 ? ' is-equipment-video' : ''
-      }`}
+        step === 14 ? ' is-computer-skills' : ''
+      }${step === 18 ? ' is-equipment-video' : ''}`}
     >
       <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
       <header className="train-header">
@@ -726,11 +726,6 @@ export function StudentSequencePage() {
   const [instrCorrect, setInstrCorrect] = useState(false)
 
   /* Step 13 digital practice */
-  const [digIdx, setDigIdx] = useState(0)
-  const [digAnswer, setDigAnswer] = useState<string | null>(null)
-  const [digCorrect, setDigCorrect] = useState(false)
-  const [digTyped, setDigTyped] = useState('')
-
   /* Step 15 tool categories */
   const [toolIdx, setToolIdx] = useState(0)
   const [toolAnswer, setToolAnswer] = useState<string | null>(null)
@@ -869,10 +864,6 @@ export function StudentSequencePage() {
     setPhraseHeard(false)
     setPhraseAnswer(null)
     setPhraseCorrect(false)
-    setDigIdx(0)
-    setDigAnswer(null)
-    setDigCorrect(false)
-    setDigTyped('')
     setToolIdx(0)
     setToolAnswer(null)
     setToolCorrect(false)
@@ -2228,96 +2219,22 @@ export function StudentSequencePage() {
   }
 
   if (step === 14) {
-    const item = DIGITAL_PRACTICE[digIdx]
-    const isLast = digIdx >= DIGITAL_PRACTICE.length - 1
-    const isType = 'kind' in item && item.kind === 'type'
-
-    function pickDig(opt: string) {
-      if (digAnswer) return
-      const ok = opt.toLowerCase() === item.answer.toLowerCase()
-      setDigAnswer(opt)
-      setDigCorrect(ok)
-      recordSkillAttempt('digital', ok)
-      playFoley(ok ? 'correct' : 'wrong')
-    }
-
-    function submitTyped(e: FormEvent) {
-      e.preventDefault()
-      pickDig(digTyped.trim())
-    }
-
-    function nextDig() {
-      if (!digCorrect) {
-        setDigAnswer(null)
-        setDigCorrect(false)
-        setDigTyped('')
-        return
-      }
-      if (isLast) {
-        go(15, 'Opening safety…')
-        return
-      }
-      setDigIdx((i) => i + 1)
-      setDigAnswer(null)
-      setDigCorrect(false)
-      setDigTyped('')
-    }
-
     return (
       <Shell step={14} onBack={() => { setCareerInterestDone(false); go(13) }}>
-        <WhyWork>Many learners are new to computers. Practice the exact clicks and typing school work needs.</WhyWork>
-        <TeachNote>Each card is a real micro-task: learn → try → feedback → next. Empty honesty is fine. Wrong answers teach.</TeachNote>
-        <p className="train-vocab-counter">Digital skill {digIdx + 1} of {DIGITAL_PRACTICE.length}</p>
-        <article className="topic-lesson-card">
-          <h3>{item.title}</h3>
-          <p>{item.teach}</p>
-          <p className="train-check-prompt">{item.prompt}</p>
-          {isType ? (
-            <form className="stack" onSubmit={submitTyped}>
-              <div className="field">
-                <label htmlFor="dig-type">Type your answer</label>
-                <input
-                  id="dig-type"
-                  value={digTyped}
-                  onChange={(e) => setDigTyped(e.target.value)}
-                  disabled={!!digAnswer}
-                  autoComplete="off"
-                  required
-                />
-              </div>
-              {!digAnswer && (
-                <button type="submit" className="btn btn-primary" disabled={!digTyped.trim()}>
-                  Check spelling
-                </button>
-              )}
-            </form>
-          ) : (
-            <div className="train-choice-grid">
-              {(item.options || []).map((opt) => (
-                <ChoiceButton
-                  key={opt}
-                  state={digAnswer === opt ? (digCorrect ? 'correct' : 'wrong') : digAnswer ? (opt === item.answer ? 'correct' : 'idle') : 'idle'}
-                  disabled={!!digAnswer && opt !== digAnswer && opt !== item.answer}
-                  onClick={() => pickDig(opt)}
-                >
-                  {opt}
-                </ChoiceButton>
-              ))}
-            </div>
-          )}
-          {digAnswer && (
-            <>
-              <div className={`alert ${digCorrect ? 'ok' : 'warn'}`}>
-                {digCorrect ? item.teachCorrect : item.teachWrong}
-              </div>
-              <button type="button" className="btn btn-primary" onClick={nextDig}>
-                {digCorrect
-                  ? (isLast ? 'Continue to safety' : 'Next digital skill')
-                  : 'Try again'}
-              </button>
-            </>
-          )}
-        </article>
+        <WhyWork>
+          This may be your first computer. Short videos. Simple English. Then you try each step yourself.
+        </WhyWork>
+        <TeachNote>
+          Pattern for every lesson: Watch → Try → Remember → one check. Wrong answers teach. Take your time.
+        </TeachNote>
+        <ComputerSkillsDrill
+          onComplete={() => go(15, 'Opening safety…')}
+          onSkip={
+            isPracticeMode()
+              ? () => requestPracticeAdvance(() => go(15, 'Opening safety…'))
+              : undefined
+          }
+        />
       </Shell>
     )
   }

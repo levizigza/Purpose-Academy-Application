@@ -47,9 +47,9 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Build the digital, safety, equipment, and systems foundations every warehouse expects.',
+      goal: 'Build Basic Computer Skills, safety, equipment, and systems foundations every warehouse expects.',
       outcomes: [
-        'Practice school computer tasks',
+        'Finish Basic Computer Skills — watch, try, and check each simple computer lesson',
         'Pass required safety checks',
         'Name equipment groups and logistics systems (receive → store → pick → ship)',
       ],
@@ -86,6 +86,11 @@ export const logisticsPack: PathwayPack = {
       title: 'Warehouse Language',
       help: 'Hear a warehouse phrase. Choose what it means.',
       purpose: 'Useful English you will hear in Alberta logistics workplaces.',
+    },
+    14: {
+      title: 'Basic Computer Skills',
+      help: 'Twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      purpose: 'First-computer friendly. Level-4 English. Same station on every pathway.',
     },
     16: {
       title: 'Equipment & Materials',

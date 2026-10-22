@@ -10947,3 +10947,168 @@ video {
 .train-shell.is-equipment-video .equip-video-card {
   scroll-margin-top: 1rem;
 }
+
+/* Basic Computer Skills — same shell chrome as equipment videos */
+.train-shell.is-computer-skills .learning-path-map,
+.train-shell.is-computer-skills .train-path-map {
+  max-height: 9.5rem;
+  overflow: auto;
+}
+
+.train-shell.is-computer-skills .comp-skills-card {
+  scroll-margin-top: 1rem;
+}
+
+.ph-computer-section-inner {
+  border-color: color-mix(in srgb, #3d8fd1 55%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #1a4f8a 42%, #0b1c2e), color-mix(in srgb, #0b2f5c 55%, #071422));
+}
+
+.ph-computer-section-inner .ph-video-section-kicker {
+  color: #8ec5f0;
+}
+
+.comp-try {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.85rem 0 0.5rem;
+  padding: 1rem 1.1rem 1.15rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, #3d8fd1 40%, transparent);
+  background: color-mix(in srgb, #0b1c2e 88%, #1a4f8a);
+}
+
+.comp-try-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8ec5f0;
+}
+
+.comp-try h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #fff;
+}
+
+.comp-desktop {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.comp-desktop-hint {
+  margin: 0;
+  color: color-mix(in srgb, #fff 86%, transparent);
+  line-height: 1.4;
+}
+
+.comp-desktop-hint strong {
+  color: #f5c542;
+}
+
+.comp-step-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.comp-step-list .btn.is-done-step {
+  opacity: 0.75;
+}
+
+.comp-fake-page {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: start;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  background: #f4f7fb;
+  color: #0b1c2e;
+  border: 1px solid color-mix(in srgb, #0b2f5c 18%, transparent);
+}
+
+.comp-fake-page p {
+  margin: 0;
+}
+
+.comp-doc-title {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.comp-folder-icon {
+  width: 3.25rem;
+  height: 2.5rem;
+}
+
+.comp-folder-glyph {
+  display: inline-block;
+  width: 2.6rem;
+  height: 1.85rem;
+  border-radius: 0.2rem 0.45rem 0.35rem 0.35rem;
+  background: linear-gradient(180deg, #f0c14b, #c9a227);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  position: relative;
+  vertical-align: middle;
+  margin-right: 0.45rem;
+}
+
+.comp-folder-glyph::before {
+  content: '';
+  position: absolute;
+  left: 0.15rem;
+  top: -0.35rem;
+  width: 1.1rem;
+  height: 0.45rem;
+  border-radius: 0.2rem 0.2rem 0 0;
+  background: #e0b03a;
+}
+
+.comp-folder-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, #c9a227 45%, transparent);
+  background: color-mix(in srgb, #0b2f5c 70%, #1a4f8a);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.comp-folder-card:hover {
+  border-color: #f5c542;
+}
+
+.comp-email .field {
+  margin: 0;
+}
+
+.comp-inbox-msg {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: #f4f7fb;
+  color: #0b1c2e;
+}
+
+.comp-inbox-msg p {
+  margin: 0;
+}
+
+.comp-attach-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.comp-skills-check {
+  margin-top: 0.85rem;
+}

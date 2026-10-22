@@ -427,6 +427,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-22 — Basic Computer Skills (step 14) for first-time computer users (L2)
+
+- Step 14 is now **Basic Computer Skills** on every pathway: 12 captioned royalty-free Mixkit lessons + interactive Try panels (power, mouse, folders, save, Word, email, safety).
+- Pattern: **Watch → Try → Remember → one check**. Level-4 English throughout.
+- Practice hub surfaces a dedicated **Basic Computer Skills** card (step 14) above the Warehouse Equipment Video section.
+- **Assumption to challenge next:** whether some Try panels should become OS-specific screen simulators (Windows vs Chromebook) once classroom hardware is fixed.
+
+
 ### 2026-10-22 — Video · Warehouse Equipment is its own unit (L2)
 
 - Step 18 is now **Unit 6 · Video · Warehouse Equipment** (not buried inside Specialize). Work ready is Unit 7 (steps 19–22).
