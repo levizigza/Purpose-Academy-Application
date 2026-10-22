@@ -4,7 +4,8 @@
  * after Workplace Instructions, before Site Language and Safety.
  *
  * Audience: Level-4 English; may be a learner’s first computer.
- * Each MP4: royalty-free Mixkit B-roll + large burned-in captions (Level-4 English).
+ * Each MP4: action-matched visuals (hardware close-ups or practice-desktop demos)
+ * + natural English narration + large burned-in captions (Level-4 English).
  * Pattern per lesson: Watch → Try → Remember → short check.
  */
 
