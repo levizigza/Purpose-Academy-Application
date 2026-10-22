@@ -427,12 +427,19 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-22 — Basic Computer Skills is its own unit on all three pathways (L2)
+
+- **Unit 6 · Basic Computer Skills** (step 14) is a dedicated shared unit on Construction, Logistics, and Community — not buried inside Specialize.
+- Unit map: Specialize (5 / step 13) → Basic Computer Skills (6 / 14) → Site ready (7 / 15–17) → Video · Warehouse Equipment (8 / 18) → Work ready (9 / 19–22).
+- Practice hub card + station-map badge call out the shared unit; Warehouse Equipment copy updated to Unit 8.
+- **Assumption to challenge next:** whether some Try panels should become OS-specific screen simulators (Windows vs Chromebook) once classroom hardware is fixed.
+
+
 ### 2026-10-22 — Basic Computer Skills (step 14) for first-time computer users (L2)
 
-- Step 14 is now **Basic Computer Skills** on every pathway: 12 captioned royalty-free Mixkit lessons + interactive Try panels (power, mouse, folders, save, Word, email, safety).
+- Step 14 is **Basic Computer Skills** on every pathway: 12 captioned royalty-free Mixkit lessons + interactive Try panels (power, mouse, folders, save, Word, email, safety).
 - Pattern: **Watch → Try → Remember → one check**. Level-4 English throughout.
 - Practice hub surfaces a dedicated **Basic Computer Skills** card (step 14) above the Warehouse Equipment Video section.
-- **Assumption to challenge next:** whether some Try panels should become OS-specific screen simulators (Windows vs Chromebook) once classroom hardware is fixed.
 
 
 ### 2026-10-22 — Video · Warehouse Equipment is its own unit (L2)

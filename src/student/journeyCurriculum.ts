@@ -3,8 +3,8 @@
  * Login → Register → Language → Work Style (path quiz) → Profile →
  * Vocab → Language Organize → English Eye Spy → Sentences / Word→Action →
  * Supported practice → Instructions → Site language →
- * Interest assessment (specialize) → Digital → Safety →
- * Tools → Systems → Observation → On-site → Final exam/certificate → Employment
+ * Interest assessment (specialize) → Basic Computer Skills (own unit) → Safety →
+ * Tools → Systems → Warehouse Video → Observation → On-site → Final exam/certificate → Employment
  *
  * Support languages: English, Spanish, Arabic, Hindi, Amharic, Tigrinya (no French).
  */
@@ -28,22 +28,22 @@ export const JOURNEY_STEPS = [
     title: 'Basic Computer Skills',
     help: 'Watch short videos, then try: power, mouse, folders, save, Word, and email — in simple English.',
     purpose: 'This may be someone’s first computer. Watch → Try → Remember → check.',
-    unit: 5,
+    unit: 6,
   },
-  { n: 15, title: 'Safety Training', help: 'Safety words with clear pictures. Required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 5 },
-  { n: 16, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 5 },
-  { n: 17, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 5 },
+  { n: 15, title: 'Safety Training', help: 'Safety words with clear pictures. Required.', purpose: 'Alberta / Canada site safety in simple English.', unit: 7 },
+  { n: 16, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 7 },
+  { n: 17, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 7 },
   {
     n: 18,
     title: 'Video · Warehouse Equipment',
     help: 'Open the Video section. Watch each equipment lesson. Know it, inspect it, protect the area — then continue to hands-on training.',
     purpose: 'Dedicated video station — real equipment habits before supervised practice.',
-    unit: 6,
+    unit: 8,
   },
-  { n: 19, title: 'Instructor Observation', help: 'Rehearse competent skill order before a real instructor check.', purpose: 'Learned → Practised → Competent under real observation.', unit: 7 },
-  { n: 20, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Daily judgment, notes, and site feedback.', unit: 7 },
-  { n: 21, title: 'Final Exam & Certificate', help: 'Written + practical checks. Pass to open your certificate.', purpose: 'Eye Spy needs 100%. Exam tries are limited.', unit: 7 },
-  { n: 22, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 7 },
+  { n: 19, title: 'Instructor Observation', help: 'Rehearse competent skill order before a real instructor check.', purpose: 'Learned → Practised → Competent under real observation.', unit: 9 },
+  { n: 20, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Daily judgment, notes, and site feedback.', unit: 9 },
+  { n: 21, title: 'Final Exam & Certificate', help: 'Written + practical checks. Pass to open your certificate.', purpose: 'Eye Spy needs 100%. Exam tries are limited.', unit: 9 },
+  { n: 22, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 9 },
 ] as const
 
 /** Total stations on the shared school path (Visual Vocabulary → Language Organize → Eye Spy → …). */
@@ -55,9 +55,11 @@ export const LEARNING_UNITS = [
   { id: 2, label: 'Find your path', range: '3–5' },
   { id: 3, label: 'Words → Pictures', range: '6–8' },
   { id: 4, label: 'Sentences → Site English', range: '9–12' },
-  { id: 5, label: 'Specialize & site ready', range: '13–17' },
-  { id: 6, label: 'Video · Warehouse Equipment', range: '18' },
-  { id: 7, label: 'Work ready', range: '19–22' },
+  { id: 5, label: 'Specialize', range: '13' },
+  { id: 6, label: 'Basic Computer Skills', range: '14' },
+  { id: 7, label: 'Site ready', range: '15–17' },
+  { id: 8, label: 'Video · Warehouse Equipment', range: '18' },
+  { id: 9, label: 'Work ready', range: '19–22' },
 ] as const
 
 /** Unit goals — shown at the start of each learning unit (Duolingo/Khan clarity). */
@@ -92,23 +94,36 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   5: {
-    goal: 'Specialize with a deeper interest inventory, then build Basic Computer Skills, safety, tool, and systems foundations.',
+    goal: 'Specialize with a deeper interest inventory after real practice.',
     outcomes: [
       'Complete the interest assessment after practice',
-      'Finish Basic Computer Skills — power, mouse, folders, save, Word, and email',
-      'Pass required safety checks',
-      'Name tool groups and building systems',
+      'See how your interests fit Construction, Logistics, or Community Support',
     ],
   },
   6: {
+    goal: 'Basic Computer Skills — first-computer lessons shared on every pathway.',
+    outcomes: [
+      'Open Unit 6: Basic Computer Skills (step 14) on Construction, Logistics, or Community',
+      'Watch, try, and check: power, mouse, folders, save, Word, and email',
+      'Use simple English — Watch → Try → Remember → one check',
+    ],
+  },
+  7: {
+    goal: 'Build safety, tool, and systems foundations Alberta workplaces expect.',
+    outcomes: [
+      'Pass required safety checks',
+      'Name tool groups and workplace systems',
+    ],
+  },
+  8: {
     goal: 'Watch the Video section — warehouse equipment familiarization before hands-on training.',
     outcomes: [
-      'Open the dedicated Video · Warehouse Equipment station',
+      'Open the dedicated Video · Warehouse Equipment station (Logistics · step 18)',
       'Watch each machine lesson: know, inspect, protect',
       'Stay clear of powered equipment unless certified elsewhere',
     ],
   },
-  7: {
+  9: {
     goal: 'Show ready-for-work habits: observation, site notes, exam, and employment next steps.',
     outcomes: [
       'Prepare for instructor observation',
@@ -1607,19 +1622,56 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
       teachWrong: 'Follow short English directions on site.',
     },
   ],
-  5: [
+  6: [
     {
-      id: 'uc5-1',
-      prompt: 'Required form fields must be…',
-      emoji: 'F',
+      id: 'uc6-1',
+      prompt: 'How do you turn a computer OFF safely?',
+      emoji: 'C',
       imageKey: 'tape-measure',
-      options: ['Filled before submit', 'Left blank', 'Someone else’s password', 'Skipped forever'],
-      answer: 'Filled before submit',
-      teachCorrect: 'Complete required fields carefully.',
-      teachWrong: 'Required fields cannot stay blank.',
+      options: [
+        'Start → Power → Shut down',
+        'Pull the power cord while it works',
+        'Hit the screen',
+        'Never turn it off',
+      ],
+      answer: 'Start → Power → Shut down',
+      teachCorrect: 'Use Shut down from the Start menu.',
+      teachWrong: 'Use Start → Power → Shut down. Do not pull the plug.',
     },
     {
-      id: 'uc5-2',
+      id: 'uc6-2',
+      prompt: 'A clear file name helps you…',
+      emoji: 'F',
+      imageKey: 'tape-measure',
+      options: [
+        'Find your work later',
+        'Hide your password',
+        'Skip saving',
+        'Delete the folder',
+      ],
+      answer: 'Find your work later',
+      teachCorrect: 'Clear names save time later.',
+      teachWrong: 'Use a clear name so you can find the file again.',
+    },
+    {
+      id: 'uc6-3',
+      prompt: 'What is a safe habit for your school password?',
+      emoji: 'P',
+      imageKey: 'ppe',
+      options: [
+        'Keep it private and do not share it',
+        'Write it on the shop wall',
+        'Text it to a stranger',
+        'Post it online',
+      ],
+      answer: 'Keep it private and do not share it',
+      teachCorrect: 'Passwords stay private.',
+      teachWrong: 'Never share or post passwords.',
+    },
+  ],
+  7: [
+    {
+      id: 'uc7-1',
       prompt: 'Stop-work authority means…',
       emoji: '!',
       imageKey: 'ppe',
@@ -1634,7 +1686,7 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
       teachWrong: 'You can stop work when something looks unsafe.',
     },
     {
-      id: 'uc5-3',
+      id: 'uc7-2',
       prompt: 'Drills and saws belong to which group?',
       emoji: 'PT',
       imageKey: 'drill',
@@ -1644,7 +1696,7 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
       teachWrong: 'Drill and saw are power tools.',
     },
     {
-      id: 'uc5-4',
+      id: 'uc7-3',
       prompt: 'Framing is…',
       emoji: 'FR',
       imageKey: 'level',
@@ -1659,9 +1711,9 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
       teachWrong: 'Framing is the building skeleton.',
     },
   ],
-  7: [
+  9: [
     {
-      id: 'uc6-1',
+      id: 'uc9-1',
       prompt: 'Competent observation means…',
       emoji: 'O',
       imageKey: 'hard-hat',
@@ -1676,7 +1728,7 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
       teachWrong: 'Show the correct steps for the instructor.',
     },
     {
-      id: 'uc6-2',
+      id: 'uc9-2',
       prompt: 'A good site log includes…',
       emoji: 'L',
       imageKey: 'tape-measure',
@@ -1691,7 +1743,7 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
       teachWrong: 'Log date, tasks, and who supervised you.',
     },
     {
-      id: 'uc6-3',
+      id: 'uc9-3',
       prompt: 'In an interview, lead with…',
       emoji: 'P',
       imageKey: 'ppe',

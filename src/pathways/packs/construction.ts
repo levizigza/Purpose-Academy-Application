@@ -55,21 +55,35 @@ export const constructionPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Build Basic Computer Skills, safety, tool, and systems foundations Alberta construction sites expect.',
+      goal: 'Specialize with a deeper interest inventory after Construction practice.',
       outcomes: [
-        'Finish Basic Computer Skills — watch, try, and check each simple computer lesson',
+        'Complete the interest assessment after practice',
+        'See how your interests fit Construction specialization',
+      ],
+    },
+    6: {
+      goal: 'Unit 6 · Basic Computer Skills — same station on Construction, Logistics, and Community.',
+      outcomes: [
+        'Open Basic Computer Skills (step 14) on this pathway',
+        'Watch, try, and check: power, mouse, folders, save, Word, and email',
+        'Use simple English — Watch → Try → Remember → one check',
+      ],
+    },
+    7: {
+      goal: 'Build safety, tool, and systems foundations Alberta construction sites expect.',
+      outcomes: [
         'Pass required safety checks',
         'Name tool groups and construction systems',
       ],
     },
-    6: {
+    8: {
       goal: 'Open the Video section (Warehouse Equipment) when training on Logistics — Construction continues to observation.',
       outcomes: [
-        'Know where the dedicated Video · Warehouse Equipment station lives (Logistics · step 18)',
+        'Know where Unit 8 · Video · Warehouse Equipment lives (Logistics · step 18)',
         'Continue Construction into instructor observation when ready',
       ],
     },
-    7: {
+    9: {
       goal: 'Prove site readiness under observation, then connect to construction employment support.',
       outcomes: [
         'Rehearse competent skill order with measurable steps',
@@ -96,8 +110,8 @@ export const constructionPack: PathwayPack = {
     },
     14: {
       title: 'Basic Computer Skills',
-      help: 'Twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
-      purpose: 'First-computer friendly. Level-4 English. Same station on every pathway.',
+      help: 'Unit 6 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
     },
     16: {
       title: 'Tools & Equipment',

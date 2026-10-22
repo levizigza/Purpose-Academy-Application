@@ -269,18 +269,19 @@ export function PracticeHub({
 
       <section className="ph-video-section ph-computer-section" aria-label="Basic Computer Skills">
         <div className="ph-video-section-inner ph-computer-section-inner">
-          <p className="ph-video-section-kicker">Basic Computer Skills</p>
-          <h2>First computer? Start here</h2>
+          <p className="ph-video-section-kicker">Shared unit · all pathways</p>
+          <h2>Basic Computer Skills</h2>
           <p>
-            Twelve short lessons on <strong>every pathway</strong> — step 14. Turn on/off, mouse, folders, save,
-            Word, and email. Watch a captioned video, try it yourself, then one check.
+            Its own unit on <strong>Construction, Logistics, and Community</strong> —{' '}
+            <strong>Unit 6 · Basic Computer Skills</strong> (step 14). Twelve short lessons: turn on/off, mouse,
+            folders, save, Word, and email. Watch, try, then one check.
           </p>
           <button
             type="button"
             className="btn btn-primary ph-video-section-btn"
             onClick={() => onOpenLesson(14)}
           >
-            Open Basic Computer Skills
+            Open Unit 6 · Basic Computer Skills
           </button>
         </div>
       </section>
@@ -290,7 +291,7 @@ export function PracticeHub({
           <p className="ph-video-section-kicker">Video section</p>
           <h2>Warehouse Equipment</h2>
           <p>
-            Fourteen machine lessons live in their own unit — <strong>Unit 6 · Video · Warehouse Equipment</strong>{' '}
+            Fourteen machine lessons live in their own unit — <strong>Unit 8 · Video · Warehouse Equipment</strong>{' '}
             (step 18) on the <strong>Logistics</strong> pathway. Watch each video before hands-on training.
           </p>
           <button
@@ -402,7 +403,9 @@ export function PracticeHub({
             return (
               <li
                 key={u.id}
-                className={`ph-unit is-${state}${expanded ? ' is-open' : ''}${u.id === 6 ? ' is-video-unit' : ''}`}
+                className={`ph-unit is-${state}${expanded ? ' is-open' : ''}${
+                  u.id === 6 ? ' is-computer-unit' : ''
+                }${u.id === 8 ? ' is-video-unit' : ''}`}
               >
                 <button
                   type="button"
@@ -411,12 +414,12 @@ export function PracticeHub({
                   onClick={() => toggleUnit(u.id)}
                 >
                   <span className="ph-unit-badge" aria-hidden>
-                    {state === 'done' ? '✓' : u.id === 6 ? '▶' : u.id}
+                    {state === 'done' ? '✓' : u.id === 6 ? 'C' : u.id === 8 ? '▶' : u.id}
                   </span>
                   <span className="ph-unit-titles">
                     <span className="ph-unit-title-row">
                       <strong>
-                        {u.id === 6 ? u.label : `Unit ${u.id}: ${u.label}`}
+                        {u.id === 6 || u.id === 8 ? u.label : `Unit ${u.id}: ${u.label}`}
                       </strong>
                       <span className={`ph-status is-${state}`}>{statusLabel}</span>
                     </span>

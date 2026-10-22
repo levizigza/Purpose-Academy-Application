@@ -2418,7 +2418,7 @@ export function StudentSequencePage() {
             <h2>Video section · Warehouse Equipment</h2>
             <p className="lede">
               The fourteen machine lessons (forklift, pallet jack, scanner, and more) are their own unit —{' '}
-              <strong>Unit 6 · Video · Warehouse Equipment</strong> on <strong>Logistics</strong>. Switch pathways
+              <strong>Unit 8 · Video · Warehouse Equipment</strong> on <strong>Logistics</strong>. Switch pathways
               to watch them, or continue this pathway to instructor observation.
             </p>
             <div className="hero-actions">

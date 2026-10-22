@@ -47,22 +47,36 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Build Basic Computer Skills, safety, equipment, and systems foundations every warehouse expects.',
+      goal: 'Specialize with a deeper interest inventory after Logistics practice.',
       outcomes: [
-        'Finish Basic Computer Skills — watch, try, and check each simple computer lesson',
+        'Complete the interest assessment after practice',
+        'See how your interests fit Logistics specialization',
+      ],
+    },
+    6: {
+      goal: 'Unit 6 · Basic Computer Skills — same station on Construction, Logistics, and Community.',
+      outcomes: [
+        'Open Basic Computer Skills (step 14) on this pathway',
+        'Watch, try, and check: power, mouse, folders, save, Word, and email',
+        'Use simple English — Watch → Try → Remember → one check',
+      ],
+    },
+    7: {
+      goal: 'Build safety, equipment, and systems foundations every warehouse expects.',
+      outcomes: [
         'Pass required safety checks',
         'Name equipment groups and logistics systems (receive → store → pick → ship)',
       ],
     },
-    6: {
+    8: {
       goal: 'Video section — watch warehouse equipment familiarization before floor training.',
       outcomes: [
-        'Open Unit 6: Video · Warehouse Equipment (step 18)',
+        'Open Unit 8: Video · Warehouse Equipment (step 18)',
         'Watch each machine lesson: know, inspect, protect',
         'Stay clear of powered lift trucks unless certified elsewhere',
       ],
     },
-    7: {
+    9: {
       goal: 'Prove floor readiness under observation, then connect to logistics employment support.',
       outcomes: [
         'Rehearse competent skill order with measurable steps',
@@ -89,8 +103,8 @@ export const logisticsPack: PathwayPack = {
     },
     14: {
       title: 'Basic Computer Skills',
-      help: 'Twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
-      purpose: 'First-computer friendly. Level-4 English. Same station on every pathway.',
+      help: 'Unit 6 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
     },
     16: {
       title: 'Equipment & Materials',
@@ -104,7 +118,7 @@ export const logisticsPack: PathwayPack = {
     },
     18: {
       title: 'Video · Warehouse Equipment',
-      help: 'Video section — fourteen short lessons. Watch each machine: know it, inspect it, protect the area. Powered lift trucks are stay-clear awareness only.',
+      help: 'Unit 8 · Video section — fourteen short lessons. Watch each machine: know it, inspect it, protect the area. Powered lift trucks are stay-clear awareness only.',
       purpose: 'Dedicated Video unit after systems — before observation and floor training.',
     },
     20: {

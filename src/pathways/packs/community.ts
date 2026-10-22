@@ -201,21 +201,35 @@ export const communityPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Build Basic Computer Skills, safety, tool, and systems foundations community support roles expect.',
+      goal: 'Specialize with a deeper interest inventory after Community practice.',
       outcomes: [
-        'Finish Basic Computer Skills — watch, try, and check each simple computer lesson',
+        'Complete the interest assessment after practice',
+        'See how your interests fit Community Support specialization',
+      ],
+    },
+    6: {
+      goal: 'Unit 6 · Basic Computer Skills — same station on Construction, Logistics, and Community.',
+      outcomes: [
+        'Open Basic Computer Skills (step 14) on this pathway',
+        'Watch, try, and check: power, mouse, folders, save, Word, and email',
+        'Use simple English — Watch → Try → Remember → one check',
+      ],
+    },
+    7: {
+      goal: 'Build safety, tool, and systems foundations community support roles expect.',
+      outcomes: [
         'Pass required privacy, hygiene, and safeguarding checks',
         'Name support tools and community systems',
       ],
     },
-    6: {
+    8: {
       goal: 'Video section lives on Logistics (Warehouse Equipment). Community continues to observation.',
       outcomes: [
-        'Know Unit 6: Video · Warehouse Equipment is the Logistics video station (step 18)',
+        'Know Unit 8: Video · Warehouse Equipment is the Logistics video station (step 18)',
         'Continue Community into instructor observation when ready',
       ],
     },
-    7: {
+    9: {
       goal: 'Prove readiness under observation, then connect to community-support employment.',
       outcomes: [
         'Rehearse competent support skill order',
@@ -232,8 +246,8 @@ export const communityPack: PathwayPack = {
     },
     14: {
       title: 'Basic Computer Skills',
-      help: 'Twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
-      purpose: 'First-computer friendly. Level-4 English. Same station on every pathway.',
+      help: 'Unit 6 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
     },
     16: {
       title: 'Support Tools & Materials',
@@ -247,7 +261,7 @@ export const communityPack: PathwayPack = {
     },
     18: {
       title: 'Video · Warehouse Equipment',
-      help: 'The Video section (warehouse machine lessons) is on Logistics. Stay here for Community observation, or switch pathways to watch the videos.',
+      help: 'Unit 8 · Video section (warehouse machine lessons) is on Logistics. Stay here for Community observation, or switch pathways to watch the videos.',
       purpose: 'Bridge from systems knowledge — Video unit is Logistics; Community continues to observation.',
     },
     20: {
