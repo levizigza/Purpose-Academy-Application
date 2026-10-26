@@ -428,6 +428,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-26 — Phone home icon: full doorway P, smaller + centered (L3/L4)
+
+- **Defect:** `logo-app-icon.png` was a tight doorway crop — top of the P, right bowl, and base clipped by the SpringBoard squircle. Tile also read oversized for a sparse home.
+- **Fix:** Rebuild from `logo-full` (P + spill only, cut before wordmark), place in 512² with ~18% safe inset so the full letter clears the ~22.5% mask. Home tile ~48px, optically centered on the stage. `scripts/bake-app-icon.mjs` regenerates the asset.
+- **Assumption to challenge next:** whether optical center should bias slightly left (door weight) vs geometric center of the P+door bounding box.
+
 ### 2026-10-26 — VocabSheet contrast + phone demo legibility (L3)
 
 - **Defect:** `.vocab-sheet-card-focus` forced light text while lang chips stayed `#f5f8fc` → Amharic/Tigrinya glosses unreadable on demos. Five-column lang grid ignored phone container (viewport `@media` never fired inside emulator).
