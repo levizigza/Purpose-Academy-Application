@@ -2079,12 +2079,7 @@ export function StudentSequencePage() {
   if (step === 12) {
     return (
       <Shell step={12} onBack={() => { resetInstr(); go(11) }}>
-        <WhyWork>
-          This may be your first computer. Short videos. Simple English. Then you try each step yourself.
-        </WhyWork>
-        <TeachNote>
-          Pattern for every lesson: Watch → Try → Remember → one check. Wrong answers teach. Take your time.
-        </TeachNote>
+        {/* Drill first — At work / Teach note used to push Watch/Try below the phone fold */}
         <ComputerSkillsDrill
           onComplete={() =>
             requestPracticeAdvance(() =>
@@ -2100,6 +2095,15 @@ export function StudentSequencePage() {
               : undefined
           }
         />
+        <details className="station-context-fold">
+          <summary>Why this station · teach note</summary>
+          <WhyWork>
+            This may be your first computer. Short videos. Simple English. Then you try each step yourself.
+          </WhyWork>
+          <TeachNote>
+            Pattern for every lesson: Watch → Try → Remember → one check. Wrong answers teach. Take your time.
+          </TeachNote>
+        </details>
       </Shell>
     )
   }
