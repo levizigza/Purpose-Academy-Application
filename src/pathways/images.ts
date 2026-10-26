@@ -130,7 +130,8 @@ export function pathwayImage(key?: string | null): string | undefined {
     return `${base}media/construction-vv/${key}.jpg`
   }
   // Community Support Visual Vocabulary (499 live / slot 176 reserved).
-  // Interim studio word tiles until worksheet photos are extracted from the PDF.
+  // Community VV tiles — Eye Spy / early words use remaster object cues;
+  // remaining slots stay word cards until the worksheet PDF is extracted.
   if (key.startsWith('com-vv-')) {
     const base = import.meta.env.BASE_URL || '/'
     return `${base}media/community-vv/${key}.jpg`

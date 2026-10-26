@@ -17,11 +17,19 @@ type Mode = 'exercise' | 'exam'
 const CLEAR_ALL_INSTRUCTION =
   'Tap a picture on the job site, then tap its English name. A correct pair disappears. Clear the whole board to move on.'
 
+function bakedSceneUrl(pathwayId: PathwayId | undefined, scene: EyeSpyScene) {
+  if (!pathwayId || !scene?.id) return undefined
+  const base = import.meta.env.BASE_URL || '/'
+  return `${base}media/eye-spy/${pathwayId}-${scene.id}.jpg`
+}
+
 function atmosphereFor(pathwayId: PathwayId | undefined, sceneIdx: number, scene: EyeSpyScene) {
   if (scene.sceneBgKey) {
     const keyed = pathwayImage(scene.sceneBgKey)
     if (keyed) return keyed
   }
+  const baked = bakedSceneUrl(pathwayId, scene)
+  if (baked) return baked
   const pack = pathwayId ? EYE_SPY_ATMOSPHERE[pathwayId] : undefined
   if (!pack?.length) return undefined
   return pack[sceneIdx % pack.length]
@@ -83,6 +91,8 @@ export function EyeSpyQuiz({
   const maxAttempts = mode === 'exam' ? ATTEMPT_POLICY.examMax : null
   const sceneBg = scene ? atmosphereFor(pathwayId, sceneIdx, scene) : undefined
   const sceneMode = Boolean(sceneBg)
+  /** Baked floors already include the tool photos — hotspots are transparent taps. */
+  const bakedMode = Boolean(scene && pathwayId && !scene.sceneBgKey && sceneBg?.includes('/media/eye-spy/'))
 
   useEffect(() => {
     window.dispatchEvent(new Event('pa-quiz-start'))
@@ -264,19 +274,19 @@ export function EyeSpyQuiz({
       )}
 
       <div
-        className={`eye-spy-stage${sceneMode ? ' is-scene' : ' is-tiles'}`}
+        className={`eye-spy-stage${sceneMode ? ' is-scene' : ' is-tiles'}${bakedMode ? ' is-baked' : ''}`}
         role="group"
         aria-label={
           sceneMode
-            ? 'Job-site photo board. Tap a tool picture, then tap its English name'
+            ? 'Job-site photo board. Tap a tool in the picture, then tap its English name'
             : 'Photo board. Tap a picture, then tap its English name'
         }
         style={sceneMode && sceneBg ? { backgroundImage: `url(${sceneBg})` } : undefined}
       >
-        {sceneMode ? <span className="eye-spy-scene-veil" aria-hidden /> : null}
+        {sceneMode && !bakedMode ? <span className="eye-spy-scene-veil" aria-hidden /> : null}
         {scene.hotspots.map((h, index) => {
           if (foundSet.has(h.id)) return null
-          const img = pathwayImage(h.imageKey)
+          const img = bakedMode ? undefined : pathwayImage(h.imageKey)
           const selected = pickedHotspot === h.id
           const style = sceneMode
             ? {
@@ -290,13 +300,15 @@ export function EyeSpyQuiz({
             <button
               key={`${scene.id}-${h.id}`}
               type="button"
-              className={`eye-spy-hotspot${selected ? ' is-selected' : ''}${wrongPair && selected ? ' is-wrong' : ''}`}
+              className={`eye-spy-hotspot${bakedMode ? ' is-baked-tap' : ''}${selected ? ' is-selected' : ''}${
+                wrongPair && selected ? ' is-wrong' : ''
+              }`}
               style={style}
               onClick={() => phase === 'play' && setPickedHotspot(h.id)}
               disabled={phase !== 'play'}
               aria-label={h.label || `Tool spot ${index + 1}`}
             >
-              {img ? <img src={img} alt="" /> : <span>{h.label}</span>}
+              {img ? <img src={img} alt="" /> : bakedMode ? <span className="sr-only">{h.label}</span> : <span>{h.label}</span>}
             </button>
           )
         })}

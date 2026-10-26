@@ -413,7 +413,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Optics + attention ethics (path stage) | L3/L4 | Done — iterate |
 | Site-wide craft layers (doctrine + sweep) | L1–L6 | Done (this climb) — keep sweeping |
 | Pathway-aware foley beds | L2/L3 | Open |
-| Eye Spy photography upgrade | L2/L3 | Climbing — atmosphere floors + positioned callouts (2026-10-26); true single-photo hotspots still open |
+| Eye Spy photography upgrade | L2/L3 | Done for showcase — baked single-photo floors + transparent taps (2026-10-26); PDF worksheet crops still welcome |
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
@@ -425,6 +425,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 ---
 
 ## 11. Changelog (living)
+
+### 2026-10-26 — Iconic 100%: baked Eye Spy floors + Community object photos (L2 / L3)
+
+- **Layers:** L2 content delivery + L3 information display (last Iconic showcase gate).
+- **Defect:** Eye Spy still floated separate tool mats on atmosphere (not one photo). Community VV Eye Spy / early words were interim navy word cards (`Volunteer`), not workplace objects. Source Community PDF still absent — object cues use remastered `com-*` photos mapped to roles/places.
+- **Fix:** `scripts/bake-eye-spy-scenes.py` composites tools into `public/media/eye-spy/{pathway}-{scene}.jpg`; quiz uses transparent tap regions on baked floors (`.is-baked`). `scripts/upgrade-community-vv-photos.py` replaces 40 Eye Spy / early `com-vv-*` word cards with studio-padded remaster object photos (welcome desk, clipboard, first-aid, wheelchair, …).
+- **Assumption to challenge next:** when the Community Service Visual Vocabulary PDF arrives, re-extract true worksheet object crops over the role→object cue map.
 
 ### 2026-10-26 — Eye Spy workplace atmosphere floors (L3 / Iconic)
 
