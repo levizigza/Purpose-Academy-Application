@@ -14,6 +14,8 @@ type Props = {
   currentStep: number
   practice?: boolean
   compact?: boolean
+  /** Collapse the full unit list so the lesson stays above the fold (phone + practice review). */
+  collapsedByDefault?: boolean
   onSelectLesson?: (step: number) => void
   onOpenHub?: () => void
 }
@@ -26,7 +28,14 @@ function levelClass(level: MasteryLevel) {
  * Linear learning path — units as stations, lessons as a clear “you are here” trail.
  * Practice marks serve craft (L4), not streak FOMO.
  */
-export function LearningPathMap({ currentStep, practice, compact, onSelectLesson, onOpenHub }: Props) {
+export function LearningPathMap({
+  currentStep,
+  practice,
+  compact,
+  collapsedByDefault = false,
+  onSelectLesson,
+  onOpenHub,
+}: Props) {
   const [, bump] = useState(0)
   useEffect(() => {
     const sync = () => bump((n) => n + 1)
@@ -36,9 +45,29 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
 
   const currentUnit = unitForStep(currentStep)
   const stats = getPlatformStats()
+  const unitPct = unitMasteryPercent(stepsInUnit(currentUnit.id))
 
   return (
-    <section className={`learning-path-map${compact ? ' is-compact' : ''}${practice ? ' is-practice' : ''}`} aria-label="Learning path">
+    <details
+      className={`learning-path-map${compact ? ' is-compact' : ''}${practice ? ' is-practice' : ''}${
+        collapsedByDefault ? ' is-fold' : ''
+      }`}
+      aria-label="Learning path"
+      open={collapsedByDefault ? undefined : true}
+    >
+      <summary className="lp-fold-summary">
+        <span className="lp-kicker">{practice ? 'Student Practice · path' : 'Your learning path'}</span>
+        <strong className="lp-fold-title">
+          Unit {currentUnit.id}: {currentUnit.label}
+        </strong>
+        <span className="lp-fold-meta">
+          {unitPct}% mastery
+          {practice ? ` · ${stats.xp} marks` : ''}
+          {' · '}
+          {collapsedByDefault ? 'Show full path' : 'Path'}
+        </span>
+      </summary>
+
       <header className="lp-head">
         <div>
           <p className="lp-kicker">{practice ? 'Student Practice · full school path' : 'Your learning path'}</p>
@@ -48,7 +77,7 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
         </div>
         <div className="lp-head-meta">
           <p className="lp-mastery" aria-label="Unit mastery">
-            Unit mastery <strong>{unitMasteryPercent(stepsInUnit(currentUnit.id))}%</strong>
+            Unit mastery <strong>{unitPct}%</strong>
           </p>
           {practice && (
             <p className="lp-xp" aria-label="Practice marks">
@@ -130,7 +159,7 @@ export function LearningPathMap({ currentStep, practice, compact, onSelectLesson
           )
         })}
       </ol>
-    </section>
+    </details>
   )
 }
 
@@ -150,9 +179,12 @@ export function UnitIntroCard({
 }) {
   const unit = LEARNING_UNITS.find((u) => u.id === unitId) || LEARNING_UNITS[0]
   return (
-    <article className="unit-intro-card" aria-label={`Unit ${unitId} introduction`}>
-      <p className="unit-intro-kicker">Unit {unit.id} · {unit.label}</p>
-      <h3>What you will learn</h3>
+    <details className="unit-intro-card" aria-label={`Unit ${unitId} introduction`}>
+      <summary className="unit-intro-summary">
+        <span className="unit-intro-kicker">Unit {unit.id} · {unit.label}</span>
+        <strong>What you will learn</strong>
+        <span className="unit-intro-summary-hint">Tap for goals</span>
+      </summary>
       <p className="unit-intro-goal">{goal}</p>
       <ul className="unit-intro-outcomes">
         {outcomes.map((o) => (
@@ -162,6 +194,6 @@ export function UnitIntroCard({
       <p className="unit-intro-method">
         Pattern: learn, try, get feedback, retry until solid. Then move forward.
       </p>
-    </article>
+    </details>
   )
 }

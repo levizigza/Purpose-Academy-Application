@@ -315,42 +315,46 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
                 Done for now
               </Link>
             )}
-            <FoleyToggle compact />
+            {/* Phone emulator chrome already has Practice sounds — hide the duplicate icon that overlaps hub buttons. */}
+            <FoleyToggle compact className="train-inline-foley" />
           </div>
         </div>
         {practice && onJumpLesson && (
-          <nav className="practice-section-skip" aria-label="Skip between sections for quality review">
-            <button
-              type="button"
-              className="btn btn-ghost practice-section-skip-btn"
-              disabled={step <= PRACTICE_ENTRY_STEP}
-              onClick={() => onJumpLesson(Math.max(PRACTICE_ENTRY_STEP, step - 1))}
-            >
-              Prev section
-            </button>
-            <label className="practice-section-skip-jump">
-              <span>Jump to section</span>
-              <select
-                value={step}
-                onChange={(e) => onJumpLesson(Number(e.target.value))}
-                aria-label="Jump to any practice section"
+          <details className="practice-section-skip-fold">
+            <summary className="practice-section-skip-summary">Jump sections (review)</summary>
+            <nav className="practice-section-skip" aria-label="Skip between sections for quality review">
+              <button
+                type="button"
+                className="btn btn-ghost practice-section-skip-btn"
+                disabled={step <= PRACTICE_ENTRY_STEP}
+                onClick={() => onJumpLesson(Math.max(PRACTICE_ENTRY_STEP, step - 1))}
               >
-                {jumpSteps.map((s) => (
-                  <option key={s.n} value={s.n}>
-                    {s.n}. {s.title}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button
-              type="button"
-              className="btn btn-ghost practice-section-skip-btn"
-              disabled={step >= JOURNEY_STEP_COUNT}
-              onClick={() => onJumpLesson(Math.min(JOURNEY_STEP_COUNT, step + 1))}
-            >
-              Next section
-            </button>
-          </nav>
+                Prev section
+              </button>
+              <label className="practice-section-skip-jump">
+                <span>Jump to section</span>
+                <select
+                  value={step}
+                  onChange={(e) => onJumpLesson(Number(e.target.value))}
+                  aria-label="Jump to any practice section"
+                >
+                  {jumpSteps.map((s) => (
+                    <option key={s.n} value={s.n}>
+                      {s.n}. {s.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                type="button"
+                className="btn btn-ghost practice-section-skip-btn"
+                disabled={step >= JOURNEY_STEP_COUNT}
+                onClick={() => onJumpLesson(Math.min(JOURNEY_STEP_COUNT, step + 1))}
+              >
+                Next section
+              </button>
+            </nav>
+          </details>
         )}
         <h1 className="train-title">{title}</h1>
         <p className="train-simple-line">{help}</p>
@@ -376,15 +380,9 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             return <li key={s.n} className={cls} title={skipped ? `${s.title} (skipped in practice)` : s.title} />
           })}
         </ol>
-        <LearningPathMap
-          currentStep={step}
-          practice={practice}
-          compact
-          onOpenHub={onOpenHub}
-          onSelectLesson={practice ? onJumpLesson : undefined}
-        />
       </header>
 
+      {/* Task / media first (L3). Path map used to sit above the lesson and ate the phone viewport. */}
       <Reveal className="train-panel" delay={40}>
         {isUnitEntryStep(step) && getPathwayUnitGoal(unit.id) && (
           <UnitIntroCard
@@ -414,6 +412,15 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
           </button>
         )}
       </div>
+
+      <LearningPathMap
+        currentStep={step}
+        practice={practice}
+        compact
+        collapsedByDefault
+        onOpenHub={onOpenHub}
+        onSelectLesson={practice ? onJumpLesson : undefined}
+      />
       {masteryBlocked && (
         <p className="train-mastery-gate" role="status">
           {masteryBlocked} Keep answering until this lesson is Familiar.
@@ -961,7 +968,10 @@ export function StudentSequencePage() {
       setTransitioning(false)
       if (pathwayId === 'construction') playFoley('ambient-stop')
       playFoley('whoosh')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: 'auto' })
+      /* Phone mode scrolls inside .iphone-scroll — window scroll alone leaves the lesson mid-fold */
+      const phoneScroll = document.querySelector('.iphone-scroll')
+      if (phoneScroll instanceof HTMLElement) phoneScroll.scrollTop = 0
     }, 900)
   }
 

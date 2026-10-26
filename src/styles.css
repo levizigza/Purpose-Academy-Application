@@ -5413,10 +5413,37 @@ table.data th {
 
 .unit-intro-card {
   margin: 0 0 1rem;
-  padding: 1rem 1.1rem;
+  padding: 0.75rem 1.1rem 1rem;
   border-radius: 16px;
   background: linear-gradient(145deg, rgba(26, 79, 138, 0.35), rgba(15, 36, 56, 0.92));
   border: 1px solid rgba(245, 197, 66, 0.28);
+}
+
+.unit-intro-summary {
+  cursor: pointer;
+  list-style: none;
+  display: grid;
+  gap: 0.12rem;
+  margin: 0 0 0.35rem;
+}
+
+.unit-intro-summary::-webkit-details-marker {
+  display: none;
+}
+
+.unit-intro-summary strong {
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+.unit-intro-summary-hint {
+  font-size: 0.78rem;
+  color: rgba(244, 247, 251, 0.65);
+  font-weight: 600;
+}
+
+.unit-intro-card[open] .unit-intro-summary-hint {
+  display: none;
 }
 
 .unit-intro-kicker {
@@ -10134,18 +10161,76 @@ video {
   margin: 0.5rem 0;
 }
 
-/* Practice quality-review: jump any section without finishing the quiz */
+/* Practice quality-review: jump any section — collapsed by default so the lesson owns the first viewport */
+.practice-section-skip-fold {
+  margin: 0.45rem 0 0.2rem;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 163, 23, 0.35);
+  background: rgba(11, 47, 92, 0.45);
+}
+
+.practice-section-skip-summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--train-amber-bright, #f5c542);
+}
+
+.practice-section-skip-summary::-webkit-details-marker {
+  display: none;
+}
+
+.practice-section-skip-fold[open] .practice-section-skip-summary {
+  border-bottom: 1px solid rgba(232, 163, 23, 0.25);
+}
+
 .practice-section-skip {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.45rem 0.65rem;
-  margin: 0.55rem 0 0.15rem;
+  margin: 0;
   padding: 0.45rem 0.55rem;
-  border-radius: 10px;
-  border: 1px solid rgba(232, 163, 23, 0.35);
-  background: rgba(11, 47, 92, 0.45);
+  border-radius: 0 0 10px 10px;
+  border: none;
+  background: transparent;
   overflow-x: auto;
+}
+
+.learning-path-map.is-fold > .lp-fold-summary {
+  cursor: pointer;
+  list-style: none;
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.15rem 0.1rem 0.35rem;
+}
+
+.learning-path-map.is-fold > .lp-fold-summary::-webkit-details-marker {
+  display: none;
+}
+
+.learning-path-map.is-fold:not([open]) > .lp-head,
+.learning-path-map.is-fold:not([open]) > .lp-units {
+  display: none;
+}
+
+.learning-path-map.is-fold[open] > .lp-fold-summary .lp-fold-meta::after {
+  content: none;
+}
+
+.lp-fold-title {
+  font-size: 1.02rem;
+  color: #fff;
+  font-weight: 800;
+}
+
+.lp-fold-meta {
+  font-size: 0.82rem;
+  color: rgba(244, 247, 251, 0.75);
 }
 
 .practice-section-skip-btn {
@@ -11170,6 +11255,14 @@ video {
   scroll-margin-top: 1rem;
 }
 
+/* Reclaim header air so Watch/Try peeks above the fold on desktop too */
+.train-shell.is-computer-skills .train-dots,
+.train-shell.is-computer-skills .train-unit-pill,
+.train-shell.is-equipment-video .train-dots,
+.train-shell.is-equipment-video .train-unit-pill {
+  display: none;
+}
+
 .ph-computer-section-inner {
   border-color: color-mix(in srgb, #3d8fd1 55%, transparent);
   background:
@@ -12001,14 +12094,24 @@ video {
 }
 
 .is-phone-app .unit-intro-card h3,
+.is-phone-app .unit-intro-summary strong,
 .is-phone-app .unit-intro-goal,
 .is-phone-app .unit-intro-outcomes,
 .is-phone-app .unit-intro-outcomes li {
   color: var(--brand-deep) !important;
 }
 
+.is-phone-app .unit-intro-summary-hint {
+  color: var(--ink-soft) !important;
+}
+
 .is-phone-app .unit-intro-method {
   color: var(--brand) !important;
+}
+
+.is-phone-app .unit-intro-card {
+  margin-bottom: 0.65rem !important;
+  padding: 0.55rem 0.75rem 0.65rem !important;
 }
 
 /* Work-style / career quiz choices: night translucent → paper chips */
@@ -12629,7 +12732,13 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-phone-app .practice-hub {
   gap: 0.85rem !important;
   padding-top: 0.35rem !important;
-  padding-bottom: 2rem !important;
+  /* Pathway switch row was clipping against the home indicator */
+  padding-bottom: 2.75rem !important;
+}
+
+.is-phone-app .ph-pathway-switch {
+  margin-bottom: 0.75rem !important;
+  padding-bottom: 0.35rem !important;
 }
 
 .is-phone-app .ph-hero,
@@ -12887,31 +12996,52 @@ html.pa-phone-shell .practice-feedback-dock {
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
-  gap: 0.4rem !important;
+  gap: 0.35rem !important;
 }
 
 .is-phone-app .train-sound-slot {
-  display: flex !important;
-  flex-wrap: wrap !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
   gap: 0.35rem !important;
   width: 100%;
+  align-items: stretch;
+}
+
+/* Shell chrome already has Practice sounds — inner icon was overlapping Done for now on phone */
+.is-phone-app .train-inline-foley,
+.is-course-app .train-inline-foley,
+.pa-course-shell .train-inline-foley {
+  display: none !important;
 }
 
 .is-phone-app .train-hub-btn {
-  flex: 1 1 calc(50% - 0.35rem);
+  flex: 1 1 auto;
   min-width: 0;
+  width: 100%;
   font-size: 0.8rem !important;
-  padding: 0.5rem 0.55rem !important;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: unset;
+  padding: 0.45rem 0.5rem !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 1.2;
+  text-align: center;
+}
+
+.is-phone-app .practice-section-skip-fold {
+  background: color-mix(in srgb, var(--brand-soft) 70%, #fff) !important;
+  border-color: color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+}
+
+.is-phone-app .practice-section-skip-summary {
+  color: var(--brand) !important;
+  font-size: 0.8rem !important;
+  padding: 0.4rem 0.65rem !important;
 }
 
 .is-phone-app .practice-section-skip {
   display: grid !important;
   grid-template-columns: 1fr !important;
-  gap: 0.4rem !important;
+  gap: 0.35rem !important;
   width: 100%;
 }
 
@@ -12924,6 +13054,95 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-phone-app .practice-section-skip-jump select {
   width: 100%;
   max-width: 100%;
+}
+
+.is-phone-app .learning-path-map.is-fold > .lp-fold-summary {
+  color: var(--brand-deep);
+}
+
+.is-phone-app .lp-fold-title {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .lp-fold-meta {
+  color: var(--ink-soft) !important;
+}
+
+.is-phone-app .lp-fold-summary .lp-kicker {
+  color: var(--brand) !important;
+}
+
+/* Keep lesson + continue above the home indicator */
+.is-phone-app .train-shell {
+  padding-bottom: 1.25rem !important;
+}
+
+.is-phone-app .train-panel {
+  min-height: 0;
+}
+
+.is-phone-app .comp-skills-card,
+.is-phone-app .sentence-cloze-card,
+.is-phone-app .vocab-sheet,
+.is-phone-app .eye-spy-stage {
+  scroll-margin-top: 0.5rem;
+}
+
+/* Lesson rail: hide stacked scrollbars that read as grey bars on the phone */
+.is-phone-app .equip-video-rail {
+  max-height: none;
+  overflow: visible;
+  scrollbar-width: none;
+}
+
+.is-phone-app .equip-video-rail::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.is-phone-app .equip-video-layout {
+  grid-template-columns: 1fr !important;
+}
+
+/* Tighter station chrome so title + first task share the first phone screen */
+.is-phone-app .train-header {
+  padding: 0.45rem 0.65rem 0.25rem !important;
+}
+
+.is-phone-app .train-title {
+  font-size: 1.28rem !important;
+  margin: 0.3rem 0 0.15rem !important;
+  line-height: 1.15 !important;
+}
+
+.is-phone-app .train-simple-line {
+  font-size: 0.88rem !important;
+  margin: 0 0 0.25rem !important;
+  line-height: 1.35 !important;
+}
+
+/* Dots + unit pill duplicate the progress bar / title — reclaim vertical air for the task */
+.is-phone-app .train-dots {
+  display: none !important;
+}
+
+.is-phone-app .train-unit-pill {
+  display: none !important;
+}
+
+.is-phone-app .train-progress {
+  margin: 0.25rem 0 0.15rem !important;
+  height: 0.35rem !important;
+}
+
+.is-phone-app .practice-stats-strip {
+  margin: 0.15rem 0 !important;
+  gap: 0.35rem 0.65rem !important;
+  font-size: 0.8rem !important;
+}
+
+.is-phone-app .train-why-details {
+  margin: 0.15rem 0 !important;
 }
 
 .is-phone-app table {
