@@ -12990,6 +12990,25 @@ video {
   color: #f5c542 !important;
 }
 
+/* Dark fit island: body labels stay bright white; only the top row keeps gold */
+.is-phone-app .career-fit .career-profile-label,
+.is-phone-app .career-fit .career-profile-pct,
+.is-phone-app .career-profile .career-profile-label,
+.is-phone-app .career-profile .career-profile-pct,
+.is-course-app .career-fit .career-profile-label,
+.is-course-app .career-fit .career-profile-pct,
+.is-course-app .career-profile .career-profile-label,
+.is-course-app .career-profile .career-profile-pct {
+  color: #f4f7fb !important;
+}
+
+.is-phone-app .career-fit .career-profile-row.is-top .career-profile-label,
+.is-phone-app .career-profile .career-profile-row.is-top .career-profile-label,
+.is-course-app .career-fit .career-profile-row.is-top .career-profile-label,
+.is-course-app .career-profile .career-profile-row.is-top .career-profile-label {
+  color: #f5c542 !important;
+}
+
 /*
  * Paper ink lock (phone + course) — site-wide L3.
  * Night leftovers (#e8eef6 / pale #f5c542 / accent kickers) die on cream mats.
