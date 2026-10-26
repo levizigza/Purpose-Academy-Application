@@ -34,11 +34,14 @@ function usePhoneOrganizeLayout() {
     const read = () =>
       setPhone(
         document.documentElement.classList.contains('pa-phone-shell') ||
-          Boolean(document.querySelector('.is-phone-app')),
+          Boolean(document.querySelector('.is-phone-app, .pa-phone-shell, .iphone-scroll')),
       )
     read()
     const obs = new MutationObserver(read)
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'], subtree: true })
+    /* Phone frame mounts .is-phone-app after first paint — watch the shell tree too */
+    const shell = document.querySelector('.pa-phone-shell, .iphone-frame, #root') || document.body
+    obs.observe(shell, { attributes: true, attributeFilter: ['class'], childList: true, subtree: true })
     return () => obs.disconnect()
   }, [])
   return phone

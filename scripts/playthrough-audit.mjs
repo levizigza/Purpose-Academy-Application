@@ -135,7 +135,7 @@ async function measureFirstViewport(page, rootSel) {
 
     const lessonCandidates = [
       ...document.querySelectorAll(
-        '.comp-skills-card, .sentence-cloze-card, .vocab-sheet, .eye-spy, .eye-spy-stage, .career-assess, .train-panel > *',
+        '.comp-skills-card, .sentence-cloze-card, .vocab-sheet, .vocab-organize, .eye-spy, .eye-spy-stage, .career-assess, .train-panel > *',
       ),
     ]
     const lesson = lessonCandidates.find((el) => {
@@ -353,18 +353,49 @@ async function runMode(phone) {
     /* Language Organize: phone must not squeeze four boards into one row */
     if (/Language Organize/i.test(s) && phone) {
       const org = await page.evaluate(() => {
+        const scroll = document.querySelector('.iphone-scroll')
+        const viewH = scroll?.clientHeight || window.innerHeight
+        const viewTop = scroll?.getBoundingClientRect().top || 0
         const boards = [...document.querySelectorAll('.iphone-scroll .vocab-organize-board')]
         const widths = boards.map((el) => Math.round(el.getBoundingClientRect().width))
         const poolLabel = document.querySelector('.iphone-scroll .vocab-organize-pool-label')
-        const s = poolLabel ? getComputedStyle(poolLabel) : null
-        const rgb = s?.color.match(/\d+/g)?.map(Number)
+        const poolGrid = document.querySelector('.iphone-scroll .vocab-organize-pool-grid')
+        const poolPiece = document.querySelector('.iphone-scroll .vocab-organize-piece')
+        const why = document.querySelector('.iphone-scroll .train-why')
+        const teach = document.querySelector('.iphone-scroll .train-teach')
+        const labelStyle = poolLabel ? getComputedStyle(poolLabel) : null
+        const rgb = labelStyle?.color.match(/\d+/g)?.map(Number)
         const lum = rgb ? (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255 : null
+        const whyStrong = why?.querySelector('strong')
+        const whyRgb = whyStrong ? getComputedStyle(whyStrong).color.match(/\d+/g)?.map(Number) : null
+        const whyLum = whyRgb
+          ? (0.2126 * whyRgb[0] + 0.7152 * whyRgb[1] + 0.0722 * whyRgb[2]) / 255
+          : null
+        const pieceBox = poolPiece?.getBoundingClientRect()
+        const poolVisible =
+          pieceBox &&
+          pieceBox.bottom > viewTop + 8 &&
+          pieceBox.top < viewTop + viewH * 0.92 &&
+          pieceBox.height > 24
+        const whyBox = why?.getBoundingClientRect()
+        const whyBlocking =
+          why &&
+          getComputedStyle(why).display !== 'none' &&
+          whyBox &&
+          whyBox.top < viewTop + viewH * 0.55 &&
+          whyBox.height > 40
         return {
           boardCount: boards.length,
           widths,
           minWidth: widths.length ? Math.min(...widths) : 0,
           focusMode: Boolean(document.querySelector('.iphone-scroll .vocab-organize.is-phone-focus')),
           poolLum: lum,
+          whyLum,
+          poolVisible: Boolean(poolVisible),
+          whyBlocking: Boolean(whyBlocking),
+          teachVisible:
+            Boolean(teach) && getComputedStyle(teach).display !== 'none' && teach.getBoundingClientRect().height > 20,
+          hasPoolGrid: Boolean(poolGrid),
         }
       })
       if (!org.focusMode) {
@@ -378,6 +409,15 @@ async function runMode(phone) {
       }
       if (org.poolLum != null && org.poolLum > 0.55) {
         find(mode, 'med', 'Language Organize pool label still light ink on paper', org)
+      }
+      if (org.whyLum != null && org.whyLum > 0.55 && org.whyBlocking) {
+        find(mode, 'med', 'Language Organize At work label still light ink on paper', org)
+      }
+      if (!org.poolVisible) {
+        find(mode, 'high', 'Language Organize pictures not in first phone viewport', org)
+      }
+      if (org.whyBlocking || org.teachVisible) {
+        find(mode, 'high', 'Language Organize coaching chrome still blocking the phone fold', org)
       }
     }
 

@@ -11087,15 +11087,22 @@ video {
   gap: 0.65rem;
 }
 
+/* Counter already carries the job — drop the long help paragraph on phone */
 .is-phone-app .vocab-organize-help {
-  font-size: 0.88rem !important;
-  color: var(--ink-soft, #2f4156) !important;
-  line-height: 1.4 !important;
+  display: none !important;
 }
 
 .is-phone-app .vocab-organize .section-kicker,
 .is-course-app .vocab-organize .section-kicker {
   color: var(--brand, #0b2f5c) !important;
+}
+
+/* Paper shells: At work / Teach note labels must stay navy (pale gold fails demos) */
+.is-phone-app .train-why strong,
+.is-course-app .train-why strong,
+.is-phone-app .train-teach-label,
+.is-course-app .train-teach-label {
+  color: var(--brand-deep, #041526) !important;
 }
 
 .is-phone-app .vocab-organize-pool {
@@ -13632,16 +13639,18 @@ html.pa-phone-shell .practice-feedback-dock {
 
 /*
  * Task-first phone stations: hide coaching chrome that duplicates the header
- * so the picture / cloze / Watch panel clears the first viewport (L3).
+ * so the picture / cloze / Watch / Organize panel clears the first viewport (L3).
  */
 .is-phone-app .train-shell.is-computer-skills .unit-intro-card,
 .is-phone-app .train-shell.is-equipment-video .unit-intro-card,
 .is-phone-app .train-shell.is-visual-vocabulary .unit-intro-card,
+.is-phone-app .train-shell.is-organize-wide .unit-intro-card,
 .is-phone-app .train-shell.is-sentence-structure .unit-intro-card,
 .is-phone-app .train-shell.is-eye-spy .unit-intro-card,
 .is-phone-app .train-shell.is-computer-skills .station-context-fold,
 .is-phone-app .train-shell.is-equipment-video .station-context-fold,
 .is-phone-app .train-shell.is-visual-vocabulary .station-context-fold,
+.is-phone-app .train-shell.is-organize-wide .station-context-fold,
 .is-phone-app .train-shell.is-sentence-structure .station-context-fold,
 .is-phone-app .train-shell.is-eye-spy .station-context-fold {
   display: none !important;
@@ -13650,6 +13659,7 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-phone-app .train-shell.is-computer-skills .train-progress,
 .is-phone-app .train-shell.is-equipment-video .train-progress,
 .is-phone-app .train-shell.is-visual-vocabulary .train-progress,
+.is-phone-app .train-shell.is-organize-wide .train-progress,
 .is-phone-app .train-shell.is-sentence-structure .train-progress,
 .is-phone-app .train-shell.is-eye-spy .train-progress {
   display: none !important;
@@ -13658,14 +13668,24 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-phone-app .train-shell.is-computer-skills .train-why-details,
 .is-phone-app .train-shell.is-equipment-video .train-why-details,
 .is-phone-app .train-shell.is-visual-vocabulary .train-why-details,
+.is-phone-app .train-shell.is-organize-wide .train-why-details,
 .is-phone-app .train-shell.is-sentence-structure .train-why-details,
 .is-phone-app .train-shell.is-eye-spy .train-why-details {
+  display: none !important;
+}
+
+/* Organize: bare WhyWork/TeachNote must never sit above the picture strip */
+.is-phone-app .train-shell.is-organize-wide > .train-why,
+.is-phone-app .train-shell.is-organize-wide > .train-teach,
+.is-phone-app .train-shell.is-organize-wide .train-panel > .train-why,
+.is-phone-app .train-shell.is-organize-wide .train-panel > .train-teach {
   display: none !important;
 }
 
 .is-phone-app .train-shell.is-computer-skills .train-simple-line,
 .is-phone-app .train-shell.is-equipment-video .train-simple-line,
 .is-phone-app .train-shell.is-visual-vocabulary .train-simple-line,
+.is-phone-app .train-shell.is-organize-wide .train-simple-line,
 .is-phone-app .train-shell.is-sentence-structure .train-simple-line,
 .is-phone-app .train-shell.is-eye-spy .train-simple-line {
   font-size: 0.84rem !important;
@@ -13678,6 +13698,15 @@ html.pa-phone-shell .practice-feedback-dock {
 /* Header already carries the VV lede — drop the duplicate inside the sheet */
 .is-phone-app .train-shell.is-visual-vocabulary .vocab-sheet-lede {
   display: none !important;
+}
+
+/* Organize: keep sticky pictures + drop target in the first phone viewport */
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-head {
+  gap: 0.2rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-head .section-kicker {
+  font-size: 0.72rem !important;
 }
 
 /* Sentence Structure: head chrome before the photo/cloze steals the fold */

@@ -1717,17 +1717,22 @@ export function StudentSequencePage() {
     }
     return (
       <Shell step={7} onBack={() => go(6)}>
-        <WhyWork>
-          {pathwayId === 'logistics'
-            ? 'The same warehouse word has one English name and many home-language names. Hear a language, then drop the picture on that word.'
-            : 'The same tool has one English name and many home-language names. Hear a language, then drop the picture on that word.'}
-        </WhyWork>
-        <TeachNote>Five rounds. Each card already lists the word in every language. Move the matching picture into the empty box. Hear any language if you want help.</TeachNote>
         <VocabOrganizeQuiz
           terms={organizeTerms}
           onPassed={() => go(8, 'Opening English Eye Spy…')}
           onSkip={isPracticeMode() ? () => go(8, 'Opening English Eye Spy…') : undefined}
         />
+        <StationContext>
+          <WhyWork>
+            {pathwayId === 'logistics'
+              ? 'The same warehouse word has one English name and many home-language names. Hear a language, then drop the picture on that word.'
+              : 'The same tool has one English name and many home-language names. Hear a language, then drop the picture on that word.'}
+          </WhyWork>
+          <TeachNote>
+            Five rounds. Each card already lists the word in every language. Move the matching picture into the
+            empty box. Hear any language if you want help.
+          </TeachNote>
+        </StationContext>
       </Shell>
     )
   }
