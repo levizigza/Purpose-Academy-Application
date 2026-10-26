@@ -1,7 +1,10 @@
 /**
  * Bake logo-app-icon.png from logo-full.jpg.
- * Doorway P + light spill only (cut before wordmark), centered in 512²
+ * Doorway P + light spill only (cut before wordmark), optically centered in 512²
  * with ~18% safe inset so the SpringBoard ~22.5% squircle never clips the letter.
+ *
+ * Geometric bbox center leaves the mark heavy on the right (P bowl). We nudge
+ * so the ink mass center lands on the canvas center.
  */
 import sharp from 'sharp'
 import path from 'path'
@@ -58,6 +61,61 @@ const fitted = await sharp(extracted)
     fit: 'contain',
     background: { r: 255, g: 255, b: 255, alpha: 1 },
   })
+  .ensureAlpha()
+  .raw()
+  .toBuffer({ resolveWithObject: true })
+
+// Find ink mass center inside the fitted tile (letterbox-aware)
+let sumX = 0
+let sumY = 0
+let mass = 0
+let fMinX = inner
+let fMaxX = 0
+let fMinY = inner
+let fMaxY = 0
+for (let y = 0; y < fitted.info.height; y++) {
+  for (let x = 0; x < fitted.info.width; x++) {
+    const i = (y * fitted.info.width + x) * 4
+    const r = fitted.data[i]
+    const g = fitted.data[i + 1]
+    const b = fitted.data[i + 2]
+    const lum = (r + g + b) / 3
+    if (lum < 230) {
+      const weight = Math.max(1, 255 - lum)
+      sumX += x * weight
+      sumY += y * weight
+      mass += weight
+      if (x < fMinX) fMinX = x
+      if (x > fMaxX) fMaxX = x
+      if (y < fMinY) fMinY = y
+      if (y > fMaxY) fMaxY = y
+    }
+  }
+}
+
+const massCx = sumX / mass
+const massCy = sumY / mass
+const canvasCenter = SIZE / 2
+// Bias mass a hair left of dead-center so the P bowl doesn’t feel cramped on the right
+const opticalX = canvasCenter - 10
+const opticalY = canvasCenter
+
+// Place so ink mass hits the optical center (clamp so ink stays inside SAFE pad)
+let left = Math.round(opticalX - massCx)
+let top = Math.round(opticalY - massCy)
+const pad = Math.round(SIZE * 0.1) // hard floor — keep clear of squircle
+left = Math.min(left, SIZE - 1 - fMaxX - pad)
+left = Math.max(left, pad - fMinX)
+top = Math.min(top, SIZE - 1 - fMaxY - pad)
+top = Math.max(top, pad - fMinY)
+
+const fittedPng = await sharp(fitted.data, {
+  raw: {
+    width: fitted.info.width,
+    height: fitted.info.height,
+    channels: 4,
+  },
+})
   .png()
   .toBuffer()
 
@@ -69,8 +127,15 @@ await sharp({
     background: { r: 255, g: 255, b: 255 },
   },
 })
-  .composite([{ input: fitted, left: SAFE, top: SAFE }])
+  .composite([{ input: fittedPng, left, top }])
   .png()
   .toFile(out)
 
-console.log('wrote', out, { extract: { minX, minY, cw, ch }, SAFE, inner })
+console.log('wrote', out, {
+  extract: { minX, minY, cw, ch },
+  SAFE,
+  inner,
+  place: { left, top },
+  massInTile: { x: massCx.toFixed(1), y: massCy.toFixed(1) },
+  targetCenter: canvasCenter,
+})
