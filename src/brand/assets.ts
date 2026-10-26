@@ -1,5 +1,6 @@
 import logoFull from '../assets/brand/logo-full.jpg'
 import logoPOpen from '../assets/brand/logo-p-open.png'
+import logoAppIcon from '../assets/brand/logo-app-icon.png'
 import logoMark from '../assets/brand/logo-mark.svg'
 import iconConstruction from '../assets/brand/icon-construction.svg'
 import iconLogistics from '../assets/brand/icon-logistics.svg'
@@ -17,6 +18,8 @@ import photoApprenticeship from '../assets/photos/stage-apprenticeship.jpg'
 export const BRAND_ASSETS = {
   logoFull,
   logoPOpen,
+  /** Square doorway-P crop from logo-full — phone home / app icon only */
+  logoAppIcon,
   logoMark,
   iconConstruction,
   iconLogistics,

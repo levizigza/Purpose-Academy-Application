@@ -428,10 +428,17 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-26 — VocabSheet contrast + phone demo legibility (L3)
+
+- **Defect:** `.vocab-sheet-card-focus` forced light text while lang chips stayed `#f5f8fc` → Amharic/Tigrinya glosses unreadable on demos. Five-column lang grid ignored phone container (viewport `@media` never fired inside emulator).
+- **Fix:** VocabSheet focus card is navy-on-paper (logo-true). Phone forces 1-col language buttons, ≥0.8rem names / ≥1.05rem glosses, dark train titles on paper chrome. App icon = doorway-P crop from `logo-full` (`logo-app-icon.png`), not the PA monogram.
+- **Assumption to challenge next:** whether Desktop VocabSheet should keep a denser 5-col grid or also prefer 2-col below 900px.
+
+
 ### 2026-10-26 — Phone app brand lockup = logo (navy on white) (L3 / L6)
 
 - **Critic overturned** gold/dark phone home + night Practice dialect inside the emulator. The website logo is **navy doorway on white paper** — the learner app icon and in-phone surfaces must inherit that lockup, not invent a second tone.
-- App icon (`PaAppIcon` / `logo-mark.svg`): white tile, navy P. Home wallpaper: paper + soft brand blue. `.is-phone-app` Practice hub tokens flip to paper/navy.
+- App icon is the doorway P from `logo-full`. Home wallpaper: paper + soft brand blue. `.is-phone-app` Practice hub tokens flip to paper/navy.
 - Outer emulator stage may stay dark (device on a desk). Inside the glass = Purpose Academy brand.
 - **Assumption to challenge next:** whether Desktop course shell should also lighten to paper, or keep shop-floor night only for full-bleed desktop demos.
 
