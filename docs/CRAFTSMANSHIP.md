@@ -428,6 +428,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-26 — Phone learner path: honest contrast pass (L3)
+
+- **Defect (customer):** Path home steps white-on-white; “Find your path” yellow-on-beige + invisible 4–5; “Choose your language” ghost title; selected EN chip white “English” on tan. Phone remapped train *surfaces* to paper but dozens of selectors still hardcode night ink (`#fff`, `#f4f7fb`, `#f5c542`).
+- **Clarification:** “Consistent” ≠ one skin everywhere. It means every surface is *readable and working* — desktop may keep night stage; phone must be navy-on-paper with amber as accent only.
+- **Fix:** Broad `.is-phone-app` typography kill-list for `lp-lesson strong/span`, current-step amber-as-body, career-assess titles, `train-lang strong`, interest/bridge/learn/topic `strong`, quiz `.train-choice` (paper chips). WCAG AA body ≥ 4.5:1.
+- **Assumption to challenge next:** walk every Practice station in the emulator and kill any leftover hard-coded light ink; consider remapping base train `strong` colors to tokens so phone flips for free.
+
 ### 2026-10-26 — Splash exit: hammer hits door mid + mirror shatter (L3)
 
 - **Critic / user overturned** walk-through-only exit (`strike → dolly`, shatter removed in v28). Wanted the sledge to hit the **middle of the door**, then a **mirror crack → shatter** before the transition.

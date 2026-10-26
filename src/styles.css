@@ -12174,6 +12174,182 @@ video {
   border-color: color-mix(in srgb, var(--accent) 40%, var(--line)) !important;
 }
 
+/*
+ * Phone learner legibility (L3 — information display first).
+ * Desktop train is a night stage (light ink). Phone remaps surfaces to paper,
+ * but dozens of selectors still hardcode #fff / #f4f7fb / #f5c542 as body copy.
+ * Law: navy ink on white/beige paper. Amber = border, pill, or fill — never
+ * body text on a light fill. WCAG AA ≥ 4.5:1 for body.
+ */
+.is-phone-app .lp-lesson strong,
+.is-phone-app .lp-lesson-btn strong,
+.is-phone-app .lp-lesson.is-current strong,
+.is-phone-app .lp-lesson.is-current .lp-lesson-btn strong {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .lp-lesson span,
+.is-phone-app .lp-lesson-btn span {
+  color: var(--ink-soft) !important;
+}
+
+.is-phone-app .lp-kicker,
+.is-phone-app .lp-hub-btn,
+.is-phone-app .lp-mastery strong,
+.is-phone-app .lp-xp {
+  color: var(--brand) !important;
+}
+
+.is-phone-app .lp-unit-badge {
+  background: var(--brand) !important;
+  color: #fff !important;
+}
+
+.is-phone-app .lp-unit.is-done {
+  background: color-mix(in srgb, var(--ok, #1f7a4d) 8%, #fff) !important;
+}
+
+.is-phone-app .lp-lesson.is-current {
+  background: transparent !important;
+}
+
+.is-phone-app .lp-lesson.is-current strong {
+  /* Current step: navy + amber marker, not yellow body on beige */
+  box-shadow: inset 3px 0 0 var(--accent);
+  padding-left: 0.35rem;
+}
+
+.is-phone-app .lp-node {
+  background: color-mix(in srgb, var(--brand) 28%, #d5deea) !important;
+}
+
+.is-phone-app .lp-node.is-locked {
+  background: #c5d0de !important;
+}
+
+/* Language / career assess on paper panels */
+.is-phone-app .career-assess-title,
+.is-phone-app .career-result-title,
+.is-phone-app .train-welcome-title,
+.is-phone-app .train-step-name,
+.is-phone-app .train-sentence-frame,
+.is-phone-app .train-check-prompt {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .career-assess-lede,
+.is-phone-app .career-result-lede,
+.is-phone-app .career-result-summary,
+.is-phone-app .train-picture figcaption {
+  color: var(--ink-soft) !important;
+}
+
+.is-phone-app .career-assess-kicker,
+.is-phone-app .career-assess-progress,
+.is-phone-app .train-step-list-heading,
+.is-phone-app .train-step-num,
+.is-phone-app .train-vocab-counter,
+.is-phone-app .train-checkin-note {
+  color: var(--brand) !important;
+}
+
+/* Chips / cards: strong was hardcoded #fff for night stage */
+.is-phone-app .train-lang,
+.is-phone-app .train-lang.is-selected,
+.is-phone-app .train-interest,
+.is-phone-app .train-bridge,
+.is-phone-app .train-learn-card,
+.is-phone-app .train-check-rich,
+.is-phone-app .train-topic-card {
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border-color: color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+}
+
+.is-phone-app .train-lang strong,
+.is-phone-app .train-lang.is-selected strong,
+.is-phone-app .train-interest strong,
+.is-phone-app .train-bridge strong,
+.is-phone-app .train-learn-card strong,
+.is-phone-app .train-check-rich strong,
+.is-phone-app .train-topic-card strong,
+.is-phone-app .train-why strong {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .train-lang span,
+.is-phone-app .train-lang.is-selected span,
+.is-phone-app .train-interest span,
+.is-phone-app .train-bridge span,
+.is-phone-app .train-learn-card span {
+  color: var(--ink-soft) !important;
+}
+
+.is-phone-app .train-lang.is-selected {
+  background: #fff6de !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px rgba(232, 163, 23, 0.35);
+}
+
+.is-phone-app .train-lang-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.5rem !important;
+}
+
+.is-phone-app .career-assess-prompt,
+.is-phone-app .career-assess-head,
+.is-phone-app .career-assess {
+  color: var(--brand-deep);
+}
+
+.is-phone-app .learning-path-map {
+  padding: 0.75rem 0.7rem !important;
+}
+
+.is-phone-app .lp-lessons {
+  gap: 0.45rem !important;
+}
+
+.is-phone-app .lp-lesson strong,
+.is-phone-app .lp-lesson-btn strong {
+  font-size: 0.9rem !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+}
+
+/* Quiz choices: was dark fill + flipped navy text → unreadable. Paper chip. */
+.is-phone-app .train-choice {
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
+}
+
+.is-phone-app .train-choice.is-selected,
+.is-phone-app .train-choice:focus-visible {
+  background: #fff6de !important;
+  border-color: var(--accent) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .train-action-block {
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+}
+
+.is-phone-app .train-instruction blockquote {
+  color: var(--brand-deep) !important;
+  background: var(--brand-soft) !important;
+  border-left: 3px solid var(--accent);
+}
+
+/* Dark career result cards keep light ink (intentional night islands) */
+.is-phone-app .career-assess-card,
+.is-phone-app .career-code,
+.is-phone-app .career-fit {
+  color: #f4f7fb;
+}
+
 .is-phone-app .practice-stats-strip {
   display: flex;
   flex-wrap: wrap;
