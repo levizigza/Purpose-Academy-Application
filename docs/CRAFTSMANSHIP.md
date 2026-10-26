@@ -426,6 +426,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-26 — Computer Skills first viewport + Familiar paper stage (L3)
+
+- **Layers:** L3 information display (phone first viewport + mastery beat).
+- **Defect:** Phone jump to Basic Computer Skills ran `scrollIntoView(block:start)` on the card and shoved the train title above the fold (`scrollTop≈395`). Familiar theater had almost no stage CSS. Course Practice banner still shouted gold on the new paper stage.
+- **Fix:** Phone Comp/Equipment drills pin `.iphone-scroll` to top; desktop uses `nearest`. Hide unit-intro + why-details on phone computer/equipment shells. Familiar theater paper card + one Continue. Course banner → quiet navy status strip.
+- **Assumption to challenge next:** Sentence Structure still clips below the fold on phone — whether worksheet chrome can collapse further so item 1 peeks without scroll.
+
 ### 2026-10-26 — Desktop course = paper dialect with phone (L3 / L6)
 
 - **Layers:** L3 information display + L6 brand lockup (one showcase dialect).

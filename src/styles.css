@@ -8950,6 +8950,12 @@ html.pa-course-shell .practice-banner {
   padding: 0.4rem 0.85rem;
   font-size: 0.8rem;
   box-shadow: none;
+  /* Paper course stage: quiet navy status strip, not gold shout */
+  background: linear-gradient(90deg, #0b2f5c, #163f73) !important;
+  color: #f4f7fb !important;
+  border-radius: 10px;
+  width: min(100% - 1.5rem, 720px);
+  margin-inline: auto;
 }
 
 /* Desktop: hub buttons stay in the header row. Phone uses Station menu instead. */
@@ -13335,6 +13341,89 @@ html.pa-phone-shell .practice-feedback-dock {
 /* Tighter station chrome so title + first task share the first phone screen */
 .is-phone-app .train-header {
   padding: 0.45rem 0.65rem 0.25rem !important;
+}
+
+/* Computer / equipment: unit intro is coaching — keep collapsed density for Watch/Try */
+.is-phone-app .train-shell.is-computer-skills .unit-intro-card,
+.is-phone-app .train-shell.is-equipment-video .unit-intro-card {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-computer-skills .train-why-details,
+.is-phone-app .train-shell.is-equipment-video .train-why-details {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-computer-skills .train-simple-line,
+.is-phone-app .train-shell.is-equipment-video .train-simple-line {
+  font-size: 0.84rem !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Familiar theater — paper stage, one primary continue (L3) */
+.familiar-theater {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(4, 21, 38, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.familiar-theater-stage {
+  width: min(100%, 26rem);
+  display: grid;
+  gap: 0.65rem;
+  padding: 1.35rem 1.4rem 1.45rem;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid color-mix(in srgb, #0b2f5c 16%, #c5d0dc);
+  box-shadow: 0 24px 48px rgba(4, 21, 38, 0.28);
+  text-align: center;
+  color: #041526;
+}
+
+.familiar-theater-kicker {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0b2f5c;
+}
+
+.familiar-theater-stamp {
+  margin: 0;
+  font-family: var(--display, Georgia, serif);
+  font-size: clamp(2rem, 6vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #a8740c;
+  line-height: 1;
+}
+
+.familiar-theater-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #041526;
+}
+
+.familiar-theater-lede {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: #2f4156;
+  font-weight: 600;
+}
+
+.is-phone-app .familiar-theater-stage {
+  width: min(100%, 20rem);
+  padding: 1.15rem 1.1rem 1.25rem;
 }
 
 .is-phone-app .train-title {
