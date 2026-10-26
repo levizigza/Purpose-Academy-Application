@@ -178,11 +178,6 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
           <h2 className="equip-video-title">{lesson.title}</h2>
           <p className="lede equip-video-purpose">{lesson.purpose}</p>
         </div>
-        {practice && onSkip ? (
-          <button type="button" className="btn btn-ghost" onClick={onSkip}>
-            Skip to site language
-          </button>
-        ) : null}
       </div>
 
       <p className="train-vocab-counter">
@@ -191,6 +186,14 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
         {familyMeta?.label ?? lesson.familyLabel}
         {' · '}
         {doneCount} finished
+        {practice && onSkip ? (
+          <>
+            {' · '}
+            <button type="button" className="linkish comp-skills-skip" onClick={onSkip}>
+              Skip to site language
+            </button>
+          </>
+        ) : null}
       </p>
 
       <div className="equip-video-layout">
