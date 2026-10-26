@@ -6414,37 +6414,42 @@ table.data th {
   line-height: 1.4;
 }
 
+/*
+ * Critic overturn (2026-10-26): dark focus card + light lang chips made
+ * gloss names/words nearly invisible (light text on #f5f8fc). VocabSheet
+ * now stays logo-true: navy on white paper — readable for demos.
+ */
 .vocab-sheet-card-focus {
-  background: rgba(15, 36, 56, 0.92) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  color: #e8eef6;
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+  color: var(--brand-deep);
 }
 
 .vocab-sheet-card-focus .vocab-sheet-en,
 .vocab-sheet-card-focus .vocab-sheet-lang-word {
-  color: #fff;
+  color: var(--brand-deep);
 }
 
 .vocab-sheet-card-focus .vocab-sheet-progress,
 .vocab-sheet-card-focus .vocab-sheet-lang-name,
 .vocab-sheet-card-focus .vocab-sheet-definition {
-  color: rgba(244, 247, 251, 0.7);
+  color: var(--ink-soft);
 }
 
 .vocab-sheet-card-focus .vocab-sheet-sentence {
-  background: rgba(245, 197, 66, 0.12);
-  color: #f5c542;
+  background: var(--brand-soft);
+  color: var(--brand-deep);
   border: none;
 }
 
 .vocab-sheet-card-focus .vocab-sheet-lang-btn {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #e8eef6;
+  background: #f5f8fc;
+  border: 1px solid color-mix(in srgb, var(--brand) 14%, var(--line));
+  color: var(--brand-deep);
 }
 
 .vocab-sheet-card-focus .vocab-sheet-photo-focus img {
-  background: #0a1f33;
+  background: #ffffff;
 }
 
 .vocab-sheet-card-focus .vocab-sheet-photo-focus.is-studio img,
@@ -7261,20 +7266,35 @@ table.data th {
 }
 
 .vocab-sheet-body-focus .vocab-sheet-lang-btn {
-  grid-template-columns: 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   justify-items: start;
-  gap: 0.2rem;
-  padding: 0.55rem 0.5rem;
-  border: 1px solid rgba(20, 40, 70, 0.12);
+  align-items: start;
+  gap: 0.35rem 0.45rem;
+  padding: 0.55rem 0.55rem;
+  border: 1px solid rgba(20, 40, 70, 0.14);
   border-radius: 10px;
   background: #f5f8fc;
-  min-height: 4.5rem;
+  color: var(--brand-deep);
+  min-height: 3.75rem;
   align-content: start;
+}
+
+.vocab-sheet-body-focus .vocab-sheet-lang-name {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+}
+
+.vocab-sheet-body-focus .vocab-sheet-lang-word {
+  color: var(--brand-deep);
+  font-size: 0.92rem;
+  font-weight: 750;
 }
 
 .vocab-sheet-body-focus .vocab-sheet-lang-link {
   margin-left: 0;
-  font-size: 0.72rem;
+  grid-column: 1 / -1;
+  font-size: 0.78rem;
+  color: #a16207;
 }
 
 @media (max-width: 820px) {
@@ -7439,7 +7459,7 @@ table.data th {
 
 .vocab-sheet-lede {
   margin: 0;
-  color: rgba(244, 247, 251, 0.82);
+  color: var(--ink-soft);
   font-size: 0.95rem;
 }
 
@@ -7648,18 +7668,18 @@ table.data th {
 }
 
 .vocab-sheet-lang-name {
-  font-size: 0.62rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #5a738c;
-  font-weight: 700;
+  color: #3a5168;
+  font-weight: 750;
 }
 
 .vocab-sheet-lang-word {
-  font-size: 0.84rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 750;
   color: #0b2f5c;
-  line-height: 1.15;
+  line-height: 1.2;
   word-break: break-word;
 }
 
@@ -11758,6 +11778,206 @@ video {
   color: var(--brand) !important;
 }
 
+.is-phone-app .train-title,
+.is-phone-app .train-simple-line,
+.is-phone-app h1.train-title {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .train-hub-btn {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  font-size: 0.8rem !important;
+  line-height: 1.2;
+}
+
+.is-phone-app .practice-section-skip-jump,
+.is-phone-app .practice-section-skip-jump span,
+.is-phone-app .practice-section-skip-btn {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .practice-section-skip select {
+  color: var(--brand-deep);
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line));
+}
+
+.is-phone-app .practice-stats-strip,
+.is-phone-app .train-progress,
+.is-phone-app .train-unit-pill,
+.is-phone-app .train-unit-pill strong,
+.is-phone-app .train-unit-pill em {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .train-progress > span {
+  background: #d5deea !important;
+}
+
+.is-phone-app .train-progress > span > span {
+  background: linear-gradient(90deg, var(--brand), var(--accent)) !important;
+}
+
+/* —— VocabSheet: demo-legible on ~390px (container, not viewport) —— */
+.is-phone-app .vocab-sheet-lede,
+.is-phone-app .vocab-sheet-definition,
+.is-phone-app .vocab-sheet-progress {
+  color: var(--ink-soft) !important;
+  font-size: 0.92rem !important;
+  line-height: 1.45 !important;
+}
+
+.is-phone-app .vocab-sheet-banner {
+  background: linear-gradient(120deg, var(--brand), #163f73) !important;
+  color: #fff !important;
+}
+
+.is-phone-app .vocab-sheet-banner .vocab-sheet-lede {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.is-phone-app .vocab-sheet-en {
+  color: var(--brand-deep) !important;
+  font-size: 1.15rem !important;
+}
+
+.is-phone-app .vocab-sheet-audio {
+  font-size: 0.8rem !important;
+  padding: 0.4rem 0.7rem !important;
+}
+
+.is-phone-app .vocab-sheet-body-focus .vocab-sheet-langs {
+  grid-template-columns: 1fr !important;
+  gap: 0.5rem !important;
+}
+
+.is-phone-app .vocab-sheet-body-focus .vocab-sheet-lang-btn {
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  min-height: 3.25rem !important;
+  padding: 0.7rem 0.75rem !important;
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .vocab-sheet-lang-name {
+  color: #2f4156 !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.06em;
+}
+
+.is-phone-app .vocab-sheet-lang-word {
+  color: var(--brand-deep) !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+}
+
+.is-phone-app .vocab-sheet-flag {
+  min-width: 2rem !important;
+  height: 1.35rem !important;
+  font-size: 0.7rem !important;
+  background: var(--brand) !important;
+  color: #f5c542 !important;
+}
+
+.is-phone-app .vocab-sheet-lang-btn.is-selected,
+.is-phone-app .vocab-sheet-langs .is-connected-lang .vocab-sheet-lang-btn {
+  background: #fff6de !important;
+  border-color: #e8a317 !important;
+  box-shadow: 0 0 0 2px rgba(232, 163, 23, 0.35);
+}
+
+.is-phone-app .vocab-sheet-photo-caption {
+  color: var(--brand-deep) !important;
+  background: #eef3f9 !important;
+  border-top: 1px solid color-mix(in srgb, var(--brand) 12%, var(--line));
+  font-size: 0.88rem !important;
+}
+
+.is-phone-app .vocab-sheet-sentence {
+  background: var(--brand-soft) !important;
+  color: var(--brand-deep) !important;
+  font-size: 0.95rem !important;
+}
+
+.is-phone-app .vocab-sheet-definition {
+  font-size: 0.95rem !important;
+  color: var(--ink-soft) !important;
+}
+
+.is-phone-app .vocab-known-btn {
+  width: 100%;
+  justify-content: center;
+  font-size: 0.95rem !important;
+  padding: 0.75rem 1rem !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 25%, var(--line)) !important;
+  background: #fff !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .vocab-sheet-photo-focus img,
+.is-phone-app .vocab-sheet-photo-focus.is-studio img {
+  max-height: min(42vh, 16rem) !important;
+  background: #fff !important;
+}
+
+.is-phone-app .ph-unit-chevron {
+  display: inline-grid !important;
+  place-items: center;
+  width: 1.5rem;
+  color: var(--brand);
+}
+
+.is-phone-app .ph-footnote h3 {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .ph-pathway-switch-label,
+.is-phone-app .ph-metric-label,
+.is-phone-app .ph-status {
+  color: var(--ink-soft) !important;
+  font-size: 0.8rem !important;
+}
+
+.is-phone-app .learning-path-map {
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+  color: var(--brand-deep);
+}
+
+.is-phone-app .lp-title,
+.is-phone-app .lp-unit-copy strong,
+.is-phone-app .lp-lesson {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .lp-mastery,
+.is-phone-app .lp-unit-copy span,
+.is-phone-app .lp-unit-copy em {
+  color: var(--ink-soft) !important;
+}
+
+.is-phone-app .lp-unit.is-current {
+  background: color-mix(in srgb, var(--accent) 12%, #fff) !important;
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line)) !important;
+}
+
+.is-phone-app .practice-stats-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.75rem;
+  font-size: 0.85rem !important;
+  color: var(--ink-soft) !important;
+}
+
+@container phone-screen (max-width: 480px) {
+  .vocab-sheet-body-focus .vocab-sheet-langs {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 .is-phone-app img,
 .is-phone-app video {
   max-width: 100% !important;
@@ -11819,11 +12039,11 @@ html.pa-phone-shell .practice-feedback-dock {
 }
 
 /*
- * Resume card must keep intrinsic height — order + overflow:hidden was
- * collapsing it to ~0 and stacking copy/media on top of the CTA.
+ * Resume first for demos. Keep intrinsic height — overflow:hidden used to
+ * collapse the card when order moved it.
  */
 .is-phone-app .ph-resume {
-  order: 0;
+  order: -1;
   width: 100%;
   min-height: 0;
   height: auto !important;
@@ -12010,11 +12230,12 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-phone-app .train-hub-btn {
   flex: 1 1 calc(50% - 0.35rem);
   min-width: 0;
-  font-size: 0.72rem !important;
-  padding: 0.4rem 0.45rem !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 0.8rem !important;
+  padding: 0.5rem 0.55rem !important;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  line-height: 1.2;
 }
 
 .is-phone-app .practice-section-skip {
@@ -12456,10 +12677,12 @@ html.pa-phone-shell .practice-feedback-dock {
 }
 
 .pa-app-icon img {
-  width: 82%;
-  height: 82%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  object-position: center;
   display: block;
+  padding: 0.15rem;
 }
 
 .pa-app-icon-sr {
