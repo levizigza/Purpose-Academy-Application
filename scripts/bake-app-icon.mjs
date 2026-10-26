@@ -96,8 +96,8 @@ for (let y = 0; y < fitted.info.height; y++) {
 const massCx = sumX / mass
 const massCy = sumY / mass
 const canvasCenter = SIZE / 2
-// Bias mass a hair left of dead-center so the P bowl doesn’t feel cramped on the right
-const opticalX = canvasCenter - 10
+// True mass center — P bowl is denser on the right; equal bbox margins look heavy-right
+const opticalX = canvasCenter
 const opticalY = canvasCenter
 
 // Place so ink mass hits the optical center (clamp so ink stays inside SAFE pad)
