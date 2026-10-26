@@ -428,6 +428,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-26 — Phone sentence feedback contrast (L3)
+
+- **Defect:** `.shell.is-train .alert.ok` used night ink (`#b8f0bb`) so “Yes — the word completes the sentence” washed out on phone paper.
+- **Fix:** `.is-phone-app` overrides for `.alert.ok` / `.warn` / `.error` → `--ok-soft` / `--ok` (and warn/danger pairs) with a visible status border.
+- **Assumption to challenge next:** shared train-token flip for phone so alert + body ink stop needing per-selector kill-lists.
+
 ### 2026-10-26 — Community Support VV + Sentence Practice parity (L2)
 
 - **Layers:** L2 content delivery (complete the third pathway pack to Construction / Logistics depth).
