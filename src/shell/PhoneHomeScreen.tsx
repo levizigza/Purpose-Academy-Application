@@ -11,7 +11,10 @@ function useClock() {
   }
 }
 
-/** Light home screen — same navy-on-white brand as the logo lockup. */
+/**
+ * Home screen for demos — one app, showcased like iOS:
+ * ~60pt icon, optical center, air around it (not a left-parked grid cell).
+ */
 export function PhoneHomeScreen() {
   const { time, date } = useClock()
 
@@ -26,19 +29,24 @@ export function PhoneHomeScreen() {
   return (
     <div className="phone-home" role="main" aria-label={`${BRAND.name} phone home screen`}>
       <div className="phone-home-wallpaper" aria-hidden />
-      <div className="phone-home-clock">
+
+      <header className="phone-home-clock">
         <p className="phone-home-time">{time}</p>
         <p className="phone-home-date">{date}</p>
-      </div>
+      </header>
 
-      <div className="phone-home-grid">
-        <button type="button" className="phone-home-app" onClick={openApp} aria-label={`Open ${BRAND.name}`}>
+      <div className="phone-home-stage">
+        <button
+          type="button"
+          className="phone-home-app"
+          onClick={openApp}
+          aria-label={`Open ${BRAND.name}`}
+        >
           <PaAppIcon className="phone-home-icon" />
           <span className="phone-home-label">{BRAND.name}</span>
         </button>
+        <p className="phone-home-hint">Tap to open</p>
       </div>
-
-      <p className="phone-home-hint">Tap the Purpose Academy icon to open the app</p>
 
       <div className="phone-home-dock" aria-hidden>
         <span />
