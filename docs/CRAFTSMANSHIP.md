@@ -310,6 +310,7 @@ Solid information output is not polish after the fact. It is the product. A Calg
 |---------|--------------|------------|
 | Splash / enter | Brand-first composition; purposeful motion | Door architecture §7.3; walk-through exit |
 | Home / Programs / Give | Three-door story; whole pathway photos; one job per section | Honest depth counts; no fake dashboards |
+| Phone learner app (emulator) | **Same logo lockup:** navy on white paper; white app icon | No gold/dark dialect that contradicts `logo-full` |
 | Practice `/journey` | Kickers, alerts, choice grids, contain object mats, visible pass | Finite stations; Done for now; mastery gates |
 | Portal School path | Same spine language + dark stage for light text | Today’s station; no feed chrome |
 | Learn / LMS | Same pathway accents + honesty when empty | Never fake “caught up” |
@@ -426,6 +427,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-26 — Phone app brand lockup = logo (navy on white) (L3 / L6)
+
+- **Critic overturned** gold/dark phone home + night Practice dialect inside the emulator. The website logo is **navy doorway on white paper** — the learner app icon and in-phone surfaces must inherit that lockup, not invent a second tone.
+- App icon (`PaAppIcon` / `logo-mark.svg`): white tile, navy P. Home wallpaper: paper + soft brand blue. `.is-phone-app` Practice hub tokens flip to paper/navy.
+- Outer emulator stage may stay dark (device on a desk). Inside the glass = Purpose Academy brand.
+- **Assumption to challenge next:** whether Desktop course shell should also lighten to paper, or keep shop-floor night only for full-bleed desktop demos.
+
 
 ### 2026-10-26 — Desktop | Phone mode chooser + in-phone app launch (L3 / L4 / L6)
 

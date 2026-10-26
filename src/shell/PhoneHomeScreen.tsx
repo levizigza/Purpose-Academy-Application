@@ -1,6 +1,6 @@
-import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { playFoley, unlockFoley } from '../audio/foley'
+import { PaAppIcon } from './PaAppIcon'
 import { setPhonePhase } from './shellMode'
 
 function useClock() {
@@ -11,7 +11,7 @@ function useClock() {
   }
 }
 
-/** iOS-style home screen with the Purpose Academy app icon. */
+/** Light home screen — same navy-on-white brand as the logo lockup. */
 export function PhoneHomeScreen() {
   const { time, date } = useClock()
 
@@ -33,9 +33,7 @@ export function PhoneHomeScreen() {
 
       <div className="phone-home-grid">
         <button type="button" className="phone-home-app" onClick={openApp} aria-label={`Open ${BRAND.name}`}>
-          <span className="phone-home-icon">
-            <img src={BRAND_ASSETS.logoPOpen} alt="" />
-          </span>
+          <PaAppIcon className="phone-home-icon" />
           <span className="phone-home-label">{BRAND.name}</span>
         </button>
       </div>

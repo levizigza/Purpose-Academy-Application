@@ -3,6 +3,7 @@ import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
 import { clearEnteredSite } from '../auth/EntryPages'
 import { playFoley, unlockFoley } from '../audio/foley'
+import { PaAppIcon } from './PaAppIcon'
 import { setPhonePhase, setShellMode, type ShellMode } from './shellMode'
 
 /**
@@ -60,7 +61,7 @@ export function ModeChooser() {
           <span className="mode-door-visual" aria-hidden>
             <span className="mode-door-handset">
               <span className="mode-door-handset-screen">
-                <img src={BRAND_ASSETS.logoPOpen} alt="" />
+                <PaAppIcon />
               </span>
             </span>
           </span>
