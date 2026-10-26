@@ -12163,6 +12163,20 @@ video {
   color: var(--brand-deep) !important;
 }
 
+/*
+ * Showcase defect (live phone hub): navy titles were forced onto the night
+ * gradient inners (Computer Skills / Warehouse Equipment) → near-invisible.
+ * Paper the INNER cards too — not only the section wrappers.
+ */
+.is-phone-app .ph-video-section-inner,
+.is-phone-app .ph-computer-section-inner {
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+  box-shadow: 0 10px 24px rgba(11, 47, 92, 0.08) !important;
+  color: var(--brand-deep) !important;
+  padding: 1rem 1.05rem 1.15rem !important;
+}
+
 .is-phone-app .ph-pathway-badge strong,
 .is-phone-app .ph-metric,
 .is-phone-app .ph-domain-row,
@@ -12170,12 +12184,35 @@ video {
 .is-phone-app .ph-unit-titles,
 .is-phone-app .ph-lesson-copy,
 .is-phone-app .ph-video-section-inner,
+.is-phone-app .ph-video-section-inner h2,
 .is-phone-app .ph-video-section-inner p,
 .is-phone-app .ph-video-section-inner strong,
 .is-phone-app .ph-computer-section-inner,
+.is-phone-app .ph-computer-section-inner h2,
 .is-phone-app .ph-computer-section-inner p,
-.is-phone-app .ph-computer-section-inner strong {
+.is-phone-app .ph-computer-section-inner strong,
+.is-phone-app .ph-computer-section-inner .ph-video-section-kicker {
   color: var(--brand-deep) !important;
+}
+
+.is-phone-app .ph-video-section-inner h2,
+.is-phone-app .ph-computer-section-inner h2 {
+  font-size: 1.35rem !important;
+  line-height: 1.2 !important;
+}
+
+.is-phone-app .ph-video-section-inner p,
+.is-phone-app .ph-computer-section-inner p {
+  color: var(--ink-soft) !important;
+  font-size: 0.98rem !important;
+  line-height: 1.45 !important;
+  font-weight: 600 !important;
+}
+
+.is-phone-app .ph-video-section-kicker,
+.is-phone-app .ph-computer-section-inner .ph-video-section-kicker {
+  color: var(--brand) !important;
+  font-size: 0.8rem !important;
 }
 
 .is-phone-app .ph-done-btn {

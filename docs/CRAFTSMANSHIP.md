@@ -433,6 +433,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** CSS `html.pa-course-shell` hides banner actions (source of truth) + MutationObserver sync; phone Station menu folds Path home/Done/Jump/stats; tokenized remaining train body hardcodes (`unit-intro`, `lp-*`, phrase/topic); phone body ledes forced to brand-deep ≥0.95rem.
 - **Assumption to challenge next:** whether Desktop course night stage should flip to paper for one showcase dialect, or stay night-with-AA contrast only.
 - **Follow-up same day:** brightened Practice hub `--ph-muted` to `#c5d3e4` and video/computer body copy so Desktop night stage does not look washed in demos.
+- **Showcase screenshot (phone hub):** Computer Skills / Warehouse Equipment titles were navy on the *inner* night gradient (wrappers were paper, inners still `#0b1c2e`). Paper + brand-deep the inners; body ≥0.98rem.
 
 Newest first.
 
