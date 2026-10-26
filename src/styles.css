@@ -13685,7 +13685,6 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-phone-app .train-shell.is-computer-skills .train-simple-line,
 .is-phone-app .train-shell.is-equipment-video .train-simple-line,
 .is-phone-app .train-shell.is-visual-vocabulary .train-simple-line,
-.is-phone-app .train-shell.is-organize-wide .train-simple-line,
 .is-phone-app .train-shell.is-sentence-structure .train-simple-line,
 .is-phone-app .train-shell.is-eye-spy .train-simple-line {
   font-size: 0.84rem !important;
@@ -13695,18 +13694,103 @@ html.pa-phone-shell .practice-feedback-dock {
   overflow: hidden;
 }
 
+/* Organize: station title alone is enough — long help stole the Drop fold */
+.is-phone-app .train-shell.is-organize-wide .train-simple-line,
+.is-phone-app .train-shell.is-organize-wide .train-dots,
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-actions {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-skip {
+  font-size: 0.68rem !important;
+  padding: 0.15rem 0.35rem !important;
+  min-height: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
 /* Header already carries the VV lede — drop the duplicate inside the sheet */
 .is-phone-app .train-shell.is-visual-vocabulary .vocab-sheet-lede {
   display: none !important;
 }
 
-/* Organize: keep sticky pictures + drop target in the first phone viewport */
+/* Organize: sticky pics + Drop slot must share the first phone viewport */
 .is-phone-app .train-shell.is-organize-wide .vocab-organize-head {
-  gap: 0.2rem !important;
+  gap: 0.15rem !important;
+  margin: 0 !important;
 }
 
 .is-phone-app .train-shell.is-organize-wide .vocab-organize-head .section-kicker {
+  font-size: 0.7rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .train-vocab-counter {
   font-size: 0.72rem !important;
+  margin: 0 0 0.2rem !important;
+  line-height: 1.25 !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-pool {
+  padding: 0.4rem 0.5rem 0.5rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-pool-grid.is-images {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.3rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-piece {
+  aspect-ratio: 1 / 1 !important;
+  padding: 0.2rem !important;
+  min-height: 0 !important;
+  border-radius: 8px !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-piece img {
+  max-height: 3.4rem !important;
+  padding: 0.05rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-slot.is-image {
+  min-height: 4.25rem !important;
+  aspect-ratio: 16 / 9 !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-lang-list.is-phone-compact {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.2rem 0.45rem !important;
+  margin: 0.25rem 0 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-lang-list.is-phone-compact li {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  gap: 0.2rem !important;
+  align-items: start !important;
+  padding: 0.15rem 0 !important;
+  border: none !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-lang-list.is-phone-compact .vocab-organize-hear {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-lang-name {
+  font-size: 0.62rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-slot-word {
+  font-size: 0.78rem !important;
+  line-height: 1.2 !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-focus-nav {
+  margin-top: 0.35rem !important;
 }
 
 /* Sentence Structure: head chrome before the photo/cloze steals the fold */

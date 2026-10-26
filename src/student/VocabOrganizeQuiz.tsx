@@ -299,30 +299,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
         )}
       </section>
 
-      {phone && unmatched.length > 1 ? (
-        <div className="vocab-organize-focus-nav" role="navigation" aria-label="Word to match">
-          <button
-            type="button"
-            className="btn btn-ghost"
-            disabled={focusIdx <= 0}
-            onClick={() => setFocusIdx((i) => Math.max(0, i - 1))}
-          >
-            ← Prev word
-          </button>
-          <span className="vocab-organize-focus-count">
-            Word {focusIdx + 1} of {unmatched.length} left
-          </span>
-          <button
-            type="button"
-            className="btn btn-ghost"
-            disabled={focusIdx >= unmatched.length - 1}
-            onClick={() => setFocusIdx((i) => Math.min(unmatched.length - 1, i + 1))}
-          >
-            Next word →
-          </button>
-        </div>
-      ) : null}
-
+      {/* Drop card directly under pictures so phone first viewport stays playable */}
       <div className={`vocab-organize-boards${phone ? ' is-phone-stack' : ''}`}>
         {boardsToShow.map((term) => {
           const done = Boolean(matched[term.id])
@@ -380,7 +357,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                 />
               </div>
 
-              <ol className="vocab-organize-lang-list">
+              <ol className={`vocab-organize-lang-list${phone ? ' is-phone-compact' : ''}`}>
                 {VOCAB_SHEET_LANGS.map((lang, i) => (
                   <li key={lang}>
                     <span className="vocab-organize-lang-order">{i + 1}</span>
@@ -400,6 +377,30 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
           )
         })}
       </div>
+
+      {phone && unmatched.length > 1 ? (
+        <div className="vocab-organize-focus-nav" role="navigation" aria-label="Word to match">
+          <button
+            type="button"
+            className="btn btn-ghost"
+            disabled={focusIdx <= 0}
+            onClick={() => setFocusIdx((i) => Math.max(0, i - 1))}
+          >
+            ← Prev
+          </button>
+          <span className="vocab-organize-focus-count">
+            Word {focusIdx + 1} of {unmatched.length}
+          </span>
+          <button
+            type="button"
+            className="btn btn-ghost"
+            disabled={focusIdx >= unmatched.length - 1}
+            onClick={() => setFocusIdx((i) => Math.min(unmatched.length - 1, i + 1))}
+          >
+            Next →
+          </button>
+        </div>
+      ) : null}
 
       <div className="vocab-organize-actions">
         <button type="button" className="btn btn-secondary on-light" onClick={reshuffle}>

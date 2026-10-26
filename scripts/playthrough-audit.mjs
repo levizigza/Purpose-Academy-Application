@@ -361,6 +361,7 @@ async function runMode(phone) {
         const poolLabel = document.querySelector('.iphone-scroll .vocab-organize-pool-label')
         const poolGrid = document.querySelector('.iphone-scroll .vocab-organize-pool-grid')
         const poolPiece = document.querySelector('.iphone-scroll .vocab-organize-piece')
+        const dropSlot = document.querySelector('.iphone-scroll .vocab-organize-slot.is-image')
         const why = document.querySelector('.iphone-scroll .train-why')
         const teach = document.querySelector('.iphone-scroll .train-teach')
         const labelStyle = poolLabel ? getComputedStyle(poolLabel) : null
@@ -372,11 +373,9 @@ async function runMode(phone) {
           ? (0.2126 * whyRgb[0] + 0.7152 * whyRgb[1] + 0.0722 * whyRgb[2]) / 255
           : null
         const pieceBox = poolPiece?.getBoundingClientRect()
-        const poolVisible =
-          pieceBox &&
-          pieceBox.bottom > viewTop + 8 &&
-          pieceBox.top < viewTop + viewH * 0.92 &&
-          pieceBox.height > 24
+        const dropBox = dropSlot?.getBoundingClientRect()
+        const inView = (box) =>
+          box && box.bottom > viewTop + 8 && box.top < viewTop + viewH * 0.95 && box.height > 20
         const whyBox = why?.getBoundingClientRect()
         const whyBlocking =
           why &&
@@ -391,7 +390,8 @@ async function runMode(phone) {
           focusMode: Boolean(document.querySelector('.iphone-scroll .vocab-organize.is-phone-focus')),
           poolLum: lum,
           whyLum,
-          poolVisible: Boolean(poolVisible),
+          poolVisible: Boolean(inView(pieceBox)),
+          dropVisible: Boolean(inView(dropBox)),
           whyBlocking: Boolean(whyBlocking),
           teachVisible:
             Boolean(teach) && getComputedStyle(teach).display !== 'none' && teach.getBoundingClientRect().height > 20,
@@ -415,6 +415,9 @@ async function runMode(phone) {
       }
       if (!org.poolVisible) {
         find(mode, 'high', 'Language Organize pictures not in first phone viewport', org)
+      }
+      if (!org.dropVisible) {
+        find(mode, 'high', 'Language Organize Drop slot not in first phone viewport', org)
       }
       if (org.whyBlocking || org.teachVisible) {
         find(mode, 'high', 'Language Organize coaching chrome still blocking the phone fold', org)
