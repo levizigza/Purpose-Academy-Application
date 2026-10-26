@@ -11878,6 +11878,48 @@ html.pa-phone-shell .practice-feedback-dock {
   align-items: stretch;
 }
 
+.is-phone-app .train-header-top {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 0.4rem !important;
+}
+
+.is-phone-app .train-sound-slot {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.35rem !important;
+  width: 100%;
+}
+
+.is-phone-app .train-hub-btn {
+  flex: 1 1 calc(50% - 0.35rem);
+  min-width: 0;
+  font-size: 0.72rem !important;
+  padding: 0.4rem 0.45rem !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.is-phone-app .practice-section-skip {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0.4rem !important;
+  width: 100%;
+}
+
+.is-phone-app .practice-section-skip-jump {
+  display: grid !important;
+  gap: 0.2rem;
+  width: 100%;
+}
+
+.is-phone-app .practice-section-skip-jump select {
+  width: 100%;
+  max-width: 100%;
+}
+
 .is-phone-app table {
   display: block;
   overflow-x: auto;
@@ -12404,7 +12446,7 @@ html.pa-phone-shell .practice-feedback-dock {
   background: rgba(255, 255, 255, 0.22);
 }
 
-/* Embedded splash inside the phone screen */
+/* Embedded splash inside the phone screen — never use vw (that's the desktop window). */
 .threshold.is-embedded,
 .iphone-scroll .threshold {
   position: absolute;
@@ -12414,7 +12456,70 @@ html.pa-phone-shell .practice-feedback-dock {
   min-height: 100% !important;
   max-height: none !important;
   border-radius: 0;
-  padding: 0.35rem 0.4rem 1.1rem;
+  padding: 0.2rem 0.35rem 0.85rem;
+}
+
+.threshold.is-embedded .threshold-school-name {
+  top: 10%;
+  width: 94%;
+  max-width: none;
+  font-size: clamp(0.72rem, 5.2cqi, 1.05rem);
+  letter-spacing: 0.12em;
+  padding-inline: 0.25rem;
+}
+
+.threshold.is-embedded .threshold-door-stage {
+  left: 50%;
+  top: 42%;
+  width: min(58%, 11.5rem);
+  transform: translate(-50%, -50%);
+}
+
+.threshold.is-embedded .threshold-pathways {
+  bottom: 22%;
+  width: 94%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+}
+
+.threshold.is-embedded .threshold-path-row {
+  gap: 0.45rem;
+  justify-content: space-between;
+}
+
+.threshold.is-embedded .threshold-pathways {
+  bottom: 26%;
+  width: 90%;
+}
+
+.threshold.is-embedded .threshold-path-lede {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+}
+
+.threshold.is-embedded .threshold-hammer {
+  right: 6%;
+  bottom: 5%;
+  width: 3.4rem;
+  z-index: 6;
+}
+
+.threshold.is-embedded .threshold-hammer-icon {
+  width: 100%;
+  height: auto;
+}
+
+.threshold.is-embedded .threshold-hammer-hint {
+  font-size: 0.55rem;
+  letter-spacing: 0.04em;
+}
+
+.threshold.is-embedded .threshold-foley {
+  right: 0.35rem;
+  bottom: 0.35rem;
+  transform: scale(0.85);
+  transform-origin: bottom right;
 }
 
 .iphone-scroll.phone-phase-home,
@@ -12430,8 +12535,13 @@ html.pa-phone-shell .practice-feedback-dock {
 
 .toolbox-station.is-in-phone {
   min-height: auto;
-  padding: 0.75rem 0.35rem 1.5rem;
+  padding: 0.35rem 0.15rem 1.25rem;
   place-items: start center;
+}
+
+.toolbox-station.is-in-phone .toolbox-station-glow,
+.toolbox-station.is-in-phone .toolbox-station-pa {
+  display: none;
 }
 
 .toolbox-station.is-in-phone .toolbox-station-hero {
@@ -12439,21 +12549,70 @@ html.pa-phone-shell .practice-feedback-dock {
 }
 
 .toolbox-station.is-in-phone .toolbox-station-logo {
-  width: min(100%, 140px);
+  width: min(100%, 96px);
+  margin-bottom: 0.2rem;
 }
 
 .toolbox-station.is-in-phone .toolbox-station-title {
-  font-size: 1.45rem;
+  font-size: 1.15rem;
+  margin-bottom: 0.25rem;
 }
 
 .toolbox-station.is-in-phone .toolbox-station-lede {
-  font-size: 0.9rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.toolbox-station.is-in-phone .toolbox-station-kicker {
+  font-size: 0.62rem;
+}
+
+.toolbox-station.is-in-phone .toolbox-station-inner {
+  gap: 0.65rem;
 }
 
 .toolbox-station.is-in-phone .toolbox,
 .iphone-scroll .toolbox {
   width: 100%;
   max-width: none;
+}
+
+.iphone-scroll .toolbox-lid {
+  padding: 0.65rem 0.75rem 0.45rem;
+}
+
+.iphone-scroll .toolbox-title {
+  font-size: 1.05rem;
+}
+
+.iphone-scroll .toolbox-lede {
+  font-size: 0.78rem;
+}
+
+.iphone-scroll .toolbox-slot {
+  min-height: 2.85rem;
+  padding: 0.45rem 0.55rem;
+}
+
+.iphone-scroll .toolbox-text strong {
+  font-size: 0.88rem;
+}
+
+.iphone-scroll .toolbox-text span {
+  font-size: 0.72rem;
+}
+
+.iphone-scroll .toolbox-etch {
+  width: 1.85rem;
+  height: 1.85rem;
+}
+
+.iphone-scroll .practice-point {
+  display: none;
 }
 
 .iphone-scroll .practice-gate {

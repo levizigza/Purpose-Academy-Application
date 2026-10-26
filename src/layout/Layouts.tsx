@@ -6,7 +6,7 @@ import { homeForRole, useSession } from '../auth/Session'
 import { AmbientField, PageMotion } from '../components/Motion'
 import { LoadingScreen, SkipLink } from '../components/Ui'
 import { PracticeFeedbackDock, PracticeModeBanner } from '../practice/PracticeFeedbackDock'
-import { isPracticeMode } from '../practice/PracticeMode'
+import { clearPracticeMode, isPracticeMode } from '../practice/PracticeMode'
 import type { Role } from '../data/types'
 import { DesktopCourseShell } from '../shell/DesktopCourse'
 import { PhoneEmulatorShell } from '../shell/PhoneEmulator'
@@ -45,6 +45,7 @@ function ToolboxLayout({ children }: { children: React.ReactNode }) {
             type="button"
             className="linkish"
             onClick={() => {
+              clearPracticeMode()
               clearShellMode()
               navigate('/', { replace: true })
             }}
