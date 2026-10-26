@@ -427,6 +427,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-26 — Paper ink lock: career strengths + site-wide night leftovers (L3)
+
+- **Layers:** L3 information display (Practical — WCAG body on paper).
+- **Customer defect:** “Why this fits you” strength cards kept night `#e8eef6` / washed gold on cream mats inside the phone paper shell — unreadable. Same class of defect as Organize pool labels.
+- **Law restated:** On `.is-phone-app` / `.is-course-app`, amber is border / pill / fill only — never body copy on a light fill. Dark islands (`.career-fit`, `.career-code`, `.career-profile`) may keep light ink.
+- **Fix:** Tokenize career body/kicker colors (`--train-text`, `--train-amber-bright`); paper overrides force navy on `.career-strengths`, likert, prompts; course gets the same career-choice chips as phone. Audit jumps to Career Profile and fails light strength ink.
+- **Assumption to challenge next:** whether remaining hardcoded `#f5c542` kickers on hub video sections should all move to tokens before the next showcase.
+
 ### 2026-10-26 — Language Organize phone: first viewport playable (L3)
 
 - **Layers:** L3 information display (Practical — playable on ~390px).

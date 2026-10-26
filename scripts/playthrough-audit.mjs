@@ -338,6 +338,7 @@ async function runMode(phone) {
 
   const stations = [
     'Your Language',
+    'Your Career Profile',
     'Visual Vocabulary',
     'Language Organize',
     'English Eye Spy',
@@ -421,6 +422,45 @@ async function runMode(phone) {
       }
       if (org.whyBlocking || org.teachVisible) {
         find(mode, 'high', 'Language Organize coaching chrome still blocking the phone fold', org)
+      }
+    }
+
+    /* Career profile: “Why this fits you” cards must be navy on cream, not night ink */
+    if (/Career Profile/i.test(s)) {
+      const fit = await page.evaluate((phoneMode) => {
+        const root = phoneMode ? document.querySelector('.iphone-scroll') : document
+        if (!root) return { present: false }
+        const items = [...root.querySelectorAll('.career-strengths li')]
+        if (!items.length) return { present: false }
+        const samples = items.slice(0, 3).map((el) => {
+          const s = getComputedStyle(el)
+          const rgb = s.color.match(/\d+/g)?.map(Number)
+          const lum = rgb ? (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255 : null
+          let bg = s.backgroundColor
+          let n = el.parentElement
+          while (n && (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent')) {
+            bg = getComputedStyle(n).backgroundColor
+            n = n.parentElement
+          }
+          const rgbBg = bg && bg.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i)
+          const bgLum = rgbBg
+            ? (0.2126 * +rgbBg[1] + 0.7152 * +rgbBg[2] + 0.0722 * +rgbBg[3]) / 255
+            : null
+          return {
+            text: (el.textContent || '').trim().slice(0, 48),
+            lum,
+            bgLum,
+            color: s.color,
+          }
+        })
+        return { present: true, samples }
+      }, phone)
+      if (fit.present) {
+        for (const sample of fit.samples || []) {
+          if (sample.lum != null && sample.bgLum != null && sample.lum > 0.55 && sample.bgLum > 0.55) {
+            find(mode, 'high', 'Career strengths still light ink on paper', sample)
+          }
+        }
       }
     }
 
