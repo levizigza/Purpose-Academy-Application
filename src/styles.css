@@ -11201,7 +11201,7 @@ video {
   z-index: 1;
   width: min(100%, 920px);
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2.4rem);
+  gap: clamp(1rem, 2.4vw, 1.75rem);
   justify-items: center;
 }
 
@@ -11211,10 +11211,14 @@ video {
 }
 
 .toolbox-station-logo {
-  width: min(100%, 220px);
+  width: min(100%, 190px);
   height: auto;
-  margin-bottom: 1rem;
+  margin-bottom: 0.65rem;
   filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+}
+
+.shell.is-toolbox .toolbox {
+  width: min(100%, 400px);
 }
 
 .toolbox-station-kicker {
