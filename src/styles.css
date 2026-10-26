@@ -12874,13 +12874,24 @@ video {
   color: #1f7a4d !important;
 }
 
-.is-phone-app .eye-spy-stage {
+.is-phone-app .eye-spy-stage:not(.is-scene) {
   background:
     radial-gradient(ellipse 80% 60% at 50% 0%, rgba(11, 47, 92, 0.08), transparent 55%),
     linear-gradient(165deg, #ffffff 0%, #eef3f9 100%) !important;
   border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
   padding: 0.55rem !important;
   box-shadow: 0 12px 28px rgba(11, 47, 92, 0.1);
+}
+
+/* Keep inline atmosphere photo — never let paper kill-list wipe scene floors */
+.is-phone-app .eye-spy-stage.is-scene,
+.is-course-app .eye-spy-stage.is-scene {
+  background-color: #0b1c2e !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+  padding: 0 !important;
 }
 
 /* Iconic: tool photos own the phone fold — bigger tiles, less chrome */
@@ -14018,7 +14029,7 @@ html.pa-phone-shell .practice-feedback-dock {
   color: var(--brand) !important;
 }
 
-.is-course-app .eye-spy-stage {
+.is-course-app .eye-spy-stage:not(.is-scene) {
   background: var(--brand-soft) !important;
   border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
 }
