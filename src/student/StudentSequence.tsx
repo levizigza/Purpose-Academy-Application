@@ -304,6 +304,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   return (
     <div
       className={`shell-main train-shell${step === 7 ? ' is-organize-wide' : ''}${
+        step === 6 ? ' is-visual-vocabulary' : ''
+      }${step === 8 ? ' is-eye-spy' : ''}${step === 9 ? ' is-sentence-structure' : ''}${
         step === 12 ? ' is-computer-skills' : ''
       }${step === 18 ? ' is-equipment-video' : ''}`}
     >

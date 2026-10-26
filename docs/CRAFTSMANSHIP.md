@@ -426,6 +426,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-26 — Hub token pass + phone task-first fold (L3)
+
+- **Layers:** L3 information display (Practical climb to showcase 100%).
+- **Defect:** Hub meter/metrics/section heads/resume/pathway badge still hard-coded `#fff` / `#f4f7fb` so paper shells washed. Desktop stats `.is-ready` / `.is-locked` lime/peach on paper. PictureCard figcaption stayed `#fff` on remapped white `--train-surface-2` (“A worker gives a direction”). Phone VV/Sentence first viewport lost to duplicate lede + unit-intro before the photo/cloze.
+- **Fix:** Tokenize remaining `.ph-*` night hardcodes to `--ph-ink*` / `--ph-soft` / `--ph-line`. Course stats strip + picture figcaption paper ink. Shell flags `is-visual-vocabulary` / `is-sentence-structure` / `is-eye-spy`; phone hides unit-intro/why/progress and drops VV sheet lede + Sentence help so media leads. Eye Spy stage paper presence + larger phone tiles.
+- **Assumption to challenge next:** true Eye Spy scene photography + Community PDF object photos still gate Iconic 100%; interim tiles remain honest.
+
 ### 2026-10-26 — Portal School path + hub domain ink on paper (L3 / L6)
 
 - **Layers:** L3 information display + L6 brand lockup (site-wide paper Practice dialect).
