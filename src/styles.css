@@ -12207,6 +12207,17 @@ video {
 
 .is-phone-app .lp-unit.is-done {
   background: color-mix(in srgb, var(--ok, #1f7a4d) 8%, #fff) !important;
+  opacity: 1 !important;
+}
+
+.is-phone-app .lp-unit.is-upcoming,
+.is-phone-app .lp-unit.is-locked {
+  opacity: 1 !important;
+}
+
+.is-phone-app .lp-unit.is-upcoming .lp-unit-copy strong,
+.is-phone-app .lp-unit.is-locked .lp-unit-copy strong {
+  color: var(--ink-soft) !important;
 }
 
 .is-phone-app .lp-lesson.is-current {
