@@ -11653,6 +11653,8 @@ video {
   /*
    * Critic: gold/dark phone app broke logo coherence.
    * Learner app inside the device = navy on white paper — same as logo-full.
+   * Must flip train *surfaces* with train *text*, or .shell.is-train fields
+   * stay night-navy bg under navy ink (Name field: Levi invisible).
    */
   --ink: #071e3d;
   --ink-soft: #2f4156;
@@ -11664,6 +11666,10 @@ video {
   --train-text: #071e3d;
   --train-text-muted: #2f4156;
   --train-panel: #ffffff;
+  --train-surface: #ffffff;
+  --train-surface-2: #ffffff;
+  --train-bg: #f3f6fb;
+  --train-bg-2: #e8eef7;
   --train-line: #aebccd;
   --train-amber: #e8a317;
   --train-amber-bright: #c8890f;
@@ -11677,6 +11683,39 @@ video {
   background:
     radial-gradient(ellipse 80% 40% at 50% 0%, rgba(11, 47, 92, 0.06), transparent 55%),
     linear-gradient(180deg, #fbfcff 0%, var(--paper) 55%, #e8eef7 100%);
+}
+
+/* Form fields — navy ink on white paper (never dark-on-dark) */
+.is-phone-app .field label {
+  color: var(--brand-deep);
+}
+
+.is-phone-app .field input,
+.is-phone-app .field select,
+.is-phone-app .field textarea,
+.is-phone-app .practice-gate .field input,
+.is-phone-app .practice-gate .field select,
+.is-phone-app .practice-gate .field textarea {
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+  caret-color: var(--brand);
+  -webkit-text-fill-color: var(--brand-deep);
+}
+
+.is-phone-app .field input::placeholder,
+.is-phone-app .field textarea::placeholder,
+.is-phone-app .practice-gate .field input::placeholder {
+  color: var(--ink-soft) !important;
+  -webkit-text-fill-color: var(--ink-soft);
+  opacity: 1;
+}
+
+.is-phone-app .field input:focus,
+.is-phone-app .field select:focus,
+.is-phone-app .field textarea:focus {
+  outline: 2px solid color-mix(in srgb, var(--brand) 45%, transparent);
+  outline-offset: 1px;
 }
 
 .is-phone-app,
