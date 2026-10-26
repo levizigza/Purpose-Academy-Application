@@ -1742,6 +1742,7 @@ export function StudentSequencePage() {
         <EyeSpyQuiz
           scenes={EYE_SPY_SCENES}
           mode="exercise"
+          pathwayId={pathwayId}
           onComplete={() => {
             setStep8Phase(SENTENCE_CLOZE.length ? 'sentences' : 'actions')
             setSentenceLevel1(false)
@@ -2750,7 +2751,12 @@ export function StudentSequencePage() {
       return (
         <Shell step={21} onBack={() => go(20)}>
           <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Pair every picture with its word until each board is empty." />
-          <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('written') }} />
+          <EyeSpyQuiz
+            scenes={EYE_SPY_SCENES}
+            mode="exam"
+            pathwayId={pathwayId}
+            onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('written') }}
+          />
         </Shell>
       )
     }

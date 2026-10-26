@@ -413,7 +413,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Optics + attention ethics (path stage) | L3/L4 | Done — iterate |
 | Site-wide craft layers (doctrine + sweep) | L1–L6 | Done (this climb) — keep sweeping |
 | Pathway-aware foley beds | L2/L3 | Open |
-| Eye Spy photography upgrade | L2/L3 | Climbing — hotspot floors + larger stage; still wants true scene photos |
+| Eye Spy photography upgrade | L2/L3 | Climbing — atmosphere floors + positioned callouts (2026-10-26); true single-photo hotspots still open |
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
@@ -425,6 +425,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 ---
 
 ## 11. Changelog (living)
+
+### 2026-10-26 — Eye Spy workplace atmosphere floors (L3 / Iconic)
+
+- **Layers:** L3 information display + Iconic presence (scene read, not flat collage).
+- **Defect:** Eye Spy was a 2×2 tile collage on a night gradient — readable but not memorable as a job-site station. Hotspot x/y/w/h lay unused.
+- **Fix:** Pathway atmosphere photos (`path-construction`, warehouse aisle/dock, community welcome, etc.) become scene floors; tool callouts sit at percent positions on paper mats. Phone keeps contain + first-viewport density. Honest: still callout mats on atmosphere, not single-photo worksheet hotspots — Community PDF wholes remain the last Iconic gate.
+- **Assumption to challenge next:** whether true PDF Eye Spy floors (one photo, tap regions only) should replace callout mats once assets exist.
 
 ### 2026-10-26 — Hub token pass + phone task-first fold (L3)
 

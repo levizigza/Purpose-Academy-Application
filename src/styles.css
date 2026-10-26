@@ -7996,6 +7996,74 @@ table.data th {
   }
 }
 
+/*
+ * Workplace atmosphere floor — tool callouts sit on a real job-site photo
+ * (Iconic climb). Whole-object mats stay paper so tools stay readable (L3).
+ */
+.eye-spy-stage.is-scene {
+  aspect-ratio: 4 / 3;
+  min-height: min(52vh, 26rem);
+  padding: 0;
+  overflow: hidden;
+  background-color: #0b1c2e;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 16px 36px rgba(4, 21, 38, 0.22);
+}
+
+.eye-spy-scene-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(4, 21, 38, 0.18), transparent 35%),
+    linear-gradient(0deg, rgba(4, 21, 38, 0.28), transparent 40%);
+  z-index: 0;
+}
+
+.eye-spy-stage.is-scene .eye-spy-hotspot {
+  position: absolute;
+  z-index: 1;
+  padding: 0.28rem;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.92),
+    0 10px 22px rgba(4, 21, 38, 0.35);
+  transform: none;
+}
+
+.eye-spy-stage.is-scene .eye-spy-hotspot img {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  padding: 0.2rem;
+  border-radius: 8px;
+}
+
+.eye-spy-stage.is-scene .eye-spy-hotspot.is-selected {
+  transform: scale(1.04);
+  z-index: 2;
+  box-shadow:
+    0 0 0 3px #e8a317,
+    0 12px 28px rgba(4, 21, 38, 0.4);
+}
+
+.is-phone-app .eye-spy-stage.is-scene {
+  aspect-ratio: 5 / 4;
+  min-height: 14.5rem;
+  max-height: min(42vh, 18rem);
+}
+
+.is-phone-app .eye-spy-stage.is-scene .eye-spy-hotspot {
+  padding: 0.18rem;
+  border-width: 2px;
+}
+
+.is-phone-app .train-shell.is-eye-spy .eye-spy-stage.is-scene {
+  margin-top: 0.25rem;
+}
+
 .eye-spy-grid {
   display: none;
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ATTEMPT_POLICY, type EyeSpyHotspot, type EyeSpyScene } from './journeyCurriculum'
-import { pathwayImage } from '../pathways'
+import { EYE_SPY_ATMOSPHERE, pathwayImage } from '../pathways'
+import type { PathwayId } from '../pathways/types'
 import { playFoley } from '../audio/foley'
 import { recordSkillAttempt } from './learningMastery'
 import {
@@ -14,7 +15,17 @@ import {
 type Mode = 'exercise' | 'exam'
 
 const CLEAR_ALL_INSTRUCTION =
-  'Tap a picture, then tap its English name. A correct pair disappears. Clear the whole board to move on.'
+  'Tap a picture on the job site, then tap its English name. A correct pair disappears. Clear the whole board to move on.'
+
+function atmosphereFor(pathwayId: PathwayId | undefined, sceneIdx: number, scene: EyeSpyScene) {
+  if (scene.sceneBgKey) {
+    const keyed = pathwayImage(scene.sceneBgKey)
+    if (keyed) return keyed
+  }
+  const pack = pathwayId ? EYE_SPY_ATMOSPHERE[pathwayId] : undefined
+  if (!pack?.length) return undefined
+  return pack[sceneIdx % pack.length]
+}
 
 export function findQueue(scene: EyeSpyScene): EyeSpyHotspot[] {
   if (scene.findOrder?.length) {
@@ -36,10 +47,13 @@ export function EyeSpyQuiz({
   scenes,
   mode,
   onComplete,
+  pathwayId,
 }: {
   scenes: EyeSpyScene[]
   mode: Mode
   onComplete: () => void
+  /** When set, hotspots sit on a rotating workplace atmosphere floor. */
+  pathwayId?: PathwayId
 }) {
   const boards = useMemo(() => scenes.filter((s) => s.hotspots.length > 0), [scenes])
   const totalFinds = useMemo(
@@ -67,6 +81,8 @@ export function EyeSpyQuiz({
   )
   const need = totalFinds
   const maxAttempts = mode === 'exam' ? ATTEMPT_POLICY.examMax : null
+  const sceneBg = scene ? atmosphereFor(pathwayId, sceneIdx, scene) : undefined
+  const sceneMode = Boolean(sceneBg)
 
   useEffect(() => {
     window.dispatchEvent(new Event('pa-quiz-start'))
@@ -228,7 +244,7 @@ export function EyeSpyQuiz({
   }
 
   return (
-    <div className="eye-spy">
+    <div className={`eye-spy${sceneMode ? ' is-scene-mode' : ''}`}>
       <p className="train-quiz-counter">
         Scene {sceneIdx + 1} of {boards.length}
         {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice (unlimited tries)'}
@@ -248,19 +264,34 @@ export function EyeSpyQuiz({
       )}
 
       <div
-        className="eye-spy-stage is-tiles"
+        className={`eye-spy-stage${sceneMode ? ' is-scene' : ' is-tiles'}`}
         role="group"
-        aria-label="Photo board. Tap a picture, then tap its English name"
+        aria-label={
+          sceneMode
+            ? 'Job-site photo board. Tap a tool picture, then tap its English name'
+            : 'Photo board. Tap a picture, then tap its English name'
+        }
+        style={sceneMode && sceneBg ? { backgroundImage: `url(${sceneBg})` } : undefined}
       >
+        {sceneMode ? <span className="eye-spy-scene-veil" aria-hidden /> : null}
         {scene.hotspots.map((h, index) => {
           if (foundSet.has(h.id)) return null
           const img = pathwayImage(h.imageKey)
           const selected = pickedHotspot === h.id
+          const style = sceneMode
+            ? {
+                left: `${h.x}%`,
+                top: `${h.y}%`,
+                width: `${Math.max(h.w, 18)}%`,
+                height: `${Math.max(h.h, 16)}%`,
+              }
+            : undefined
           return (
             <button
               key={`${scene.id}-${h.id}`}
               type="button"
               className={`eye-spy-hotspot${selected ? ' is-selected' : ''}${wrongPair && selected ? ' is-wrong' : ''}`}
+              style={style}
               onClick={() => phase === 'play' && setPickedHotspot(h.id)}
               disabled={phase !== 'play'}
               aria-label={h.label || `Tool spot ${index + 1}`}

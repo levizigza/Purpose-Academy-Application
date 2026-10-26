@@ -8,4 +8,4 @@ export {
   clearPathwaySession,
 } from './session'
 export { getPathwayPack, getPathwayJourneySteps, getPathwayUnitGoal, PACKS } from './content'
-export { pathwayImage } from './images'
+export { pathwayImage, EYE_SPY_ATMOSPHERE } from './images'

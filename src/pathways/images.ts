@@ -49,7 +49,25 @@ import comSupportPlan from '../assets/photos/community/com-support-plan.jpg'
 import comBackpack from '../assets/photos/community/com-backpack.jpg'
 import comShopping from '../assets/photos/community/com-shopping.jpg'
 
+import pathConstruction from '../assets/photos/path-construction.jpg'
+import pathLogistics from '../assets/photos/path-logistics.jpg'
+import pathCommunity from '../assets/photos/path-community.jpg'
+import heroWork from '../assets/photos/hero-work.jpg'
+import stageApprenticeship from '../assets/photos/stage-apprenticeship.jpg'
+
+/** Workplace atmosphere floors for Eye Spy scenes (not object tiles). */
+export const EYE_SPY_ATMOSPHERE: Record<'construction' | 'logistics' | 'community', string[]> = {
+  construction: [pathConstruction, heroWork, stageApprenticeship],
+  logistics: [logWarehouse, logAisle, logDock, pathLogistics],
+  community: [pathCommunity, comWelcome, comHygiene, comShopping],
+}
+
 const PATHWAY_PHOTOS: Record<string, string> = {
+  'path-construction': pathConstruction,
+  'path-logistics': pathLogistics,
+  'path-community': pathCommunity,
+  'hero-work': heroWork,
+  'stage-apprenticeship': stageApprenticeship,
   'log-box': logBox,
   'log-bag': logBag,
   'log-bin': logBin,
