@@ -79,7 +79,7 @@ async function measureFirstViewport(page, rootSel) {
      */
     const cutoffs = []
     const probe = root.querySelectorAll(
-      '.train-title, .train-simple-line, .comp-skills, .sentence-cloze-card, .vocab-sheet, .alert, .practice-stats-strip, .ph-resume, button.btn-primary',
+      '.train-title, .train-simple-line, .comp-skills, .sentence-cloze-card, .vocab-sheet, .vocab-organize-board, .vocab-organize-pool-label, .alert, .practice-stats-strip, .ph-resume, button.btn-primary',
     )
     for (const el of probe) {
       const b = el.getBoundingClientRect()
@@ -339,6 +339,7 @@ async function runMode(phone) {
   const stations = [
     'Your Language',
     'Visual Vocabulary',
+    'Language Organize',
     'English Eye Spy',
     'Sentence Structure',
     'Basic Computer Skills',
@@ -348,6 +349,37 @@ async function runMode(phone) {
     const okJump = await jump(page, s, phone)
     if (!okJump) continue
     await auditStation(page, mode, s.replace(/\s+/g, '-').toLowerCase(), root)
+
+    /* Language Organize: phone must not squeeze four boards into one row */
+    if (/Language Organize/i.test(s) && phone) {
+      const org = await page.evaluate(() => {
+        const boards = [...document.querySelectorAll('.iphone-scroll .vocab-organize-board')]
+        const widths = boards.map((el) => Math.round(el.getBoundingClientRect().width))
+        const poolLabel = document.querySelector('.iphone-scroll .vocab-organize-pool-label')
+        const s = poolLabel ? getComputedStyle(poolLabel) : null
+        const rgb = s?.color.match(/\d+/g)?.map(Number)
+        const lum = rgb ? (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255 : null
+        return {
+          boardCount: boards.length,
+          widths,
+          minWidth: widths.length ? Math.min(...widths) : 0,
+          focusMode: Boolean(document.querySelector('.iphone-scroll .vocab-organize.is-phone-focus')),
+          poolLum: lum,
+        }
+      })
+      if (!org.focusMode) {
+        find(mode, 'high', 'Language Organize missing phone focus layout', org)
+      }
+      if (org.boardCount > 1) {
+        find(mode, 'high', 'Language Organize shows more than one word board on phone', org)
+      }
+      if (org.minWidth > 0 && org.minWidth < 220) {
+        find(mode, 'high', 'Language Organize board too narrow to play', org)
+      }
+      if (org.poolLum != null && org.poolLum > 0.55) {
+        find(mode, 'med', 'Language Organize pool label still light ink on paper', org)
+      }
+    }
 
     /* Computer skills: ensure lesson body visible */
     if (/Computer/i.test(s)) {

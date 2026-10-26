@@ -10807,11 +10807,12 @@ video {
 
 .vocab-organize-pool-label {
   margin: 0 0 0.55rem;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #8a6a12;
+  /* Navy on paper — pale gold failed WCAG on demos */
+  color: var(--brand-deep, #041526);
 }
 
 .vocab-organize-pool-grid.is-images {
@@ -10952,9 +10953,9 @@ video {
 }
 
 .vocab-organize-slot-hint {
-  color: #8aa0b8;
-  font-size: 0.78rem;
-  font-weight: 650;
+  color: var(--brand, #0b2f5c);
+  font-size: 0.84rem;
+  font-weight: 700;
   text-align: center;
   padding: 0.35rem;
 }
@@ -11075,6 +11076,123 @@ video {
   margin: 0.15rem 0 0;
   font-family: var(--display, Georgia, serif);
   color: #0b2f5c;
+}
+
+/* Phone: one word card + sticky picture strip (4-up desktop grid cannot fit ~390px) */
+.is-phone-app .train-shell.is-organize-wide {
+  max-width: 100% !important;
+}
+
+.is-phone-app .vocab-organize.is-phone-focus {
+  gap: 0.65rem;
+}
+
+.is-phone-app .vocab-organize-help {
+  font-size: 0.88rem !important;
+  color: var(--ink-soft, #2f4156) !important;
+  line-height: 1.4 !important;
+}
+
+.is-phone-app .vocab-organize .section-kicker,
+.is-course-app .vocab-organize .section-kicker {
+  color: var(--brand, #0b2f5c) !important;
+}
+
+.is-phone-app .vocab-organize-pool {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  padding: 0.55rem 0.65rem 0.7rem !important;
+  background: #ffffff !important;
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+  box-shadow: 0 8px 18px rgba(11, 47, 92, 0.08);
+}
+
+.is-phone-app .vocab-organize-pool-label {
+  color: var(--brand-deep, #041526) !important;
+  font-size: 0.78rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.is-phone-app .vocab-organize-pool-grid.is-images {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.45rem !important;
+}
+
+.is-phone-app .vocab-organize-piece {
+  min-height: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0.35rem !important;
+}
+
+.is-phone-app .vocab-organize-piece img {
+  max-height: 5.5rem !important;
+  padding: 0.15rem !important;
+}
+
+.is-phone-app .vocab-organize-focus-nav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.is-phone-app .vocab-organize-focus-nav .btn {
+  font-size: 0.78rem !important;
+  padding: 0.4rem 0.55rem !important;
+}
+
+.is-phone-app .vocab-organize-focus-count {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 750;
+  color: var(--brand, #0b2f5c);
+}
+
+.is-phone-app .vocab-organize-boards,
+.is-phone-app .vocab-organize-boards.is-phone-stack {
+  grid-template-columns: 1fr !important;
+  overflow: visible !important;
+  gap: 0.55rem !important;
+  padding-bottom: 0 !important;
+}
+
+.is-phone-app .vocab-organize-board {
+  padding: 0.75rem 0.8rem 0.85rem !important;
+}
+
+.is-phone-app .vocab-organize-slot.is-image {
+  min-height: 6.5rem !important;
+  aspect-ratio: 16 / 10 !important;
+}
+
+.is-phone-app .vocab-organize-slot.is-image img {
+  max-height: 8rem !important;
+}
+
+.is-phone-app .vocab-organize-english {
+  font-size: 1.15rem !important;
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .vocab-organize-lang-name {
+  color: var(--brand, #0b2f5c) !important;
+  font-size: 0.72rem !important;
+}
+
+.is-phone-app .vocab-organize-slot-word {
+  font-size: 0.95rem !important;
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .vocab-organize-slot-hint {
+  color: var(--brand, #0b2f5c) !important;
+  font-size: 0.88rem !important;
+}
+
+.is-course-app .vocab-organize-pool-label,
+.is-course-app .vocab-organize-slot-hint {
+  color: var(--brand-deep, #041526) !important;
 }
 
 .vocab-organize-pass .hero-actions {

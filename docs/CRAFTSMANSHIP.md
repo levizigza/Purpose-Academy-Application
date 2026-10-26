@@ -426,6 +426,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-26 — Language Organize phone: one word at a time (L3)
+
+- **Layers:** L3 information display (Practical — playable on ~390px).
+- **Customer defect:** Four word boards stayed in a desktop 4-column grid inside the phone emulator (viewport `@media` never fires). Boards overlapped into unusable slivers; pool label washed gold on paper. Playthrough audit never jumped to Language Organize — miss.
+- **Fix:** Phone focus layout — sticky 2×2 picture strip + **one full-width word card** with Prev/Next among unmatched. Navy pool/slot ink. Audit now visits Organize and fails if more than one board or width &lt; 220px.
+- **Assumption to challenge next:** whether Desktop course should also default to 2×2 boards below ~900px container width (not only viewport).
+
 ### 2026-10-26 — Iconic 100%: baked Eye Spy floors + Community object photos (L2 / L3)
 
 - **Layers:** L2 content delivery + L3 information display (last Iconic showcase gate).
