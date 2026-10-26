@@ -1,12 +1,23 @@
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FoleyToggle } from '../components/CrewLoading'
-import { restartPracticeFromTop } from '../practice/PracticeMode'
-import { clearShellMode } from './shellMode'
-
-/** Logical iPhone 15 Pro points — scaled to fit the stage. */
-const PHONE_W = 393
-const PHONE_H = 852
+import { SplashPage } from '../auth/EntryPages'
+import { clearPracticeMode, restartPracticeFromTop } from '../practice/PracticeMode'
+import {
+  getSavedPhoneDeviceId,
+  PHONE_DEVICES,
+  resolvePhoneDevice,
+  savePhoneDeviceId,
+  type PhoneDevice,
+} from './phoneDevices'
+import { PhoneHomeScreen } from './PhoneHomeScreen'
+import {
+  clearShellMode,
+  getPhonePhase,
+  setPhonePhase,
+  subscribePhonePhase,
+  type PhonePhase,
+} from './shellMode'
 
 function useClock() {
   const [now, setNow] = useState(() => new Date())
@@ -17,44 +28,47 @@ function useClock() {
   return now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
 }
 
-function usePhoneScale(wrapRef: React.RefObject<HTMLDivElement | null>) {
+function usePhoneScale(device: PhoneDevice) {
   const [scale, setScale] = useState(1)
   useLayoutEffect(() => {
-    const el = wrapRef.current
-    if (!el) return
     const fit = () => {
-      const padX = 48
-      const padY = 120
-      const availW = Math.max(280, window.innerWidth - padX)
-      const availH = Math.max(400, window.innerHeight - padY)
-      const next = Math.min(1.12, availW / PHONE_W, availH / PHONE_H)
-      setScale(Math.max(0.55, next))
+      const padX = 56
+      const padY = 200
+      const availW = Math.max(260, window.innerWidth - padX)
+      const availH = Math.max(360, window.innerHeight - padY)
+      const next = Math.min(1.05, availW / device.width, availH / device.height)
+      setScale(Math.max(0.42, next))
     }
     fit()
-    const ro = new ResizeObserver(fit)
-    ro.observe(document.documentElement)
     window.addEventListener('resize', fit)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', fit)
-    }
-  }, [wrapRef])
+    return () => window.removeEventListener('resize', fit)
+  }, [device.width, device.height])
   return scale
 }
 
+function useLivePhonePhase(): PhonePhase {
+  const [phase, setPhase] = useState(() => getPhonePhase())
+  useEffect(() => subscribePhonePhase(() => setPhase(getPhonePhase())), [])
+  return phase
+}
+
 /**
- * Presentation bezel: a faithful iPhone 15 Pro frame around the live learner app.
- * Content is the real `/journey` tree — not a mock — so demos stay functional.
+ * Live phone presentation shell.
+ * Phases: home (PA icon) → splash → toolbox → app (Practice / enter routes).
+ *
+ * Layout uses `.is-phone-app` + container queries so content follows device width,
+ * not the outer desktop viewport.
  */
 export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
-  const wrapRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const scale = usePhoneScale(wrapRef)
+  const [deviceId, setDeviceId] = useState(() => getSavedPhoneDeviceId())
+  const device = useMemo(() => resolvePhoneDevice(deviceId), [deviceId])
+  const scale = usePhoneScale(device)
   const time = useClock()
+  const phase = useLivePhonePhase()
 
   useEffect(() => {
-    /* Keep scroll inside the device, not the outer page. */
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     document.documentElement.classList.add('pa-phone-shell')
@@ -66,55 +80,116 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 })
-  }, [])
+  }, [deviceId, phase])
 
-  function exitToToolbox() {
+  function exitToModes() {
+    clearPracticeMode()
     clearShellMode()
-    navigate('/')
+    navigate('/', { replace: true })
   }
+
+  function backInsidePhone() {
+    if (phase === 'app') {
+      setPhonePhase('toolbox')
+      navigate('/', { replace: true })
+      return
+    }
+    if (phase === 'toolbox') {
+      setPhonePhase('splash')
+      return
+    }
+    if (phase === 'splash') {
+      setPhonePhase('home')
+      return
+    }
+    exitToModes()
+  }
+
+  function pickDevice(id: string) {
+    savePhoneDeviceId(id)
+    setDeviceId(id)
+  }
+
+  const frameStyle = {
+    '--phone-w': `${device.width}px`,
+    '--phone-h': `${device.height}px`,
+    '--phone-radius': `${device.radius}px`,
+    '--phone-inset': `${device.inset}px`,
+    '--phone-screen-radius': `${Math.max(28, device.radius - device.inset)}px`,
+  } as CSSProperties
+
+  const backLabel =
+    phase === 'app' ? '← Toolbox' : phase === 'home' ? '← Modes' : phase === 'splash' ? '← Home' : '← Opening'
+
+  const phaseLabel =
+    phase === 'home'
+      ? 'Home screen'
+      : phase === 'splash'
+        ? 'Opening animation'
+        : phase === 'toolbox'
+          ? 'Toolbox'
+          : 'Learner app'
 
   return (
     <div className="phone-stage">
       <header className="phone-stage-bar">
-        <button type="button" className="phone-stage-back" onClick={exitToToolbox}>
-          ← Toolbox
+        <button type="button" className="phone-stage-back" onClick={backInsidePhone}>
+          {backLabel}
         </button>
         <div className="phone-stage-meta">
-          <strong>iPhone 15 Pro</strong>
-          <span>Purpose Academy · Learner app</span>
+          <strong>{device.label}</strong>
+          <span>
+            Purpose Academy · {phaseLabel} · {device.width}×{device.height}
+          </span>
         </div>
         <div className="phone-stage-actions">
           <FoleyToggle />
-          <button
-            type="button"
-            className="phone-stage-link"
-            onClick={() => {
-              restartPracticeFromTop()
-              scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
-            }}
-          >
-            Restart path
+          {phase === 'app' && (
+            <button
+              type="button"
+              className="phone-stage-link"
+              onClick={() => {
+                restartPracticeFromTop()
+                scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
+            >
+              Restart path
+            </button>
+          )}
+          <button type="button" className="phone-stage-link" onClick={exitToModes}>
+            Exit phone
           </button>
         </div>
       </header>
 
+      <div className="phone-device-picker" role="group" aria-label="Phone size">
+        {PHONE_DEVICES.map((d) => (
+          <button
+            key={d.id}
+            type="button"
+            className={`phone-device-chip${d.id === deviceId ? ' is-active' : ''}`}
+            onClick={() => pickDevice(d.id)}
+            title={`${d.label} · ${d.width}×${d.height}`}
+          >
+            {d.short}
+          </button>
+        ))}
+      </div>
+
       <div className="phone-stage-floor" aria-hidden />
 
-      <div
-        className="phone-scale-wrap"
-        ref={wrapRef}
-        style={{ width: PHONE_W * scale, height: PHONE_H * scale }}
-      >
+      <div className="phone-scale-wrap" style={{ width: device.width * scale, height: device.height * scale }}>
         <div
-          className="iphone"
+          className={`iphone finish-${device.finish} island-${device.island}`}
           style={{
-            width: PHONE_W,
-            height: PHONE_H,
+            ...frameStyle,
+            width: device.width,
+            height: device.height,
             transform: `scale(${scale})`,
             transformOrigin: 'top left',
           }}
-          role="img"
-          aria-label="iPhone emulator running Purpose Academy"
+          role="region"
+          aria-label={`${device.label} emulator running Purpose Academy`}
         >
           <div className="iphone-titanium" aria-hidden>
             <span className="iphone-btn iphone-btn-silent" />
@@ -127,9 +202,13 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
             <div className="iphone-screen">
               <div className="iphone-status" aria-hidden>
                 <span className="iphone-status-time">{time}</span>
-                <span className="iphone-island">
-                  <span className="iphone-island-cam" />
-                </span>
+                {device.island === 'dynamic' && (
+                  <span className="iphone-island">
+                    <span className="iphone-island-cam" />
+                  </span>
+                )}
+                {device.island === 'notch' && <span className="iphone-notch" />}
+                {device.island === 'none' && <span className="iphone-island-spacer" />}
                 <span className="iphone-status-glyphs">
                   <span className="iphone-signal" />
                   <span className="iphone-wifi" />
@@ -137,8 +216,23 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
                 </span>
               </div>
 
-              <div className="iphone-scroll shell is-train is-phone-app" ref={scrollRef}>
-                {children}
+              <div
+                className={`iphone-scroll shell is-train is-phone-app phone-phase-${phase}`}
+                ref={scrollRef}
+                data-phone-device={device.id}
+                data-phone-phase={phase}
+              >
+                {phase === 'home' && <PhoneHomeScreen />}
+                {phase === 'splash' && (
+                  <SplashPage
+                    embedded
+                    onEnter={() => {
+                      setPhonePhase('toolbox')
+                      navigate('/', { replace: true })
+                    }}
+                  />
+                )}
+                {(phase === 'toolbox' || phase === 'app') && children}
               </div>
 
               <div className="iphone-home-bar" aria-hidden>
@@ -150,7 +244,13 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
       </div>
 
       <p className="phone-stage-hint">
-        Live learner path inside the device. Scroll and tap as you would on a phone.
+        {phase === 'home'
+          ? 'Tap the Purpose Academy icon on the home screen to launch the app.'
+          : phase === 'splash'
+            ? 'Watch the opening on the phone, then strike Enter to open the toolbox.'
+            : phase === 'toolbox'
+              ? 'Open a tray — Practice, Student, Instructor, or Admin — inside the device.'
+              : 'Live learner path inside the device. Pick a phone size above, then scroll and tap.'}
       </p>
     </div>
   )

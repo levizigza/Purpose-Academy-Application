@@ -310,6 +310,7 @@ Solid information output is not polish after the fact. It is the product. A Calg
 |---------|--------------|------------|
 | Splash / enter | Brand-first composition; purposeful motion | Door architecture §7.3; walk-through exit |
 | Home / Programs / Give | Three-door story; whole pathway photos; one job per section | Honest depth counts; no fake dashboards |
+| Phone learner app (emulator) | **Same logo lockup:** navy on white paper; white app icon | No gold/dark dialect that contradicts `logo-full` |
 | Practice `/journey` | Kickers, alerts, choice grids, contain object mats, visible pass | Finite stations; Done for now; mastery gates |
 | Portal School path | Same spine language + dark stage for light text | Today’s station; no feed chrome |
 | Learn / LMS | Same pathway accents + honesty when empty | Never fake “caught up” |
@@ -426,6 +427,24 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-26 — Phone app brand lockup = logo (navy on white) (L3 / L6)
+
+- **Critic overturned** gold/dark phone home + night Practice dialect inside the emulator. The website logo is **navy doorway on white paper** — the learner app icon and in-phone surfaces must inherit that lockup, not invent a second tone.
+- App icon (`PaAppIcon` / `logo-mark.svg`): white tile, navy P. Home wallpaper: paper + soft brand blue. `.is-phone-app` Practice hub tokens flip to paper/navy.
+- Outer emulator stage may stay dark (device on a desk). Inside the glass = Purpose Academy brand.
+- **Assumption to challenge next:** whether Desktop course shell should also lighten to paper, or keep shop-floor night only for full-bleed desktop demos.
+
+
+### 2026-10-26 — Desktop | Phone mode chooser + in-phone app launch (L3 / L4 / L6)
+
+- **Overturned** splash-first → toolbox-as-Phone/Desktop picker. Critic: demos need a clear Desktop vs Phone door, and phone demos must start from a home-screen icon like a real app.
+- **First screen:** split **Desktop mode | Phone mode** (brand hero-level).
+- **Desktop:** opening animation → Enter → toolbox trays (Student, Practice, Instructor, Admin) → course shell. Marketing site stays off this app surface.
+- **Phone:** device home with Purpose Academy icon → opening animation *inside* the phone → toolbox on device → Practice / enter routes in `.is-phone-app` (container queries, not viewport media).
+- Multi-device picker (SE → 16 Pro Max, Pixel, Galaxy) kept for demo coverage.
+- **Assumption to challenge next:** whether Instructor/Admin trays should open dedicated phone-optimized shells or stay as scrollable desktop layouts inside the frame.
+
 
 ### 2026-10-22 — Basic Computer Skills at curriculum step 12 (Unit 6, all pathways) (L2)
 

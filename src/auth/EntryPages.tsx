@@ -25,6 +25,15 @@ export function markEnteredSite() {
   }
 }
 
+/** Clear so Desktop mode can replay the opening after leaving Modes. */
+export function clearEnteredSite() {
+  try {
+    sessionStorage.removeItem(ENTERED_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
 /**
  * Composition + motion threshold (v33):
  * Build → Breathe → Resolve.
@@ -186,7 +195,10 @@ function OpeningComposition({
   )
 }
 
-export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
+export function SplashPage({
+  onEnter,
+  embedded = false,
+}: { onEnter?: () => void; /** Fill a phone screen instead of the browser viewport */ embedded?: boolean } = {}) {
   const navigate = useNavigate()
   const [stage, setStage] = useState<SplashStage>('breath')
 
@@ -262,6 +274,7 @@ export function SplashPage({ onEnter }: { onEnter?: () => void } = {}) {
       className={[
         'threshold',
         `threshold-stage-${stage}`,
+        embedded ? 'is-embedded' : '',
         showName ? 'is-named' : '',
         showPathways ? 'is-pathways' : '',
         showEnter ? 'is-ready' : '',
