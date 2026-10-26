@@ -143,6 +143,16 @@ function WhyWork({ children }: { children: ReactNode }) {
   )
 }
 
+/** Coaching notes below the drill on phone — task/media leads the first viewport. */
+function StationContext({ children }: { children: ReactNode }) {
+  return (
+    <details className="station-context-fold">
+      <summary>Why this station · teach note</summary>
+      {children}
+    </details>
+  )
+}
+
 function PictureCard({
   emoji,
   label,
@@ -294,6 +304,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   return (
     <div
       className={`shell-main train-shell${step === 7 ? ' is-organize-wide' : ''}${
+        step === 6 ? ' is-visual-vocabulary' : ''
+      }${step === 8 ? ' is-eye-spy' : ''}${step === 9 ? ' is-sentence-structure' : ''}${
         step === 12 ? ' is-computer-skills' : ''
       }${step === 18 ? ' is-equipment-video' : ''}`}
     >
@@ -305,20 +317,76 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             {practice ? ' · Student Practice' : ''}
           </p>
           <div className="train-sound-slot">
-            {practice && onOpenHub && (
-              <button type="button" className="btn btn-ghost train-hub-btn" onClick={onOpenHub}>
-                Path home
-              </button>
-            )}
-            {practice && (
-              <Link className="btn btn-ghost train-hub-btn" to="/app/student">
-                Done for now
-              </Link>
-            )}
-            {/* Phone emulator chrome already has Practice sounds — hide the duplicate icon that overlaps hub buttons. */}
+            {/* Desktop wide: keep Path home / Done visible. Phone folds them into Station menu. */}
+            <div className="train-hub-row">
+              {practice && onOpenHub && (
+                <button type="button" className="btn btn-ghost train-hub-btn" onClick={onOpenHub}>
+                  Path home
+                </button>
+              )}
+              {practice && (
+                <Link className="btn btn-ghost train-hub-btn" to="/app/student">
+                  Done for now
+                </Link>
+              )}
+            </div>
+            {/* Phone emulator / course shell already have Practice sounds. */}
             <FoleyToggle compact className="train-inline-foley" />
           </div>
         </div>
+        {practice && (
+          <details className="train-station-menu">
+            <summary className="train-station-menu-summary">Station menu</summary>
+            <div className="train-station-menu-body">
+              <div className="train-station-menu-hub">
+                {onOpenHub && (
+                  <button type="button" className="btn btn-ghost train-hub-btn" onClick={onOpenHub}>
+                    Path home
+                  </button>
+                )}
+                <Link className="btn btn-ghost train-hub-btn" to="/app/student">
+                  Done for now
+                </Link>
+              </div>
+              {practice && <PracticeStatsStrip step={step} />}
+              {onJumpLesson && (
+                <nav className="practice-section-skip" aria-label="Skip between sections for quality review">
+                  <button
+                    type="button"
+                    className="btn btn-ghost practice-section-skip-btn"
+                    disabled={step <= PRACTICE_ENTRY_STEP}
+                    onClick={() => onJumpLesson(Math.max(PRACTICE_ENTRY_STEP, step - 1))}
+                  >
+                    Prev section
+                  </button>
+                  <label className="practice-section-skip-jump">
+                    <span>Jump to section</span>
+                    <select
+                      value={step}
+                      onChange={(e) => onJumpLesson(Number(e.target.value))}
+                      aria-label="Jump to any practice section"
+                    >
+                      {jumpSteps.map((s) => (
+                        <option key={s.n} value={s.n}>
+                          {s.n}. {s.title}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <button
+                    type="button"
+                    className="btn btn-ghost practice-section-skip-btn"
+                    disabled={step >= JOURNEY_STEP_COUNT}
+                    onClick={() => onJumpLesson(Math.min(JOURNEY_STEP_COUNT, step + 1))}
+                  >
+                    Next section
+                  </button>
+                </nav>
+              )}
+            </div>
+          </details>
+        )}
+        {/* Desktop review: keep a dedicated jump fold when not using the phone station menu layout */}
         {practice && onJumpLesson && (
           <details className="practice-section-skip-fold">
             <summary className="practice-section-skip-summary">Jump sections (review)</summary>
@@ -358,7 +426,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         )}
         <h1 className="train-title">{title}</h1>
         <p className="train-simple-line">{help}</p>
-        {practice && <PracticeStatsStrip step={step} />}
+        {practice && <PracticeStatsStrip step={step} className="practice-stats-strip-desktop" />}
         {!motherTongue && (
           <p className="train-unit-pill" aria-label={`Learning unit ${unit.id}`}>
             <span>Unit {unit.id}</span>
@@ -1649,17 +1717,22 @@ export function StudentSequencePage() {
     }
     return (
       <Shell step={7} onBack={() => go(6)}>
-        <WhyWork>
-          {pathwayId === 'logistics'
-            ? 'The same warehouse word has one English name and many home-language names. Hear a language, then drop the picture on that word.'
-            : 'The same tool has one English name and many home-language names. Hear a language, then drop the picture on that word.'}
-        </WhyWork>
-        <TeachNote>Five rounds. Each card already lists the word in every language. Move the matching picture into the empty box. Hear any language if you want help.</TeachNote>
         <VocabOrganizeQuiz
           terms={organizeTerms}
           onPassed={() => go(8, 'Opening English Eye Spy…')}
           onSkip={isPracticeMode() ? () => go(8, 'Opening English Eye Spy…') : undefined}
         />
+        <StationContext>
+          <WhyWork>
+            {pathwayId === 'logistics'
+              ? 'The same warehouse word has one English name and many home-language names. Hear a language, then drop the picture on that word.'
+              : 'The same tool has one English name and many home-language names. Hear a language, then drop the picture on that word.'}
+          </WhyWork>
+          <TeachNote>
+            Five rounds. Each card already lists the word in every language. Move the matching picture into the
+            empty box. Hear any language if you want help.
+          </TeachNote>
+        </StationContext>
       </Shell>
     )
   }
@@ -1671,15 +1744,10 @@ export function StudentSequencePage() {
         step={8}
         onBack={() => go(7)}
       >
-        <WhyWork>
-          {pathwayId === 'logistics'
-            ? 'On a real warehouse floor every object sits among other goods and equipment. Prove you can name each one until the board is clear.'
-            : 'On a real site every tool sits among other objects. Prove you can name each one until the board is clear.'}
-        </WhyWork>
-        <TeachNote>Exercise mode: unlimited tries. Tap a picture and its English name. A correct pair disappears. Clear the whole board, then the next scene. Pass requires 100% with no misses.</TeachNote>
         <EyeSpyQuiz
           scenes={EYE_SPY_SCENES}
           mode="exercise"
+          pathwayId={pathwayId}
           onComplete={() => {
             setStep8Phase(SENTENCE_CLOZE.length ? 'sentences' : 'actions')
             setSentenceLevel1(false)
@@ -1693,6 +1761,17 @@ export function StudentSequencePage() {
             )
           }}
         />
+        <StationContext>
+          <WhyWork>
+            {pathwayId === 'logistics'
+              ? 'On a real warehouse floor every object sits among other goods and equipment. Prove you can name each one until the board is clear.'
+              : 'On a real site every tool sits among other objects. Prove you can name each one until the board is clear.'}
+          </WhyWork>
+          <TeachNote>
+            Exercise mode: unlimited tries. Tap a picture and its English name. A correct pair disappears. Clear
+            the whole board, then the next scene. Pass requires 100% with no misses.
+          </TeachNote>
+        </StationContext>
       </Shell>
     )
   }
@@ -2677,7 +2756,12 @@ export function StudentSequencePage() {
       return (
         <Shell step={21} onBack={() => go(20)}>
           <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Pair every picture with its word until each board is empty." />
-          <EyeSpyQuiz scenes={EYE_SPY_SCENES} mode="exam" onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('written') }} />
+          <EyeSpyQuiz
+            scenes={EYE_SPY_SCENES}
+            mode="exam"
+            pathwayId={pathwayId}
+            onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('written') }}
+          />
         </Shell>
       )
     }

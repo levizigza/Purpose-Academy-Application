@@ -49,7 +49,25 @@ import comSupportPlan from '../assets/photos/community/com-support-plan.jpg'
 import comBackpack from '../assets/photos/community/com-backpack.jpg'
 import comShopping from '../assets/photos/community/com-shopping.jpg'
 
+import pathConstruction from '../assets/photos/path-construction.jpg'
+import pathLogistics from '../assets/photos/path-logistics.jpg'
+import pathCommunity from '../assets/photos/path-community.jpg'
+import heroWork from '../assets/photos/hero-work.jpg'
+import stageApprenticeship from '../assets/photos/stage-apprenticeship.jpg'
+
+/** Workplace atmosphere floors for Eye Spy scenes (not object tiles). */
+export const EYE_SPY_ATMOSPHERE: Record<'construction' | 'logistics' | 'community', string[]> = {
+  construction: [pathConstruction, heroWork, stageApprenticeship],
+  logistics: [logWarehouse, logAisle, logDock, pathLogistics],
+  community: [pathCommunity, comWelcome, comHygiene, comShopping],
+}
+
 const PATHWAY_PHOTOS: Record<string, string> = {
+  'path-construction': pathConstruction,
+  'path-logistics': pathLogistics,
+  'path-community': pathCommunity,
+  'hero-work': heroWork,
+  'stage-apprenticeship': stageApprenticeship,
   'log-box': logBox,
   'log-bag': logBag,
   'log-bin': logBin,
@@ -112,7 +130,8 @@ export function pathwayImage(key?: string | null): string | undefined {
     return `${base}media/construction-vv/${key}.jpg`
   }
   // Community Support Visual Vocabulary (499 live / slot 176 reserved).
-  // Interim studio word tiles until worksheet photos are extracted from the PDF.
+  // Community VV tiles — Eye Spy / early words use remaster object cues;
+  // remaining slots stay word cards until the worksheet PDF is extracted.
   if (key.startsWith('com-vv-')) {
     const base = import.meta.env.BASE_URL || '/'
     return `${base}media/community-vv/${key}.jpg`

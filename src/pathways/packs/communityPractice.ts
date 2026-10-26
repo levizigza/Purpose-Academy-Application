@@ -1,8 +1,8 @@
 /**
  * Community Support Foundations practice layers aligned to Community Visual Vocabulary.
  * Eye Spy uses the same clear-all mold as Construction / Logistics (ten boards).
- * termIds / hotspot ids match community-NNN; imageKeys use com-vv-NNN (interim tiles)
- * or remastered com-* photos when available.
+ * termIds / hotspot ids match community-NNN; imageKeys use com-vv-NNN object photos
+ * (role→workplace cue remasters) or remastered com-* keys when titles match.
  */
 import type { EyeSpyScene } from '../../student/journeyCurriculum'
 import { hint } from '../packHelpers'

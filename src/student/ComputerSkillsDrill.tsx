@@ -80,7 +80,20 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
   }, [lesson.id])
 
   useEffect(() => {
-    document.querySelector('.comp-skills-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    /*
+     * Phone: jump already sets .iphone-scroll to top. scrollIntoView(block:start)
+     * on the card shoved the train title above the fold (showcase: blank chrome).
+     * Desktop course: soft-scroll the card into view under the sticky topbar.
+     */
+    const phone =
+      document.documentElement.classList.contains('pa-phone-shell') ||
+      Boolean(document.querySelector('.is-phone-app'))
+    if (phone) {
+      const sc = document.querySelector('.iphone-scroll')
+      if (sc instanceof HTMLElement) sc.scrollTop = 0
+      return
+    }
+    document.querySelector('.comp-skills-card')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [])
 
   function markWatched(item: BasicComputerLesson) {

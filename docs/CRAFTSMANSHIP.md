@@ -224,10 +224,11 @@ These are load-bearing across all layers.
 
 ### 6.3a1 Language organize quiz (after five-language VocabSheet)
 
-- After Visual Vocabulary Level-1 is ready, learners face a **language organize** page before Sentence Structure / Word → Action.
-- One page = **four English stations**. Top tray is jumbled: pictures + five-language word chips.
-- For each English word (e.g. HAMMER): place the **picture**, then place language names in worksheet descending order (Amharic → Tigrinya → Arabic → Spanish → Hindi).
-- Pass requires all four stations complete (picture + all five glosses). Tap-to-place (mobile-safe).
+- After Visual Vocabulary Level-1 is ready, learners face a **language organize** page before Eye Spy.
+- **Five rounds**, each with **four pictured words**. Each word card already shows English + five home-language names; the learner only places the matching **picture**.
+- **Desktop / course:** four boards side by side. **Phone (`.is-phone-app`):** sticky 2×2 picture strip + **one full-width word** with Prev/Next among unmatched — never a crushed 4-column grid (viewport `@media` does not fire inside the emulator).
+- Coaching (At work / Teach note) lives in `StationContext` **below** the quiz; phone task-first CSS hides that chrome so pictures + Drop clear the first viewport.
+- Pool / label ink on paper is **navy**, not pale gold. Pass = five rounds clear.
 
 ### 6.3b Photos show the whole object
 
@@ -413,7 +414,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 | Optics + attention ethics (path stage) | L3/L4 | Done — iterate |
 | Site-wide craft layers (doctrine + sweep) | L1–L6 | Done (this climb) — keep sweeping |
 | Pathway-aware foley beds | L2/L3 | Open |
-| Eye Spy photography upgrade | L2/L3 | Climbing — hotspot floors + larger stage; still wants true scene photos |
+| Eye Spy photography upgrade | L2/L3 | Done for showcase — baked single-photo floors + transparent taps (2026-10-26); PDF worksheet crops still welcome |
 | Community specialty vocab growth | L2 | Open |
 | Deeper Logistics/Community LMS modules | L2/L6 | Open |
 | Portal School path polish (mobile density) | L3/L6 | Open |
@@ -425,6 +426,84 @@ Revisit when aims change. Ranked by learner / trust harm.
 ---
 
 ## 11. Changelog (living)
+
+### 2026-10-26 — Paper ink lock: full Practice sweep (L3)
+
+- **Layers:** L3 information display (Practical — WCAG body on paper).
+- **Method:** Phone playthrough ink sweep across hub + stations; fail light foreground on light backgrounds.
+- **Customer defects found:** Career strengths night `#e8eef6` on cream; `.section-kicker` accent gold on paper (Computer Skills); Sentence Structure A–D / blank slot muted `#8aa0b8`; check-in / unit-method / result-badge gold-on-cream risk.
+- **Law restated:** On `.is-phone-app` / `.is-course-app`, amber is border / pill / fill / motion-dot only — never body or kicker copy on a light fill. Dark islands (`.career-fit`, `.career-code`, `.career-profile`, `.equip-video-rail`) keep light ink; rail family labels use brighter `#f5c542`.
+- **Fix:** Navy `.section-kicker` on paper; tokenize + override career / check-in / badge / cloze letters; course parity. Scripts: `ink-sweep.mjs`, `verify-career-ink.mjs`.
+- **Honest remainder:** Marketing splash heroes still use gold-on-photo with text-shadow (intentional). Desktop night train stage outside paper shells still uses light ink by design. Live GitHub Pages lags until `main` merge.
+- **Assumption to challenge next:** whether hub video/computer marketing panels on paper should drop remaining hardcoded `#e8eef6` body outside Practice.
+
+### 2026-10-26 — Language Organize phone: first viewport playable (L3)
+
+- **Layers:** L3 information display (Practical — playable on ~390px).
+- **Customer defect (round 2):** Even after one-board focus, At work / Teach note still filled the phone fold so pictures never appeared without scroll. Washed gold “At work” / pool labels failed demos. Live GitHub Pages (`levizigza.github.io/Purpose-Academy-Application/`) still served the pre-fix build until this PR merges to `main` — demos against that URL will look broken.
+- **Why the app-wide playthrough missed it:** Audit jumped many stations but **not** Language Organize; phone checks used viewport `@media` thinking, not `.is-phone-app` board geometry. Critic failed the connection test (gateway → path → Practice) for this station.
+- **Fix:** Quiz first; coaching in `StationContext` below. Phone task-first hide list includes `is-organize-wide`. Sticky picture row + Drop card (+ word) share the first viewport; compact language grid; navy paper labels. Audit visits Organize and fails multi-board / narrow / light pool ink / pictures or Drop below fold.
+- **Assumption to challenge next:** whether Desktop course should also default to 2×2 boards below ~900px container width (not only viewport).
+
+### 2026-10-26 — Language Organize phone: one word at a time (L3)
+
+- **Layers:** L3 information display (Practical — playable on ~390px).
+- **Customer defect:** Four word boards stayed in a desktop 4-column grid inside the phone emulator (viewport `@media` never fires). Boards overlapped into unusable slivers; pool label washed gold on paper. Playthrough audit never jumped to Language Organize — miss.
+- **Fix:** Phone focus layout — sticky 2×2 picture strip + **one full-width word card** with Prev/Next among unmatched. Navy pool/slot ink. Audit now visits Organize and fails if more than one board or width &lt; 220px.
+- **Assumption to challenge next:** whether Desktop course should also default to 2×2 boards below ~900px container width (not only viewport).
+
+### 2026-10-26 — Iconic 100%: baked Eye Spy floors + Community object photos (L2 / L3)
+
+- **Layers:** L2 content delivery + L3 information display (last Iconic showcase gate).
+- **Defect:** Eye Spy still floated separate tool mats on atmosphere (not one photo). Community VV Eye Spy / early words were interim navy word cards (`Volunteer`), not workplace objects. Source Community PDF still absent — object cues use remastered `com-*` photos mapped to roles/places.
+- **Fix:** `scripts/bake-eye-spy-scenes.py` composites tools into `public/media/eye-spy/{pathway}-{scene}.jpg`; quiz uses transparent tap regions on baked floors (`.is-baked`). `scripts/upgrade-community-vv-photos.py` replaces 40 Eye Spy / early `com-vv-*` word cards with studio-padded remaster object photos (welcome desk, clipboard, first-aid, wheelchair, …).
+- **Assumption to challenge next:** when the Community Service Visual Vocabulary PDF arrives, re-extract true worksheet object crops over the role→object cue map.
+
+### 2026-10-26 — Eye Spy workplace atmosphere floors (L3 / Iconic)
+
+- **Layers:** L3 information display + Iconic presence (scene read, not flat collage).
+- **Defect:** Eye Spy was a 2×2 tile collage on a night gradient — readable but not memorable as a job-site station. Hotspot x/y/w/h lay unused.
+- **Fix:** Pathway atmosphere photos (`path-construction`, warehouse aisle/dock, community welcome, etc.) become scene floors; tool callouts sit at percent positions on paper mats. Phone keeps contain + first-viewport density. Honest: still callout mats on atmosphere, not single-photo worksheet hotspots — Community PDF wholes remain the last Iconic gate.
+- **Assumption to challenge next:** whether true PDF Eye Spy floors (one photo, tap regions only) should replace callout mats once assets exist.
+
+### 2026-10-26 — Hub token pass + phone task-first fold (L3)
+
+- **Layers:** L3 information display (Practical climb to showcase 100%).
+- **Defect:** Hub meter/metrics/section heads/resume/pathway badge still hard-coded `#fff` / `#f4f7fb` so paper shells washed. Desktop stats `.is-ready` / `.is-locked` lime/peach on paper. PictureCard figcaption stayed `#fff` on remapped white `--train-surface-2` (“A worker gives a direction”). Phone VV/Sentence first viewport lost to duplicate lede + unit-intro before the photo/cloze.
+- **Fix:** Tokenize remaining `.ph-*` night hardcodes to `--ph-ink*` / `--ph-soft` / `--ph-line`. Course stats strip + picture figcaption paper ink. Shell flags `is-visual-vocabulary` / `is-sentence-structure` / `is-eye-spy`; phone hides unit-intro/why/progress and drops VV sheet lede + Sentence help so media leads. Eye Spy stage paper presence + larger phone tiles.
+- **Assumption to challenge next:** true Eye Spy scene photography + Community PDF object photos still gate Iconic 100%; interim tiles remain honest.
+
+### 2026-10-26 — Portal School path + hub domain ink on paper (L3 / L6)
+
+- **Layers:** L3 information display + L6 brand lockup (site-wide paper Practice dialect).
+- **Defect:** Portal `/app/student` School path kept night `practice-hub.is-portal` + navy stage head while Desktop course/Phone were paper — third skin. Desktop hub domain rows still hard-coded `#f4f7fb` on white paper after the course flip.
+- **Fix:** Portal hub + school-path stage head → paper; tokenize `.ph-domain-row` / unit titles / status chips to `--ph-ink*`. Course hub domain overrides. Phone VV lede clamped to 3 lines to cut first-viewport overflow.
+- **Assumption to challenge next:** whether Learn/LMS should inherit the same paper dialect next, or keep instructor-dense chrome.
+
+### 2026-10-26 — Computer Skills first viewport + Familiar paper stage (L3)
+
+- **Layers:** L3 information display (phone first viewport + mastery beat).
+- **Defect:** Phone jump to Basic Computer Skills ran `scrollIntoView(block:start)` on the card and shoved the train title above the fold (`scrollTop≈395`). Familiar theater had almost no stage CSS. Course Practice banner still shouted gold on the new paper stage.
+- **Fix:** Phone Comp/Equipment drills pin `.iphone-scroll` to top; desktop uses `nearest`. Hide unit-intro + why-details on phone computer/equipment shells. Familiar theater paper card + one Continue. Course banner → quiet navy status strip.
+- **Assumption to challenge next:** Sentence Structure still clips below the fold on phone — whether worksheet chrome can collapse further so item 1 peeks without scroll.
+
+### 2026-10-26 — Desktop course = paper dialect with phone (L3 / L6)
+
+- **Layers:** L3 information display + L6 brand lockup (one showcase dialect).
+- **Critic overturn:** Desktop course night stage fought the logo + phone navy-on-paper lockup; hub Computer/Warehouse inners and Eye Spy titles washed or split the product into two skins.
+- **Fix:** `.course-stage` paper bed; `.is-course-app` shares phone train/ph tokens; hub/station/Eye Spy/chips paper overrides. Topbar stays navy brand chrome. Eye Spy body colors tokenized (`--train-text*`).
+- **Assumption to challenge next:** whether Learn/portal School path should inherit the same paper Practice dialect, or keep a darker instructor stage.
+- **Same sprint:** Practice `.train-panel` Reveal + `train-fade-rise` left phone Eye Spy mid-opacity (~0.25) after section jumps — looked like washed ink. Instant-visible panels in phone/course shells; Reveal uses `.iphone-scroll` as IO root elsewhere.
+- **Same sprint:** Eye Spy At work / Teach note moved below the board in `StationContext` fold so pictures lead the phone first viewport.
+
+### 2026-10-26 — Showcase readability: course banner + phone body ink (L3)
+
+- **Layers:** L3 information display (app-wide readable ink for showcase demos).
+- **Defect:** Desktop course shell still showed Practice banner Toolbox/Start over (duplicate chrome) because React state raced `pa-course-shell` class mount. Phone VV lede / page labels / “Tap for goals” / equipment purpose read soft gray on paper. Station hub chrome competed with the task on ~390px.
+- **Fix:** CSS `html.pa-course-shell` hides banner actions (source of truth) + MutationObserver sync; phone Station menu folds Path home/Done/Jump/stats; tokenized remaining train body hardcodes (`unit-intro`, `lp-*`, phrase/topic); phone body ledes forced to brand-deep ≥0.95rem.
+- **Assumption to challenge next:** whether Desktop course night stage should flip to paper for one showcase dialect, or stay night-with-AA contrast only.
+- **Follow-up same day:** brightened Practice hub `--ph-muted` to `#c5d3e4` and video/computer body copy so Desktop night stage does not look washed in demos.
+- **Showcase screenshot (phone hub):** Computer Skills / Warehouse Equipment titles were navy on the *inner* night gradient (wrappers were paper, inners still `#0b1c2e`). Paper + brand-deep the inners; body ≥0.98rem.
 
 Newest first.
 

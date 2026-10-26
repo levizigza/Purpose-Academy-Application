@@ -329,16 +329,21 @@ export function PracticeModeBanner() {
   const navigate = useNavigate()
   const [name, setName] = useState(() => getPracticeName())
   const [active, setActive] = useState(() => isPracticeMode())
+  const [inCourseShell, setInCourseShell] = useState(false)
 
   useEffect(() => {
     const sync = () => {
       setName(getPracticeName())
       setActive(isPracticeMode())
+      setInCourseShell(document.documentElement.classList.contains('pa-course-shell'))
     }
     sync()
+    const mo = new MutationObserver(sync)
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
     window.addEventListener('pa-practice-started', sync)
     window.addEventListener('pa-practice-restarted', sync)
     return () => {
+      mo.disconnect()
       window.removeEventListener('pa-practice-started', sync)
       window.removeEventListener('pa-practice-restarted', sync)
     }
@@ -354,24 +359,26 @@ export function PracticeModeBanner() {
   }
 
   return (
-    <div className="practice-banner" role="status">
+    <div className={`practice-banner${inCourseShell ? ' is-status-only' : ''}`} role="status">
       <span>
         Practice{name ? ` · ${name}` : ''}. Finite school path — one station at a time. Registration
         skipped.
       </span>
-      <span className="practice-banner-actions">
-        <Link className="practice-banner-cta" to="/">
-          Toolbox
-        </Link>
-        {!onJourney && (
-          <Link className="practice-banner-cta" to="/journey">
-            School path
+      {!inCourseShell && (
+        <span className="practice-banner-actions">
+          <Link className="practice-banner-cta" to="/">
+            Toolbox
           </Link>
-        )}
-        <button type="button" className="practice-banner-cta" onClick={startOver}>
-          Start over
-        </button>
-      </span>
+          {!onJourney && (
+            <Link className="practice-banner-cta" to="/journey">
+              School path
+            </Link>
+          )}
+          <button type="button" className="practice-banner-cta" onClick={startOver}>
+            Start over
+          </button>
+        </span>
+      )}
     </div>
   )
 }

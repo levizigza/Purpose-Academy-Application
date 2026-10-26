@@ -28,6 +28,25 @@ function chunk<T>(items: T[], size: number): T[][] {
   return pages.filter((page) => page.length)
 }
 
+function usePhoneOrganizeLayout() {
+  const [phone, setPhone] = useState(false)
+  useEffect(() => {
+    const read = () =>
+      setPhone(
+        document.documentElement.classList.contains('pa-phone-shell') ||
+          Boolean(document.querySelector('.is-phone-app, .pa-phone-shell, .iphone-scroll')),
+      )
+    read()
+    const obs = new MutationObserver(read)
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'], subtree: true })
+    /* Phone frame mounts .is-phone-app after first paint — watch the shell tree too */
+    const shell = document.querySelector('.pa-phone-shell, .iphone-frame, #root') || document.body
+    obs.observe(shell, { attributes: true, attributeFilter: ['class'], childList: true, subtree: true })
+    return () => obs.disconnect()
+  }, [])
+  return phone
+}
+
 /** Pick pictured specialty words for five organize rounds. */
 export function pickOrganizeTerms(vocab: readonly VocabTerm[]): VocabTerm[] {
   const pool = specialtyVocabPool(vocab)
@@ -56,9 +75,11 @@ type Props = {
 /**
  * Five rounds. Each word already shows English + five language names.
  * Move the matching picture into the empty box on that word.
- * Hear any language to help decide.
+ * Phone: one word card at a time (four columns cannot fit ~390px).
+ * Desktop: four boards side by side.
  */
 export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
+  const phone = usePhoneOrganizeLayout()
   const rounds = useMemo(() => chunk(terms, ORGANIZE_PAGE_SIZE), [terms])
   const [round, setRound] = useState(0)
   const page = rounds[Math.min(round, Math.max(0, rounds.length - 1))] || []
@@ -72,6 +93,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
   const [speakingKey, setSpeakingKey] = useState<string | null>(null)
   const [roundClear, setRoundClear] = useState(false)
   const [passed, setPassed] = useState(false)
+  const [focusIdx, setFocusIdx] = useState(0)
   const practice = isPracticeMode()
 
   const pageKey = page.map((t) => t.id).join('|')
@@ -83,11 +105,22 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
     setShakeId(null)
     setDragOverId(null)
     setRoundClear(false)
+    setFocusIdx(0)
   }, [pageKey])
 
   const leftoverImages = imageOrder.filter((id) => !matched[id])
+  const unmatched = page.filter((t) => !matched[t.id])
   const matchedCount = Object.keys(matched).length
   const lastRound = round >= rounds.length - 1
+
+  /* Keep focus on an unmatched word when the current one is cleared */
+  useEffect(() => {
+    if (!phone || !unmatched.length) return
+    if (focusIdx >= unmatched.length) setFocusIdx(Math.max(0, unmatched.length - 1))
+  }, [phone, unmatched.length, focusIdx])
+
+  const focusTerm = phone && unmatched.length ? unmatched[Math.min(focusIdx, unmatched.length - 1)] : null
+  const boardsToShow = phone ? (focusTerm ? [focusTerm] : []) : page
 
   function placeImage(imageId: string, wordId: string) {
     if (roundClear || passed || matched[wordId]) return
@@ -112,6 +145,12 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
       } else {
         setRoundClear(true)
       }
+      return
+    }
+    /* Phone: stay on the next unmatched word (same index after removal) */
+    if (phone) {
+      const nextUnmatched = page.filter((t) => !nextMatched[t.id])
+      setFocusIdx((i) => Math.min(i, Math.max(0, nextUnmatched.length - 1)))
     }
   }
 
@@ -146,6 +185,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
     setMatched({})
     setPicked(null)
     setShakeId(null)
+    setFocusIdx(0)
     playFoley('whoosh')
   }
 
@@ -157,7 +197,9 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
     return (
       <article className="vocab-organize vocab-organize-pass" aria-live="polite">
         <p className="section-kicker">Language organize · Passed</p>
-        <div className="vocab-organize-pass-badge" aria-hidden>✓</div>
+        <div className="vocab-organize-pass-badge" aria-hidden>
+          ✓
+        </div>
         <h2>Five rounds complete</h2>
         <p className="lede">You matched each picture to the word in every language. Next: Eye Spy.</p>
         <div className="hero-actions">
@@ -175,7 +217,9 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
         <p className="section-kicker">
           Language organize · Round {round + 1} of {rounds.length}
         </p>
-        <div className="vocab-organize-pass-badge" aria-hidden>✓</div>
+        <div className="vocab-organize-pass-badge" aria-hidden>
+          ✓
+        </div>
         <h2>Round {round + 1} clear</h2>
         <p className="lede">Four pictures are on the right words. Next set uses four new words.</p>
         <div className="hero-actions">
@@ -188,7 +232,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
   }
 
   return (
-    <article className="vocab-organize">
+    <article className={`vocab-organize${phone ? ' is-phone-focus' : ''}`}>
       <header className="vocab-organize-head">
         <div className="vocab-organize-head-row">
           <p className="section-kicker">
@@ -201,17 +245,22 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
           ) : null}
         </div>
         <p className="train-vocab-counter">
-          Move each picture into its word box · {matchedCount} of {page.length}
-          {picked ? ' · Picture selected — drop it on the empty box' : ''}
+          {phone
+            ? `Tap a picture, then tap Drop on this word · ${matchedCount} of ${page.length}`
+            : `Move each picture into its word box · ${matchedCount} of ${page.length}`}
+          {picked ? (phone ? ' · Picture selected — tap Drop' : ' · Picture selected — drop it on the empty box') : ''}
         </p>
         <p className="lede vocab-organize-help">
-          Each card is the English word plus the same word in five languages. Hear a language if you
-          want help. Then move the matching picture into the empty box on that card.
+          {phone
+            ? 'One word at a time. Hear a language if you want help, then place the matching picture.'
+            : 'Each card is the English word plus the same word in five languages. Hear a language if you want help. Then move the matching picture into the empty box on that card.'}
         </p>
       </header>
 
       <section className="vocab-organize-pool" aria-label="Pictures to place">
-        <p className="vocab-organize-pool-label">Pictures — drag or tap, then drop on a box</p>
+        <p className="vocab-organize-pool-label">
+          {phone ? 'Pictures — tap one, then tap Drop on the word' : 'Pictures — drag or tap, then drop on a box'}
+        </p>
         {leftoverImages.length ? (
           <div className="vocab-organize-pool-grid is-images">
             {leftoverImages.map((termId) => {
@@ -225,8 +274,9 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   type="button"
                   className={`vocab-organize-piece is-image${active ? ' is-selected' : ''}`}
                   data-term-id={termId}
-                  draggable
+                  draggable={!phone}
                   onDragStart={(e) => {
+                    if (phone) return
                     e.dataTransfer.setData('text/plain', termId)
                     e.dataTransfer.effectAllowed = 'move'
                     setPicked({ kind: 'image', termId })
@@ -235,7 +285,11 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   aria-pressed={active}
                   aria-label="Picture to place"
                 >
-                  {img ? <img src={img} alt="" draggable={false} /> : <span className="vocab-organize-emoji">{term.emoji}</span>}
+                  {img ? (
+                    <img src={img} alt="" draggable={false} />
+                  ) : (
+                    <span className="vocab-organize-emoji">{term.emoji}</span>
+                  )}
                 </button>
               )
             })}
@@ -245,8 +299,9 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
         )}
       </section>
 
-      <div className="vocab-organize-boards">
-        {page.map((term) => {
+      {/* Drop card directly under pictures so phone first viewport stays playable */}
+      <div className={`vocab-organize-boards${phone ? ' is-phone-stack' : ''}`}>
+        {boardsToShow.map((term) => {
           const done = Boolean(matched[term.id])
           const img = pathwayImage(term.imageKey)
           return (
@@ -266,11 +321,13 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                 data-box-id={term.id}
                 onClick={() => tapBox(term.id)}
                 onDragOver={(e) => {
+                  if (phone) return
                   e.preventDefault()
                   setDragOverId(term.id)
                 }}
                 onDragLeave={() => setDragOverId((cur) => (cur === term.id ? null : cur))}
                 onDrop={(e) => {
+                  if (phone) return
                   e.preventDefault()
                   setDragOverId(null)
                   const imageId = e.dataTransfer.getData('text/plain') || picked?.termId
@@ -285,7 +342,9 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                     <span className="vocab-organize-emoji">{term.emoji}</span>
                   )
                 ) : (
-                  <span className="vocab-organize-slot-hint">Drop picture here</span>
+                  <span className="vocab-organize-slot-hint">
+                    {picked ? 'Tap to drop picture here' : 'Drop picture here'}
+                  </span>
                 )}
               </button>
 
@@ -298,7 +357,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                 />
               </div>
 
-              <ol className="vocab-organize-lang-list">
+              <ol className={`vocab-organize-lang-list${phone ? ' is-phone-compact' : ''}`}>
                 {VOCAB_SHEET_LANGS.map((lang, i) => (
                   <li key={lang}>
                     <span className="vocab-organize-lang-order">{i + 1}</span>
@@ -318,6 +377,30 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
           )
         })}
       </div>
+
+      {phone && unmatched.length > 1 ? (
+        <div className="vocab-organize-focus-nav" role="navigation" aria-label="Word to match">
+          <button
+            type="button"
+            className="btn btn-ghost"
+            disabled={focusIdx <= 0}
+            onClick={() => setFocusIdx((i) => Math.max(0, i - 1))}
+          >
+            ← Prev
+          </button>
+          <span className="vocab-organize-focus-count">
+            Word {focusIdx + 1} of {unmatched.length}
+          </span>
+          <button
+            type="button"
+            className="btn btn-ghost"
+            disabled={focusIdx >= unmatched.length - 1}
+            onClick={() => setFocusIdx((i) => Math.min(unmatched.length - 1, i + 1))}
+          >
+            Next →
+          </button>
+        </div>
+      ) : null}
 
       <div className="vocab-organize-actions">
         <button type="button" className="btn btn-secondary on-light" onClick={reshuffle}>

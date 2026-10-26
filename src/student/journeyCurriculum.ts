@@ -322,6 +322,12 @@ export type EyeSpyScene = {
   variantGroup?: string
   /** Hotspot ids in the order the learner must identify them. Defaults to targetId first, then the rest. */
   findOrder?: string[]
+  /**
+   * Optional pathwayImage key for a workplace atmosphere floor.
+   * When set (or when the quiz supplies a pathway atmosphere), hotspots
+   * render at their x/y/w/h percent positions on that photo.
+   */
+  sceneBgKey?: string
 }
 
 /**

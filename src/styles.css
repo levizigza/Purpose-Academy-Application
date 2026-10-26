@@ -4763,7 +4763,7 @@ table.data th {
   font-size: clamp(1.65rem, 3.4vw, 2.35rem);
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--train-text);
   line-height: 1.05;
 }
 
@@ -4983,7 +4983,7 @@ table.data th {
   display: grid;
   justify-items: center;
   gap: 0.2rem;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .train-sub {
@@ -5087,7 +5087,7 @@ table.data th {
   box-shadow: 0 0 0 2px rgba(232, 163, 23, 0.25);
 }
 
-.train-interest strong { color: #fff; }
+.train-interest strong { color: var(--train-text); }
 
 .train-interest-detail {
   font-style: normal;
@@ -5129,7 +5129,7 @@ table.data th {
   box-shadow: 0 0 0 2px rgba(232, 163, 23, 0.25);
 }
 
-.train-lang strong { color: #fff; }
+.train-lang strong { color: var(--train-text); }
 
 /* Bridge / scaffold */
 
@@ -5141,7 +5141,7 @@ table.data th {
   color: var(--train-text);
 }
 
-.train-bridge strong { color: #fff; }
+.train-bridge strong { color: var(--train-text); }
 
 .train-bridge ol {
   margin: 0.4rem 0 0;
@@ -5217,7 +5217,7 @@ table.data th {
   border-radius: 999px;
   background: rgba(245, 197, 66, 0.14);
   border: 1px solid rgba(245, 197, 66, 0.35);
-  color: #f5c542;
+  color: var(--train-amber-bright);
   font-size: 0.78rem;
   width: fit-content;
 }
@@ -5230,13 +5230,13 @@ table.data th {
 }
 
 .train-unit-pill strong {
-  color: #fff;
+  color: var(--train-text);
   font-weight: 800;
 }
 
 .train-unit-pill em {
   font-style: normal;
-  color: rgba(244, 247, 251, 0.7);
+  color: var(--train-text-muted);
 }
 
 /* ─── Learning path map (Duolingo-style linear units) ─── */
@@ -5273,17 +5273,17 @@ table.data th {
 .lp-title {
   margin: 0.15rem 0 0;
   font-size: 1.05rem;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .lp-mastery {
   margin: 0;
   font-size: 0.82rem;
-  color: rgba(244, 247, 251, 0.75);
+  color: var(--train-text-muted);
 }
 
 .lp-mastery strong {
-  color: #f5c542;
+  color: var(--train-amber-bright);
 }
 
 .lp-units {
@@ -5323,8 +5323,8 @@ table.data th {
   place-items: center;
   font-weight: 800;
   font-size: 0.78rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: color-mix(in srgb, var(--train-text) 12%, transparent);
+  color: var(--train-text);
 }
 
 .lp-unit.is-done .lp-unit-badge {
@@ -5345,13 +5345,13 @@ table.data th {
 }
 
 .lp-unit-copy strong {
-  color: #fff;
+  color: var(--train-text);
 }
 
 .lp-unit-copy span,
 .lp-unit-copy em {
   font-size: 0.78rem;
-  color: rgba(244, 247, 251, 0.65);
+  color: var(--train-text-muted);
   font-style: normal;
 }
 
@@ -5384,13 +5384,13 @@ table.data th {
 
 .lp-lesson strong {
   display: block;
-  color: #f4f7fb;
+  color: var(--train-text);
   font-size: 0.86rem;
 }
 
 .lp-lesson span {
   font-size: 0.74rem;
-  color: rgba(244, 247, 251, 0.6);
+  color: var(--train-text-muted);
 }
 
 .lp-node {
@@ -5432,14 +5432,14 @@ table.data th {
 }
 
 .unit-intro-summary strong {
-  color: #fff;
+  color: var(--train-text);
   font-size: 1.05rem;
 }
 
 .unit-intro-summary-hint {
-  font-size: 0.78rem;
-  color: rgba(244, 247, 251, 0.65);
-  font-weight: 600;
+  font-size: 0.84rem;
+  color: var(--train-text-muted);
+  font-weight: 650;
 }
 
 .unit-intro-card[open] .unit-intro-summary-hint {
@@ -5457,18 +5457,18 @@ table.data th {
 
 .unit-intro-card h3 {
   margin: 0.35rem 0 0.45rem;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .unit-intro-goal {
   margin: 0 0 0.65rem;
-  color: rgba(244, 247, 251, 0.9);
+  color: var(--train-text);
 }
 
 .unit-intro-outcomes {
   margin: 0 0 0.7rem;
   padding-left: 1.1rem;
-  color: rgba(244, 247, 251, 0.82);
+  color: var(--train-text-muted);
 }
 
 .unit-intro-outcomes li {
@@ -5478,18 +5478,19 @@ table.data th {
 .unit-intro-method {
   margin: 0;
   font-size: 0.86rem;
-  color: rgba(245, 197, 66, 0.92);
+  color: var(--train-amber-bright, #f5c542);
   font-weight: 650;
 }
 
 /* ─── Student Practice Mode learning dashboard ─── */
 .practice-hub {
+  /* Showcase: muted must still clear ~7:1 on night stage — avoid washed slate */
   --ph-ink: #f4f7fb;
-  --ph-muted: #9aabc0;
-  --ph-line: rgba(255, 255, 255, 0.1);
-  --ph-panel: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+  --ph-muted: #c5d3e4;
+  --ph-line: rgba(255, 255, 255, 0.14);
+  --ph-panel: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
   --ph-panel-solid: #152234;
-  --ph-soft: rgba(255, 255, 255, 0.045);
+  --ph-soft: rgba(255, 255, 255, 0.06);
   --ph-accent: var(--train-amber, var(--accent));
   max-width: 920px;
   margin: 0 auto;
@@ -5497,20 +5498,31 @@ table.data th {
   display: grid;
   gap: 1.25rem;
   animation: ph-enter 0.55s ease both;
+  color: var(--ph-ink);
 }
 
-/* Embedded in /app/student — shop-floor stage so light text never sits on paper */
+/*
+ * Portal School path — same navy-on-paper lockup as Phone + Desktop course.
+ * Critic overturn (2026-10-26): night “shop-floor” stage split the product for demos.
+ */
 .practice-hub.is-portal {
+  --ph-ink: #071e3d;
+  --ph-muted: #2f4156;
+  --ph-line: color-mix(in srgb, #0b2f5c 16%, #c5d0dc);
+  --ph-panel: linear-gradient(180deg, #ffffff, #f3f6fb);
+  --ph-panel-solid: #ffffff;
+  --ph-soft: #e6eef8;
+  --ph-accent: #0b2f5c;
   max-width: none;
   margin: 0;
   padding: 1.25rem 1.15rem 2.25rem;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, #0b2f5c 14%, #c5d0dc);
   background:
-    radial-gradient(ellipse 90% 70% at 100% 0%, color-mix(in srgb, var(--ph-stream, var(--accent)) 22%, transparent), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 0% 100%, rgba(11, 47, 92, 0.55), transparent 50%),
-    linear-gradient(165deg, #0c1828 0%, #07101c 55%, #050b14 100%);
-  box-shadow: 0 28px 60px rgba(4, 21, 38, 0.28);
+    radial-gradient(ellipse 80% 50% at 100% 0%, rgba(11, 47, 92, 0.06), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #f3f6fb 55%, #e8eef7 100%);
+  box-shadow: 0 18px 40px rgba(11, 47, 92, 0.08);
+  color: var(--ph-ink);
 }
 
 .school-path-page {
@@ -5526,12 +5538,12 @@ table.data th {
   padding: 1.35rem 1.35rem 1.25rem;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line));
   background:
-    radial-gradient(ellipse 80% 100% at 0% 0%, rgba(232, 163, 23, 0.16), transparent 55%),
-    linear-gradient(145deg, #0b2f5c 0%, #041526 70%);
-  color: #f4f7fb;
-  box-shadow: 0 22px 48px rgba(4, 21, 38, 0.2);
+    radial-gradient(ellipse 70% 90% at 100% 0%, rgba(11, 47, 92, 0.08), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #eef3f9 100%);
+  color: var(--brand-deep, #041526);
+  box-shadow: 0 16px 36px rgba(11, 47, 92, 0.08);
 }
 
 .school-path-stage-copy {
@@ -5549,37 +5561,39 @@ table.data th {
   letter-spacing: 0.02em;
   text-transform: uppercase;
   line-height: 1.05;
-  color: #fff;
+  color: var(--brand-deep, #041526);
 }
 
 .school-path-stage-lede {
   margin: 0;
   max-width: 34rem;
-  color: rgba(244, 247, 251, 0.82);
+  color: var(--ink-soft, #2f4156);
   font-size: 1.02rem;
   line-height: 1.5;
+  font-weight: 600;
 }
 
 .school-path-back {
   width: fit-content;
   font-weight: 700;
-  color: var(--accent-bright);
+  color: var(--brand, #0b2f5c);
   text-decoration: none;
   font-size: 0.92rem;
 }
 
 .school-path-back:hover {
-  color: #fff;
+  color: var(--brand-deep, #041526);
+  text-decoration: underline;
 }
 
 .school-path-stage-media {
   margin: 0;
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line));
   position: relative;
   min-height: 12rem;
-  background: #0b1c2e;
+  background: var(--brand-soft, #e6eef8);
 }
 
 .school-path-stage-media img {
@@ -5589,7 +5603,7 @@ table.data th {
   object-position: center;
   display: block;
   min-height: 12rem;
-  background: #0b1c2e;
+  background: #ffffff;
 }
 
 .school-path-stage-media figcaption {
@@ -5598,10 +5612,10 @@ table.data th {
   right: 0;
   bottom: 0;
   padding: 0.55rem 0.75rem;
-  font-size: 0.78rem;
-  font-weight: 650;
-  color: #fff;
-  background: linear-gradient(180deg, transparent, rgba(4, 21, 38, 0.85));
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--brand-deep, #041526);
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.94));
 }
 
 .school-path-home-card {
@@ -5644,10 +5658,11 @@ table.data th {
 
 .ph-today-line {
   margin: 0.35rem 1.15rem 0;
-  font-size: 0.9rem;
-  color: color-mix(in srgb, var(--ph-accent) 85%, #fff);
-  font-weight: 650;
+  font-size: 0.95rem;
+  color: var(--ph-ink);
+  font-weight: 700;
   line-height: 1.4;
+  text-shadow: none;
 }
 
 .ph-resume-actions {
@@ -5663,7 +5678,7 @@ table.data th {
 }
 
 .ph-done-btn {
-  color: rgba(244, 247, 251, 0.88) !important;
+  color: var(--ph-ink) !important;
 }
 
 .ph-metric-quiet {
@@ -5728,11 +5743,11 @@ table.data th {
 
 .ph-kicker {
   margin: 0;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ph-accent);
-  font-weight: 700;
+  font-weight: 750;
   font-family: var(--train-display, var(--display));
 }
 
@@ -5744,7 +5759,7 @@ table.data th {
   letter-spacing: 0.01em;
   line-height: 1.05;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--ph-ink);
 }
 
 .ph-lede {
@@ -5752,7 +5767,8 @@ table.data th {
   max-width: 36rem;
   color: var(--ph-muted);
   line-height: 1.55;
-  font-size: 1.02rem;
+  font-size: 1.05rem;
+  font-weight: 550;
 }
 
 .ph-pathway-badge {
@@ -5763,7 +5779,7 @@ table.data th {
   align-items: center;
   padding: 0.55rem 0.75rem 0.55rem 0.55rem;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.22);
+  background: var(--ph-soft, rgba(0, 0, 0, 0.22));
   border: 1px solid color-mix(in srgb, var(--ph-stream, var(--accent)) 35%, transparent);
   max-width: 28rem;
 }
@@ -5776,7 +5792,7 @@ table.data th {
 
 .ph-pathway-badge strong {
   display: block;
-  color: #fff;
+  color: var(--ph-ink);
   font-size: 0.95rem;
   font-family: var(--display);
 }
@@ -5789,7 +5805,7 @@ table.data th {
 .ph-resume {
   padding: 0;
   border-radius: 14px;
-  background: rgba(4, 21, 38, 0.55);
+  background: var(--ph-panel-solid, rgba(4, 21, 38, 0.55));
   border: 1px solid color-mix(in srgb, var(--ph-stream, var(--accent)) 40%, transparent);
   display: grid;
   align-content: start;
@@ -5847,18 +5863,19 @@ table.data th {
   justify-content: space-between;
   gap: 0.75rem;
   font-size: 0.9rem;
-  color: #f4f7fb;
+  color: var(--ph-ink);
+  font-weight: 600;
 }
 
 .ph-domain-row strong {
-  color: var(--ph-stream, var(--accent-bright));
+  color: var(--ph-accent, var(--brand));
   font-family: var(--display);
 }
 
 .ph-domain-track {
   height: 0.42rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--ph-ink) 12%, transparent);
   overflow: hidden;
   margin-top: 0.3rem;
 }
@@ -5931,7 +5948,7 @@ table.data th {
 
 .ph-resume h2 {
   margin: 0.15rem 0 0;
-  color: #fff;
+  color: var(--ph-ink);
   font-family: var(--display);
   font-size: 1.15rem;
   font-weight: 750;
@@ -5940,8 +5957,9 @@ table.data th {
 
 .ph-resume-lesson {
   margin: 0;
-  color: rgba(244, 247, 251, 0.78);
-  font-size: 0.94rem;
+  color: var(--ph-muted);
+  font-size: 0.98rem;
+  font-weight: 600;
 }
 
 .ph-resume-progress {
@@ -5954,7 +5972,7 @@ table.data th {
 .ph-unit-progress-track {
   height: 0.38rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--ph-ink) 12%, transparent);
   overflow: hidden;
 }
 
@@ -6009,7 +6027,7 @@ table.data th {
 }
 
 .ph-meter-track {
-  stroke: rgba(255, 255, 255, 0.1);
+  stroke: color-mix(in srgb, var(--ph-ink) 14%, transparent);
 }
 
 .ph-meter-value {
@@ -6030,7 +6048,7 @@ table.data th {
 .ph-meter-label strong {
   font-family: var(--display);
   font-size: 1.4rem;
-  color: #fff;
+  color: var(--ph-ink);
   line-height: 1;
 }
 
@@ -6051,8 +6069,8 @@ table.data th {
 .ph-metric {
   padding: 0.85rem 0.8rem;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--ph-soft, rgba(0, 0, 0, 0.22));
+  border: 1px solid var(--ph-line, rgba(255, 255, 255, 0.07));
   display: grid;
   gap: 0.18rem;
 }
@@ -6069,7 +6087,7 @@ table.data th {
 .ph-metric strong {
   font-family: var(--display);
   font-size: 1.4rem;
-  color: #fff;
+  color: var(--ph-ink);
   line-height: 1;
 }
 
@@ -6099,7 +6117,7 @@ table.data th {
   font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #f4f7fb;
+  color: var(--ph-ink);
 }
 
 .ph-section-head p {
@@ -6130,8 +6148,8 @@ table.data th {
   margin: 0;
   padding: 0.7rem 0.9rem;
   border-radius: 10px;
-  border: 1px dashed rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed var(--ph-line, rgba(255, 255, 255, 0.14));
+  background: var(--ph-soft, rgba(255, 255, 255, 0.03));
   color: var(--ph-muted);
   font-size: 0.88rem;
 }
@@ -6176,7 +6194,7 @@ table.data th {
 }
 
 .ph-unit-toggle:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--ph-accent, var(--brand)) 6%, transparent);
 }
 
 .ph-unit-badge {
@@ -6220,7 +6238,7 @@ table.data th {
   font-family: var(--display);
   font-size: 1.05rem;
   font-weight: 750;
-  color: #fff;
+  color: var(--ph-ink);
   letter-spacing: -0.01em;
 }
 
@@ -6245,8 +6263,8 @@ table.data th {
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--ph-muted);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--ph-soft, rgba(11, 47, 92, 0.06));
+  border: 1px solid var(--ph-line, rgba(11, 47, 92, 0.12));
   margin-top: 0.2rem;
 }
 
@@ -6255,12 +6273,12 @@ table.data th {
   align-items: center;
   padding: 0.16rem 0.5rem;
   border-radius: 6px;
-  font-size: 0.66rem;
-  letter-spacing: 0.07em;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 800;
   font-family: var(--train-display, var(--display));
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--ph-soft, rgba(11, 47, 92, 0.06));
   color: var(--ph-muted);
 }
 
@@ -6270,13 +6288,13 @@ table.data th {
 }
 
 .ph-status.is-done {
-  background: rgba(95, 168, 106, 0.16);
-  color: #9ccc65;
+  background: color-mix(in srgb, var(--train-ok, var(--ok)) 16%, transparent);
+  color: var(--train-ok, #1f7a4d);
 }
 
 .ph-status.is-locked {
-  background: rgba(255, 255, 255, 0.05);
-  color: #7d8fa5;
+  background: var(--ph-soft, rgba(255, 255, 255, 0.05));
+  color: var(--ph-muted);
 }
 
 .ph-unit-body {
@@ -6300,14 +6318,14 @@ table.data th {
   margin: 0;
   padding: 0;
   display: grid;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--ph-line, rgba(11, 47, 92, 0.12));
   border-radius: 12px;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.18);
+  background: var(--ph-panel-solid, #ffffff);
 }
 
 .ph-lesson + .ph-lesson {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--ph-line, rgba(11, 47, 92, 0.1));
 }
 
 .ph-lesson button {
@@ -6327,11 +6345,11 @@ table.data th {
 }
 
 .ph-lesson button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--ph-accent, var(--brand)) 6%, transparent);
 }
 
 .ph-lesson.is-current button {
-  background: rgba(232, 163, 23, 0.1);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .ph-lesson.is-locked button {
@@ -6346,7 +6364,7 @@ table.data th {
 }
 
 .ph-lesson-copy strong {
-  color: #f4f7fb;
+  color: var(--ph-ink);
   font-size: 0.95rem;
   font-weight: 700;
 }
@@ -6365,7 +6383,7 @@ table.data th {
 }
 
 .ph-lesson.is-locked .ph-lesson-action {
-  color: #7d8fa5;
+  color: var(--ph-muted);
 }
 
 .ph-level {
@@ -6386,10 +6404,10 @@ table.data th {
   margin: 0.75rem 0 0;
   padding: 0.7rem 0.85rem 0.7rem 1.25rem;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--ph-soft, rgba(255, 255, 255, 0.04));
   color: var(--ph-muted);
   font-size: 0.86rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--ph-line, rgba(255, 255, 255, 0.06));
 }
 
 .ph-outcomes li + li {
@@ -6413,7 +6431,7 @@ table.data th {
   font-size: 0.98rem;
   font-weight: 750;
   font-family: var(--display);
-  color: #fff;
+  color: var(--ph-ink);
 }
 
 .ph-footnote p {
@@ -6428,13 +6446,14 @@ table.data th {
   gap: 0.55rem 0.85rem;
   margin: 0.55rem 0 0.35rem;
   font-size: 0.8rem;
-  color: rgba(244, 247, 251, 0.78);
+  color: var(--train-text-muted);
 }
 
 .practice-stats-strip strong {
   color: var(--accent-bright);
 }
 
+/* Night-stage defaults; paper shells remapped below (.is-course-app / .is-phone-app) */
 .practice-stats-strip .is-ready {
   color: #9ccc65;
 }
@@ -6445,8 +6464,8 @@ table.data th {
 
 .train-hub-btn {
   margin-right: 0.35rem;
-  color: #f4f7fb !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: var(--train-text) !important;
+  border-color: color-mix(in srgb, var(--train-text) 28%, transparent) !important;
 }
 
 .train-mastery-gate {
@@ -6517,8 +6536,8 @@ table.data th {
 
 .lp-xp {
   margin: 0;
-  font-size: 0.78rem;
-  color: rgba(244, 247, 251, 0.75);
+  font-size: 0.82rem;
+  color: var(--train-text-muted);
 }
 
 .lp-hub-btn,
@@ -6559,7 +6578,7 @@ table.data th {
 .train-check-prompt {
   margin: 0.75rem 0 0.45rem;
   font-weight: 800;
-  color: #f4f7fb;
+  color: var(--train-text);
 }
 
 .train-checkin-note {
@@ -6568,7 +6587,8 @@ table.data th {
   border-radius: 10px;
   background: rgba(245, 197, 66, 0.1);
   border: 1px solid rgba(245, 197, 66, 0.28);
-  color: #f5c542;
+  /* Token remaps on paper; hard #f5c542 fails on cream */
+  color: var(--train-amber-bright, #f5c542);
   font-weight: 700;
 }
 
@@ -6586,14 +6606,14 @@ table.data th {
   margin: 0;
   font-size: clamp(1.2rem, 2.6vw, 1.55rem);
   font-weight: 850;
-  color: #fff;
+  color: var(--train-text);
   line-height: 1.25;
 }
 
 .topic-lesson-card h3 {
   margin: 0;
   font-size: 1.25rem;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .topic-lesson-card > p {
@@ -6693,7 +6713,7 @@ table.data th {
   background: var(--train-surface-2);
 }
 
-.train-learn-card strong { color: #fff; }
+.train-learn-card strong { color: var(--train-text); }
 
 .train-learn-card p {
   margin: 0.2rem 0 0;
@@ -6800,7 +6820,7 @@ table.data th {
   background: rgba(76, 175, 80, 0.08);
 }
 
-.train-topic-card strong { color: #fff; display: block; }
+.train-topic-card strong { color: var(--train-text); display: block; }
 .train-topic-card p { margin: 0.2rem 0 0; font-size: 0.88rem; color: var(--train-text-muted); }
 
 .train-topic-mark {
@@ -6941,7 +6961,7 @@ table.data th {
   font-size: 1.3rem;
   font-family: var(--train-display);
   font-weight: 700;
-  color: #fff;
+  color: var(--train-text);
   text-align: center;
   margin: 0.25rem 0 0.5rem;
 }
@@ -7245,7 +7265,7 @@ table.data th {
 
 .train-step-name {
   font-weight: 700;
-  color: #fff;
+  color: var(--train-text);
   font-family: var(--train-display);
   font-size: 0.95rem;
 }
@@ -7363,6 +7383,7 @@ table.data th {
 
 .train-picture.is-object figcaption {
   background: var(--train-surface-2, #0f2438);
+  color: var(--train-text);
 }
 
 /* Chart-style vocabulary card (legacy helpers kept for other screens) */
@@ -7932,7 +7953,7 @@ table.data th {
 .eye-spy-instruction {
   margin: 0;
   font-weight: 600;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .eye-spy-scene-title {
@@ -7974,6 +7995,106 @@ table.data th {
     gap: 1rem;
     padding: 1rem;
   }
+}
+
+/*
+ * Workplace atmosphere floor — tool callouts sit on a real job-site photo
+ * (Iconic climb). Whole-object mats stay paper so tools stay readable (L3).
+ */
+.eye-spy-stage.is-scene {
+  aspect-ratio: 4 / 3;
+  min-height: min(52vh, 26rem);
+  padding: 0;
+  overflow: hidden;
+  background-color: #0b1c2e;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 16px 36px rgba(4, 21, 38, 0.22);
+}
+
+.eye-spy-scene-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(4, 21, 38, 0.18), transparent 35%),
+    linear-gradient(0deg, rgba(4, 21, 38, 0.28), transparent 40%);
+  z-index: 0;
+}
+
+.eye-spy-stage.is-scene .eye-spy-hotspot {
+  position: absolute;
+  z-index: 1;
+  padding: 0.28rem;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.92),
+    0 10px 22px rgba(4, 21, 38, 0.35);
+  transform: none;
+}
+
+.eye-spy-stage.is-scene .eye-spy-hotspot img {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  padding: 0.2rem;
+  border-radius: 8px;
+}
+
+.eye-spy-stage.is-scene .eye-spy-hotspot.is-selected {
+  transform: scale(1.04);
+  z-index: 2;
+  box-shadow:
+    0 0 0 3px #e8a317,
+    0 12px 28px rgba(4, 21, 38, 0.4);
+}
+
+.is-phone-app .eye-spy-stage.is-scene {
+  aspect-ratio: 5 / 4;
+  min-height: 14.5rem;
+  max-height: min(42vh, 18rem);
+}
+
+.is-phone-app .eye-spy-stage.is-scene .eye-spy-hotspot {
+  padding: 0.18rem;
+  border-width: 2px;
+}
+
+.is-phone-app .train-shell.is-eye-spy .eye-spy-stage.is-scene {
+  margin-top: 0.25rem;
+}
+
+/* Baked single-photo floors — hotspots are invisible taps on the photo */
+.eye-spy-stage.is-baked {
+  /* tools are already in the JPEG — drop the dark veil that washed callouts */
+}
+
+.eye-spy-stage.is-baked .eye-spy-hotspot.is-baked-tap {
+  background: transparent;
+  border: 2px solid transparent;
+  box-shadow: none;
+  padding: 0;
+  overflow: visible;
+}
+
+.eye-spy-stage.is-baked .eye-spy-hotspot.is-baked-tap:hover,
+.eye-spy-stage.is-baked .eye-spy-hotspot.is-baked-tap:focus-visible {
+  border-color: rgba(232, 163, 23, 0.85);
+  box-shadow: 0 0 0 3px rgba(232, 163, 23, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.eye-spy-stage.is-baked .eye-spy-hotspot.is-baked-tap.is-selected {
+  border-color: #e8a317;
+  box-shadow: 0 0 0 3px rgba(232, 163, 23, 0.55);
+  background: rgba(232, 163, 23, 0.12);
+  transform: none;
+}
+
+.eye-spy-stage.is-baked .eye-spy-hotspot.is-baked-tap.is-wrong {
+  border-color: #c45c5c;
+  box-shadow: 0 0 0 3px rgba(196, 92, 92, 0.4);
 }
 
 .eye-spy-grid {
@@ -8060,15 +8181,15 @@ table.data th {
   font-size: 1.45rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .eye-spy-word strong {
-  color: #e8a317;
+  color: var(--train-amber-bright, #e8a317);
 }
 
 .eye-spy-word.is-clear {
-  color: #7dcea0;
+  color: var(--ok, #3f7d24);
   font-size: 1.15rem;
 }
 
@@ -8084,15 +8205,15 @@ table.data th {
 .eye-spy-cleared li {
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid color-mix(in srgb, var(--train-text) 22%, transparent);
   font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--train-text-muted);
 }
 
 .eye-spy-cleared li.is-found {
-  border-color: #3da86c;
-  color: #d7f5e4;
-  background: rgba(61, 168, 108, 0.16);
+  border-color: color-mix(in srgb, var(--ok, #3f7d24) 55%, var(--train-line));
+  color: var(--ok, #3f7d24);
+  background: var(--ok-soft, #e5f3d9);
 }
 
 .eye-spy-prompt {
@@ -8923,6 +9044,45 @@ html.pa-page-wipe .hero-inner {
   width: min(100% - 1rem, 720px);
 }
 
+.practice-banner.is-status-only {
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+  box-shadow: none;
+}
+
+/*
+ * Desktop course shell: status strip only.
+ * React class sync can race DesktopCourse mount — CSS is source of truth.
+ */
+html.pa-course-shell .practice-banner-actions {
+  display: none !important;
+}
+
+html.pa-course-shell .practice-banner {
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+  box-shadow: none;
+  /* Paper course stage: quiet navy status strip, not gold shout */
+  background: linear-gradient(90deg, #0b2f5c, #163f73) !important;
+  color: #f4f7fb !important;
+  border-radius: 10px;
+  width: min(100% - 1.5rem, 720px);
+  margin-inline: auto;
+}
+
+/* Desktop: hub buttons stay in the header row. Phone uses Station menu instead. */
+.train-hub-row {
+  display: contents;
+}
+
+.train-station-menu {
+  display: none;
+}
+
 /* Side feedback chatbot */
 .practice-chat {
   position: fixed;
@@ -9658,7 +9818,7 @@ video {
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #f5c542;
+  color: var(--train-amber-bright, #f5c542);
   font-weight: 800;
 }
 
@@ -9667,7 +9827,7 @@ video {
   margin: 0;
   font-family: var(--display);
   font-size: clamp(1.2rem, 2.6vw, 1.55rem);
-  color: #fff;
+  color: var(--train-text);
   letter-spacing: -0.02em;
 }
 
@@ -9675,7 +9835,7 @@ video {
 .career-result-lead,
 .career-result-summary {
   margin: 0;
-  color: rgba(244, 247, 251, 0.84);
+  color: var(--train-text-muted);
   line-height: 1.45;
 }
 
@@ -9819,7 +9979,7 @@ video {
   border-radius: 999px;
   background: rgba(245, 197, 66, 0.18);
   border: 1px solid rgba(245, 197, 66, 0.45);
-  color: #f5c542;
+  color: var(--train-amber-bright, #f5c542);
   font-weight: 800;
   font-size: 0.86rem;
   width: fit-content;
@@ -9841,7 +10001,8 @@ video {
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(245, 197, 66, 0.92);
+  /* Token remaps on paper (#a8740c); hard #f5c542 washed out on cream */
+  color: var(--train-amber-bright, #f5c542);
 }
 
 .career-code-value {
@@ -9985,9 +10146,10 @@ video {
 .career-strengths li {
   padding: 0.7rem 0.85rem;
   border-radius: 10px;
-  border-left: 3px solid #e8a317;
-  background: rgba(232, 163, 23, 0.08);
-  color: #e8eef6;
+  border-left: 3px solid var(--train-amber, #e8a317);
+  background: var(--train-amber-soft, rgba(232, 163, 23, 0.08));
+  /* --train-text flips navy on paper shells — never hardcode night #e8eef6 here */
+  color: var(--train-text, #e6edf5);
   font-weight: 650;
 }
 
@@ -10224,13 +10386,13 @@ video {
 
 .lp-fold-title {
   font-size: 1.02rem;
-  color: #fff;
+  color: var(--train-text);
   font-weight: 800;
 }
 
 .lp-fold-meta {
   font-size: 0.82rem;
-  color: rgba(244, 247, 251, 0.75);
+  color: var(--train-text-muted);
 }
 
 .practice-section-skip-btn {
@@ -10377,7 +10539,7 @@ video {
 
 .sentence-cloze-num {
   font-weight: 800;
-  color: #8aa0b8;
+  color: var(--brand, #0b2f5c);
   margin-right: 0.15rem;
 }
 
@@ -10390,7 +10552,7 @@ video {
 
 .sentence-cloze-chip-letter {
   font-weight: 800;
-  color: #8aa0b8;
+  color: var(--brand, #0b2f5c);
 }
 
 .sentence-cloze-item.is-correct {
@@ -10447,7 +10609,7 @@ video {
 }
 
 .sentence-cloze-slot {
-  color: #8aa0b8;
+  color: var(--ink-soft, #2f4156);
   letter-spacing: 0.08em;
   font-weight: 650;
 }
@@ -10648,11 +10810,12 @@ video {
 
 .vocab-organize-pool-label {
   margin: 0 0 0.55rem;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #8a6a12;
+  /* Navy on paper — pale gold failed WCAG on demos */
+  color: var(--brand-deep, #041526);
 }
 
 .vocab-organize-pool-grid.is-images {
@@ -10793,9 +10956,9 @@ video {
 }
 
 .vocab-organize-slot-hint {
-  color: #8aa0b8;
-  font-size: 0.78rem;
-  font-weight: 650;
+  color: var(--brand, #0b2f5c);
+  font-size: 0.84rem;
+  font-weight: 700;
   text-align: center;
   padding: 0.35rem;
 }
@@ -10918,6 +11081,130 @@ video {
   color: #0b2f5c;
 }
 
+/* Phone: one word card + sticky picture strip (4-up desktop grid cannot fit ~390px) */
+.is-phone-app .train-shell.is-organize-wide {
+  max-width: 100% !important;
+}
+
+.is-phone-app .vocab-organize.is-phone-focus {
+  gap: 0.65rem;
+}
+
+/* Counter already carries the job — drop the long help paragraph on phone */
+.is-phone-app .vocab-organize-help {
+  display: none !important;
+}
+
+.is-phone-app .vocab-organize .section-kicker,
+.is-course-app .vocab-organize .section-kicker {
+  color: var(--brand, #0b2f5c) !important;
+}
+
+/* Paper shells: At work / Teach note labels must stay navy (pale gold fails demos) */
+.is-phone-app .train-why strong,
+.is-course-app .train-why strong,
+.is-phone-app .train-teach-label,
+.is-course-app .train-teach-label {
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .vocab-organize-pool {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  padding: 0.55rem 0.65rem 0.7rem !important;
+  background: #ffffff !important;
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+  box-shadow: 0 8px 18px rgba(11, 47, 92, 0.08);
+}
+
+.is-phone-app .vocab-organize-pool-label {
+  color: var(--brand-deep, #041526) !important;
+  font-size: 0.78rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.is-phone-app .vocab-organize-pool-grid.is-images {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.45rem !important;
+}
+
+.is-phone-app .vocab-organize-piece {
+  min-height: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0.35rem !important;
+}
+
+.is-phone-app .vocab-organize-piece img {
+  max-height: 5.5rem !important;
+  padding: 0.15rem !important;
+}
+
+.is-phone-app .vocab-organize-focus-nav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.is-phone-app .vocab-organize-focus-nav .btn {
+  font-size: 0.78rem !important;
+  padding: 0.4rem 0.55rem !important;
+}
+
+.is-phone-app .vocab-organize-focus-count {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 750;
+  color: var(--brand, #0b2f5c);
+}
+
+.is-phone-app .vocab-organize-boards,
+.is-phone-app .vocab-organize-boards.is-phone-stack {
+  grid-template-columns: 1fr !important;
+  overflow: visible !important;
+  gap: 0.55rem !important;
+  padding-bottom: 0 !important;
+}
+
+.is-phone-app .vocab-organize-board {
+  padding: 0.75rem 0.8rem 0.85rem !important;
+}
+
+.is-phone-app .vocab-organize-slot.is-image {
+  min-height: 6.5rem !important;
+  aspect-ratio: 16 / 10 !important;
+}
+
+.is-phone-app .vocab-organize-slot.is-image img {
+  max-height: 8rem !important;
+}
+
+.is-phone-app .vocab-organize-english {
+  font-size: 1.15rem !important;
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .vocab-organize-lang-name {
+  color: var(--brand, #0b2f5c) !important;
+  font-size: 0.72rem !important;
+}
+
+.is-phone-app .vocab-organize-slot-word {
+  font-size: 0.95rem !important;
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .vocab-organize-slot-hint {
+  color: var(--brand, #0b2f5c) !important;
+  font-size: 0.88rem !important;
+}
+
+.is-course-app .vocab-organize-pool-label,
+.is-course-app .vocab-organize-slot-hint {
+  color: var(--brand-deep, #041526) !important;
+}
+
 .vocab-organize-pass .hero-actions {
   justify-content: center;
 }
@@ -10940,7 +11227,7 @@ video {
   margin: 0.15rem 0 0.35rem;
   font-family: var(--display, Georgia, serif);
   font-size: clamp(1.45rem, 2.4vw, 1.9rem);
-  color: #f0e6d4;
+  color: var(--train-text);
 }
 
 .equip-video-purpose {
@@ -10974,12 +11261,14 @@ video {
   margin-bottom: 0.55rem;
 }
 
-.is-phone-app .station-context-fold {
+.is-phone-app .station-context-fold,
+.is-course-app .station-context-fold {
   background: #fff6de !important;
   border-color: color-mix(in srgb, var(--accent) 40%, var(--line)) !important;
 }
 
-.is-phone-app .station-context-fold > summary {
+.is-phone-app .station-context-fold > summary,
+.is-course-app .station-context-fold > summary {
   color: var(--brand) !important;
 }
 
@@ -11020,10 +11309,12 @@ video {
   gap: 0.85rem;
   padding: 0.75rem;
   border-radius: 14px;
-  background: color-mix(in srgb, #0b1c2e 88%, #1e3a5f);
+  /* Solid RGB so contrast audits resolve a real night island (not color-mix parse noise) */
+  background: #0f2438;
   border: 1px solid color-mix(in srgb, #c9a227 28%, transparent);
   max-height: min(70vh, 36rem);
   overflow: auto;
+  color: #dce6f2;
 }
 
 .equip-video-family-label {
@@ -11238,9 +11529,9 @@ video {
 
 .ph-video-section-kicker {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #f5c542;
 }
@@ -11255,8 +11546,10 @@ video {
 .ph-video-section-inner p {
   margin: 0;
   max-width: 40rem;
-  color: color-mix(in srgb, #fff 82%, transparent);
-  line-height: 1.45;
+  color: #e8eef6;
+  line-height: 1.5;
+  font-size: 1rem;
+  font-weight: 550;
 }
 
 .ph-video-section-inner strong {
@@ -11340,9 +11633,9 @@ video {
 
 .comp-try-kicker {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #8ec5f0;
 }
@@ -11984,6 +12277,7 @@ video {
    * Learner app inside the device = navy on white paper — same as logo-full.
    * Must flip train *surfaces* with train *text*, or .shell.is-train fields
    * stay night-navy bg under navy ink (Name field: Levi invisible).
+   * Showcase law: every body string must clear WCAG AA on paper — no leftover night ink.
    */
   --ink: #071e3d;
   --ink-soft: #2f4156;
@@ -12001,7 +12295,14 @@ video {
   --train-bg-2: #e8eef7;
   --train-line: #aebccd;
   --train-amber: #e8a317;
-  --train-amber-bright: #c8890f;
+  --train-amber-bright: #a8740c;
+  --ph-ink: #071e3d;
+  --ph-muted: #2f4156;
+  --ph-line: color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
+  --ph-panel: #ffffff;
+  --ph-panel-solid: #ffffff;
+  --ph-soft: #eef3f9;
+  --ph-accent: #0b2f5c;
   min-height: 100%;
   max-width: 100% !important;
   width: 100%;
@@ -12115,6 +12416,20 @@ video {
   color: var(--brand-deep) !important;
 }
 
+/*
+ * Showcase defect (live phone hub): navy titles were forced onto the night
+ * gradient inners (Computer Skills / Warehouse Equipment) → near-invisible.
+ * Paper the INNER cards too — not only the section wrappers.
+ */
+.is-phone-app .ph-video-section-inner,
+.is-phone-app .ph-computer-section-inner {
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+  box-shadow: 0 10px 24px rgba(11, 47, 92, 0.08) !important;
+  color: var(--brand-deep) !important;
+  padding: 1rem 1.05rem 1.15rem !important;
+}
+
 .is-phone-app .ph-pathway-badge strong,
 .is-phone-app .ph-metric,
 .is-phone-app .ph-domain-row,
@@ -12122,12 +12437,37 @@ video {
 .is-phone-app .ph-unit-titles,
 .is-phone-app .ph-lesson-copy,
 .is-phone-app .ph-video-section-inner,
+.is-phone-app .ph-video-section-inner h2,
 .is-phone-app .ph-video-section-inner p,
 .is-phone-app .ph-video-section-inner strong,
 .is-phone-app .ph-computer-section-inner,
+.is-phone-app .ph-computer-section-inner h2,
 .is-phone-app .ph-computer-section-inner p,
-.is-phone-app .ph-computer-section-inner strong {
+.is-phone-app .ph-computer-section-inner strong,
+.is-phone-app .ph-computer-section-inner .ph-video-section-kicker {
   color: var(--brand-deep) !important;
+}
+
+.is-phone-app .ph-video-section-inner h2,
+.is-phone-app .ph-computer-section-inner h2 {
+  font-size: 1.35rem !important;
+  line-height: 1.2 !important;
+}
+
+.is-phone-app .ph-video-section-inner > p:not(.ph-video-section-kicker),
+.is-phone-app .ph-computer-section-inner > p:not(.ph-video-section-kicker) {
+  color: var(--ink-soft) !important;
+  font-size: 0.98rem !important;
+  line-height: 1.45 !important;
+  font-weight: 600 !important;
+}
+
+.is-phone-app .ph-video-section-inner > .ph-video-section-kicker,
+.is-phone-app .ph-computer-section-inner > .ph-video-section-kicker {
+  color: var(--brand) !important;
+  font-size: 0.84rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em;
 }
 
 .is-phone-app .ph-done-btn {
@@ -12157,7 +12497,9 @@ video {
 }
 
 .is-phone-app .unit-intro-summary-hint {
-  color: var(--ink-soft) !important;
+  color: var(--brand) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
 }
 
 .is-phone-app .unit-intro-method {
@@ -12165,8 +12507,20 @@ video {
 }
 
 .is-phone-app .unit-intro-card {
-  margin-bottom: 0.65rem !important;
-  padding: 0.55rem 0.75rem 0.65rem !important;
+  margin-bottom: 0.35rem !important;
+  padding: 0.35rem 0.55rem 0.4rem !important;
+}
+
+.is-phone-app .unit-intro-card:not([open]) {
+  margin-bottom: 0.25rem !important;
+}
+
+.is-phone-app .unit-intro-card:not([open]) .unit-intro-summary strong {
+  font-size: 0.92rem !important;
+}
+
+.is-phone-app .unit-intro-card:not([open]) .unit-intro-summary-hint {
+  font-size: 0.8rem !important;
 }
 
 /* Work-style / career quiz choices: night translucent → paper chips */
@@ -12197,7 +12551,29 @@ video {
 .is-phone-app .equip-video-family-blurb,
 .is-phone-app .equip-video-kip-item p,
 .is-phone-app .equip-video-kip-label,
-.is-phone-app .equip-video-stayclear {
+.is-phone-app .equip-video-stayclear,
+.is-phone-app .phrase-lesson-en,
+.is-phone-app .topic-lesson-card h3,
+.is-phone-app .topic-lesson-card > p,
+.is-phone-app .comp-try h3,
+.is-phone-app .comp-desktop-hint {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .equip-video-purpose,
+.is-phone-app .comp-desktop-hint,
+.is-phone-app .topic-lesson-card > p {
+  font-weight: 600;
+  font-size: 0.95rem !important;
+  line-height: 1.45 !important;
+}
+
+/* Showcase: paper chips for phrase/topic cards that still ship night fills */
+.is-phone-app .phrase-lesson-card,
+.is-phone-app .topic-lesson-card,
+.is-phone-app .comp-try {
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
   color: var(--brand-deep) !important;
 }
 
@@ -12262,11 +12638,23 @@ video {
 
 /* —— VocabSheet: demo-legible on ~390px (container, not viewport) —— */
 .is-phone-app .vocab-sheet-lede,
+.is-phone-app .vocab-sheet-page-label,
+.is-phone-app .vocab-sheet-page-progress,
 .is-phone-app .vocab-sheet-definition,
 .is-phone-app .vocab-sheet-progress {
-  color: var(--ink-soft) !important;
-  font-size: 0.92rem !important;
+  color: var(--brand-deep) !important;
+  font-size: 0.95rem !important;
   line-height: 1.45 !important;
+  font-weight: 600;
+}
+
+.is-phone-app .vocab-sheet-lede {
+  font-size: 0.95rem !important;
+  font-weight: 650;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .is-phone-app .vocab-sheet-banner {
@@ -12588,8 +12976,139 @@ video {
 /* Dark career result cards keep light ink (intentional night islands) */
 .is-phone-app .career-assess-card,
 .is-phone-app .career-code,
-.is-phone-app .career-fit {
+.is-phone-app .career-fit,
+.is-phone-app .career-profile {
   color: #f4f7fb;
+}
+
+.is-phone-app .career-fit .career-section-title,
+.is-phone-app .career-code .career-section-title,
+.is-phone-app .career-profile .career-section-title,
+.is-course-app .career-fit .career-section-title,
+.is-course-app .career-code .career-section-title,
+.is-course-app .career-profile .career-section-title {
+  color: #f5c542 !important;
+}
+
+/* Dark fit island: body labels stay bright white; only the top row keeps gold */
+.is-phone-app .career-fit .career-profile-label,
+.is-phone-app .career-fit .career-profile-pct,
+.is-phone-app .career-profile .career-profile-label,
+.is-phone-app .career-profile .career-profile-pct,
+.is-course-app .career-fit .career-profile-label,
+.is-course-app .career-fit .career-profile-pct,
+.is-course-app .career-profile .career-profile-label,
+.is-course-app .career-profile .career-profile-pct {
+  color: #f4f7fb !important;
+}
+
+.is-phone-app .career-fit .career-profile-row.is-top .career-profile-label,
+.is-phone-app .career-profile .career-profile-row.is-top .career-profile-label,
+.is-course-app .career-fit .career-profile-row.is-top .career-profile-label,
+.is-course-app .career-profile .career-profile-row.is-top .career-profile-label {
+  color: #f5c542 !important;
+}
+
+/*
+ * Paper ink lock (phone + course) — site-wide L3.
+ * Night leftovers (#e8eef6 / pale #f5c542 / accent kickers) die on cream mats.
+ * Law: amber = border, pill, or fill — never body copy on a light fill.
+ */
+.is-phone-app .section-kicker:not(.on-dark),
+.is-course-app .section-kicker:not(.on-dark) {
+  color: var(--brand, #0b2f5c) !important;
+}
+
+.is-phone-app .section-kicker:not(.on-dark)::after,
+.is-course-app .section-kicker:not(.on-dark)::after {
+  background: var(--accent, #e8a317) !important;
+}
+
+.is-phone-app .train-checkin-note,
+.is-course-app .train-checkin-note,
+.is-phone-app .unit-intro-method,
+.is-course-app .unit-intro-method {
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .comp-desktop-hint strong,
+.is-course-app .comp-desktop-hint strong {
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .career-result-badge,
+.is-course-app .career-result-badge {
+  color: var(--brand-deep, #041526) !important;
+  background: #fff6de !important;
+  border-color: color-mix(in srgb, var(--accent, #e8a317) 45%, var(--line)) !important;
+}
+
+/* Dark lesson rail family labels — brighter gold for AA on navy */
+.is-phone-app .equip-video-family-label,
+.is-course-app .equip-video-family-label {
+  color: #f5c542 !important;
+}
+
+.is-phone-app .career-strengths li,
+.is-course-app .career-strengths li {
+  color: var(--brand-deep, #041526) !important;
+  background: #fff6de !important;
+  border: 1px solid color-mix(in srgb, var(--accent, #e8a317) 40%, var(--line)) !important;
+  border-left: 3px solid var(--accent, #e8a317) !important;
+}
+
+.is-phone-app .career-result > section:not(.career-fit):not(.career-code):not(.career-profile) .career-section-title,
+.is-course-app .career-result > section:not(.career-fit):not(.career-code):not(.career-profile) .career-section-title {
+  color: var(--brand, #0b2f5c) !important;
+}
+
+.is-phone-app .career-likert-btn,
+.is-course-app .career-likert-btn {
+  background: #ffffff !important;
+  color: var(--brand-deep, #041526) !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
+}
+
+.is-phone-app .career-likert-btn:hover,
+.is-phone-app .career-likert-btn:focus-visible,
+.is-course-app .career-likert-btn:hover,
+.is-course-app .career-likert-btn:focus-visible {
+  background: var(--brand-soft, #e6eef8) !important;
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .career-likert-btn.is-selected,
+.is-course-app .career-likert-btn.is-selected {
+  background: #fff6de !important;
+  border-color: var(--accent, #e8a317) !important;
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .career-assess-prompt,
+.is-course-app .career-assess-prompt {
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-course-app .career-choice {
+  background: #ffffff !important;
+  color: var(--brand-deep, #041526) !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
+}
+
+.is-course-app .career-choice:hover,
+.is-course-app .career-choice:focus-visible {
+  background: var(--brand-soft, #e6eef8) !important;
+  color: var(--brand-deep, #041526) !important;
+}
+
+/* Coaching callouts on paper — At work / Teach note body (not pale gold) */
+.is-phone-app .train-why,
+.is-course-app .train-why,
+.is-phone-app .train-teach,
+.is-course-app .train-teach,
+.is-phone-app .train-teach p,
+.is-course-app .train-teach p {
+  color: var(--brand-deep, #041526) !important;
 }
 
 .is-phone-app .practice-stats-strip {
@@ -12646,9 +13165,45 @@ video {
   color: #1f7a4d !important;
 }
 
-.is-phone-app .eye-spy-stage {
-  background: var(--brand-soft) !important;
+.is-phone-app .eye-spy-stage:not(.is-scene) {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(11, 47, 92, 0.08), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #eef3f9 100%) !important;
   border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+  padding: 0.55rem !important;
+  box-shadow: 0 12px 28px rgba(11, 47, 92, 0.1);
+}
+
+/* Keep inline atmosphere photo — never let paper kill-list wipe scene floors */
+.is-phone-app .eye-spy-stage.is-scene,
+.is-course-app .eye-spy-stage.is-scene {
+  background-color: #0b1c2e !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+  padding: 0 !important;
+}
+
+/* Iconic: tool photos own the phone fold — bigger tiles, less chrome */
+.is-phone-app .train-shell.is-eye-spy .eye-spy-stage.is-tiles {
+  gap: 0.55rem !important;
+}
+
+.is-phone-app .train-shell.is-eye-spy .eye-spy-hotspot {
+  padding: 0.35rem !important;
+  border-radius: 12px;
+}
+
+.is-phone-app .train-shell.is-eye-spy .eye-spy-hotspot img {
+  max-height: min(28vh, 11.5rem) !important;
+  padding: 0.2rem !important;
+}
+
+.is-phone-app .train-shell.is-eye-spy .eye-spy-instruction,
+.is-phone-app .train-shell.is-eye-spy .eye-spy-progress {
+  font-size: 0.78rem !important;
+  margin: 0.15rem 0 !important;
 }
 
 .is-phone-app .train-mastery-gate,
@@ -13049,17 +13604,21 @@ html.pa-phone-shell .practice-feedback-dock {
 
 .is-phone-app .train-header-top {
   display: flex !important;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  gap: 0.35rem !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.35rem 0.5rem !important;
+}
+
+.is-phone-app .train-kicker {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 !important;
 }
 
 .is-phone-app .train-sound-slot {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 0.35rem !important;
-  width: 100%;
-  align-items: stretch;
+  display: none !important; /* Path home / Done live in Station menu on phone */
 }
 
 /* Shell chrome already has Practice sounds — inner icon was overlapping Done for now on phone */
@@ -13069,10 +13628,58 @@ html.pa-phone-shell .practice-feedback-dock {
   display: none !important;
 }
 
+/* One Station menu replaces Path home + Done + Jump + stats on phone first viewport */
+.is-phone-app .train-station-menu {
+  display: block !important;
+  margin: 0.25rem 0 0.35rem !important;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line));
+  background: #fff;
+}
+
+.is-phone-app .train-station-menu-summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.8rem !important;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand) !important;
+}
+
+.is-phone-app .train-station-menu-summary::-webkit-details-marker {
+  display: none;
+}
+
+.is-phone-app .train-station-menu-body {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0 0.55rem 0.55rem;
+  border-top: 1px solid color-mix(in srgb, var(--brand) 12%, var(--line));
+}
+
+.is-phone-app .train-station-menu-hub {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+}
+
+.is-phone-app .train-station-menu .train-hub-btn {
+  width: 100%;
+  font-size: 0.8rem !important;
+  padding: 0.45rem 0.5rem !important;
+  text-align: center;
+}
+
+.is-phone-app .practice-section-skip-fold,
+.is-phone-app .practice-stats-strip-desktop {
+  display: none !important;
+}
+
 .is-phone-app .train-hub-btn {
   flex: 1 1 auto;
   min-width: 0;
-  width: 100%;
   font-size: 0.8rem !important;
   padding: 0.45rem 0.5rem !important;
   white-space: nowrap;
@@ -13164,6 +13771,295 @@ html.pa-phone-shell .practice-feedback-dock {
   padding: 0.45rem 0.65rem 0.25rem !important;
 }
 
+/*
+ * Task-first phone stations: hide coaching chrome that duplicates the header
+ * so the picture / cloze / Watch / Organize panel clears the first viewport (L3).
+ */
+.is-phone-app .train-shell.is-computer-skills .unit-intro-card,
+.is-phone-app .train-shell.is-equipment-video .unit-intro-card,
+.is-phone-app .train-shell.is-visual-vocabulary .unit-intro-card,
+.is-phone-app .train-shell.is-organize-wide .unit-intro-card,
+.is-phone-app .train-shell.is-sentence-structure .unit-intro-card,
+.is-phone-app .train-shell.is-eye-spy .unit-intro-card,
+.is-phone-app .train-shell.is-computer-skills .station-context-fold,
+.is-phone-app .train-shell.is-equipment-video .station-context-fold,
+.is-phone-app .train-shell.is-visual-vocabulary .station-context-fold,
+.is-phone-app .train-shell.is-organize-wide .station-context-fold,
+.is-phone-app .train-shell.is-sentence-structure .station-context-fold,
+.is-phone-app .train-shell.is-eye-spy .station-context-fold {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-computer-skills .train-progress,
+.is-phone-app .train-shell.is-equipment-video .train-progress,
+.is-phone-app .train-shell.is-visual-vocabulary .train-progress,
+.is-phone-app .train-shell.is-organize-wide .train-progress,
+.is-phone-app .train-shell.is-sentence-structure .train-progress,
+.is-phone-app .train-shell.is-eye-spy .train-progress {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-computer-skills .train-why-details,
+.is-phone-app .train-shell.is-equipment-video .train-why-details,
+.is-phone-app .train-shell.is-visual-vocabulary .train-why-details,
+.is-phone-app .train-shell.is-organize-wide .train-why-details,
+.is-phone-app .train-shell.is-sentence-structure .train-why-details,
+.is-phone-app .train-shell.is-eye-spy .train-why-details {
+  display: none !important;
+}
+
+/* Organize: bare WhyWork/TeachNote must never sit above the picture strip */
+.is-phone-app .train-shell.is-organize-wide > .train-why,
+.is-phone-app .train-shell.is-organize-wide > .train-teach,
+.is-phone-app .train-shell.is-organize-wide .train-panel > .train-why,
+.is-phone-app .train-shell.is-organize-wide .train-panel > .train-teach {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-computer-skills .train-simple-line,
+.is-phone-app .train-shell.is-equipment-video .train-simple-line,
+.is-phone-app .train-shell.is-visual-vocabulary .train-simple-line,
+.is-phone-app .train-shell.is-sentence-structure .train-simple-line,
+.is-phone-app .train-shell.is-eye-spy .train-simple-line {
+  font-size: 0.84rem !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Organize: station title alone is enough — long help stole the Drop fold */
+.is-phone-app .train-shell.is-organize-wide .train-simple-line,
+.is-phone-app .train-shell.is-organize-wide .train-dots,
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-actions {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-skip {
+  font-size: 0.68rem !important;
+  padding: 0.15rem 0.35rem !important;
+  min-height: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+/* Header already carries the VV lede — drop the duplicate inside the sheet */
+.is-phone-app .train-shell.is-visual-vocabulary .vocab-sheet-lede {
+  display: none !important;
+}
+
+/* Organize: sticky pics + Drop slot must share the first phone viewport */
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-head {
+  gap: 0.15rem !important;
+  margin: 0 !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-head .section-kicker {
+  font-size: 0.7rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .train-vocab-counter {
+  font-size: 0.72rem !important;
+  margin: 0 0 0.2rem !important;
+  line-height: 1.25 !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-pool {
+  padding: 0.4rem 0.5rem 0.5rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-pool-grid.is-images {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.3rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-piece {
+  aspect-ratio: 1 / 1 !important;
+  padding: 0.2rem !important;
+  min-height: 0 !important;
+  border-radius: 8px !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-piece img {
+  max-height: 3.4rem !important;
+  padding: 0.05rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-slot.is-image {
+  min-height: 4.25rem !important;
+  aspect-ratio: 16 / 9 !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-lang-list.is-phone-compact {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.2rem 0.45rem !important;
+  margin: 0.25rem 0 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-lang-list.is-phone-compact li {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  gap: 0.2rem !important;
+  align-items: start !important;
+  padding: 0.15rem 0 !important;
+  border: none !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-lang-list.is-phone-compact .vocab-organize-hear {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-lang-name {
+  font-size: 0.62rem !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-slot-word {
+  font-size: 0.78rem !important;
+  line-height: 1.2 !important;
+}
+
+.is-phone-app .train-shell.is-organize-wide .vocab-organize-focus-nav {
+  margin-top: 0.35rem !important;
+}
+
+/* Sentence Structure: head chrome before the photo/cloze steals the fold */
+.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-help,
+.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-skip,
+.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-head-row .section-kicker {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-head-row {
+  margin-bottom: 0.15rem !important;
+}
+
+.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-doc-kicker {
+  font-size: 0.72rem !important;
+  margin: 0 !important;
+  line-height: 1.25 !important;
+  color: var(--brand) !important;
+}
+
+.is-phone-app .train-shell.is-sentence-structure .train-vocab-counter {
+  font-size: 0.7rem !important;
+  margin: 0.1rem 0 0.2rem !important;
+}
+
+.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-page-jump {
+  margin: 0.15rem 0 0.35rem !important;
+}
+
+.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-page-jump label {
+  font-size: 0.68rem !important;
+}
+
+.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-photo {
+  max-height: 9.5rem;
+  margin: 0.25rem 0 0.35rem !important;
+}
+
+.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-photo img {
+  max-height: 9.5rem !important;
+  object-fit: contain !important;
+}
+
+.is-phone-app .train-shell.is-visual-vocabulary .vocab-sheet-pages {
+  margin: 0.15rem 0 0.25rem !important;
+}
+
+.is-phone-app .train-shell.is-visual-vocabulary .vocab-sheet-page-label {
+  font-size: 0.68rem !important;
+  margin: 0 0 0.2rem !important;
+  line-height: 1.25 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.is-phone-app .train-shell.is-visual-vocabulary .vocab-sheet-page-nav .btn {
+  font-size: 0.78rem !important;
+  padding: 0.35rem 0.55rem !important;
+}
+
+.is-phone-app .ph-unit-badge {
+  background: var(--brand) !important;
+  color: #ffffff !important;
+}
+
+.is-phone-app .ph-unit.is-current .ph-unit-badge {
+  background: linear-gradient(160deg, var(--accent), #c98510) !important;
+  color: #1a1200 !important;
+}
+
+/* Familiar theater — paper stage, one primary continue (L3) */
+.familiar-theater {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(4, 21, 38, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.familiar-theater-stage {
+  width: min(100%, 26rem);
+  display: grid;
+  gap: 0.65rem;
+  padding: 1.35rem 1.4rem 1.45rem;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid color-mix(in srgb, #0b2f5c 16%, #c5d0dc);
+  box-shadow: 0 24px 48px rgba(4, 21, 38, 0.28);
+  text-align: center;
+  color: #041526;
+}
+
+.familiar-theater-kicker {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0b2f5c;
+}
+
+.familiar-theater-stamp {
+  margin: 0;
+  font-family: var(--display, Georgia, serif);
+  font-size: clamp(2rem, 6vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #a8740c;
+  line-height: 1;
+}
+
+.familiar-theater-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #041526;
+}
+
+.familiar-theater-lede {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: #2f4156;
+  font-weight: 600;
+}
+
+.is-phone-app .familiar-theater-stage {
+  width: min(100%, 20rem);
+  padding: 1.15rem 1.1rem 1.25rem;
+}
+
 .is-phone-app .train-title {
   font-size: 1.28rem !important;
   margin: 0.3rem 0 0.15rem !important;
@@ -13198,6 +14094,19 @@ html.pa-phone-shell .practice-feedback-dock {
 
 .is-phone-app .train-why-details {
   margin: 0.15rem 0 !important;
+  color: var(--ink-soft) !important;
+  font-size: 0.92rem !important;
+}
+
+.is-phone-app .train-why-details summary {
+  color: var(--brand) !important;
+  font-weight: 750 !important;
+  font-size: 0.92rem !important;
+}
+
+.is-phone-app .train-why-details .train-purpose {
+  color: var(--brand-deep) !important;
+  font-weight: 600;
 }
 
 .is-phone-app table {
@@ -13258,15 +14167,19 @@ html.pa-phone-shell .practice-feedback-dock {
 }
 
 /* ——— Desktop course stage ——— */
+/*
+ * Showcase dialect (2026-10-26): course body matches logo + phone — navy on paper.
+ * Topbar stays navy brand chrome; learning surface is paper.
+ */
 .course-stage {
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(ellipse 60% 40% at 0% 0%, rgba(232, 163, 23, 0.12), transparent 50%),
-    linear-gradient(180deg, #041526, #071c30 40%, #041526);
-  color: #f4f7fb;
+    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(11, 47, 92, 0.06), transparent 55%),
+    linear-gradient(180deg, #fbfcff 0%, #f3f6fb 48%, #e8eef7 100%);
+  color: #041526;
 }
 
 .course-topbar {
@@ -13351,6 +14264,322 @@ html.pa-phone-shell .practice-feedback-dock {
 
 .is-course-app {
   max-width: none;
+  /*
+   * Same paper train/ph tokens as .is-phone-app — one showcase lockup.
+   * Desktop topbar stays night chrome; this flips the learning surface only.
+   */
+  --ink: #071e3d;
+  --ink-soft: #2f4156;
+  --paper: #f3f6fb;
+  --panel: #ffffff;
+  --train-text: #071e3d;
+  --train-text-muted: #2f4156;
+  --train-panel: #ffffff;
+  --train-surface: #ffffff;
+  --train-surface-2: #ffffff;
+  --train-bg: #f3f6fb;
+  --train-bg-2: #e8eef7;
+  --train-line: #aebccd;
+  --train-amber: #e8a317;
+  --train-amber-bright: #a8740c;
+  --ph-ink: #071e3d;
+  --ph-muted: #2f4156;
+  --ph-line: color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
+  --ph-panel: #ffffff;
+  --ph-panel-solid: #ffffff;
+  --ph-soft: #eef3f9;
+  --ph-accent: #0b2f5c;
+  color: var(--brand-deep, #041526);
+}
+
+.is-course-app .practice-hub {
+  --ph-ink: var(--brand-deep);
+  --ph-muted: var(--ink-soft);
+  --ph-line: color-mix(in srgb, var(--brand) 16%, var(--line));
+  --ph-panel: linear-gradient(180deg, #ffffff, #f3f6fb);
+  --ph-panel-solid: #ffffff;
+  --ph-soft: var(--brand-soft);
+  --ph-accent: var(--brand);
+  color: var(--brand-deep);
+}
+
+.is-course-app .ph-hero {
+  background:
+    radial-gradient(ellipse 70% 90% at 100% 0%, rgba(11, 47, 92, 0.08), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #eef3f9 100%) !important;
+  border-color: color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+  box-shadow: 0 12px 28px rgba(11, 47, 92, 0.08) !important;
+}
+
+.is-course-app .ph-hero-copy h1,
+.is-course-app .ph-resume h2,
+.is-course-app .ph-section-head h2,
+.is-course-app .ph-video-section h2,
+.is-course-app .ph-computer-section h2,
+.is-course-app .train-title,
+.is-course-app .train-simple-line,
+.is-course-app .train-kicker,
+.is-course-app .train-hub-btn {
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-kicker,
+.is-course-app .ph-resume-label,
+.is-course-app .ph-video-section-kicker,
+.is-course-app .train-kicker,
+.is-course-app .train-why-details summary {
+  color: var(--brand) !important;
+}
+
+.is-course-app .ph-lede,
+.is-course-app .ph-resume-lesson,
+.is-course-app .ph-resume-progress,
+.is-course-app .ph-today-line {
+  color: var(--ink-soft) !important;
+  text-shadow: none !important;
+}
+
+.is-course-app .ph-resume,
+.is-course-app .ph-pathway-badge,
+.is-course-app .ph-video-section,
+.is-course-app .ph-computer-section,
+.is-course-app .ph-domains,
+.is-course-app .ph-curriculum,
+.is-course-app .ph-overview,
+.is-course-app .ph-footnote,
+.is-course-app .train-header,
+.is-course-app .train-panel,
+.is-course-app .unit-intro-card,
+.is-course-app .learning-path-map,
+.is-course-app .train-lang,
+.is-course-app .train-interest,
+.is-course-app .train-bridge,
+.is-course-app .train-learn-card,
+.is-course-app .train-check-rich,
+.is-course-app .train-topic-card,
+.is-course-app .train-choice,
+.is-course-app .phrase-lesson-card,
+.is-course-app .topic-lesson-card,
+.is-course-app .comp-try {
+  background: #ffffff !important;
+  border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-video-section-inner,
+.is-course-app .ph-computer-section-inner {
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+  box-shadow: 0 10px 24px rgba(11, 47, 92, 0.08) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-video-section-inner h2,
+.is-course-app .ph-computer-section-inner h2,
+.is-course-app .ph-video-section-inner strong,
+.is-course-app .ph-computer-section-inner strong,
+.is-course-app .ph-pathway-badge strong,
+.is-course-app .train-lang strong,
+.is-course-app .train-interest strong,
+.is-course-app .train-bridge strong,
+.is-course-app .train-learn-card strong,
+.is-course-app .train-topic-card strong,
+.is-course-app .phrase-lesson-en,
+.is-course-app .topic-lesson-card h3,
+.is-course-app .unit-intro-card h3,
+.is-course-app .unit-intro-summary strong,
+.is-course-app .lp-title,
+.is-course-app .lp-unit-copy strong,
+.is-course-app .lp-lesson strong,
+.is-course-app .career-assess-title,
+.is-course-app .career-result-title,
+.is-course-app .train-check-prompt,
+.is-course-app .vocab-sheet-lede,
+.is-course-app .vocab-sheet-page-label,
+.is-course-app .eye-spy-instruction,
+.is-course-app .eye-spy-scene-title,
+.is-course-app .eye-spy-progress,
+.is-course-app .eye-spy-prompt,
+.is-course-app .eye-spy-word,
+.is-course-app .eye-spy-word strong {
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-video-section-inner > p:not(.ph-video-section-kicker),
+.is-course-app .ph-computer-section-inner > p:not(.ph-video-section-kicker),
+.is-course-app .ph-lede,
+.is-course-app .lp-mastery,
+.is-course-app .lp-unit-copy span,
+.is-course-app .lp-unit-copy em,
+.is-course-app .unit-intro-goal,
+.is-course-app .unit-intro-outcomes,
+.is-course-app .vocab-sheet-definition {
+  color: var(--ink-soft) !important;
+}
+
+.is-course-app .ph-video-section-inner > .ph-video-section-kicker,
+.is-course-app .ph-computer-section-inner > .ph-video-section-kicker,
+.is-course-app .lp-kicker,
+.is-course-app .lp-hub-btn,
+.is-course-app .unit-intro-kicker,
+.is-course-app .unit-intro-summary-hint {
+  color: var(--brand) !important;
+}
+
+.is-course-app .eye-spy-stage:not(.is-scene) {
+  background: var(--brand-soft) !important;
+  border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+}
+
+.is-course-app .eye-spy-word.is-clear,
+.is-course-app .eye-spy-cleared li.is-found {
+  color: #1f7a4d !important;
+}
+
+.is-course-app .eye-spy-cleared li {
+  color: var(--ink-soft) !important;
+  border-color: color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+}
+
+.is-course-app .train-lang.is-selected,
+.is-course-app .career-choice.is-selected {
+  background: #fff6de !important;
+  border-color: var(--accent) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-pathway-switch-btn {
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
+}
+
+.is-course-app .ph-pathway-switch-btn.is-active {
+  background: var(--brand-soft) !important;
+  border-color: var(--brand) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-pathway-switch-label,
+.is-course-app .ph-pathway-switch-hint,
+.is-course-app .ph-pathway-switch-hint strong {
+  color: var(--ink-soft) !important;
+}
+
+.is-course-app .ph-pathway-switch-label {
+  color: var(--brand) !important;
+  font-weight: 800;
+}
+
+.is-course-app .ph-domain-row,
+.is-course-app .ph-domain-row strong,
+.is-course-app .ph-unit-titles,
+.is-course-app .ph-unit-title-row strong,
+.is-course-app .ph-unit-goal,
+.is-course-app .ph-lesson-copy,
+.is-course-app .ph-meter-label,
+.is-course-app .ph-meter-label strong,
+.is-course-app .ph-footnote,
+.is-course-app .ph-section-head p {
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-domain-row strong,
+.is-course-app .ph-status.is-current,
+.is-course-app .ph-meter-label span,
+.is-course-app .ph-status {
+  color: var(--brand) !important;
+}
+
+.is-course-app .ph-domain-track {
+  background: color-mix(in srgb, var(--brand) 12%, #e8eef7) !important;
+}
+
+.is-course-app .ph-unit {
+  background: #ffffff !important;
+  border-color: color-mix(in srgb, var(--brand) 14%, var(--line)) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-unit.is-current {
+  background: color-mix(in srgb, var(--accent) 10%, #fff) !important;
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line)) !important;
+}
+
+.is-course-app .ph-unit-badge {
+  background: var(--brand-soft) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .field input,
+.is-course-app .field select,
+.is-course-app .field textarea,
+.is-course-app .practice-section-skip select {
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+}
+
+.is-course-app .shell.is-train .alert.ok,
+.is-course-app .alert.ok {
+  background: var(--ok-soft) !important;
+  color: var(--ok) !important;
+  border: 1px solid color-mix(in srgb, var(--ok) 35%, var(--line)) !important;
+}
+
+.is-course-app .practice-stats-strip,
+.is-course-app .practice-stats-strip strong {
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .practice-stats-strip .is-ready {
+  color: #1f7a4d !important;
+  font-weight: 700;
+}
+
+.is-course-app .practice-stats-strip .is-locked {
+  color: var(--brand) !important;
+}
+
+.is-course-app .train-picture figcaption,
+.is-course-app .train-picture.is-object figcaption,
+.is-course-app .train-picture figcaption strong {
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .train-picture.is-object figcaption {
+  background: #ffffff !important;
+}
+
+.is-course-app .train-instruction blockquote {
+  color: var(--brand-deep) !important;
+  background: var(--brand-soft) !important;
+  border-left: 3px solid var(--accent);
+}
+
+.is-course-app .ph-section-head h2,
+.is-course-app .ph-metric strong,
+.is-course-app .ph-meter-label strong,
+.is-course-app .ph-pathway-badge strong,
+.is-course-app .ph-resume h2,
+.is-course-app .ph-lesson-copy strong,
+.is-course-app .ph-footnote h3 {
+  color: var(--brand-deep) !important;
+}
+
+/*
+ * Showcase: lesson panel must never sit mid-fade (opacity ~0.25 reads as
+ * “washed ink”). Phone scroll root + Reveal remount on jump made demos look broken.
+ */
+.is-phone-app .reveal.train-panel,
+.is-course-app .reveal.train-panel,
+.is-phone-app .train-panel,
+.is-course-app .train-panel {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 .course-footer {
@@ -13359,18 +14588,20 @@ html.pa-phone-shell .practice-feedback-dock {
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.85rem clamp(1rem, 3vw, 1.75rem);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid color-mix(in srgb, var(--brand) 14%, #c5d0dc);
   font-size: 0.85rem;
-  color: rgba(244, 247, 251, 0.55);
+  color: var(--ink-soft, #2f4156);
+  background: #ffffff;
 }
 
 .course-footer .linkish {
-  color: #f5c542;
+  color: var(--brand, #0b2f5c);
   background: none;
   border: 0;
   font: inherit;
   cursor: pointer;
   text-decoration: underline;
+  font-weight: 700;
 }
 
 @media (max-width: 720px) {

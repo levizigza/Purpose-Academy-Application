@@ -67,9 +67,16 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   }, [lesson.id])
 
   useEffect(() => {
-    // Practice chrome is tall — bring the player into view when the station opens.
-    const node = document.querySelector('.equip-video-card')
-    node?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    /* Same phone rule as Computer Skills — do not scroll the title off the fold. */
+    const phone =
+      document.documentElement.classList.contains('pa-phone-shell') ||
+      Boolean(document.querySelector('.is-phone-app'))
+    if (phone) {
+      const sc = document.querySelector('.iphone-scroll')
+      if (sc instanceof HTMLElement) sc.scrollTop = 0
+      return
+    }
+    document.querySelector('.equip-video-card')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [])
 
   const familyLessons = useMemo(

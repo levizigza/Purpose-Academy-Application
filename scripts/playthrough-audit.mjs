@@ -72,16 +72,23 @@ async function measureFirstViewport(page, rootSel) {
       }
     }
 
-    /* Cutoff: elements near bottom with clipped text */
+    /*
+     * Cutoff: content that *starts* too late and is mostly below the fold.
+     * Tall lesson cards (vocab / cloze) legitimately extend past the fold once
+     * the photo peeks in — do not treat that as a chrome defect.
+     */
     const cutoffs = []
     const probe = root.querySelectorAll(
-      '.train-title, .train-simple-line, .comp-skills, .sentence-cloze-card, .vocab-sheet, .alert, .practice-stats-strip, .ph-resume, button.btn-primary',
+      '.train-title, .train-simple-line, .comp-skills, .sentence-cloze-card, .vocab-sheet, .vocab-organize-board, .vocab-organize-pool-label, .alert, .practice-stats-strip, .ph-resume, button.btn-primary',
     )
     for (const el of probe) {
       const b = el.getBoundingClientRect()
       if (b.height < 4 || b.width < 4) continue
+      const top = b.top - viewTop
       const bottom = b.bottom - viewTop
-      if (bottom > viewH - 8 && b.top - viewTop < viewH - 20) {
+      const tallCard = b.height > viewH * 0.45
+      if (tallCard && top < viewH * 0.62) continue
+      if (bottom > viewH - 8 && top > viewH * 0.42 && top < viewH - 20) {
         cutoffs.push({
           cls: (el.className || '').toString().slice(0, 40),
           text: (el.textContent || '').trim().slice(0, 40),
@@ -109,8 +116,12 @@ async function measureFirstViewport(page, rootSel) {
         bg = getComputedStyle(n).backgroundColor
         n = n.parentElement
       }
-      const m = bg && bg.match(/\d+/g)?.map(Number)
-      const bgLum = m ? (0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]) / 255 : 1
+      /* Prefer rgb()/rgba() only — color-mix / lab strings produce bogus digit lists. */
+      const rgbBg = bg && bg.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i)
+      const bgLum = rgbBg
+        ? (0.2126 * +rgbBg[1] + 0.7152 * +rgbBg[2] + 0.0722 * +rgbBg[3]) / 255
+        : null
+      if (bgLum == null || bgLum > 1.05) continue
       if (lum > 0.72 && bgLum > 0.55) {
         lightInk.push({
           text: t.slice(0, 36),
@@ -122,9 +133,17 @@ async function measureFirstViewport(page, rootSel) {
       if (lightInk.length >= 10) break
     }
 
-    const lesson = document.querySelector(
-      '.comp-skills-card, .sentence-cloze-card, .vocab-sheet, .eye-spy-stage, .train-panel > *, .career-assess',
-    )
+    const lessonCandidates = [
+      ...document.querySelectorAll(
+        '.comp-skills-card, .sentence-cloze-card, .vocab-sheet, .vocab-organize, .eye-spy, .eye-spy-stage, .career-assess, .train-panel > *',
+      ),
+    ]
+    const lesson = lessonCandidates.find((el) => {
+      const s = getComputedStyle(el)
+      if (s.display === 'none' || s.visibility === 'hidden' || Number(s.opacity) < 0.2) return false
+      const r = el.getBoundingClientRect()
+      return r.width > 8 && r.height > 8
+    })
     const lessonBox = lesson?.getBoundingClientRect()
     const lessonInView = lessonBox
       ? lessonBox.top < viewTop + viewH * 0.92 && lessonBox.bottom > viewTop + 40
@@ -183,17 +202,27 @@ async function enterPractice(page, { phone }) {
 
 async function jump(page, label, phone) {
   const root = phone ? '.iphone-scroll' : 'body'
-  const fold = page.locator(`${root} .practice-section-skip-fold`).first()
-  if (await fold.count()) {
-    const open = await fold.evaluate((el) => el.open)
+  /* Phone: jump lives inside Station menu. Desktop: dedicated review fold. */
+  const menu = page.locator(`${root} .train-station-menu`).first()
+  if (phone && (await menu.count())) {
+    const open = await menu.evaluate((el) => el.open)
     if (!open) {
-      await fold.locator('summary').first().click()
+      await menu.locator('summary').first().click()
       await page.waitForTimeout(200)
+    }
+  } else {
+    const fold = page.locator(`${root} .practice-section-skip-fold`).first()
+    if (await fold.count()) {
+      const open = await fold.evaluate((el) => el.open)
+      if (!open) {
+        await fold.locator('summary').first().click()
+        await page.waitForTimeout(200)
+      }
     }
   }
   const jumpSel = phone
-    ? '.iphone-scroll .practice-section-skip select'
-    : '.practice-section-skip select'
+    ? '.iphone-scroll .train-station-menu[open] select'
+    : '.practice-section-skip-fold[open] select'
   const sel = page.locator(jumpSel).first()
   if (!(await sel.count())) {
     find(phone ? 'phone' : 'desktop', 'high', 'Section jump missing', { label })
@@ -296,17 +325,22 @@ async function runMode(phone) {
     } else find(mode, 'high', 'Could not open today’s station from hub')
   }
   /* Ensure jump chrome exists before station loop */
+  const jumpChrome = phone
+    ? '.iphone-scroll .train-station-menu'
+    : '.practice-section-skip-fold'
   const foldReady = await page
-    .locator(phone ? '.iphone-scroll .practice-section-skip-fold' : '.practice-section-skip-fold')
+    .locator(jumpChrome)
     .first()
     .waitFor({ state: 'visible', timeout: 8000 })
     .then(() => true)
     .catch(() => false)
-  if (!foldReady) find(mode, 'high', 'Practice section jump fold never appeared after open')
+  if (!foldReady) find(mode, 'high', 'Practice section jump chrome never appeared after open')
 
   const stations = [
     'Your Language',
+    'Your Career Profile',
     'Visual Vocabulary',
+    'Language Organize',
     'English Eye Spy',
     'Sentence Structure',
     'Basic Computer Skills',
@@ -316,6 +350,119 @@ async function runMode(phone) {
     const okJump = await jump(page, s, phone)
     if (!okJump) continue
     await auditStation(page, mode, s.replace(/\s+/g, '-').toLowerCase(), root)
+
+    /* Language Organize: phone must not squeeze four boards into one row */
+    if (/Language Organize/i.test(s) && phone) {
+      const org = await page.evaluate(() => {
+        const scroll = document.querySelector('.iphone-scroll')
+        const viewH = scroll?.clientHeight || window.innerHeight
+        const viewTop = scroll?.getBoundingClientRect().top || 0
+        const boards = [...document.querySelectorAll('.iphone-scroll .vocab-organize-board')]
+        const widths = boards.map((el) => Math.round(el.getBoundingClientRect().width))
+        const poolLabel = document.querySelector('.iphone-scroll .vocab-organize-pool-label')
+        const poolGrid = document.querySelector('.iphone-scroll .vocab-organize-pool-grid')
+        const poolPiece = document.querySelector('.iphone-scroll .vocab-organize-piece')
+        const dropSlot = document.querySelector('.iphone-scroll .vocab-organize-slot.is-image')
+        const why = document.querySelector('.iphone-scroll .train-why')
+        const teach = document.querySelector('.iphone-scroll .train-teach')
+        const labelStyle = poolLabel ? getComputedStyle(poolLabel) : null
+        const rgb = labelStyle?.color.match(/\d+/g)?.map(Number)
+        const lum = rgb ? (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255 : null
+        const whyStrong = why?.querySelector('strong')
+        const whyRgb = whyStrong ? getComputedStyle(whyStrong).color.match(/\d+/g)?.map(Number) : null
+        const whyLum = whyRgb
+          ? (0.2126 * whyRgb[0] + 0.7152 * whyRgb[1] + 0.0722 * whyRgb[2]) / 255
+          : null
+        const pieceBox = poolPiece?.getBoundingClientRect()
+        const dropBox = dropSlot?.getBoundingClientRect()
+        const inView = (box) =>
+          box && box.bottom > viewTop + 8 && box.top < viewTop + viewH * 0.95 && box.height > 20
+        const whyBox = why?.getBoundingClientRect()
+        const whyBlocking =
+          why &&
+          getComputedStyle(why).display !== 'none' &&
+          whyBox &&
+          whyBox.top < viewTop + viewH * 0.55 &&
+          whyBox.height > 40
+        return {
+          boardCount: boards.length,
+          widths,
+          minWidth: widths.length ? Math.min(...widths) : 0,
+          focusMode: Boolean(document.querySelector('.iphone-scroll .vocab-organize.is-phone-focus')),
+          poolLum: lum,
+          whyLum,
+          poolVisible: Boolean(inView(pieceBox)),
+          dropVisible: Boolean(inView(dropBox)),
+          whyBlocking: Boolean(whyBlocking),
+          teachVisible:
+            Boolean(teach) && getComputedStyle(teach).display !== 'none' && teach.getBoundingClientRect().height > 20,
+          hasPoolGrid: Boolean(poolGrid),
+        }
+      })
+      if (!org.focusMode) {
+        find(mode, 'high', 'Language Organize missing phone focus layout', org)
+      }
+      if (org.boardCount > 1) {
+        find(mode, 'high', 'Language Organize shows more than one word board on phone', org)
+      }
+      if (org.minWidth > 0 && org.minWidth < 220) {
+        find(mode, 'high', 'Language Organize board too narrow to play', org)
+      }
+      if (org.poolLum != null && org.poolLum > 0.55) {
+        find(mode, 'med', 'Language Organize pool label still light ink on paper', org)
+      }
+      if (org.whyLum != null && org.whyLum > 0.55 && org.whyBlocking) {
+        find(mode, 'med', 'Language Organize At work label still light ink on paper', org)
+      }
+      if (!org.poolVisible) {
+        find(mode, 'high', 'Language Organize pictures not in first phone viewport', org)
+      }
+      if (!org.dropVisible) {
+        find(mode, 'high', 'Language Organize Drop slot not in first phone viewport', org)
+      }
+      if (org.whyBlocking || org.teachVisible) {
+        find(mode, 'high', 'Language Organize coaching chrome still blocking the phone fold', org)
+      }
+    }
+
+    /* Career profile: “Why this fits you” cards must be navy on cream, not night ink */
+    if (/Career Profile/i.test(s)) {
+      const fit = await page.evaluate((phoneMode) => {
+        const root = phoneMode ? document.querySelector('.iphone-scroll') : document
+        if (!root) return { present: false }
+        const items = [...root.querySelectorAll('.career-strengths li')]
+        if (!items.length) return { present: false }
+        const samples = items.slice(0, 3).map((el) => {
+          const s = getComputedStyle(el)
+          const rgb = s.color.match(/\d+/g)?.map(Number)
+          const lum = rgb ? (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255 : null
+          let bg = s.backgroundColor
+          let n = el.parentElement
+          while (n && (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent')) {
+            bg = getComputedStyle(n).backgroundColor
+            n = n.parentElement
+          }
+          const rgbBg = bg && bg.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i)
+          const bgLum = rgbBg
+            ? (0.2126 * +rgbBg[1] + 0.7152 * +rgbBg[2] + 0.0722 * +rgbBg[3]) / 255
+            : null
+          return {
+            text: (el.textContent || '').trim().slice(0, 48),
+            lum,
+            bgLum,
+            color: s.color,
+          }
+        })
+        return { present: true, samples }
+      }, phone)
+      if (fit.present) {
+        for (const sample of fit.samples || []) {
+          if (sample.lum != null && sample.bgLum != null && sample.lum > 0.55 && sample.bgLum > 0.55) {
+            find(mode, 'high', 'Career strengths still light ink on paper', sample)
+          }
+        }
+      }
+    }
 
     /* Computer skills: ensure lesson body visible */
     if (/Computer/i.test(s)) {
