@@ -427,6 +427,16 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-26 — Desktop | Phone mode chooser + in-phone app launch (L3 / L4 / L6)
+
+- **Overturned** splash-first → toolbox-as-Phone/Desktop picker. Critic: demos need a clear Desktop vs Phone door, and phone demos must start from a home-screen icon like a real app.
+- **First screen:** split **Desktop mode | Phone mode** (brand hero-level).
+- **Desktop:** opening animation → Enter → toolbox trays (Student, Practice, Instructor, Admin) → course shell. Marketing site stays off this app surface.
+- **Phone:** device home with Purpose Academy icon → opening animation *inside* the phone → toolbox on device → Practice / enter routes in `.is-phone-app` (container queries, not viewport media).
+- Multi-device picker (SE → 16 Pro Max, Pixel, Galaxy) kept for demo coverage.
+- **Assumption to challenge next:** whether Instructor/Admin trays should open dedicated phone-optimized shells or stay as scrollable desktop layouts inside the frame.
+
+
 ### 2026-10-22 — Basic Computer Skills at curriculum step 12 (Unit 6, all pathways) (L2)
 
 - Moved **Unit 6 · Basic Computer Skills** to **step 12** to match the Purpose Academy 20-step curriculum map (after Workplace Instructions; Safety follows later).

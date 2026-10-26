@@ -20,8 +20,12 @@ export function DesktopCourseShell({ children }: { children: ReactNode }) {
   }, [])
 
   function exitToToolbox() {
-    clearShellMode()
     navigate('/')
+  }
+
+  function exitToModes() {
+    clearShellMode()
+    navigate('/', { replace: true })
   }
 
   function startOver() {
@@ -40,7 +44,7 @@ export function DesktopCourseShell({ children }: { children: ReactNode }) {
             <img src={BRAND_ASSETS.logoPOpen} alt="" width={36} height={36} />
             <div>
               <strong>{BRAND.name}</strong>
-              <span>Desktop course</span>
+              <span>Desktop mode</span>
             </div>
           </div>
           <div className="course-topbar-actions">
@@ -48,8 +52,8 @@ export function DesktopCourseShell({ children }: { children: ReactNode }) {
             <button type="button" className="btn btn-secondary course-action" onClick={startOver}>
               Start over
             </button>
-            <button type="button" className="btn btn-ghost course-action" onClick={exitToToolbox}>
-              Exit
+            <button type="button" className="btn btn-ghost course-action" onClick={exitToModes}>
+              Exit to modes
             </button>
           </div>
         </div>
@@ -69,6 +73,9 @@ export function DesktopCourseShell({ children }: { children: ReactNode }) {
         </span>
         <button type="button" className="linkish" onClick={exitToToolbox}>
           Back to toolbox
+        </button>
+        <button type="button" className="linkish" onClick={exitToModes}>
+          Desktop / Phone
         </button>
       </footer>
     </div>

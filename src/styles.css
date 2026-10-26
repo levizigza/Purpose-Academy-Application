@@ -11350,15 +11350,57 @@ video {
   margin: 0.25rem auto 0;
 }
 
+.phone-device-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  max-width: min(100%, 920px);
+  padding: 0 0.5rem;
+  z-index: 2;
+}
+
+.phone-device-chip {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(244, 247, 251, 0.78);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.phone-device-chip:hover {
+  border-color: rgba(245, 197, 66, 0.55);
+  color: #fff;
+}
+
+.phone-device-chip.is-active {
+  border-color: #f5c542;
+  background: rgba(245, 197, 66, 0.16);
+  color: #f5c542;
+}
+
 .iphone {
   position: relative;
-  border-radius: 54px;
+  border-radius: var(--phone-radius, 54px);
   background: linear-gradient(145deg, #5a5a5e 0%, #2c2c2e 28%, #1a1a1c 70%, #0e0e10 100%);
   box-shadow:
     0 40px 80px rgba(0, 0, 0, 0.55),
     0 0 0 1px rgba(255, 255, 255, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.28),
     inset 0 -2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.iphone.finish-matte {
+  background: linear-gradient(145deg, #3d3d40 0%, #1f1f22 45%, #121214 100%);
+}
+
+.iphone.finish-aluminum {
+  background: linear-gradient(145deg, #c5c5c8 0%, #7a7a80 35%, #3a3a3e 100%);
 }
 
 .iphone-titanium {
@@ -11409,8 +11451,8 @@ video {
 
 .iphone-bezel {
   position: absolute;
-  inset: 11px;
-  border-radius: 44px;
+  inset: var(--phone-inset, 11px);
+  border-radius: var(--phone-screen-radius, 44px);
   background: #000;
   overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
@@ -11454,6 +11496,19 @@ video {
   place-items: center end;
   padding-right: 12px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.iphone-notch {
+  width: 126px;
+  height: 28px;
+  border-radius: 0 0 16px 16px;
+  background: #000;
+  justify-self: center;
+}
+
+.iphone-island-spacer {
+  width: 40px;
+  height: 10px;
 }
 
 .iphone-island-cam {
@@ -11535,6 +11590,9 @@ video {
   -webkit-overflow-scrolling: touch;
   min-height: 0;
   background: var(--train-bg, #041526);
+  /* Drive layout from device width — not the outer desktop viewport */
+  container-type: inline-size;
+  container-name: phone-screen;
 }
 
 .iphone-scroll::-webkit-scrollbar {
@@ -11566,33 +11624,315 @@ video {
   max-width: 28rem;
 }
 
-/* Phone app content tightening */
+/*
+ * Phone app layout — MUST NOT rely on @media viewport width.
+ * The outer browser is desktop-wide; only the device frame is narrow.
+ * Use .is-phone-app + @container phone-screen.
+ */
 .is-phone-app {
   min-height: 100%;
-  max-width: 100%;
-  padding: 0.35rem 0.7rem 1.5rem;
+  max-width: 100% !important;
+  width: 100%;
+  padding: 0.2rem 0.55rem 1.75rem !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-.is-phone-app .shell-main,
-.is-phone-app .practice-hub,
-.is-phone-app .seq-station,
-.is-phone-app .unit-intro,
-.is-phone-app .path-map {
-  max-width: 100%;
+.is-phone-app,
+.is-phone-app * {
+  box-sizing: border-box;
 }
 
 .is-phone-app img,
 .is-phone-app video {
-  max-width: 100%;
+  max-width: 100% !important;
   height: auto;
 }
 
 .is-phone-app .practice-banner {
-  display: none; /* banner lives outside the device on desktop course; phone uses stage bar */
+  display: none !important;
 }
 
 html.pa-phone-shell .practice-feedback-dock {
-  display: none; /* keep demos clean inside the device */
+  display: none !important;
+}
+
+/* —— Practice hub: single column, resume first —— */
+.is-phone-app .shell-main,
+.is-phone-app .practice-hub,
+.is-phone-app .seq-station,
+.is-phone-app .unit-intro,
+.is-phone-app .path-map,
+.is-phone-app .school-path-page {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.is-phone-app .practice-hub {
+  gap: 0.85rem !important;
+  padding-top: 0.35rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.is-phone-app .ph-hero,
+.is-phone-app .ph-overview,
+.is-phone-app .ph-footnote,
+.is-phone-app .school-path-stage-head,
+.is-phone-app .school-path-home-card {
+  grid-template-columns: 1fr !important;
+  gap: 0.75rem !important;
+  padding: 0.85rem 0.75rem !important;
+}
+
+.is-phone-app .ph-hero {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: visible !important;
+  width: 100% !important;
+  min-height: 0;
+  height: auto !important;
+}
+
+.is-phone-app .practice-hub,
+.is-phone-app .ph-video-section,
+.is-phone-app .ph-curriculum {
+  overflow: visible !important;
+}
+
+/*
+ * Resume card must keep intrinsic height — order + overflow:hidden was
+ * collapsing it to ~0 and stacking copy/media on top of the CTA.
+ */
+.is-phone-app .ph-resume {
+  order: 0;
+  width: 100%;
+  min-height: 0;
+  height: auto !important;
+  overflow: visible !important;
+  flex: none !important;
+  display: grid !important;
+  align-content: start !important;
+}
+
+.is-phone-app .ph-hero-copy {
+  order: 0;
+  width: 100%;
+  gap: 0.4rem !important;
+  overflow: visible !important;
+}
+
+.is-phone-app .ph-hero-copy h1,
+.is-phone-app .school-path-stage-copy h1 {
+  font-size: 1.35rem !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.01em !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.is-phone-app .ph-lede,
+.is-phone-app .school-path-stage-lede {
+  font-size: 0.88rem !important;
+  line-height: 1.45 !important;
+  max-width: none !important;
+}
+
+.is-phone-app .ph-kicker {
+  font-size: 0.65rem !important;
+}
+
+.is-phone-app .ph-pathway-badge {
+  max-width: none !important;
+  width: 100%;
+  margin-top: 0.5rem !important;
+}
+
+.is-phone-app .ph-pathway-switch {
+  width: 100%;
+}
+
+.is-phone-app .ph-pathway-switch-row {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0.4rem !important;
+}
+
+.is-phone-app .ph-pathway-switch-btn {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.is-phone-app .ph-resume-media {
+  height: 7.5rem !important;
+}
+
+.is-phone-app .ph-resume-top,
+.is-phone-app .ph-resume h2,
+.is-phone-app .ph-resume-lesson,
+.is-phone-app .ph-resume-progress,
+.is-phone-app .ph-today-line,
+.is-phone-app .ph-resume-actions {
+  margin-left: 0.75rem !important;
+  margin-right: 0.75rem !important;
+}
+
+.is-phone-app .ph-resume h2 {
+  font-size: 1.1rem !important;
+}
+
+.is-phone-app .ph-resume-btn,
+.is-phone-app .ph-video-section-btn,
+.is-phone-app .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.is-phone-app .ph-resume-actions {
+  flex-direction: column;
+  align-items: stretch !important;
+}
+
+.is-phone-app .ph-metrics {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.5rem !important;
+}
+
+.is-phone-app .ph-meter {
+  width: min(100%, 7.5rem);
+  margin: 0 auto;
+}
+
+.is-phone-app .ph-video-section,
+.is-phone-app .ph-computer-section,
+.is-phone-app .ph-domains,
+.is-phone-app .ph-curriculum,
+.is-phone-app .ph-overview {
+  padding: 0.75rem !important;
+  border-radius: 12px !important;
+}
+
+.is-phone-app .ph-video-section h2,
+.is-phone-app .ph-computer-section h2,
+.is-phone-app .ph-section-head h2 {
+  font-size: 1.15rem !important;
+}
+
+.is-phone-app .ph-units,
+.is-phone-app .ph-lessons,
+.is-phone-app .ph-domain-list {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.is-phone-app .ph-unit-toggle,
+.is-phone-app .ph-lesson button {
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  gap: 0.5rem !important;
+}
+
+.is-phone-app .ph-unit-chevron {
+  display: none !important;
+}
+
+.is-phone-app .ph-lesson-action {
+  grid-column: 2;
+}
+
+.is-phone-app .ph-legend {
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+/* —— Journey / station screens —— */
+.is-phone-app .train-choice-grid,
+.is-phone-app .train-interest-grid,
+.is-phone-app .train-card-grid,
+.is-phone-app .train-learn-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.is-phone-app .lp-head,
+.is-phone-app .unit-intro,
+.is-phone-app .seq-board,
+.is-phone-app .familiar-theater,
+.is-phone-app .vocab-sheet,
+.is-phone-app .comp-skills {
+  grid-template-columns: 1fr !important;
+  max-width: 100% !important;
+}
+
+.is-phone-app h1,
+.is-phone-app h2 {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.is-phone-app .hero-actions,
+.is-phone-app .train-actions {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.is-phone-app table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.is-phone-app .comp-skills video,
+.is-phone-app video {
+  width: 100% !important;
+  max-height: 40vh;
+  object-fit: contain;
+  background: #000;
+}
+
+/* Container queries — belt-and-suspenders with .is-phone-app */
+@container phone-screen (max-width: 480px) {
+  .ph-hero,
+  .ph-overview,
+  .ph-footnote,
+  .school-path-stage-head,
+  .school-path-home-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ph-hero-copy h1 {
+    font-size: 1.35rem !important;
+  }
+
+  .ph-pathway-switch-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ph-metrics {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .train-choice-grid,
+  .train-interest-grid,
+  .train-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@container phone-screen (max-width: 360px) {
+  .ph-hero-copy h1 {
+    font-size: 1.2rem !important;
+  }
+
+  .ph-resume-media {
+    height: 6.25rem !important;
+  }
+
+  .iphone-status {
+    padding-inline: 14px;
+  }
 }
 
 /* ——— Desktop course stage ——— */
@@ -11730,4 +12070,408 @@ html.pa-phone-shell .practice-feedback-dock {
   .iphone {
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
   }
+}
+
+/* ——— Mode chooser: Desktop | Phone split (first screen) ——— */
+.mode-chooser {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  align-content: center;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem) 2.5rem;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 55% 40% at 20% 15%, rgba(61, 143, 209, 0.2), transparent 55%),
+    radial-gradient(ellipse 50% 38% at 85% 20%, rgba(245, 197, 66, 0.14), transparent 50%),
+    linear-gradient(165deg, #041526 0%, #0a1f36 45%, #061018 100%);
+  color: #f4f7fb;
+}
+
+.mode-chooser-glow {
+  position: absolute;
+  inset: 20% 10%;
+  background: radial-gradient(circle, rgba(245, 197, 66, 0.1), transparent 65%);
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mode-chooser-brand {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.mode-chooser-logo {
+  width: min(100%, 220px);
+  height: auto;
+  margin-bottom: 0.85rem;
+  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.4));
+}
+
+.mode-chooser-kicker {
+  margin: 0 0 0.35rem;
+  font-family: var(--display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f5c542;
+}
+
+.mode-chooser-title {
+  margin: 0 0 0.65rem;
+  font-family: var(--display);
+  font-size: clamp(1.85rem, 4.2vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.mode-chooser-lede {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: rgba(244, 247, 251, 0.8);
+}
+
+.mode-chooser-split {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  width: min(100%, 960px);
+  margin: 0 auto;
+}
+
+.mode-door {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    rgba(4, 21, 38, 0.55);
+  color: inherit;
+  text-align: left;
+  padding: 1.35rem 1.25rem 1.2rem;
+  display: grid;
+  gap: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  font: inherit;
+}
+
+.mode-door:hover,
+.mode-door:focus-visible {
+  border-color: #f5c542;
+  transform: translateY(-3px);
+  outline: none;
+}
+
+.mode-door-desktop:hover {
+  background:
+    linear-gradient(165deg, rgba(61, 143, 209, 0.18), rgba(255, 255, 255, 0.02)),
+    rgba(4, 21, 38, 0.65);
+}
+
+.mode-door-phone:hover {
+  background:
+    linear-gradient(165deg, rgba(245, 197, 66, 0.14), rgba(255, 255, 255, 0.02)),
+    rgba(4, 21, 38, 0.65);
+}
+
+.mode-door-visual {
+  display: grid;
+  place-items: center;
+  min-height: 7.5rem;
+}
+
+.mode-door-monitor {
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+}
+
+.mode-door-monitor-screen {
+  width: 7.5rem;
+  height: 4.6rem;
+  border-radius: 6px;
+  border: 2px solid rgba(244, 247, 251, 0.55);
+  background:
+    radial-gradient(ellipse at 40% 40%, rgba(245, 197, 66, 0.35), transparent 55%),
+    linear-gradient(160deg, #1a3348, #0a1a2c);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+.mode-door-monitor-stand {
+  width: 0.55rem;
+  height: 0.85rem;
+  background: rgba(244, 247, 251, 0.45);
+}
+
+.mode-door-monitor-base {
+  width: 3.2rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: rgba(244, 247, 251, 0.4);
+}
+
+.mode-door-handset {
+  width: 3.4rem;
+  height: 6.4rem;
+  border-radius: 14px;
+  padding: 0.35rem;
+  background: linear-gradient(145deg, #5a5a5e, #1a1a1c);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+.mode-door-handset-screen {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(165deg, #0b2f5c, #041526);
+}
+
+.mode-door-handset-screen img {
+  width: 1.65rem;
+  height: 1.65rem;
+  object-fit: contain;
+}
+
+.mode-door-copy {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.mode-door-copy strong {
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.mode-door-copy span {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: rgba(244, 247, 251, 0.72);
+}
+
+.mode-door-cta {
+  font-family: var(--display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f5c542;
+}
+
+@media (max-width: 720px) {
+  .mode-chooser-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ——— Phone home screen (PA app icon) ——— */
+.phone-home {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1rem 1.5rem;
+  color: #fff;
+  overflow: hidden;
+}
+
+.phone-home-wallpaper {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(61, 143, 209, 0.45), transparent 55%),
+    linear-gradient(180deg, #1a4a7a 0%, #0b2f5c 40%, #041526 100%);
+  z-index: 0;
+}
+
+.phone-home-clock,
+.phone-home-grid,
+.phone-home-hint,
+.phone-home-dock {
+  position: relative;
+  z-index: 1;
+}
+
+.phone-home-clock {
+  text-align: center;
+  padding: 1.5rem 0 1.75rem;
+}
+
+.phone-home-time {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 3.4rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.phone-home-date {
+  margin: 0.35rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.phone-home-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem 0.5rem;
+  justify-items: center;
+  padding: 0.5rem 0.25rem 1rem;
+  flex: 1;
+  align-content: start;
+}
+
+.phone-home-app {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  width: 4.5rem;
+  padding: 0.25rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.phone-home-icon {
+  width: 3.65rem;
+  height: 3.65rem;
+  border-radius: 0.95rem;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #f5c542, #e8a317 55%, #0b2f5c);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.phone-home-icon img {
+  width: 2.35rem;
+  height: 2.35rem;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+}
+
+.phone-home-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.phone-home-hint {
+  margin: auto 0 0.75rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.phone-home-dock {
+  display: flex;
+  justify-content: center;
+  gap: 1.1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+}
+
+.phone-home-dock span {
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Embedded splash inside the phone screen */
+.threshold.is-embedded,
+.iphone-scroll .threshold {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  border-radius: 0;
+  padding: 0.35rem 0.4rem 1.1rem;
+}
+
+.iphone-scroll.phone-phase-home,
+.iphone-scroll.phone-phase-splash {
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.iphone-scroll.phone-phase-splash {
+  display: block;
+}
+
+.toolbox-station.is-in-phone {
+  min-height: auto;
+  padding: 0.75rem 0.35rem 1.5rem;
+  place-items: start center;
+}
+
+.toolbox-station.is-in-phone .toolbox-station-hero {
+  max-width: none;
+}
+
+.toolbox-station.is-in-phone .toolbox-station-logo {
+  width: min(100%, 140px);
+}
+
+.toolbox-station.is-in-phone .toolbox-station-title {
+  font-size: 1.45rem;
+}
+
+.toolbox-station.is-in-phone .toolbox-station-lede {
+  font-size: 0.9rem;
+}
+
+.toolbox-station.is-in-phone .toolbox,
+.iphone-scroll .toolbox {
+  width: 100%;
+  max-width: none;
+}
+
+.iphone-scroll .practice-gate {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  padding: 0.75rem;
+  overflow: auto;
+  background: rgba(4, 21, 38, 0.72);
+}
+
+.iphone-scroll .practice-gate-card {
+  max-width: none;
+  width: 100%;
+}
+
+.iphone-scroll .toolbox-flyout {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
 }

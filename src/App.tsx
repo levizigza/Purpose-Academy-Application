@@ -3,6 +3,8 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { LoginPage, RegisterPage, ForgotPasswordPage } from './auth/AuthPages'
 import { RoleSelectionPage, SplashPage, WelcomePage, hasEnteredSite, markEnteredSite } from './auth/EntryPages'
 import { SessionProvider, useSession, homeForRole } from './auth/Session'
+import { ModeChooser } from './shell/ModeChooser'
+import { getShellMode, subscribeShellMode, type ShellMode } from './shell/shellMode'
 import { AdminCoursesPage, AdminDashboardPage, AdminPrivacyPage, AdminReportsPage, AdminSchedulesPage, AdminStudentsPage } from './admin/AdminPages'
 import { AdminPracticeFeedbackPage } from './admin/AdminPracticeFeedbackPage'
 import {
@@ -69,8 +71,15 @@ const SPLASH_BYPASS = new Set([
   '/journey',
 ])
 
+function useLiveShellMode(): ShellMode | null {
+  const [mode, setMode] = useState<ShellMode | null>(() => getShellMode())
+  useEffect(() => subscribeShellMode(() => setMode(getShellMode())), [])
+  return mode
+}
+
 function AppRoutes() {
   const location = useLocation()
+  const shellMode = useLiveShellMode()
   const [entered, setEntered] = useState(() => hasEnteredSite())
   const bypassSplash =
     SPLASH_BYPASS.has(location.pathname) || location.pathname.startsWith('/enter/')
@@ -82,8 +91,30 @@ function AppRoutes() {
     }
   }, [bypassSplash])
 
-  /* Gateway module: splash owns first entry; session key = idempotent re-entry. */
-  if (!entered && !bypassSplash) {
+  /* Re-read splash flag when Desktop/Phone mode changes (ModeChooser clears it). */
+  useEffect(() => {
+    setEntered(hasEnteredSite())
+  }, [shellMode])
+
+  /* Auth / legal paths skip the mode chooser and splash. */
+  const isAuthPath =
+    location.pathname.startsWith('/login') ||
+    location.pathname.startsWith('/register') ||
+    location.pathname.startsWith('/welcome') ||
+    location.pathname.startsWith('/roles') ||
+    location.pathname.startsWith('/forgot-password') ||
+    location.pathname.startsWith('/app')
+
+  /* First screen: Desktop | Phone split (unless already mid-session or on auth). */
+  if (!shellMode && !isAuthPath && location.pathname !== '/privacy' && location.pathname !== '/contact') {
+    return <ModeChooser />
+  }
+
+  /*
+   * Desktop mode: opening animation, then toolbox (not the marketing site).
+   * Phone mode: splash runs inside the device after the PA icon — skip here.
+   */
+  if (shellMode === 'course' && !entered && !bypassSplash) {
     return <SplashPage onEnter={() => setEntered(true)} />
   }
 

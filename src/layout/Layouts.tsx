@@ -1,4 +1,4 @@
-import { NavLink, Outlet, Navigate, Link, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, Navigate, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
@@ -10,7 +10,7 @@ import { isPracticeMode } from '../practice/PracticeMode'
 import type { Role } from '../data/types'
 import { DesktopCourseShell } from '../shell/DesktopCourse'
 import { PhoneEmulatorShell } from '../shell/PhoneEmulator'
-import { getShellMode, subscribeShellMode, type ShellMode } from '../shell/shellMode'
+import { clearShellMode, getShellMode, subscribeShellMode, type ShellMode } from '../shell/shellMode'
 
 function BrandLockup({ to, compact = false, dark = false }: { to: string; compact?: boolean; dark?: boolean }) {
   return (
@@ -30,8 +30,9 @@ function useLiveShellMode(): ShellMode | null {
   return mode
 }
 
-/** Minimal chrome for the post-splash toolbox station. */
+/** Minimal chrome for the post-splash toolbox station (desktop). */
 function ToolboxLayout({ children }: { children: React.ReactNode }) {
+  const navigate = useNavigate()
   return (
     <div className="shell is-toolbox">
       <SkipLink />
@@ -40,6 +41,16 @@ function ToolboxLayout({ children }: { children: React.ReactNode }) {
         <nav className="toolbox-layout-nav" aria-label="Workshop">
           <Link to="/splash">Replay opening</Link>
           <Link to="/privacy">Privacy</Link>
+          <button
+            type="button"
+            className="linkish"
+            onClick={() => {
+              clearShellMode()
+              navigate('/', { replace: true })
+            }}
+          >
+            Desktop / Phone
+          </button>
         </nav>
       </header>
       <main id="main-content">{children}</main>
@@ -102,14 +113,19 @@ export function PublicLayout() {
 
   if (loading) return <LoadingScreen label={`Opening ${BRAND.name}…`} />
 
-  /* Phone / desktop course wrap the live journey — no marketing chrome. */
-  if (pathname === '/journey' && shellMode === 'phone') {
+  /*
+   * Phone mode: entire public surface runs inside the device frame
+   * (home → splash → toolbox → Practice / enter).
+   */
+  if (shellMode === 'phone') {
     return (
       <PhoneEmulatorShell>
         <Outlet />
       </PhoneEmulatorShell>
     )
   }
+
+  /* Desktop course wrap for the live journey */
   if (pathname === '/journey' && shellMode === 'course') {
     return (
       <DesktopCourseShell>
@@ -118,7 +134,7 @@ export function PublicLayout() {
     )
   }
 
-  /* Toolbox home after splash */
+  /* Toolbox home after desktop splash */
   if (pathname === '/') {
     return (
       <ToolboxLayout>
