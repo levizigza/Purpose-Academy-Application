@@ -428,6 +428,19 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-26 — Phone sentence feedback contrast (L3)
+
+- **Defect:** `.shell.is-train .alert.ok` used night ink (`#b8f0bb`) so “Yes — the word completes the sentence” washed out on phone paper.
+- **Fix:** `.is-phone-app` overrides for `.alert.ok` / `.warn` / `.error` → `--ok-soft` / `--ok` (and warn/danger pairs) with a visible status border.
+- **Assumption to challenge next:** shared train-token flip for phone so alert + body ink stop needing per-selector kill-lists.
+
+### 2026-10-26 — Community Support VV + Sentence Practice parity (L2)
+
+- **Layers:** L2 content delivery (complete the third pathway pack to Construction / Logistics depth).
+- **Ingest:** `Community_Visual_Vocabulary_Cursor.md` (499 live / slot 176 reserved) → `communityVocab500.ts`; Sentence Practice → `communitySentenceCloze499.ts` (499 cloze). Wired `sentenceCloze`, clear-all Eye Spy (10 boards), Word→Action, workplace instructions via `communityPractice.ts`. Same pack serves Desktop + Phone.
+- **Images:** `com-vv-NNN` interim studio word tiles in `public/media/community-vv/` (PDF object photos still pending). Remasters `com-hygiene` / `com-consent` kept where titles match.
+- **Assumption to challenge next:** extract real Community VV worksheet photos from the source PDF so tiles are whole-object photos, not interim word cards.
+
 ### 2026-10-26 — Phone playthrough: leftover ink + path status collapse (L3)
 
 - **Layers:** L3 information display (secondary labels + leftover night ink on paper).

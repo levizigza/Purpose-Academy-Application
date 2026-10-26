@@ -73,6 +73,8 @@ export function VocabSheetCard({
     term.imageKey.startsWith('log-') ||
     term.imageKey.startsWith('dc-vv-') ||
     term.imageKey.startsWith('con-vv-') ||
+    term.imageKey.startsWith('com-vv-') ||
+    term.imageKey.startsWith('com-') ||
     term.imageKey.startsWith('con-')
 
   return (

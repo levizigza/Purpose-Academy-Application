@@ -12513,6 +12513,31 @@ video {
 }
 
 /*
+ * Sentence / drill feedback — train night ink (#b8f0bb) fails on phone paper.
+ * Paper flip: soft green/amber/red beds with deep status ink (L3, three-second read).
+ */
+.is-phone-app .shell.is-train .alert.ok,
+.is-phone-app .alert.ok {
+  background: var(--ok-soft) !important;
+  color: var(--ok) !important;
+  border: 1px solid color-mix(in srgb, var(--ok) 35%, var(--line)) !important;
+}
+
+.is-phone-app .shell.is-train .alert.warn,
+.is-phone-app .alert.warn {
+  background: var(--warn-soft) !important;
+  color: var(--warn) !important;
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, var(--line)) !important;
+}
+
+.is-phone-app .shell.is-train .alert.error,
+.is-phone-app .alert.error {
+  background: var(--danger-soft) !important;
+  color: var(--danger) !important;
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, var(--line)) !important;
+}
+
+/*
  * Secondary labels — mobile needs ≥ ~0.8rem for status/kickers.
  * Critic: 0.65–0.74rem captions failed the three-second read on ~390px.
  */
