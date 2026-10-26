@@ -27,13 +27,10 @@ import {
   StudentEnterPage,
 } from './gateway/GatewayPages'
 import {
-  AdmissionsPage,
-  AboutPage,
   ContactPage,
-  GivePage,
   HomePage,
+  MarketingRedirect,
   PrivacyNoticePage,
-  ProgramsPage,
 } from './public/PublicPages'
 import { SkillsPassportPage } from './skills/SkillsPassportPage'
 import { StudentSequencePage } from './student/StudentSequence'
@@ -70,8 +67,6 @@ const SPLASH_BYPASS = new Set([
   '/enter/admin/guest',
   '/enter/instructor',
   '/journey',
-  '/about',
-  '/give',
 ])
 
 function AppRoutes() {
@@ -138,10 +133,11 @@ function AppRoutes() {
 
       <Route element={<PublicLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/programs" element={<ProgramsPage />} />
-        <Route path="/admissions" element={<AdmissionsPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/give" element={<GivePage />} />
+        {/* Marketing site lives on purposeacademy.ca — keep deep links polite. */}
+        <Route path="/programs" element={<MarketingRedirect />} />
+        <Route path="/admissions" element={<MarketingRedirect />} />
+        <Route path="/about" element={<MarketingRedirect />} />
+        <Route path="/give" element={<MarketingRedirect />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/sequences" element={<Navigate to="/" replace />} />
         <Route path="/privacy" element={<PrivacyNoticePage />} />

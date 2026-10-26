@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   isSequenceComplete,
@@ -8,13 +8,12 @@ import {
 import { playFoley, unlockFoley } from '../audio/foley'
 import {
   getPracticeName,
-  isPracticeMode,
   PRACTICE_REVIEWERS,
-  PRACTICE_TRAY_HELP,
   startPracticeMode,
 } from '../practice/PracticeMode'
+import { setShellMode, type ShellMode } from '../shell/shellMode'
 
-type ToolKind = 'screwdriver' | 'hammer' | 'tape' | 'level' | 'wrench' | 'latch'
+type ToolKind = 'phone' | 'desktop' | 'wrench' | 'tape' | 'level'
 
 type Entry = {
   label: string
@@ -22,58 +21,44 @@ type Entry = {
   tone: string
   tool: ToolKind
   completeIds: SequenceId[]
+  shell: ShellMode
   practice?: boolean
-} & ({ to: string; placeholder?: false } | { to?: undefined; placeholder: true })
+}
 
 const ENTRIES: Entry[] = [
   {
-    to: '/contact',
-    label: 'Contact Us',
-    help: 'Ask a question',
-    tone: 'contact',
-    tool: 'screwdriver',
-    completeIds: ['contact'],
-  },
-  {
-    to: '/enter/student',
-    label: 'Student',
-    help: 'Start learning',
-    tone: 'student',
-    tool: 'hammer',
+    label: 'Phone App',
+    help: 'iPhone learner experience',
+    tone: 'phone',
+    tool: 'phone',
     completeIds: ['student'],
-  },
-  {
-    to: '/journey',
-    label: 'Practice',
-    help: PRACTICE_TRAY_HELP,
-    tone: 'journey',
-    tool: 'wrench',
-    completeIds: ['student'],
+    shell: 'phone',
     practice: true,
   },
   {
-    to: '/enter/admin',
-    label: 'Admin',
-    help: 'Manage the school',
-    tone: 'admin',
-    tool: 'tape',
-    completeIds: ['admin-contact', 'admin-guest'],
+    label: 'Desktop Course',
+    help: 'Full course on the web',
+    tone: 'course',
+    tool: 'desktop',
+    completeIds: ['student'],
+    shell: 'course',
+    practice: true,
   },
   {
-    to: '/enter/instructor',
     label: 'Instructor',
     help: 'Teach and check skills',
     tone: 'instructor',
     tool: 'level',
     completeIds: ['instructor'],
+    shell: 'course',
   },
   {
-    placeholder: true,
-    label: 'Purpose Academy Application',
-    help: 'Coming soon',
-    tone: 'app',
-    tool: 'latch',
-    completeIds: [],
+    label: 'Admin',
+    help: 'Manage the school',
+    tone: 'admin',
+    tool: 'tape',
+    completeIds: ['admin-contact', 'admin-guest'],
+    shell: 'course',
   },
 ]
 
@@ -83,22 +68,22 @@ function ToolEtch({ kind }: { kind: ToolKind }) {
     className: 'toolbox-tool-svg',
     'aria-hidden': true as const,
   }
-  if (kind === 'screwdriver') {
+  if (kind === 'phone') {
     return (
       <svg {...common}>
-        <path d="M22 6h4l2 14h-8l2-14z" fill="currentColor" opacity="0.9" />
-        <rect x="20" y="20" width="8" height="18" rx="1.5" fill="currentColor" />
-        <path d="M22 38h4l1 6h-6l1-6z" fill="currentColor" opacity="0.75" />
+        <rect x="14" y="6" width="20" height="36" rx="4" fill="currentColor" />
+        <rect x="17" y="10" width="14" height="24" rx="1.5" fill="#0b2f5c" opacity="0.45" />
+        <circle cx="24" cy="38" r="1.8" fill="#0b2f5c" opacity="0.55" />
       </svg>
     )
   }
-  if (kind === 'hammer') {
+  if (kind === 'desktop') {
     return (
       <svg {...common}>
-        <rect x="21" y="14" width="6" height="28" rx="2" fill="currentColor" />
-        <path d="M12 12h24v8H12z" fill="currentColor" />
-        <path d="M10 10h6v12h-6z" fill="currentColor" opacity="0.85" />
-        <path d="M32 8l8 4-2 8-8-3z" fill="currentColor" opacity="0.85" />
+        <rect x="6" y="8" width="36" height="24" rx="2" fill="currentColor" />
+        <rect x="9" y="11" width="30" height="18" rx="1" fill="#0b2f5c" opacity="0.4" />
+        <rect x="18" y="34" width="12" height="3" rx="1" fill="currentColor" />
+        <rect x="12" y="38" width="24" height="3" rx="1" fill="currentColor" opacity="0.85" />
       </svg>
     )
   }
@@ -122,49 +107,47 @@ function ToolEtch({ kind }: { kind: ToolKind }) {
       </svg>
     )
   }
-  if (kind === 'wrench') {
-    return (
-      <svg {...common}>
-        <path
-          fill="currentColor"
-          d="M34 8c-4 0-7 2.4-8.2 5.8L14 25.6l-3.2-3.2-3.6 3.6 8.8 8.8 3.6-3.6-3-3L29 16.4c3.2.2 6.2-1.6 7.6-4.6L32 14l-2-2 4.2-4z"
-        />
-        <rect x="10" y="30" width="8" height="12" rx="1.5" transform="rotate(-35 14 36)" fill="currentColor" opacity="0.9" />
-      </svg>
-    )
-  }
   return (
     <svg {...common}>
-      <rect x="12" y="18" width="24" height="18" rx="2" fill="currentColor" />
-      <path d="M18 18v-4a6 6 0 0 1 12 0v4" fill="none" stroke="currentColor" strokeWidth="2.5" />
-      <circle cx="24" cy="28" r="2.2" fill="#0b2f5c" opacity="0.55" />
+      <path
+        fill="currentColor"
+        d="M34 8c-4 0-7 2.4-8.2 5.8L14 25.6l-3.2-3.2-3.6 3.6 8.8 8.8 3.6-3.6-3-3L29 16.4c3.2.2 6.2-1.6 7.6-4.6L32 14l-2-2 4.2-4z"
+      />
+      <rect
+        x="10"
+        y="30"
+        width="8"
+        height="12"
+        rx="1.5"
+        transform="rotate(-35 14 36)"
+        fill="currentColor"
+        opacity="0.9"
+      />
     </svg>
   )
-}
-
-function ignoreEmptyLink(e: MouseEvent<HTMLAnchorElement>) {
-  e.preventDefault()
 }
 
 function PracticeNameGate({
   onCancel,
   onReady,
+  title,
 }: {
   onCancel: () => void
   onReady: (name: string) => void
+  title: string
 }) {
-  const [name, setName] = useState(() => getPracticeName())
+  const [name, setName] = useState(() => getPracticeName() || 'Showcase')
   return (
-    <div className="practice-gate" role="dialog" aria-modal="true" aria-label="Practice name">
+    <div className="practice-gate" role="dialog" aria-modal="true" aria-label={`${title} name`}>
       <div className="practice-gate-card site-crate">
-        <p className="section-kicker">Practice</p>
-        <h2>Who is practising?</h2>
+        <p className="section-kicker">{title}</p>
+        <h2>Who is exploring?</h2>
         <p className="lede">
-          Walk the full student learning path without registration. Catch issues, learn every station, and send
-          feedback so we can improve the school experience.
+          Walk the learner path without registration — perfect for demos and reviews. Pick a name so
+          feedback stays attached to you.
         </p>
         <div className="practice-name-grid">
-          {PRACTICE_REVIEWERS.map((r) => (
+          {['Showcase', ...PRACTICE_REVIEWERS].map((r) => (
             <button
               key={r}
               type="button"
@@ -192,7 +175,7 @@ function PracticeNameGate({
             disabled={!name.trim()}
             onClick={() => onReady(name.trim())}
           >
-            Enter Practice
+            Enter {title}
           </button>
           <button type="button" className="btn btn-ghost" onClick={onCancel}>
             Cancel
@@ -203,7 +186,7 @@ function PracticeNameGate({
   )
 }
 
-/** Metal toolbox entry panel — trays pull out, then fly to fill the page. */
+/** Metal toolbox entry panel — trays pull out, then fly into Phone or Desktop Course. */
 export function EnterBox() {
   const navigate = useNavigate()
   const boxRef = useRef<HTMLElement>(null)
@@ -211,12 +194,20 @@ export function EnterBox() {
   const [openTray, setOpenTray] = useState<string | null>(null)
   const [flying, setFlying] = useState(false)
   const [flyLabel, setFlyLabel] = useState('')
-  const [practiceGate, setPracticeGate] = useState(false)
+  const [pendingShell, setPendingShell] = useState<ShellMode | null>(null)
+  const [gateTitle, setGateTitle] = useState('Phone App')
 
   useEffect(() => subscribeSequenceProgress(() => setTick((t) => t + 1)), [])
 
-  function launchTo(to: string, label: string) {
+  function destinationFor(item: Entry) {
+    if (item.label === 'Instructor') return '/enter/instructor'
+    if (item.label === 'Admin') return '/enter/admin'
+    return '/journey'
+  }
+
+  function launchTo(to: string, label: string, shell: ShellMode | null) {
     if (flying) return
+    if (shell) setShellMode(shell)
     void unlockFoley().then(() => {
       playFoley('latch')
       window.setTimeout(() => playFoley('whoosh'), 180)
@@ -237,16 +228,18 @@ export function EnterBox() {
     }, delay)
   }
 
-  function beginPractice(name: string) {
+  function beginLearner(name: string) {
+    if (!pendingShell) return
+    const shell = pendingShell
+    const label = shell === 'phone' ? 'Phone App' : 'Desktop Course'
     startPracticeMode(name)
-    setPracticeGate(false)
-    setOpenTray('Practice')
+    setPendingShell(null)
+    setOpenTray(label)
     void unlockFoley().then(() => {
       playFoley('latch')
       playFoley('metal')
     })
-    /* Skip registration and open the real training path */
-    window.setTimeout(() => launchTo('/journey', 'Practice'), 380)
+    window.setTimeout(() => launchTo('/journey', label, shell), 380)
   }
 
   return (
@@ -254,7 +247,7 @@ export function EnterBox() {
       <aside
         ref={boxRef}
         className={`toolbox${flying ? ' is-flying' : ''}`}
-        aria-label="Purpose Academy tool chest. choose your path"
+        aria-label="Purpose Academy tool chest. choose Phone App or Desktop Course"
       >
         <div className="toolbox-rim" aria-hidden />
         <div className="toolbox-handle" aria-hidden>
@@ -268,7 +261,7 @@ export function EnterBox() {
           </div>
           <p className="toolbox-kicker">Tool chest</p>
           <h2 className="toolbox-title">Open a tray</h2>
-          <p className="toolbox-lede">Each tray is a door. Pull one and step in.</p>
+          <p className="toolbox-lede">Phone app or desktop course — pull a tray and step in.</p>
           <div className="toolbox-latches" aria-hidden>
             <span />
             <span />
@@ -277,11 +270,13 @@ export function EnterBox() {
 
         <div className="toolbox-body">
           <div className="toolbox-rivets" aria-hidden>
-            <span /><span /><span /><span />
+            <span />
+            <span />
+            <span />
+            <span />
           </div>
-          <nav className="toolbox-tray" aria-label="Site entry">
+          <nav className="toolbox-tray" aria-label="Workshop entry">
             {ENTRIES.map((item, i) => {
-              if (item.practice && isPracticeMode()) return null
               const done =
                 item.completeIds.length > 0 &&
                 item.completeIds.every((id) => isSequenceComplete(id))
@@ -290,23 +285,15 @@ export function EnterBox() {
               const isOpen = openTray === item.label
               const className = `toolbox-slot toolbox-slot-${item.tone}${
                 done ? ' is-complete' : partial ? ' is-partial' : ''
-              }${item.placeholder ? ' is-placeholder' : ''}${isOpen ? ' is-open' : ''}${
-                item.practice ? ' is-practice' : ''
-              }`
+              }${isOpen ? ' is-open' : ''}${item.practice ? ' is-practice' : ''}`
               const style = { animationDelay: `${0.14 + i * 0.07}s` }
-              const help = item.placeholder
-                ? item.help
-                : done
-                  ? 'Done. Open again'
-                  : partial
-                    ? 'Partly done. Continue'
-                    : item.help
+              const help = done ? 'Done. Open again' : partial ? 'Partly done. Continue' : item.help
               const inner: ReactNode = (
                 <>
                   {item.practice && (
                     <span className="practice-point" aria-hidden>
                       <span className="practice-point-arrow">➜</span>
-                      <span className="practice-point-label">Practice</span>
+                      <span className="practice-point-label">Learners</span>
                     </span>
                   )}
                   <span className="toolbox-etch" aria-hidden>
@@ -318,46 +305,31 @@ export function EnterBox() {
                     <span>{help}</span>
                   </span>
                   <span className="toolbox-pull" aria-hidden>
-                    {item.placeholder ? '·' : isOpen ? '↗' : '⟶'}
+                    {isOpen ? '↗' : '⟶'}
                   </span>
                 </>
               )
 
-              if (item.placeholder) {
-                return (
-                  <a
-                    key={item.label}
-                    className={className}
-                    href=""
-                    onClick={ignoreEmptyLink}
-                    aria-disabled="true"
-                    title="Coming soon"
-                    style={style}
-                  >
-                    {inner}
-                  </a>
-                )
-              }
-
               return (
                 <button
-                  key={item.to}
+                  key={item.label}
                   type="button"
                   className={className}
                   style={style}
                   onClick={() => {
                     if (item.practice) {
                       void unlockFoley().then(() => playFoley('metal'))
-                      setPracticeGate(true)
+                      setGateTitle(item.label)
+                      setPendingShell(item.shell)
                       return
                     }
                     setOpenTray(item.label)
                     void unlockFoley().then(() => {
                       playFoley('latch')
-                      playFoley(item.tool === 'wrench' ? 'metal' : 'wood')
+                      playFoley('wood')
                     })
                     window.setTimeout(() => {
-                      launchTo(item.to!, item.label)
+                      launchTo(destinationFor(item), item.label, null)
                     }, 380)
                   }}
                 >
@@ -369,12 +341,17 @@ export function EnterBox() {
         </div>
 
         <div className="toolbox-feet" aria-hidden>
-          <span /><span />
+          <span />
+          <span />
         </div>
       </aside>
 
-      {practiceGate && (
-        <PracticeNameGate onCancel={() => setPracticeGate(false)} onReady={beginPractice} />
+      {pendingShell && (
+        <PracticeNameGate
+          title={gateTitle}
+          onCancel={() => setPendingShell(null)}
+          onReady={beginLearner}
+        />
       )}
 
       {flying && (
@@ -389,6 +366,7 @@ export function EnterBox() {
           </div>
         </div>
       )}
+
     </>
   )
 }

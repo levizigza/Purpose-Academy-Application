@@ -6,10 +6,11 @@ import { homeForRole, useSession } from '../auth/Session'
 import { AmbientField, PageMotion } from '../components/Motion'
 import { LoadingScreen, SkipLink } from '../components/Ui'
 import { PracticeFeedbackDock, PracticeModeBanner } from '../practice/PracticeFeedbackDock'
-import { applyPreviewPatchToDom, getActivePreviewPatch } from '../practice/changeLoop'
-import { PreviewPatchBanner } from '../practice/PreviewPatchBanner'
 import { isPracticeMode } from '../practice/PracticeMode'
 import type { Role } from '../data/types'
+import { DesktopCourseShell } from '../shell/DesktopCourse'
+import { PhoneEmulatorShell } from '../shell/PhoneEmulator'
+import { getShellMode, subscribeShellMode, type ShellMode } from '../shell/shellMode'
 
 function BrandLockup({ to, compact = false, dark = false }: { to: string; compact?: boolean; dark?: boolean }) {
   return (
@@ -23,90 +24,185 @@ function BrandLockup({ to, compact = false, dark = false }: { to: string; compac
   )
 }
 
+function useLiveShellMode(): ShellMode | null {
+  const [mode, setMode] = useState<ShellMode | null>(() => getShellMode())
+  useEffect(() => subscribeShellMode(() => setMode(getShellMode())), [])
+  return mode
+}
+
+/** Minimal chrome for the post-splash toolbox station. */
+function ToolboxLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="shell is-toolbox">
+      <SkipLink />
+      <header className="toolbox-layout-bar">
+        <BrandLockup to="/" dark />
+        <nav className="toolbox-layout-nav" aria-label="Workshop">
+          <Link to="/splash">Replay opening</Link>
+          <Link to="/privacy">Privacy</Link>
+        </nav>
+      </header>
+      <main id="main-content">{children}</main>
+    </div>
+  )
+}
+
+/** Slim support chrome for contact / privacy / enter gates. */
+function SupportLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="shell is-support">
+      <AmbientField />
+      <SkipLink />
+      <header className="topbar">
+        <div className="topbar-inner">
+          <BrandLockup to="/" />
+          <div className="topbar-nav">
+            <nav className="nav-cluster" aria-label="Support">
+              <NavLink to="/">Toolbox</NavLink>
+              <NavLink to="/contact">Help</NavLink>
+              <NavLink to="/privacy">Privacy</NavLink>
+            </nav>
+          </div>
+        </div>
+      </header>
+      <main id="main-content">
+        <PageMotion>{children}</PageMotion>
+      </main>
+      <footer className="footer">
+        <div className="footer-inner">
+          <div>
+            <strong>{BRAND.name}</strong>
+            <p className="muted" style={{ margin: 0 }}>
+              Learner workshop · {BRAND.tagline}
+            </p>
+          </div>
+          <div className="nav-links">
+            <Link to="/">Toolbox</Link>
+            <Link to="/contact">Help</Link>
+            <Link to="/privacy">Privacy</Link>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
+
 export function PublicLayout() {
   const { user, student, logout, loading } = useSession()
   const { pathname } = useLocation()
   const [practice, setPractice] = useState(() => isPracticeMode())
+  const shellMode = useLiveShellMode()
 
   useEffect(() => {
     const sync = () => setPractice(isPracticeMode())
     sync()
-    applyPreviewPatchToDom(getActivePreviewPatch())
     window.addEventListener('pa-practice-started', sync)
     return () => window.removeEventListener('pa-practice-started', sync)
   }, [pathname])
 
   if (loading) return <LoadingScreen label={`Opening ${BRAND.name}…`} />
 
-  const isTrain = pathname === '/journey' || pathname === '/enter/student'
+  /* Phone / desktop course wrap the live journey — no marketing chrome. */
+  if (pathname === '/journey' && shellMode === 'phone') {
+    return (
+      <PhoneEmulatorShell>
+        <Outlet />
+      </PhoneEmulatorShell>
+    )
+  }
+  if (pathname === '/journey' && shellMode === 'course') {
+    return (
+      <DesktopCourseShell>
+        <Outlet />
+      </DesktopCourseShell>
+    )
+  }
 
-  return (
-    <div className={`shell${isTrain ? ' is-train' : ''}`}>
-      <AmbientField />
-      <SkipLink />
-      <header className="topbar">
-        <div className="topbar-inner">
-          <BrandLockup to="/" dark={isTrain} />
-          <div className="topbar-nav">
-            <nav className="nav-cluster" aria-label="Website">
-              <NavLink to="/programs">Programs</NavLink>
-              <NavLink to={BRAND.joinTo}>{BRAND.joinLabel}</NavLink>
-              <NavLink to="/about">About</NavLink>
-              <NavLink to="/give">Give</NavLink>
-              <NavLink to="/contact">Contact</NavLink>
-              {practice && <NavLink to="/journey">Practice</NavLink>}
-              {user && (
-                <NavLink to={homeForRole(user.role, student?.registration_status)}>Portal</NavLink>
-              )}
-            </nav>
-            <div className="nav-actions">
-              {user ? (
-                <button type="button" className="linkish nav-signout" onClick={logout}>
-                  Sign out
-                </button>
-              ) : practice && pathname !== '/journey' ? (
-                <NavLink className="btn btn-primary nav-cta" to="/journey">
-                  Continue practice
-                </NavLink>
-              ) : practice ? (
-                <NavLink className="btn btn-secondary nav-cta" to="/">
-                  Review website
-                </NavLink>
-              ) : (
-                <NavLink className="btn btn-primary nav-cta" to="/login">
-                  {BRAND.secondaryCta}
-                </NavLink>
-              )}
+  /* Toolbox home after splash */
+  if (pathname === '/') {
+    return (
+      <ToolboxLayout>
+        <Outlet />
+      </ToolboxLayout>
+    )
+  }
+
+  /* Enter gates + legal/support — lean chrome */
+  const isTrain = pathname === '/enter/student' || (pathname === '/journey' && !shellMode)
+
+  if (
+    pathname.startsWith('/enter/') ||
+    pathname === '/contact' ||
+    pathname === '/privacy' ||
+    pathname === '/journey'
+  ) {
+    return (
+      <div className={`shell${isTrain ? ' is-train' : ''} is-support`}>
+        <AmbientField />
+        <SkipLink />
+        <header className="topbar">
+          <div className="topbar-inner">
+            <BrandLockup to="/" dark={isTrain} />
+            <div className="topbar-nav">
+              <nav className="nav-cluster" aria-label="Workshop">
+                <NavLink to="/">Toolbox</NavLink>
+                {practice && <NavLink to="/journey">Training</NavLink>}
+                <NavLink to="/contact">Help</NavLink>
+                {user && (
+                  <NavLink to={homeForRole(user.role, student?.registration_status)}>Portal</NavLink>
+                )}
+              </nav>
+              <div className="nav-actions">
+                {user ? (
+                  <button type="button" className="linkish nav-signout" onClick={logout}>
+                    Sign out
+                  </button>
+                ) : practice && pathname !== '/journey' ? (
+                  <NavLink className="btn btn-primary nav-cta" to="/journey">
+                    Continue training
+                  </NavLink>
+                ) : (
+                  <NavLink className="btn btn-secondary nav-cta" to="/">
+                    Toolbox
+                  </NavLink>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </header>
-      <main id="main-content">
-        <PageMotion>
-          <PracticeModeBanner />
-          <PreviewPatchBanner />
-          <Outlet />
-        </PageMotion>
-      </main>
-      <PracticeFeedbackDock />
-      <footer className="footer">
-        <div className="footer-inner">
-          <div>
-            <strong>{BRAND.name}</strong>
-            <p className="muted" style={{ margin: 0 }}>
-              Trades school in {BRAND.place}. {BRAND.tagline}
-            </p>
-          </div>
-          <div className="nav-links">
-            <Link to="/about">About</Link>
-            <Link to="/programs">Programs</Link>
-            <Link to="/give">Give</Link>
-            <Link to="/contact">Contact</Link>
-            {practice ? <Link to="/journey">Practice</Link> : <Link to="/login">{BRAND.secondaryCta}</Link>}
-          </div>
-        </div>
-      </footer>
-    </div>
+        </header>
+        <main id="main-content">
+          <PageMotion>
+            <PracticeModeBanner />
+            <Outlet />
+          </PageMotion>
+        </main>
+        <PracticeFeedbackDock />
+        {!isTrain && (
+          <footer className="footer">
+            <div className="footer-inner">
+              <div>
+                <strong>{BRAND.name}</strong>
+                <p className="muted" style={{ margin: 0 }}>
+                  Learner workshop · {BRAND.tagline}
+                </p>
+              </div>
+              <div className="nav-links">
+                <Link to="/">Toolbox</Link>
+                <Link to="/contact">Help</Link>
+                <Link to="/privacy">Privacy</Link>
+              </div>
+            </div>
+          </footer>
+        )}
+      </div>
+    )
+  }
+
+  /* Legacy marketing URLs → toolbox */
+  return (
+    <SupportLayout>
+      <Outlet />
+    </SupportLayout>
   )
 }
 
@@ -117,7 +213,7 @@ function DesktopNav({ role }: { role: Role }) {
         <NavLink to="/app/student" end>
           Home
         </NavLink>
-        <NavLink to="/app/student/path">School path</NavLink>
+        <NavLink to="/journey">Guided path</NavLink>
         <NavLink to="/app/student/courses">Learn</NavLink>
         <NavLink to="/app/student/assignments">Tasks</NavLink>
         <NavLink to="/app/student/skills">My skills</NavLink>
@@ -160,7 +256,7 @@ function MobileNav({ role }: { role: Role }) {
         <NavLink to="/app/student" end>
           Home
         </NavLink>
-        <NavLink to="/app/student/path">Path</NavLink>
+        <NavLink to="/journey">Path</NavLink>
         <NavLink to="/app/student/courses">Learn</NavLink>
         <NavLink to="/app/student/assignments">Tasks</NavLink>
         <NavLink to="/app/student/profile">More</NavLink>
@@ -223,7 +319,7 @@ export function AppLayout({ role }: { role: Role }) {
               ) : (
                 <DesktopNav role={role} />
               )}
-              <NavLink to="/">Website</NavLink>
+              <NavLink to="/">Toolbox</NavLink>
             </nav>
             <div className="nav-actions">
               <button type="button" className="linkish nav-signout" onClick={logout}>
@@ -236,7 +332,6 @@ export function AppLayout({ role }: { role: Role }) {
       <main id="main-content" className="shell-main">
         <PageMotion>
           <PracticeModeBanner />
-          <PreviewPatchBanner />
           <Outlet />
         </PageMotion>
       </main>
@@ -273,7 +368,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           <BrandLockup to="/" />
           <div className="topbar-nav">
             <nav className="nav-cluster" aria-label="Account">
-              <Link to="/">Website</Link>
+              <Link to="/">Toolbox</Link>
               <Link to="/contact">Help</Link>
             </nav>
             <div className="nav-actions">
@@ -287,7 +382,6 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <main id="main-content">
         <PageMotion>
           <PracticeModeBanner />
-          <PreviewPatchBanner />
           {children}
         </PageMotion>
       </main>
