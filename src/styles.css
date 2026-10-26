@@ -12486,6 +12486,51 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-phone-app .ph-pathway-switch-btn {
   width: 100%;
   justify-content: flex-start;
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
+}
+
+.is-phone-app .ph-pathway-switch-btn.is-active {
+  background: var(--brand-soft) !important;
+  border-color: var(--brand) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .ph-pathway-switch-hint,
+.is-phone-app .ph-pathway-switch-hint strong {
+  color: var(--ink-soft) !important;
+}
+
+.is-phone-app .train-lang > span[aria-hidden] {
+  color: var(--brand) !important;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.is-phone-app .lp-lesson-btn {
+  display: grid !important;
+  grid-template-columns: 0.7rem minmax(0, 1fr) !important;
+  gap: 0.55rem !important;
+  align-items: start !important;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  padding: 0.25rem 0.15rem;
+  color: inherit;
+}
+
+.is-phone-app .lp-lesson-btn span:not([class*='lp-node']):not(.lp-node) {
+  white-space: normal;
+  display: block;
+  line-height: 1.25;
+}
+
+.is-phone-app .lp-lesson > div,
+.is-phone-app .lp-lesson-btn > div {
+  min-width: 0;
 }
 
 .is-phone-app .ph-resume-media {
