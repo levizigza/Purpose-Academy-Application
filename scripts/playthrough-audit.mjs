@@ -72,7 +72,11 @@ async function measureFirstViewport(page, rootSel) {
       }
     }
 
-    /* Cutoff: elements near bottom with clipped text */
+    /*
+     * Cutoff: content that *starts* too late and is mostly below the fold.
+     * Tall lesson cards (vocab / cloze) legitimately extend past the fold once
+     * the photo peeks in — do not treat that as a chrome defect.
+     */
     const cutoffs = []
     const probe = root.querySelectorAll(
       '.train-title, .train-simple-line, .comp-skills, .sentence-cloze-card, .vocab-sheet, .alert, .practice-stats-strip, .ph-resume, button.btn-primary',
@@ -80,8 +84,11 @@ async function measureFirstViewport(page, rootSel) {
     for (const el of probe) {
       const b = el.getBoundingClientRect()
       if (b.height < 4 || b.width < 4) continue
+      const top = b.top - viewTop
       const bottom = b.bottom - viewTop
-      if (bottom > viewH - 8 && b.top - viewTop < viewH - 20) {
+      const tallCard = b.height > viewH * 0.45
+      if (tallCard && top < viewH * 0.62) continue
+      if (bottom > viewH - 8 && top > viewH * 0.42 && top < viewH - 20) {
         cutoffs.push({
           cls: (el.className || '').toString().slice(0, 40),
           text: (el.textContent || '').trim().slice(0, 40),
@@ -109,8 +116,12 @@ async function measureFirstViewport(page, rootSel) {
         bg = getComputedStyle(n).backgroundColor
         n = n.parentElement
       }
-      const m = bg && bg.match(/\d+/g)?.map(Number)
-      const bgLum = m ? (0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]) / 255 : 1
+      /* Prefer rgb()/rgba() only — color-mix / lab strings produce bogus digit lists. */
+      const rgbBg = bg && bg.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i)
+      const bgLum = rgbBg
+        ? (0.2126 * +rgbBg[1] + 0.7152 * +rgbBg[2] + 0.0722 * +rgbBg[3]) / 255
+        : null
+      if (bgLum == null || bgLum > 1.05) continue
       if (lum > 0.72 && bgLum > 0.55) {
         lightInk.push({
           text: t.slice(0, 36),

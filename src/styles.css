@@ -11081,10 +11081,12 @@ video {
   gap: 0.85rem;
   padding: 0.75rem;
   border-radius: 14px;
-  background: color-mix(in srgb, #0b1c2e 88%, #1e3a5f);
+  /* Solid RGB so contrast audits resolve a real night island (not color-mix parse noise) */
+  background: #0f2438;
   border: 1px solid color-mix(in srgb, #c9a227 28%, transparent);
   max-height: min(70vh, 36rem);
   overflow: auto;
+  color: #dce6f2;
 }
 
 .equip-video-family-label {
