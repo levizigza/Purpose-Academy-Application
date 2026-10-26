@@ -10948,6 +10948,41 @@ video {
   max-width: 40rem;
 }
 
+.station-context-fold {
+  margin: 0.85rem 0 0.25rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--train-amber, #e8a317) 35%, transparent);
+  background: rgba(11, 47, 92, 0.28);
+}
+
+.station-context-fold > summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.82rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--train-amber-bright, #f5c542);
+}
+
+.station-context-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.station-context-fold[open] > summary {
+  margin-bottom: 0.55rem;
+}
+
+.is-phone-app .station-context-fold {
+  background: #fff6de !important;
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line)) !important;
+}
+
+.is-phone-app .station-context-fold > summary {
+  color: var(--brand) !important;
+}
+
 /* Quiet review escape — was a ghost CTA that floated over the peaking lesson card */
 .comp-skills-skip,
 .train-vocab-counter .comp-skills-skip {
