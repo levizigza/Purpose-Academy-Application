@@ -12201,18 +12201,20 @@ video {
   line-height: 1.2 !important;
 }
 
-.is-phone-app .ph-video-section-inner p,
-.is-phone-app .ph-computer-section-inner p {
+.is-phone-app .ph-video-section-inner > p:not(.ph-video-section-kicker),
+.is-phone-app .ph-computer-section-inner > p:not(.ph-video-section-kicker) {
   color: var(--ink-soft) !important;
   font-size: 0.98rem !important;
   line-height: 1.45 !important;
   font-weight: 600 !important;
 }
 
-.is-phone-app .ph-video-section-kicker,
-.is-phone-app .ph-computer-section-inner .ph-video-section-kicker {
+.is-phone-app .ph-video-section-inner > .ph-video-section-kicker,
+.is-phone-app .ph-computer-section-inner > .ph-video-section-kicker {
   color: var(--brand) !important;
-  font-size: 0.8rem !important;
+  font-size: 0.84rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em;
 }
 
 .is-phone-app .ph-done-btn {
