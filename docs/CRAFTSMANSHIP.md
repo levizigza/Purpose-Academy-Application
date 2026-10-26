@@ -426,6 +426,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-26 — Portal School path + hub domain ink on paper (L3 / L6)
+
+- **Layers:** L3 information display + L6 brand lockup (site-wide paper Practice dialect).
+- **Defect:** Portal `/app/student` School path kept night `practice-hub.is-portal` + navy stage head while Desktop course/Phone were paper — third skin. Desktop hub domain rows still hard-coded `#f4f7fb` on white paper after the course flip.
+- **Fix:** Portal hub + school-path stage head → paper; tokenize `.ph-domain-row` / unit titles / status chips to `--ph-ink*`. Course hub domain overrides. Phone VV lede clamped to 3 lines to cut first-viewport overflow.
+- **Assumption to challenge next:** whether Learn/LMS should inherit the same paper dialect next, or keep instructor-dense chrome.
+
 ### 2026-10-26 — Computer Skills first viewport + Familiar paper stage (L3)
 
 - **Layers:** L3 information display (phone first viewport + mastery beat).

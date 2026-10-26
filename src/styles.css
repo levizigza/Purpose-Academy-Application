@@ -5501,18 +5501,28 @@ table.data th {
   color: var(--ph-ink);
 }
 
-/* Embedded in /app/student — shop-floor stage so light text never sits on paper */
+/*
+ * Portal School path — same navy-on-paper lockup as Phone + Desktop course.
+ * Critic overturn (2026-10-26): night “shop-floor” stage split the product for demos.
+ */
 .practice-hub.is-portal {
+  --ph-ink: #071e3d;
+  --ph-muted: #2f4156;
+  --ph-line: color-mix(in srgb, #0b2f5c 16%, #c5d0dc);
+  --ph-panel: linear-gradient(180deg, #ffffff, #f3f6fb);
+  --ph-panel-solid: #ffffff;
+  --ph-soft: #e6eef8;
+  --ph-accent: #0b2f5c;
   max-width: none;
   margin: 0;
   padding: 1.25rem 1.15rem 2.25rem;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, #0b2f5c 14%, #c5d0dc);
   background:
-    radial-gradient(ellipse 90% 70% at 100% 0%, color-mix(in srgb, var(--ph-stream, var(--accent)) 22%, transparent), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 0% 100%, rgba(11, 47, 92, 0.55), transparent 50%),
-    linear-gradient(165deg, #0c1828 0%, #07101c 55%, #050b14 100%);
-  box-shadow: 0 28px 60px rgba(4, 21, 38, 0.28);
+    radial-gradient(ellipse 80% 50% at 100% 0%, rgba(11, 47, 92, 0.06), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #f3f6fb 55%, #e8eef7 100%);
+  box-shadow: 0 18px 40px rgba(11, 47, 92, 0.08);
+  color: var(--ph-ink);
 }
 
 .school-path-page {
@@ -5528,12 +5538,12 @@ table.data th {
   padding: 1.35rem 1.35rem 1.25rem;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line));
   background:
-    radial-gradient(ellipse 80% 100% at 0% 0%, rgba(232, 163, 23, 0.16), transparent 55%),
-    linear-gradient(145deg, #0b2f5c 0%, #041526 70%);
-  color: #f4f7fb;
-  box-shadow: 0 22px 48px rgba(4, 21, 38, 0.2);
+    radial-gradient(ellipse 70% 90% at 100% 0%, rgba(11, 47, 92, 0.08), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #eef3f9 100%);
+  color: var(--brand-deep, #041526);
+  box-shadow: 0 16px 36px rgba(11, 47, 92, 0.08);
 }
 
 .school-path-stage-copy {
@@ -5551,37 +5561,39 @@ table.data th {
   letter-spacing: 0.02em;
   text-transform: uppercase;
   line-height: 1.05;
-  color: #fff;
+  color: var(--brand-deep, #041526);
 }
 
 .school-path-stage-lede {
   margin: 0;
   max-width: 34rem;
-  color: rgba(244, 247, 251, 0.82);
+  color: var(--ink-soft, #2f4156);
   font-size: 1.02rem;
   line-height: 1.5;
+  font-weight: 600;
 }
 
 .school-path-back {
   width: fit-content;
   font-weight: 700;
-  color: var(--accent-bright);
+  color: var(--brand, #0b2f5c);
   text-decoration: none;
   font-size: 0.92rem;
 }
 
 .school-path-back:hover {
-  color: #fff;
+  color: var(--brand-deep, #041526);
+  text-decoration: underline;
 }
 
 .school-path-stage-media {
   margin: 0;
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line));
   position: relative;
   min-height: 12rem;
-  background: #0b1c2e;
+  background: var(--brand-soft, #e6eef8);
 }
 
 .school-path-stage-media img {
@@ -5591,7 +5603,7 @@ table.data th {
   object-position: center;
   display: block;
   min-height: 12rem;
-  background: #0b1c2e;
+  background: #ffffff;
 }
 
 .school-path-stage-media figcaption {
@@ -5600,10 +5612,10 @@ table.data th {
   right: 0;
   bottom: 0;
   padding: 0.55rem 0.75rem;
-  font-size: 0.78rem;
-  font-weight: 650;
-  color: #fff;
-  background: linear-gradient(180deg, transparent, rgba(4, 21, 38, 0.85));
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--brand-deep, #041526);
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.94));
 }
 
 .school-path-home-card {
@@ -5851,18 +5863,19 @@ table.data th {
   justify-content: space-between;
   gap: 0.75rem;
   font-size: 0.9rem;
-  color: #f4f7fb;
+  color: var(--ph-ink);
+  font-weight: 600;
 }
 
 .ph-domain-row strong {
-  color: var(--ph-stream, var(--accent-bright));
+  color: var(--ph-accent, var(--brand));
   font-family: var(--display);
 }
 
 .ph-domain-track {
   height: 0.42rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--ph-ink) 12%, transparent);
   overflow: hidden;
   margin-top: 0.3rem;
 }
@@ -6181,7 +6194,7 @@ table.data th {
 }
 
 .ph-unit-toggle:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--ph-accent, var(--brand)) 6%, transparent);
 }
 
 .ph-unit-badge {
@@ -6225,7 +6238,7 @@ table.data th {
   font-family: var(--display);
   font-size: 1.05rem;
   font-weight: 750;
-  color: #fff;
+  color: var(--ph-ink);
   letter-spacing: -0.01em;
 }
 
@@ -6250,8 +6263,8 @@ table.data th {
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--ph-muted);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--ph-soft, rgba(11, 47, 92, 0.06));
+  border: 1px solid var(--ph-line, rgba(11, 47, 92, 0.12));
   margin-top: 0.2rem;
 }
 
@@ -6260,12 +6273,12 @@ table.data th {
   align-items: center;
   padding: 0.16rem 0.5rem;
   border-radius: 6px;
-  font-size: 0.66rem;
-  letter-spacing: 0.07em;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 800;
   font-family: var(--train-display, var(--display));
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--ph-soft, rgba(11, 47, 92, 0.06));
   color: var(--ph-muted);
 }
 
@@ -12404,8 +12417,12 @@ video {
 }
 
 .is-phone-app .vocab-sheet-lede {
-  font-size: 1rem !important;
+  font-size: 0.95rem !important;
   font-weight: 650;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .is-phone-app .vocab-sheet-banner {
@@ -13854,6 +13871,46 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-course-app .ph-pathway-switch-label {
   color: var(--brand) !important;
   font-weight: 800;
+}
+
+.is-course-app .ph-domain-row,
+.is-course-app .ph-domain-row strong,
+.is-course-app .ph-unit-titles,
+.is-course-app .ph-unit-title-row strong,
+.is-course-app .ph-unit-goal,
+.is-course-app .ph-lesson-copy,
+.is-course-app .ph-meter-label,
+.is-course-app .ph-meter-label strong,
+.is-course-app .ph-footnote,
+.is-course-app .ph-section-head p {
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-domain-row strong,
+.is-course-app .ph-status.is-current,
+.is-course-app .ph-meter-label span,
+.is-course-app .ph-status {
+  color: var(--brand) !important;
+}
+
+.is-course-app .ph-domain-track {
+  background: color-mix(in srgb, var(--brand) 12%, #e8eef7) !important;
+}
+
+.is-course-app .ph-unit {
+  background: #ffffff !important;
+  border-color: color-mix(in srgb, var(--brand) 14%, var(--line)) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-unit.is-current {
+  background: color-mix(in srgb, var(--accent) 10%, #fff) !important;
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line)) !important;
+}
+
+.is-course-app .ph-unit-badge {
+  background: var(--brand-soft) !important;
+  color: var(--brand-deep) !important;
 }
 
 .is-course-app .field input,
