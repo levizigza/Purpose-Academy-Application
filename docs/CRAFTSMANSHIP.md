@@ -428,6 +428,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-26 — Practice first-viewport: task before path map (L3)
+
+- **Customer defect (phone):** Jump Prev/Next + full-school path map sat *above* the lesson. Basic Computer Skills showed only chrome; the real Watch/Try station was cut off below the fold. Foley icon overlapped “Done for now.” Duplicate Practice sounds (shell bar + inline).
+- **Critic:** Information display first — task/media must be unmistakable in three seconds. QA jump chrome is not the product.
+- **Fix:** Collapse “Jump sections (review)” into `<details>`; move `LearningPathMap` below the lesson and fold it by default; collapse `UnitIntroCard` to a summary; hide `.train-inline-foley` when shell chrome already has sounds; compact phone header; phone scroll-to-top on jump; single-column computer-skills rail without stacked scrollbars.
+- **Assumption to challenge next:** whether PracticeModeBanner “Toolbox / Start over” still earns its gold strip when the course topbar already has those actions.
+
 ### 2026-10-26 — Phone sentence feedback contrast (L3)
 
 - **Defect:** `.shell.is-train .alert.ok` used night ink (`#b8f0bb`) so “Yes — the word completes the sentence” washed out on phone paper.

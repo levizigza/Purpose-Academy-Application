@@ -139,11 +139,6 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
           <h2 className="equip-video-title">{lesson.title}</h2>
           <p className="lede equip-video-purpose">{lesson.purpose}</p>
         </div>
-        {practice && onSkip ? (
-          <button type="button" className="btn btn-ghost" onClick={onSkip}>
-            Skip to observation
-          </button>
-        ) : null}
       </div>
 
       <p className="train-vocab-counter">
@@ -152,6 +147,14 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
         {familyMeta?.label ?? lesson.familyLabel}
         {' · '}
         {watchedCount} watched
+        {practice && onSkip ? (
+          <>
+            {' · '}
+            <button type="button" className="linkish comp-skills-skip" onClick={onSkip}>
+              Skip to observation
+            </button>
+          </>
+        ) : null}
       </p>
 
       <div className="equip-video-layout">
