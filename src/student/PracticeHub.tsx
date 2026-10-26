@@ -520,7 +520,7 @@ export function PracticeHub({
 }
 
 /** Compact practice-marks strip inside the lesson shell. */
-export function PracticeStatsStrip({ step }: { step: number }) {
+export function PracticeStatsStrip({ step, className = '' }: { step: number; className?: string }) {
   const [, bump] = useState(0)
   useEffect(() => {
     const sync = () => bump((n) => n + 1)
@@ -531,7 +531,7 @@ export function PracticeStatsStrip({ step }: { step: number }) {
   const overall = overallMasteryPercent()
   const ready = canAdvanceFromStep(step)
   return (
-    <div className="practice-stats-strip" aria-label="Practice marks">
+    <div className={`practice-stats-strip ${className}`.trim()} aria-label="Practice marks">
       <span>
         <strong>{stats.xp}</strong> marks
       </span>

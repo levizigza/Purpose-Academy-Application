@@ -305,20 +305,76 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             {practice ? ' · Student Practice' : ''}
           </p>
           <div className="train-sound-slot">
-            {practice && onOpenHub && (
-              <button type="button" className="btn btn-ghost train-hub-btn" onClick={onOpenHub}>
-                Path home
-              </button>
-            )}
-            {practice && (
-              <Link className="btn btn-ghost train-hub-btn" to="/app/student">
-                Done for now
-              </Link>
-            )}
-            {/* Phone emulator chrome already has Practice sounds — hide the duplicate icon that overlaps hub buttons. */}
+            {/* Desktop wide: keep Path home / Done visible. Phone folds them into Station menu. */}
+            <div className="train-hub-row">
+              {practice && onOpenHub && (
+                <button type="button" className="btn btn-ghost train-hub-btn" onClick={onOpenHub}>
+                  Path home
+                </button>
+              )}
+              {practice && (
+                <Link className="btn btn-ghost train-hub-btn" to="/app/student">
+                  Done for now
+                </Link>
+              )}
+            </div>
+            {/* Phone emulator / course shell already have Practice sounds. */}
             <FoleyToggle compact className="train-inline-foley" />
           </div>
         </div>
+        {practice && (
+          <details className="train-station-menu">
+            <summary className="train-station-menu-summary">Station menu</summary>
+            <div className="train-station-menu-body">
+              <div className="train-station-menu-hub">
+                {onOpenHub && (
+                  <button type="button" className="btn btn-ghost train-hub-btn" onClick={onOpenHub}>
+                    Path home
+                  </button>
+                )}
+                <Link className="btn btn-ghost train-hub-btn" to="/app/student">
+                  Done for now
+                </Link>
+              </div>
+              {practice && <PracticeStatsStrip step={step} />}
+              {onJumpLesson && (
+                <nav className="practice-section-skip" aria-label="Skip between sections for quality review">
+                  <button
+                    type="button"
+                    className="btn btn-ghost practice-section-skip-btn"
+                    disabled={step <= PRACTICE_ENTRY_STEP}
+                    onClick={() => onJumpLesson(Math.max(PRACTICE_ENTRY_STEP, step - 1))}
+                  >
+                    Prev section
+                  </button>
+                  <label className="practice-section-skip-jump">
+                    <span>Jump to section</span>
+                    <select
+                      value={step}
+                      onChange={(e) => onJumpLesson(Number(e.target.value))}
+                      aria-label="Jump to any practice section"
+                    >
+                      {jumpSteps.map((s) => (
+                        <option key={s.n} value={s.n}>
+                          {s.n}. {s.title}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <button
+                    type="button"
+                    className="btn btn-ghost practice-section-skip-btn"
+                    disabled={step >= JOURNEY_STEP_COUNT}
+                    onClick={() => onJumpLesson(Math.min(JOURNEY_STEP_COUNT, step + 1))}
+                  >
+                    Next section
+                  </button>
+                </nav>
+              )}
+            </div>
+          </details>
+        )}
+        {/* Desktop review: keep a dedicated jump fold when not using the phone station menu layout */}
         {practice && onJumpLesson && (
           <details className="practice-section-skip-fold">
             <summary className="practice-section-skip-summary">Jump sections (review)</summary>
@@ -358,7 +414,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         )}
         <h1 className="train-title">{title}</h1>
         <p className="train-simple-line">{help}</p>
-        {practice && <PracticeStatsStrip step={step} />}
+        {practice && <PracticeStatsStrip step={step} className="practice-stats-strip-desktop" />}
         {!motherTongue && (
           <p className="train-unit-pill" aria-label={`Learning unit ${unit.id}`}>
             <span>Unit {unit.id}</span>

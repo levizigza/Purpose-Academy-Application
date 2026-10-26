@@ -183,17 +183,27 @@ async function enterPractice(page, { phone }) {
 
 async function jump(page, label, phone) {
   const root = phone ? '.iphone-scroll' : 'body'
-  const fold = page.locator(`${root} .practice-section-skip-fold`).first()
-  if (await fold.count()) {
-    const open = await fold.evaluate((el) => el.open)
+  /* Phone: jump lives inside Station menu. Desktop: dedicated review fold. */
+  const menu = page.locator(`${root} .train-station-menu`).first()
+  if (phone && (await menu.count())) {
+    const open = await menu.evaluate((el) => el.open)
     if (!open) {
-      await fold.locator('summary').first().click()
+      await menu.locator('summary').first().click()
       await page.waitForTimeout(200)
+    }
+  } else {
+    const fold = page.locator(`${root} .practice-section-skip-fold`).first()
+    if (await fold.count()) {
+      const open = await fold.evaluate((el) => el.open)
+      if (!open) {
+        await fold.locator('summary').first().click()
+        await page.waitForTimeout(200)
+      }
     }
   }
   const jumpSel = phone
-    ? '.iphone-scroll .practice-section-skip select'
-    : '.practice-section-skip select'
+    ? '.iphone-scroll .train-station-menu[open] select'
+    : '.practice-section-skip-fold[open] select'
   const sel = page.locator(jumpSel).first()
   if (!(await sel.count())) {
     find(phone ? 'phone' : 'desktop', 'high', 'Section jump missing', { label })
@@ -296,13 +306,16 @@ async function runMode(phone) {
     } else find(mode, 'high', 'Could not open today’s station from hub')
   }
   /* Ensure jump chrome exists before station loop */
+  const jumpChrome = phone
+    ? '.iphone-scroll .train-station-menu'
+    : '.practice-section-skip-fold'
   const foldReady = await page
-    .locator(phone ? '.iphone-scroll .practice-section-skip-fold' : '.practice-section-skip-fold')
+    .locator(jumpChrome)
     .first()
     .waitFor({ state: 'visible', timeout: 8000 })
     .then(() => true)
     .catch(() => false)
-  if (!foldReady) find(mode, 'high', 'Practice section jump fold never appeared after open')
+  if (!foldReady) find(mode, 'high', 'Practice section jump chrome never appeared after open')
 
   const stations = [
     'Your Language',

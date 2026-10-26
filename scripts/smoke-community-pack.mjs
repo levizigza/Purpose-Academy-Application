@@ -81,15 +81,28 @@ async function switchCommunity(page) {
 }
 
 async function jumpSection(page, labelRe) {
-  const fold = page.locator('.iphone-scroll .practice-section-skip-fold, .practice-section-skip-fold').first()
-  if (await fold.count()) {
-    const open = await fold.evaluate((el) => el.open)
+  const menu = page.locator('.iphone-scroll .train-station-menu').first()
+  if (await menu.count()) {
+    const open = await menu.evaluate((el) => el.open)
     if (!open) {
-      await fold.locator('summary').first().click()
+      await menu.locator('summary').first().click()
       await page.waitForTimeout(200)
     }
+  } else {
+    const fold = page.locator('.iphone-scroll .practice-section-skip-fold, .practice-section-skip-fold').first()
+    if (await fold.count()) {
+      const open = await fold.evaluate((el) => el.open)
+      if (!open) {
+        await fold.locator('summary').first().click()
+        await page.waitForTimeout(200)
+      }
+    }
   }
-  const jump = page.locator('.practice-section-skip select').first()
+  const jump = page
+    .locator(
+      '.iphone-scroll .train-station-menu[open] select, .practice-section-skip-fold[open] select, .practice-section-skip select',
+    )
+    .first()
   if (!(await jump.count())) {
     note('Section skip select missing')
     return false

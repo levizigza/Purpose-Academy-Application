@@ -4763,7 +4763,7 @@ table.data th {
   font-size: clamp(1.65rem, 3.4vw, 2.35rem);
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--train-text);
   line-height: 1.05;
 }
 
@@ -5087,7 +5087,7 @@ table.data th {
   box-shadow: 0 0 0 2px rgba(232, 163, 23, 0.25);
 }
 
-.train-interest strong { color: #fff; }
+.train-interest strong { color: var(--train-text); }
 
 .train-interest-detail {
   font-style: normal;
@@ -5129,7 +5129,7 @@ table.data th {
   box-shadow: 0 0 0 2px rgba(232, 163, 23, 0.25);
 }
 
-.train-lang strong { color: #fff; }
+.train-lang strong { color: var(--train-text); }
 
 /* Bridge / scaffold */
 
@@ -5141,7 +5141,7 @@ table.data th {
   color: var(--train-text);
 }
 
-.train-bridge strong { color: #fff; }
+.train-bridge strong { color: var(--train-text); }
 
 .train-bridge ol {
   margin: 0.4rem 0 0;
@@ -5217,7 +5217,7 @@ table.data th {
   border-radius: 999px;
   background: rgba(245, 197, 66, 0.14);
   border: 1px solid rgba(245, 197, 66, 0.35);
-  color: #f5c542;
+  color: var(--train-amber-bright);
   font-size: 0.78rem;
   width: fit-content;
 }
@@ -5230,13 +5230,13 @@ table.data th {
 }
 
 .train-unit-pill strong {
-  color: #fff;
+  color: var(--train-text);
   font-weight: 800;
 }
 
 .train-unit-pill em {
   font-style: normal;
-  color: rgba(244, 247, 251, 0.7);
+  color: var(--train-text-muted);
 }
 
 /* ─── Learning path map (Duolingo-style linear units) ─── */
@@ -5273,17 +5273,17 @@ table.data th {
 .lp-title {
   margin: 0.15rem 0 0;
   font-size: 1.05rem;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .lp-mastery {
   margin: 0;
   font-size: 0.82rem;
-  color: rgba(244, 247, 251, 0.75);
+  color: var(--train-text-muted);
 }
 
 .lp-mastery strong {
-  color: #f5c542;
+  color: var(--train-amber-bright);
 }
 
 .lp-units {
@@ -5323,8 +5323,8 @@ table.data th {
   place-items: center;
   font-weight: 800;
   font-size: 0.78rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: color-mix(in srgb, var(--train-text) 12%, transparent);
+  color: var(--train-text);
 }
 
 .lp-unit.is-done .lp-unit-badge {
@@ -5345,13 +5345,13 @@ table.data th {
 }
 
 .lp-unit-copy strong {
-  color: #fff;
+  color: var(--train-text);
 }
 
 .lp-unit-copy span,
 .lp-unit-copy em {
   font-size: 0.78rem;
-  color: rgba(244, 247, 251, 0.65);
+  color: var(--train-text-muted);
   font-style: normal;
 }
 
@@ -5384,13 +5384,13 @@ table.data th {
 
 .lp-lesson strong {
   display: block;
-  color: #f4f7fb;
+  color: var(--train-text);
   font-size: 0.86rem;
 }
 
 .lp-lesson span {
   font-size: 0.74rem;
-  color: rgba(244, 247, 251, 0.6);
+  color: var(--train-text-muted);
 }
 
 .lp-node {
@@ -5432,14 +5432,14 @@ table.data th {
 }
 
 .unit-intro-summary strong {
-  color: #fff;
+  color: var(--train-text);
   font-size: 1.05rem;
 }
 
 .unit-intro-summary-hint {
-  font-size: 0.78rem;
-  color: rgba(244, 247, 251, 0.65);
-  font-weight: 600;
+  font-size: 0.84rem;
+  color: var(--train-text-muted);
+  font-weight: 650;
 }
 
 .unit-intro-card[open] .unit-intro-summary-hint {
@@ -5457,18 +5457,18 @@ table.data th {
 
 .unit-intro-card h3 {
   margin: 0.35rem 0 0.45rem;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .unit-intro-goal {
   margin: 0 0 0.65rem;
-  color: rgba(244, 247, 251, 0.9);
+  color: var(--train-text);
 }
 
 .unit-intro-outcomes {
   margin: 0 0 0.7rem;
   padding-left: 1.1rem;
-  color: rgba(244, 247, 251, 0.82);
+  color: var(--train-text-muted);
 }
 
 .unit-intro-outcomes li {
@@ -6428,7 +6428,7 @@ table.data th {
   gap: 0.55rem 0.85rem;
   margin: 0.55rem 0 0.35rem;
   font-size: 0.8rem;
-  color: rgba(244, 247, 251, 0.78);
+  color: var(--train-text-muted);
 }
 
 .practice-stats-strip strong {
@@ -6445,8 +6445,8 @@ table.data th {
 
 .train-hub-btn {
   margin-right: 0.35rem;
-  color: #f4f7fb !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: var(--train-text) !important;
+  border-color: color-mix(in srgb, var(--train-text) 28%, transparent) !important;
 }
 
 .train-mastery-gate {
@@ -6517,8 +6517,8 @@ table.data th {
 
 .lp-xp {
   margin: 0;
-  font-size: 0.78rem;
-  color: rgba(244, 247, 251, 0.75);
+  font-size: 0.82rem;
+  color: var(--train-text-muted);
 }
 
 .lp-hub-btn,
@@ -6559,7 +6559,7 @@ table.data th {
 .train-check-prompt {
   margin: 0.75rem 0 0.45rem;
   font-weight: 800;
-  color: #f4f7fb;
+  color: var(--train-text);
 }
 
 .train-checkin-note {
@@ -6586,14 +6586,14 @@ table.data th {
   margin: 0;
   font-size: clamp(1.2rem, 2.6vw, 1.55rem);
   font-weight: 850;
-  color: #fff;
+  color: var(--train-text);
   line-height: 1.25;
 }
 
 .topic-lesson-card h3 {
   margin: 0;
   font-size: 1.25rem;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .topic-lesson-card > p {
@@ -6693,7 +6693,7 @@ table.data th {
   background: var(--train-surface-2);
 }
 
-.train-learn-card strong { color: #fff; }
+.train-learn-card strong { color: var(--train-text); }
 
 .train-learn-card p {
   margin: 0.2rem 0 0;
@@ -6800,7 +6800,7 @@ table.data th {
   background: rgba(76, 175, 80, 0.08);
 }
 
-.train-topic-card strong { color: #fff; display: block; }
+.train-topic-card strong { color: var(--train-text); display: block; }
 .train-topic-card p { margin: 0.2rem 0 0; font-size: 0.88rem; color: var(--train-text-muted); }
 
 .train-topic-mark {
@@ -6941,7 +6941,7 @@ table.data th {
   font-size: 1.3rem;
   font-family: var(--train-display);
   font-weight: 700;
-  color: #fff;
+  color: var(--train-text);
   text-align: center;
   margin: 0.25rem 0 0.5rem;
 }
@@ -7245,7 +7245,7 @@ table.data th {
 
 .train-step-name {
   font-weight: 700;
-  color: #fff;
+  color: var(--train-text);
   font-family: var(--train-display);
   font-size: 0.95rem;
 }
@@ -8923,6 +8923,39 @@ html.pa-page-wipe .hero-inner {
   width: min(100% - 1rem, 720px);
 }
 
+.practice-banner.is-status-only {
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+  box-shadow: none;
+}
+
+/*
+ * Desktop course shell: status strip only.
+ * React class sync can race DesktopCourse mount — CSS is source of truth.
+ */
+html.pa-course-shell .practice-banner-actions {
+  display: none !important;
+}
+
+html.pa-course-shell .practice-banner {
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+  box-shadow: none;
+}
+
+/* Desktop: hub buttons stay in the header row. Phone uses Station menu instead. */
+.train-hub-row {
+  display: contents;
+}
+
+.train-station-menu {
+  display: none;
+}
+
 /* Side feedback chatbot */
 .practice-chat {
   position: fixed;
@@ -9667,7 +9700,7 @@ video {
   margin: 0;
   font-family: var(--display);
   font-size: clamp(1.2rem, 2.6vw, 1.55rem);
-  color: #fff;
+  color: var(--train-text);
   letter-spacing: -0.02em;
 }
 
@@ -9675,7 +9708,7 @@ video {
 .career-result-lead,
 .career-result-summary {
   margin: 0;
-  color: rgba(244, 247, 251, 0.84);
+  color: var(--train-text-muted);
   line-height: 1.45;
 }
 
@@ -10224,13 +10257,13 @@ video {
 
 .lp-fold-title {
   font-size: 1.02rem;
-  color: #fff;
+  color: var(--train-text);
   font-weight: 800;
 }
 
 .lp-fold-meta {
   font-size: 0.82rem;
-  color: rgba(244, 247, 251, 0.75);
+  color: var(--train-text-muted);
 }
 
 .practice-section-skip-btn {
@@ -10940,7 +10973,7 @@ video {
   margin: 0.15rem 0 0.35rem;
   font-family: var(--display, Georgia, serif);
   font-size: clamp(1.45rem, 2.4vw, 1.9rem);
-  color: #f0e6d4;
+  color: var(--train-text);
 }
 
 .equip-video-purpose {
@@ -11984,6 +12017,7 @@ video {
    * Learner app inside the device = navy on white paper — same as logo-full.
    * Must flip train *surfaces* with train *text*, or .shell.is-train fields
    * stay night-navy bg under navy ink (Name field: Levi invisible).
+   * Showcase law: every body string must clear WCAG AA on paper — no leftover night ink.
    */
   --ink: #071e3d;
   --ink-soft: #2f4156;
@@ -12001,7 +12035,14 @@ video {
   --train-bg-2: #e8eef7;
   --train-line: #aebccd;
   --train-amber: #e8a317;
-  --train-amber-bright: #c8890f;
+  --train-amber-bright: #a8740c;
+  --ph-ink: #071e3d;
+  --ph-muted: #2f4156;
+  --ph-line: color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
+  --ph-panel: #ffffff;
+  --ph-panel-solid: #ffffff;
+  --ph-soft: #eef3f9;
+  --ph-accent: #0b2f5c;
   min-height: 100%;
   max-width: 100% !important;
   width: 100%;
@@ -12157,7 +12198,9 @@ video {
 }
 
 .is-phone-app .unit-intro-summary-hint {
-  color: var(--ink-soft) !important;
+  color: var(--brand) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
 }
 
 .is-phone-app .unit-intro-method {
@@ -12197,7 +12240,29 @@ video {
 .is-phone-app .equip-video-family-blurb,
 .is-phone-app .equip-video-kip-item p,
 .is-phone-app .equip-video-kip-label,
-.is-phone-app .equip-video-stayclear {
+.is-phone-app .equip-video-stayclear,
+.is-phone-app .phrase-lesson-en,
+.is-phone-app .topic-lesson-card h3,
+.is-phone-app .topic-lesson-card > p,
+.is-phone-app .comp-try h3,
+.is-phone-app .comp-desktop-hint {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .equip-video-purpose,
+.is-phone-app .comp-desktop-hint,
+.is-phone-app .topic-lesson-card > p {
+  font-weight: 600;
+  font-size: 0.95rem !important;
+  line-height: 1.45 !important;
+}
+
+/* Showcase: paper chips for phrase/topic cards that still ship night fills */
+.is-phone-app .phrase-lesson-card,
+.is-phone-app .topic-lesson-card,
+.is-phone-app .comp-try {
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
   color: var(--brand-deep) !important;
 }
 
@@ -12262,11 +12327,19 @@ video {
 
 /* —— VocabSheet: demo-legible on ~390px (container, not viewport) —— */
 .is-phone-app .vocab-sheet-lede,
+.is-phone-app .vocab-sheet-page-label,
+.is-phone-app .vocab-sheet-page-progress,
 .is-phone-app .vocab-sheet-definition,
 .is-phone-app .vocab-sheet-progress {
-  color: var(--ink-soft) !important;
-  font-size: 0.92rem !important;
+  color: var(--brand-deep) !important;
+  font-size: 0.95rem !important;
   line-height: 1.45 !important;
+  font-weight: 600;
+}
+
+.is-phone-app .vocab-sheet-lede {
+  font-size: 1rem !important;
+  font-weight: 650;
 }
 
 .is-phone-app .vocab-sheet-banner {
@@ -13049,17 +13122,21 @@ html.pa-phone-shell .practice-feedback-dock {
 
 .is-phone-app .train-header-top {
   display: flex !important;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  gap: 0.35rem !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.35rem 0.5rem !important;
+}
+
+.is-phone-app .train-kicker {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 !important;
 }
 
 .is-phone-app .train-sound-slot {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 0.35rem !important;
-  width: 100%;
-  align-items: stretch;
+  display: none !important; /* Path home / Done live in Station menu on phone */
 }
 
 /* Shell chrome already has Practice sounds — inner icon was overlapping Done for now on phone */
@@ -13069,10 +13146,58 @@ html.pa-phone-shell .practice-feedback-dock {
   display: none !important;
 }
 
+/* One Station menu replaces Path home + Done + Jump + stats on phone first viewport */
+.is-phone-app .train-station-menu {
+  display: block !important;
+  margin: 0.25rem 0 0.35rem !important;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line));
+  background: #fff;
+}
+
+.is-phone-app .train-station-menu-summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.8rem !important;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand) !important;
+}
+
+.is-phone-app .train-station-menu-summary::-webkit-details-marker {
+  display: none;
+}
+
+.is-phone-app .train-station-menu-body {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0 0.55rem 0.55rem;
+  border-top: 1px solid color-mix(in srgb, var(--brand) 12%, var(--line));
+}
+
+.is-phone-app .train-station-menu-hub {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+}
+
+.is-phone-app .train-station-menu .train-hub-btn {
+  width: 100%;
+  font-size: 0.8rem !important;
+  padding: 0.45rem 0.5rem !important;
+  text-align: center;
+}
+
+.is-phone-app .practice-section-skip-fold,
+.is-phone-app .practice-stats-strip-desktop {
+  display: none !important;
+}
+
 .is-phone-app .train-hub-btn {
   flex: 1 1 auto;
   min-width: 0;
-  width: 100%;
   font-size: 0.8rem !important;
   padding: 0.45rem 0.5rem !important;
   white-space: nowrap;
@@ -13198,6 +13323,19 @@ html.pa-phone-shell .practice-feedback-dock {
 
 .is-phone-app .train-why-details {
   margin: 0.15rem 0 !important;
+  color: var(--ink-soft) !important;
+  font-size: 0.92rem !important;
+}
+
+.is-phone-app .train-why-details summary {
+  color: var(--brand) !important;
+  font-weight: 750 !important;
+  font-size: 0.92rem !important;
+}
+
+.is-phone-app .train-why-details .train-purpose {
+  color: var(--brand-deep) !important;
+  font-weight: 600;
 }
 
 .is-phone-app table {
