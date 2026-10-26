@@ -432,6 +432,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Defect:** Desktop course shell still showed Practice banner Toolbox/Start over (duplicate chrome) because React state raced `pa-course-shell` class mount. Phone VV lede / page labels / “Tap for goals” / equipment purpose read soft gray on paper. Station hub chrome competed with the task on ~390px.
 - **Fix:** CSS `html.pa-course-shell` hides banner actions (source of truth) + MutationObserver sync; phone Station menu folds Path home/Done/Jump/stats; tokenized remaining train body hardcodes (`unit-intro`, `lp-*`, phrase/topic); phone body ledes forced to brand-deep ≥0.95rem.
 - **Assumption to challenge next:** whether Desktop course night stage should flip to paper for one showcase dialect, or stay night-with-AA contrast only.
+- **Follow-up same day:** brightened Practice hub `--ph-muted` to `#c5d3e4` and video/computer body copy so Desktop night stage does not look washed in demos.
 
 Newest first.
 

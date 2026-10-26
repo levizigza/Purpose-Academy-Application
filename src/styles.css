@@ -5484,12 +5484,13 @@ table.data th {
 
 /* ─── Student Practice Mode learning dashboard ─── */
 .practice-hub {
+  /* Showcase: muted must still clear ~7:1 on night stage — avoid washed slate */
   --ph-ink: #f4f7fb;
-  --ph-muted: #9aabc0;
-  --ph-line: rgba(255, 255, 255, 0.1);
-  --ph-panel: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+  --ph-muted: #c5d3e4;
+  --ph-line: rgba(255, 255, 255, 0.14);
+  --ph-panel: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
   --ph-panel-solid: #152234;
-  --ph-soft: rgba(255, 255, 255, 0.045);
+  --ph-soft: rgba(255, 255, 255, 0.06);
   --ph-accent: var(--train-amber, var(--accent));
   max-width: 920px;
   margin: 0 auto;
@@ -5497,6 +5498,7 @@ table.data th {
   display: grid;
   gap: 1.25rem;
   animation: ph-enter 0.55s ease both;
+  color: var(--ph-ink);
 }
 
 /* Embedded in /app/student — shop-floor stage so light text never sits on paper */
@@ -5728,11 +5730,11 @@ table.data th {
 
 .ph-kicker {
   margin: 0;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ph-accent);
-  font-weight: 700;
+  font-weight: 750;
   font-family: var(--train-display, var(--display));
 }
 
@@ -5744,7 +5746,7 @@ table.data th {
   letter-spacing: 0.01em;
   line-height: 1.05;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--ph-ink);
 }
 
 .ph-lede {
@@ -5752,7 +5754,8 @@ table.data th {
   max-width: 36rem;
   color: var(--ph-muted);
   line-height: 1.55;
-  font-size: 1.02rem;
+  font-size: 1.05rem;
+  font-weight: 550;
 }
 
 .ph-pathway-badge {
@@ -5940,8 +5943,9 @@ table.data th {
 
 .ph-resume-lesson {
   margin: 0;
-  color: rgba(244, 247, 251, 0.78);
-  font-size: 0.94rem;
+  color: var(--ph-muted);
+  font-size: 0.98rem;
+  font-weight: 600;
 }
 
 .ph-resume-progress {
@@ -11271,9 +11275,9 @@ video {
 
 .ph-video-section-kicker {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #f5c542;
 }
@@ -11288,8 +11292,10 @@ video {
 .ph-video-section-inner p {
   margin: 0;
   max-width: 40rem;
-  color: color-mix(in srgb, #fff 82%, transparent);
-  line-height: 1.45;
+  color: #e8eef6;
+  line-height: 1.5;
+  font-size: 1rem;
+  font-weight: 550;
 }
 
 .ph-video-section-inner strong {
@@ -11373,9 +11379,9 @@ video {
 
 .comp-try-kicker {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #8ec5f0;
 }
