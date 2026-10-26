@@ -432,7 +432,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Layers:** L3 information display (Practical — playable on ~390px).
 - **Customer defect (round 2):** Even after one-board focus, At work / Teach note still filled the phone fold so pictures never appeared without scroll. Washed gold “At work” / pool labels failed demos. Live GitHub Pages (`levizigza.github.io/Purpose-Academy-Application/`) still served the pre-fix build until this PR merges to `main` — demos against that URL will look broken.
 - **Why the app-wide playthrough missed it:** Audit jumped many stations but **not** Language Organize; phone checks used viewport `@media` thinking, not `.is-phone-app` board geometry. Critic failed the connection test (gateway → path → Practice) for this station.
-- **Fix:** Quiz first; coaching in `StationContext` below. Phone task-first hide list includes `is-organize-wide`. Sticky 2×2 pics + one full-width word; navy paper labels. Audit visits Organize and fails multi-board / narrow / light pool ink / pictures below fold.
+- **Fix:** Quiz first; coaching in `StationContext` below. Phone task-first hide list includes `is-organize-wide`. Sticky picture row + Drop card (+ word) share the first viewport; compact language grid; navy paper labels. Audit visits Organize and fails multi-board / narrow / light pool ink / pictures or Drop below fold.
 - **Assumption to challenge next:** whether Desktop course should also default to 2×2 boards below ~900px container width (not only viewport).
 
 ### 2026-10-26 — Language Organize phone: one word at a time (L3)
