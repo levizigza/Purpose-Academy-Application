@@ -428,6 +428,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-26 — Phone playthrough: leftover ink + path status collapse (L3)
+
+- **Layers:** L3 information display (secondary labels + leftover night ink on paper).
+- **Playthrough findings:** Hub video/computer copy still `#fff` on paper; unit-intro night gradient; career-choice translucent light chips; practice-stats amber numbers; equip-video cream title on paper; path-map status (“Open for review”) width 0 because `li.lp-lesson` grid nested a full-width `.lp-lesson-btn` into the 0.7rem node column.
+- **Fix:** Broaden `.is-phone-app` kill-list (video/computer inners, unit-intro-card, career-choice paper chips, stats navy numbers, equip-video titles). `.lp-lesson:has(> .lp-lesson-btn) { display: block }` site-wide. Secondary kickers ≥0.8rem.
+- **Assumption to challenge next:** whether night-stage train tokens should flip via shared variables so phone overrides stop being a growing kill-list.
+
 ### 2026-10-26 — Phone learner path: honest contrast pass (L3)
 
 - **Defect (customer):** Path home steps white-on-white; “Find your path” yellow-on-beige + invisible 4–5; “Choose your language” ghost title; selected EN chip white “English” on tan. Phone remapped train *surfaces* to paper but dozens of selectors still hardcode night ink (`#fff`, `#f4f7fb`, `#f5c542`).

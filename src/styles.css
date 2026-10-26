@@ -5372,6 +5372,16 @@ table.data th {
   padding: 0.25rem 0.15rem;
 }
 
+/*
+ * When the row is a single .lp-lesson-btn (node + copy inside the button),
+ * do not also grid the <li> — that parked the whole button in the 0.7rem
+ * node column and collapsed status text (“Open for review”) to ~0 width.
+ */
+.lp-lesson:has(> .lp-lesson-btn) {
+  display: block;
+  padding: 0;
+}
+
 .lp-lesson strong {
   display: block;
   color: #f4f7fb;
@@ -11960,8 +11970,15 @@ video {
 .is-phone-app .ph-pathway-badge strong,
 .is-phone-app .ph-metric,
 .is-phone-app .ph-domain-row,
+.is-phone-app .ph-domain-row strong,
 .is-phone-app .ph-unit-titles,
-.is-phone-app .ph-lesson-copy {
+.is-phone-app .ph-lesson-copy,
+.is-phone-app .ph-video-section-inner,
+.is-phone-app .ph-video-section-inner p,
+.is-phone-app .ph-video-section-inner strong,
+.is-phone-app .ph-computer-section-inner,
+.is-phone-app .ph-computer-section-inner p,
+.is-phone-app .ph-computer-section-inner strong {
   color: var(--brand-deep) !important;
 }
 
@@ -11974,6 +11991,61 @@ video {
 .is-phone-app .seq-station,
 .is-phone-app .unit-intro {
   color: var(--brand-deep);
+}
+
+/* Unit intro was a night gradient card — paper + navy on phone */
+.is-phone-app .unit-intro-card {
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .unit-intro-card h3,
+.is-phone-app .unit-intro-goal,
+.is-phone-app .unit-intro-outcomes,
+.is-phone-app .unit-intro-outcomes li {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .unit-intro-method {
+  color: var(--brand) !important;
+}
+
+/* Work-style / career quiz choices: night translucent → paper chips */
+.is-phone-app .career-choice {
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
+}
+
+.is-phone-app .career-choice:hover,
+.is-phone-app .career-choice:focus-visible {
+  background: var(--brand-soft) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .career-choice.is-selected {
+  background: #fff6de !important;
+  border-color: var(--accent) !important;
+  color: var(--brand-deep) !important;
+}
+
+/*
+ * Equipment / computer video: title sits on paper panel (cream ink failed).
+ * Lesson rail stays a dark island — leave rail light ink alone.
+ */
+.is-phone-app .equip-video-title,
+.is-phone-app .equip-video-purpose,
+.is-phone-app .equip-video-family-blurb,
+.is-phone-app .equip-video-kip-item p,
+.is-phone-app .equip-video-kip-label,
+.is-phone-app .equip-video-stayclear {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .equip-video-kip-label {
+  color: var(--brand) !important;
+  font-size: 0.8rem !important;
 }
 
 .is-phone-app .train-header,
@@ -12250,6 +12322,7 @@ video {
 
 .is-phone-app .career-assess-lede,
 .is-phone-app .career-result-lede,
+.is-phone-app .career-result-lead,
 .is-phone-app .career-result-summary,
 .is-phone-app .train-picture figcaption {
   color: var(--ink-soft) !important;
@@ -12365,8 +12438,132 @@ video {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem 0.75rem;
-  font-size: 0.85rem !important;
+  font-size: 0.88rem !important;
   color: var(--ink-soft) !important;
+}
+
+/* Amber (#f5c542) marks/days/% fail WCAG on paper — navy numbers */
+.is-phone-app .practice-stats-strip strong {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .practice-stats-strip .is-ready {
+  color: #1f7a4d !important;
+  font-weight: 700;
+}
+
+/* —— Leftover light ink on paper (hub metrics, Eye Spy, gates, hovers) —— */
+.is-phone-app .ph-unit-title-row strong,
+.is-phone-app .ph-lesson-copy strong,
+.is-phone-app .ph-metric strong,
+.is-phone-app .ph-meter-label strong {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .ph-meter-label span,
+.is-phone-app .ph-lesson-copy span,
+.is-phone-app .ph-lesson-action,
+.is-phone-app .ph-legend {
+  color: var(--ink-soft) !important;
+}
+
+.is-phone-app .ph-metric {
+  background: var(--brand-soft) !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 14%, var(--line));
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .eye-spy-instruction,
+.is-phone-app .eye-spy-scene-title,
+.is-phone-app .eye-spy-progress,
+.is-phone-app .eye-spy-prompt,
+.is-phone-app .eye-spy-word,
+.is-phone-app .eye-spy-word strong,
+.is-phone-app .eye-spy-word.is-clear,
+.is-phone-app .eye-spy-cleared li {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .eye-spy-word.is-clear {
+  color: #1f7a4d !important;
+}
+
+.is-phone-app .eye-spy-stage {
+  background: var(--brand-soft) !important;
+  border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+}
+
+.is-phone-app .train-mastery-gate,
+.is-phone-app .practice-stats-strip .is-locked,
+.is-phone-app .career-result-badge,
+.is-phone-app .train-action-label,
+.is-phone-app .train-quiz-counter {
+  color: var(--brand) !important;
+}
+
+.is-phone-app .shell.is-train .train-actions .btn-ghost:hover,
+.is-phone-app .shell.is-train .train-back:hover,
+.is-phone-app .train-actions .btn-ghost:hover,
+.is-phone-app .train-back:hover,
+.is-phone-app .train-role.secondary:hover,
+.is-phone-app .train-role.instructor:hover,
+.is-phone-app .train-role.admin:hover {
+  color: var(--brand-deep) !important;
+  background: var(--brand-soft) !important;
+}
+
+/*
+ * Secondary labels — mobile needs ≥ ~0.8rem for status/kickers.
+ * Critic: 0.65–0.74rem captions failed the three-second read on ~390px.
+ */
+.is-phone-app .ph-kicker,
+.is-phone-app .ph-resume-label,
+.is-phone-app .ph-pathway-switch-label,
+.is-phone-app .ph-video-section-kicker,
+.is-phone-app .lp-kicker,
+.is-phone-app .train-kicker,
+.is-phone-app .train-teach-label,
+.is-phone-app .career-assess-kicker,
+.is-phone-app .unit-intro-kicker,
+.is-phone-app .comp-try-kicker {
+  font-size: 0.8rem !important;
+  letter-spacing: 0.06em;
+  color: var(--brand) !important;
+}
+
+.is-phone-app .ph-meter-label span,
+.is-phone-app .ph-metric-label,
+.is-phone-app .ph-status,
+.is-phone-app .ph-legend,
+.is-phone-app .ph-lesson-copy span,
+.is-phone-app .ph-lesson-action,
+.is-phone-app .lp-lesson span,
+.is-phone-app .lp-unit-copy span,
+.is-phone-app .lp-unit-copy em,
+.is-phone-app .lp-xp,
+.is-phone-app .lp-mastery,
+.is-phone-app .train-unit-pill,
+.is-phone-app .train-action-label,
+.is-phone-app .train-vocab-counter,
+.is-phone-app .train-quiz-counter,
+.is-phone-app .train-step-num,
+.is-phone-app .train-lang > span[aria-hidden] {
+  font-size: 0.84rem !important;
+  line-height: 1.3 !important;
+}
+
+.is-phone-app .lp-hub-btn,
+.is-phone-app .train-hub-btn {
+  font-size: 0.84rem !important;
+  padding: 0.4rem 0.7rem !important;
+}
+
+.is-phone-app .vocab-sheet-flag {
+  font-size: 0.75rem !important;
+}
+
+.is-phone-app .vocab-sheet-lang-name {
+  font-size: 0.84rem !important;
 }
 
 @container phone-screen (max-width: 480px) {
@@ -12474,9 +12671,7 @@ html.pa-phone-shell .practice-feedback-dock {
   max-width: none !important;
 }
 
-.is-phone-app .ph-kicker {
-  font-size: 0.65rem !important;
-}
+/* ph-kicker size set in secondary-label block above (≥0.8rem) */
 
 .is-phone-app .ph-pathway-badge {
   max-width: none !important;
@@ -12520,6 +12715,11 @@ html.pa-phone-shell .practice-feedback-dock {
   letter-spacing: 0.06em;
 }
 
+.is-phone-app .lp-lesson:has(> .lp-lesson-btn) {
+  display: block !important;
+  padding: 0 !important;
+}
+
 .is-phone-app .lp-lesson-btn {
   display: grid !important;
   grid-template-columns: 0.7rem minmax(0, 1fr) !important;
@@ -12536,12 +12736,15 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-phone-app .lp-lesson-btn span:not([class*='lp-node']):not(.lp-node) {
   white-space: normal;
   display: block;
-  line-height: 1.25;
+  line-height: 1.35;
+  font-size: 0.84rem !important;
+  color: var(--ink-soft) !important;
 }
 
 .is-phone-app .lp-lesson > div,
 .is-phone-app .lp-lesson-btn > div {
   min-width: 0;
+  overflow: visible;
 }
 
 .is-phone-app .ph-resume-media {
