@@ -361,7 +361,7 @@ export function PracticeModeBanner() {
       </span>
       <span className="practice-banner-actions">
         <Link className="practice-banner-cta" to="/">
-          Done for now
+          Toolbox
         </Link>
         {!onJourney && (
           <Link className="practice-banner-cta" to="/journey">
