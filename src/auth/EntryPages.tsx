@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
@@ -7,7 +7,7 @@ import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v41'
+const ENTERED_KEY = 'pa-crossed-threshold-v43'
 
 export function hasEnteredSite() {
   try {
@@ -35,10 +35,10 @@ export function clearEnteredSite() {
 }
 
 /**
- * Composition + motion threshold (v33):
- * Build → Breathe → Resolve.
+ * Composition + motion threshold (v43):
+ * Build → Breathe → Resolve → Strike middle of door → Mirror shatter → Enter.
  * Focal point = doorway cavity. Hierarchy in time = who moves first.
- * Door/camera use pose charts; name/paths/CTA use varied ease-out entrances.
+ * Critic overturned walk-through-only exit: shatter returns, impact on the leaf.
  */
 type SplashStage =
   | 'breath'
@@ -47,8 +47,8 @@ type SplashStage =
   | 'named'
   | 'pathways'
   | 'ready'
-  | 'striking'
-  | 'crossing'
+  | 'smashing'
+  | 'shattering'
 
 const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 0, stage: 'breath' },
@@ -62,7 +62,26 @@ const TIMELINE: { at: number; stage: SplashStage }[] = [
   { at: 5750, stage: 'ready' },
 ]
 
-const EXIT_STAGES = new Set<SplashStage>(['striking', 'crossing'])
+const EXIT_STAGES = new Set<SplashStage>(['smashing', 'shattering'])
+
+/**
+ * Full-screen irregular mirror shards — opening image stays painted on the glass.
+ * Impact hub ≈ doorway cavity (stem mid), not dead screen center.
+ */
+const MIRROR_SHARDS: { clip: string; dx: string; dy: string; rot: string; delay: string }[] = [
+  { clip: 'polygon(0% 0%, 38% 0%, 28% 34%, 0% 42%)', dx: '-14%', dy: '18%', rot: '-14deg', delay: '0ms' },
+  { clip: 'polygon(38% 0%, 72% 0%, 64% 28%, 28% 34%)', dx: '2%', dy: '22%', rot: '8deg', delay: '40ms' },
+  { clip: 'polygon(72% 0%, 100% 0%, 100% 36%, 64% 28%)', dx: '18%', dy: '14%', rot: '16deg', delay: '20ms' },
+  { clip: 'polygon(0% 42%, 28% 34%, 36% 62%, 0% 70%)', dx: '-22%', dy: '28%', rot: '-22deg', delay: '70ms' },
+  { clip: 'polygon(28% 34%, 64% 28%, 58% 58%, 36% 62%)', dx: '-4%', dy: '34%', rot: '4deg', delay: '90ms' },
+  { clip: 'polygon(64% 28%, 100% 36%, 100% 68%, 58% 58%)', dx: '24%', dy: '26%', rot: '20deg', delay: '55ms' },
+  { clip: 'polygon(0% 70%, 36% 62%, 44% 100%, 0% 100%)', dx: '-16%', dy: '42%', rot: '-10deg', delay: '110ms' },
+  { clip: 'polygon(36% 62%, 58% 58%, 70% 100%, 44% 100%)', dx: '6%', dy: '46%', rot: '12deg', delay: '130ms' },
+  { clip: 'polygon(58% 58%, 100% 68%, 100% 100%, 70% 100%)', dx: '20%', dy: '40%', rot: '18deg', delay: '100ms' },
+  { clip: 'polygon(22% 18%, 48% 12%, 52% 40%, 30% 46%)', dx: '-8%', dy: '30%', rot: '-6deg', delay: '150ms' },
+  { clip: 'polygon(48% 12%, 78% 16%, 74% 44%, 52% 40%)', dx: '10%', dy: '32%', rot: '10deg', delay: '160ms' },
+  { clip: 'polygon(30% 46%, 52% 40%, 56% 72%, 34% 76%)', dx: '0%', dy: '48%', rot: '-4deg', delay: '180ms' },
+]
 
 /** Sledgehammer CTA — tool mass first (head weight, tapered shaft), not a hanging plaque. */
 function EnterHammer({ className = '' }: { className?: string }) {
@@ -174,7 +193,11 @@ function OpeningComposition({
   showName: boolean
 }) {
   const zoomStage =
-    stage === 'breath' || stage === 'closed' ? 'closed' : stage === 'opening' ? 'opening' : 'ready'
+    stage === 'breath' || stage === 'closed'
+      ? 'closed'
+      : stage === 'opening'
+        ? 'opening'
+        : 'ready'
 
   return (
     <div className="threshold-compose" data-stage={stage}>
@@ -191,6 +214,50 @@ function OpeningComposition({
       <p className={`threshold-school-name${showName ? ' is-live' : ''}`}>{BRAND.name}</p>
       {/* Lower third — secondary paths (enter from left, not the same rise as the name) */}
       <PathwayStage active={showPathways} />
+    </div>
+  )
+}
+
+/** Cracks radiate from the doorway cavity mid, then shards fall with the painted opening. */
+function MirrorBreak({ children, active }: { children: ReactNode; active: boolean }) {
+  return (
+    <div className={`mirror-break${active ? ' is-active' : ''}`} aria-hidden>
+      <svg className="mirror-cracks" viewBox="0 0 100 100" preserveAspectRatio="none">
+        {/* Hub = doorway cavity mid (bright opening), not the open leaf edge */}
+        <path className="crack c1" d="M47 45 L32 18 L14 4" />
+        <path className="crack c2" d="M47 45 L62 16 L84 2" />
+        <path className="crack c3" d="M47 45 L24 50 L4 44" />
+        <path className="crack c4" d="M47 45 L72 48 L96 40" />
+        <path className="crack c5" d="M47 45 L36 70 L18 94" />
+        <path className="crack c6" d="M47 45 L64 72 L88 96" />
+        <path className="crack c7" d="M47 45 L47 6" />
+        <path className="crack c8" d="M47 45 L47 94" />
+        <path className="crack c9" d="M47 45 L30 58 L10 76" />
+        <path className="crack c10" d="M47 45 L68 60 L94 74" />
+        <path className="crack c11" d="M38 36 L20 24" />
+        <path className="crack c12" d="M56 36 L78 22" />
+      </svg>
+      <div className="mirror-impact" />
+      <div className="mirror-shards">
+        {MIRROR_SHARDS.map((shard, i) => (
+          <div
+            key={i}
+            className="mirror-shard"
+            style={
+              {
+                clipPath: shard.clip,
+                WebkitClipPath: shard.clip,
+                '--dx': shard.dx,
+                '--dy': shard.dy,
+                '--rot': shard.rot,
+                '--delay': shard.delay,
+              } as CSSProperties
+            }
+          >
+            <div className="mirror-shard-face">{children}</div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -213,16 +280,19 @@ export function SplashPage({
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     void unlockFoley().then(() => {
       playFoley('hammer')
-      window.setTimeout(() => playFoley('wood'), 180)
-      window.setTimeout(() => playFoley('whoosh'), 480)
+      window.setTimeout(() => playFoley('wood'), 160)
+      window.setTimeout(() => playFoley('metal'), 340)
+      window.setTimeout(() => playFoley('whoosh'), 720)
     })
     if (reduce) {
       finishEnter()
       return
     }
-    setStage('striking')
-    window.setTimeout(() => setStage('crossing'), 620)
-    window.setTimeout(finishEnter, 1550)
+    /* Strike middle of door → cracks → shatter → cross into the site */
+    setStage('smashing')
+    /* Shatter after hammer contact + crack bloom (~0.42s + bloom) */
+    window.setTimeout(() => setStage('shattering'), 560)
+    window.setTimeout(finishEnter, 2200)
   }, [stage, finishEnter])
 
   useEffect(() => {
@@ -262,12 +332,23 @@ export function SplashPage({
     stage === 'named' ||
     stage === 'pathways' ||
     stage === 'ready' ||
-    stage === 'striking' ||
-    stage === 'crossing'
+    stage === 'smashing' ||
+    stage === 'shattering'
   const showPathways =
-    stage === 'pathways' || stage === 'ready' || stage === 'striking' || stage === 'crossing'
-  const showEnter = stage === 'ready' || stage === 'striking' || stage === 'crossing'
+    stage === 'pathways' || stage === 'ready' || stage === 'smashing' || stage === 'shattering'
+  const showEnter = stage === 'ready' || stage === 'smashing' || stage === 'shattering'
+  const isSmashing = stage === 'smashing' || stage === 'shattering'
+  const isShattering = stage === 'shattering'
+  const glassLive = !isShattering
   const exiting = EXIT_STAGES.has(stage)
+
+  const glassScene = (
+    <OpeningComposition
+      stage={isShattering ? 'ready' : stage}
+      showPathways={showPathways && !isShattering}
+      showName={showName && !isShattering}
+    />
+  )
 
   return (
     <div
@@ -278,29 +359,33 @@ export function SplashPage({
         showName ? 'is-named' : '',
         showPathways ? 'is-pathways' : '',
         showEnter ? 'is-ready' : '',
-        stage === 'striking' ? 'is-striking' : '',
-        stage === 'crossing' ? 'is-crossing' : '',
+        isSmashing ? 'is-smashing' : '',
+        isShattering ? 'is-shattering' : '',
       ]
         .filter(Boolean)
         .join(' ')}
-      data-splash-version="v41"
+      data-splash-version="v43"
       role="dialog"
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}
     >
       <div className="threshold-atmosphere" aria-hidden />
-      <div className="threshold-glass is-live">
-        <OpeningComposition stage={stage} showPathways={showPathways} showName={showName} />
-      </div>
+      <div className={`threshold-glass${glassLive ? ' is-live' : ' is-gone'}`}>{glassScene}</div>
 
-      <div className={`threshold-cross${stage === 'crossing' ? ' is-active' : ''}`} aria-hidden>
+      {isSmashing && (
+        <MirrorBreak active={isShattering}>
+          <OpeningComposition stage="ready" showPathways showName />
+        </MirrorBreak>
+      )}
+
+      <div className={`threshold-cross${isShattering ? ' is-active' : ''}`} aria-hidden>
         <div className="threshold-cross-beam" />
       </div>
 
       {showEnter && (
         <button
           type="button"
-          className={`threshold-hammer is-visible${exiting ? ' is-striking' : ''}`}
+          className={`threshold-hammer is-visible${isSmashing ? ' is-smashing' : ''}`}
           onClick={enter}
           aria-label="Enter Purpose Academy"
           disabled={exiting}

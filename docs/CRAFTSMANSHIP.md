@@ -267,7 +267,7 @@ This section is the **site-wide aesthetics + information-display template** — 
 6. **Mobile and desktop** both load clean; splash/gate must not trap entry without an obvious continue.
 7. **Cool for the trades** — shop-floor gravity (navy, amber, material photos, crew order). Proud to be seen here — not homework app, not casino.
 8. **Training stages** (School path / Practice hub) sit on a dark material stage when embedded in the light portal so light text never dies on paper.
-9. **Opening / splash is L3 too** — composition + motion doctrine below. Exit is walk-through (strike → dolly), not shatter.
+9. **Opening / splash is L3 too** — composition + motion doctrine below. Exit is **strike the door mid → mirror crack → shatter → soft cross** (v43; walk-through-only exit overturned).
 10. **Information first** — the learner must understand the task, the picture, and the result in three seconds. If the image is cropped so the object is unclear, or feedback is ambiguous, the surface fails.
 11. **Whole-object photos** — pathway cards, VocabSheet, Word→Action, Matching, Sentence Structure imagery, and similar object drills use `object-fit: contain` with a calm mat. Mystery crops are a craft defect. Full-bleed marketing heroes may use `cover` only when the composition is intentionally edge-to-edge.
 12. **Success is visible** — when a station or page is passed, show a clear, calm success state (badge / filled sentence / advance). Do not rely on a silent score tick.
@@ -308,7 +308,7 @@ Solid information output is not polish after the fact. It is the product. A Calg
 
 | Surface | Must inherit | Extra duty |
 |---------|--------------|------------|
-| Splash / enter | Brand-first composition; purposeful motion | Door architecture §7.3; walk-through exit |
+| Splash / enter | Brand-first composition; purposeful motion | Door architecture §7.3; hammer hits door mid → shatter exit |
 | Home / Programs / Give | Three-door story; whole pathway photos; one job per section | Honest depth counts; no fake dashboards |
 | Phone learner app (emulator) | **Same logo lockup:** navy on white paper; white app icon | No gold/dark dialect that contradicts `logo-full` |
 | Practice `/journey` | Kickers, alerts, choice grids, contain object mats, visible pass | Finite stations; Done for now; mastery gates |
@@ -427,6 +427,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 ## 11. Changelog (living)
 
 Newest first.
+
+### 2026-10-26 — Splash exit: hammer hits door mid + mirror shatter (L3)
+
+- **Critic / user overturned** walk-through-only exit (`strike → dolly`, shatter removed in v28). Wanted the sledge to hit the **middle of the door**, then a **mirror crack → shatter** before the transition.
+- **Fix (v43):** `smashing` → `shattering` stages return. Cracks + impact hub at ~44%×46% (doorway cavity). Hammer keyframes aim the head at that point. Shards carry the painted opening; soft cross veil follows. Frozen pre-change as `docs/splash-versions/v42/`.
+- **Assumption to challenge next:** whether 12 painted shards stay smooth inside the phone emulator at SE widths.
 
 ### 2026-10-26 — Practice name field legible on phone (L3)
 
