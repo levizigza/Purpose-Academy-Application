@@ -10948,6 +10948,26 @@ video {
   max-width: 40rem;
 }
 
+/* Quiet review escape — was a ghost CTA that floated over the peaking lesson card */
+.comp-skills-skip,
+.train-vocab-counter .comp-skills-skip {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--train-amber-bright, #f5c542);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.is-phone-app .comp-skills-skip {
+  color: var(--brand) !important;
+}
+
 .equip-video-layout {
   display: grid;
   gap: 1.1rem;
