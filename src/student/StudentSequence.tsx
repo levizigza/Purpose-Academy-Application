@@ -1695,7 +1695,11 @@ export function StudentSequencePage() {
           <SentenceClozeDrill
             items={SENTENCE_CLOZE}
             documentLabel={
-              pathwayId === 'logistics' ? 'Logistics Questions' : 'Construction Questions'
+              pathwayId === 'logistics'
+                ? 'Logistics Questions'
+                : pathwayId === 'community'
+                  ? 'Community Sentence Practice'
+                  : 'Construction Questions'
             }
             picturedAnswers={VOCAB_UNIT.filter((t) => t.imageKey).map((t) => t.english)}
             onLevel1Passed={() => {
