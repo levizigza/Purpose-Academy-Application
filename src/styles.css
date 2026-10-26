@@ -5478,7 +5478,7 @@ table.data th {
 .unit-intro-method {
   margin: 0;
   font-size: 0.86rem;
-  color: rgba(245, 197, 66, 0.92);
+  color: var(--train-amber-bright, #f5c542);
   font-weight: 650;
 }
 
@@ -6587,7 +6587,8 @@ table.data th {
   border-radius: 10px;
   background: rgba(245, 197, 66, 0.1);
   border: 1px solid rgba(245, 197, 66, 0.28);
-  color: #f5c542;
+  /* Token remaps on paper; hard #f5c542 fails on cream */
+  color: var(--train-amber-bright, #f5c542);
   font-weight: 700;
 }
 
@@ -10538,7 +10539,7 @@ video {
 
 .sentence-cloze-num {
   font-weight: 800;
-  color: #8aa0b8;
+  color: var(--brand, #0b2f5c);
   margin-right: 0.15rem;
 }
 
@@ -10551,7 +10552,7 @@ video {
 
 .sentence-cloze-chip-letter {
   font-weight: 800;
-  color: #8aa0b8;
+  color: var(--brand, #0b2f5c);
 }
 
 .sentence-cloze-item.is-correct {
@@ -10608,7 +10609,7 @@ video {
 }
 
 .sentence-cloze-slot {
-  color: #8aa0b8;
+  color: var(--ink-soft, #2f4156);
   letter-spacing: 0.08em;
   font-weight: 650;
 }
@@ -12991,9 +12992,44 @@ video {
 
 /*
  * Paper ink lock (phone + course) — site-wide L3.
- * Night leftovers (#e8eef6 / pale #f5c542) die on cream mats.
+ * Night leftovers (#e8eef6 / pale #f5c542 / accent kickers) die on cream mats.
  * Law: amber = border, pill, or fill — never body copy on a light fill.
  */
+.is-phone-app .section-kicker:not(.on-dark),
+.is-course-app .section-kicker:not(.on-dark) {
+  color: var(--brand, #0b2f5c) !important;
+}
+
+.is-phone-app .section-kicker:not(.on-dark)::after,
+.is-course-app .section-kicker:not(.on-dark)::after {
+  background: var(--accent, #e8a317) !important;
+}
+
+.is-phone-app .train-checkin-note,
+.is-course-app .train-checkin-note,
+.is-phone-app .unit-intro-method,
+.is-course-app .unit-intro-method {
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .comp-desktop-hint strong,
+.is-course-app .comp-desktop-hint strong {
+  color: var(--brand-deep, #041526) !important;
+}
+
+.is-phone-app .career-result-badge,
+.is-course-app .career-result-badge {
+  color: var(--brand-deep, #041526) !important;
+  background: #fff6de !important;
+  border-color: color-mix(in srgb, var(--accent, #e8a317) 45%, var(--line)) !important;
+}
+
+/* Dark lesson rail family labels — brighter gold for AA on navy */
+.is-phone-app .equip-video-family-label,
+.is-course-app .equip-video-family-label {
+  color: #f5c542 !important;
+}
+
 .is-phone-app .career-strengths li,
 .is-course-app .career-strengths li {
   color: var(--brand-deep, #041526) !important;
