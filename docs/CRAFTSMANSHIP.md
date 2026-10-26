@@ -433,6 +433,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** `.course-stage` paper bed; `.is-course-app` shares phone train/ph tokens; hub/station/Eye Spy/chips paper overrides. Topbar stays navy brand chrome. Eye Spy body colors tokenized (`--train-text*`).
 - **Assumption to challenge next:** whether Learn/portal School path should inherit the same paper Practice dialect, or keep a darker instructor stage.
 - **Same sprint:** Practice `.train-panel` Reveal + `train-fade-rise` left phone Eye Spy mid-opacity (~0.25) after section jumps — looked like washed ink. Instant-visible panels in phone/course shells; Reveal uses `.iphone-scroll` as IO root elsewhere.
+- **Same sprint:** Eye Spy At work / Teach note moved below the board in `StationContext` fold so pictures lead the phone first viewport.
 
 ### 2026-10-26 — Showcase readability: course banner + phone body ink (L3)
 
