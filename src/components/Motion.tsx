@@ -23,6 +23,14 @@ export function Reveal({
       setShown(true)
       return
     }
+    /* Practice shells: show immediately — scroll-root demos must not look washed. */
+    if (
+      node.classList.contains('train-panel') ||
+      node.closest('.is-phone-app, .is-course-app, .pa-phone-shell, .pa-course-shell')
+    ) {
+      setShown(true)
+      return
+    }
     const alreadyInView = () => {
       const rect = node.getBoundingClientRect()
       const vh = window.innerHeight || document.documentElement.clientHeight
@@ -32,6 +40,10 @@ export function Reveal({
       setShown(true)
       return
     }
+    const scrollRoot =
+      (node.closest('.iphone-scroll') as Element | null) ||
+      (node.closest('[data-scroll-root]') as Element | null) ||
+      null
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -39,7 +51,7 @@ export function Reveal({
           io.disconnect()
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+      { root: scrollRoot, threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
     )
     io.observe(node)
     return () => io.disconnect()

@@ -7937,7 +7937,7 @@ table.data th {
 .eye-spy-instruction {
   margin: 0;
   font-weight: 600;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .eye-spy-scene-title {
@@ -8065,15 +8065,15 @@ table.data th {
   font-size: 1.45rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: #fff;
+  color: var(--train-text);
 }
 
 .eye-spy-word strong {
-  color: #e8a317;
+  color: var(--train-amber-bright, #e8a317);
 }
 
 .eye-spy-word.is-clear {
-  color: #7dcea0;
+  color: var(--ok, #3f7d24);
   font-size: 1.15rem;
 }
 
@@ -8089,15 +8089,15 @@ table.data th {
 .eye-spy-cleared li {
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid color-mix(in srgb, var(--train-text) 22%, transparent);
   font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--train-text-muted);
 }
 
 .eye-spy-cleared li.is-found {
-  border-color: #3da86c;
-  color: #d7f5e4;
-  background: rgba(61, 168, 108, 0.16);
+  border-color: color-mix(in srgb, var(--ok, #3f7d24) 55%, var(--train-line));
+  color: var(--ok, #3f7d24);
+  background: var(--ok-soft, #e5f3d9);
 }
 
 .eye-spy-prompt {
@@ -13442,15 +13442,19 @@ html.pa-phone-shell .practice-feedback-dock {
 }
 
 /* ——— Desktop course stage ——— */
+/*
+ * Showcase dialect (2026-10-26): course body matches logo + phone — navy on paper.
+ * Topbar stays navy brand chrome; learning surface is paper.
+ */
 .course-stage {
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(ellipse 60% 40% at 0% 0%, rgba(232, 163, 23, 0.12), transparent 50%),
-    linear-gradient(180deg, #041526, #071c30 40%, #041526);
-  color: #f4f7fb;
+    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(11, 47, 92, 0.06), transparent 55%),
+    linear-gradient(180deg, #fbfcff 0%, #f3f6fb 48%, #e8eef7 100%);
+  color: #041526;
 }
 
 .course-topbar {
@@ -13535,6 +13539,247 @@ html.pa-phone-shell .practice-feedback-dock {
 
 .is-course-app {
   max-width: none;
+  /*
+   * Same paper train/ph tokens as .is-phone-app — one showcase lockup.
+   * Desktop topbar stays night chrome; this flips the learning surface only.
+   */
+  --ink: #071e3d;
+  --ink-soft: #2f4156;
+  --paper: #f3f6fb;
+  --panel: #ffffff;
+  --train-text: #071e3d;
+  --train-text-muted: #2f4156;
+  --train-panel: #ffffff;
+  --train-surface: #ffffff;
+  --train-surface-2: #ffffff;
+  --train-bg: #f3f6fb;
+  --train-bg-2: #e8eef7;
+  --train-line: #aebccd;
+  --train-amber: #e8a317;
+  --train-amber-bright: #a8740c;
+  --ph-ink: #071e3d;
+  --ph-muted: #2f4156;
+  --ph-line: color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
+  --ph-panel: #ffffff;
+  --ph-panel-solid: #ffffff;
+  --ph-soft: #eef3f9;
+  --ph-accent: #0b2f5c;
+  color: var(--brand-deep, #041526);
+}
+
+.is-course-app .practice-hub {
+  --ph-ink: var(--brand-deep);
+  --ph-muted: var(--ink-soft);
+  --ph-line: color-mix(in srgb, var(--brand) 16%, var(--line));
+  --ph-panel: linear-gradient(180deg, #ffffff, #f3f6fb);
+  --ph-panel-solid: #ffffff;
+  --ph-soft: var(--brand-soft);
+  --ph-accent: var(--brand);
+  color: var(--brand-deep);
+}
+
+.is-course-app .ph-hero {
+  background:
+    radial-gradient(ellipse 70% 90% at 100% 0%, rgba(11, 47, 92, 0.08), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #eef3f9 100%) !important;
+  border-color: color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+  box-shadow: 0 12px 28px rgba(11, 47, 92, 0.08) !important;
+}
+
+.is-course-app .ph-hero-copy h1,
+.is-course-app .ph-resume h2,
+.is-course-app .ph-section-head h2,
+.is-course-app .ph-video-section h2,
+.is-course-app .ph-computer-section h2,
+.is-course-app .train-title,
+.is-course-app .train-simple-line,
+.is-course-app .train-kicker,
+.is-course-app .train-hub-btn {
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-kicker,
+.is-course-app .ph-resume-label,
+.is-course-app .ph-video-section-kicker,
+.is-course-app .train-kicker,
+.is-course-app .train-why-details summary {
+  color: var(--brand) !important;
+}
+
+.is-course-app .ph-lede,
+.is-course-app .ph-resume-lesson,
+.is-course-app .ph-resume-progress,
+.is-course-app .ph-today-line {
+  color: var(--ink-soft) !important;
+  text-shadow: none !important;
+}
+
+.is-course-app .ph-resume,
+.is-course-app .ph-pathway-badge,
+.is-course-app .ph-video-section,
+.is-course-app .ph-computer-section,
+.is-course-app .ph-domains,
+.is-course-app .ph-curriculum,
+.is-course-app .ph-overview,
+.is-course-app .ph-footnote,
+.is-course-app .train-header,
+.is-course-app .train-panel,
+.is-course-app .unit-intro-card,
+.is-course-app .learning-path-map,
+.is-course-app .train-lang,
+.is-course-app .train-interest,
+.is-course-app .train-bridge,
+.is-course-app .train-learn-card,
+.is-course-app .train-check-rich,
+.is-course-app .train-topic-card,
+.is-course-app .train-choice,
+.is-course-app .phrase-lesson-card,
+.is-course-app .topic-lesson-card,
+.is-course-app .comp-try {
+  background: #ffffff !important;
+  border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-video-section-inner,
+.is-course-app .ph-computer-section-inner {
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+  box-shadow: 0 10px 24px rgba(11, 47, 92, 0.08) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-video-section-inner h2,
+.is-course-app .ph-computer-section-inner h2,
+.is-course-app .ph-video-section-inner strong,
+.is-course-app .ph-computer-section-inner strong,
+.is-course-app .ph-pathway-badge strong,
+.is-course-app .train-lang strong,
+.is-course-app .train-interest strong,
+.is-course-app .train-bridge strong,
+.is-course-app .train-learn-card strong,
+.is-course-app .train-topic-card strong,
+.is-course-app .phrase-lesson-en,
+.is-course-app .topic-lesson-card h3,
+.is-course-app .unit-intro-card h3,
+.is-course-app .unit-intro-summary strong,
+.is-course-app .lp-title,
+.is-course-app .lp-unit-copy strong,
+.is-course-app .lp-lesson strong,
+.is-course-app .career-assess-title,
+.is-course-app .career-result-title,
+.is-course-app .train-check-prompt,
+.is-course-app .vocab-sheet-lede,
+.is-course-app .vocab-sheet-page-label,
+.is-course-app .eye-spy-instruction,
+.is-course-app .eye-spy-scene-title,
+.is-course-app .eye-spy-progress,
+.is-course-app .eye-spy-prompt,
+.is-course-app .eye-spy-word,
+.is-course-app .eye-spy-word strong {
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-video-section-inner > p:not(.ph-video-section-kicker),
+.is-course-app .ph-computer-section-inner > p:not(.ph-video-section-kicker),
+.is-course-app .ph-lede,
+.is-course-app .lp-mastery,
+.is-course-app .lp-unit-copy span,
+.is-course-app .lp-unit-copy em,
+.is-course-app .unit-intro-goal,
+.is-course-app .unit-intro-outcomes,
+.is-course-app .vocab-sheet-definition {
+  color: var(--ink-soft) !important;
+}
+
+.is-course-app .ph-video-section-inner > .ph-video-section-kicker,
+.is-course-app .ph-computer-section-inner > .ph-video-section-kicker,
+.is-course-app .lp-kicker,
+.is-course-app .lp-hub-btn,
+.is-course-app .unit-intro-kicker,
+.is-course-app .unit-intro-summary-hint {
+  color: var(--brand) !important;
+}
+
+.is-course-app .eye-spy-stage {
+  background: var(--brand-soft) !important;
+  border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+}
+
+.is-course-app .eye-spy-word.is-clear,
+.is-course-app .eye-spy-cleared li.is-found {
+  color: #1f7a4d !important;
+}
+
+.is-course-app .eye-spy-cleared li {
+  color: var(--ink-soft) !important;
+  border-color: color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
+}
+
+.is-course-app .train-lang.is-selected,
+.is-course-app .career-choice.is-selected {
+  background: #fff6de !important;
+  border-color: var(--accent) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-pathway-switch-btn {
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
+}
+
+.is-course-app .ph-pathway-switch-btn.is-active {
+  background: var(--brand-soft) !important;
+  border-color: var(--brand) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-course-app .ph-pathway-switch-label,
+.is-course-app .ph-pathway-switch-hint,
+.is-course-app .ph-pathway-switch-hint strong {
+  color: var(--ink-soft) !important;
+}
+
+.is-course-app .ph-pathway-switch-label {
+  color: var(--brand) !important;
+  font-weight: 800;
+}
+
+.is-course-app .field input,
+.is-course-app .field select,
+.is-course-app .field textarea,
+.is-course-app .practice-section-skip select {
+  background: #ffffff !important;
+  color: var(--brand-deep) !important;
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+}
+
+.is-course-app .shell.is-train .alert.ok,
+.is-course-app .alert.ok {
+  background: var(--ok-soft) !important;
+  color: var(--ok) !important;
+  border: 1px solid color-mix(in srgb, var(--ok) 35%, var(--line)) !important;
+}
+
+.is-course-app .practice-stats-strip,
+.is-course-app .practice-stats-strip strong {
+  color: var(--brand-deep) !important;
+}
+
+/*
+ * Showcase: lesson panel must never sit mid-fade (opacity ~0.25 reads as
+ * “washed ink”). Phone scroll root + Reveal remount on jump made demos look broken.
+ */
+.is-phone-app .reveal.train-panel,
+.is-course-app .reveal.train-panel,
+.is-phone-app .train-panel,
+.is-course-app .train-panel {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 .course-footer {
@@ -13543,18 +13788,20 @@ html.pa-phone-shell .practice-feedback-dock {
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.85rem clamp(1rem, 3vw, 1.75rem);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid color-mix(in srgb, var(--brand) 14%, #c5d0dc);
   font-size: 0.85rem;
-  color: rgba(244, 247, 251, 0.55);
+  color: var(--ink-soft, #2f4156);
+  background: #ffffff;
 }
 
 .course-footer .linkish {
-  color: #f5c542;
+  color: var(--brand, #0b2f5c);
   background: none;
   border: 0;
   font: inherit;
   cursor: pointer;
   text-decoration: underline;
+  font-weight: 700;
 }
 
 @media (max-width: 720px) {

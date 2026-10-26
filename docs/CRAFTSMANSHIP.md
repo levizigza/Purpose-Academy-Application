@@ -426,6 +426,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-26 — Desktop course = paper dialect with phone (L3 / L6)
+
+- **Layers:** L3 information display + L6 brand lockup (one showcase dialect).
+- **Critic overturn:** Desktop course night stage fought the logo + phone navy-on-paper lockup; hub Computer/Warehouse inners and Eye Spy titles washed or split the product into two skins.
+- **Fix:** `.course-stage` paper bed; `.is-course-app` shares phone train/ph tokens; hub/station/Eye Spy/chips paper overrides. Topbar stays navy brand chrome. Eye Spy body colors tokenized (`--train-text*`).
+- **Assumption to challenge next:** whether Learn/portal School path should inherit the same paper Practice dialect, or keep a darker instructor stage.
+- **Same sprint:** Practice `.train-panel` Reveal + `train-fade-rise` left phone Eye Spy mid-opacity (~0.25) after section jumps — looked like washed ink. Instant-visible panels in phone/course shells; Reveal uses `.iphone-scroll` as IO root elsewhere.
+
 ### 2026-10-26 — Showcase readability: course banner + phone body ink (L3)
 
 - **Layers:** L3 information display (app-wide readable ink for showcase demos).
