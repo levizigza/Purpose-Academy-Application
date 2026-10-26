@@ -12262,8 +12262,20 @@ video {
 }
 
 .is-phone-app .unit-intro-card {
-  margin-bottom: 0.65rem !important;
-  padding: 0.55rem 0.75rem 0.65rem !important;
+  margin-bottom: 0.35rem !important;
+  padding: 0.35rem 0.55rem 0.4rem !important;
+}
+
+.is-phone-app .unit-intro-card:not([open]) {
+  margin-bottom: 0.25rem !important;
+}
+
+.is-phone-app .unit-intro-card:not([open]) .unit-intro-summary strong {
+  font-size: 0.92rem !important;
+}
+
+.is-phone-app .unit-intro-card:not([open]) .unit-intro-summary-hint {
+  font-size: 0.8rem !important;
 }
 
 /* Work-style / career quiz choices: night translucent → paper chips */
@@ -13345,7 +13357,14 @@ html.pa-phone-shell .practice-feedback-dock {
 
 /* Computer / equipment: unit intro is coaching — keep collapsed density for Watch/Try */
 .is-phone-app .train-shell.is-computer-skills .unit-intro-card,
-.is-phone-app .train-shell.is-equipment-video .unit-intro-card {
+.is-phone-app .train-shell.is-equipment-video .unit-intro-card,
+.is-phone-app .train-shell.is-computer-skills .station-context-fold,
+.is-phone-app .train-shell.is-equipment-video .station-context-fold {
+  display: none !important;
+}
+
+.is-phone-app .train-shell.is-computer-skills .train-progress,
+.is-phone-app .train-shell.is-equipment-video .train-progress {
   display: none !important;
 }
 

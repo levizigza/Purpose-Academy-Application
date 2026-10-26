@@ -122,9 +122,17 @@ async function measureFirstViewport(page, rootSel) {
       if (lightInk.length >= 10) break
     }
 
-    const lesson = document.querySelector(
-      '.comp-skills-card, .sentence-cloze-card, .vocab-sheet, .eye-spy-stage, .train-panel > *, .career-assess',
-    )
+    const lessonCandidates = [
+      ...document.querySelectorAll(
+        '.comp-skills-card, .sentence-cloze-card, .vocab-sheet, .eye-spy, .eye-spy-stage, .career-assess, .train-panel > *',
+      ),
+    ]
+    const lesson = lessonCandidates.find((el) => {
+      const s = getComputedStyle(el)
+      if (s.display === 'none' || s.visibility === 'hidden' || Number(s.opacity) < 0.2) return false
+      const r = el.getBoundingClientRect()
+      return r.width > 8 && r.height > 8
+    })
     const lessonBox = lesson?.getBoundingClientRect()
     const lessonInView = lessonBox
       ? lessonBox.top < viewTop + viewH * 0.92 && lessonBox.bottom > viewTop + 40
