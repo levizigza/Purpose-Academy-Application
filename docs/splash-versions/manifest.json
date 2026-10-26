@@ -1,6 +1,30 @@
 {
   "versions": [
     {
+      "id": "v43",
+      "note": "hammer hits doorway cavity mid; mirror crack then shatter; soft cross handoff",
+      "sessionKey": "v43",
+      "commit": "7f675683",
+      "createdAt": "2026-10-26T18:24:33.407Z",
+      "files": [
+        "splash.css",
+        "OpeningDoor.tsx",
+        "EntryPages.tsx"
+      ]
+    },
+    {
+      "id": "v42",
+      "note": "walk-through exit (strike→dolly) before restoring mirror shatter aimed at door center",
+      "sessionKey": "v41",
+      "commit": "7f675683",
+      "createdAt": "2026-10-26T18:16:32.324Z",
+      "files": [
+        "splash.css",
+        "OpeningDoor.tsx",
+        "EntryPages.tsx"
+      ]
+    },
+    {
       "id": "v41",
       "note": "dusk shop stage so doorway daylight pops; version archive live",
       "sessionKey": "v41",
@@ -25,5 +49,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T22:07:54.317Z"
+  "updatedAt": "2026-10-26T18:24:33.408Z"
 }
