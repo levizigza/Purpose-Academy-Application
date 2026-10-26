@@ -11012,12 +11012,14 @@ video {
   margin-bottom: 0.55rem;
 }
 
-.is-phone-app .station-context-fold {
+.is-phone-app .station-context-fold,
+.is-course-app .station-context-fold {
   background: #fff6de !important;
   border-color: color-mix(in srgb, var(--accent) 40%, var(--line)) !important;
 }
 
-.is-phone-app .station-context-fold > summary {
+.is-phone-app .station-context-fold > summary,
+.is-course-app .station-context-fold > summary {
   color: var(--brand) !important;
 }
 

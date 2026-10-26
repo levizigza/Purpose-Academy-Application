@@ -143,6 +143,16 @@ function WhyWork({ children }: { children: ReactNode }) {
   )
 }
 
+/** Coaching notes below the drill on phone — task/media leads the first viewport. */
+function StationContext({ children }: { children: ReactNode }) {
+  return (
+    <details className="station-context-fold">
+      <summary>Why this station · teach note</summary>
+      {children}
+    </details>
+  )
+}
+
 function PictureCard({
   emoji,
   label,
@@ -1727,12 +1737,6 @@ export function StudentSequencePage() {
         step={8}
         onBack={() => go(7)}
       >
-        <WhyWork>
-          {pathwayId === 'logistics'
-            ? 'On a real warehouse floor every object sits among other goods and equipment. Prove you can name each one until the board is clear.'
-            : 'On a real site every tool sits among other objects. Prove you can name each one until the board is clear.'}
-        </WhyWork>
-        <TeachNote>Exercise mode: unlimited tries. Tap a picture and its English name. A correct pair disappears. Clear the whole board, then the next scene. Pass requires 100% with no misses.</TeachNote>
         <EyeSpyQuiz
           scenes={EYE_SPY_SCENES}
           mode="exercise"
@@ -1749,6 +1753,17 @@ export function StudentSequencePage() {
             )
           }}
         />
+        <StationContext>
+          <WhyWork>
+            {pathwayId === 'logistics'
+              ? 'On a real warehouse floor every object sits among other goods and equipment. Prove you can name each one until the board is clear.'
+              : 'On a real site every tool sits among other objects. Prove you can name each one until the board is clear.'}
+          </WhyWork>
+          <TeachNote>
+            Exercise mode: unlimited tries. Tap a picture and its English name. A correct pair disappears. Clear
+            the whole board, then the next scene. Pass requires 100% with no misses.
+          </TeachNote>
+        </StationContext>
       </Shell>
     )
   }
