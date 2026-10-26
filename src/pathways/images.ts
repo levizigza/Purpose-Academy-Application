@@ -111,6 +111,12 @@ export function pathwayImage(key?: string | null): string | undefined {
     const base = import.meta.env.BASE_URL || '/'
     return `${base}media/construction-vv/${key}.jpg`
   }
+  // Community Support Visual Vocabulary (499 live / slot 176 reserved).
+  // Interim studio word tiles until worksheet photos are extracted from the PDF.
+  if (key.startsWith('com-vv-')) {
+    const base = import.meta.env.BASE_URL || '/'
+    return `${base}media/community-vv/${key}.jpg`
+  }
   // Daily Conversation Vocabulary words 1–200 (shared across all streams).
   if (key.startsWith('dc-vv-')) {
     const base = import.meta.env.BASE_URL || '/'
