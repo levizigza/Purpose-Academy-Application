@@ -428,6 +428,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 Newest first.
 
+### 2026-10-26 — Practice name field legible on phone (L3)
+
+- **Defect:** `.is-phone-app` flipped `--train-text` to navy for paper lockup but left `--train-surface-2` night-dark. `.shell.is-train .field input` → dark navy bg + navy ink → picked name (e.g. Levi) invisible on “Who is exploring?”.
+- **Fix:** Phone also remaps `--train-surface` / `--train-surface-2` / `--train-bg*` to white/paper, and hard-sets field input color/fill to brand-deep on `#fff`.
+- **Assumption to challenge next:** audit other train-surface-2 chrome (cards, chips) inside phone for leftover night panels that still fight the paper shell.
+
 ### 2026-10-26 — Phone home icon: full doorway P, smaller + centered (L3/L4)
 
 - **Defect:** `logo-app-icon.png` was a tight doorway crop — top of the P, right bowl, and base clipped by the SpringBoard squircle. Tile also read oversized for a sparse home.
