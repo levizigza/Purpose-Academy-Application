@@ -104,7 +104,7 @@ function VocabPractice({
     const correct = choice === term.english
     await recordVocabAttempt(studentId, term.id, 'recognize', correct)
     setChoiceState({ [choice]: correct ? 'correct' : 'wrong' })
-    setFeedback(correct ? 'Correct.' : `The English word is “${term.english}”.`)
+    setFeedback(correct ? 'Yes.' : `Not yet — the English word is “${term.english}”.`)
   }
 
   async function onRecall(e: FormEvent<HTMLFormElement>) {
@@ -115,7 +115,7 @@ function VocabPractice({
       .toLowerCase()
     const correct = answer === term.english.toLowerCase()
     await recordVocabAttempt(studentId, term.id, 'recall', correct)
-    setFeedback(correct ? 'Correct recall.' : `Expected “${term.english}”.`)
+    setFeedback(correct ? 'Yes.' : `Not yet — try “${term.english}”.`)
   }
 
   const distractors = useMemo(() => {
@@ -133,7 +133,8 @@ function VocabPractice({
           Layer {layerIdx + 1}/{LAYERS.length}: {layer.label}
         </strong>
         <span className={`badge ${mastery >= 80 ? 'ok' : 'brand'}`}>
-          Mastery prototype {mastery}% {englishOnly ? '· English-only bridge' : '· support language on'}
+          {mastery >= 80 ? 'Comfortable' : 'Keep practising'}
+          {englishOnly ? ' · English-only bridge' : ' · support language on'}
         </span>
       </div>
       <p className="muted">{layer.help}</p>
@@ -538,10 +539,10 @@ export function LessonViewPage() {
       const pct = Math.round((nextScore / quiz.length) * 100)
       if (pct < 80) {
         setMessage(
-          `Score ${pct}%. You need at least 80% to finish this lesson. Tap Retry quiz, then choose carefully.`,
+          'Not quite finished yet — clear a few more. Tap Try again when you are ready. No rush.',
         )
       } else {
-        setMessage(`Quiz passed at ${pct}%. Tap Mark lesson complete to save your progress.`)
+        setMessage('Practice clear. Tap Mark lesson complete to save your progress.')
       }
     }
   }
@@ -550,13 +551,13 @@ export function LessonViewPage() {
     const pct = quiz.length ? Math.round((score / quiz.length) * 100) : 100
     if (quiz.length && pct < 80) {
       setMessage(
-        `Score ${pct}%. You need at least 80% to finish this lesson. Tap Retry quiz, then choose carefully.`,
+        'Not quite finished yet — clear a few more. Tap Try again when you are ready. No rush.',
       )
       return
     }
     try {
       await completeLesson(student!.id, lesson!.id, quiz.length ? pct : null)
-      setMessage(`Lesson completed${quiz.length ? ` · quiz ${pct}%` : ''}.`)
+      setMessage(`Lesson completed${quiz.length ? ' · practice clear' : ''}.`)
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Could not save lesson progress.')
     }
@@ -579,7 +580,7 @@ export function LessonViewPage() {
 
       {blocked && (
         <div className="alert warn">
-          Safety gate {gate?.status}: {gate?.reason}. Complete Safety Basics with a passing quiz before practical prep.
+          Safety first{gate?.reason ? `: ${gate.reason}` : ''}. Finish Safety Basics practice before workshop prep.
         </div>
       )}
 
@@ -593,7 +594,7 @@ export function LessonViewPage() {
 
       {!blocked && quiz.length > 0 && answered < quiz.length && (
         <div className="panel stack" data-testid="knowledge-check">
-          <h2>Knowledge check</h2>
+          <h2>Practice questions</h2>
           <p>
             Question {quizIndex + 1} of {quiz.length}
           </p>
@@ -613,9 +614,9 @@ export function LessonViewPage() {
       {message && (
         <div
           className={`alert ${
-            /completed|passed/i.test(message)
+            /completed|Practice clear/i.test(message)
               ? 'ok'
-              : /Score|Not quite|need at least|Could not/i.test(message)
+              : /Not quite|Could not/i.test(message)
                 ? 'warn'
                 : 'ok'
           }`}
@@ -626,7 +627,7 @@ export function LessonViewPage() {
 
       {!blocked && quiz.length > 0 && quizDone && !quizPassed && (
         <button type="button" className="btn btn-ghost" onClick={retryQuiz}>
-          Retry quiz
+          Try again
         </button>
       )}
 
@@ -638,8 +639,7 @@ export function LessonViewPage() {
 
       {isPractical && !blocked && (
         <p className="muted">
-          Practical competency still requires instructor observation on the Assess screen. Completing this page only
-          prepares you.
+          Hands-on checks still need an instructor beside you. Finishing this page only prepares you.
         </p>
       )}
 

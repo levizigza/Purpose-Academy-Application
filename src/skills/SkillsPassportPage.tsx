@@ -14,17 +14,17 @@ const LPC_STAGES: { status: CompetencyStatus; title: string; body: string }[] = 
   {
     status: 'learned',
     title: 'Learned',
-    body: 'Studied in the app or class — understanding, not yet verified on the job.',
+    body: 'Studied in the app or class — you know the idea.',
   },
   {
     status: 'practised',
     title: 'Practised',
-    body: 'Tried with supervision. Still needs authorized instructor confirmation.',
+    body: 'Tried with supervision. Still needs an instructor check on the job.',
   },
   {
     status: 'competent',
-    title: 'Competent',
-    body: 'Authorized instructor confirmed the standard. This is the passport signal.',
+    title: 'Checked',
+    body: 'An instructor confirmed it with you. That is the passport signal.',
   },
 ]
 
@@ -64,12 +64,15 @@ export function SkillsPassportPage() {
   return (
     <div className="stack skills-passport">
       <PageHeader
-        kicker="Verified skill"
+        kicker="What you practised"
         title="Skills Passport"
-        help="What you studied, practised, and demonstrated — not Red Seal, apprenticeship certification, or a guaranteed job."
+        help="What you studied, practised, and showed — not a trade ticket, Red Seal, or a guaranteed job."
         backTo="/app/student"
         backLabel="Home"
       />
+      <p className="play-nearby-objective" aria-live="polite">
+        Review your record · Home when you are done
+      </p>
 
       <div className="panel stack skills-passport-summary">
         <div className="skills-passport-meta">
@@ -78,7 +81,7 @@ export function SkillsPassportPage() {
             <strong>{user.full_name}</strong>
             <div className="muted">{pathwayLabel} pathway</div>
           </div>
-          <div className="skills-passport-lpc-counts" aria-label="Competency stage counts">
+          <div className="skills-passport-lpc-counts" aria-label="Practice stage counts">
             <span className="skills-passport-count">
               <strong>{counts.learned}</strong>
               <span>Learned</span>
@@ -89,12 +92,12 @@ export function SkillsPassportPage() {
             </span>
             <span className="skills-passport-count is-competent">
               <strong>{counts.competent}</strong>
-              <span>Competent</span>
+              <span>Checked</span>
             </span>
           </div>
         </div>
         <p className="muted" style={{ margin: 0 }}>
-          Purpose Academy documents progress in three stages. Only Competent is instructor-verified.
+          Three stages. Only Checked means an instructor watched with you.
         </p>
       </div>
 
@@ -109,18 +112,18 @@ export function SkillsPassportPage() {
       </div>
 
       <div className="panel stack">
-        <h2>Competencies</h2>
+        <h2>Skills on record</h2>
         {records.length === 0 ? (
           <p className="muted">
-            No competency records yet. Complete lessons and practical observation. A quiz score alone
-            cannot mark you Competent.
+            Nothing on record yet. Finish stations and an instructor check. Finishing a practice round alone
+            cannot mark you Checked.
           </p>
         ) : (
           <div className="table-wrap">
             <table className="data">
               <thead>
                 <tr>
-                  <th>Competency</th>
+                  <th>Skill</th>
                   <th>Status</th>
                   <th>Version</th>
                   <th>Date</th>
@@ -157,10 +160,11 @@ export function SkillsPassportPage() {
           </div>
         )}
         {counts.remediation > 0 && (
-          <div className="alert warn">
-            {counts.remediation} competenc{counts.remediation === 1 ? 'y needs' : 'ies need'} more
-            practice before re-observation.
-          </div>
+          <p className="play-soft-miss" role="status">
+            {counts.remediation === 1
+              ? '1 skill needs more practice before another instructor check.'
+              : `${counts.remediation} skills need more practice before another instructor check.`}
+          </p>
         )}
       </div>
 

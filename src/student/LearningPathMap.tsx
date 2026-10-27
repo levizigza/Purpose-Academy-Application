@@ -6,7 +6,6 @@ import {
   getPlatformStats,
   masteryLabel,
   SKILL_BY_STEP,
-  unitMasteryPercent,
   type MasteryLevel,
 } from './learningMastery'
 
@@ -45,7 +44,6 @@ export function LearningPathMap({
 
   const currentUnit = unitForStep(currentStep)
   const stats = getPlatformStats()
-  const unitPct = unitMasteryPercent(stepsInUnit(currentUnit.id))
 
   return (
     <details
@@ -56,13 +54,13 @@ export function LearningPathMap({
       open={collapsedByDefault ? undefined : true}
     >
       <summary className="lp-fold-summary">
-        <span className="lp-kicker">{practice ? 'Student Practice · path' : 'Your learning path'}</span>
+        <span className="lp-kicker">{practice ? 'Practice · path' : 'Your learning path'}</span>
         <strong className="lp-fold-title">
           Unit {currentUnit.id}: {currentUnit.label}
         </strong>
         <span className="lp-fold-meta">
-          {unitPct}% mastery
-          {practice ? ` · ${stats.xp} marks` : ''}
+          This stretch
+          {practice ? ` · ${stats.dayStreak} days showed up` : ''}
           {' · '}
           {collapsedByDefault ? 'Show full path' : 'Path'}
         </span>
@@ -70,18 +68,18 @@ export function LearningPathMap({
 
       <header className="lp-head">
         <div>
-          <p className="lp-kicker">{practice ? 'Student Practice · full school path' : 'Your learning path'}</p>
+          <p className="lp-kicker">{practice ? 'Practice · your path' : 'Your learning path'}</p>
           <h2 className="lp-title">
             Unit {currentUnit.id}: {currentUnit.label}
           </h2>
         </div>
         <div className="lp-head-meta">
-          <p className="lp-mastery" aria-label="Unit mastery">
-            Unit mastery <strong>{unitPct}%</strong>
+          <p className="lp-mastery" aria-label="Unit ready">
+            Stations in this stretch
           </p>
           {practice && (
             <p className="lp-xp" aria-label="Practice marks">
-              <strong>{stats.xp}</strong> practice marks · <strong>{stats.dayStreak}</strong> days showed up
+              <strong>{stats.dayStreak}</strong> days showed up · keep going
             </p>
           )}
           {practice && onOpenHub && (
@@ -102,7 +100,6 @@ export function LearningPathMap({
           /* Practice quality review: every unit/lesson is open so reviewers can jump without grinding. */
           const reviewOpen = Boolean(practice && onSelectLesson)
           const showLessons = reviewOpen || ((!compact || state === 'current') && state !== 'locked')
-          const pct = unitMasteryPercent(steps)
           return (
             <li key={unit.id} className={`lp-unit is-${reviewOpen && state === 'locked' ? 'upcoming' : state}`}>
               <div className="lp-unit-badge" aria-hidden>
@@ -111,7 +108,7 @@ export function LearningPathMap({
               <div className="lp-unit-copy">
                 <strong>{unit.label}</strong>
                 <span>Steps {unit.range}</span>
-                {(state !== 'locked' || reviewOpen) && <em>{pct}% mastery</em>}
+                {(state !== 'locked' || reviewOpen) && <em>Open</em>}
               </div>
               {showLessons && (
                 <ol className="lp-lessons">
@@ -182,9 +179,12 @@ export function UnitIntroCard({
     <details className="unit-intro-card" aria-label={`Unit ${unitId} introduction`}>
       <summary className="unit-intro-summary">
         <span className="unit-intro-kicker">Unit {unit.id} · {unit.label}</span>
-        <strong>What you will learn</strong>
-        <span className="unit-intro-summary-hint">Tap for goals</span>
+        <strong>Today’s work</strong>
+        <span className="unit-intro-summary-hint">Tap to see</span>
       </summary>
+      <p className="play-nearby-objective" aria-live="polite">
+        Today’s work · one clear action at a time
+      </p>
       <p className="unit-intro-goal">{goal}</p>
       <ul className="unit-intro-outcomes">
         {outcomes.map((o) => (
@@ -192,7 +192,7 @@ export function UnitIntroCard({
         ))}
       </ul>
       <p className="unit-intro-method">
-        Pattern: learn, try, get feedback, retry until solid. Then move forward.
+        Learn, try, soft retry if you need, then move forward. Done for now when you finish.
       </p>
     </details>
   )

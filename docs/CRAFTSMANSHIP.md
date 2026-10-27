@@ -16,7 +16,7 @@ This doctrine exists so quality does not depend on memory. When we return months
 
 1. **Challenge assumptions.** Before shipping a “polish,” ask what we might be wrong about (audience, depth, honesty, load).
 2. **Grow with the platform.** When curriculum grows, doctrine grows. When a pathway is thinner, copy says so.
-3. **Protect what already sings.** Tool Chest, VocabSheet, Calgary voice, mother-tongue → English discipline — do not sand these into generic edtech.
+3. **Protect what already sings.** Tool Chest, VocabSheet, Calgary voice, mother-tongue → English → type discipline — do not sand these into generic edtech.
 4. **Leave the trail better.** Every meaningful craft pass ends with a short entry in [§11 Changelog](#11-changelog-living).
 
 ### Builder and critic (same person)
@@ -65,7 +65,7 @@ Archives live in [`docs/splash-versions/`](splash-versions/). Snapshot **before*
 | Humans | Treat edits here as product decisions, not docs chore. Prefer short, concrete rules over essays. |
 | Future selves | If a rule no longer matches the product, rewrite the rule — do not paper over the product. |
 
-**Pointer for agents:** root `AGENTS.md` requires this file. Do not invent a parallel style guide. For UI work, **§7.0–7.0b is the aesthetics + information-display template** — inherit it; do not fork it.
+**Pointer for agents:** root `AGENTS.md` requires this file, [`LEARNER_FEAR.md`](LEARNER_FEAR.md), and [`PLAY_CRAFT.md`](PLAY_CRAFT.md) for Practice entertainment loops. Do not invent a parallel style guide. For UI work, **§7.0–7.0b is the aesthetics + information-display template** — inherit it; do not fork it. For Practice / journey / gates / vocabulary, **LEARNER_FEAR + PLAY_CRAFT are non-optional**.
 
 **Site-wide rule:** Craft layers apply to *every* surface — public marketing, splash/enter, auth, Practice `/journey`, portal School path, Learn/LMS, instructor, and admin — not only the last page we polished. Coherence beats local cleverness.
 
@@ -78,7 +78,7 @@ Craftsmanship is not one blob. Different work needs different chisels. Always kn
 | Layer | Job | Success looks like | Failure looks like |
 |-------|-----|--------------------|--------------------|
 | **L1 · Truth & story** | One school, three doors, honest depth | Home / Programs / Admissions / portal agree | Construction-only copy while three doors are open |
-| **L2 · Content delivery** | Curriculum, vocab, drills, gates, mother-tongue → English | Specialty distractors; Level-1 = 20; instructor Competent honesty | Hammer vs Hi/Hello; fake “busy scene”; quiz = job ready |
+| **L2 · Content delivery** | Curriculum, vocab, drills, gates, mother-tongue → English → type | Specialty distractors; Level-1 = 20; instructor Checked honesty | Hammer vs Hi/Hello; fake “busy scene”; quiz = job ready |
 | **L3 · Aesthetic optics + information display** | How it *looks*, and whether the user can **read the job** | Cool trades gravity; whole-object photos; task → result clear in 3s; shared grammar site-wide | Cheap chrome; mystery crops; silent success; each page invents its own UI dialect |
 | **L4 · Attention ethics** | How human attention is treated | Finite stations; Done for now; metrics serve craft | Infinite feed, streak FOMO, soft-pulse addiction, “one more” |
 | **L5 · Trust & people** | Founding builders, claims, ops honesty | Interim roles framed honestly | Invented bios, inflated enrollment badges |
@@ -106,9 +106,10 @@ UX translation (not SD colour cosplay):
 |------|----------------|
 | Belonging / crew | Pathway identity, Calgary voice, crew-path language |
 | Order | Numbered 20-step spine, Level-1 gates, clear “you are here” |
-| Dignity | Adult tone, tool photos, no casino chrome |
+| Dignity | Adult tone, tool photos, no casino chrome; never make the learner feel dumb |
 | Achievement | One **Today’s station**; Skills Passport; marks = skill |
-| Ascent | After Familiar, next station — never endless novelty |
+| Ascent | After Comfortable (internal Familiar), next station — never endless novelty |
+| Fear of school | Short actions, repetition, one job; refuse exam/assessment/mastery theatre in learner chrome |
 
 ### Anti-doomscroll rules (site-wide)
 
@@ -160,12 +161,13 @@ When you change one node, ask: *What contract did neighbors rely on? Did the han
 These are load-bearing across all layers.
 
 1. **Calgary trades-school voice** — concrete, respectful, short sentences. Not startup hype. Not purple SaaS.
-2. **Mother tongue → English discipline** — home languages support understanding; English is the workplace word.
+2. **Mother tongue → English → type discipline** — hear home language, hear English, type English (reps that stick). Home languages support understanding; English is the workplace word; typing locks production without a “test” feel.
 3. **VocabSheet / Tool Chest craft** — Level-1 gate (Daily Conversation 1–20), full tables stay open to practise, real photos where we have them.
 4. **One learning spine** — same 20-step school path across pathways; pathway packs change craft, not the spine shape.
 5. **Instructor truth** — skills are verified; do not sell “finish the quiz = job ready.”
 6. **Honesty over symmetry** — if Community has ~16 specialty workplace words and Construction has 660 visual vocab rows, marketing and UI must not pretend they are the same depth.
 7. **Solid information output** — every training and marketing surface must make the task, the picture/media, and the result unmistakable. Ambiguous feedback, cropped objects, or silent “success” are craft defects (see §7.0).
+8. **Learner-fear standard** — adults who fear education must never meet exam / quiz / assessment / mastery / % report-card theatre. Standing doctrine: [`LEARNER_FEAR.md`](LEARNER_FEAR.md). Hear → hear → type; soft retry; station language.
 
 ---
 
@@ -235,11 +237,12 @@ These are load-bearing across all layers.
 - Training object photos and pathway program cards use **`object-fit: contain`** so royalty-free imagery is fully readable.
 - Do not crop tool/vocab photos with `cover` on drill surfaces. Full-bleed marketing heroes may still use cover when the composition is intentionally edge-to-edge.
 
-### 6.3c Vocabulary audio
+### 6.3c Vocabulary audio + type reps
 
 - Every vocabulary English word must speak when the learner bridges or presses Hear English.
 - Priority stays: baked neural → live neural → Free Dictionary (works without our API) → browser `speechSynthesis`.
 - After a home-language connect, auto-speak the English workplace word.
+- **Then type it:** English title hides; picture + Hear again stay; soft retry (“Not yet — hear it again”) — never Incorrect / Expected. Gate = heard + typed + (bridged or known).
 
 ### 6.4 Sound (foley)
 
@@ -312,7 +315,8 @@ Solid information output is not polish after the fact. It is the product. A Calg
 | Splash / enter | Brand-first composition; purposeful motion | Door architecture §7.3; hammer hits door mid → shatter exit |
 | Home / Programs / Give | Three-door story; whole pathway photos; one job per section | Honest depth counts; no fake dashboards |
 | Phone learner app (emulator) | **Same logo lockup:** navy on white paper; white app icon | No gold/dark dialect that contradicts `logo-full` |
-| Practice `/journey` | Kickers, alerts, choice grids, contain object mats, visible pass | Finite stations; Done for now; mastery gates |
+| Desktop course shell | **Original night material stage** (amber wash on navy); light train ink | Topbar navy chrome; gold Practice status strip; not paper |
+| Practice `/journey` | Kickers, alerts, choice grids, contain object mats, visible pass | Phone = paper; Desktop course = night — two shells, two looks |
 | Portal School path | Same spine language + dark stage for light text | Today’s station; no feed chrome |
 | Learn / LMS | Same pathway accents + honesty when empty | Never fake “caught up” |
 | Instructor / admin | Calm work chrome; clear status language | No casino metrics theatre |
@@ -427,6 +431,51 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-27 — Phone splash: centered Tap hammer + soft blink (L3)
+
+- **Layers:** L3 information display (next action unmistakable in 3s) on the phone app splash.
+- **Customer overturn:** Corner hammer + “Strike to enter” was too quiet. Wanted the hammer **in the middle**, text that says **Tap**, and a **blink** so the next action is obvious.
+- **Fix (v44, embedded/phone only):** Hammer rests mid-frame (`left/top 50%/52%`); hint reads **Tap**; soft opacity/scale blink on hammer + label after settle. Pathways drop below mid so the CTA owns the middle. Desktop night splash keeps quiet lower-right “Strike to enter.” `prefers-reduced-motion` freezes mid-frame, no blink. Pre-change frozen as `docs/splash-versions/v44/`.
+- **Critic:** Blink is a door affordance, not work-chrome attention spam — stops on smash; no glow/casino pulse.
+- **Assumption to challenge next:** whether desktop should mirror Tap/center on narrow viewports, or stay rule-of-thirds corner forever.
+
+### 2026-10-26 — Learner-fear doctrine + deep Practice pass (L1 / L2 / L4)
+
+- **Layers:** L1 story + L2 delivery + L4 attention ethics.
+- **Customer ask:** Deeper redesign of **every** Practice station start→finish; make learner-fear a standing documented standard for the whole build.
+- **Doctrine:** New [`LEARNER_FEAR.md`](LEARNER_FEAR.md) — banned lexicon, hear→hear→type loop, chrome rules, spine checklist, pre-ship critic. Wired from `AGENTS.md` + Craft non-negotiable #8.
+- **Deep Practice pass:** Hub report-card %/marks chrome collapsed; Eye Spy / Sentence / Final check exam lexicon removed; Organize “quiz” gone; observation Competent → habit language; career % fit / RIASEC learner strings cut; pathway unit goals softened; shell motto / counters quieted.
+- **Assumption to challenge next:** whether internal mastery gates should credit more generously so Continue rarely feels like a locked door.
+
+### 2026-10-26 — Hear → hear → type + fearless learner chrome (L2 / L1 / L4)
+
+- **Layers:** L2 content delivery (vocab reps) + L1 story voice + L4 attention (no shame loops).
+- **Customer ask:** Vocabulary must not stop at listening — hear in home language, hear English, then **type** it. Train like a dog: repetitive actions that stick. Site/app-wide: many learners fear education and feel “not academic”; intellectual/exam chrome threatens them.
+- **Vocab fix:** `VocabSheet` adds a type beat after English is heard; English title hides during typing; soft “Not yet — hear it again” (never Incorrect); gate requires typed. Counters drop Level-1/ladder math theatre for “first set / greetings / workplace.”
+- **Chrome soften (site-wide):** Journey titles Final Exam → Final Check, Interest Assessment → Work Interests; mastery labels → Started/Comfortable/Strong/Solid; Familiar theater → Station clear / Ready; Passport Competent → Checked; hub “mastery gates / Reach Familiar” → one station / comfortable; exam captions / perfect score / RIASEC learner copy cut; Programs volume bullets → hear/hear/type story.
+- **Law:** Prefer **station / check / comfortable** over **exam / assessment / mastery / proficient**. Keep adult crew gravity — never childish gamification.
+- **Follow-up same day:** full doctrine + deeper Practice pass (see entry above).
+
+### 2026-10-26 — Play craft: casual-game joy without learner fear (L2 / L3 / L4)
+
+- **Layers:** L2 moment loop · L3 info display + purposeful motion · L4 finite stop (anti-doomscroll).
+- **Customer ask:** Candy Crush / Temple Run / Flappy clarity and joy while keeping LEARNER_FEAR; desktop + phone.
+- **Plan:** [`docs/PLAY_CRAFT.md`](PLAY_CRAFT.md) §0 marble plan — eight roles, steal/refuse, authority rule, shell contract.
+- **Ship:** `PlayClear` pulse engine; Eye Spy “Clear this board · N left”; Workplace Words word-clear; hub boards-cleared (presentation only); night + paper CSS; reduced-motion safe.
+- **Refuse:** lives, scoreboards, % grades, realtime runners, points-as-competence.
+- **Follow-up same day (pass 2):** Organize / Sentence / Word→Action / Supported Practice inherit nearby-objective + clear-pulse grammar (desktop + phone).
+- **Follow-up next day (pass 3):** QuizRunner + Safety/Tools/Systems/Computer/Equipment/Instructor/Site/Final written/Employment prep inherit the same grammar; phone nearby-objective ink specificity hardened; spine moment-loop wiring complete. See [`PLAY_CRAFT.md`](PLAY_CRAFT.md).
+- **Follow-up same week (pass 4):** Soft-miss lexicon centralized; Eye Spy/Organize miss status; Vocab double-latch removed; Computer try whoosh-only; Sentence grade-tone cut; dual-shell `.play-soft-miss` — critic coverage ~100% on clear stations.
+- **Follow-up same week (pass 5):** Critic overturned “~100% done” — dual-shell soft-miss on all choice stations; intake/unit/passport/hub light nearby; FamiliarTheater Foley authority; residual exam lexicon killed. See [`PLAY_CRAFT.md`](PLAY_CRAFT.md).
+
+### 2026-10-26 — Desktop night / phone paper: two shells, two looks (L3 / L6)
+
+- **Layers:** L3 information display + L6 brand lockup (surface coherence).
+- **Critic overturn:** Unifying Desktop course to phone’s navy-on-paper lockup erased the original night material stage. Customer ask: Desktop = original night look; Phone = keep the new paper look.
+- **Fix:** Restore `.course-stage` amber-on-navy bed + night footer/banner; strip `.is-course-app` from paper ink dual-selectors (kickers, career strengths, organize labels, coaching callouts, likert chips). Phone `.is-phone-app` paper dialect unchanged. Shared duals kept only where both shells share dark islands (career fit/code/profile titles, equip rail labels, Eye Spy scene floors, no mid-fade panels).
+- **Law restated:** Paper ink lock is **phone-only**. Amber-as-body-copy ban applies on cream mats inside `.is-phone-app`. Desktop course uses night train tokens / light ink by design.
+- **Assumption to challenge next:** whether Portal School path should stay paper or return to a darker instructor stage now that Desktop course is night again.
+
 ### 2026-10-26 — Computer Skills narration: Piper Lessac (L2 / L3)
 
 - **Layers:** L2 content delivery + L3 connection (voice that feels human).
@@ -439,9 +488,9 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Layers:** L3 information display (Practical — WCAG body on paper).
 - **Method:** Phone playthrough ink sweep across hub + stations; fail light foreground on light backgrounds.
 - **Customer defects found:** Career strengths night `#e8eef6` on cream; `.section-kicker` accent gold on paper (Computer Skills); Sentence Structure A–D / blank slot muted `#8aa0b8`; check-in / unit-method / result-badge gold-on-cream risk.
-- **Law restated:** On `.is-phone-app` / `.is-course-app`, amber is border / pill / fill / motion-dot only — never body or kicker copy on a light fill. Dark islands (`.career-fit`, `.career-code`, `.career-profile`, `.equip-video-rail`) keep light ink; rail family labels use brighter `#f5c542`.
-- **Fix:** Navy `.section-kicker` on paper; tokenize + override career / check-in / badge / cloze letters; course parity. Scripts: `ink-sweep.mjs`, `verify-career-ink.mjs`.
-- **Honest remainder:** Marketing splash heroes still use gold-on-photo with text-shadow (intentional). Desktop night train stage outside paper shells still uses light ink by design. Live GitHub Pages lags until `main` merge.
+- **Law restated (superseded same day):** Paper amber-as-body ban now scopes to `.is-phone-app` only — Desktop course restored to night (see “two shells, two looks”). Dark islands (`.career-fit`, `.career-code`, `.career-profile`, `.equip-video-rail`) keep light ink; rail family labels use brighter `#f5c542`.
+- **Fix:** Navy `.section-kicker` on paper; tokenize + override career / check-in / badge / cloze letters. Scripts: `ink-sweep.mjs`, `verify-career-ink.mjs`.
+- **Honest remainder:** Marketing splash heroes still use gold-on-photo with text-shadow (intentional). Desktop night train stage uses light ink by design.
 - **Assumption to challenge next:** whether hub video/computer marketing panels on paper should drop remaining hardcoded `#e8eef6` body outside Practice.
 
 ### 2026-10-26 — Language Organize phone: first viewport playable (L3)
@@ -494,14 +543,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Phone Comp/Equipment drills pin `.iphone-scroll` to top; desktop uses `nearest`. Hide unit-intro + why-details on phone computer/equipment shells. Familiar theater paper card + one Continue. Course banner → quiet navy status strip.
 - **Assumption to challenge next:** Sentence Structure still clips below the fold on phone — whether worksheet chrome can collapse further so item 1 peeks without scroll.
 
-### 2026-10-26 — Desktop course = paper dialect with phone (L3 / L6)
+### 2026-10-26 — Desktop course = paper dialect with phone (L3 / L6) — *overturned same day*
 
 - **Layers:** L3 information display + L6 brand lockup (one showcase dialect).
-- **Critic overturn:** Desktop course night stage fought the logo + phone navy-on-paper lockup; hub Computer/Warehouse inners and Eye Spy titles washed or split the product into two skins.
-- **Fix:** `.course-stage` paper bed; `.is-course-app` shares phone train/ph tokens; hub/station/Eye Spy/chips paper overrides. Topbar stays navy brand chrome. Eye Spy body colors tokenized (`--train-text*`).
-- **Assumption to challenge next:** whether Learn/portal School path should inherit the same paper Practice dialect, or keep a darker instructor stage.
-- **Same sprint:** Practice `.train-panel` Reveal + `train-fade-rise` left phone Eye Spy mid-opacity (~0.25) after section jumps — looked like washed ink. Instant-visible panels in phone/course shells; Reveal uses `.iphone-scroll` as IO root elsewhere.
-- **Same sprint:** Eye Spy At work / Teach note moved below the board in `StationContext` fold so pictures lead the phone first viewport.
+- **Critic overturn (then):** Desktop course night stage fought the logo + phone navy-on-paper lockup; hub Computer/Warehouse inners and Eye Spy titles washed or split the product into two skins.
+- **Fix (temporary):** `.course-stage` paper bed; `.is-course-app` shares phone train/ph tokens; hub/station/Eye Spy/chips paper overrides. Topbar stays navy brand chrome. Eye Spy body colors tokenized (`--train-text*`).
+- **Customer overturn (same day):** Desktop should look like the original night stage; Phone keeps paper — see “two shells, two looks.”
+- **Same sprint (kept):** Practice `.train-panel` Reveal + `train-fade-rise` left phone Eye Spy mid-opacity (~0.25) after section jumps — looked like washed ink. Instant-visible panels in phone/course shells; Reveal uses `.iphone-scroll` as IO root elsewhere.
+- **Same sprint (kept):** Eye Spy At work / Teach note moved below the board in `StationContext` fold so pictures lead the phone first viewport.
 
 ### 2026-10-26 — Showcase readability: course banner + phone body ink (L3)
 

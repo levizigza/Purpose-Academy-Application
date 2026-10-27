@@ -4,6 +4,7 @@ import type { SentenceClozeItem } from '../pathways/packs/constructionSentenceCl
 import { isPracticeMode } from '../practice/PracticeMode'
 import { speakEnglish } from './speech'
 import { playFoley } from '../audio/foley'
+import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 
 /** Worksheet tile from public/sentence-cloze/ when extracted from the PPTX. */
@@ -159,7 +160,11 @@ export function SentenceClozeDrill({
 
   function finishPagePass(finalScore: number) {
     setPhase('passed')
-    playFoley('correct')
+    firePlayClear({
+      label: 'Page clear',
+      remnant: 'Sentences done — next door can open',
+      kind: 'board',
+    })
     if (!level1Unlocked) {
       setLevel1Unlocked(true)
       onLevel1Passed()
@@ -223,7 +228,16 @@ export function SentenceClozeDrill({
     setCorrect(ok)
     setFlying(true)
     recordSkillAttempt('sentence-cloze', ok, ok ? 12 : 0)
-    playFoley(ok ? 'correct' : 'wrong')
+    if (ok) {
+      const leftAfter = deck.length - (idx + 1)
+      firePlayClear({
+        label: 'Sentence clear',
+        remnant: leftAfter > 0 ? `${leftAfter} left on this page` : 'Page almost clear',
+        kind: 'micro',
+      })
+    } else {
+      playFoley('wrong')
+    }
 
     const newScore = scoreCorrect + (ok ? 1 : 0)
     const nextMissed = ok ? missed : [...missed, item]
@@ -310,10 +324,10 @@ export function SentenceClozeDrill({
         <div className="sentence-cloze-pass-badge" aria-hidden>
           ✓
         </div>
-        <h2>Page passed</h2>
+        <h2>Page complete</h2>
         <p className="lede">
-          Sentences {from}–{to} complete. First-try score {scoreCorrect} of {pageItems.length}. Words had to
-          land in the blank — no shopping for answers.
+          Sentences {from}–{to} clear. {scoreCorrect} of {pageItems.length} landed in the blank — keep the words
+          working for you on site.
         </p>
         <div className="hero-actions">
           <button type="button" className="btn btn-primary" onClick={onContinueToActions}>
@@ -336,11 +350,11 @@ export function SentenceClozeDrill({
         <p className="section-kicker">Sentence Structure</p>
         <h2>Keep learning this page</h2>
         <p className="lede">
-          Score {scoreCorrect} of {pageItems.length}. You need {PASS_SCORE} correct on the first try to pass.
-          Wrong answers move on — you cannot tap every choice. Read each sentence and try the page again.
+          {scoreCorrect} of {pageItems.length} clear so far. Clear {PASS_SCORE} on this page to keep moving.
+          Misses move on — one try each, then we show the word. Read each sentence and try the page again. No rush.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>
-          Retry this page
+          Not yet · practice this page again
         </button>
         {practice && onSkipToActions ? (
           <button type="button" className="btn btn-secondary on-light" onClick={onSkipToActions}>
@@ -368,7 +382,7 @@ export function SentenceClozeDrill({
       <div className="sentence-cloze-head-row">
         <div>
           <p className="section-kicker">Sentence Structure</p>
-          <p className="sentence-cloze-doc-kicker">{englishBrand} · Multiple Choice</p>
+          <p className="sentence-cloze-doc-kicker">{englishBrand} · Pick the word</p>
         </div>
         {practice && onSkipToActions ? (
           <button
@@ -380,16 +394,20 @@ export function SentenceClozeDrill({
           </button>
         ) : null}
       </div>
+      <p className="play-nearby-objective" aria-live="polite">
+        {phase === 'repair'
+          ? `Repair · ${deck.length - idx} left`
+          : `Clear this page · ${deck.length - idx} left`}
+      </p>
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
         All {bank.length} {documentLabel} · Item {idx + 1} of {deck.length}
-        {phase === 'drill' ? ` · First-try ${scoreCorrect}` : ''}
-        {level1Unlocked ? ' · Level-1 unlocked' : ''}
+        {phase === 'drill' ? ` · ${scoreCorrect} clear so far` : ''}
+        {level1Unlocked ? ' · First page done' : ''}
       </p>
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
-        Choose the correct word to complete each sentence. Every item from the {documentLabel}{' '}
-        PowerPoint (1–{bank.length}) is here. One try — if it is wrong, we show the answer and move on.
+        Pick the word that fits the blank. One try each — if it is not yet, we show the answer and keep going.
       </p>
 
       <div
@@ -447,13 +465,14 @@ export function SentenceClozeDrill({
         })}
       </div>
 
-      {picked && (
-        <div className={`alert ${correct ? 'ok' : 'warn'}`}>
-          {correct
-            ? 'Yes — the word completes the sentence.'
-            : `Not this one. The sentence needs “${item.answer}.” Moving on.`}
-        </div>
-      )}
+      {picked &&
+        (correct ? (
+          <div className="alert ok">Yes — the word completes the sentence.</div>
+        ) : (
+          <p className="play-soft-miss" role="status">
+            {softMissLine(`The sentence needs “${item.answer}.” Keep going.`)}
+          </p>
+        ))}
     </article>
   )
 }

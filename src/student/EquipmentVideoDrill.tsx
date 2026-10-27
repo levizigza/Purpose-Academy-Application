@@ -7,6 +7,7 @@ import {
   type WarehouseEquipmentLesson,
 } from '../pathways/packs/warehouseEquipmentVideos'
 import { playFoley } from '../audio/foley'
+import { firePlayClear } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 
@@ -47,6 +48,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   const [ended, setEnded] = useState(false)
   const [progress, setProgress] = useState(0)
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const clearedIdsRef = useRef<Set<string>>(new Set())
   const practice = isPracticeMode()
 
   const lesson = lessons[Math.min(idx, lessons.length - 1)]
@@ -65,6 +67,17 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
       el.load()
     }
   }, [lesson.id])
+
+  function pulseVideoClear(item: WarehouseEquipmentLesson, atIndex: number) {
+    if (clearedIdsRef.current.has(item.id)) return
+    clearedIdsRef.current.add(item.id)
+    const left = lessons.length - (atIndex + 1)
+    firePlayClear({
+      label: 'Video clear',
+      remnant: left > 0 ? `${left} left` : 'Equipment set clear — continue when ready',
+      kind: left === 0 ? 'board' : 'micro',
+    })
+  }
 
   useEffect(() => {
     /* Same phone rule as Computer Skills — do not scroll the title off the fold. */
@@ -106,12 +119,13 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   function onEnded() {
     setEnded(true)
     markWatched(lesson)
-    playFoley('correct')
+    pulseVideoClear(lesson, idx)
   }
 
   function goNext() {
     if (!canAdvanceLesson && !practice) return
     if (!watched.has(lesson.id)) markWatched(lesson)
+    pulseVideoClear(lesson, idx)
     if (idx >= lessons.length - 1) {
       if (allDone || watched.has(lesson.id) || practice) {
         recordSkillAttempt('equipment-videos', true, 20)
@@ -148,6 +162,9 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
         </div>
       </div>
 
+      <p className="play-nearby-objective" aria-live="polite">
+        Clear this video · {lessons.length - idx} left
+      </p>
       <p className="train-vocab-counter">
         Lesson {lesson.n} of {lessons.length}
         {' · '}
@@ -240,6 +257,11 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
           </p>
 
           <div className="hero-actions equip-video-actions">
+            {!canAdvanceLesson && !practice ? (
+              <p className="play-soft-miss" role="status">
+                Keep watching — then continue. No rush.
+              </p>
+            ) : null}
             <button
               type="button"
               className="btn btn-primary"
@@ -248,11 +270,11 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
             >
               {idx >= lessons.length - 1
                 ? allDone || canAdvanceLesson
-                  ? 'Continue to observation'
+                  ? 'Continue to instructor check'
                   : 'Finish this video to continue'
                 : canAdvanceLesson
                   ? `Next · ${lessons[idx + 1]?.title}`
-                  : 'Watch to unlock next'}
+                  : 'Keep watching, then continue'}
             </button>
           </div>
         </div>

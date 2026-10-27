@@ -23,7 +23,7 @@ export function ProgramsPage() {
         <p className="section-kicker">Programs</p>
         <h1>Three pathways that lead somewhere</h1>
         <p className="lede">
-          Construction, Logistics, and Community Support share one school spine. Build language and safety, practise
+          Construction, Logistics, and Community Support share one practice spine. Build language and safety, practise
           with instructors, then move toward work or apprenticeship with employer partners.
         </p>
       </Reveal>
@@ -33,16 +33,16 @@ export function ProgramsPage() {
           <span className="badge ok">Flagship program</span>
           <h2>Construction Foundations</h2>
           <p>
-            A full school pathway: site English, safety gear, hand and power tools, measurement, systems awareness, and
+            A full practice pathway: site English, safety gear, hand and power tools, measurement, systems awareness, and
             supervised practice. Graduates are prepared to enter registered apprenticeship and work with construction
             employers in Alberta.
           </p>
           <ul className="school-bullets">
-            <li>Shared 200-word Daily Conversation Vocabulary plus 660-word Construction Visual Vocabulary</li>
-            <li>560 Sentence Structure drills — site-stage motion; wrong guesses show crew consequences</li>
-            <li>Foundation theory + shop practice</li>
-            <li>Instructor observation and Skills Passport</li>
-            <li>Apprenticeship orientation and employer connection</li>
+            <li>Workplace words: hear your language, hear English, type it — then find every picture again</li>
+            <li>Sentence practice on a job-site stage — wrong guesses show what the crew would notice</li>
+            <li>Shop practice with an instructor beside you</li>
+            <li>Skills Passport and apprenticeship orientation</li>
+            <li>Employer connection when you are ready</li>
           </ul>
           <Link className="btn btn-primary" to="/admissions">
             Apply for Construction
@@ -61,8 +61,8 @@ export function ProgramsPage() {
           <span className="badge ok">Enrolling now</span>
           <h2>Logistics Foundations</h2>
           <p>
-            Same {JOURNEY_STEP_COUNT}-step school path as Construction: assess fit, learn vocabulary, practise English, build safety and
-            systems skills, then move toward warehouse and logistics roles with instructor checks.
+            Same {JOURNEY_STEP_COUNT}-step practice path as Construction: find your fit, learn workplace words, practise English, build safety and
+            systems skills, then move toward warehouse roles with an instructor beside you.
           </p>
           <ul className="school-bullets">
             <li>Shared 200-word Daily Conversation Vocabulary plus 500-word Logistics Visual Vocabulary</li>
@@ -125,7 +125,7 @@ export function AdmissionsPage() {
             <li>Create your student account</li>
             <li>Complete registration. Admin confirms your place</li>
             <li>Choose your pathway — Construction, Logistics, or Community Support</li>
-            <li>Practise with instructors and earn verified skills</li>
+            <li>Practise with instructors and clear each station</li>
             <li>Move into work readiness and employer connection</li>
           </ol>
           <div className="hero-actions">
@@ -387,7 +387,7 @@ export function PrivacyNoticePage() {
           retention limits, and secure processing.
         </p>
         <p>
-          We keep identity for access, progress for instruction, and competency evidence for your Skills Passport.
+          We keep identity for access, progress for instruction, and skills evidence for your Skills Passport.
           Nothing beyond training and apprenticeship readiness.
         </p>
         <Link className="btn btn-ghost" to="/">

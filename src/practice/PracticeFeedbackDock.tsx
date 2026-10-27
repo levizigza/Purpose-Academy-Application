@@ -298,7 +298,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
                 </button>
               </form>
             ) : blockForQuiz ? (
-              <p className="practice-dock-prompt">Finish this quiz first, then send feedback on the whole activity.</p>
+              <p className="practice-dock-prompt">Finish this practice first, then send feedback on the whole activity.</p>
             ) : (
               <form className="practice-chat-form" onSubmit={onSend}>
                 <label className="sr-only" htmlFor="practice-fb-body">
@@ -361,8 +361,7 @@ export function PracticeModeBanner() {
   return (
     <div className={`practice-banner${inCourseShell ? ' is-status-only' : ''}`} role="status">
       <span>
-        Practice{name ? ` · ${name}` : ''}. Finite school path — one station at a time. Registration
-        skipped.
+        Practice{name ? ` · ${name}` : ''}. One station at a time — take your time.
       </span>
       {!inCourseShell && (
         <span className="practice-banner-actions">
@@ -371,7 +370,7 @@ export function PracticeModeBanner() {
           </Link>
           {!onJourney && (
             <Link className="practice-banner-cta" to="/journey">
-              School path
+              Practice path
             </Link>
           )}
           <button type="button" className="practice-banner-cta" onClick={startOver}>

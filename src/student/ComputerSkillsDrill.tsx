@@ -7,6 +7,7 @@ import {
   type ComputerTryKind,
 } from '../pathways/packs/basicComputerSkillsVideos'
 import { playFoley } from '../audio/foley'
+import { SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 
@@ -128,7 +129,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
   function onEnded() {
     setEnded(true)
     markWatched(lesson)
-    playFoley('correct')
+    playFoley('whoosh')
   }
 
   function goTry() {
@@ -141,7 +142,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
   function onTryComplete() {
     setTryReady(true)
     setPhase('check')
-    playFoley('correct')
+    playFoley('whoosh')
   }
 
   function pickCheck(opt: string) {
@@ -150,8 +151,17 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
     setCheckAnswer(opt)
     setCheckCorrect(ok)
     recordSkillAttempt('digital', ok)
-    playFoley(ok ? 'correct' : 'wrong')
-    if (ok) markDone(lesson)
+    if (ok) {
+      markDone(lesson)
+      const left = lessons.length - (idx + 1)
+      firePlayClear({
+        label: 'Lesson clear',
+        remnant: left > 0 ? `${left} left` : 'Computer skills clear — continue when ready',
+        kind: left === 0 ? 'board' : 'micro',
+      })
+    } else {
+      playFoley('wrong')
+    }
   }
 
   function goNext() {
@@ -193,6 +203,13 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
         </div>
       </div>
 
+      <p className="play-nearby-objective" aria-live="polite">
+        {phase === 'check'
+          ? `Clear this check · ${lessons.length - idx} left`
+          : phase === 'try'
+            ? `Try this step · ${lessons.length - idx} left`
+            : `Watch, then try · ${lessons.length - idx} left`}
+      </p>
       <p className="train-vocab-counter">
         Lesson {lesson.n} of {lessons.length}
         {' · '}
@@ -283,7 +300,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
                   disabled={!canLeaveWatch}
                   onClick={goTry}
                 >
-                  {canLeaveWatch ? 'Try it now' : 'Watch to unlock practice'}
+                  {canLeaveWatch ? 'Try it now' : 'Keep watching, then try'}
                 </button>
               </div>
             </>
@@ -300,7 +317,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
 
           {phase === 'check' ? (
             <div className="comp-skills-check topic-lesson-card">
-              <h3>Quick check</h3>
+              <h3>One practice question</h3>
               <p className="train-check-prompt">{lesson.checkPrompt}</p>
               <div className="train-choice-grid">
                 {lesson.checkOptions.map((opt) => {
@@ -324,9 +341,13 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
               </div>
               {checkAnswer ? (
                 <>
-                  <div className={`alert ${checkCorrect ? 'ok' : 'warn'}`}>
-                    {checkCorrect ? lesson.checkCorrect : lesson.checkWrong}
-                  </div>
+                  {checkCorrect ? (
+                    <div className="alert ok">{lesson.checkCorrect}</div>
+                  ) : (
+                    <p className="play-soft-miss" role="status">
+                      {softMissLine(lesson.checkWrong)}
+                    </p>
+                  )}
                   <button type="button" className="btn btn-primary" onClick={goNext}>
                     {checkCorrect
                       ? idx >= lessons.length - 1
@@ -334,7 +355,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
                           ? 'Continue to site language'
                           : 'Finish this lesson'
                         : `Next · ${lessons[idx + 1]?.title}`
-                      : 'Try again'}
+                      : SOFT_RETRY_LABEL}
                   </button>
                 </>
               ) : null}
@@ -453,7 +474,7 @@ function TryKeyboard({ onDone }: { onDone: () => void }) {
         />
       </div>
       <button type="submit" className="btn btn-primary" disabled={!value.trim()}>
-        Check
+        Done
       </button>
     </form>
   )
@@ -461,7 +482,7 @@ function TryKeyboard({ onDone }: { onDone: () => void }) {
 
 function TryFolder({ onDone }: { onDone: () => void }) {
   const [name, setName] = useState('')
-  const ok = name.trim().toLowerCase() === 'school work'
+  const ok = name.trim().toLowerCase() === 'job files'
   return (
     <form
       className="comp-desktop"
@@ -471,7 +492,7 @@ function TryFolder({ onDone }: { onDone: () => void }) {
         else playFoley('wrong')
       }}
     >
-      <p className="comp-desktop-hint">New folder — type this name: <strong>School Work</strong></p>
+      <p className="comp-desktop-hint">New folder — type this name: <strong>Job Files</strong></p>
       <div className="comp-folder-icon" aria-hidden>
         <span className="comp-folder-glyph" />
       </div>
@@ -500,10 +521,10 @@ function TrySubfolder({ onDone }: { onDone: () => void }) {
     <div className="comp-desktop">
       {!opened ? (
         <>
-          <p className="comp-desktop-hint">First open the folder <strong>School Work</strong>.</p>
+          <p className="comp-desktop-hint">First open the folder <strong>Job Files</strong>.</p>
           <button type="button" className="comp-folder-card" onClick={() => setOpened(true)}>
             <span className="comp-folder-glyph" aria-hidden />
-            School Work
+            Job Files
           </button>
         </>
       ) : (
@@ -515,7 +536,7 @@ function TrySubfolder({ onDone }: { onDone: () => void }) {
           }}
         >
           <p className="comp-desktop-hint">
-            Inside School Work — create subfolder: <strong>Week 1</strong>
+            Inside Job Files — create subfolder: <strong>Week 1</strong>
           </p>
           <div className="field">
             <label htmlFor="comp-subfolder">Subfolder name</label>
@@ -540,7 +561,7 @@ function TrySaveName({ onDone }: { onDone: () => void }) {
   const [folder, setFolder] = useState('')
   const [file, setFile] = useState('')
   const ok =
-    folder.trim().toLowerCase() === 'school work' && file.trim().toLowerCase() === 'safety notes'
+    folder.trim().toLowerCase() === 'job files' && file.trim().toLowerCase() === 'safety notes'
   return (
     <form
       className="comp-desktop"
@@ -551,7 +572,7 @@ function TrySaveName({ onDone }: { onDone: () => void }) {
       }}
     >
       <p className="comp-desktop-hint">
-        Save As → folder <strong>School Work</strong> → name <strong>Safety Notes</strong>
+        Save As → folder <strong>Job Files</strong> → name <strong>Safety Notes</strong>
       </p>
       <div className="field">
         <label htmlFor="comp-save-folder">Folder</label>
@@ -615,7 +636,8 @@ function TrySaveDoc({ onDone }: { onDone: () => void }) {
           className="btn btn-primary"
           onClick={() => {
             setSaved(true)
-            playFoley('correct')
+            /* Try-phase only — check clear owns success Foley via firePlayClear. */
+            playFoley('whoosh')
             window.setTimeout(onDone, 400)
           }}
         >
@@ -647,7 +669,7 @@ function TryEmailSend({ onDone }: { onDone: () => void }) {
           id="comp-email-to"
           value={to}
           onChange={(e) => setTo(e.target.value)}
-          placeholder="instructor@school.ca"
+          placeholder="instructor@work.ca"
           autoComplete="off"
         />
       </div>
@@ -688,7 +710,7 @@ function TryEmailReply({ onDone }: { onDone: () => void }) {
           <p className="comp-desktop-hint">You have one email. Click Reply.</p>
           <article className="comp-inbox-msg">
             <p>
-              <strong>From:</strong> instructor@school.ca
+              <strong>From:</strong> instructor@work.ca
             </p>
             <p>
               <strong>Subject:</strong> Welcome
@@ -758,7 +780,7 @@ function TryAttachSave({ onDone }: { onDone: () => void }) {
           }}
           disabled={!attached || saved}
         >
-          {saved ? '✓ Saved to School Work' : 'Save attachment to School Work'}
+          {saved ? '✓ Saved to Job Files' : 'Save attachment to Job Files'}
         </button>
       </div>
     </div>

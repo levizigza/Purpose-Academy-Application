@@ -1,6 +1,18 @@
 {
   "versions": [
     {
+      "id": "v44",
+      "note": "Before phone hammer center + Tap blink (user feedback)",
+      "sessionKey": "v43",
+      "commit": "54fc6591",
+      "createdAt": "2026-10-27T22:25:41.610Z",
+      "files": [
+        "splash.css",
+        "OpeningDoor.tsx",
+        "EntryPages.tsx"
+      ]
+    },
+    {
       "id": "v43",
       "note": "hammer hits doorway cavity mid; mirror crack then shatter; soft cross handoff",
       "sessionKey": "v43",
@@ -49,5 +61,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-26T18:24:33.408Z"
+  "updatedAt": "2026-10-27T22:25:41.610Z"
 }

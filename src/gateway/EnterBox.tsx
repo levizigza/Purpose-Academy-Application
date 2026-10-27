@@ -162,7 +162,7 @@ function PracticeNameGate({
         <p className="section-kicker">Practice</p>
         <h2>Who is exploring?</h2>
         <p className="lede">
-          Walk the learner path without registration — perfect for demos and reviews. Pick a name so
+          Walk the learner path without registration — good for demos and walkthroughs. Pick a name so
           feedback stays attached to you.
         </p>
         <div className="practice-name-grid">

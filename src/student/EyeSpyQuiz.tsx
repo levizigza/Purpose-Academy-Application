@@ -11,6 +11,7 @@ import {
   openPracticeChat,
   practiceFeedbackKey,
 } from '../practice/PracticeMode'
+import { SOFT_RETRY_LABEL, firePlayClear } from '../practice/PlayClear'
 
 type Mode = 'exercise' | 'exam'
 
@@ -49,7 +50,7 @@ export function findQueue(scene: EyeSpyScene): EyeSpyHotspot[] {
 /**
  * Eye Spy: pair each remaining picture with its English name.
  * A correct pair vanishes. The scene is done when the board is empty.
- * Pass requires identifying every item with no misses.
+ * Clear every picture. Misses mean try that board again — no exam theatre.
  */
 export function EyeSpyQuiz({
   scenes,
@@ -128,12 +129,21 @@ export function EyeSpyQuiz({
     const ok = Boolean(hotspot && hotspot.answer === pickedName)
     recordSkillAttempt(mode === 'exam' ? 'final-exam' : 'eye-spy', ok, ok ? 15 : 0)
     if (ok && hotspot) {
-      playFoley('correct')
       const nextFound = [...foundIds, hotspot.id]
+      const left = queue.length - nextFound.length
       setFoundIds(nextFound)
       setCorrectCount((c) => c + 1)
       resetPicks()
-      if (nextFound.length >= queue.length) setPhase('scene-clear')
+      if (nextFound.length >= queue.length) {
+        firePlayClear({ label: 'Board clear', remnant: 'Every pair matched', kind: 'board' })
+        setPhase('scene-clear')
+      } else {
+        firePlayClear({
+          label: 'Pair clear',
+          remnant: left === 1 ? '1 left on this board' : `${left} left on this board`,
+          kind: 'micro',
+        })
+      }
       return
     }
     playFoley('wrong')
@@ -209,11 +219,11 @@ export function EyeSpyQuiz({
     return (
       <div className="train-quiz-summary eye-spy-summary">
         <p className="train-score">
-          {correctCount} / {need} identified
-          {misses > 0 ? ` · ${misses} miss${misses === 1 ? '' : 'es'} (must be 0 to pass)` : ' · clean run'}
+          {correctCount} of {need} pictures named
+          {misses > 0 ? ` · ${misses} miss${misses === 1 ? '' : 'es'} — try again` : ' · board clear'}
         </p>
         <p className="muted">
-          You must pair every picture with its English name until each board is empty.
+          Pair every picture with its English name until each board is empty.
         </p>
         {pass ? (
           <button type="button" className="btn btn-primary" onClick={handleComplete}>
@@ -221,13 +231,13 @@ export function EyeSpyQuiz({
           </button>
         ) : examLocked ? (
           <p className="alert warn">
-            Exam tries used ({maxAttempts}). Review the words, then ask an instructor for another try.
+            Three tries used. Review the words, then ask an instructor for another go.
           </p>
         ) : (
           <button type="button" className="btn btn-primary" onClick={retryRun}>
             {mode === 'exam' && maxAttempts
-              ? `Try exam again (${attempt + 1} of ${maxAttempts})`
-              : 'Try again. Clear every board with no mistakes'}
+              ? `${SOFT_RETRY_LABEL} (${attempt + 1} of ${maxAttempts})`
+              : `${SOFT_RETRY_LABEL}. Clear every picture`}
           </button>
         )}
         {feedbackPrompt && (
@@ -255,16 +265,28 @@ export function EyeSpyQuiz({
 
   return (
     <div className={`eye-spy${sceneMode ? ' is-scene-mode' : ''}`}>
+      <p className="play-nearby-objective" aria-live="polite">
+        {phase === 'scene-clear'
+          ? 'Board clear — next door can open'
+          : remaining.length === 0
+            ? 'Board empty'
+            : `Clear this board · ${remaining.length} left`}
+      </p>
       <p className="train-quiz-counter">
         Scene {sceneIdx + 1} of {boards.length}
-        {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice (unlimited tries)'}
+        {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice — take your time'}
       </p>
       <p className="eye-spy-instruction">{CLEAR_ALL_INSTRUCTION}</p>
+      {wrongPair ? (
+        <p className="play-soft-miss" role="status">
+          Not yet · wrong pair — try again. No rush.
+        </p>
+      ) : null}
       <p className="eye-spy-scene-title">{scene.title}</p>
       <p className="eye-spy-progress" aria-live="polite">
         {remaining.length === 0
           ? 'Board empty'
-          : `${remaining.length} left on this board · ${foundIds.length} of ${queue.length} cleared`}
+          : `${foundIds.length} of ${queue.length} cleared`}
       </p>
 
       {phase === 'scene-clear' && (
@@ -340,14 +362,14 @@ export function EyeSpyQuiz({
             disabled={!pickedHotspot || !pickedName}
             onClick={confirm}
           >
-            Check pair
+            Match
           </button>
         </>
       )}
 
       {phase === 'scene-clear' && (
         <button type="button" className="btn btn-primary" onClick={nextAfterSceneClear}>
-          {sceneIdx + 1 >= boards.length ? 'See results' : 'Next scene'}
+          {sceneIdx + 1 >= boards.length ? 'Finish' : 'Next scene'}
         </button>
       )}
     </div>

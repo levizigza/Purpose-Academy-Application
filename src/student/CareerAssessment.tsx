@@ -7,7 +7,6 @@ import {
   LIKERT_OPTIONS,
   PATHWAY_RESULT,
   RIASEC_LABELS,
-  hollandCode,
   pathwayFitPercent,
   rankedPathways,
   type AssessmentScores,
@@ -50,10 +49,16 @@ export function CareerInterestAssessment({ lang, onComplete, onBack }: InterestP
     })
   }
 
+  const left = items.length - idx
+
   return (
     <div className="career-assess" data-assess-idx={idx}>
       <header className="career-assess-head">
         <p className="career-assess-kicker">{t(ASSESSMENT_COPY.introTitle, lang)}</p>
+        <p className="play-nearby-objective" aria-live="polite">
+          {t(ASSESSMENT_COPY.nearbyInterest, lang)}
+          {left > 0 ? ` · ${left}` : ''}
+        </p>
         <h2 className="career-assess-title">{t(ASSESSMENT_COPY.part1Hint, lang)}</h2>
         <p className="career-assess-progress" aria-live="polite">
           {t(ASSESSMENT_COPY.progress, lang)} {idx + 1} {t(ASSESSMENT_COPY.of, lang)} {items.length}
@@ -131,10 +136,16 @@ export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) 
     })
   }
 
+  const left = items.length - idx
+
   return (
     <div className="career-assess" data-assess-idx={idx}>
       <header className="career-assess-head">
         <p className="career-assess-kicker">{t(ASSESSMENT_COPY.introTitle, lang)}</p>
+        <p className="play-nearby-objective" aria-live="polite">
+          {t(ASSESSMENT_COPY.nearbyStyle, lang)}
+          {left > 0 ? ` · ${left}` : ''}
+        </p>
         <h2 className="career-assess-title">{t(ASSESSMENT_COPY.part2Title, lang)}</h2>
         <p className="career-assess-lede">{t(ASSESSMENT_COPY.part2Hint, lang)}</p>
         <p className="career-assess-progress" aria-live="polite">
@@ -184,7 +195,7 @@ type ResultProps = {
   riasec: AssessmentScores
   pathwayScores: PathwayScores
   ranked: (keyof AssessmentScores)[]
-  /** Early path pick hides Holland code; later specialization shows full RIASEC. */
+  /** Early path pick hides interest list; later specialization shows top work interests (no letter codes). */
   showRiasec?: boolean
   /** After practice: let the learner confirm or switch pathway. */
   allowPathwaySwitch?: boolean
@@ -214,7 +225,6 @@ export function CareerAssessmentResult({
 }: ResultProps) {
   const result = PATHWAY_RESULT[pathway]
   const top3 = ranked.slice(0, 3)
-  const code = hollandCode(riasec)
   const fit = pathwayFitPercent(pathwayScores)
   const pathwayOrder = rankedPathways(pathwayScores)
   const recommended = pathwayOrder[0]
@@ -223,6 +233,9 @@ export function CareerAssessmentResult({
     <div className="career-result">
       <header className="career-result-head">
         <p className="career-assess-kicker">{t(ASSESSMENT_COPY.resultTitle, lang)}</p>
+        <p className="play-nearby-objective" aria-live="polite">
+          {t(ASSESSMENT_COPY.nearbyResult, lang)}
+        </p>
         <h2 className="career-result-title">{t(result.title, lang)}</h2>
         <p className="career-result-lead">
           {t(allowPathwaySwitch ? ASSESSMENT_COPY.specializeLead : ASSESSMENT_COPY.resultLead, lang)}
@@ -232,15 +245,10 @@ export function CareerAssessmentResult({
       {showRiasec ? (
         <section className="career-code" aria-label={t(ASSESSMENT_COPY.yourCode, lang)}>
           <p className="career-code-label">{t(ASSESSMENT_COPY.yourCode, lang)}</p>
-          <p className="career-code-value" aria-live="polite">
-            {code}
-          </p>
           <p className="career-code-hint">{t(ASSESSMENT_COPY.codeHint, lang)}</p>
           <ul className="career-code-areas">
             {top3.map((area) => (
-              <li key={area}>
-                <strong>{area}</strong>: {t(RIASEC_LABELS[area], lang)}
-              </li>
+              <li key={area}>{t(RIASEC_LABELS[area], lang)}</li>
             ))}
           </ul>
         </section>
@@ -272,21 +280,22 @@ export function CareerAssessmentResult({
                 >
                   <span className="career-path-option-title">{t(PATHWAY_RESULT[id].title, lang)}</span>
                   <span className="career-path-option-meta">
-                    {fit[id]}%
-                    {id === recommended ? ` · ${t(ASSESSMENT_COPY.recommended, lang)}` : ''}
+                    {id === recommended ? t(ASSESSMENT_COPY.recommended, lang) : ''}
                   </span>
                 </button>
               )
             })}
           </div>
         ) : (
-          pathwayOrder.map((id) => (
+          pathwayOrder.map((id, idx) => (
             <div key={id} className={`career-profile-row${id === pathway ? ' is-top' : ''}`}>
               <span className="career-profile-label">{t(PATHWAY_RESULT[id].title, lang)}</span>
               <div className="career-profile-track">
                 <span style={{ width: `${fit[id]}%` }} />
               </div>
-              <span className="career-profile-pct">{fit[id]}%</span>
+              <span className="career-profile-pct">
+                {idx === 0 ? t(ASSESSMENT_COPY.recommended, lang) : ''}
+              </span>
             </div>
           ))
         )}
@@ -301,7 +310,9 @@ export function CareerAssessmentResult({
               <div className="career-profile-track">
                 <span style={{ width: `${riasec[area]}%` }} />
               </div>
-              <span className="career-profile-pct">{riasec[area]}%</span>
+              <span className="career-profile-pct">
+                {top3.includes(area) ? t(ASSESSMENT_COPY.recommended, lang) : ''}
+              </span>
             </div>
           ))}
         </section>

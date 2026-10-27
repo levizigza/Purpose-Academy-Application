@@ -48,16 +48,16 @@ export function StatusLabel({ status }: { status: string }) {
     approved: { label: 'Approved. Ready to learn', tone: 'ok' },
     rejected: { label: 'Not approved', tone: 'danger' },
     submitted: { label: 'Sent. Waiting for review', tone: 'brand' },
-    graded: { label: 'Graded', tone: 'ok' },
+    graded: { label: 'Feedback ready', tone: 'ok' },
     PASS: { label: 'Safety cleared', tone: 'ok' },
-    BLOCKED: { label: 'Safety not passed yet. Review and try again', tone: 'warn' },
+    BLOCKED: { label: 'Safety not clear yet. Review and try again', tone: 'warn' },
     EXPIRED: { label: 'Safety check expired', tone: 'danger' },
     MANUAL_REVIEW: { label: 'Needs instructor review', tone: 'warn' },
     learned: { label: 'Learned', tone: 'brand' },
     practised: { label: 'Practised', tone: 'brand' },
-    competent: { label: 'Competent (verified)', tone: 'ok' },
+    competent: { label: 'Checked (instructor)', tone: 'ok' },
     remediation_required: { label: 'Needs more practice', tone: 'danger' },
-    not_assessed: { label: 'Not assessed yet', tone: 'warn' },
+    not_assessed: { label: 'Not checked yet', tone: 'warn' },
   }
   const item = map[status] || { label: status.replaceAll('_', ' '), tone: 'brand' }
   return <span className={`badge ${item.tone}`}>{item.label}</span>

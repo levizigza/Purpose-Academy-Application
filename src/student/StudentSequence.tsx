@@ -68,6 +68,7 @@ import { ComputerSkillsDrill } from './ComputerSkillsDrill'
 import { EquipmentVideoDrill } from './EquipmentVideoDrill'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
+import { PlayClearPulse, SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
 import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
@@ -233,7 +234,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const masteryBlocked = practice ? advanceBlockedReason(step) : null
   const stepKicker = motherTongue
     ? `${assessT(ASSESSMENT_COPY.stepOf, supportLang!)} ${step} ${assessT(ASSESSMENT_COPY.ofTotal, supportLang!)} ${JOURNEY_STEP_COUNT}`
-    : `Step ${step} of ${JOURNEY_STEP_COUNT} · Unit ${unit.id}: ${unit.label}`
+    : `Unit ${unit.id}: ${unit.label}`
   const whyLabel = motherTongue
     ? ({
         English: 'Why this step?',
@@ -314,7 +315,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         <div className="train-header-top">
           <p className="train-kicker">
             {stepKicker}
-            {practice ? ' · Student Practice' : ''}
+            {practice ? ' · Practice' : ''}
           </p>
           <div className="train-sound-slot">
             {/* Desktop wide: keep Path home / Done visible. Phone folds them into Station menu. */}
@@ -438,7 +439,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
           <summary>{whyLabel}</summary>
           <p className="train-purpose">{purpose}</p>
         </details>
-        <div className="train-progress" aria-label={`Progress ${pct}%`}>
+        <div className="train-progress" aria-label={`Progress`}>
           <span style={{ width: `${pct}%` }} />
         </div>
         <ol className="train-dots" aria-label="Step progress">
@@ -491,7 +492,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       />
       {masteryBlocked && (
         <p className="train-mastery-gate" role="status">
-          {masteryBlocked} Keep answering until this lesson is Familiar.
+          {masteryBlocked} Keep practising until this station feels comfortable.
         </p>
       )}
 
@@ -594,8 +595,18 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
     const isCorrect = opt === item.answer
     setAnswered(opt)
     setCorrect(isCorrect)
-    playFoley(isCorrect ? 'correct' : 'wrong')
-    if (isCorrect) setScore((s) => s + 1)
+    if (isCorrect) {
+      const cleared = score + 1
+      const left = items.length - cleared
+      firePlayClear({
+        label: 'Item clear',
+        remnant: left > 0 ? `${left} left` : 'Set clear — continue when ready',
+        kind: left === 0 ? 'board' : 'micro',
+      })
+      setScore(cleared)
+    } else {
+      playFoley('wrong')
+    }
     if (gated && !isCorrect) setGateBlocked(true)
     try {
       const step = Number(sessionStorage.getItem(JOURNEY_KEY) || '0')
@@ -617,16 +628,18 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
   if (done) {
     return (
       <div className="train-quiz-summary">
-        <p className="train-score">{score} / {items.length} correct</p>
+        <p className="train-score">{score} of {items.length} clear</p>
         {gated && score < items.length && (
-          <p className="alert warn">Safety requires a perfect score. Review and try again.</p>
+          <p className="play-soft-miss" role="status">
+            Safety needs every answer clear. Look again, then try the set once more. No rush.
+          </p>
         )}
         {(!gated || score === items.length) && (
           <button type="button" className="btn btn-primary" onClick={handleComplete}>Continue</button>
         )}
         {gated && score < items.length && (
           <button type="button" className="btn btn-primary" onClick={() => { setIdx(0); setScore(0); setDone(false); setAnswered(null); setCorrect(false); }}>
-            Retry quiz
+            {SOFT_RETRY_LABEL}
           </button>
         )}
         {feedbackPrompt && (
@@ -653,10 +666,14 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
   }
 
   const objectImg = quizObjectImage(item)
+  const leftInSet = items.length - idx
 
   return (
     <div className="train-quiz-item">
-      <p className="train-quiz-counter">Question {idx + 1} of {items.length}</p>
+      <p className="play-nearby-objective" aria-live="polite">
+        Clear this item · {leftInSet} left
+      </p>
+      <p className="train-quiz-counter">Item {idx + 1} of {items.length}</p>
       <PictureCard
         image={objectImg}
         fit="contain"
@@ -677,11 +694,15 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
       </div>
       {answered && (
         <>
-          <div className={`alert ${correct ? 'ok' : 'warn'}`}>
-            {correct ? item.teachCorrect : item.teachWrong}
-          </div>
+          {correct ? (
+            <div className="alert ok">{item.teachCorrect}</div>
+          ) : (
+            <p className="play-soft-miss" role="status">
+              {softMissLine(item.teachWrong)}
+            </p>
+          )}
           <button type="button" className="btn btn-primary" onClick={next}>
-            {gateBlocked ? 'Try again' : idx + 1 >= items.length ? 'See results' : 'Next question'}
+            {gateBlocked ? SOFT_RETRY_LABEL : idx + 1 >= items.length ? 'Continue' : 'Next'}
           </button>
         </>
       )}
@@ -776,9 +797,10 @@ export function StudentSequencePage() {
     preferred_language: 'Amharic', previous_experience: '',
   })
 
-  /* Step 7 visual vocabulary — all five languages; press yours → connect to English */
+  /* Step 6 visual vocabulary — hear L1 → hear English → type English */
   const [vocabHeard, setVocabHeard] = useState<Record<string, boolean>>({})
   const [vocabConnected, setVocabConnected] = useState<Record<string, HomeLang>>({})
+  const [vocabTyped, setVocabTyped] = useState<Record<string, boolean>>({})
   const [vocabKnownIds, setVocabKnownIds] = useState<string[]>(() => getKnownVocabIds(getActivePathway()))
   const [vocabSpeakingId, setVocabSpeakingId] = useState<string | null>(null)
   const [vocabIdx, setVocabIdx] = useState(0)
@@ -873,6 +895,7 @@ export function StudentSequencePage() {
     setVocabIdx(0)
     setVocabHeard({})
     setVocabConnected({})
+    setVocabTyped({})
     setVocabKnownIds(getKnownVocabIds(pathwayId))
     setActionIdx(0)
     setActionAnswer(null)
@@ -959,6 +982,7 @@ export function StudentSequencePage() {
     setVocabIdx(0)
     setVocabHeard({})
     setVocabConnected({})
+    setVocabTyped({})
     setVocabSpeakingId(null)
   }
 
@@ -1060,7 +1084,7 @@ export function StudentSequencePage() {
   /** Practice mode: ask for feedback at unit boundaries before leaving via in-panel Continues. */
   function requestPracticeAdvance(advance: () => void) {
     if (isPracticeMode() && !canAdvanceFromStep(step)) {
-      const reason = advanceBlockedReason(step) || 'Keep practising until this skill is Familiar.'
+      const reason = advanceBlockedReason(step) || 'Keep practising until this station feels comfortable.'
       setAdvanceGateMsg(reason)
       playFoley('wrong')
       window.setTimeout(() => {
@@ -1088,7 +1112,7 @@ export function StudentSequencePage() {
     if (!advanceGateMsg) return null
     return (
       <p className="train-advance-gate alert warn" role="status">
-        {advanceGateMsg} Keep answering until this lesson is Familiar.
+        {advanceGateMsg} Keep practising until this station feels comfortable.
       </p>
     )
   }
@@ -1142,6 +1166,7 @@ export function StudentSequencePage() {
             </div>
           </div>
         )}
+        <PlayClearPulse />
         <FamiliarTheater />
       </>
     )
@@ -1173,6 +1198,7 @@ export function StudentSequencePage() {
             saveStep(PRACTICE_ENTRY_STEP)
           }}
         />
+        <PlayClearPulse />
         <FamiliarTheater />
       </>
     )
@@ -1186,28 +1212,31 @@ export function StudentSequencePage() {
           <button type="button" className="back-link" onClick={() => setPracticeView('hub')}>
             ← Path home
           </button>
-          <p className="section-kicker">Verified skill · Practice</p>
+          <p className="section-kicker">Skills record · Practice</p>
           <h1>Skills Passport</h1>
+          <p className="play-nearby-objective" aria-live="polite">
+            Review your record · Path home when you are done
+          </p>
           <p className="lede">
-            What you studied and practised on this path — not Red Seal, apprenticeship certification, or a guaranteed
-            job. Competent still needs a real instructor later.
+            What you studied and practised on this path — not a trade ticket, Red Seal, or a guaranteed job.
+            A real instructor still checks you on the floor later.
           </p>
         </header>
         <div className="train-learn-grid skills-passport-stages">
           <article className="skills-passport-stage">
             <span className="badge brand">Learned</span>
             <h3>Learned</h3>
-            <p>Studied in the app — understanding, not yet verified on the job.</p>
+            <p>Studied in the app — you know the idea.</p>
           </article>
           <article className="skills-passport-stage">
             <span className="badge brand">Practised</span>
             <h3>Practised</h3>
-            <p>Tried through Practice drills and unit checkpoints.</p>
+            <p>Tried through Practice drills and unit reviews.</p>
           </article>
           <article className="skills-passport-stage">
-            <span className="badge ok">Competent</span>
-            <h3>Competent</h3>
-            <p>Authorized instructor confirmation — not awarded by Practice alone.</p>
+            <span className="badge ok">Checked</span>
+            <h3>Checked</h3>
+            <p>An instructor watches with you on the job — Practice alone does not award this.</p>
           </article>
         </div>
         <div className="panel stack emp-followup">
@@ -1268,11 +1297,11 @@ export function StudentSequencePage() {
         onNext={() => setCheckpointUnit(null)}
       >
         <div className="unit-checkpoint">
-          <p className="section-kicker">Unit checkpoint</p>
+          <p className="section-kicker">Unit practice</p>
           <h2>
-            Unit {unit.id}: {unit.label} review
+            Unit {unit.id}: {unit.label} practice
           </h2>
-          <p className="lede">Prove the unit stuck. Pass this review, then unlock the next unit.</p>
+          <p className="lede">A few pictures to clear this unit. Finish them, then the next unit can open.</p>
           <QuizRunner
             items={items}
             gated
@@ -1334,6 +1363,12 @@ export function StudentSequencePage() {
     setVocabKnownIds(getKnownVocabIds(pathwayId))
     creditKnownVocabMastery()
     playFoley('whoosh')
+  }
+
+  function markVocabTyped(term: (typeof VOCAB_UNIT)[number]) {
+    setVocabTyped((t) => ({ ...t, [term.id]: true }))
+    recordSkillAttempt('vocab', true, 10)
+    /* Success Foley owned by VocabSheet → firePlayClear — do not double-latch. */
   }
 
   function resetMatch() {
@@ -1519,6 +1554,9 @@ export function StudentSequencePage() {
         nextLabel={assessT(ASSESSMENT_COPY.next, supportLang)}
       >
         <div className="train-lang-pick">
+          <p className="play-nearby-objective" aria-live="polite">
+            {assessT(ASSESSMENT_COPY.nearbyLangPick, supportLang)}
+          </p>
           <h2 className="career-assess-title">{assessT(ASSESSMENT_COPY.langPickTitle, supportLang)}</h2>
           <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickBody, supportLang)}</p>
           <div className="train-lang-grid">
@@ -1608,12 +1646,14 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 6: Visual Vocabulary — pictures and five languages */
+  /* Step 6: Visual Vocabulary — hear → hear → type (reps that stick) */
   if (step === 6) {
     const knownSet = new Set(vocabKnownIds)
-    const linkedCount = VOCAB_UNIT.filter(
-      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
-    ).length
+    const wordDone = (t: (typeof VOCAB_UNIT)[number]) =>
+      !!vocabHeard[t.id] &&
+      !!vocabTyped[t.id] &&
+      (!!vocabConnected[t.id] || knownSet.has(t.id))
+    const linkedCount = VOCAB_UNIT.filter(wordDone).length
     /**
      * Ladder: Daily Conversation Level-1, then specialty pictures.
      * Construction Sentence Structure must not unlock on greetings alone —
@@ -1627,18 +1667,12 @@ export function StudentSequencePage() {
     const journeyGateCount = usesSentenceLadder
       ? undefined
       : Math.min(LEVEL1_PAGE_SIZE, VOCAB_UNIT.length)
-    const gateLinked = ladderGateTerms.filter(
-      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
-    ).length
+    const gateLinked = ladderGateTerms.filter(wordDone).length
     const ready = gateLinked >= ladderGateTerms.length
     const dcGate = ladderGateTerms.filter(isDailyConversationTerm)
     const specialtyGate = ladderGateTerms.filter((t) => !isDailyConversationTerm(t))
-    const dcLinked = dcGate.filter(
-      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
-    ).length
-    const specialtyLinked = specialtyGate.filter(
-      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
-    ).length
+    const dcLinked = dcGate.filter(wordDone).length
+    const specialtyLinked = specialtyGate.filter(wordDone).length
     const firstSpecialtyIdx = VOCAB_UNIT.findIndex((t) => !isDailyConversationTerm(t))
     const canContinue = ready || isPracticeMode()
 
@@ -1646,7 +1680,7 @@ export function StudentSequencePage() {
       <Shell
         step={6}
         onBack={() => go(5)}
-        onNext={canContinue ? () => go(7, 'Opening language organize quiz…') : undefined}
+        onNext={canContinue ? () => go(7, 'Opening language organize…') : undefined}
         nextLabel="Continue to language organize"
         nextDisabled={!canContinue}
       >
@@ -1656,6 +1690,7 @@ export function StudentSequencePage() {
           speakingId={vocabSpeakingId}
           heard={vocabHeard}
           connected={vocabConnected}
+          typed={vocabTyped}
           knownIds={vocabKnownIds}
           journeyGateCount={journeyGateCount}
           journeyGateIds={journeyGateIds}
@@ -1663,10 +1698,11 @@ export function StudentSequencePage() {
           onPlayEnglish={(term) => void playVocabEnglish(term)}
           onConnectLang={(term, lang) => void connectVocabLang(term, lang)}
           onMarkKnown={(term) => markCurrentVocabKnown(term)}
+          onTypedCorrect={(term) => markVocabTyped(term)}
         />
         {usesSentenceLadder && !ready && dcLinked >= dcGate.length && specialtyGate.length > 0 ? (
           <p className="alert warn train-ladder-nudge" role="status">
-            Daily Conversation Level-1 is done. Next: link workplace pictures
+            Greetings set is done. Next: workplace pictures
             ({specialtyLinked} of {specialtyGate.length})
             {firstSpecialtyIdx >= 0
               ? ` — open the ${
@@ -1675,7 +1711,7 @@ export function StudentSequencePage() {
                     : pathwayId === 'community'
                       ? 'Community'
                       : 'Construction'
-                } vocabulary pages.`
+                } word pages.`
               : '.'}
             {' '}
             {firstSpecialtyIdx >= 0 ? (
@@ -1694,12 +1730,8 @@ export function StudentSequencePage() {
         ) : null}
         <p className="train-vocab-counter">
           {ready
-            ? usesSentenceLadder
-              ? `Ladder ready · Next: Language Organize (match each language group to its picture) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
-              : `Level-1 complete · Next: Language Organize (match each language group to its picture) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
-            : usesSentenceLadder
-              ? `Ladder ${gateLinked} of ${ladderGateTerms.length} (DC ${dcLinked}/${dcGate.length} · workplace ${specialtyLinked}/${specialtyGate.length}) · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
-              : `Level-1 ${gateLinked} of ${ladderGateTerms.length} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
+            ? `Words practised: ${linkedCount}. Next: Language Organize — match each word to its picture.`
+            : `Words practised: ${linkedCount}. Keep going — hear, hear, type.`}
         </p>
       </Shell>
     )
@@ -1764,12 +1796,12 @@ export function StudentSequencePage() {
         <StationContext>
           <WhyWork>
             {pathwayId === 'logistics'
-              ? 'On a real warehouse floor every object sits among other goods and equipment. Prove you can name each one until the board is clear.'
-              : 'On a real site every tool sits among other objects. Prove you can name each one until the board is clear.'}
+              ? 'On a real warehouse floor every object sits among other goods and equipment. Name each one until the board is clear.'
+              : 'On a real site every tool sits among other objects. Name each one until the board is clear.'}
           </WhyWork>
           <TeachNote>
             Exercise mode: unlimited tries. Tap a picture and its English name. A correct pair disappears. Clear
-            the whole board, then the next scene. Pass requires 100% with no misses.
+            the whole board, then the next scene. Clear every picture. If you miss one, try the board again.
           </TeachNote>
         </StationContext>
       </Shell>
@@ -1846,7 +1878,16 @@ export function StudentSequencePage() {
       setActionAnswer(opt)
       setActionCorrect(ok)
       recordSkillAttempt('word-action', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = safeDeck.length - (safeIdx + 1)
+        firePlayClear({
+          label: 'Action clear',
+          remnant: left > 0 ? `${left} left` : 'Last action — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextAction() {
@@ -1878,6 +1919,9 @@ export function StudentSequencePage() {
         {SENTENCE_CLOZE.length ? (
           <p className="train-vocab-counter">Word → Action · after Sentence Structure</p>
         ) : null}
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this action · {safeDeck.length - safeIdx} left
+        </p>
         <p className="train-vocab-counter">
           Action {safeIdx + 1} of {safeDeck.length}
           {knownSet.size ? ` · ${knownSet.size} already known skipped or quick-checked` : ''}
@@ -1914,14 +1958,18 @@ export function StudentSequencePage() {
           </div>
           {actionAnswer && (
             <>
-              <div className={`alert ${actionCorrect ? 'ok' : 'warn'}`}>
-                {actionCorrect ? 'Yes. Word and action match.' : `Not yet. This action uses the ${term?.english}.`}
-              </div>
+              {actionCorrect ? (
+                <div className="alert ok">Yes. Word and action match.</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(`This action uses the ${term?.english}.`)}
+                </p>
+              )}
               <AdvanceGateNote />
               <button type="button" className="btn btn-primary" onClick={nextAction}>
                 {actionCorrect
                   ? (isLast ? 'Continue to supported practice' : 'Next action')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -1955,7 +2003,22 @@ export function StudentSequencePage() {
       setMatchAnswer(opt)
       setMatchCorrect(ok)
       recordSkillAttempt('matching', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = matchDeck.length - (safeIdx + 1)
+        const lastRound = matchRound >= roundsNeeded
+        firePlayClear({
+          label: 'Match clear',
+          remnant:
+            left > 0
+              ? `${left} left this round`
+              : lastRound
+                ? 'Round clear — continue when ready'
+                : 'Round clear — next round next',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextMatch() {
@@ -1991,12 +2054,15 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={10} onBack={() => go(9)}>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this match · {matchDeck.length - safeIdx} left · round {matchRound} of {roundsNeeded}
+        </p>
         <p className="train-vocab-counter">
           Round {matchRound} of {roundsNeeded} · Match {safeIdx + 1} of {matchDeck.length}
           {' · '}
           Worksheet page (not the full {VOCAB_UNIT.length}-word table)
           {unknownTerms.length
-            ? ` · ${Math.min(unknownTerms.length, matchDeck.length)} to strengthen`
+            ? ` · ${Math.min(unknownTerms.length, matchDeck.length)} to practise again`
             : ''}
         </p>
         <PictureCard
@@ -2041,14 +2107,18 @@ export function StudentSequencePage() {
         </div>
         {matchAnswer && (
           <>
-            <div className={`alert ${matchCorrect ? 'ok' : 'warn'}`}>
-              {matchCorrect ? 'Yes. Picture and word match.' : `Not yet. The correct word is ${term.english}. Try again.`}
-            </div>
+            {matchCorrect ? (
+              <div className="alert ok">Yes. Picture and word match.</div>
+            ) : (
+              <p className="play-soft-miss" role="status">
+                {softMissLine(`The word is ${term.english}.`)}
+              </p>
+            )}
             <AdvanceGateNote />
             <button type="button" className="btn btn-primary" onClick={nextMatch}>
               {matchCorrect
                 ? (isLast && matchRound >= roundsNeeded ? 'Continue to workplace instructions' : isLast ? 'Next round' : 'Next match')
-                : 'Try again'}
+                : SOFT_RETRY_LABEL}
             </button>
           </>
         )}
@@ -2067,7 +2137,16 @@ export function StudentSequencePage() {
       setInstrAnswer(opt)
       setInstrCorrect(ok)
       recordSkillAttempt('instructions', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = WORKPLACE_INSTRUCTIONS.length - (instrIdx + 1)
+        firePlayClear({
+          label: 'Instruction clear',
+          remnant: left > 0 ? `${left} left` : 'Last instruction — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextInstr() {
@@ -2089,6 +2168,9 @@ export function StudentSequencePage() {
     return (
       <Shell step={11} onBack={() => { resetMatch(); go(10) }}>
         <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this instruction · {WORKPLACE_INSTRUCTIONS.length - instrIdx} left
+        </p>
         <p className="train-vocab-counter">Instruction {instrIdx + 1} of {WORKPLACE_INSTRUCTIONS.length} · English only</p>
         <div className="train-instruction">
           <PictureCard
@@ -2140,13 +2222,17 @@ export function StudentSequencePage() {
         </div>
         {instrAnswer && (
           <>
-            <div className={`alert ${instrCorrect ? 'ok' : 'warn'}`}>
-              {instrCorrect ? 'Yes. You heard the tool name and the action.' : `Not yet. The correct action was: "${instr.correct}". Try again.`}
-            </div>
+            {instrCorrect ? (
+              <div className="alert ok">Yes. You heard the tool name and the action.</div>
+            ) : (
+              <p className="play-soft-miss" role="status">
+                {softMissLine(`The action was: "${instr.correct}".`)}
+              </p>
+            )}
             <button type="button" className="btn btn-primary" onClick={nextInstr}>
               {instrCorrect
                 ? (isLast ? 'Continue to Basic Computer Skills' : 'Next instruction')
-                : 'Try again'}
+                : SOFT_RETRY_LABEL}
             </button>
           </>
         )}
@@ -2180,7 +2266,7 @@ export function StudentSequencePage() {
             This may be your first computer. Short videos. Simple English. Then you try each step yourself.
           </WhyWork>
           <TeachNote>
-            Pattern for every lesson: Watch → Try → Remember → one check. Wrong answers teach. Take your time.
+            Pattern for every lesson: Watch → Try → Remember → one check. Misses teach — try again, no rush.
           </TeachNote>
         </details>
       </Shell>
@@ -2198,7 +2284,16 @@ export function StudentSequencePage() {
       setPhraseAnswer(opt)
       setPhraseCorrect(ok)
       recordSkillAttempt('site-phrases', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = SITE_PHRASES.length - (phraseIdx + 1)
+        firePlayClear({
+          label: 'Phrase clear',
+          remnant: left > 0 ? `${left} left` : 'Last phrase — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextPhrase() {
@@ -2208,7 +2303,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => go(14, 'Opening interest assessment…'))
+        requestPracticeAdvance(() => go(14, 'Opening work-interest questions…'))
         return
       }
       setPhraseIdx((i) => i + 1)
@@ -2219,6 +2314,9 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={13} onBack={() => go(12)}>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this phrase · {SITE_PHRASES.length - phraseIdx} left
+        </p>
         <p className="train-vocab-counter">Phrase {phraseIdx + 1} of {SITE_PHRASES.length}</p>
         <article className="phrase-lesson-card">
           <p className="phrase-lesson-en">{phrase.en}</p>
@@ -2250,13 +2348,17 @@ export function StudentSequencePage() {
           </div>
           {phraseAnswer && (
             <>
-              <div className={`alert ${phraseCorrect ? 'ok' : 'warn'}`}>
-                {phraseCorrect ? `Yes. ${phrase.why}` : `Not yet. ${phrase.why}`}
-              </div>
+              {phraseCorrect ? (
+                <div className="alert ok">Yes. {phrase.why}</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(phrase.why)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextPhrase}>
                 {phraseCorrect
-                  ? (isLast ? 'Continue to interest assessment' : 'Next phrase')
-                  : 'Try again'}
+                  ? (isLast ? 'Continue to work-interest questions' : 'Next phrase')
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2362,7 +2464,16 @@ export function StudentSequencePage() {
       setToolAnswer(opt)
       setToolCorrect(ok)
       recordSkillAttempt('tools', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = TOOL_CATEGORIES.length - (toolIdx + 1)
+        firePlayClear({
+          label: 'Tool group clear',
+          remnant: left > 0 ? `${left} left` : 'Last group — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextTool() {
@@ -2385,6 +2496,9 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={16} onBack={() => go(15)}>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this tool group · {TOOL_CATEGORIES.length - toolIdx} left
+        </p>
         <p className="train-vocab-counter">Tool group {toolIdx + 1} of {TOOL_CATEGORIES.length}</p>
         <article className="topic-lesson-card">
           <span className="train-topic-mark">{cat.mark}</span>
@@ -2405,13 +2519,17 @@ export function StudentSequencePage() {
           </div>
           {toolAnswer && (
             <>
-              <div className={`alert ${toolCorrect ? 'ok' : 'warn'}`}>
-                {toolCorrect ? 'Correct.' : `Not yet. The answer is ${cat.answer}.`}
-              </div>
+              {toolCorrect ? (
+                <div className="alert ok">Yes.</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(`It’s ${cat.answer}.`)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextTool}>
                 {toolCorrect
                   ? (isLast ? 'Continue to systems' : 'Next tool group')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2430,7 +2548,16 @@ export function StudentSequencePage() {
       setSysAnswer(opt)
       setSysCorrect(ok)
       recordSkillAttempt('systems', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = SYSTEM_TOPICS.length - (sysIdx + 1)
+        firePlayClear({
+          label: 'System clear',
+          remnant: left > 0 ? `${left} left` : 'Last system — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextSys() {
@@ -2442,7 +2569,7 @@ export function StudentSequencePage() {
       if (isLast) {
         requestPracticeAdvance(() => advanceWithOptionalCheckpoint(
               17,
-              18, 'Opening equipment familiarization…'))
+              18, 'Opening equipment videos…'))
         return
       }
       setSysIdx((i) => i + 1)
@@ -2452,6 +2579,9 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={17} onBack={() => go(16)}>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this system · {SYSTEM_TOPICS.length - sysIdx} left
+        </p>
         <p className="train-vocab-counter">System {sysIdx + 1} of {SYSTEM_TOPICS.length}</p>
         <article className="topic-lesson-card">
           <span className="train-topic-mark">{topic.mark}</span>
@@ -2472,13 +2602,17 @@ export function StudentSequencePage() {
           </div>
           {sysAnswer && (
             <>
-              <div className={`alert ${sysCorrect ? 'ok' : 'warn'}`}>
-                {sysCorrect ? 'Correct.' : `Not yet. The answer is ${topic.answer}.`}
-              </div>
+              {sysCorrect ? (
+                <div className="alert ok">Yes.</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(`It’s ${topic.answer}.`)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextSys}>
                 {sysCorrect
-                  ? (isLast ? 'Continue to observation' : 'Next system')
-                  : 'Try again'}
+                  ? (isLast ? 'Continue to instructor check' : 'Next system')
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2504,14 +2638,14 @@ export function StudentSequencePage() {
             <EquipmentVideoDrill
               onComplete={() =>
                 requestPracticeAdvance(() =>
-                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
                 )
               }
               onSkip={
                 isPracticeMode()
                   ? () =>
                       requestPracticeAdvance(() =>
-                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
                       )
                   : undefined
               }
@@ -2519,7 +2653,7 @@ export function StudentSequencePage() {
           </>
         ) : (
           <article className="topic-lesson-card">
-            <p className="section-kicker">Equipment Familiarization</p>
+            <p className="section-kicker">Equipment videos</p>
             <h2>Video section · Warehouse Equipment</h2>
             <p className="lede">
               The fourteen machine lessons (forklift, pallet jack, scanner, and more) are their own unit —{' '}
@@ -2544,7 +2678,7 @@ export function StudentSequencePage() {
                 onClick={() => {
                   recordSkillAttempt('equipment-videos', true, 15)
                   requestPracticeAdvance(() =>
-                    advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                    advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
                   )
                 }}
               >
@@ -2573,7 +2707,16 @@ export function StudentSequencePage() {
       setObsChecked(true)
       setObsCorrect(ok)
       recordSkillAttempt('observation', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = OBSERVATION_SCENARIOS.length - (obsIdx + 1)
+        firePlayClear({
+          label: 'Order clear',
+          remnant: left > 0 ? `${left} left` : 'Last practice — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
       try {
         sessionStorage.setItem(OBS_KEY, JSON.stringify({ scenario: scenario.id, picked: obsPicked, ok }))
       } catch { /* */ }
@@ -2598,18 +2741,21 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={19} onBack={() => go(18)}>
-        <WhyWork>Before a real instructor watches you, rehearse the competent order of a skill.</WhyWork>
+        <WhyWork>Before a real instructor watches with you, practise the calm order of a skill — step by step.</WhyWork>
         <div className="train-learn-grid">
           <LearnCard mark="L" title="Learned" body="Studied in the app or class." />
           <LearnCard mark="P" title="Practised" body="Tried with supervision." />
-          <LearnCard mark="C" title="Competent" body="Authorized instructor confirmed the standard." />
+          <LearnCard mark="C" title="Checked" body="An instructor confirms it with you on the job." />
         </div>
-        <p className="train-vocab-counter">Observation drill {obsIdx + 1} of {OBSERVATION_SCENARIOS.length}</p>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this order · {OBSERVATION_SCENARIOS.length - obsIdx} left
+        </p>
+        <p className="train-vocab-counter">Practice {obsIdx + 1} of {OBSERVATION_SCENARIOS.length}</p>
         <article className="topic-lesson-card">
           <h3>{scenario.title}</h3>
           <p><strong>Situation:</strong> {scenario.situation}</p>
           <p className="muted">Skill focus: {scenario.skill}</p>
-          <p className="train-check-prompt">Tap the steps in the correct order (1 → {scenario.steps.length}).</p>
+          <p className="train-check-prompt">Tap the steps in order (1 → {scenario.steps.length}).</p>
           <div className="train-choice-grid">
             {scenario.steps.map((s) => {
               const pickedAt = obsPicked.indexOf(s.id)
@@ -2643,13 +2789,17 @@ export function StudentSequencePage() {
           )}
           {obsChecked && (
             <>
-              <div className={`alert ${obsCorrect ? 'ok' : 'warn'}`}>
-                {obsCorrect ? scenario.passNote : `Not yet. Correct order: ${ordered.map((s) => s.label).join(' → ')}`}
-              </div>
+              {obsCorrect ? (
+                <div className="alert ok">{scenario.passNote}</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(`Try this order: ${ordered.map((s) => s.label).join(' → ')}`)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextObs}>
                 {obsCorrect
-                  ? (isLast ? 'Continue to on-site training' : 'Next observation drill')
-                  : 'Try again'}
+                  ? (isLast ? 'Continue to on-site training' : 'Next practice')
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2668,7 +2818,16 @@ export function StudentSequencePage() {
       setSiteAnswer(opt)
       setSiteCorrect(ok)
       recordSkillAttempt('site-log', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = SITE_DECISIONS.length - (siteIdx + 1)
+        firePlayClear({
+          label: 'Decision clear',
+          remnant: left > 0 ? `${left} left` : 'Last decision — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextSite() {
@@ -2687,7 +2846,7 @@ export function StudentSequencePage() {
           }))
         } catch { /* */ }
         setFinalPhase('eyespy')
-        go(21, 'Opening final exam…')
+        go(21, 'Opening final check…')
         return
       }
       setSiteIdx((i) => i + 1)
@@ -2697,7 +2856,10 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={20} onBack={() => go(19)}>
-        <WhyWork>On-site days need judgment and a clear log. Practice both before the exam.</WhyWork>
+        <WhyWork>On-site days need judgment and a clear log. Practice both before the final check.</WhyWork>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this decision · {SITE_DECISIONS.length - siteIdx} left
+        </p>
         <p className="train-vocab-counter">Site decision {siteIdx + 1} of {SITE_DECISIONS.length}</p>
         <article className="topic-lesson-card">
           <h3>{item.title}</h3>
@@ -2717,13 +2879,17 @@ export function StudentSequencePage() {
           </div>
           {siteAnswer && (
             <>
-              <div className={`alert ${siteCorrect ? 'ok' : 'warn'}`}>
-                {siteCorrect ? item.teachCorrect : item.teachWrong}
-              </div>
+              {siteCorrect ? (
+                <div className="alert ok">{item.teachCorrect}</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(item.teachWrong)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextSite}>
                 {siteCorrect
-                  ? (isLast ? 'Continue to final exam' : 'Next site decision')
-                  : 'Try again'}
+                  ? (isLast ? 'Continue to final check' : 'Next site decision')
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2750,12 +2916,12 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 21: Final Eye Spy exam (up to 3 attempts) + written + certificate */
+  /* Step 21: Final picture practice (limited tries) + written + certificate */
   if (step === 21) {
     if (finalPhase === 'eyespy') {
       return (
         <Shell step={21} onBack={() => go(20)}>
-          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Pair every picture with its word until each board is empty." />
+          <PictureCard emoji="E" label="Final picture practice" caption="Clear every picture. You can try a few times. Tap each picture with its word until the board is empty." />
           <EyeSpyQuiz
             scenes={EYE_SPY_SCENES}
             mode="exam"
@@ -2768,7 +2934,7 @@ export function StudentSequencePage() {
     if (finalPhase === 'written') {
       return (
         <Shell step={21} onBack={() => setFinalPhase('eyespy')}>
-          <PictureCard emoji="W" label="Written & knowledge check" caption="Safety, measurement, language, and tools. Perfect score required." />
+          <PictureCard emoji="W" label="Written practice" caption="Safety, measurement, language, and tools. Get each one clear — you can try the set again." />
           <QuizRunner items={FINAL_QUIZ} onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('certificate') }} gated />
         </Shell>
       )
@@ -2782,10 +2948,10 @@ export function StudentSequencePage() {
         nextDisabled={!honestyChecked}
       >
         <div className="train-passport">
-          <PictureCard emoji="C" label="Purpose Academy Program Certificate" caption="You passed the exam mix. Your Skills Passport collects verified evidence." />
+          <PictureCard emoji="C" label="Purpose Academy Program Certificate" caption="You cleared the final check. Your Skills Passport keeps a record of what you practised." />
           <ul className="list-plain">
-            <li>Vocabulary Eye Spy passed at 100%</li>
-            <li>Written / knowledge check complete</li>
+            <li>Picture practice cleared</li>
+            <li>Written practice complete</li>
             <li>Digital Skills Passport you can share</li>
           </ul>
           <label className="train-honesty-check">
@@ -2852,7 +3018,16 @@ export function StudentSequencePage() {
       setEmpAnswer(opt)
       setEmpCorrect(ok)
       recordSkillAttempt('employment', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = EMPLOYMENT_PREP.length - (empIdx + 1)
+        firePlayClear({
+          label: 'Prep clear',
+          remnant: left > 0 ? `${left} left` : 'Interview prep clear — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextEmp() {
@@ -2873,6 +3048,9 @@ export function StudentSequencePage() {
     return (
       <Shell step={22} onBack={() => go(21)}>
         <WhyWork>Employment connection starts with clear interview answers, then partner matching.</WhyWork>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this interview question · {EMPLOYMENT_PREP.length - empIdx} left
+        </p>
         <p className="train-vocab-counter">Interview prep {empIdx + 1} of {EMPLOYMENT_PREP.length}</p>
         <article className="topic-lesson-card">
           <p className="train-check-prompt">{item.prompt}</p>
@@ -2890,13 +3068,17 @@ export function StudentSequencePage() {
           </div>
           {empAnswer && (
             <>
-              <div className={`alert ${empCorrect ? 'ok' : 'warn'}`}>
-                {empCorrect ? item.teachCorrect : item.teachWrong}
-              </div>
+              {empCorrect ? (
+                <div className="alert ok">{item.teachCorrect}</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(item.teachWrong)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextEmp}>
                 {empCorrect
                   ? (isLast ? 'Continue to partner setup' : 'Next interview question')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2922,12 +3104,12 @@ export function StudentSequencePage() {
             <label htmlFor="emp-avail">Availability</label>
             <input id="emp-avail" value={empForm.availability} onChange={(e) => setEmpForm({ ...empForm, availability: e.target.value })} required placeholder="e.g. Weekdays, full-time" />
           </div>
-          <button className="btn btn-primary" type="submit">Complete student training path</button>
+          <button className="btn btn-primary" type="submit">Finish this path</button>
         </form>
       ) : (
         <>
           <div className="alert ok">
-            Student training path complete. Your Skills Passport and 30 / 90 / 180 day follow-up are open.
+            Path complete. Your Skills Passport and 30 / 90 / 180 day follow-up are open.
           </div>
           <div className="train-learn-grid">
             <LearnCard title="Hiring partner match" body={`Connect with ${meta.label.toLowerCase()} partners hiring from this pathway.`} />
@@ -3024,7 +3206,7 @@ export function StudentSequencePage() {
           </div>
         </>
       )}
-      <p className="train-motto">Learn · Practice · Improve · Achieve</p>
+      <p className="train-motto">Learn · Practise · Keep going</p>
     </Shell>
   )
 }

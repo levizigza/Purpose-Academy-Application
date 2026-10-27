@@ -7,7 +7,7 @@ import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v43'
+const ENTERED_KEY = 'pa-crossed-threshold-v44'
 
 export function hasEnteredSite() {
   try {
@@ -364,7 +364,7 @@ export function SplashPage({
       ]
         .filter(Boolean)
         .join(' ')}
-      data-splash-version="v43"
+      data-splash-version="v44"
       role="dialog"
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}
@@ -385,13 +385,15 @@ export function SplashPage({
       {showEnter && (
         <button
           type="button"
-          className={`threshold-hammer is-visible${isSmashing ? ' is-smashing' : ''}`}
+          className={`threshold-hammer is-visible${isSmashing ? ' is-smashing' : ''}${
+            embedded ? ' is-phone-tap' : ''
+          }`}
           onClick={enter}
-          aria-label="Enter Purpose Academy"
+          aria-label={embedded ? 'Tap to enter Purpose Academy' : 'Enter Purpose Academy'}
           disabled={exiting}
         >
           <EnterHammer className="threshold-hammer-icon" />
-          <span className="threshold-hammer-hint">Strike to enter</span>
+          <span className="threshold-hammer-hint">{embedded ? 'Tap' : 'Strike to enter'}</span>
         </button>
       )}
 
@@ -441,7 +443,7 @@ export function RoleSelectionPage() {
         <p className="lede">Choose your role. You will use the same email and password on the next screen.</p>
         <div className="role-pick">
           <Link to="/login?role=student">Learner: learn and practise</Link>
-          <Link to="/login?role=instructor">Instructor: teach and assess</Link>
+          <Link to="/login?role=instructor">Instructor: teach and check</Link>
           <Link to="/login?role=admin">Admin: approve and manage</Link>
         </div>
         <p className="muted">

@@ -2780,7 +2780,7 @@ table.data th {
   }
 }
 
-/* Embedded phone: door is geometrically centered — bias contact toward 50% × 42% */
+/* Embedded phone: hammer rests mid-frame — strike rises into door at 50% × 42% */
 .threshold.is-embedded .threshold-hammer.is-smashing {
   animation-name: hammer-door-strike-embedded;
 }
@@ -2788,26 +2788,59 @@ table.data th {
 @keyframes hammer-door-strike-embedded {
   0% {
     opacity: 1;
-    transform: translateX(0) translateY(0) rotate(6deg) scale(1);
+    transform: translate(-50%, -50%) rotate(4deg) scale(1);
   }
   12% {
-    transform: translateX(10px) translateY(8px) rotate(20deg) scale(1.04);
+    transform: translate(-50%, -42%) rotate(18deg) scale(1.04);
   }
   24% {
-    transform: translateX(12px) translateY(10px) rotate(30deg) scale(1.06);
+    transform: translate(-50%, -38%) rotate(28deg) scale(1.06);
   }
   40% {
-    transform: translate(-16cqw, -14cqh) rotate(-2deg) scale(1.1);
+    transform: translate(-50%, -28cqh) rotate(-4deg) scale(1.1);
   }
   54% {
-    transform: translate(-40cqw, -28cqh) rotate(-26deg) scale(1.16);
+    /* Contact — head into the glowing doorway cavity mid */
+    transform: translate(-50%, -36cqh) rotate(-22deg) scale(1.16);
   }
   68% {
-    transform: translate(-42cqw, -26cqh) rotate(-10deg) scale(1.06);
+    transform: translate(-50%, -34cqh) rotate(-8deg) scale(1.06);
   }
   100% {
     opacity: 0;
-    transform: translate(-44cqw, -16cqh) rotate(14deg) scale(0.9);
+    transform: translate(-50%, -22cqh) rotate(12deg) scale(0.9);
+  }
+}
+
+/* Phone app: rise into mid-frame (not corner slide-in) */
+@keyframes hammer-center-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.9);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(-50%, -52%) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(4deg) scale(1);
+  }
+}
+
+/*
+  Soft blink on phone Tap CTA — draws the next action without casino glow.
+  Opacity + slight scale only; stopped while smashing / under reduced motion.
+*/
+@keyframes hammer-tap-blink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.42;
+    transform: scale(1.06);
   }
 }
 
@@ -2933,6 +2966,20 @@ table.data th {
   .threshold-hammer.is-visible {
     opacity: 1;
     transform: rotate(6deg);
+  }
+
+  .threshold.is-embedded .threshold-hammer,
+  .threshold.is-embedded .threshold-hammer.is-visible,
+  .threshold.is-embedded .threshold-hammer.is-phone-tap {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(4deg);
+  }
+
+  .threshold.is-embedded .threshold-hammer.is-phone-tap .threshold-hammer-icon,
+  .threshold.is-embedded .threshold-hammer.is-phone-tap .threshold-hammer-hint {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
   }
 
   .threshold-door-zoom.is-closed,
@@ -5502,7 +5549,7 @@ table.data th {
 }
 
 /*
- * Portal School path — same navy-on-paper lockup as Phone + Desktop course.
+ * Portal School path — same navy-on-paper lockup as Phone (Desktop course stays night).
  * Critic overturn (2026-10-26): night “shop-floor” stage split the product for demos.
  */
 .practice-hub.is-portal {
@@ -6453,7 +6500,7 @@ table.data th {
   color: var(--accent-bright);
 }
 
-/* Night-stage defaults; paper shells remapped below (.is-course-app / .is-phone-app) */
+/* Night-stage defaults; phone paper remaps below (.is-phone-app only — course stays night) */
 .practice-stats-strip .is-ready {
   color: #9ccc65;
 }
@@ -7632,6 +7679,130 @@ table.data th {
   max-width: 52rem;
   margin: 0 auto;
   width: 100%;
+}
+
+/* Hear → hear → type: one quiet production beat (reps that stick, not a test) */
+.vocab-sheet-en.is-hidden-for-type {
+  color: var(--brand, #0b2f5c);
+  font-style: italic;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  opacity: 0.72;
+}
+
+.vocab-sheet-card.is-typed {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ok, #1f7a4d) 35%, transparent);
+}
+
+.vocab-sheet-type {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.85rem 0 0.35rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 14px;
+  background: #fff6de;
+  border: 1px solid color-mix(in srgb, var(--accent, #e8a317) 42%, var(--line, #c5d0dc));
+}
+
+.vocab-sheet-type-prompt {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 650;
+  color: var(--brand-deep, #041526);
+  line-height: 1.35;
+}
+
+.vocab-sheet-type-kicker {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand, #0b2f5c);
+}
+
+.vocab-sheet-type-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+  align-items: stretch;
+}
+
+.vocab-sheet-type-input {
+  width: 100%;
+  min-height: 2.85rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 12px;
+  border: 2px solid color-mix(in srgb, var(--brand, #0b2f5c) 28%, var(--line, #c5d0dc));
+  background: #ffffff;
+  color: var(--brand-deep, #041526);
+  font: inherit;
+  font-size: 1.15rem;
+  font-weight: 650;
+}
+
+.vocab-sheet-type-input:focus {
+  outline: 2px solid var(--accent, #e8a317);
+  outline-offset: 1px;
+  border-color: var(--brand, #0b2f5c);
+}
+
+.vocab-sheet-type-input[aria-invalid='true'] {
+  border-color: color-mix(in srgb, #b45309 55%, var(--line));
+}
+
+.vocab-sheet-type-check {
+  min-height: 2.85rem;
+  padding-inline: 1.1rem !important;
+  white-space: nowrap;
+}
+
+.vocab-sheet-type-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.vocab-sheet-type-replay {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem !important;
+}
+
+.vocab-sheet-type-fb {
+  margin: 0.15rem 0 0;
+  font-size: 0.98rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.vocab-sheet-type-fb.is-ok {
+  color: #1f7a4d;
+}
+
+.vocab-sheet-type-fb.is-retry {
+  color: var(--brand-deep, #041526);
+}
+
+.is-phone-app .vocab-sheet-type {
+  margin-top: 0.65rem;
+  padding: 0.75rem 0.8rem;
+}
+
+.is-phone-app .vocab-sheet-type-input {
+  font-size: 1.05rem;
+}
+
+.is-phone-app .vocab-sheet-type-row {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 520px) {
+  .vocab-sheet-type-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -9066,10 +9237,7 @@ html.pa-course-shell .practice-banner {
   padding: 0.4rem 0.85rem;
   font-size: 0.8rem;
   box-shadow: none;
-  /* Paper course stage: quiet navy status strip, not gold shout */
-  background: linear-gradient(90deg, #0b2f5c, #163f73) !important;
-  color: #f4f7fb !important;
-  border-radius: 10px;
+  /* Night course stage: keep gold/navy Practice banner (phone keeps quiet paper chrome) */
   width: min(100% - 1.5rem, 720px);
   margin-inline: auto;
 }
@@ -11095,16 +11263,13 @@ video {
   display: none !important;
 }
 
-.is-phone-app .vocab-organize .section-kicker,
-.is-course-app .vocab-organize .section-kicker {
+.is-phone-app .vocab-organize .section-kicker {
   color: var(--brand, #0b2f5c) !important;
 }
 
-/* Paper shells: At work / Teach note labels must stay navy (pale gold fails demos) */
+/* Phone paper: At work / Teach note labels must stay navy (pale gold fails demos) */
 .is-phone-app .train-why strong,
-.is-course-app .train-why strong,
-.is-phone-app .train-teach-label,
-.is-course-app .train-teach-label {
+.is-phone-app .train-teach-label {
   color: var(--brand-deep, #041526) !important;
 }
 
@@ -11200,11 +11365,6 @@ video {
   font-size: 0.88rem !important;
 }
 
-.is-course-app .vocab-organize-pool-label,
-.is-course-app .vocab-organize-slot-hint {
-  color: var(--brand-deep, #041526) !important;
-}
-
 .vocab-organize-pass .hero-actions {
   justify-content: center;
 }
@@ -11261,14 +11421,12 @@ video {
   margin-bottom: 0.55rem;
 }
 
-.is-phone-app .station-context-fold,
-.is-course-app .station-context-fold {
+.is-phone-app .station-context-fold {
   background: #fff6de !important;
   border-color: color-mix(in srgb, var(--accent) 40%, var(--line)) !important;
 }
 
-.is-phone-app .station-context-fold > summary,
-.is-course-app .station-context-fold > summary {
+.is-phone-app .station-context-fold > summary {
   color: var(--brand) !important;
 }
 
@@ -13010,104 +13168,76 @@ video {
 }
 
 /*
- * Paper ink lock (phone + course) — site-wide L3.
- * Night leftovers (#e8eef6 / pale #f5c542 / accent kickers) die on cream mats.
- * Law: amber = border, pill, or fill — never body copy on a light fill.
+ * Paper ink lock (phone only) — L3 on the emulator.
+ * Desktop course keeps night train dialect; phone keeps navy-on-paper.
+ * Law on paper: amber = border, pill, or fill — never body copy on a light fill.
  */
-.is-phone-app .section-kicker:not(.on-dark),
-.is-course-app .section-kicker:not(.on-dark) {
+.is-phone-app .section-kicker:not(.on-dark) {
   color: var(--brand, #0b2f5c) !important;
 }
 
-.is-phone-app .section-kicker:not(.on-dark)::after,
-.is-course-app .section-kicker:not(.on-dark)::after {
+.is-phone-app .section-kicker:not(.on-dark)::after {
   background: var(--accent, #e8a317) !important;
 }
 
 .is-phone-app .train-checkin-note,
-.is-course-app .train-checkin-note,
-.is-phone-app .unit-intro-method,
-.is-course-app .unit-intro-method {
+.is-phone-app .unit-intro-method {
   color: var(--brand-deep, #041526) !important;
 }
 
-.is-phone-app .comp-desktop-hint strong,
-.is-course-app .comp-desktop-hint strong {
+.is-phone-app .comp-desktop-hint strong {
   color: var(--brand-deep, #041526) !important;
 }
 
-.is-phone-app .career-result-badge,
-.is-course-app .career-result-badge {
+.is-phone-app .career-result-badge {
   color: var(--brand-deep, #041526) !important;
   background: #fff6de !important;
   border-color: color-mix(in srgb, var(--accent, #e8a317) 45%, var(--line)) !important;
 }
 
-/* Dark lesson rail family labels — brighter gold for AA on navy */
+/* Dark lesson rail family labels — brighter gold for AA on navy (both shells) */
 .is-phone-app .equip-video-family-label,
 .is-course-app .equip-video-family-label {
   color: #f5c542 !important;
 }
 
-.is-phone-app .career-strengths li,
-.is-course-app .career-strengths li {
+.is-phone-app .career-strengths li {
   color: var(--brand-deep, #041526) !important;
   background: #fff6de !important;
   border: 1px solid color-mix(in srgb, var(--accent, #e8a317) 40%, var(--line)) !important;
   border-left: 3px solid var(--accent, #e8a317) !important;
 }
 
-.is-phone-app .career-result > section:not(.career-fit):not(.career-code):not(.career-profile) .career-section-title,
-.is-course-app .career-result > section:not(.career-fit):not(.career-code):not(.career-profile) .career-section-title {
+.is-phone-app .career-result > section:not(.career-fit):not(.career-code):not(.career-profile) .career-section-title {
   color: var(--brand, #0b2f5c) !important;
 }
 
-.is-phone-app .career-likert-btn,
-.is-course-app .career-likert-btn {
+.is-phone-app .career-likert-btn {
   background: #ffffff !important;
   color: var(--brand-deep, #041526) !important;
   border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
 }
 
 .is-phone-app .career-likert-btn:hover,
-.is-phone-app .career-likert-btn:focus-visible,
-.is-course-app .career-likert-btn:hover,
-.is-course-app .career-likert-btn:focus-visible {
+.is-phone-app .career-likert-btn:focus-visible {
   background: var(--brand-soft, #e6eef8) !important;
   color: var(--brand-deep, #041526) !important;
 }
 
-.is-phone-app .career-likert-btn.is-selected,
-.is-course-app .career-likert-btn.is-selected {
+.is-phone-app .career-likert-btn.is-selected {
   background: #fff6de !important;
   border-color: var(--accent, #e8a317) !important;
   color: var(--brand-deep, #041526) !important;
 }
 
-.is-phone-app .career-assess-prompt,
-.is-course-app .career-assess-prompt {
+.is-phone-app .career-assess-prompt {
   color: var(--brand-deep, #041526) !important;
 }
 
-.is-course-app .career-choice {
-  background: #ffffff !important;
-  color: var(--brand-deep, #041526) !important;
-  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
-}
-
-.is-course-app .career-choice:hover,
-.is-course-app .career-choice:focus-visible {
-  background: var(--brand-soft, #e6eef8) !important;
-  color: var(--brand-deep, #041526) !important;
-}
-
-/* Coaching callouts on paper — At work / Teach note body (not pale gold) */
+/* Coaching callouts on phone paper — At work / Teach note body (not pale gold) */
 .is-phone-app .train-why,
-.is-course-app .train-why,
 .is-phone-app .train-teach,
-.is-course-app .train-teach,
-.is-phone-app .train-teach p,
-.is-course-app .train-teach p {
+.is-phone-app .train-teach p {
   color: var(--brand-deep, #041526) !important;
 }
 
@@ -14060,6 +14190,181 @@ html.pa-phone-shell .practice-feedback-dock {
   padding: 1.15rem 1.1rem 1.25rem;
 }
 
+/* ——— Play craft: moment-loop clear pulse + nearby objective (L3/L4) ———
+   Desktop night + phone paper inherit the same grammar; ink tokens differ.
+   Presentation only — never evidence. See docs/PLAY_CRAFT.md. */
+.play-clear-pulse {
+  position: fixed;
+  left: 50%;
+  bottom: max(1.25rem, env(safe-area-inset-bottom, 0px) + 1rem);
+  z-index: 70;
+  transform: translateX(-50%) translateY(0);
+  display: grid;
+  gap: 0.15rem;
+  min-width: min(16rem, calc(100vw - 2rem));
+  max-width: 22rem;
+  padding: 0.7rem 1.1rem 0.75rem;
+  border-radius: 14px;
+  text-align: center;
+  pointer-events: none;
+  animation: play-clear-rise 0.52s ease-out both;
+}
+
+.play-clear-pulse.is-micro {
+  background: color-mix(in srgb, #041526 88%, #0b2f5c);
+  border: 1px solid color-mix(in srgb, #f5c542 45%, transparent);
+  box-shadow: 0 12px 28px rgba(4, 21, 38, 0.35);
+  color: #f8f4ea;
+}
+
+.play-clear-pulse.is-board {
+  background: #ffffff;
+  border: 1px solid color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
+  box-shadow: 0 16px 36px rgba(4, 21, 38, 0.32);
+  color: #041526;
+  animation-duration: 0.9s;
+}
+
+.play-clear-label {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.play-clear-pulse.is-micro .play-clear-label {
+  color: #f5c542;
+}
+
+.play-clear-pulse.is-board .play-clear-label {
+  color: #0b2f5c;
+}
+
+.play-clear-remnant {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.3;
+  opacity: 0.92;
+}
+
+.play-nearby-objective {
+  margin: 0 0 0.55rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  background: color-mix(in srgb, #f5c542 16%, transparent);
+  border: 1px solid color-mix(in srgb, #f5c542 40%, transparent);
+  color: #f5c542;
+}
+
+.course-stage .play-nearby-objective {
+  color: #f5c542;
+  background: color-mix(in srgb, #f5c542 14%, rgba(4, 21, 38, 0.35));
+}
+
+/* Phone paper: navy body on cream — beat night amber even inside .course-stage */
+.is-phone-app .play-nearby-objective,
+.is-phone-app .course-stage .play-nearby-objective,
+html.pa-phone-shell .play-nearby-objective {
+  color: #0b2f5c;
+  background: color-mix(in srgb, #0b2f5c 8%, #fff8e8);
+  border-color: color-mix(in srgb, #0b2f5c 22%, #c5d0dc);
+}
+
+.is-phone-app .play-clear-pulse.is-micro {
+  background: #ffffff;
+  border-color: color-mix(in srgb, #0b2f5c 20%, #c5d0dc);
+  color: #041526;
+  box-shadow: 0 10px 24px rgba(4, 21, 38, 0.18);
+}
+
+.is-phone-app .play-clear-pulse.is-micro .play-clear-label {
+  color: #0b2f5c;
+}
+
+.is-phone-app .play-clear-pulse.is-board {
+  animation-duration: 0.72s;
+}
+
+/* Soft miss — night amber tip / phone navy on cream */
+.play-soft-miss {
+  margin: 0 0 0.55rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #f8f4ea;
+  background: color-mix(in srgb, #0b2f5c 55%, transparent);
+  border: 1px solid color-mix(in srgb, #f5c542 35%, transparent);
+}
+
+.course-stage .play-soft-miss {
+  color: #f8f4ea;
+  background: color-mix(in srgb, #041526 70%, #0b2f5c);
+}
+
+.is-phone-app .play-soft-miss,
+.is-phone-app .course-stage .play-soft-miss,
+html.pa-phone-shell .play-soft-miss {
+  color: #0b2f5c;
+  background: color-mix(in srgb, #0b2f5c 7%, #fff8e8);
+  border-color: color-mix(in srgb, #0b2f5c 20%, #c5d0dc);
+}
+
+.ph-play-loop {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+/* Hub resume inherits dual-shell nearby objective; keep card insets */
+.ph-resume .play-nearby-objective.ph-play-loop {
+  margin-left: 1.15rem;
+  margin-right: 1.15rem;
+  margin-top: 0.45rem;
+}
+
+.ph-play-clears {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+.ph-play-clears-hint {
+  font-weight: 550;
+  opacity: 0.75;
+}
+
+@keyframes play-clear-rise {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px) scale(0.96);
+  }
+  55% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play-clear-pulse {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 .is-phone-app .train-title {
   font-size: 1.28rem !important;
   margin: 0.3rem 0 0.15rem !important;
@@ -14168,8 +14473,8 @@ html.pa-phone-shell .practice-feedback-dock {
 
 /* ——— Desktop course stage ——— */
 /*
- * Showcase dialect (2026-10-26): course body matches logo + phone — navy on paper.
- * Topbar stays navy brand chrome; learning surface is paper.
+ * Desktop course = original night material stage (amber wash on navy).
+ * Phone emulator keeps the navy-on-paper dialect — two shells, two looks.
  */
 .course-stage {
   min-height: 100vh;
@@ -14177,9 +14482,9 @@ html.pa-phone-shell .practice-feedback-dock {
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(11, 47, 92, 0.06), transparent 55%),
-    linear-gradient(180deg, #fbfcff 0%, #f3f6fb 48%, #e8eef7 100%);
-  color: #041526;
+    radial-gradient(ellipse 60% 40% at 0% 0%, rgba(232, 163, 23, 0.12), transparent 50%),
+    linear-gradient(180deg, #041526, #071c30 40%, #041526);
+  color: #f4f7fb;
 }
 
 .course-topbar {
@@ -14264,307 +14569,6 @@ html.pa-phone-shell .practice-feedback-dock {
 
 .is-course-app {
   max-width: none;
-  /*
-   * Same paper train/ph tokens as .is-phone-app — one showcase lockup.
-   * Desktop topbar stays night chrome; this flips the learning surface only.
-   */
-  --ink: #071e3d;
-  --ink-soft: #2f4156;
-  --paper: #f3f6fb;
-  --panel: #ffffff;
-  --train-text: #071e3d;
-  --train-text-muted: #2f4156;
-  --train-panel: #ffffff;
-  --train-surface: #ffffff;
-  --train-surface-2: #ffffff;
-  --train-bg: #f3f6fb;
-  --train-bg-2: #e8eef7;
-  --train-line: #aebccd;
-  --train-amber: #e8a317;
-  --train-amber-bright: #a8740c;
-  --ph-ink: #071e3d;
-  --ph-muted: #2f4156;
-  --ph-line: color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
-  --ph-panel: #ffffff;
-  --ph-panel-solid: #ffffff;
-  --ph-soft: #eef3f9;
-  --ph-accent: #0b2f5c;
-  color: var(--brand-deep, #041526);
-}
-
-.is-course-app .practice-hub {
-  --ph-ink: var(--brand-deep);
-  --ph-muted: var(--ink-soft);
-  --ph-line: color-mix(in srgb, var(--brand) 16%, var(--line));
-  --ph-panel: linear-gradient(180deg, #ffffff, #f3f6fb);
-  --ph-panel-solid: #ffffff;
-  --ph-soft: var(--brand-soft);
-  --ph-accent: var(--brand);
-  color: var(--brand-deep);
-}
-
-.is-course-app .ph-hero {
-  background:
-    radial-gradient(ellipse 70% 90% at 100% 0%, rgba(11, 47, 92, 0.08), transparent 55%),
-    linear-gradient(165deg, #ffffff 0%, #eef3f9 100%) !important;
-  border-color: color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
-  box-shadow: 0 12px 28px rgba(11, 47, 92, 0.08) !important;
-}
-
-.is-course-app .ph-hero-copy h1,
-.is-course-app .ph-resume h2,
-.is-course-app .ph-section-head h2,
-.is-course-app .ph-video-section h2,
-.is-course-app .ph-computer-section h2,
-.is-course-app .train-title,
-.is-course-app .train-simple-line,
-.is-course-app .train-kicker,
-.is-course-app .train-hub-btn {
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .ph-kicker,
-.is-course-app .ph-resume-label,
-.is-course-app .ph-video-section-kicker,
-.is-course-app .train-kicker,
-.is-course-app .train-why-details summary {
-  color: var(--brand) !important;
-}
-
-.is-course-app .ph-lede,
-.is-course-app .ph-resume-lesson,
-.is-course-app .ph-resume-progress,
-.is-course-app .ph-today-line {
-  color: var(--ink-soft) !important;
-  text-shadow: none !important;
-}
-
-.is-course-app .ph-resume,
-.is-course-app .ph-pathway-badge,
-.is-course-app .ph-video-section,
-.is-course-app .ph-computer-section,
-.is-course-app .ph-domains,
-.is-course-app .ph-curriculum,
-.is-course-app .ph-overview,
-.is-course-app .ph-footnote,
-.is-course-app .train-header,
-.is-course-app .train-panel,
-.is-course-app .unit-intro-card,
-.is-course-app .learning-path-map,
-.is-course-app .train-lang,
-.is-course-app .train-interest,
-.is-course-app .train-bridge,
-.is-course-app .train-learn-card,
-.is-course-app .train-check-rich,
-.is-course-app .train-topic-card,
-.is-course-app .train-choice,
-.is-course-app .phrase-lesson-card,
-.is-course-app .topic-lesson-card,
-.is-course-app .comp-try {
-  background: #ffffff !important;
-  border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .ph-video-section-inner,
-.is-course-app .ph-computer-section-inner {
-  background: #ffffff !important;
-  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
-  box-shadow: 0 10px 24px rgba(11, 47, 92, 0.08) !important;
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .ph-video-section-inner h2,
-.is-course-app .ph-computer-section-inner h2,
-.is-course-app .ph-video-section-inner strong,
-.is-course-app .ph-computer-section-inner strong,
-.is-course-app .ph-pathway-badge strong,
-.is-course-app .train-lang strong,
-.is-course-app .train-interest strong,
-.is-course-app .train-bridge strong,
-.is-course-app .train-learn-card strong,
-.is-course-app .train-topic-card strong,
-.is-course-app .phrase-lesson-en,
-.is-course-app .topic-lesson-card h3,
-.is-course-app .unit-intro-card h3,
-.is-course-app .unit-intro-summary strong,
-.is-course-app .lp-title,
-.is-course-app .lp-unit-copy strong,
-.is-course-app .lp-lesson strong,
-.is-course-app .career-assess-title,
-.is-course-app .career-result-title,
-.is-course-app .train-check-prompt,
-.is-course-app .vocab-sheet-lede,
-.is-course-app .vocab-sheet-page-label,
-.is-course-app .eye-spy-instruction,
-.is-course-app .eye-spy-scene-title,
-.is-course-app .eye-spy-progress,
-.is-course-app .eye-spy-prompt,
-.is-course-app .eye-spy-word,
-.is-course-app .eye-spy-word strong {
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .ph-video-section-inner > p:not(.ph-video-section-kicker),
-.is-course-app .ph-computer-section-inner > p:not(.ph-video-section-kicker),
-.is-course-app .ph-lede,
-.is-course-app .lp-mastery,
-.is-course-app .lp-unit-copy span,
-.is-course-app .lp-unit-copy em,
-.is-course-app .unit-intro-goal,
-.is-course-app .unit-intro-outcomes,
-.is-course-app .vocab-sheet-definition {
-  color: var(--ink-soft) !important;
-}
-
-.is-course-app .ph-video-section-inner > .ph-video-section-kicker,
-.is-course-app .ph-computer-section-inner > .ph-video-section-kicker,
-.is-course-app .lp-kicker,
-.is-course-app .lp-hub-btn,
-.is-course-app .unit-intro-kicker,
-.is-course-app .unit-intro-summary-hint {
-  color: var(--brand) !important;
-}
-
-.is-course-app .eye-spy-stage:not(.is-scene) {
-  background: var(--brand-soft) !important;
-  border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
-}
-
-.is-course-app .eye-spy-word.is-clear,
-.is-course-app .eye-spy-cleared li.is-found {
-  color: #1f7a4d !important;
-}
-
-.is-course-app .eye-spy-cleared li {
-  color: var(--ink-soft) !important;
-  border-color: color-mix(in srgb, var(--brand) 18%, var(--line)) !important;
-}
-
-.is-course-app .train-lang.is-selected,
-.is-course-app .career-choice.is-selected {
-  background: #fff6de !important;
-  border-color: var(--accent) !important;
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .ph-pathway-switch-btn {
-  background: #ffffff !important;
-  color: var(--brand-deep) !important;
-  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
-}
-
-.is-course-app .ph-pathway-switch-btn.is-active {
-  background: var(--brand-soft) !important;
-  border-color: var(--brand) !important;
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .ph-pathway-switch-label,
-.is-course-app .ph-pathway-switch-hint,
-.is-course-app .ph-pathway-switch-hint strong {
-  color: var(--ink-soft) !important;
-}
-
-.is-course-app .ph-pathway-switch-label {
-  color: var(--brand) !important;
-  font-weight: 800;
-}
-
-.is-course-app .ph-domain-row,
-.is-course-app .ph-domain-row strong,
-.is-course-app .ph-unit-titles,
-.is-course-app .ph-unit-title-row strong,
-.is-course-app .ph-unit-goal,
-.is-course-app .ph-lesson-copy,
-.is-course-app .ph-meter-label,
-.is-course-app .ph-meter-label strong,
-.is-course-app .ph-footnote,
-.is-course-app .ph-section-head p {
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .ph-domain-row strong,
-.is-course-app .ph-status.is-current,
-.is-course-app .ph-meter-label span,
-.is-course-app .ph-status {
-  color: var(--brand) !important;
-}
-
-.is-course-app .ph-domain-track {
-  background: color-mix(in srgb, var(--brand) 12%, #e8eef7) !important;
-}
-
-.is-course-app .ph-unit {
-  background: #ffffff !important;
-  border-color: color-mix(in srgb, var(--brand) 14%, var(--line)) !important;
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .ph-unit.is-current {
-  background: color-mix(in srgb, var(--accent) 10%, #fff) !important;
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--line)) !important;
-}
-
-.is-course-app .ph-unit-badge {
-  background: var(--brand-soft) !important;
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .field input,
-.is-course-app .field select,
-.is-course-app .field textarea,
-.is-course-app .practice-section-skip select {
-  background: #ffffff !important;
-  color: var(--brand-deep) !important;
-  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
-}
-
-.is-course-app .shell.is-train .alert.ok,
-.is-course-app .alert.ok {
-  background: var(--ok-soft) !important;
-  color: var(--ok) !important;
-  border: 1px solid color-mix(in srgb, var(--ok) 35%, var(--line)) !important;
-}
-
-.is-course-app .practice-stats-strip,
-.is-course-app .practice-stats-strip strong {
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .practice-stats-strip .is-ready {
-  color: #1f7a4d !important;
-  font-weight: 700;
-}
-
-.is-course-app .practice-stats-strip .is-locked {
-  color: var(--brand) !important;
-}
-
-.is-course-app .train-picture figcaption,
-.is-course-app .train-picture.is-object figcaption,
-.is-course-app .train-picture figcaption strong {
-  color: var(--brand-deep) !important;
-}
-
-.is-course-app .train-picture.is-object figcaption {
-  background: #ffffff !important;
-}
-
-.is-course-app .train-instruction blockquote {
-  color: var(--brand-deep) !important;
-  background: var(--brand-soft) !important;
-  border-left: 3px solid var(--accent);
-}
-
-.is-course-app .ph-section-head h2,
-.is-course-app .ph-metric strong,
-.is-course-app .ph-meter-label strong,
-.is-course-app .ph-pathway-badge strong,
-.is-course-app .ph-resume h2,
-.is-course-app .ph-lesson-copy strong,
-.is-course-app .ph-footnote h3 {
-  color: var(--brand-deep) !important;
 }
 
 /*
@@ -14588,20 +14592,18 @@ html.pa-phone-shell .practice-feedback-dock {
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.85rem clamp(1rem, 3vw, 1.75rem);
-  border-top: 1px solid color-mix(in srgb, var(--brand) 14%, #c5d0dc);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.85rem;
-  color: var(--ink-soft, #2f4156);
-  background: #ffffff;
+  color: rgba(244, 247, 251, 0.55);
 }
 
 .course-footer .linkish {
-  color: var(--brand, #0b2f5c);
+  color: #f5c542;
   background: none;
   border: 0;
   font: inherit;
   cursor: pointer;
   text-decoration: underline;
-  font-weight: 700;
 }
 
 @media (max-width: 720px) {
@@ -15056,9 +15058,16 @@ html.pa-phone-shell .practice-feedback-dock {
   transform: translate(-50%, -50%);
 }
 
+/*
+  Critic overturn (user): phone hammer was a quiet corner CTA — next action
+  was unclear. Center it, label Tap, soft blink. Pathways lift above mid so
+  the hammer owns the middle of the phone frame. Desktop night splash unchanged.
+*/
 .threshold.is-embedded .threshold-pathways {
-  bottom: 22%;
-  width: 94%;
+  /* Below mid-frame hammer so the Tap CTA owns the middle */
+  bottom: auto;
+  top: 72%;
+  width: 88%;
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.72rem;
@@ -15069,31 +15078,68 @@ html.pa-phone-shell .practice-feedback-dock {
   justify-content: space-between;
 }
 
-.threshold.is-embedded .threshold-pathways {
-  bottom: 26%;
-  width: 90%;
-}
-
 .threshold.is-embedded .threshold-path-lede {
   font-size: 0.58rem;
   letter-spacing: 0.1em;
 }
 
-.threshold.is-embedded .threshold-hammer {
-  right: 6%;
-  bottom: 5%;
-  width: 3.4rem;
-  z-index: 6;
+.threshold.is-embedded .threshold-hammer,
+.threshold.is-embedded .threshold-hammer.is-phone-tap {
+  left: 50%;
+  right: auto;
+  top: 52%;
+  bottom: auto;
+  width: auto;
+  max-width: none;
+  z-index: 12;
+  gap: 0.35rem;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 8px 14px rgba(40, 24, 4, 0.42));
+}
+
+.threshold.is-embedded .threshold-hammer.is-visible {
+  animation: hammer-center-in 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
+}
+
+.threshold.is-embedded .threshold-hammer:hover:not(:disabled) {
+  transform: translate(-50%, -52%) rotate(2deg);
+  filter: drop-shadow(0 14px 22px rgba(90, 55, 8, 0.55));
+}
+
+.threshold.is-embedded .threshold-hammer:active:not(:disabled) {
+  transform: translate(-50%, -50%) rotate(0deg) scale(0.97);
 }
 
 .threshold.is-embedded .threshold-hammer-icon {
-  width: 100%;
+  width: clamp(3.6rem, 28cqi, 5.2rem);
   height: auto;
 }
 
 .threshold.is-embedded .threshold-hammer-hint {
-  font-size: 0.55rem;
-  letter-spacing: 0.04em;
+  font-size: clamp(0.85rem, 6.5cqi, 1.05rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: rgba(255, 244, 210, 0.98);
+  text-shadow: 0 1px 3px rgba(4, 21, 38, 0.65);
+  opacity: 1;
+  animation: none;
+}
+
+/* Soft blink after settle — hammer + Tap read as the one next action */
+.threshold.is-embedded .threshold-hammer.is-phone-tap.is-visible:not(.is-smashing) .threshold-hammer-icon {
+  animation: hammer-tap-blink 1.55s ease-in-out 1.05s infinite;
+  transform-origin: 50% 40%;
+}
+
+.threshold.is-embedded .threshold-hammer.is-phone-tap.is-visible:not(.is-smashing) .threshold-hammer-hint {
+  animation: hammer-tap-blink 1.55s ease-in-out 1.05s infinite;
+}
+
+.threshold.is-embedded .threshold-hammer.is-smashing .threshold-hammer-icon,
+.threshold.is-embedded .threshold-hammer.is-smashing .threshold-hammer-hint {
+  animation: none !important;
+  opacity: 0;
 }
 
 .threshold.is-embedded .threshold-foley {

@@ -467,8 +467,8 @@ export function localGradeSubmission(submissionId: string, grade: number, feedba
       db.notifications.push({
         id: id('n'),
         user_uid: student.uid,
-        title: 'Assignment graded',
-        body: `Your submission was graded ${grade}/100. ${feedback}`,
+        title: 'Assignment feedback ready',
+        body: `Your instructor left feedback on your submission. ${feedback}`,
         read: false,
         created_at: now(),
       })

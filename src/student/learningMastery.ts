@@ -1,6 +1,7 @@
 /**
- * Mastery tracking for the Purpose Academy journey.
- * Pattern: Khan Academy style levels: attempted → familiar → proficient → mastered.
+ * Station readiness tracking for the Purpose Academy journey.
+ * Internal levels (attempted → familiar → proficient → mastered) stay for craft gates.
+ * Learner-facing labels prefer crew language: Started → Comfortable → Strong → Solid.
  * Practice marks and “days showed up” serve craft (L4) — not streak FOMO.
  * Persisted in sessionStorage so Practice Mode and student runs keep progress.
  */
@@ -89,12 +90,12 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   /** Curriculum map step 12 — Basic Computer Skills (Unit 6), all pathways. */
   12: 'digital',
   13: 'site-phrases',
-  /** After practice: RIASEC interest inventory for specialization. */
+  /** After practice: work-interest questions for specialization. */
   14: 'career-assessment',
   15: 'safety',
   16: 'tools',
   17: 'systems',
-  /** After systems: equipment familiarization videos, then hands-on observation. */
+  /** After systems: equipment videos, then instructor check. */
   18: 'equipment-videos',
   19: 'observation',
   20: 'site-log',
@@ -301,18 +302,19 @@ export function resetMastery() {
   }
 }
 
+/** Learner-facing readiness labels — crew language, not report-card tiers. */
 export function masteryLabel(level: MasteryLevel): string {
   switch (level) {
     case 'mastered':
-      return 'Mastered'
+      return 'Solid'
     case 'proficient':
-      return 'Proficient'
+      return 'Strong'
     case 'familiar':
-      return 'Familiar'
+      return 'Comfortable'
     case 'attempted':
       return 'Started'
     default:
-      return 'Locked'
+      return 'Not started'
   }
 }
 
@@ -348,17 +350,17 @@ export function skillStationLabel(id: SkillId): string {
     case 'systems':
       return 'Workplace Systems'
     case 'equipment-videos':
-      return 'Equipment Familiarization'
+      return 'Equipment videos'
     case 'observation':
-      return 'Instructor Observation'
+      return 'Practice for your instructor'
     case 'site-log':
       return 'Floor Training'
     case 'final-exam':
-      return 'Final Exam'
+      return 'Final check'
     case 'employment':
       return 'Employment'
     case 'unit-checkpoint':
-      return 'Unit Checkpoint'
+      return 'Unit practice'
     default:
       return 'This skill'
   }
@@ -390,7 +392,7 @@ export function advanceBlockedReason(step: number): string | null {
   if (canAdvanceFromStep(step)) return null
   const skill = SKILL_BY_STEP[step]
   if (!skill) return null
-  return `Keep practising until this skill is Familiar (${masteryLabel(getMasteryLevel(skill))} now).`
+  return `Take another try on this station — no rush.`
 }
 
 /** Soft credit toward Familiar when a learner marks a vocab word as already known. */

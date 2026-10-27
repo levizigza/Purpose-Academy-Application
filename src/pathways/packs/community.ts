@@ -42,7 +42,7 @@ export const communityPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Learn support language, then specialize with a deeper interest inventory after Community practice.',
+      goal: 'Learn support language, then answer more questions about work you like after Community practice.',
       outcomes: [
         'Understand dignity, privacy, and consent phrases for community support',
         'See how your interests fit Community Support specialization',
@@ -69,10 +69,10 @@ export const communityPack: PathwayPack = {
       ],
     },
     9: {
-      goal: 'Prove readiness under observation, then connect to community-support employment.',
+      goal: 'Practise with an instructor, then connect to community-support employment.',
       outcomes: [
         'Complete observation scenarios with dignity and escalate-when-unsure',
-        'Prepare employment materials that lead with privacy and verified skills',
+        'Prepare employment materials that lead with privacy and what you practised',
       ],
     },
   },
@@ -85,7 +85,7 @@ export const communityPack: PathwayPack = {
     8: {
       title: 'English Eye Spy',
       help: 'Clear every board. Tap the picture that matches the English word.',
-      purpose: 'Prove you can find Community Support words in busy scenes.',
+      purpose: 'Find Community Support words in busy scenes.',
     },
     9: {
       title: 'Sentence Structure',
@@ -493,7 +493,7 @@ export const communityPack: PathwayPack = {
         { id: 'phone', label: 'Work phone charged and nearby', correctOrder: 3 },
         { id: 'open', label: 'Signal that you are ready to greet people arriving for support', correctOrder: 4 },
       ],
-      passNote: 'Competent welcome is prepared before the first person arrives.',
+      passNote: 'Welcome is prepared before the first person arrives.',
     },
     {
       id: 'knock-consent',
@@ -545,7 +545,7 @@ export const communityPack: PathwayPack = {
         { id: 'follow', label: 'Follow the supervisor\'s direction and update the person', correctOrder: 3 },
         { id: 'note', label: 'Write factual notes about what you saw and did', correctOrder: 4 },
       ],
-      passNote: 'Competent support means escalate first, then document facts - never guess or diagnose.',
+      passNote: 'Escalate first, then document facts — never guess or diagnose.',
     },
   ],
   siteDecisions: [
@@ -772,8 +772,8 @@ export const communityPack: PathwayPack = {
       ],
       answer:
         'I learned community support foundations for disability support, older adults, and settlement settings - privacy, support plans, and workplace English - with instructors who checked my skills',
-      teachCorrect: 'Connect your training to safety, dignity, language, and verified skill.',
-      teachWrong: 'Employers want proof of foundations, not shortcuts.',
+      teachCorrect: 'Connect your training to safety, dignity, language, and what you practised.',
+      teachWrong: 'Employers want to see what you practised — not shortcuts.',
     },
     {
       id: 'com-privacy',
@@ -999,7 +999,7 @@ export const communityPack: PathwayPack = {
     7: [
       {
         id: 'uc6-c1',
-        prompt: 'Competent observation means…',
+        prompt: 'A careful observation means…',
         emoji: 'O',
         imageKey: 'com-badge',
         options: [
@@ -1033,12 +1033,12 @@ export const communityPack: PathwayPack = {
         emoji: 'P',
         imageKey: 'com-welcome',
         options: [
-          'Privacy, dignity, foundations, and verified skills',
+          'Privacy, dignity, foundations, and what you practised',
           'Skipping training',
           'Avoiding English',
           'Guessing support words',
         ],
-        answer: 'Privacy, dignity, foundations, and verified skills',
+        answer: 'Privacy, dignity, foundations, and what you practised',
         teachCorrect: 'Employers want person-centred practice and proof of skill.',
         teachWrong: 'Talk about privacy, dignity, and what you can do.',
       },

@@ -101,7 +101,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Construction Workforce Readiness',
         category: 'construction',
         description:
-          'Construction foundations: shared 200-word Daily Conversation Vocabulary, 660-word Construction Visual Vocabulary, safety, tools, materials, site English, and instructor-verified skill, with a clear path into apprenticeship.',
+          'Construction foundations: shared 200-word Daily Conversation Vocabulary, 660-word Construction Visual Vocabulary, safety, tools, materials, site English, and instructor-checked practice, with a clear path into apprenticeship.',
         duration: '12-16 weeks',
         skills: ['Visual vocabulary', 'Site safety', 'Hand & power tools', 'Drywall', 'Flooring', 'Painting'],
         active: true,
@@ -111,7 +111,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Logistics Foundations',
         category: 'logistics',
         description:
-          'Logistics foundations: shared 200-word Daily Conversation Vocabulary, 500-word Logistics Visual Vocabulary, warehouse safety, equipment, inventory systems, workplace English, and instructor-verified skill.',
+          'Logistics foundations: shared 200-word Daily Conversation Vocabulary, 500-word Logistics Visual Vocabulary, warehouse safety, equipment, inventory systems, workplace English, and instructor-checked practice.',
         duration: '12-16 weeks',
         skills: ['Visual vocabulary', 'Warehouse safety', 'Inventory', 'Scanning', 'Receiving', 'Shipping'],
         active: true,
@@ -121,7 +121,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Community Support Foundations',
         category: 'community',
         description:
-          'Community support foundations: shared 200-word Daily Conversation Vocabulary, disability & community living, older adults, settlement support, privacy, support plans, workplace English, and instructor-verified skill.',
+          'Community support foundations: shared 200-word Daily Conversation Vocabulary, disability & community living, older adults, settlement support, privacy, support plans, workplace English, and instructor-checked practice.',
         duration: '12-16 weeks',
         skills: [
           'Community communication',
@@ -398,7 +398,7 @@ export function createSeedDatabase(): AppDatabase {
         order: 2,
         lesson_type: 'practical_prep',
         content:
-          'Prepare for supervised practice: PPE on, tools identified, and safety gate PASS. Your instructor records observation. A quiz score alone cannot mark you Competent.',
+          'Prepare for supervised practice: PPE on, tools identified, and safety gate clear. Your instructor records the check. Practice questions alone do not finish hands-on skill.',
         competency_id: 'comp-tool-id',
         safety_critical: true,
       },
@@ -715,7 +715,7 @@ export function createSeedDatabase(): AppDatabase {
       {
         id: 'ann-1',
         title: 'Three pathways open',
-        body: 'Construction, Logistics, and Community Support Foundations are open. Start with the pathway that fits your goals; each uses the same 21-step school path with instructor checks.',
+        body: 'Construction, Logistics, and Community Support Foundations are open. Start with the pathway that fits your goals; each uses the same 21-step practice path with instructor checks.',
         audience: 'all',
         created_at: now,
       },
