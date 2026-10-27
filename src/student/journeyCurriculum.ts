@@ -1257,7 +1257,7 @@ export const WORKPLACE_INSTRUCTIONS = [
   },
 ]
 
-/** Instructor observation — competency checklist learners rehearse before a real check. */
+/** Instructor observation — habit checklist learners rehearse before a real check. */
 export const OBSERVATION_SCENARIOS = [
   {
     id: 'ppe-entry',
@@ -1283,7 +1283,7 @@ export const OBSERVATION_SCENARIOS = [
       { id: 'mark', label: 'Mark the cut line once', correctOrder: 3 },
       { id: 'check', label: 'Measure a second time before cutting', correctOrder: 4 },
     ],
-    passNote: 'Measure twice, cut once. That is the competent standard.',
+    passNote: 'Measure twice, cut once. That is station clear — Checked with instructor.',
   },
   {
     id: 'level-wall',

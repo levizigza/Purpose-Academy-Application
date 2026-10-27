@@ -80,11 +80,13 @@ presentation / clear pulses / boards-cleared MUST NOT manufacture evidence
 
 **Pass 4 (shipped):** Soft-miss grammar site-wide (`softMissLine` / `SOFT_RETRY_LABEL`) · Eye Spy + Organize miss status · Vocab double-latch removed · Computer try-phase whoosh-only · Sentence pass/result copy · dual-shell `.play-soft-miss` · coverage → ~100% on choice/clear stations.
 
-**Pass 5 (this carve):** True ~100% critic pass — dual-shell `.play-soft-miss` on every choice/clear miss (not `alert.warn`) · Sentence + VocabSheet soft-miss · intake/unit/passport/hub light next-action nearby (no fake board evidence) · FamiliarTheater visual-only (no double latch vs `firePlayClear`) · “Wrong answers” / Eye Spy “Go” lexicon · Equipment keep-watching soft tip · Skills Passport chrome.
+**Pass 5 (shipped):** True ~100% critic pass — dual-shell `.play-soft-miss` on every choice/clear miss (not `alert.warn`) · Sentence + VocabSheet soft-miss · intake/unit/passport/hub light next-action nearby (no fake board evidence) · FamiliarTheater visual-only (no double latch vs `firePlayClear`) · “Wrong answers” / Eye Spy “Go” lexicon · Equipment keep-watching soft tip · Skills Passport chrome.
+
+**Pass 6 (this carve):** Residual lexicon + soft-miss gate — instructor-check `passNote` bans Competent · QuizRunner gated incomplete uses `.play-soft-miss` · Skills Passport table/remediation crew language (Skill / instructor check) · public trust “skills evidence”.
 
 Later: choice-schema content registry, review planner, finite fluency route, weekly challenge.
 
-**Intake / chrome (Pass 5):** Preference steps and passport are **not** board clears — no `firePlayClear` evidence cosplay. They still get a light nearby next-action line so the moment loop reads continuous with Practice stations.
+**Intake / chrome (Pass 5–6):** Preference steps and passport are **not** board clears — no `firePlayClear` evidence cosplay. They still get a light nearby next-action line so the moment loop reads continuous with Practice stations.
 
 ### 0.7 Critic tests before merge
 

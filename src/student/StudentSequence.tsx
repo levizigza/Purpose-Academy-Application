@@ -630,7 +630,9 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
       <div className="train-quiz-summary">
         <p className="train-score">{score} of {items.length} clear</p>
         {gated && score < items.length && (
-          <p className="alert warn">Safety needs every answer clear. Look again, then try the set once more. No rush.</p>
+          <p className="play-soft-miss" role="status">
+            Safety needs every answer clear. Look again, then try the set once more. No rush.
+          </p>
         )}
         {(!gated || score === items.length) && (
           <button type="button" className="btn btn-primary" onClick={handleComplete}>Continue</button>

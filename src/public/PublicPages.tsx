@@ -387,7 +387,7 @@ export function PrivacyNoticePage() {
           retention limits, and secure processing.
         </p>
         <p>
-          We keep identity for access, progress for instruction, and competency evidence for your Skills Passport.
+          We keep identity for access, progress for instruction, and skills evidence for your Skills Passport.
           Nothing beyond training and apprenticeship readiness.
         </p>
         <Link className="btn btn-ghost" to="/">

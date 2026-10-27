@@ -123,7 +123,7 @@ export function SkillsPassportPage() {
             <table className="data">
               <thead>
                 <tr>
-                  <th>Competency</th>
+                  <th>Skill</th>
                   <th>Status</th>
                   <th>Version</th>
                   <th>Date</th>
@@ -160,10 +160,11 @@ export function SkillsPassportPage() {
           </div>
         )}
         {counts.remediation > 0 && (
-          <div className="alert warn">
-            {counts.remediation} competenc{counts.remediation === 1 ? 'y needs' : 'ies need'} more
-            practice before re-observation.
-          </div>
+          <p className="play-soft-miss" role="status">
+            {counts.remediation === 1
+              ? '1 skill needs more practice before another instructor check.'
+              : `${counts.remediation} skills need more practice before another instructor check.`}
+          </p>
         )}
       </div>
 
