@@ -10986,6 +10986,111 @@ video {
   }
 }
 
+/* Type-the-blank — same Type / Go joy as Workplace Words (play craft). */
+.sentence-cloze-type {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.15rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent, #e8a317) 35%, #d7e3ef);
+  background: color-mix(in srgb, var(--accent, #e8a317) 8%, #fff);
+}
+
+.sentence-cloze-type-prompt {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--brand-deep, #041526);
+}
+
+.sentence-cloze-type-kicker {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--brand, #0b2f5c);
+}
+
+.sentence-cloze-type-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.sentence-cloze-type-input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  border-radius: 10px;
+  border: 1px solid #c9d8e8;
+  background: #fff;
+  color: #0b2f5c;
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.7rem 0.85rem;
+}
+
+.sentence-cloze-type-input:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent, #e8a317) 70%, #0b2f5c);
+  outline-offset: 1px;
+  border-color: var(--accent, #e8a317);
+}
+
+.sentence-cloze-type-input[aria-invalid='true'] {
+  border-color: #b45309;
+}
+
+.sentence-cloze-type-go {
+  flex: 0 0 auto;
+  min-width: 4.5rem;
+}
+
+.sentence-cloze-type-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  align-items: center;
+}
+
+.course-stage .sentence-cloze-type {
+  background: color-mix(in srgb, #e8a317 14%, transparent);
+  border-color: color-mix(in srgb, #e8a317 42%, transparent);
+}
+
+.course-stage .sentence-cloze-type-prompt,
+.course-stage .sentence-cloze-type-kicker {
+  color: #f5f8fc;
+}
+
+.course-stage .sentence-cloze-type-input {
+  background: rgba(255, 255, 255, 0.96);
+  color: #0b2f5c;
+}
+
+.is-phone-app .sentence-cloze-type {
+  background: #fff6de !important;
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--line)) !important;
+}
+
+.is-phone-app .sentence-cloze-type-prompt,
+.is-phone-app .sentence-cloze-type-kicker {
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .sentence-cloze-type-row {
+  flex-wrap: nowrap;
+}
+
+.is-phone-app .sentence-cloze-type-input {
+  font-size: 1.05rem !important;
+  padding: 0.65rem 0.75rem !important;
+}
+
 .sentence-cloze-choices {
   margin-top: 0.15rem;
 }

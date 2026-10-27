@@ -1,7 +1,8 @@
 /**
  * Construction Foundations — Sentence Structure (cloze) bank.
  * Source: Purpose Academy Construction Questions 1–560 (PPTX).
- * Fill the blank with one specialty word. One attempt per item in the learner UI.
+ * Fill the blank with one specialty word. Learner UI: type the short word (soft retry);
+ * optional word-choice hint after a miss.
  */
 
 export type SentenceClozeItem = {
