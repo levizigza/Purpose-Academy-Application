@@ -70,17 +70,13 @@ presentation / clear pulses / boards-cleared MUST NOT manufacture evidence
 | Words | Identical learner lexicon | Identical — fear doctrine is shell-agnostic |
 | First viewport | Task + nearby goal + media | Same; fold Why / map / stats |
 
-### 0.6 Build order (this pass)
+### 0.6 Build order
 
-1. Doctrine wires (`PLAY_CRAFT` ↔ LEARNER_FEAR ↔ Craft ↔ AGENTS).  
-2. Shared moment engine (`PlayClear` pulse + day counter).  
-3. Station A — Eye Spy (board clear = Candy Crush level).  
-4. Station B — Workplace Words (word clear = Flappy tiny increment).  
-5. Hub Promise/Return (boards cleared today — presentation only).  
-6. CSS for both shells + reduced-motion.  
-7. Critic pass · build · ship.
+**Pass 1 (shipped):** doctrine · PlayClear engine · Eye Spy · Workplace Words · hub · CSS.  
 
-Later (not this carve): choice-schema content registry, review planner, finite fluency route, weekly challenge.
+**Pass 2 (this carve):** Organize · Sentence · Word→Action · Supported Practice — same nearby-objective + clear-pulse grammar on desktop night and phone paper.
+
+Later: choice-schema content registry, review planner, finite fluency route, weekly challenge.
 
 ### 0.7 Critic tests before merge
 
@@ -103,12 +99,17 @@ stays real workplace English.
 
 ---
 
-## 2. Moment-loop slice (shipped surfaces)
+## 2. Moment-loop surfaces (shipped)
 
 | Surface | Nearby objective | Clear joy | Soft miss |
 |---------|------------------|-----------|-----------|
-| Eye Spy | `Clear this board · N left` | Micro pair + board latch | Wrong pair shake + try again |
-| Workplace Words | Type the English word | Word clear pulse | Not yet — hear again |
+| Eye Spy | `Clear this board · N left` | Pair + board latch | Wrong pair · try again |
+| Workplace Words | Type the English word | Word / set clear | Not yet — hear again |
+| Language Organize | Clear this round/word · N left | Picture / round / station | Shake · try again |
+| Sentence Structure | Clear this page · N left | Sentence / page clear | Show answer · keep going |
+| Word → Action | Clear this action · N left | Action clear | Not yet · try again |
+| Supported Practice | Clear this match · N left | Match / round clear | Not yet · try again |
+| Workplace Instructions | Clear this instruction · N left | Instruction clear | Not yet · try again |
 | Hub | Today’s station | Boards cleared today (quiet) | — |
 | Shell | Done for now | PlayClearPulse overlay | — |
 
@@ -121,3 +122,8 @@ stays real workplace English.
 - Distilled research into this doctrine; systematic plan §0; wired from LEARNER_FEAR + Craft + AGENTS.  
 - Shared `PlayClear` engine; Eye Spy + Workplace Words moment loops; hub boards-cleared presentation.  
 - Desktop night + phone paper CSS; reduced-motion safe. Entertainment without scoreboard fear.
+
+### 2026-10-26 — Pass 2: Organize → Sentence → Action → Match → Instructions
+
+- Same moment grammar across Language Organize, Sentence Structure, Word→Action, Supported Practice, Workplace Instructions.  
+- Softened Sentence “First go” counter → “clear so far.” Double-foley avoided (pulse owns success sound).

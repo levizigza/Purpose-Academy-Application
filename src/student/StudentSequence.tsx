@@ -68,7 +68,7 @@ import { ComputerSkillsDrill } from './ComputerSkillsDrill'
 import { EquipmentVideoDrill } from './EquipmentVideoDrill'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
-import { PlayClearPulse } from '../practice/PlayClear'
+import { PlayClearPulse, firePlayClear } from '../practice/PlayClear'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
 import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
@@ -1852,7 +1852,16 @@ export function StudentSequencePage() {
       setActionAnswer(opt)
       setActionCorrect(ok)
       recordSkillAttempt('word-action', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = safeDeck.length - (safeIdx + 1)
+        firePlayClear({
+          label: 'Action clear',
+          remnant: left > 0 ? `${left} left` : 'Last action — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextAction() {
@@ -1884,6 +1893,9 @@ export function StudentSequencePage() {
         {SENTENCE_CLOZE.length ? (
           <p className="train-vocab-counter">Word → Action · after Sentence Structure</p>
         ) : null}
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this action · {safeDeck.length - safeIdx} left
+        </p>
         <p className="train-vocab-counter">
           Action {safeIdx + 1} of {safeDeck.length}
           {knownSet.size ? ` · ${knownSet.size} already known skipped or quick-checked` : ''}
@@ -1961,7 +1973,22 @@ export function StudentSequencePage() {
       setMatchAnswer(opt)
       setMatchCorrect(ok)
       recordSkillAttempt('matching', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = matchDeck.length - (safeIdx + 1)
+        const lastRound = matchRound >= roundsNeeded
+        firePlayClear({
+          label: 'Match clear',
+          remnant:
+            left > 0
+              ? `${left} left this round`
+              : lastRound
+                ? 'Round clear — continue when ready'
+                : 'Round clear — next round next',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextMatch() {
@@ -1997,6 +2024,9 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={10} onBack={() => go(9)}>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this match · {matchDeck.length - safeIdx} left · round {matchRound} of {roundsNeeded}
+        </p>
         <p className="train-vocab-counter">
           Round {matchRound} of {roundsNeeded} · Match {safeIdx + 1} of {matchDeck.length}
           {' · '}
@@ -2073,7 +2103,16 @@ export function StudentSequencePage() {
       setInstrAnswer(opt)
       setInstrCorrect(ok)
       recordSkillAttempt('instructions', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = WORKPLACE_INSTRUCTIONS.length - (instrIdx + 1)
+        firePlayClear({
+          label: 'Instruction clear',
+          remnant: left > 0 ? `${left} left` : 'Last instruction — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextInstr() {
@@ -2095,6 +2134,9 @@ export function StudentSequencePage() {
     return (
       <Shell step={11} onBack={() => { resetMatch(); go(10) }}>
         <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this instruction · {WORKPLACE_INSTRUCTIONS.length - instrIdx} left
+        </p>
         <p className="train-vocab-counter">Instruction {instrIdx + 1} of {WORKPLACE_INSTRUCTIONS.length} · English only</p>
         <div className="train-instruction">
           <PictureCard

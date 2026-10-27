@@ -3,6 +3,7 @@ import type { HomeLang, SupportLang, VocabTerm } from './journeyCurriculum'
 import { pathwayImage } from '../pathways'
 import { VOCAB_SHEET_LANGS } from './VocabSheet'
 import { playFoley } from '../audio/foley'
+import { firePlayClear } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { speakEnglish, speakSupport, stopSpeech } from './speech'
@@ -64,6 +65,20 @@ function SpeakerIcon() {
       />
     </svg>
   )
+}
+
+/** Nearby objective — Candy Crush “clear this board” without a score. */
+function leftOverObjective(matchedCount: number, pageLen: number, phone: boolean) {
+  const left = pageLen - matchedCount
+  if (left <= 0) return 'Round clear — every picture placed'
+  if (phone) {
+    return left === 1
+      ? 'Clear this word · 1 picture left'
+      : `Clear this word · ${left} pictures left`
+  }
+  return left === 1
+    ? 'Clear this round · 1 picture left'
+    : `Clear this round · ${left} pictures left`
 }
 
 type Props = {
@@ -133,20 +148,36 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
       return
     }
     const nextMatched = { ...matched, [wordId]: true as const }
+    const placed = Object.keys(nextMatched).length
+    const left = page.length - placed
     setMatched(nextMatched)
     setPicked(null)
-    playFoley('correct')
     recordSkillAttempt('vocab-organize', true, 8)
-    if (Object.keys(nextMatched).length === page.length) {
+    if (placed === page.length) {
       recordSkillAttempt('vocab-organize', true, 16)
       if (lastRound) {
+        firePlayClear({
+          label: 'Station clear',
+          remnant: 'Five rounds complete',
+          kind: 'board',
+        })
         setPassed(true)
         recordSkillAttempt('vocab-organize', true, 24)
       } else {
+        firePlayClear({
+          label: 'Round clear',
+          remnant: `Round ${round + 1} of ${rounds.length} done`,
+          kind: 'board',
+        })
         setRoundClear(true)
       }
       return
     }
+    firePlayClear({
+      label: 'Picture clear',
+      remnant: left === 1 ? '1 left this round' : `${left} left this round`,
+      kind: 'micro',
+    })
     /* Phone: stay on the next unmatched word (same index after removal) */
     if (phone) {
       const nextUnmatched = page.filter((t) => !nextMatched[t.id])
@@ -244,6 +275,9 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
             </button>
           ) : null}
         </div>
+        <p className="play-nearby-objective" aria-live="polite">
+          {leftOverObjective(matchedCount, page.length, phone)}
+        </p>
         <p className="train-vocab-counter">
           {phone
             ? `Tap a picture, then tap Drop on this word · ${matchedCount} of ${page.length}`

@@ -183,3 +183,8 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 - Customer ask: Candy Crush / Temple Run / Flappy-style joy while keeping learner-fear doctrine.
 - New [`PLAY_CRAFT.md`](PLAY_CRAFT.md) — marble plan, eight roles, steal/refuse, desktop+phone contract.
 - Moment loop on Workplace Words + Eye Spy; presentation-only boards cleared; no scoreboard theatre.
+
+### 2026-10-26 — Play craft pass 2 (spine stations)
+
+- Language Organize, Sentence Structure, Word→Action, Supported Practice: nearby objectives + clear pulses.
+- Desktop night + phone paper inherit identical words; pulse CSS already dual-shell.

@@ -4,6 +4,7 @@ import type { SentenceClozeItem } from '../pathways/packs/constructionSentenceCl
 import { isPracticeMode } from '../practice/PracticeMode'
 import { speakEnglish } from './speech'
 import { playFoley } from '../audio/foley'
+import { firePlayClear } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 
 /** Worksheet tile from public/sentence-cloze/ when extracted from the PPTX. */
@@ -159,7 +160,11 @@ export function SentenceClozeDrill({
 
   function finishPagePass(finalScore: number) {
     setPhase('passed')
-    playFoley('correct')
+    firePlayClear({
+      label: 'Page clear',
+      remnant: 'Sentences done — next door can open',
+      kind: 'board',
+    })
     if (!level1Unlocked) {
       setLevel1Unlocked(true)
       onLevel1Passed()
@@ -223,7 +228,16 @@ export function SentenceClozeDrill({
     setCorrect(ok)
     setFlying(true)
     recordSkillAttempt('sentence-cloze', ok, ok ? 12 : 0)
-    playFoley(ok ? 'correct' : 'wrong')
+    if (ok) {
+      const leftAfter = deck.length - (idx + 1)
+      firePlayClear({
+        label: 'Sentence clear',
+        remnant: leftAfter > 0 ? `${leftAfter} left on this page` : 'Page almost clear',
+        kind: 'micro',
+      })
+    } else {
+      playFoley('wrong')
+    }
 
     const newScore = scoreCorrect + (ok ? 1 : 0)
     const nextMissed = ok ? missed : [...missed, item]
@@ -380,16 +394,20 @@ export function SentenceClozeDrill({
           </button>
         ) : null}
       </div>
+      <p className="play-nearby-objective" aria-live="polite">
+        {phase === 'repair'
+          ? `Repair · ${deck.length - idx} left`
+          : `Clear this page · ${deck.length - idx} left`}
+      </p>
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
         All {bank.length} {documentLabel} · Item {idx + 1} of {deck.length}
-        {phase === 'drill' ? ` · First go ${scoreCorrect}` : ''}
+        {phase === 'drill' ? ` · ${scoreCorrect} clear so far` : ''}
         {level1Unlocked ? ' · First page done' : ''}
       </p>
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
-        Choose the correct word to complete each sentence. Every item from the {documentLabel}{' '}
-        PowerPoint (1–{bank.length}) is here. One try — if it is wrong, we show the answer and move on.
+        Pick the word that fits the blank. One try each — if it is not yet, we show the answer and keep going.
       </p>
 
       <div
