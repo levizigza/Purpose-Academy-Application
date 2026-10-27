@@ -65,7 +65,7 @@ Archives live in [`docs/splash-versions/`](splash-versions/). Snapshot **before*
 | Humans | Treat edits here as product decisions, not docs chore. Prefer short, concrete rules over essays. |
 | Future selves | If a rule no longer matches the product, rewrite the rule — do not paper over the product. |
 
-**Pointer for agents:** root `AGENTS.md` requires this file **and** [`LEARNER_FEAR.md`](LEARNER_FEAR.md). Do not invent a parallel style guide. For UI work, **§7.0–7.0b is the aesthetics + information-display template** — inherit it; do not fork it. For Practice / journey / gates / vocabulary, **LEARNER_FEAR is non-optional**.
+**Pointer for agents:** root `AGENTS.md` requires this file, [`LEARNER_FEAR.md`](LEARNER_FEAR.md), and [`PLAY_CRAFT.md`](PLAY_CRAFT.md) for Practice entertainment loops. Do not invent a parallel style guide. For UI work, **§7.0–7.0b is the aesthetics + information-display template** — inherit it; do not fork it. For Practice / journey / gates / vocabulary, **LEARNER_FEAR + PLAY_CRAFT are non-optional**.
 
 **Site-wide rule:** Craft layers apply to *every* surface — public marketing, splash/enter, auth, Practice `/journey`, portal School path, Learn/LMS, instructor, and admin — not only the last page we polished. Coherence beats local cleverness.
 
@@ -447,6 +447,15 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Chrome soften (site-wide):** Journey titles Final Exam → Final Check, Interest Assessment → Work Interests; mastery labels → Started/Comfortable/Strong/Solid; Familiar theater → Station clear / Ready; Passport Competent → Checked; hub “mastery gates / Reach Familiar” → one station / comfortable; exam captions / perfect score / RIASEC learner copy cut; Programs volume bullets → hear/hear/type story.
 - **Law:** Prefer **station / check / comfortable** over **exam / assessment / mastery / proficient**. Keep adult crew gravity — never childish gamification.
 - **Follow-up same day:** full doctrine + deeper Practice pass (see entry above).
+
+### 2026-10-26 — Play craft: casual-game joy without learner fear (L2 / L3 / L4)
+
+- **Layers:** L2 moment loop · L3 info display + purposeful motion · L4 finite stop (anti-doomscroll).
+- **Customer ask:** Candy Crush / Temple Run / Flappy clarity and joy while keeping LEARNER_FEAR; desktop + phone.
+- **Plan:** [`docs/PLAY_CRAFT.md`](PLAY_CRAFT.md) §0 marble plan — eight roles, steal/refuse, authority rule, shell contract.
+- **Ship:** `PlayClear` pulse engine; Eye Spy “Clear this board · N left”; Workplace Words word-clear; hub boards-cleared (presentation only); night + paper CSS; reduced-motion safe.
+- **Refuse:** lives, scoreboards, % grades, realtime runners, points-as-competence.
+- **Assumption to challenge next:** whether Organize / Sentence should inherit the same nearby-objective chrome next.
 
 ### 2026-10-26 — Desktop night / phone paper: two shells, two looks (L3 / L6)
 

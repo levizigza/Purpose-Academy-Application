@@ -68,6 +68,7 @@ import { ComputerSkillsDrill } from './ComputerSkillsDrill'
 import { EquipmentVideoDrill } from './EquipmentVideoDrill'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
+import { PlayClearPulse } from '../practice/PlayClear'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
 import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
@@ -1145,6 +1146,7 @@ export function StudentSequencePage() {
             </div>
           </div>
         )}
+        <PlayClearPulse />
         <FamiliarTheater />
       </>
     )
@@ -1176,6 +1178,7 @@ export function StudentSequencePage() {
             saveStep(PRACTICE_ENTRY_STEP)
           }}
         />
+        <PlayClearPulse />
         <FamiliarTheater />
       </>
     )

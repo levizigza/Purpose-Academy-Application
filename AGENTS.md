@@ -4,6 +4,7 @@ Before changing UI, curriculum packs, brand copy, learning flow, sound, or publi
 
 1. Read **[`docs/CRAFTSMANSHIP.md`](docs/CRAFTSMANSHIP.md)** — living craftsmanship doctrine (§1 builder+critic, §3.1 systems, **§7.0–7.0b aesthetics + information display**, §7 composition/motion/door).
 2. Read **[`docs/LEARNER_FEAR.md`](docs/LEARNER_FEAR.md)** — standing standard for adults who fear education. Ban exam/quiz/assessment/mastery/% theatre; prefer hear→hear→type reps and soft retries. Run its spine checklist on every Practice change.
+2b. Read **[`docs/PLAY_CRAFT.md`](docs/PLAY_CRAFT.md)** when changing Practice loops, feedback joy, hub resume, or station motion — entertainment without exam theatre; desktop night + phone paper both inherit.
 3. Name which **craft layer(s)** you are touching (L1–L6).
 4. **Be the critic of your own build** — relentless, never toxic. Customer first. Build → destroy → question → improve. No version is the final destination.
 5. **Systems test:** excellent in isolation *and* continuous with neighbors (gateway → Home → path → Practice).

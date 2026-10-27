@@ -1,0 +1,123 @@
+# Play craft — entertainment without learner fear
+
+> **Standing companion to [`LEARNER_FEAR.md`](LEARNER_FEAR.md) and Craft §7.**  
+> Adults who fear school still deserve the *joy* of a clear, mindless-feeling game loop.  
+> We borrow structures from Candy Crush, Temple Run, Flappy Bird, and the Purpose Academy  
+> game-research pack — **without** exam theatre, lives walls, or points-as-competence.
+
+Source pack: [`docs/game-research/`](game-research/) (Oct 2026). Implementation reference lives  
+here so agents carve the same stone. Layers: **L2** (content loop), **L3** (info display + motion),  
+**L4** (attention ethics), **L6** (Practice spine). Desktop night + phone paper both inherit.
+
+---
+
+## 0. Marble plan (how we carve)
+
+Carve **system first**, then **stations**, then **shell aesthetics**. Never bolt a minigame onto a quiz.
+
+### 0.1 Three nested loops (Systems Framework §8)
+
+| Loop | Timescale | What must feel “game-like” | What must stay honest |
+|------|-----------|----------------------------|------------------------|
+| **Moment** | One tap | Clear next verb · instant result · soft retry | Feedback explains the *language*, not a score |
+| **Session** | 3–8 min | Nearby board goal · satisfying stop | **Done for now** sacred; no auto-chain |
+| **Journey** | Days | Station map · boards cleared (presentation) | Evidence ≠ cosmetics; instructor check separate |
+
+### 0.2 Eight roles → existing surfaces
+
+| Role | Desktop (`.course-stage` night) | Phone (`.is-phone-app` paper) | Primary files |
+|------|----------------------------------|-------------------------------|---------------|
+| Promise | Hub resume card, amber on navy | Same words, paper ink | `PracticeHub.tsx` |
+| Entry | Continue / resume into station | Same; sticky task-first | `StudentSequence` shell |
+| Action | Hear→type · pair · choose | Same grammar; denser chrome fold | `VocabSheet`, `EyeSpyQuiz` |
+| Response | Clear pulse + foley + short line | Same pulse; paper-safe ink | `PlayClear.tsx` + CSS |
+| Challenge | “N left” nearby objective | Same line, first viewport | Eye Spy / VV |
+| Progress | Stations finished · boards today | Quiet metric under resume | Hub + `PlayClear` |
+| Return | Done for now · Path home | Same exits, phone menu | Banner + shell |
+| Evidence | Attempts / instructor only | Same | `learningMastery` (unchanged authority) |
+
+### 0.3 Steal / refuse (from research)
+
+| Steal | Refuse |
+|-------|--------|
+| One obvious verb (Flappy) | Instruction walls before first try |
+| Nearby objective (Candy Crush level) | Global XP, leagues, % report cards |
+| Clear joy / cascade *feeling* | “Perfect!”, stars, score pops |
+| Rapid soft retry | Lives, wait timers, paid continues |
+| Stable grammar, new object | New control scheme every station |
+| Finite stop (Wordle) | Endless auto-advance, missed-day loss |
+| Forward motion via boards clearing | Real-time runner racing comprehension |
+
+**Hard bans (Implementation Brief):** paid lives, mystery chests, credit-from-points, public proficiency leagues, forced invites, missed-day penalties, auto practical certification, realtime runners vs reading/listening.
+
+### 0.4 Authority rule (non-negotiable)
+
+```
+presentation may read activity
+activity may create attempts
+evidence policy may evaluate eligible attempts
+assessors may create practical observations
+presentation / clear pulses / boards-cleared MUST NOT manufacture evidence
+```
+
+### 0.5 Desktop vs phone contract (L3)
+
+| Concern | Desktop night | Phone paper |
+|---------|---------------|-------------|
+| Pulse stage | Dark translucent veil, amber label | Soft navy veil, navy/amber on white card ink |
+| Nearby objective | Above counter; amber accent | Sticky-friendly; navy on cream; no amber-as-body |
+| Motion | 2–3 purposeful beats; respect `prefers-reduced-motion` | Same beats; slightly shorter hold |
+| Words | Identical learner lexicon | Identical — fear doctrine is shell-agnostic |
+| First viewport | Task + nearby goal + media | Same; fold Why / map / stats |
+
+### 0.6 Build order (this pass)
+
+1. Doctrine wires (`PLAY_CRAFT` ↔ LEARNER_FEAR ↔ Craft ↔ AGENTS).  
+2. Shared moment engine (`PlayClear` pulse + day counter).  
+3. Station A — Eye Spy (board clear = Candy Crush level).  
+4. Station B — Workplace Words (word clear = Flappy tiny increment).  
+5. Hub Promise/Return (boards cleared today — presentation only).  
+6. CSS for both shells + reduced-motion.  
+7. Critic pass · build · ship.
+
+Later (not this carve): choice-schema content registry, review planner, finite fluency route, weekly challenge.
+
+### 0.7 Critic tests before merge
+
+1. Proud tradesperson — enjoy without feeling graded?  
+2. Next action obvious in 3s (L3 info display)?  
+3. Miss → invited to try while lesson is warm?  
+4. Animation removed → learning outcome still clear?  
+5. Mindless *more* or finished station (L4)?  
+6. Phone paper + desktop night both readable (no amber body on cream)?
+
+---
+
+## 1. The one sentence
+
+Make the **learning action** feel like clearing a Candy Crush board: one obvious verb,  
+instant legible result, soft retry, tiny nearby goal, finite stop — while the skill itself  
+stays real workplace English.
+
+**Never** put an unrelated minigame in front of a quiz. [Research §1]
+
+---
+
+## 2. Moment-loop slice (shipped surfaces)
+
+| Surface | Nearby objective | Clear joy | Soft miss |
+|---------|------------------|-----------|-----------|
+| Eye Spy | `Clear this board · N left` | Micro pair + board latch | Wrong pair shake + try again |
+| Workplace Words | Type the English word | Word clear pulse | Not yet — hear again |
+| Hub | Today’s station | Boards cleared today (quiet) | — |
+| Shell | Done for now | PlayClearPulse overlay | — |
+
+---
+
+## 3. Changelog
+
+### 2026-10-26 — Play craft established + marble plan + moment-loop slice
+
+- Distilled research into this doctrine; systematic plan §0; wired from LEARNER_FEAR + Craft + AGENTS.  
+- Shared `PlayClear` engine; Eye Spy + Workplace Words moment loops; hub boards-cleared presentation.  
+- Desktop night + phone paper CSS; reduced-motion safe. Entertainment without scoreboard fear.

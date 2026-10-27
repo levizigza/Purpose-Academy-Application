@@ -8,7 +8,8 @@
 
 Read this **before** changing Practice, journey copy, gates, hub chrome, vocabulary,
 career questions, certificates, Skills Passport, or marketing that describes the path.
-Update this file when the critic overturns a choice. Cross-link: [`CRAFTSMANSHIP.md`](CRAFTSMANSHIP.md).
+Update this file when the critic overturns a choice. Cross-link: [`CRAFTSMANSHIP.md`](CRAFTSMANSHIP.md)
+and [`PLAY_CRAFT.md`](PLAY_CRAFT.md) (entertainment loops without exam theatre).
 
 ---
 
@@ -22,6 +23,7 @@ Update this file when the critic overturns a choice. Cross-link: [`CRAFTSMANSHIP
 | Calculation and jargon feel like traps | One job, one verb, no % report cards in the first viewport |
 | Repetition builds skill (like training a dog) | Short actions, same loop, soft retry — not novelty for its own sake |
 | Adult dignity matters | No childish gamification; no soft-shame “retry quiz” |
+| Joy still matters | Clear next action, soft clear joy, finite stop — see [`PLAY_CRAFT.md`](PLAY_CRAFT.md) |
 
 **Critic test:** Would this copy or chrome make a proud tradesperson feel small?
 If yes, rewrite before ship.
@@ -132,12 +134,13 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 | Concern | Primary files |
 |---------|----------------|
-| Doctrine / craft | `docs/LEARNER_FEAR.md`, `docs/CRAFTSMANSHIP.md`, `AGENTS.md` |
+| Doctrine / craft | `docs/LEARNER_FEAR.md`, `docs/PLAY_CRAFT.md`, `docs/CRAFTSMANSHIP.md`, `AGENTS.md` |
 | Hub / stats | `src/student/PracticeHub.tsx` |
 | Journey shell / quizzes | `src/student/StudentSequence.tsx` |
 | Step titles / goals | `src/student/journeyCurriculum.ts`, `src/pathways/packs/*.ts` |
 | Vocab type loop | `src/student/VocabSheet.tsx` |
 | Organize / Eye Spy / Sentences | `VocabOrganizeQuiz.tsx`, `EyeSpyQuiz.tsx`, `SentenceClozeDrill.tsx` |
+| Play moment loop | `src/practice/PlayClear.tsx` + station wires |
 | Career questions | `src/student/careerAssessment.ts`, `CareerAssessment.tsx` |
 | Readiness labels | `src/student/learningMastery.ts`, `FamiliarTheater.tsx` |
 | Passport | `src/skills/SkillsPassportPage.tsx`, Practice passport in `StudentSequence.tsx` |
@@ -174,3 +177,9 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 - Computer Skills lesson pack (`basicComputerSkillsVideos.ts`) aligned to Job Files (UI + checks match).
 - Learner notification: Assignment graded /100 → feedback ready.
 - Public + seed: school path/spine → practice path/spine (pathway copy).
+
+### 2026-10-26 — Play craft (entertainment without fear)
+
+- Customer ask: Candy Crush / Temple Run / Flappy-style joy while keeping learner-fear doctrine.
+- New [`PLAY_CRAFT.md`](PLAY_CRAFT.md) — marble plan, eight roles, steal/refuse, desktop+phone contract.
+- Moment loop on Workplace Words + Eye Spy; presentation-only boards cleared; no scoreboard theatre.

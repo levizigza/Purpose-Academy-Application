@@ -2,6 +2,8 @@ import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import type { HomeLang, SupportLang, VocabTerm } from './journeyCurriculum'
 import { SUPPORT_LANGUAGES } from './journeyCurriculum'
 import { pathwayImage } from '../pathways'
+import { firePlayClear } from '../practice/PlayClear'
+import { playFoley } from '../audio/foley'
 
 /**
  * Official Purpose Academy visual-vocabulary language order
@@ -123,9 +125,16 @@ export function VocabSheetCard({
     const ok = normalizeEnglishAnswer(draft) === normalizeEnglishAnswer(term.english)
     if (ok) {
       setFeedback('ok')
+      const leftAfter = total - index
+      firePlayClear({
+        label: 'Word clear',
+        remnant: leftAfter > 0 ? `${leftAfter} left in this set` : 'Set clear',
+        kind: leftAfter === 0 ? 'board' : 'micro',
+      })
       onTypedCorrect()
       return
     }
+    playFoley('wrong')
     setFeedback('retry')
     setDraft('')
     inputRef.current?.focus()
@@ -231,6 +240,9 @@ export function VocabSheetCard({
 
       {typingPhase && (
         <form className="vocab-sheet-type" onSubmit={checkType}>
+          <p className="play-nearby-objective" aria-live="polite">
+            Clear this word · type what you heard
+          </p>
           <p className="vocab-sheet-type-prompt">
             <span className="vocab-sheet-type-kicker">Your turn</span>
             Type the English word you just heard.
@@ -257,7 +269,7 @@ export function VocabSheetCard({
               aria-describedby={feedback ? `${inputId}-fb` : undefined}
             />
             <button type="submit" className="btn btn-primary vocab-sheet-type-check" disabled={!draft.trim()}>
-              Check
+              Go
             </button>
           </div>
           <div className="vocab-sheet-type-tools">

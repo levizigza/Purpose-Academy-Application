@@ -14143,6 +14143,142 @@ html.pa-phone-shell .practice-feedback-dock {
   padding: 1.15rem 1.1rem 1.25rem;
 }
 
+/* ——— Play craft: moment-loop clear pulse + nearby objective (L3/L4) ———
+   Desktop night + phone paper inherit the same grammar; ink tokens differ.
+   Presentation only — never evidence. See docs/PLAY_CRAFT.md. */
+.play-clear-pulse {
+  position: fixed;
+  left: 50%;
+  bottom: max(1.25rem, env(safe-area-inset-bottom, 0px) + 1rem);
+  z-index: 70;
+  transform: translateX(-50%) translateY(0);
+  display: grid;
+  gap: 0.15rem;
+  min-width: min(16rem, calc(100vw - 2rem));
+  max-width: 22rem;
+  padding: 0.7rem 1.1rem 0.75rem;
+  border-radius: 14px;
+  text-align: center;
+  pointer-events: none;
+  animation: play-clear-rise 0.52s ease-out both;
+}
+
+.play-clear-pulse.is-micro {
+  background: color-mix(in srgb, #041526 88%, #0b2f5c);
+  border: 1px solid color-mix(in srgb, #f5c542 45%, transparent);
+  box-shadow: 0 12px 28px rgba(4, 21, 38, 0.35);
+  color: #f8f4ea;
+}
+
+.play-clear-pulse.is-board {
+  background: #ffffff;
+  border: 1px solid color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
+  box-shadow: 0 16px 36px rgba(4, 21, 38, 0.32);
+  color: #041526;
+  animation-duration: 0.9s;
+}
+
+.play-clear-label {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.play-clear-pulse.is-micro .play-clear-label {
+  color: #f5c542;
+}
+
+.play-clear-pulse.is-board .play-clear-label {
+  color: #0b2f5c;
+}
+
+.play-clear-remnant {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.3;
+  opacity: 0.92;
+}
+
+.play-nearby-objective {
+  margin: 0 0 0.55rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  background: color-mix(in srgb, #f5c542 16%, transparent);
+  border: 1px solid color-mix(in srgb, #f5c542 40%, transparent);
+  color: #f5c542;
+}
+
+.course-stage .play-nearby-objective {
+  color: #f5c542;
+  background: color-mix(in srgb, #f5c542 14%, rgba(4, 21, 38, 0.35));
+}
+
+.is-phone-app .play-nearby-objective {
+  color: #0b2f5c;
+  background: color-mix(in srgb, #0b2f5c 8%, #fff8e8);
+  border-color: color-mix(in srgb, #0b2f5c 22%, #c5d0dc);
+}
+
+.is-phone-app .play-clear-pulse.is-micro {
+  background: #ffffff;
+  border-color: color-mix(in srgb, #0b2f5c 20%, #c5d0dc);
+  color: #041526;
+  box-shadow: 0 10px 24px rgba(4, 21, 38, 0.18);
+}
+
+.is-phone-app .play-clear-pulse.is-micro .play-clear-label {
+  color: #0b2f5c;
+}
+
+.ph-play-loop {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 650;
+  line-height: 1.4;
+  color: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+.ph-play-clears {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+.ph-play-clears-hint {
+  font-weight: 550;
+  opacity: 0.75;
+}
+
+@keyframes play-clear-rise {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px) scale(0.96);
+  }
+  55% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play-clear-pulse {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 .is-phone-app .train-title {
   font-size: 1.28rem !important;
   margin: 0.3rem 0 0.15rem !important;

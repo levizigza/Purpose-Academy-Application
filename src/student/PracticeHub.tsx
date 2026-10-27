@@ -25,6 +25,7 @@ import {
   type PathwayId,
 } from '../pathways'
 import { followUpSummary, loadFollowUp } from './employmentFollowUp'
+import { BoardsClearedToday } from '../practice/PlayClear'
 
 type Props = {
   currentStep: number
@@ -234,6 +235,8 @@ export function PracticeHub({
           <h2>{resumeHeading}</h2>
           <p className="ph-resume-lesson">{resumeLesson}</p>
           <p className="ph-today-line">{todayLine}</p>
+          <p className="ph-play-loop">One clear action · soft retry · Done for now when you finish</p>
+          <BoardsClearedToday />
           <div
             className="ph-resume-progress"
             aria-label={`${unitDoneCount} of ${unitSteps.length} stations finished in this stretch`}

@@ -1,0 +1,218 @@
+{
+  "schema_version": "1.0",
+  "items": [
+    {
+      "item_id": "PA-CON-DEMO-001",
+      "version": "0.1.0",
+      "status": "draft",
+      "stream": "construction",
+      "concept_id": "PA-CON-TAPE-MEASURE",
+      "objective": "Recognize a tape measure in a reviewed photograph.",
+      "activity_type": "choice",
+      "evidence_dimension": "recognition",
+      "task_form": "image_to_english_label",
+      "safety_classification": "ordinary",
+      "prompt": {
+        "text": "What is this tool called?",
+        "primary_modality": "image",
+        "image_asset_id": "IMG-TAPE-001",
+        "audio_asset_id": null
+      },
+      "options": [
+        {
+          "option_id": "a",
+          "label": "Tape measure",
+          "image_asset_id": null,
+          "feedback": "This tool measures length."
+        },
+        {
+          "option_id": "b",
+          "label": "Paintbrush",
+          "image_asset_id": null,
+          "feedback": "A paintbrush applies paint. Review the tool in the photograph."
+        },
+        {
+          "option_id": "c",
+          "label": "Broom",
+          "image_asset_id": null,
+          "feedback": "A broom is used for sweeping. Review the tool in the photograph."
+        }
+      ],
+      "answer": {
+        "selection_mode": "single",
+        "correct_option_ids": [
+          "a"
+        ]
+      },
+      "explanation": "A tape measure is a tool used to measure length.",
+      "assets": [
+        {
+          "asset_id": "IMG-TAPE-001",
+          "kind": "image",
+          "required": true,
+          "status": "missing",
+          "uri": null,
+          "language": null,
+          "accessible_text": "Required reviewed photograph of a tape measure. The accessible task form and alternative text must be designed and reviewed before release.",
+          "rights_status": "unverified",
+          "review": null
+        }
+      ],
+      "translations": [],
+      "approvals": {
+        "language": null,
+        "domain": null,
+        "accessibility": null,
+        "safety": null
+      },
+      "support_policy": {
+        "audio_replay_allowed": true,
+        "transcript_changes_evidence": false,
+        "independent_evidence_rule": "Draft only. No learner release or independent evidence until this item version and its task form are approved."
+      },
+      "provenance": {
+        "kind": "development_demo",
+        "source_reference": null,
+        "review_note": "Illustrative English-only development fixture. Not imported approved curriculum. Assets, accessible task form, answer policy, and teaching content require human review."
+      }
+    },
+    {
+      "item_id": "PA-CON-DEMO-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "stream": "construction",
+      "concept_id": "PA-CON-TAPE-MEASURE",
+      "objective": "Understand a short request to bring a tape measure.",
+      "activity_type": "choice",
+      "evidence_dimension": "listening_comprehension",
+      "task_form": "english_audio_to_response",
+      "safety_classification": "ordinary",
+      "prompt": {
+        "text": "Listen. What are you asked to bring?",
+        "primary_modality": "audio",
+        "image_asset_id": null,
+        "audio_asset_id": "AUD-REQUEST-001"
+      },
+      "options": [
+        {
+          "option_id": "a",
+          "label": "A tape measure",
+          "image_asset_id": null,
+          "feedback": "The speaker asks for a tape measure."
+        },
+        {
+          "option_id": "b",
+          "label": "A broom",
+          "image_asset_id": null,
+          "feedback": "Listen again for the name of the requested tool."
+        },
+        {
+          "option_id": "c",
+          "label": "A paintbrush",
+          "image_asset_id": null,
+          "feedback": "Listen again for the name of the requested tool."
+        }
+      ],
+      "answer": {
+        "selection_mode": "single",
+        "correct_option_ids": [
+          "a"
+        ]
+      },
+      "explanation": "The intended reviewed recording says: Please bring the tape measure.",
+      "assets": [
+        {
+          "asset_id": "AUD-REQUEST-001",
+          "kind": "audio",
+          "required": true,
+          "status": "missing",
+          "uri": null,
+          "language": "en-CA",
+          "accessible_text": "Intended recording transcript for authoring review: Please bring the tape measure. Do not reveal this transcript before a listening-only response unless the evidence policy permits it.",
+          "rights_status": "unverified",
+          "review": null
+        }
+      ],
+      "translations": [],
+      "approvals": {
+        "language": null,
+        "domain": null,
+        "accessibility": null,
+        "safety": null
+      },
+      "support_policy": {
+        "audio_replay_allowed": true,
+        "transcript_changes_evidence": true,
+        "independent_evidence_rule": "Draft only. No learner release or independent evidence until this item version and its task form are approved."
+      },
+      "provenance": {
+        "kind": "development_demo",
+        "source_reference": null,
+        "review_note": "Illustrative English-only development fixture. Not imported approved curriculum. Assets, accessible task form, answer policy, and teaching content require human review."
+      }
+    },
+    {
+      "item_id": "PA-CON-DEMO-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "stream": "construction",
+      "concept_id": "PA-CON-CLARIFICATION",
+      "objective": "Choose a useful phrase for asking someone to repeat an instruction.",
+      "activity_type": "choice",
+      "evidence_dimension": "contextual_use",
+      "task_form": "scenario_to_clarification_phrase",
+      "safety_classification": "ordinary",
+      "prompt": {
+        "text": "You did not understand an instruction. What can you say?",
+        "primary_modality": "text",
+        "image_asset_id": null,
+        "audio_asset_id": null
+      },
+      "options": [
+        {
+          "option_id": "a",
+          "label": "Could you say that again, please?",
+          "image_asset_id": null,
+          "feedback": "This asks the person to repeat the instruction."
+        },
+        {
+          "option_id": "b",
+          "label": "I understood everything.",
+          "image_asset_id": null,
+          "feedback": "This does not communicate that you need help understanding."
+        },
+        {
+          "option_id": "c",
+          "label": "I will guess.",
+          "image_asset_id": null,
+          "feedback": "Ask for clarification when you do not understand an instruction."
+        }
+      ],
+      "answer": {
+        "selection_mode": "single",
+        "correct_option_ids": [
+          "a"
+        ]
+      },
+      "explanation": "Could you say that again, please? is one way to ask for repetition. Other polite reviewed phrases can also be appropriate.",
+      "assets": [],
+      "translations": [],
+      "approvals": {
+        "language": null,
+        "domain": null,
+        "accessibility": null,
+        "safety": null
+      },
+      "support_policy": {
+        "audio_replay_allowed": true,
+        "transcript_changes_evidence": false,
+        "independent_evidence_rule": "Draft only. No learner release or independent evidence until this item version and its task form are approved."
+      },
+      "provenance": {
+        "kind": "development_demo",
+        "source_reference": null,
+        "review_note": "Illustrative English-only development fixture. Not imported approved curriculum. Assets, accessible task form, answer policy, and teaching content require human review."
+      }
+    }
+  ]
+}

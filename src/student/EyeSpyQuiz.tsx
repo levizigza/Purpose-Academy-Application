@@ -11,6 +11,7 @@ import {
   openPracticeChat,
   practiceFeedbackKey,
 } from '../practice/PracticeMode'
+import { firePlayClear } from '../practice/PlayClear'
 
 type Mode = 'exercise' | 'exam'
 
@@ -128,12 +129,21 @@ export function EyeSpyQuiz({
     const ok = Boolean(hotspot && hotspot.answer === pickedName)
     recordSkillAttempt(mode === 'exam' ? 'final-exam' : 'eye-spy', ok, ok ? 15 : 0)
     if (ok && hotspot) {
-      playFoley('correct')
       const nextFound = [...foundIds, hotspot.id]
+      const left = queue.length - nextFound.length
       setFoundIds(nextFound)
       setCorrectCount((c) => c + 1)
       resetPicks()
-      if (nextFound.length >= queue.length) setPhase('scene-clear')
+      if (nextFound.length >= queue.length) {
+        firePlayClear({ label: 'Board clear', remnant: 'Every pair matched', kind: 'board' })
+        setPhase('scene-clear')
+      } else {
+        firePlayClear({
+          label: 'Pair clear',
+          remnant: left === 1 ? '1 left on this board' : `${left} left on this board`,
+          kind: 'micro',
+        })
+      }
       return
     }
     playFoley('wrong')
@@ -255,6 +265,13 @@ export function EyeSpyQuiz({
 
   return (
     <div className={`eye-spy${sceneMode ? ' is-scene-mode' : ''}`}>
+      <p className="play-nearby-objective" aria-live="polite">
+        {phase === 'scene-clear'
+          ? 'Board clear — next door can open'
+          : remaining.length === 0
+            ? 'Board empty'
+            : `Clear this board · ${remaining.length} left`}
+      </p>
       <p className="train-quiz-counter">
         Scene {sceneIdx + 1} of {boards.length}
         {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice — take your time'}
@@ -264,7 +281,7 @@ export function EyeSpyQuiz({
       <p className="eye-spy-progress" aria-live="polite">
         {remaining.length === 0
           ? 'Board empty'
-          : `${remaining.length} left on this board · ${foundIds.length} of ${queue.length} cleared`}
+          : `${foundIds.length} of ${queue.length} cleared`}
       </p>
 
       {phase === 'scene-clear' && (
@@ -340,7 +357,7 @@ export function EyeSpyQuiz({
             disabled={!pickedHotspot || !pickedName}
             onClick={confirm}
           >
-            Check pair
+            Match
           </button>
         </>
       )}
