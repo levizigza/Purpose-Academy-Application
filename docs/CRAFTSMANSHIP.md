@@ -243,6 +243,7 @@ These are load-bearing across all layers.
 - Priority stays: baked neural → live neural → Free Dictionary (works without our API) → browser `speechSynthesis`.
 - After a home-language connect, auto-speak the English workplace word.
 - **Then type it (every VV card):** English spelling stays hidden from first paint until typed; listen/type panel sits with the photo (langs collapse to the bridge); soft retry (“Not yet — hear it again”) — never Incorrect / Expected. Nearby: “Clear this word · type what you heard”; `firePlayClear` on correct type. TTS failure still unlocks the type beat (Hear again remains). Gate = heard + typed + (bridged or known).
+- **First go vs retake:** “I already know this word” is hidden on day-one intake. Skip-known unlocks only after the station was cleared once for that pathway (`pa-vocab-station-cleared-v1`). Retake still requires hear English + type.
 
 ### 6.4 Sound (foley)
 
@@ -431,19 +432,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
-### 2026-10-27 — Vocab first-go vs retake: skip-known after station clear (L2 / L4)
+### 2026-10-27 — Vocab type-out + first-go / retake skip-known (L2 / L3 / L4)
 
-- **Layers:** L2 content delivery (type-out reps) + L4 attention ethics (no day-one escape hatch that skips the work).
-- **Customer ask:** First go through Visual Vocabulary / Workplace Words should not show “I already know this word.” After they finish and come back for another round, that control (and a clear retake section) may appear.
-- **Fix:** Persist `pa-vocab-station-cleared-v1` when the first-set gate is clear and they continue. `VocabSheet` `allowSkipKnown` only on retake visits; hub gains “Workplace words again”; soft invite after first set clear. Start-over wipes cleared + known. Tone stays crew (“Another round”), not exam retake.
-- **Critic:** Mastery “familiar” alone is too early (hear credits) — station-cleared flag is the truth for skip unlock.
-
-### 2026-10-27 — Vocab type-out + first-go / retake skip-known (L2 / L3)
-
-- **Layers:** L2 (VV loop) + L3 (type beat with photo; English spelling never spoilers).
-- **Type-out:** press-language Visual Vocabulary keeps hear → hear → **type**; production beat sits with the photo; langs collapse to the bridge.
-- **Retake:** “I already know this word” hidden on day-one; unlocked only after `markVocabStationCleared` when the first-set gate is clear. Practice restart clears the flag.
-- **Critic:** Showing skip-known on first intake invited mindless skip; type reps are the station.
+- **Layers:** L2 (VV loop) + L3 (type beat with photo; English never spoilers) + L4 (no day-one escape hatch).
+- **Customer ask:** Type the English word on press-language / familiar VV; hide “I already know this word” on first go; show it only on retake after finishing once.
+- **Type-out:** hear → hear → **type** on every card; production panel with photo; langs collapse to the bridge; TTS fail still unlocks type.
+- **Retake:** Persist `pa-vocab-station-cleared-v1` when first-set gate clears and they continue. `allowSkipKnown` + hub “Workplace words again” only then. Practice restart wipes cleared + known. Crew tone (“Another round”), not exam retake.
+- **Critic:** Mastery “familiar” alone is too early for skip unlock; station-cleared flag is the truth.
 
 ### 2026-10-27 — Phone splash: centered Tap hammer + soft blink (L3)
 
@@ -465,8 +460,8 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 - **Layers:** L2 hear→hear→type · L3 first-viewport type beat (phone paper + desktop night).
 - **Customer ask:** Mother-tongue greeting / Visual Vocab must require typing the English word on every card — not only press language + hear.
-- **Critic:** Live mid-listen state still showed English title + definition (spoiler / looked like “forgot type”); type form sat under five langs; TTS failure never unlocked typing.
-- **Fix:** Hide English until typed; listen/type panel with photo; collapse langs to bridge; unlock type after bridge/hear attempt; caption teaches full loop; soft-miss + `firePlayClear` unchanged.
+- **Critic:** Live mid-listen state still showed English title + definition (spoiler / looked like “forgot type”); type form sat under five langs; TTS failure never unlocked typing; “I already know” on day-one skipped the type loop.
+- **Fix:** Hide English until typed; listen/type panel with photo; collapse langs to bridge; unlock type after bridge/hear attempt; caption teaches full loop; soft-miss + `firePlayClear` unchanged. Skip-known is **retake-only** after the station clears once (still hear English + type).
 - **Law restated:** Production (type) is the clear — listening alone never finishes a VV word.
 
 ### 2026-10-26 — Hear → hear → type + fearless learner chrome (L2 / L1 / L4)
