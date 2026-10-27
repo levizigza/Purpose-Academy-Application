@@ -312,7 +312,8 @@ Solid information output is not polish after the fact. It is the product. A Calg
 | Splash / enter | Brand-first composition; purposeful motion | Door architecture §7.3; hammer hits door mid → shatter exit |
 | Home / Programs / Give | Three-door story; whole pathway photos; one job per section | Honest depth counts; no fake dashboards |
 | Phone learner app (emulator) | **Same logo lockup:** navy on white paper; white app icon | No gold/dark dialect that contradicts `logo-full` |
-| Practice `/journey` | Kickers, alerts, choice grids, contain object mats, visible pass | Finite stations; Done for now; mastery gates |
+| Desktop course shell | **Original night material stage** (amber wash on navy); light train ink | Topbar navy chrome; gold Practice status strip; not paper |
+| Practice `/journey` | Kickers, alerts, choice grids, contain object mats, visible pass | Phone = paper; Desktop course = night — two shells, two looks |
 | Portal School path | Same spine language + dark stage for light text | Today’s station; no feed chrome |
 | Learn / LMS | Same pathway accents + honesty when empty | Never fake “caught up” |
 | Instructor / admin | Calm work chrome; clear status language | No casino metrics theatre |
@@ -427,6 +428,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-26 — Desktop night / phone paper: two shells, two looks (L3 / L6)
+
+- **Layers:** L3 information display + L6 brand lockup (surface coherence).
+- **Critic overturn:** Unifying Desktop course to phone’s navy-on-paper lockup erased the original night material stage. Customer ask: Desktop = original night look; Phone = keep the new paper look.
+- **Fix:** Restore `.course-stage` amber-on-navy bed + night footer/banner; strip `.is-course-app` from paper ink dual-selectors (kickers, career strengths, organize labels, coaching callouts, likert chips). Phone `.is-phone-app` paper dialect unchanged. Shared duals kept only where both shells share dark islands (career fit/code/profile titles, equip rail labels, Eye Spy scene floors, no mid-fade panels).
+- **Law restated:** Paper ink lock is **phone-only**. Amber-as-body-copy ban applies on cream mats inside `.is-phone-app`. Desktop course uses night train tokens / light ink by design.
+- **Assumption to challenge next:** whether Portal School path should stay paper or return to a darker instructor stage now that Desktop course is night again.
+
 ### 2026-10-26 — Computer Skills narration: Piper Lessac (L2 / L3)
 
 - **Layers:** L2 content delivery + L3 connection (voice that feels human).
@@ -439,9 +448,9 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Layers:** L3 information display (Practical — WCAG body on paper).
 - **Method:** Phone playthrough ink sweep across hub + stations; fail light foreground on light backgrounds.
 - **Customer defects found:** Career strengths night `#e8eef6` on cream; `.section-kicker` accent gold on paper (Computer Skills); Sentence Structure A–D / blank slot muted `#8aa0b8`; check-in / unit-method / result-badge gold-on-cream risk.
-- **Law restated:** On `.is-phone-app` / `.is-course-app`, amber is border / pill / fill / motion-dot only — never body or kicker copy on a light fill. Dark islands (`.career-fit`, `.career-code`, `.career-profile`, `.equip-video-rail`) keep light ink; rail family labels use brighter `#f5c542`.
-- **Fix:** Navy `.section-kicker` on paper; tokenize + override career / check-in / badge / cloze letters; course parity. Scripts: `ink-sweep.mjs`, `verify-career-ink.mjs`.
-- **Honest remainder:** Marketing splash heroes still use gold-on-photo with text-shadow (intentional). Desktop night train stage outside paper shells still uses light ink by design. Live GitHub Pages lags until `main` merge.
+- **Law restated (superseded same day):** Paper amber-as-body ban now scopes to `.is-phone-app` only — Desktop course restored to night (see “two shells, two looks”). Dark islands (`.career-fit`, `.career-code`, `.career-profile`, `.equip-video-rail`) keep light ink; rail family labels use brighter `#f5c542`.
+- **Fix:** Navy `.section-kicker` on paper; tokenize + override career / check-in / badge / cloze letters. Scripts: `ink-sweep.mjs`, `verify-career-ink.mjs`.
+- **Honest remainder:** Marketing splash heroes still use gold-on-photo with text-shadow (intentional). Desktop night train stage uses light ink by design.
 - **Assumption to challenge next:** whether hub video/computer marketing panels on paper should drop remaining hardcoded `#e8eef6` body outside Practice.
 
 ### 2026-10-26 — Language Organize phone: first viewport playable (L3)
@@ -494,14 +503,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Phone Comp/Equipment drills pin `.iphone-scroll` to top; desktop uses `nearest`. Hide unit-intro + why-details on phone computer/equipment shells. Familiar theater paper card + one Continue. Course banner → quiet navy status strip.
 - **Assumption to challenge next:** Sentence Structure still clips below the fold on phone — whether worksheet chrome can collapse further so item 1 peeks without scroll.
 
-### 2026-10-26 — Desktop course = paper dialect with phone (L3 / L6)
+### 2026-10-26 — Desktop course = paper dialect with phone (L3 / L6) — *overturned same day*
 
 - **Layers:** L3 information display + L6 brand lockup (one showcase dialect).
-- **Critic overturn:** Desktop course night stage fought the logo + phone navy-on-paper lockup; hub Computer/Warehouse inners and Eye Spy titles washed or split the product into two skins.
-- **Fix:** `.course-stage` paper bed; `.is-course-app` shares phone train/ph tokens; hub/station/Eye Spy/chips paper overrides. Topbar stays navy brand chrome. Eye Spy body colors tokenized (`--train-text*`).
-- **Assumption to challenge next:** whether Learn/portal School path should inherit the same paper Practice dialect, or keep a darker instructor stage.
-- **Same sprint:** Practice `.train-panel` Reveal + `train-fade-rise` left phone Eye Spy mid-opacity (~0.25) after section jumps — looked like washed ink. Instant-visible panels in phone/course shells; Reveal uses `.iphone-scroll` as IO root elsewhere.
-- **Same sprint:** Eye Spy At work / Teach note moved below the board in `StationContext` fold so pictures lead the phone first viewport.
+- **Critic overturn (then):** Desktop course night stage fought the logo + phone navy-on-paper lockup; hub Computer/Warehouse inners and Eye Spy titles washed or split the product into two skins.
+- **Fix (temporary):** `.course-stage` paper bed; `.is-course-app` shares phone train/ph tokens; hub/station/Eye Spy/chips paper overrides. Topbar stays navy brand chrome. Eye Spy body colors tokenized (`--train-text*`).
+- **Customer overturn (same day):** Desktop should look like the original night stage; Phone keeps paper — see “two shells, two looks.”
+- **Same sprint (kept):** Practice `.train-panel` Reveal + `train-fade-rise` left phone Eye Spy mid-opacity (~0.25) after section jumps — looked like washed ink. Instant-visible panels in phone/course shells; Reveal uses `.iphone-scroll` as IO root elsewhere.
+- **Same sprint (kept):** Eye Spy At work / Teach note moved below the board in `StationContext` fold so pictures lead the phone first viewport.
 
 ### 2026-10-26 — Showcase readability: course banner + phone body ink (L3)
 
