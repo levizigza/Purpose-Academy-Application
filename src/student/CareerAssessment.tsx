@@ -272,21 +272,22 @@ export function CareerAssessmentResult({
                 >
                   <span className="career-path-option-title">{t(PATHWAY_RESULT[id].title, lang)}</span>
                   <span className="career-path-option-meta">
-                    {fit[id]}%
-                    {id === recommended ? ` · ${t(ASSESSMENT_COPY.recommended, lang)}` : ''}
+                    {id === recommended ? t(ASSESSMENT_COPY.recommended, lang) : ''}
                   </span>
                 </button>
               )
             })}
           </div>
         ) : (
-          pathwayOrder.map((id) => (
+          pathwayOrder.map((id, idx) => (
             <div key={id} className={`career-profile-row${id === pathway ? ' is-top' : ''}`}>
               <span className="career-profile-label">{t(PATHWAY_RESULT[id].title, lang)}</span>
               <div className="career-profile-track">
                 <span style={{ width: `${fit[id]}%` }} />
               </div>
-              <span className="career-profile-pct">{fit[id]}%</span>
+              <span className="career-profile-pct">
+                {idx === 0 ? t(ASSESSMENT_COPY.recommended, lang) : ''}
+              </span>
             </div>
           ))
         )}
@@ -301,7 +302,9 @@ export function CareerAssessmentResult({
               <div className="career-profile-track">
                 <span style={{ width: `${riasec[area]}%` }} />
               </div>
-              <span className="career-profile-pct">{riasec[area]}%</span>
+              <span className="career-profile-pct">
+                {top3.includes(area) ? t(ASSESSMENT_COPY.recommended, lang) : ''}
+              </span>
             </div>
           ))}
         </section>

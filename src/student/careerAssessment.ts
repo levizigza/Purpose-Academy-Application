@@ -83,7 +83,7 @@ export const LIKERT_OPTIONS: { value: LikertValue; label: LangText }[] = [
 
 export const ASSESSMENT_COPY = {
   introTitle: {
-    Spanish: 'Evaluación de carrera',
+    Spanish: 'Intereses de trabajo',
       English: 'Work interests',
     Arabic: 'تقييم المسار المهني',
     Hindi: 'कैरियर आकलन',
@@ -92,7 +92,7 @@ export const ASSESSMENT_COPY = {
   } satisfies LangText,
   introBody: {
     Spanish: 'Primero un quiz corto de estilo de trabajo elige tu camino. Después de practicar, un inventario de intereses más largo afina tu especialización. No hay respuestas correctas o incorrectas.',
-    English: 'First a short work-style quiz chooses your path. After you practise, a longer “what kind of work feels right?” step helps you specialize. There are no right or wrong answers.',
+    English: 'First a few questions about how you like to work choose your path. After you practise, more questions help you specialize. There are no right or wrong answers.',
     Arabic:
       'أولاً اختبار قصير لأسلوب العمل يختار مسارك. بعد الممارسة، جرد اهتمامات أطول يساعدك على التخصص. لا توجد إجابات صحيحة أو خاطئة.',
     Hindi:
@@ -232,12 +232,12 @@ export const ASSESSMENT_COPY = {
     Tigrinya: 'ናይ ፍቓድ ኮድካ',
   } satisfies LangText,
   codeHint: {
-    Spanish: 'Como en evaluaciones profesionales (Holland / RIASEC): tus tres áreas más fuertes.',
+    Spanish: 'Tus tres intereses laborales más fuertes — una guía, no una nota.',
       English: 'Your three strongest work interests — a guide, not a grade.',
-    Arabic: 'كما في التقييمات المهنية (Holland / RIASEC): أقوى ثلاث مجالات لديك.',
-    Hindi: 'पेशेवर मूल्यांकनों की तरह (Holland / RIASEC): आपकी तीन सबसे मज़बूत रुचियाँ।',
-    Amharic: 'እንደ ሙያዊ ግምገማዎች (Holland / RIASEC)፡ ሦስቱ ጠንካራ ፍላጎቶችዎ።',
-    Tigrinya: 'ከም ናይ ሞያ ግምገማታት (Holland / RIASEC)፡ ሰለስተ ዝሓየሉ ፍቓዳትካ።',
+    Arabic: 'أقوى ثلاث مجالات عمل لديك — دليل، وليس درجة.',
+    Hindi: 'आपकी तीन सबसे मज़बूत काम-रुचियाँ — मार्गदर्शन, नंबर नहीं।',
+    Amharic: 'ሦስቱ ጠንካራ የሥራ ፍላጎቶችዎ — መመሪያ እንጂ ውጤት አይደለም።',
+    Tigrinya: 'ሰለስተ ዝሓየሉ ናይ ስራሕ ፍቓዳትካ — መምርሒ እዩ፣ ነጥቢ ኣይኮነን።',
   } satisfies LangText,
   pathwayFit: {
     Spanish: 'Ajuste a los caminos de Purpose Academy',
@@ -400,7 +400,7 @@ export const ASSESSMENT_SHELL: Record<
   },
   14: {
     title: {
-      Spanish: 'Evaluación de intereses',
+      Spanish: 'Intereses de trabajo',
       English: 'Work interests',
       Arabic: 'تقييم الاهتمامات',
       Hindi: 'रुचि आकलन',
@@ -416,12 +416,12 @@ export const ASSESSMENT_SHELL: Record<
       Tigrinya: 'ናይ ስራሕ ንጥፈታት ደረጃ ሃብ። ቅኑዕ ወይ ጌጋ የለን።',
     },
     purpose: {
-      Spanish: 'Inventario profesional de intereses (Holland / RIASEC) después de práctica real — no un examen de aprobado/reprobado.',
+      Spanish: '¿Qué tipo de trabajo se siente bien? Después de práctica real — no es un examen.',
       English: 'What kind of work feels right? After real practice — not a pass/fail test.',
-      Arabic: 'جرد مهني للاهتمامات (Holland / RIASEC) بعد ممارسة حقيقية — وليس اختبار نجاح/رسوب.',
-      Hindi: 'असली अभ्यास के बाद पेशेवर रुचि सूची (Holland / RIASEC) — पास/फेल परीक्षा नहीं।',
-      Amharic: 'ሙያዊ የፍላጎት ዝርዝር (Holland / RIASEC). ማለፍ/መውደቅ ፈተና አይደለም።',
-      Tigrinya: 'ናይ ሞያ ፍቓድ ዝርዝር (Holland / RIASEC). ምሕላፍ/ምውዳቕ ፈተና ኣይኮነን።',
+      Arabic: 'أي نوع من العمل يناسبك؟ بعد ممارسة حقيقية — وليس اختباراً.',
+      Hindi: 'किस तरह का काम सही लगता है? असली अभ्यास के बाद — परीक्षा नहीं।',
+      Amharic: 'ምን ዓይነት ሥራ ይሰማዎታል? ከእውነተኛ ልምምድ በኋላ — ፈተና አይደለም።',
+      Tigrinya: 'እንታይ ዓይነት ስራሕ ይስምዓካ? ድሕሪ ናይ ብሓቂ ልምምድ — ፈተና ኣይኮነን።',
     },
   },
 }

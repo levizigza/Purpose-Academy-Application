@@ -233,7 +233,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const masteryBlocked = practice ? advanceBlockedReason(step) : null
   const stepKicker = motherTongue
     ? `${assessT(ASSESSMENT_COPY.stepOf, supportLang!)} ${step} ${assessT(ASSESSMENT_COPY.ofTotal, supportLang!)} ${JOURNEY_STEP_COUNT}`
-    : `Step ${step} of ${JOURNEY_STEP_COUNT} · Unit ${unit.id}: ${unit.label}`
+    : `Unit ${unit.id}: ${unit.label}`
   const whyLabel = motherTongue
     ? ({
         English: 'Why this step?',
@@ -438,7 +438,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
           <summary>{whyLabel}</summary>
           <p className="train-purpose">{purpose}</p>
         </details>
-        <div className="train-progress" aria-label={`Progress ${pct}%`}>
+        <div className="train-progress" aria-label={`Progress`}>
           <span style={{ width: `${pct}%` }} />
         </div>
         <ol className="train-dots" aria-label="Step progress">
@@ -617,7 +617,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
   if (done) {
     return (
       <div className="train-quiz-summary">
-        <p className="train-score">{score} / {items.length} correct</p>
+        <p className="train-score">You got {score} of {items.length} clear</p>
         {gated && score < items.length && (
           <p className="alert warn">Safety needs every answer clear. Look again, then try the set once more.</p>
         )}
@@ -656,7 +656,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
 
   return (
     <div className="train-quiz-item">
-      <p className="train-quiz-counter">Question {idx + 1} of {items.length}</p>
+      <p className="train-quiz-counter">Item {idx + 1} of {items.length}</p>
       <PictureCard
         image={objectImg}
         fit="contain"
@@ -681,7 +681,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
             {correct ? item.teachCorrect : item.teachWrong}
           </div>
           <button type="button" className="btn btn-primary" onClick={next}>
-            {gateBlocked ? 'Try again' : idx + 1 >= items.length ? 'See results' : 'Next question'}
+            {gateBlocked ? 'Try again' : idx + 1 >= items.length ? 'See how you did' : 'Next'}
           </button>
         </>
       )}
@@ -1189,7 +1189,7 @@ export function StudentSequencePage() {
           <button type="button" className="back-link" onClick={() => setPracticeView('hub')}>
             ← Path home
           </button>
-          <p className="section-kicker">Verified skill · Practice</p>
+          <p className="section-kicker">Skills record · Practice</p>
           <h1>Skills Passport</h1>
           <p className="lede">
             What you studied and practised on this path — not a trade ticket, Red Seal, or a guaranteed job.
@@ -1701,10 +1701,8 @@ export function StudentSequencePage() {
         ) : null}
         <p className="train-vocab-counter">
           {ready
-            ? `First set done · Next: Language Organize (match each word to its picture) · All words ${linkedCount} of ${VOCAB_UNIT.length}`
-            : usesSentenceLadder
-              ? `First set ${gateLinked} of ${ladderGateTerms.length} (greetings ${dcLinked}/${dcGate.length} · workplace ${specialtyLinked}/${specialtyGate.length}) · All words ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
-              : `First set ${gateLinked} of ${ladderGateTerms.length} to keep going · All words ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
+            ? `Words practised: ${linkedCount}. Next: Language Organize — match each word to its picture.`
+            : `Words practised: ${linkedCount}. Keep going — hear, hear, type.`}
         </p>
       </Shell>
     )
@@ -1769,12 +1767,12 @@ export function StudentSequencePage() {
         <StationContext>
           <WhyWork>
             {pathwayId === 'logistics'
-              ? 'On a real warehouse floor every object sits among other goods and equipment. Prove you can name each one until the board is clear.'
-              : 'On a real site every tool sits among other objects. Prove you can name each one until the board is clear.'}
+              ? 'On a real warehouse floor every object sits among other goods and equipment. Name each one until the board is clear.'
+              : 'On a real site every tool sits among other objects. Name each one until the board is clear.'}
           </WhyWork>
           <TeachNote>
             Exercise mode: unlimited tries. Tap a picture and its English name. A correct pair disappears. Clear
-            the whole board, then the next scene. Pass requires 100% with no misses.
+            the whole board, then the next scene. Clear every picture. If you miss one, try the board again.
           </TeachNote>
         </StationContext>
       </Shell>
@@ -2001,7 +1999,7 @@ export function StudentSequencePage() {
           {' · '}
           Worksheet page (not the full {VOCAB_UNIT.length}-word table)
           {unknownTerms.length
-            ? ` · ${Math.min(unknownTerms.length, matchDeck.length)} to strengthen`
+            ? ` · ${Math.min(unknownTerms.length, matchDeck.length)} to practise again`
             : ''}
         </p>
         <PictureCard
@@ -2213,7 +2211,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => go(14, 'Opening interest assessment…'))
+        requestPracticeAdvance(() => go(14, 'Opening work-interest questions…'))
         return
       }
       setPhraseIdx((i) => i + 1)
@@ -2260,7 +2258,7 @@ export function StudentSequencePage() {
               </div>
               <button type="button" className="btn btn-primary" onClick={nextPhrase}>
                 {phraseCorrect
-                  ? (isLast ? 'Continue to interest assessment' : 'Next phrase')
+                  ? (isLast ? 'Continue to work-interest questions' : 'Next phrase')
                   : 'Try again'}
               </button>
             </>
@@ -2447,7 +2445,7 @@ export function StudentSequencePage() {
       if (isLast) {
         requestPracticeAdvance(() => advanceWithOptionalCheckpoint(
               17,
-              18, 'Opening equipment familiarization…'))
+              18, 'Opening equipment videos…'))
         return
       }
       setSysIdx((i) => i + 1)
@@ -2524,7 +2522,7 @@ export function StudentSequencePage() {
           </>
         ) : (
           <article className="topic-lesson-card">
-            <p className="section-kicker">Equipment Familiarization</p>
+            <p className="section-kicker">Equipment videos</p>
             <h2>Video section · Warehouse Equipment</h2>
             <p className="lede">
               The fourteen machine lessons (forklift, pallet jack, scanner, and more) are their own unit —{' '}
@@ -2609,12 +2607,12 @@ export function StudentSequencePage() {
           <LearnCard mark="P" title="Practised" body="Tried with supervision." />
           <LearnCard mark="C" title="Checked" body="An instructor confirms it with you on the job." />
         </div>
-        <p className="train-vocab-counter">Observation drill {obsIdx + 1} of {OBSERVATION_SCENARIOS.length}</p>
+        <p className="train-vocab-counter">Practice {obsIdx + 1} of {OBSERVATION_SCENARIOS.length}</p>
         <article className="topic-lesson-card">
           <h3>{scenario.title}</h3>
           <p><strong>Situation:</strong> {scenario.situation}</p>
           <p className="muted">Skill focus: {scenario.skill}</p>
-          <p className="train-check-prompt">Tap the steps in the correct order (1 → {scenario.steps.length}).</p>
+          <p className="train-check-prompt">Tap the steps in order (1 → {scenario.steps.length}).</p>
           <div className="train-choice-grid">
             {scenario.steps.map((s) => {
               const pickedAt = obsPicked.indexOf(s.id)
@@ -2755,12 +2753,12 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 21: Final Eye Spy exam (up to 3 attempts) + written + certificate */
+  /* Step 21: Final picture practice (limited tries) + written + certificate */
   if (step === 21) {
     if (finalPhase === 'eyespy') {
       return (
         <Shell step={21} onBack={() => go(20)}>
-          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Clear every picture. You can try up to 3 times. Tap each picture with its word until the board is empty." />
+          <PictureCard emoji="E" label="Final picture practice" caption="Clear every picture. You can try a few times. Tap each picture with its word until the board is empty." />
           <EyeSpyQuiz
             scenes={EYE_SPY_SCENES}
             mode="exam"
@@ -2773,7 +2771,7 @@ export function StudentSequencePage() {
     if (finalPhase === 'written') {
       return (
         <Shell step={21} onBack={() => setFinalPhase('eyespy')}>
-          <PictureCard emoji="W" label="Written & knowledge check" caption="Safety, measurement, language, and tools. Perfect score required." />
+          <PictureCard emoji="W" label="Written practice" caption="Safety, measurement, language, and tools. Get each one clear — you can try the set again." />
           <QuizRunner items={FINAL_QUIZ} onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('certificate') }} gated />
         </Shell>
       )
@@ -2789,8 +2787,8 @@ export function StudentSequencePage() {
         <div className="train-passport">
           <PictureCard emoji="C" label="Purpose Academy Program Certificate" caption="You cleared the final check. Your Skills Passport keeps a record of what you practised." />
           <ul className="list-plain">
-            <li>Vocabulary Eye Spy passed at 100%</li>
-            <li>Written / knowledge check complete</li>
+            <li>Picture practice cleared</li>
+            <li>Written practice complete</li>
             <li>Digital Skills Passport you can share</li>
           </ul>
           <label className="train-honesty-check">
@@ -3029,7 +3027,7 @@ export function StudentSequencePage() {
           </div>
         </>
       )}
-      <p className="train-motto">Learn · Practice · Improve · Achieve</p>
+      <p className="train-motto">Learn · Practise · Keep going</p>
     </Shell>
   )
 }

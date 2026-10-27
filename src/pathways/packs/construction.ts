@@ -54,10 +54,10 @@ export const constructionPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Learn site phrases, then specialize with a deeper interest inventory after Construction practice.',
+      goal: 'Learn site phrases, then answer more questions about work you like after Construction practice.',
       outcomes: [
         'Understand common job-site phrases',
-        'Complete the interest assessment after practice',
+        'Answer more questions about work you like',
         'See how your interests fit Construction specialization',
       ],
     },
@@ -72,7 +72,7 @@ export const constructionPack: PathwayPack = {
     7: {
       goal: 'Build safety, tool, and systems foundations Alberta construction sites expect.',
       outcomes: [
-        'Pass required safety checks',
+        'Finish the safety practice',
         'Name tool groups and construction systems',
       ],
     },
@@ -84,11 +84,11 @@ export const constructionPack: PathwayPack = {
       ],
     },
     9: {
-      goal: 'Prove site readiness under observation, then connect to construction employment support.',
+      goal: 'Practise with an instructor, then connect to construction employment support.',
       outcomes: [
-        'Rehearse competent skill order with measurable steps',
+        'Practise the steps in a calm order',
         'Make safe site decisions, including stop-work',
-        'Pass the final checks and open employment support',
+        'Finish the last practice stations, then talk about work',
       ],
     },
   },
@@ -106,7 +106,7 @@ export const constructionPack: PathwayPack = {
     12: {
       title: 'Basic Computer Skills',
       help: 'Unit 6 · step 12 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
-      purpose: 'Curriculum map position 12. Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
+      purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Simple English.',
     },
     13: {
       title: 'Site Language',

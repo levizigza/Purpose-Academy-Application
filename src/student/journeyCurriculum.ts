@@ -13,9 +13,9 @@ export const JOURNEY_STEPS = [
   { n: 1, title: 'Start as Student', help: 'Begin your learning path.', purpose: 'Students, instructors, and admins use different doors.', unit: 1 },
   { n: 2, title: 'Registration', help: 'Tell us who you are so we can support you.', purpose: 'Your profile opens learning after approval.', unit: 1 },
   { n: 3, title: 'Your Language', help: 'Choose the language you understand best. We use it for the short path questions.', purpose: 'Path and work-interest steps run in a language you understand. Job-site English comes with practice.', unit: 2 },
-  { n: 4, title: 'Work Style', help: 'Ten short questions. Pick what sounds most like you — there is no wrong answer.', purpose: 'A short path quiz opens Construction, Logistics, or Community Support.', unit: 2 },
+  { n: 4, title: 'Work Style', help: 'Ten short questions. Pick what sounds most like you — there is no wrong answer.', purpose: 'A few short questions open Construction, Logistics, or Community Support.', unit: 2 },
   { n: 5, title: 'Your Career Profile', help: 'See the path that fits how you like to work.', purpose: 'Work style → recommended pathway. Later practice, then a deeper “what kind of work feels right?” step.', unit: 2 },
-  { n: 6, title: 'Visual Vocabulary', help: 'See the picture. Hear your language. Hear English. Type the word. One word at a time.', purpose: 'Reps that stick: hear → hear → type — not a test.', unit: 3 },
+  { n: 6, title: 'Workplace Words', help: 'See the picture. Hear your language. Hear English. Type the word. One word at a time.', purpose: 'Reps that stick: hear → hear → type — not a test.', unit: 3 },
   { n: 7, title: 'Language Organize', help: 'Five rounds. Hear a language if you want, then drop the picture into the empty box.', purpose: 'Match the picture to the word you already practised.', unit: 3 },
   { n: 8, title: 'English Eye Spy', help: 'Tap a picture and its English name. Correct pairs disappear until the board is clear.', purpose: 'See the same words again in a busy scene before sentences.', unit: 3 },
   { n: 9, title: 'Word → Action', help: 'See the action. Pick which tool it uses.', purpose: 'After pictures are solid, link English words to real movement.', unit: 4 },
@@ -30,7 +30,7 @@ export const JOURNEY_STEPS = [
   },
   { n: 13, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 5 },
   { n: 14, title: 'Work Interests', help: 'After practice, rate simple work activities so we can specialize with you.', purpose: 'What kind of work feels right? Not a pass/fail test — a guide after real practice.', unit: 5 },
-  { n: 15, title: 'Safety Training', help: 'Safety words with clear pictures. Required for the job.', purpose: 'Alberta / Canada site safety in simple English.', unit: 7 },
+  { n: 15, title: 'Safety Training', help: 'Safety words with clear pictures. Needed on the job.', purpose: 'Alberta / Canada site safety in simple English.', unit: 7 },
   { n: 16, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 7 },
   { n: 17, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 7 },
   {
@@ -41,8 +41,8 @@ export const JOURNEY_STEPS = [
     unit: 8,
   },
   { n: 19, title: 'Instructor Check', help: 'Practise the calm order of a skill before a real instructor watches with you.', purpose: 'Learned → Practised → Checked with an instructor.', unit: 9 },
-  { n: 20, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Daily judgment, notes, and site feedback.', unit: 9 },
-  { n: 21, title: 'Final Check & Certificate', help: 'A last picture check and written check. Clear them to open your certificate.', purpose: 'Clear every picture. You can try a few times. Then your certificate opens.', unit: 9 },
+  { n: 20, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Practice real site decisions and a short daily note.', unit: 9 },
+  { n: 21, title: 'Final Check & Certificate', help: 'A last picture practice and a few written questions. Then your certificate opens.', purpose: 'Clear every picture. You can try a few times. Then your certificate opens.', unit: 9 },
   { n: 22, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 9 },
 ] as const
 
@@ -987,7 +987,7 @@ export const COMPUTER_SKILLS = [
   { id: 'type', title: 'Type short answers', why: 'You can enter your name and simple sentences.' },
   { id: 'upload', title: 'Upload a photo or file', why: 'Evidence and assignments need uploads.' },
   { id: 'video', title: 'Play a short training video', why: 'Lessons include watch-and-check moments.' },
-  { id: 'form', title: 'Complete an online form', why: 'Registration, logs, and quizzes are forms.' },
+  { id: 'form', title: 'Complete an online form', why: 'Registration, logs, and practice checks are forms.' },
 ]
 
 /**
@@ -1270,7 +1270,7 @@ export const OBSERVATION_SCENARIOS = [
       { id: 'hands', label: 'Gloves ready for the task', correctOrder: 3 },
       { id: 'enter', label: 'Enter the bay only after gear is on', correctOrder: 4 },
     ],
-    passNote: 'Competent means gear is correct BEFORE you cross the line, every time.',
+    passNote: 'Gear is correct BEFORE you cross the line, every time.',
   },
   {
     id: 'measure',
@@ -1296,7 +1296,7 @@ export const OBSERVATION_SCENARIOS = [
       { id: 'read', label: 'Confirm the bubble is centered', correctOrder: 3 },
       { id: 'report', label: 'Tell the instructor if it is true or needs adjustment', correctOrder: 4 },
     ],
-    passNote: 'Competent workers can place, read, and report the level clearly.',
+    passNote: 'Place, read, and report the level clearly — that is the habit.',
   },
   {
     id: 'tool-pass',
@@ -1322,7 +1322,7 @@ export const OBSERVATION_SCENARIOS = [
       { id: 'clear', label: 'Check hands and body are clear of the blade path', correctOrder: 3 },
       { id: 'ready', label: 'Tell the instructor you are ready for the cut', correctOrder: 4 },
     ],
-    passNote: 'Competent setup is calm, clear, and confirmed before the cut.',
+    passNote: 'Setup is calm, clear, and confirmed before the cut.',
   },
 ]
 
@@ -1721,7 +1721,7 @@ export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
   9: [
     {
       id: 'uc9-1',
-      prompt: 'Competent observation means…',
+      prompt: 'A careful observation means…',
       emoji: 'O',
       imageKey: 'hard-hat',
       options: [

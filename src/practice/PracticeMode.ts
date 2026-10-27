@@ -266,4 +266,4 @@ export function shouldHidePracticeFeedback(pathname: string, journeyStep?: numbe
 }
 
 export const PRACTICE_TRAY_HELP =
-  'Full learning path. Path home, practice marks, station doors, unit reviews, and the same drills the real student path will use. Skip registration, finish one station at a time, and leave feedback as you go.'
+  'Walk the same path a student walks — one station at a time. Leave a note if something is unclear.'

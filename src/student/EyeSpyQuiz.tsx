@@ -49,7 +49,7 @@ export function findQueue(scene: EyeSpyScene): EyeSpyHotspot[] {
 /**
  * Eye Spy: pair each remaining picture with its English name.
  * A correct pair vanishes. The scene is done when the board is empty.
- * Pass requires identifying every item with no misses.
+ * Clear every picture. Misses mean try that board again — no exam theatre.
  */
 export function EyeSpyQuiz({
   scenes,
@@ -210,7 +210,7 @@ export function EyeSpyQuiz({
       <div className="train-quiz-summary eye-spy-summary">
         <p className="train-score">
           {correctCount} / {need} identified
-          {misses > 0 ? ` · ${misses} miss${misses === 1 ? '' : 'es'} (must be 0 to pass)` : ' · clean run'}
+          {misses > 0 ? ` · ${misses} miss${misses === 1 ? '' : 'es'} — try again` : ' · board clear'}
         </p>
         <p className="muted">
           You must pair every picture with its English name until each board is empty.
@@ -226,8 +226,8 @@ export function EyeSpyQuiz({
         ) : (
           <button type="button" className="btn btn-primary" onClick={retryRun}>
             {mode === 'exam' && maxAttempts
-              ? `Try exam again (${attempt + 1} of ${maxAttempts})`
-              : 'Try again. Clear every board with no mistakes'}
+              ? `Try again (${attempt + 1} of ${maxAttempts})`
+              : 'Try again. Clear every picture'}
           </button>
         )}
         {feedbackPrompt && (
@@ -257,7 +257,7 @@ export function EyeSpyQuiz({
     <div className={`eye-spy${sceneMode ? ' is-scene-mode' : ''}`}>
       <p className="train-quiz-counter">
         Scene {sceneIdx + 1} of {boards.length}
-        {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice (unlimited tries)'}
+        {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice — take your time'}
       </p>
       <p className="eye-spy-instruction">{CLEAR_ALL_INSTRUCTION}</p>
       <p className="eye-spy-scene-title">{scene.title}</p>
@@ -347,7 +347,7 @@ export function EyeSpyQuiz({
 
       {phase === 'scene-clear' && (
         <button type="button" className="btn btn-primary" onClick={nextAfterSceneClear}>
-          {sceneIdx + 1 >= boards.length ? 'See results' : 'Next scene'}
+          {sceneIdx + 1 >= boards.length ? 'Finish' : 'Next scene'}
         </button>
       )}
     </div>

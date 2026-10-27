@@ -65,7 +65,7 @@ Archives live in [`docs/splash-versions/`](splash-versions/). Snapshot **before*
 | Humans | Treat edits here as product decisions, not docs chore. Prefer short, concrete rules over essays. |
 | Future selves | If a rule no longer matches the product, rewrite the rule — do not paper over the product. |
 
-**Pointer for agents:** root `AGENTS.md` requires this file. Do not invent a parallel style guide. For UI work, **§7.0–7.0b is the aesthetics + information-display template** — inherit it; do not fork it.
+**Pointer for agents:** root `AGENTS.md` requires this file **and** [`LEARNER_FEAR.md`](LEARNER_FEAR.md). Do not invent a parallel style guide. For UI work, **§7.0–7.0b is the aesthetics + information-display template** — inherit it; do not fork it. For Practice / journey / gates / vocabulary, **LEARNER_FEAR is non-optional**.
 
 **Site-wide rule:** Craft layers apply to *every* surface — public marketing, splash/enter, auth, Practice `/journey`, portal School path, Learn/LMS, instructor, and admin — not only the last page we polished. Coherence beats local cleverness.
 
@@ -167,6 +167,7 @@ These are load-bearing across all layers.
 5. **Instructor truth** — skills are verified; do not sell “finish the quiz = job ready.”
 6. **Honesty over symmetry** — if Community has ~16 specialty workplace words and Construction has 660 visual vocab rows, marketing and UI must not pretend they are the same depth.
 7. **Solid information output** — every training and marketing surface must make the task, the picture/media, and the result unmistakable. Ambiguous feedback, cropped objects, or silent “success” are craft defects (see §7.0).
+8. **Learner-fear standard** — adults who fear education must never meet exam / quiz / assessment / mastery / % report-card theatre. Standing doctrine: [`LEARNER_FEAR.md`](LEARNER_FEAR.md). Hear → hear → type; soft retry; station language.
 
 ---
 
@@ -430,6 +431,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-26 — Learner-fear doctrine + deep Practice pass (L1 / L2 / L4)
+
+- **Layers:** L1 story + L2 delivery + L4 attention ethics.
+- **Customer ask:** Deeper redesign of **every** Practice station start→finish; make learner-fear a standing documented standard for the whole build.
+- **Doctrine:** New [`LEARNER_FEAR.md`](LEARNER_FEAR.md) — banned lexicon, hear→hear→type loop, chrome rules, spine checklist, pre-ship critic. Wired from `AGENTS.md` + Craft non-negotiable #8.
+- **Deep Practice pass:** Hub report-card %/marks chrome collapsed; Eye Spy / Sentence / Final check exam lexicon removed; Organize “quiz” gone; observation Competent → habit language; career % fit / RIASEC learner strings cut; pathway unit goals softened; shell motto / counters quieted.
+- **Assumption to challenge next:** whether internal mastery gates should credit more generously so Continue rarely feels like a locked door.
+
 ### 2026-10-26 — Hear → hear → type + fearless learner chrome (L2 / L1 / L4)
 
 - **Layers:** L2 content delivery (vocab reps) + L1 story voice + L4 attention (no shame loops).
@@ -437,7 +446,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Vocab fix:** `VocabSheet` adds a type beat after English is heard; English title hides during typing; soft “Not yet — hear it again” (never Incorrect); gate requires typed. Counters drop Level-1/ladder math theatre for “first set / greetings / workplace.”
 - **Chrome soften (site-wide):** Journey titles Final Exam → Final Check, Interest Assessment → Work Interests; mastery labels → Started/Comfortable/Strong/Solid; Familiar theater → Station clear / Ready; Passport Competent → Checked; hub “mastery gates / Reach Familiar” → one station / comfortable; exam captions / perfect score / RIASEC learner copy cut; Programs volume bullets → hear/hear/type story.
 - **Law:** Prefer **station / check / comfortable** over **exam / assessment / mastery / proficient**. Keep adult crew gravity — never childish gamification.
-- **Assumption to challenge next:** whether Sentence Structure first-try pass and dark career fit-% bars still intimidate after this pass.
+- **Follow-up same day:** full doctrine + deeper Practice pass (see entry above).
 
 ### 2026-10-26 — Desktop night / phone paper: two shells, two looks (L3 / L6)
 

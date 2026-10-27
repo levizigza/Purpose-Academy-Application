@@ -6,7 +6,6 @@ import {
   getMasteryLevel,
   getPlatformStats,
   masteryLabel,
-  overallMasteryPercent,
   SKILL_BY_STEP,
   SKILL_DOMAINS,
   unitMasteryPercent,
@@ -62,8 +61,10 @@ function unitState(unitId: number, currentStep: number): UnitState {
   return 'done'
 }
 
-function MasteryMeter({ percent, label }: { percent: number; label: string }) {
-  const clamped = Math.max(0, Math.min(100, percent))
+/** Quiet progress ring — stations finished, not a grade %. */
+function StationMeter({ done, total, label }: { done: number; total: number; label: string }) {
+  const safeTotal = Math.max(1, total)
+  const clamped = Math.max(0, Math.min(100, Math.round((done / safeTotal) * 100)))
   const radius = 46
   const circ = 2 * Math.PI * radius
   const offset = circ - (clamped / 100) * circ
@@ -81,8 +82,10 @@ function MasteryMeter({ percent, label }: { percent: number; label: string }) {
         />
       </svg>
       <div className="ph-meter-label">
-        <strong>{clamped}%</strong>
-        <span>Ready</span>
+        <strong>
+          {done}/{safeTotal}
+        </strong>
+        <span>Stations</span>
       </div>
     </div>
   )
@@ -132,7 +135,6 @@ export function PracticeHub({
   const pack = getPathwayPack(pathwayId)
   const journeySteps = getPathwayJourneySteps(pathwayId)
   const stats = getPlatformStats()
-  const overall = overallMasteryPercent()
   const resumeStep = Math.max(currentStep, PRACTICE_ENTRY_STEP)
   const unit = unitForStep(resumeStep)
   const resumeMeta = journeySteps[resumeStep - 1]
@@ -141,7 +143,6 @@ export function PracticeHub({
   const completedUnits = activeUnits.filter((u) => unitState(u.id, currentStep) === 'done').length
   const unitSteps = stepsInUnit(unit.id).filter((n) => n >= PRACTICE_ENTRY_STEP)
   const unitDoneCount = unitSteps.filter((n) => n < currentStep).length
-  const unitPct = unitMasteryPercent(stepsInUnit(unit.id))
   const freshStart =
     !pathComplete &&
     resumeStep === PRACTICE_ENTRY_STEP &&
@@ -153,7 +154,6 @@ export function PracticeHub({
     { label: pack.skillDomains.safety, pct: domainMasteryPercent(SKILL_DOMAINS.safety) },
     { label: pack.skillDomains.tools, pct: domainMasteryPercent(SKILL_DOMAINS.tools) },
     { label: pack.skillDomains.systems, pct: domainMasteryPercent(SKILL_DOMAINS.systems) },
-    { label: 'Overall progress', pct: overall },
   ]
 
   function toggleUnit(id: number) {
@@ -234,14 +234,21 @@ export function PracticeHub({
           <h2>{resumeHeading}</h2>
           <p className="ph-resume-lesson">{resumeLesson}</p>
           <p className="ph-today-line">{todayLine}</p>
-          <div className="ph-resume-progress" aria-label={`${unitPct}% unit ready`}>
+          <div
+            className="ph-resume-progress"
+            aria-label={`${unitDoneCount} of ${unitSteps.length} stations finished in this stretch`}
+          >
             <div className="ph-resume-progress-track">
-              <span style={{ width: `${pathComplete ? 100 : unitPct}%` }} />
+              <span
+                style={{
+                  width: `${pathComplete ? 100 : Math.round((unitDoneCount / Math.max(1, unitSteps.length)) * 100)}%`,
+                }}
+              />
             </div>
             <em>
               {pathComplete
                 ? 'All units open for review · follow-up schedule active'
-                : `${unitDoneCount}/${unitSteps.length} lessons in this unit · ${unitPct}% ready`}
+                : `${unitDoneCount} of ${unitSteps.length} stations finished in this stretch`}
             </em>
           </div>
           <div className="ph-resume-actions">
@@ -272,17 +279,15 @@ export function PracticeHub({
           <p className="ph-video-section-kicker">Shared unit · all pathways</p>
           <h2>Basic Computer Skills</h2>
           <p>
-            Its own unit on <strong>Construction, Logistics, and Community</strong> —{' '}
-            <strong>Unit 6 · Basic Computer Skills</strong> at <strong>step 12</strong> (after Workplace
-            Instructions, before Safety). Twelve short lessons: turn on/off, mouse, folders, save, Word, and
-            email. Watch, try, then one check.
+            Short computer lessons on every pathway — turn on/off, mouse, folders, save, Word, and email.
+            Watch, then try. First-computer friendly.
           </p>
           <button
             type="button"
             className="btn btn-primary ph-video-section-btn"
             onClick={() => onOpenLesson(12)}
           >
-            Open Unit 6 · Basic Computer Skills
+            Open Basic Computer Skills
           </button>
         </div>
       </section>
@@ -292,8 +297,7 @@ export function PracticeHub({
           <p className="ph-video-section-kicker">Video section</p>
           <h2>Warehouse Equipment</h2>
           <p>
-            Fourteen machine lessons live in their own unit — <strong>Unit 8 · Video · Warehouse Equipment</strong>{' '}
-            (step 18) on the <strong>Logistics</strong> pathway. Watch each video before hands-on training.
+            Warehouse machine videos on the Logistics pathway. Watch each one before hands-on training.
           </p>
           <button
             type="button"
@@ -304,53 +308,51 @@ export function PracticeHub({
             }}
           >
             {pathwayId === 'logistics'
-              ? 'Open Video section · Warehouse Equipment'
-              : 'Switch to Logistics · open Video section'}
+              ? 'Open Warehouse Equipment videos'
+              : 'Switch to Logistics · open equipment videos'}
           </button>
         </div>
       </section>
 
-      <section className="ph-overview" aria-label="Practice marks">
-        <MasteryMeter percent={overall} label={`Path ready ${overall} percent`} />
+      <section className="ph-overview" aria-label="Stations finished">
+        <StationMeter
+          done={stats.lessonsCompleted}
+          total={JOURNEY_STEP_COUNT - PRACTICE_ENTRY_STEP + 1}
+          label={`${stats.lessonsCompleted} stations finished`}
+        />
         <div className="ph-metrics">
           <article className="ph-metric">
-            <span className="ph-metric-label">Practice marks</span>
-            <strong>{stats.xp}</strong>
-            <span className="ph-metric-hint">Earned by finishing stations</span>
+            <span className="ph-metric-label">Stations finished</span>
+            <strong>{stats.lessonsCompleted}</strong>
+            <span className="ph-metric-hint">One station at a time</span>
           </article>
           <article className="ph-metric ph-metric-quiet">
             <span className="ph-metric-label">Days showed up</span>
             <strong>{stats.dayStreak}</strong>
-            <span className="ph-metric-hint">Consistency — not a streak trap</span>
+            <span className="ph-metric-hint">Showing up matters</span>
           </article>
           <article className="ph-metric">
-            <span className="ph-metric-label">Stations done</span>
-            <strong>{stats.lessonsCompleted}</strong>
-            <span className="ph-metric-hint">Completed lessons</span>
-          </article>
-          <article className="ph-metric">
-            <span className="ph-metric-label">Units</span>
+            <span className="ph-metric-label">Stretches done</span>
             <strong>
               {completedUnits}/{activeUnits.length}
             </strong>
-            <span className="ph-metric-hint">Cleared</span>
+            <span className="ph-metric-hint">Units finished</span>
           </article>
         </div>
       </section>
 
-      <section className="ph-domains" aria-label="Skill domains">
+      <section className="ph-domains" aria-label="Where practice is landing">
         <div className="ph-section-head">
           <div>
-            <h2>Where you are strong</h2>
-            <p>Simple check-ins for {meta.programTitle} — same order on every pathway.</p>
+            <h2>Where practice is landing</h2>
+            <p>Quiet check-ins for {meta.programTitle} — bars only, no grades.</p>
           </div>
         </div>
         <ul className="ph-domain-list">
-          {domains.map((d) => (
+          {domains.filter((d) => d.label !== 'Overall progress').map((d) => (
             <li key={d.label}>
               <div className="ph-domain-row">
                 <span>{d.label}</span>
-                <strong>{d.pct}%</strong>
               </div>
               <div className="ph-domain-track" aria-hidden>
                 <span style={{ width: `${d.pct}%` }} />
@@ -364,20 +366,14 @@ export function PracticeHub({
         <div className="ph-section-head">
           <div>
             <h2>Station map</h2>
-            <p>Expand a unit. Locked doors open when the station before feels comfortable — not by scrolling past.</p>
+            <p>Expand a unit. The next door opens when this station feels comfortable — not by scrolling past.</p>
           </div>
           <ul className="ph-legend" aria-label="Station readiness">
             <li>
-              <span className="ph-level is-attempted" aria-hidden /> Started
+              <span className="ph-level is-attempted" aria-hidden /> In progress
             </li>
             <li>
-              <span className="ph-level is-familiar" aria-hidden /> Comfortable
-            </li>
-            <li>
-              <span className="ph-level is-proficient" aria-hidden /> Strong
-            </li>
-            <li>
-              <span className="ph-level is-mastered" aria-hidden /> Solid
+              <span className="ph-level is-familiar" aria-hidden /> Ready to continue
             </li>
           </ul>
         </div>
@@ -430,7 +426,7 @@ export function PracticeHub({
                         <span style={{ width: `${pct}%` }} />
                       </span>
                       <em>
-                        {pct}% ready · Steps {u.range}
+                        Steps {u.range}
                       </em>
                     </span>
                   </span>
@@ -519,7 +515,7 @@ export function PracticeHub({
   )
 }
 
-/** Compact practice-marks strip inside the lesson shell. */
+/** Quiet strip inside the lesson shell — coach only, no grade %. */
 export function PracticeStatsStrip({ step, className = '' }: { step: number; className?: string }) {
   const [, bump] = useState(0)
   useEffect(() => {
@@ -527,22 +523,11 @@ export function PracticeStatsStrip({ step, className = '' }: { step: number; cla
     window.addEventListener('pa-mastery-changed', sync)
     return () => window.removeEventListener('pa-mastery-changed', sync)
   }, [])
-  const stats = getPlatformStats()
-  const overall = overallMasteryPercent()
   const ready = canAdvanceFromStep(step)
   return (
-    <div className={`practice-stats-strip ${className}`.trim()} aria-label="Practice marks">
-      <span>
-        <strong>{stats.xp}</strong> marks
-      </span>
-      <span>
-        <strong>{stats.dayStreak}</strong> days
-      </span>
-      <span>
-        <strong>{overall}%</strong> ready
-      </span>
+    <div className={`practice-stats-strip ${className}`.trim()} aria-label="Station coach">
       <span className={ready ? 'is-ready' : 'is-locked'}>
-        {ready ? 'Ready for the next station' : 'Practise until comfortable'}
+        {ready ? 'Ready for the next station' : 'Keep practising — no rush'}
       </span>
     </div>
   )

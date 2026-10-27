@@ -190,13 +190,13 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
   }
 
   if (!terms.length || !page.length) {
-    return <div className="alert warn">Organize quiz needs pictured vocabulary words.</div>
+    return <div className="alert warn">Language organize needs pictured words.</div>
   }
 
   if (passed) {
     return (
       <article className="vocab-organize vocab-organize-pass" aria-live="polite">
-        <p className="section-kicker">Language organize · Passed</p>
+        <p className="section-kicker">Language organize · Done</p>
         <div className="vocab-organize-pass-badge" aria-hidden>
           ✓
         </div>
@@ -240,7 +240,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
           </p>
           {practice && onSkip ? (
             <button type="button" className="btn btn-ghost vocab-organize-skip" onClick={onSkip}>
-              Skip organize quiz
+              Skip for now
             </button>
           ) : null}
         </div>

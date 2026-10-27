@@ -350,9 +350,9 @@ export function skillStationLabel(id: SkillId): string {
     case 'systems':
       return 'Workplace Systems'
     case 'equipment-videos':
-      return 'Equipment Familiarization'
+      return 'Equipment videos'
     case 'observation':
-      return 'Instructor Observation'
+      return 'Practice for your instructor'
     case 'site-log':
       return 'Floor Training'
     case 'final-exam':
@@ -392,7 +392,7 @@ export function advanceBlockedReason(step: number): string | null {
   if (canAdvanceFromStep(step)) return null
   const skill = SKILL_BY_STEP[step]
   if (!skill) return null
-  return `Keep practising this station until it feels comfortable (${masteryLabel(getMasteryLevel(skill))} now).`
+  return `Take another try on this station — no rush.`
 }
 
 /** Soft credit toward Familiar when a learner marks a vocab word as already known. */

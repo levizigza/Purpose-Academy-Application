@@ -310,9 +310,9 @@ export function SentenceClozeDrill({
         <div className="sentence-cloze-pass-badge" aria-hidden>
           ✓
         </div>
-        <h2>Page passed</h2>
+        <h2>Page complete</h2>
         <p className="lede">
-          Sentences {from}–{to} complete. First-try score {scoreCorrect} of {pageItems.length}. Words had to
+          Sentences {from}–{to} complete. You got {scoreCorrect} of {pageItems.length} on the first go. Words had to
           land in the blank — no shopping for answers.
         </p>
         <div className="hero-actions">
@@ -336,11 +336,11 @@ export function SentenceClozeDrill({
         <p className="section-kicker">Sentence Structure</p>
         <h2>Keep learning this page</h2>
         <p className="lede">
-          Clear {scoreCorrect} of {pageItems.length}. Get {PASS_SCORE} right the first time through to keep going.
+          You have {scoreCorrect} of {pageItems.length} clear. Get {PASS_SCORE} right as you go to keep moving.
           Wrong answers move on — you cannot tap every choice. Read each sentence and try the page again.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>
-          Retry this page
+          Practice this page again
         </button>
         {practice && onSkipToActions ? (
           <button type="button" className="btn btn-secondary on-light" onClick={onSkipToActions}>
@@ -368,7 +368,7 @@ export function SentenceClozeDrill({
       <div className="sentence-cloze-head-row">
         <div>
           <p className="section-kicker">Sentence Structure</p>
-          <p className="sentence-cloze-doc-kicker">{englishBrand} · Multiple Choice</p>
+          <p className="sentence-cloze-doc-kicker">{englishBrand} · Pick the word</p>
         </div>
         {practice && onSkipToActions ? (
           <button
@@ -383,8 +383,8 @@ export function SentenceClozeDrill({
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
         All {bank.length} {documentLabel} · Item {idx + 1} of {deck.length}
-        {phase === 'drill' ? ` · First-try ${scoreCorrect}` : ''}
-        {level1Unlocked ? ' · Level-1 unlocked' : ''}
+        {phase === 'drill' ? ` · First go ${scoreCorrect}` : ''}
+        {level1Unlocked ? ' · First page done' : ''}
       </p>
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">

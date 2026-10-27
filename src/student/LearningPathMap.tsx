@@ -6,7 +6,6 @@ import {
   getPlatformStats,
   masteryLabel,
   SKILL_BY_STEP,
-  unitMasteryPercent,
   type MasteryLevel,
 } from './learningMastery'
 
@@ -45,7 +44,6 @@ export function LearningPathMap({
 
   const currentUnit = unitForStep(currentStep)
   const stats = getPlatformStats()
-  const unitPct = unitMasteryPercent(stepsInUnit(currentUnit.id))
 
   return (
     <details
@@ -61,8 +59,8 @@ export function LearningPathMap({
           Unit {currentUnit.id}: {currentUnit.label}
         </strong>
         <span className="lp-fold-meta">
-          {unitPct}% ready
-          {practice ? ` · ${stats.xp} marks` : ''}
+          This stretch
+          {practice ? ` · ${stats.dayStreak} days showed up` : ''}
           {' · '}
           {collapsedByDefault ? 'Show full path' : 'Path'}
         </span>
@@ -77,11 +75,11 @@ export function LearningPathMap({
         </div>
         <div className="lp-head-meta">
           <p className="lp-mastery" aria-label="Unit ready">
-            Unit ready <strong>{unitPct}%</strong>
+            Stations in this stretch
           </p>
           {practice && (
             <p className="lp-xp" aria-label="Practice marks">
-              <strong>{stats.xp}</strong> practice marks · <strong>{stats.dayStreak}</strong> days showed up
+              <strong>{stats.dayStreak}</strong> days showed up · keep going
             </p>
           )}
           {practice && onOpenHub && (
@@ -102,7 +100,6 @@ export function LearningPathMap({
           /* Practice quality review: every unit/lesson is open so reviewers can jump without grinding. */
           const reviewOpen = Boolean(practice && onSelectLesson)
           const showLessons = reviewOpen || ((!compact || state === 'current') && state !== 'locked')
-          const pct = unitMasteryPercent(steps)
           return (
             <li key={unit.id} className={`lp-unit is-${reviewOpen && state === 'locked' ? 'upcoming' : state}`}>
               <div className="lp-unit-badge" aria-hidden>
@@ -111,7 +108,7 @@ export function LearningPathMap({
               <div className="lp-unit-copy">
                 <strong>{unit.label}</strong>
                 <span>Steps {unit.range}</span>
-                {(state !== 'locked' || reviewOpen) && <em>{pct}% ready</em>}
+                {(state !== 'locked' || reviewOpen) && <em>Open</em>}
               </div>
               {showLessons && (
                 <ol className="lp-lessons">
@@ -192,7 +189,7 @@ export function UnitIntroCard({
         ))}
       </ul>
       <p className="unit-intro-method">
-        Pattern: learn, try, get feedback, retry until solid. Then move forward.
+        Learn, try, get feedback, try again if you need. Then move forward.
       </p>
     </details>
   )

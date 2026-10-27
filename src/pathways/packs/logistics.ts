@@ -46,10 +46,10 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     5: {
-      goal: 'Learn warehouse phrases, then specialize with a deeper interest inventory after Logistics practice.',
+      goal: 'Learn warehouse phrases, then answer more questions about work you like after Logistics practice.',
       outcomes: [
         'Understand common warehouse phrases',
-        'Complete the interest assessment after practice',
+        'Answer more questions about work you like',
         'See how your interests fit Logistics specialization',
       ],
     },
@@ -64,7 +64,7 @@ export const logisticsPack: PathwayPack = {
     7: {
       goal: 'Build safety, equipment, and systems foundations every warehouse expects.',
       outcomes: [
-        'Pass required safety checks',
+        'Finish the safety practice',
         'Name equipment groups and logistics systems (receive → store → pick → ship)',
       ],
     },
@@ -77,11 +77,11 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     9: {
-      goal: 'Prove floor readiness under observation, then connect to logistics employment support.',
+      goal: 'Practise with an instructor, then connect to logistics employment support.',
       outcomes: [
-        'Rehearse competent skill order with measurable steps',
+        'Practise the steps in a calm order',
         'Make safe floor decisions, including OS&D and stop-work',
-        'Pass the final checks and open employment support',
+        'Finish the last practice stations, then talk about work',
       ],
     },
   },
@@ -99,7 +99,7 @@ export const logisticsPack: PathwayPack = {
     12: {
       title: 'Basic Computer Skills',
       help: 'Unit 6 · step 12 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
-      purpose: 'Curriculum map position 12. Dedicated Basic Computer Skills unit. First-computer friendly. Level-4 English.',
+      purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Simple English.',
     },
     13: {
       title: 'Warehouse Language',
@@ -444,7 +444,7 @@ export const logisticsPack: PathwayPack = {
         { id: 'path', label: 'Check the aisle is clear of equipment', correctOrder: 3 },
         { id: 'enter', label: 'Enter the floor only after gear is ready', correctOrder: 4 },
       ],
-      passNote: 'Competent means gear is correct BEFORE you cross the line, every time.',
+      passNote: 'Gear is correct BEFORE you cross the line, every time.',
     },
     {
       id: 'scan-stage',
@@ -496,7 +496,7 @@ export const logisticsPack: PathwayPack = {
         { id: 'inspect', label: 'Inspect for overage, shortage, or damage (OS&D)', correctOrder: 3 },
         { id: 'escalate', label: 'Report OS&D to the supervisor before put-away', correctOrder: 4 },
       ],
-      passNote: 'Competent receiving means count, inspect, and escalate OS&D — never force a mismatch through.',
+      passNote: 'Count, inspect, and escalate OS&D — never force a mismatch through.',
     },
   ],
   siteDecisions: [
@@ -949,7 +949,7 @@ export const logisticsPack: PathwayPack = {
     7: [
       {
         id: 'uc6-l1',
-        prompt: 'Competent observation means…',
+        prompt: 'A careful observation means…',
         emoji: 'O',
         imageKey: 'log-vest',
         options: [
