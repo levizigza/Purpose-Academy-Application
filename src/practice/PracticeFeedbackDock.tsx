@@ -361,8 +361,7 @@ export function PracticeModeBanner() {
   return (
     <div className={`practice-banner${inCourseShell ? ' is-status-only' : ''}`} role="status">
       <span>
-        Practice{name ? ` · ${name}` : ''}. Finite school path — one station at a time. Registration
-        skipped.
+        Practice{name ? ` · ${name}` : ''}. One station at a time — take your time.
       </span>
       {!inCourseShell && (
         <span className="practice-banner-actions">
