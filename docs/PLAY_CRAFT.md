@@ -184,3 +184,8 @@ Closed:
 - FamiliarTheater: visual only (success Foley stays with `firePlayClear`).  
 - Lexicon: Computer TeachNote “Misses teach”; Eye Spy final “Try N of M”; Equipment keep-watching soft tip.  
 - Authority unchanged — pulses never write evidence.
+
+### 2026-10-27 — VV type-out first-viewport
+
+- VocabSheet production phase: nearby + type (or listen) beside/under photo; langs collapse; English title stays `???` / Type it until typed.  
+- Soft-miss + `firePlayClear` unchanged; dual-shell listen panel (night / phone paper).

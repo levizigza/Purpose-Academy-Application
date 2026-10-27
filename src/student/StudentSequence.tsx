@@ -74,7 +74,12 @@ import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
 import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
 import { PracticeHub, PracticeStatsStrip } from './PracticeHub'
-import { getKnownVocabIds, markVocabKnown } from './adaptiveVocab'
+import {
+  getKnownVocabIds,
+  hasClearedVocabStation,
+  markVocabKnown,
+  markVocabStationCleared,
+} from './adaptiveVocab'
 import {
   createFollowUpPlan,
   followUpSummary,
@@ -802,6 +807,8 @@ export function StudentSequencePage() {
   const [vocabConnected, setVocabConnected] = useState<Record<string, HomeLang>>({})
   const [vocabTyped, setVocabTyped] = useState<Record<string, boolean>>({})
   const [vocabKnownIds, setVocabKnownIds] = useState<string[]>(() => getKnownVocabIds(getActivePathway()))
+  /** Snapshot at visit: skip-known only on retake after station was cleared once. */
+  const [vocabRetake, setVocabRetake] = useState(() => hasClearedVocabStation(getActivePathway()))
   const [vocabSpeakingId, setVocabSpeakingId] = useState<string | null>(null)
   const [vocabIdx, setVocabIdx] = useState(0)
   const [speaking, setSpeaking] = useState<'en' | 'support' | 'both' | null>(null)
@@ -867,6 +874,19 @@ export function StudentSequencePage() {
     window.addEventListener('pa-vocab-known-changed', sync)
     return () => window.removeEventListener('pa-vocab-known-changed', sync)
   }, [pathwayId])
+
+  useEffect(() => {
+    const sync = () => {
+      if (step === 6) setVocabRetake(hasClearedVocabStation(pathwayId))
+    }
+    sync()
+    window.addEventListener('pa-vocab-station-cleared-changed', sync)
+    window.addEventListener('pa-practice-restarted', sync)
+    return () => {
+      window.removeEventListener('pa-vocab-station-cleared-changed', sync)
+      window.removeEventListener('pa-practice-restarted', sync)
+    }
+  }, [step, pathwayId])
 
   useEffect(() => { saveStep(step) }, [step])
   useEffect(() => { if (student?.preferred_language) setSupportLang(student.preferred_language as SupportLang) }, [student?.preferred_language])
@@ -994,6 +1014,7 @@ export function StudentSequencePage() {
       setEmpQuizDone(false)
       setFollowUp(null)
       setVocabKnownIds([])
+      setVocabRetake(false)
       setLogForm({ date: '', tasks: '', supervisor: '' })
       setEmpForm({ resume_goal: '', availability: '' })
       setError(null)
@@ -1193,6 +1214,7 @@ export function StudentSequencePage() {
             setEmpQuizDone(false)
             setFollowUp(null)
             setVocabKnownIds([])
+            setVocabRetake(false)
             setPracticeView('hub')
             setStep(PRACTICE_ENTRY_STEP)
             saveStep(PRACTICE_ENTRY_STEP)
@@ -1337,10 +1359,9 @@ export function StudentSequencePage() {
     stopSpeech()
     const ok = await speakEnglish(term.english)
     setVocabSpeakingId(null)
-    if (ok) {
-      setVocabHeard((h) => ({ ...h, [term.id]: true }))
-      recordSkillAttempt('vocab', true, 8)
-    }
+    /* Offer unlocks typing even when audio is blocked — Hear again remains. */
+    setVocabHeard((h) => ({ ...h, [term.id]: true }))
+    if (ok) recordSkillAttempt('vocab', true, 8)
   }
 
   async function connectVocabLang(term: (typeof VOCAB_UNIT)[number], lang: HomeLang) {
@@ -1351,14 +1372,19 @@ export function StudentSequencePage() {
     /* Always speak the English workplace word after the home-language bridge. */
     await new Promise((r) => setTimeout(r, 220))
     const heard = await speakEnglish(term.english)
-    if (heard) {
-      setVocabHeard((h) => ({ ...h, [term.id]: true }))
-      recordSkillAttempt('vocab', true, 8)
-    }
+    /*
+     * Unlock the type beat after the bridge attempt even if TTS fails
+     * (locked autoplay / missing neural). Hear-again stays available;
+     * English spelling stays hidden until they type it.
+     */
+    setVocabHeard((h) => ({ ...h, [term.id]: true }))
+    if (heard) recordSkillAttempt('vocab', true, 8)
     setVocabSpeakingId(null)
   }
 
   function markCurrentVocabKnown(term: (typeof VOCAB_UNIT)[number]) {
+    /* Skip-known is retake-only — never on day-one intake. */
+    if (!hasClearedVocabStation(pathwayId)) return
     markVocabKnown(pathwayId, term.id)
     setVocabKnownIds(getKnownVocabIds(pathwayId))
     creditKnownVocabMastery()
@@ -1680,7 +1706,15 @@ export function StudentSequencePage() {
       <Shell
         step={6}
         onBack={() => go(5)}
-        onNext={canContinue ? () => go(7, 'Opening language organize…') : undefined}
+        onNext={
+          canContinue
+            ? () => {
+                /* First-set clear → later visits unlock skip-known (retake), not day-one. */
+                if (ready) markVocabStationCleared(pathwayId)
+                go(7, 'Opening language organize…')
+              }
+            : undefined
+        }
         nextLabel="Continue to language organize"
         nextDisabled={!canContinue}
       >
@@ -1694,6 +1728,7 @@ export function StudentSequencePage() {
           knownIds={vocabKnownIds}
           journeyGateCount={journeyGateCount}
           journeyGateIds={journeyGateIds}
+          allowSkipKnown={vocabRetake}
           onIndexChange={setVocabIdx}
           onPlayEnglish={(term) => void playVocabEnglish(term)}
           onConnectLang={(term, lang) => void connectVocabLang(term, lang)}
@@ -1726,6 +1761,12 @@ export function StudentSequencePage() {
                 Jump to workplace words
               </button>
             ) : null}
+          </p>
+        ) : null}
+        {ready && !vocabRetake ? (
+          <p className="vocab-retake-invite" role="status">
+            First set clear. When you come back for another round, you can mark words you already know —
+            still hear English and type so it sticks.
           </p>
         ) : null}
         <p className="train-vocab-counter">

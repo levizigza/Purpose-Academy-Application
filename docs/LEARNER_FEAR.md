@@ -149,6 +149,11 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 ## 8. Changelog
 
+### 2026-10-27 — First-go type-out; skip-known only on retake
+
+- Customer ask: “I already know this word” does not belong on the first go — every learner should hear → hear → type. After they finish Workplace Words once and come back, a retake section may offer skip-known (still hear English + type).
+- Ship: hide skip on day-one; persist station-cleared per pathway; hub “Workplace words again” + in-deck “Another round” framing (crew tone, no exam/retake-test lexicon).
+
 ### 2026-10-26 — Doctrine established + first deep Practice pass
 
 - Customer ask: deeper learner-fear redesign of **all** Practice; documentation that agents must implement everywhere.
@@ -207,3 +212,8 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 - Residual lexicon: “Wrong answers teach” → “Misses teach”; Eye Spy “Go N” → “Try N”.
 - Intake / unit intro / hub / passport: light next-action nearby only — still no fake board evidence.
 - FamiliarTheater no longer double-latches Foley with `firePlayClear`.
+
+### 2026-10-27 — VV type-out (every card)
+
+- Visual Vocab / mother-tongue greetings: English spelling hidden until typed; type panel first-viewport with photo; langs collapse after bridge.
+- Soft miss + nearby “Clear this word · type what you heard”; TTS fail still opens type (Hear again).
