@@ -183,7 +183,7 @@ export function PracticeHub({
     >
       <header className="ph-hero">
         <div className="ph-hero-copy">
-          <p className="ph-kicker">{portal ? 'School path · crew order' : 'Practice · crew order'}</p>
+          <p className="ph-kicker">{portal ? 'Practice path · crew order' : 'Practice · crew order'}</p>
           <h1>{portal ? `Your ${JOURNEY_STEP_COUNT}-step path` : 'Your training path'}</h1>
           <p className="ph-lede">
             {portal

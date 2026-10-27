@@ -95,7 +95,7 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   15: 'safety',
   16: 'tools',
   17: 'systems',
-  /** After systems: equipment familiarization videos, then hands-on observation. */
+  /** After systems: equipment videos, then instructor check. */
   18: 'equipment-videos',
   19: 'observation',
   20: 'site-log',

@@ -429,7 +429,7 @@ export function VocabSheet({
       </div>
       <p className="vocab-sheet-lede">
         One word at a time. Hear it in your language. Hear it in English. Type it.
-        Repeat until it feels easy — like practice on the job, not a test.
+        Repeat until it feels easy — like practice on the job.
         {paged
           ? ` This set has ${terms.length} words in pages of ${VOCAB_PAGE_SIZE}.`
           : ''}

@@ -7,7 +7,6 @@ import {
   LIKERT_OPTIONS,
   PATHWAY_RESULT,
   RIASEC_LABELS,
-  hollandCode,
   pathwayFitPercent,
   rankedPathways,
   type AssessmentScores,
@@ -184,7 +183,7 @@ type ResultProps = {
   riasec: AssessmentScores
   pathwayScores: PathwayScores
   ranked: (keyof AssessmentScores)[]
-  /** Early path pick hides Holland code; later specialization shows full RIASEC. */
+  /** Early path pick hides interest list; later specialization shows top work interests (no letter codes). */
   showRiasec?: boolean
   /** After practice: let the learner confirm or switch pathway. */
   allowPathwaySwitch?: boolean
@@ -214,7 +213,6 @@ export function CareerAssessmentResult({
 }: ResultProps) {
   const result = PATHWAY_RESULT[pathway]
   const top3 = ranked.slice(0, 3)
-  const code = hollandCode(riasec)
   const fit = pathwayFitPercent(pathwayScores)
   const pathwayOrder = rankedPathways(pathwayScores)
   const recommended = pathwayOrder[0]
@@ -232,15 +230,10 @@ export function CareerAssessmentResult({
       {showRiasec ? (
         <section className="career-code" aria-label={t(ASSESSMENT_COPY.yourCode, lang)}>
           <p className="career-code-label">{t(ASSESSMENT_COPY.yourCode, lang)}</p>
-          <p className="career-code-value" aria-live="polite">
-            {code}
-          </p>
           <p className="career-code-hint">{t(ASSESSMENT_COPY.codeHint, lang)}</p>
           <ul className="career-code-areas">
             {top3.map((area) => (
-              <li key={area}>
-                <strong>{area}</strong>: {t(RIASEC_LABELS[area], lang)}
-              </li>
+              <li key={area}>{t(RIASEC_LABELS[area], lang)}</li>
             ))}
           </ul>
         </section>

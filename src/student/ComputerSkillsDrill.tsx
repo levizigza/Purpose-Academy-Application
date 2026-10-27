@@ -453,7 +453,7 @@ function TryKeyboard({ onDone }: { onDone: () => void }) {
         />
       </div>
       <button type="submit" className="btn btn-primary" disabled={!value.trim()}>
-        Check
+        Done
       </button>
     </form>
   )
@@ -461,7 +461,7 @@ function TryKeyboard({ onDone }: { onDone: () => void }) {
 
 function TryFolder({ onDone }: { onDone: () => void }) {
   const [name, setName] = useState('')
-  const ok = name.trim().toLowerCase() === 'school work'
+  const ok = name.trim().toLowerCase() === 'job files'
   return (
     <form
       className="comp-desktop"
@@ -471,7 +471,7 @@ function TryFolder({ onDone }: { onDone: () => void }) {
         else playFoley('wrong')
       }}
     >
-      <p className="comp-desktop-hint">New folder — type this name: <strong>School Work</strong></p>
+      <p className="comp-desktop-hint">New folder — type this name: <strong>Job Files</strong></p>
       <div className="comp-folder-icon" aria-hidden>
         <span className="comp-folder-glyph" />
       </div>
@@ -500,10 +500,10 @@ function TrySubfolder({ onDone }: { onDone: () => void }) {
     <div className="comp-desktop">
       {!opened ? (
         <>
-          <p className="comp-desktop-hint">First open the folder <strong>School Work</strong>.</p>
+          <p className="comp-desktop-hint">First open the folder <strong>Job Files</strong>.</p>
           <button type="button" className="comp-folder-card" onClick={() => setOpened(true)}>
             <span className="comp-folder-glyph" aria-hidden />
-            School Work
+            Job Files
           </button>
         </>
       ) : (
@@ -515,7 +515,7 @@ function TrySubfolder({ onDone }: { onDone: () => void }) {
           }}
         >
           <p className="comp-desktop-hint">
-            Inside School Work — create subfolder: <strong>Week 1</strong>
+            Inside Job Files — create subfolder: <strong>Week 1</strong>
           </p>
           <div className="field">
             <label htmlFor="comp-subfolder">Subfolder name</label>
@@ -540,7 +540,7 @@ function TrySaveName({ onDone }: { onDone: () => void }) {
   const [folder, setFolder] = useState('')
   const [file, setFile] = useState('')
   const ok =
-    folder.trim().toLowerCase() === 'school work' && file.trim().toLowerCase() === 'safety notes'
+    folder.trim().toLowerCase() === 'job files' && file.trim().toLowerCase() === 'safety notes'
   return (
     <form
       className="comp-desktop"
@@ -551,7 +551,7 @@ function TrySaveName({ onDone }: { onDone: () => void }) {
       }}
     >
       <p className="comp-desktop-hint">
-        Save As → folder <strong>School Work</strong> → name <strong>Safety Notes</strong>
+        Save As → folder <strong>Job Files</strong> → name <strong>Safety Notes</strong>
       </p>
       <div className="field">
         <label htmlFor="comp-save-folder">Folder</label>
@@ -647,7 +647,7 @@ function TryEmailSend({ onDone }: { onDone: () => void }) {
           id="comp-email-to"
           value={to}
           onChange={(e) => setTo(e.target.value)}
-          placeholder="instructor@school.ca"
+          placeholder="instructor@work.ca"
           autoComplete="off"
         />
       </div>
@@ -688,7 +688,7 @@ function TryEmailReply({ onDone }: { onDone: () => void }) {
           <p className="comp-desktop-hint">You have one email. Click Reply.</p>
           <article className="comp-inbox-msg">
             <p>
-              <strong>From:</strong> instructor@school.ca
+              <strong>From:</strong> instructor@work.ca
             </p>
             <p>
               <strong>Subject:</strong> Welcome
@@ -758,7 +758,7 @@ function TryAttachSave({ onDone }: { onDone: () => void }) {
           }}
           disabled={!attached || saved}
         >
-          {saved ? '✓ Saved to School Work' : 'Save attachment to School Work'}
+          {saved ? '✓ Saved to Job Files' : 'Save attachment to Job Files'}
         </button>
       </div>
     </div>

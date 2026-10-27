@@ -32,7 +32,7 @@ export function StudentAssignmentsPage() {
     <div className="stack">
       <PageHeader
         title="Assignments"
-        help="Open a task, write your answer, then submit. Your instructor will grade it."
+        help="Open a task, write your answer, then submit. Your instructor will send feedback."
         backTo="/app/student"
         backLabel="Home"
       />
@@ -51,7 +51,7 @@ export function StudentAssignmentsPage() {
                 <p className="muted">
                   {course?.title} · Due {a.due_date} ·{' '}
                   <StatusLabel status={sub?.status ?? 'pending'} />
-                  {sub?.grade != null ? ` · Grade ${sub.grade}/100` : ''}
+                  {sub?.grade != null ? ' · Feedback ready' : ''}
                 </p>
                 <Link className="btn btn-ghost" to={`/app/student/assignments/${a.id}`}>
                   {sub?.status === 'graded' ? 'View feedback' : 'Open assignment'}
@@ -105,11 +105,11 @@ export function SubmissionPage() {
       />
       {existing?.status === 'graded' && (
         <div className="alert ok">
-          Graded {existing.grade}/100. Feedback: {existing.feedback || '—'}
+          Instructor feedback ready{existing.feedback ? `: ${existing.feedback}` : '.'}
         </div>
       )}
       {existing?.status === 'submitted' && !msg && (
-        <div className="alert ok">Already submitted. You can update and submit again before grading.</div>
+        <div className="alert ok">Already submitted. You can update and send again before feedback arrives.</div>
       )}
       {error && <div className="alert error">{error}</div>}
       {msg && <div className="alert ok">{msg}</div>}
@@ -183,7 +183,7 @@ export function StudentProgressPage() {
           {student.pathway && !hasPathwayLessons ? (
             <>
               <p>
-                Learn lessons for {pathwayLabel} are not built yet. Train on the shared {JOURNEY_STEP_COUNT}-step spine under School
+                Learn lessons for {pathwayLabel} are not built yet. Train on the shared {JOURNEY_STEP_COUNT}-step spine under Practice
                 path.
               </p>
               <Link
@@ -194,18 +194,23 @@ export function StudentProgressPage() {
                   openPracticeSpine(user.full_name)
                 }}
               >
-                Open School path
+                Open Practice path
               </Link>
             </>
           ) : (
             <>
-              <div className="progress" aria-label={`${pathwayLabel ?? 'Pathway'} ${student.pathway ? pathPct : 0}%`}>
+              <div
+                className="progress"
+                aria-label={`${pathwayLabel ?? 'Pathway'} ${
+                  !student.pathway ? 'not started' : pathPct >= 80 ? 'comfortable' : pathPct > 0 ? 'started' : 'not started'
+                }`}
+              >
                 <span style={{ width: `${student.pathway ? pathPct : 0}%` }} />
               </div>
               <p>
                 {student.pathway ? (
                   <strong>
-                    {pathPct}% {pathwayLabel}
+                    {pathPct >= 80 ? 'Comfortable' : pathPct > 0 ? 'Started' : 'Not started'} · {pathwayLabel}
                   </strong>
                 ) : (
                   'Not selected yet'
@@ -239,7 +244,7 @@ export function StudentProgressPage() {
             return (
               <li key={s.id}>
                 {a?.title} · <StatusLabel status={s.status} />
-                {s.grade != null ? ` · ${s.grade}/100` : ''}
+                {s.grade != null ? ' · Feedback ready' : ''}
                 {s.feedback ? ` · ${s.feedback}` : ''}
               </li>
             )

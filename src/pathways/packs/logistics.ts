@@ -69,7 +69,7 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     8: {
-      goal: 'Video section — watch warehouse equipment familiarization before floor training.',
+      goal: 'Video section — watch warehouse equipment videos before floor training.',
       outcomes: [
         'Open Unit 8: Video · Warehouse Equipment (step 18)',
         'Watch each machine lesson: know, inspect, protect',

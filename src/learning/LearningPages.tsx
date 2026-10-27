@@ -639,7 +639,7 @@ export function LessonViewPage() {
 
       {isPractical && !blocked && (
         <p className="muted">
-          Hands-on checks still need an instructor on the Assess screen. Finishing this page only prepares you.
+          Hands-on checks still need an instructor beside you. Finishing this page only prepares you.
         </p>
       )}
 

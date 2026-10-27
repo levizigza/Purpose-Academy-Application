@@ -160,3 +160,10 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 - Learn portal: Retry quiz / Score % / Expected / Mastery prototype → soft crew language.
 - Public join path + seed pathway blurbs: verified skills → clear stations / instructor-checked practice.
 - Assignments progress: quiz % → practice clear / in progress.
+
+### 2026-10-26 — Board to 100% on every prior gap row
+
+- Hub / portal: School path → Practice path; home % grades → Comfortable / Started; no Holland letter codes on career result.
+- Soft / path: equipment familiarization → videos; StatusLabel Graded → Feedback ready; Work Interests purpose without “test”.
+- Computer Skills: School Work folder → Job Files; Check → Done; instructor@school.ca → @work.ca.
+- Multi / Learn: examen / اختبار / परीक्षा / ፈተና “not a test” lines → guide for your path; assignment Grade/100 chrome removed.
