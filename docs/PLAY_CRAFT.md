@@ -74,7 +74,9 @@ presentation / clear pulses / boards-cleared MUST NOT manufacture evidence
 
 **Pass 1 (shipped):** doctrine · PlayClear engine · Eye Spy · Workplace Words · hub · CSS.  
 
-**Pass 2 (this carve):** Organize · Sentence · Word→Action · Supported Practice — same nearby-objective + clear-pulse grammar on desktop night and phone paper.
+**Pass 2 (shipped):** Organize · Sentence · Word→Action · Supported Practice · Workplace Instructions — same nearby-objective + clear-pulse grammar on desktop night and phone paper.
+
+**Pass 3 (this carve):** QuizRunner shared path · Safety · Tools · Systems · Site Language · Computer Skills check · Equipment videos · Instructor check · Site decisions · Final written · Employment prep — spine complete for moment loop.
 
 Later: choice-schema content registry, review planner, finite fluency route, weekly challenge.
 
@@ -110,6 +112,15 @@ stays real workplace English.
 | Word → Action | Clear this action · N left | Action clear | Not yet · try again |
 | Supported Practice | Clear this match · N left | Match / round clear | Not yet · try again |
 | Workplace Instructions | Clear this instruction · N left | Instruction clear | Not yet · try again |
+| QuizRunner (Safety / Final written) | Clear this item · N left | Item / set clear | Soft retry · gated sets |
+| Site Language | Clear this phrase · N left | Phrase clear | Not yet · try again |
+| Tools & Equipment | Clear this tool group · N left | Tool group clear | Not yet · try again |
+| Workplace Systems | Clear this system · N left | System clear | Not yet · try again |
+| Basic Computer Skills | Watch/try/check · N left | Lesson clear on check | Wrong check · try again |
+| Equipment videos | Clear this video · N left | Video clear | Keep watching |
+| Instructor check | Clear this order · N left | Order clear | Not yet · try again |
+| On-site decisions | Clear this decision · N left | Decision clear | Not yet · try again |
+| Employment prep | Clear this interview question · N left | Prep clear | Not yet · try again |
 | Hub | Today’s station | Boards cleared today (quiet) | — |
 | Shell | Done for now | PlayClearPulse overlay | — |
 
@@ -127,3 +138,12 @@ stays real workplace English.
 
 - Same moment grammar across Language Organize, Sentence Structure, Word→Action, Supported Practice, Workplace Instructions.  
 - Softened Sentence “First go” counter → “clear so far.” Double-foley avoided (pulse owns success sound).
+
+### 2026-10-27 — Pass 3: remaining Practice spine
+
+- QuizRunner shared path (Safety + Final written): nearby objective, item/set clear via `firePlayClear`, no “See how you did.”  
+- Tools, Systems, Site Language, Instructor check, Site decisions, Employment prep: same grammar.  
+- Computer Skills: pulse on check clear (try/video use whoosh only — no double foley).  
+- Equipment videos: video-clear pulse once per lesson (ref-guarded).  
+- Critic: Sentence pass/result copy softened; phone `.play-nearby-objective` navy-on-cream beats night amber inside `.course-stage`.  
+- Authority unchanged — presentation clears never write evidence.

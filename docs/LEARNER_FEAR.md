@@ -188,3 +188,9 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 - Language Organize, Sentence Structure, Word→Action, Supported Practice: nearby objectives + clear pulses.
 - Desktop night + phone paper inherit identical words; pulse CSS already dual-shell.
+
+### 2026-10-27 — Play craft pass 3 (remaining spine)
+
+- QuizRunner + Safety / Tools / Systems / Computer check / Equipment / Instructor / Site decisions / Final written / Employment prep: nearby + `firePlayClear`.
+- Softened residual grade-like QuizRunner / Sentence summary wording; phone nearby-objective ink locked navy-on-cream.
+- Still presentation-only — no evidence manufactured by clear pulses.

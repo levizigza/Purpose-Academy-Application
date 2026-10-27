@@ -7,6 +7,7 @@ import {
   type ComputerTryKind,
 } from '../pathways/packs/basicComputerSkillsVideos'
 import { playFoley } from '../audio/foley'
+import { firePlayClear } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 
@@ -128,7 +129,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
   function onEnded() {
     setEnded(true)
     markWatched(lesson)
-    playFoley('correct')
+    playFoley('whoosh')
   }
 
   function goTry() {
@@ -141,7 +142,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
   function onTryComplete() {
     setTryReady(true)
     setPhase('check')
-    playFoley('correct')
+    playFoley('whoosh')
   }
 
   function pickCheck(opt: string) {
@@ -150,8 +151,17 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
     setCheckAnswer(opt)
     setCheckCorrect(ok)
     recordSkillAttempt('digital', ok)
-    playFoley(ok ? 'correct' : 'wrong')
-    if (ok) markDone(lesson)
+    if (ok) {
+      markDone(lesson)
+      const left = lessons.length - (idx + 1)
+      firePlayClear({
+        label: 'Lesson clear',
+        remnant: left > 0 ? `${left} left` : 'Computer skills clear — continue when ready',
+        kind: left === 0 ? 'board' : 'micro',
+      })
+    } else {
+      playFoley('wrong')
+    }
   }
 
   function goNext() {
@@ -193,6 +203,13 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
         </div>
       </div>
 
+      <p className="play-nearby-objective" aria-live="polite">
+        {phase === 'check'
+          ? `Clear this check · ${lessons.length - idx} left`
+          : phase === 'try'
+            ? `Try this step · ${lessons.length - idx} left`
+            : `Watch, then try · ${lessons.length - idx} left`}
+      </p>
       <p className="train-vocab-counter">
         Lesson {lesson.n} of {lessons.length}
         {' · '}

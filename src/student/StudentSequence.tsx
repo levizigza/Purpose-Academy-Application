@@ -595,8 +595,18 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
     const isCorrect = opt === item.answer
     setAnswered(opt)
     setCorrect(isCorrect)
-    playFoley(isCorrect ? 'correct' : 'wrong')
-    if (isCorrect) setScore((s) => s + 1)
+    if (isCorrect) {
+      const cleared = score + 1
+      const left = items.length - cleared
+      firePlayClear({
+        label: 'Item clear',
+        remnant: left > 0 ? `${left} left` : 'Set clear — continue when ready',
+        kind: left === 0 ? 'board' : 'micro',
+      })
+      setScore(cleared)
+    } else {
+      playFoley('wrong')
+    }
     if (gated && !isCorrect) setGateBlocked(true)
     try {
       const step = Number(sessionStorage.getItem(JOURNEY_KEY) || '0')
@@ -618,7 +628,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
   if (done) {
     return (
       <div className="train-quiz-summary">
-        <p className="train-score">You got {score} of {items.length} clear</p>
+        <p className="train-score">{score} of {items.length} clear</p>
         {gated && score < items.length && (
           <p className="alert warn">Safety needs every answer clear. Look again, then try the set once more.</p>
         )}
@@ -654,9 +664,13 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
   }
 
   const objectImg = quizObjectImage(item)
+  const leftInSet = items.length - idx
 
   return (
     <div className="train-quiz-item">
+      <p className="play-nearby-objective" aria-live="polite">
+        Clear this item · {leftInSet} left
+      </p>
       <p className="train-quiz-counter">Item {idx + 1} of {items.length}</p>
       <PictureCard
         image={objectImg}
@@ -682,7 +696,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
             {correct ? item.teachCorrect : item.teachWrong}
           </div>
           <button type="button" className="btn btn-primary" onClick={next}>
-            {gateBlocked ? 'Try again' : idx + 1 >= items.length ? 'See how you did' : 'Next'}
+            {gateBlocked ? 'Try again' : idx + 1 >= items.length ? 'Continue' : 'Next'}
           </button>
         </>
       )}
@@ -2246,7 +2260,16 @@ export function StudentSequencePage() {
       setPhraseAnswer(opt)
       setPhraseCorrect(ok)
       recordSkillAttempt('site-phrases', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = SITE_PHRASES.length - (phraseIdx + 1)
+        firePlayClear({
+          label: 'Phrase clear',
+          remnant: left > 0 ? `${left} left` : 'Last phrase — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextPhrase() {
@@ -2267,6 +2290,9 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={13} onBack={() => go(12)}>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this phrase · {SITE_PHRASES.length - phraseIdx} left
+        </p>
         <p className="train-vocab-counter">Phrase {phraseIdx + 1} of {SITE_PHRASES.length}</p>
         <article className="phrase-lesson-card">
           <p className="phrase-lesson-en">{phrase.en}</p>
@@ -2410,7 +2436,16 @@ export function StudentSequencePage() {
       setToolAnswer(opt)
       setToolCorrect(ok)
       recordSkillAttempt('tools', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = TOOL_CATEGORIES.length - (toolIdx + 1)
+        firePlayClear({
+          label: 'Tool group clear',
+          remnant: left > 0 ? `${left} left` : 'Last group — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextTool() {
@@ -2433,6 +2468,9 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={16} onBack={() => go(15)}>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this tool group · {TOOL_CATEGORIES.length - toolIdx} left
+        </p>
         <p className="train-vocab-counter">Tool group {toolIdx + 1} of {TOOL_CATEGORIES.length}</p>
         <article className="topic-lesson-card">
           <span className="train-topic-mark">{cat.mark}</span>
@@ -2478,7 +2516,16 @@ export function StudentSequencePage() {
       setSysAnswer(opt)
       setSysCorrect(ok)
       recordSkillAttempt('systems', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = SYSTEM_TOPICS.length - (sysIdx + 1)
+        firePlayClear({
+          label: 'System clear',
+          remnant: left > 0 ? `${left} left` : 'Last system — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextSys() {
@@ -2500,6 +2547,9 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={17} onBack={() => go(16)}>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this system · {SYSTEM_TOPICS.length - sysIdx} left
+        </p>
         <p className="train-vocab-counter">System {sysIdx + 1} of {SYSTEM_TOPICS.length}</p>
         <article className="topic-lesson-card">
           <span className="train-topic-mark">{topic.mark}</span>
@@ -2621,7 +2671,16 @@ export function StudentSequencePage() {
       setObsChecked(true)
       setObsCorrect(ok)
       recordSkillAttempt('observation', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = OBSERVATION_SCENARIOS.length - (obsIdx + 1)
+        firePlayClear({
+          label: 'Order clear',
+          remnant: left > 0 ? `${left} left` : 'Last practice — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
       try {
         sessionStorage.setItem(OBS_KEY, JSON.stringify({ scenario: scenario.id, picked: obsPicked, ok }))
       } catch { /* */ }
@@ -2652,6 +2711,9 @@ export function StudentSequencePage() {
           <LearnCard mark="P" title="Practised" body="Tried with supervision." />
           <LearnCard mark="C" title="Checked" body="An instructor confirms it with you on the job." />
         </div>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this order · {OBSERVATION_SCENARIOS.length - obsIdx} left
+        </p>
         <p className="train-vocab-counter">Practice {obsIdx + 1} of {OBSERVATION_SCENARIOS.length}</p>
         <article className="topic-lesson-card">
           <h3>{scenario.title}</h3>
@@ -2716,7 +2778,16 @@ export function StudentSequencePage() {
       setSiteAnswer(opt)
       setSiteCorrect(ok)
       recordSkillAttempt('site-log', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = SITE_DECISIONS.length - (siteIdx + 1)
+        firePlayClear({
+          label: 'Decision clear',
+          remnant: left > 0 ? `${left} left` : 'Last decision — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextSite() {
@@ -2746,6 +2817,9 @@ export function StudentSequencePage() {
     return (
       <Shell step={20} onBack={() => go(19)}>
         <WhyWork>On-site days need judgment and a clear log. Practice both before the final check.</WhyWork>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this decision · {SITE_DECISIONS.length - siteIdx} left
+        </p>
         <p className="train-vocab-counter">Site decision {siteIdx + 1} of {SITE_DECISIONS.length}</p>
         <article className="topic-lesson-card">
           <h3>{item.title}</h3>
@@ -2900,7 +2974,16 @@ export function StudentSequencePage() {
       setEmpAnswer(opt)
       setEmpCorrect(ok)
       recordSkillAttempt('employment', ok)
-      playFoley(ok ? 'correct' : 'wrong')
+      if (ok) {
+        const left = EMPLOYMENT_PREP.length - (empIdx + 1)
+        firePlayClear({
+          label: 'Prep clear',
+          remnant: left > 0 ? `${left} left` : 'Interview prep clear — continue when ready',
+          kind: left === 0 ? 'board' : 'micro',
+        })
+      } else {
+        playFoley('wrong')
+      }
     }
 
     function nextEmp() {
@@ -2921,6 +3004,9 @@ export function StudentSequencePage() {
     return (
       <Shell step={22} onBack={() => go(21)}>
         <WhyWork>Employment connection starts with clear interview answers, then partner matching.</WhyWork>
+        <p className="play-nearby-objective" aria-live="polite">
+          Clear this interview question · {EMPLOYMENT_PREP.length - empIdx} left
+        </p>
         <p className="train-vocab-counter">Interview prep {empIdx + 1} of {EMPLOYMENT_PREP.length}</p>
         <article className="topic-lesson-card">
           <p className="train-check-prompt">{item.prompt}</p>

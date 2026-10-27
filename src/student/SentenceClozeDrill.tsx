@@ -326,7 +326,7 @@ export function SentenceClozeDrill({
         </div>
         <h2>Page complete</h2>
         <p className="lede">
-          Sentences {from}–{to} complete. You got {scoreCorrect} of {pageItems.length} on the first go. Words had to
+          Sentences {from}–{to} complete. {scoreCorrect} of {pageItems.length} clear on the first go. Words had to
           land in the blank — no shopping for answers.
         </p>
         <div className="hero-actions">
@@ -350,7 +350,7 @@ export function SentenceClozeDrill({
         <p className="section-kicker">Sentence Structure</p>
         <h2>Keep learning this page</h2>
         <p className="lede">
-          You have {scoreCorrect} of {pageItems.length} clear. Get {PASS_SCORE} right as you go to keep moving.
+          {scoreCorrect} of {pageItems.length} clear so far. Clear {PASS_SCORE} on this page to keep moving.
           Wrong answers move on — you cannot tap every choice. Read each sentence and try the page again.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>

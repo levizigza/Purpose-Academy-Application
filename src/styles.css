@@ -14220,7 +14220,10 @@ html.pa-phone-shell .practice-feedback-dock {
   background: color-mix(in srgb, #f5c542 14%, rgba(4, 21, 38, 0.35));
 }
 
-.is-phone-app .play-nearby-objective {
+/* Phone paper: navy body on cream — beat night amber even inside .course-stage */
+.is-phone-app .play-nearby-objective,
+.is-phone-app .course-stage .play-nearby-objective,
+html.pa-phone-shell .play-nearby-objective {
   color: #0b2f5c;
   background: color-mix(in srgb, #0b2f5c 8%, #fff8e8);
   border-color: color-mix(in srgb, #0b2f5c 22%, #c5d0dc);
