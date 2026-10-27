@@ -67,6 +67,11 @@ type CardProps = {
   /** Language the learner pressed to bridge meaning → English */
   connectedLang: HomeLang | null
   alreadyKnown: boolean
+  /**
+   * Retake only: show “I already know this word”.
+   * Hidden on the first go so every learner types through the set.
+   */
+  allowSkipKnown: boolean
   onPlayEnglish: () => void
   onConnectLang: (lang: HomeLang) => void
   onMarkKnown: () => void
@@ -76,6 +81,7 @@ type CardProps = {
 /**
  * Visual vocabulary card — Purpose Academy worksheet mold (one word per page):
  * picture → home language → Hear English → type English (reps that stick).
+ * English spelling stays hidden until the learner types it — no spoiler title.
  */
 export function VocabSheetCard({
   index,
@@ -86,6 +92,7 @@ export function VocabSheetCard({
   typedEnglish,
   connectedLang,
   alreadyKnown,
+  allowSkipKnown,
   onPlayEnglish,
   onConnectLang,
   onMarkKnown,
@@ -94,7 +101,10 @@ export function VocabSheetCard({
   const img = pathwayImage(term.imageKey)
   const bridged = !!connectedLang || alreadyKnown
   const ready = bridged && heardEnglish && typedEnglish
+  /** After bridge: listen → type. Typing unlocks once English was offered (heard). */
+  const listeningPhase = bridged && !heardEnglish && !typedEnglish
   const typingPhase = bridged && heardEnglish && !typedEnglish
+  const productionPhase = bridged && !typedEnglish
   const inputId = useId()
   const inputRef = useRef<HTMLInputElement>(null)
   const [draft, setDraft] = useState('')
@@ -143,28 +153,128 @@ export function VocabSheetCard({
   const progressLine = (() => {
     if (ready) return ' · Done ✓'
     if (typingPhase) return ' · Now type the English word'
+    if (listeningPhase) {
+      return speaking
+        ? ' · Listening — then type the English word'
+        : ' · Hear English, then type it'
+    }
     if (alreadyKnown) return ' · Already known — hear English, then type it'
-    if (connectedLang) return ` · Heard: ${connectedLang} → English — type it next`
     return ' · Press the language you understand'
   })()
 
+  const caption = (() => {
+    if (typedEnglish) return `Yes — ${term.english}.`
+    if (typingPhase) return 'Look. Hear your language. Hear English. Type what you heard.'
+    if (listeningPhase) return 'Listening… Then type the English word so it sticks.'
+    if (studioPhoto) return 'Look at the object. Press your language. Hear English. Type it.'
+    return 'Look at the picture. Press your language. Hear English. Type it.'
+  })()
+
+  const langsToShow =
+    productionPhase && connectedLang
+      ? [connectedLang]
+      : productionPhase
+        ? []
+        : VOCAB_SHEET_LANGS
+
+  const typeForm = typingPhase ? (
+    <form className="vocab-sheet-type" onSubmit={checkType}>
+      <p className="play-nearby-objective" aria-live="polite">
+        Clear this word · type what you heard
+      </p>
+      <p className="vocab-sheet-type-prompt">
+        <span className="vocab-sheet-type-kicker">Your turn</span>
+        Type the English word you just heard.
+      </p>
+      <div className="vocab-sheet-type-row">
+        <label className="sr-only" htmlFor={inputId}>
+          English word
+        </label>
+        <input
+          ref={inputRef}
+          id={inputId}
+          className="vocab-sheet-type-input"
+          value={draft}
+          onChange={(e) => {
+            setDraft(e.target.value)
+            if (feedback === 'retry') setFeedback(null)
+          }}
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
+          enterKeyHint="done"
+          placeholder="Type here…"
+          aria-invalid={feedback === 'retry'}
+          aria-describedby={feedback ? `${inputId}-fb` : undefined}
+        />
+        <button type="submit" className="btn btn-primary vocab-sheet-type-check" disabled={!draft.trim()}>
+          Go
+        </button>
+      </div>
+      <div className="vocab-sheet-type-tools">
+        <button
+          type="button"
+          className="btn btn-ghost vocab-sheet-type-replay"
+          disabled={speaking}
+          onClick={onPlayEnglish}
+        >
+          <SpeakerIconSmall />
+          Hear English again
+        </button>
+      </div>
+      {feedback === 'retry' && (
+        <p id={`${inputId}-fb`} className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
+          Not yet — hear it again, then type what you heard. No rush.
+        </p>
+      )}
+    </form>
+  ) : null
+
+  const listenStatus = listeningPhase ? (
+    <div className="vocab-sheet-listen" role="status" aria-live="polite">
+      <p className="play-nearby-objective">
+        Clear this word · listen, then type
+      </p>
+      <p className="vocab-sheet-listen-prompt">
+        {speaking
+          ? 'Hear your language, then English…'
+          : 'Press Hear English if you need it again — then type the word.'}
+      </p>
+      {!speaking && (
+        <button type="button" className="btn btn-secondary vocab-sheet-listen-go" onClick={onPlayEnglish}>
+          <SpeakerIconSmall />
+          Hear English
+        </button>
+      )}
+    </div>
+  ) : null
+
   return (
     <article
-      className={`vocab-sheet-card vocab-sheet-card-focus${heardEnglish ? ' is-heard' : ''}${bridged ? ' is-connected' : ''}${typedEnglish ? ' is-typed' : ''}${alreadyKnown ? ' is-known' : ''}${studioPhoto ? ' vocab-sheet-studio' : ''}`}
+      className={`vocab-sheet-card vocab-sheet-card-focus${heardEnglish ? ' is-heard' : ''}${bridged ? ' is-connected' : ''}${typedEnglish ? ' is-typed' : ''}${alreadyKnown ? ' is-known' : ''}${productionPhase ? ' is-production' : ''}${studioPhoto ? ' vocab-sheet-studio' : ''}`}
     >
       <header className="vocab-sheet-card-head">
         <span className={`vocab-sheet-num tone-${(index % 4) + 1}`}>{index}</span>
-        {typingPhase ? (
-          <strong className="vocab-sheet-en is-hidden-for-type" aria-label="Type the English word you heard">
-            Type it
-          </strong>
+        {typedEnglish ? (
+          <strong className="vocab-sheet-en is-linked">{term.english}</strong>
         ) : (
-          <strong className={`vocab-sheet-en${bridged ? ' is-linked' : ''}`}>{term.english}</strong>
+          <strong
+            className="vocab-sheet-en is-hidden-for-type"
+            aria-label={
+              typingPhase
+                ? 'Type the English word you heard'
+                : listeningPhase
+                  ? 'Listen, then type the English word'
+                  : 'English word hidden until you type it'
+            }
+          >
+            {typingPhase ? 'Type it' : listeningPhase ? 'Listen…' : '???'}
+          </strong>
         )}
         <button
           type="button"
           className={`vocab-sheet-audio${heardEnglish ? ' is-done' : ''}`}
-          aria-label={`Listen to ${term.english}`}
+          aria-label="Listen to the English workplace word"
           disabled={speaking || !bridged}
           onClick={onPlayEnglish}
           title={bridged ? 'Listen to English' : 'Press your language first'}
@@ -189,35 +299,54 @@ export function VocabSheetCard({
         {progressLine}
       </p>
 
-      <div className="vocab-sheet-body vocab-sheet-body-focus">
+      {!productionPhase && !typedEnglish && (
+        <p className="play-nearby-objective vocab-sheet-nearby-pre" aria-live="polite">
+          Clear this word · press your language, then type
+        </p>
+      )}
+
+      <div className={`vocab-sheet-body vocab-sheet-body-focus${productionPhase ? ' is-production' : ''}`}>
         <figure className={`vocab-sheet-photo vocab-sheet-photo-focus${studioPhoto ? ' is-studio' : ''}`}>
           {img ? (
-            <img src={img} alt={typingPhase ? 'Workplace object — type the English name' : `Photo of ${term.english}`} />
+            <img
+              src={img}
+              alt={
+                typedEnglish
+                  ? `Photo of ${term.english}`
+                  : 'Workplace object — hear it, then type the English name'
+              }
+            />
           ) : (
             <span className="vocab-sheet-fallback" aria-hidden>
               {term.emoji}
             </span>
           )}
-          <figcaption className="vocab-sheet-photo-caption">
-            {typingPhase
-              ? 'Look. Hear your language. Hear English. Type what you heard.'
-              : studioPhoto
-                ? 'Look at the object. Press your language. Then hear English.'
-                : 'Look at the picture. Connect it to English.'}
-          </figcaption>
+          <figcaption className="vocab-sheet-photo-caption">{caption}</figcaption>
         </figure>
-        <ul className="vocab-sheet-langs" aria-label="Press the language you understand">
-          {VOCAB_SHEET_LANGS.map((lang) => {
+
+        {/* Type / listen sit beside (desktop) or under (phone) the photo — before the lang stack so the beat is first-viewport. */}
+        {productionPhase && (
+          <div className="vocab-sheet-production">
+            {listenStatus}
+            {typeForm}
+          </div>
+        )}
+
+        <ul
+          className={`vocab-sheet-langs${productionPhase ? ' is-collapsed' : ''}`}
+          aria-label="Press the language you understand"
+        >
+          {langsToShow.map((lang) => {
             const selected = connectedLang === lang
             return (
               <li key={lang} className={selected ? 'is-connected-lang' : ''}>
                 <button
                   type="button"
                   className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}`}
-                  disabled={speaking || alreadyKnown || typingPhase || typedEnglish}
+                  disabled={speaking || alreadyKnown || productionPhase}
                   onClick={() => onConnectLang(lang)}
                   aria-pressed={selected}
-                  aria-label={`Hear ${term.gloss[lang]} in ${lang}, then English ${term.english}`}
+                  aria-label={`Hear ${term.gloss[lang]} in ${lang}, then hear and type English`}
                 >
                   <span className="vocab-sheet-flag" aria-hidden>
                     {FLAG[lang]}
@@ -228,7 +357,7 @@ export function VocabSheetCard({
                   </span>
                   {selected && (
                     <span className="vocab-sheet-lang-link">
-                      {typedEnglish ? `→ ${term.english}` : '→ heard'}
+                      {typedEnglish ? `→ ${term.english}` : speaking ? '→ …' : '→ type next'}
                     </span>
                   )}
                 </button>
@@ -238,73 +367,20 @@ export function VocabSheetCard({
         </ul>
       </div>
 
-      {typingPhase && (
-        <form className="vocab-sheet-type" onSubmit={checkType}>
-          <p className="play-nearby-objective" aria-live="polite">
-            Clear this word · type what you heard
-          </p>
-          <p className="vocab-sheet-type-prompt">
-            <span className="vocab-sheet-type-kicker">Your turn</span>
-            Type the English word you just heard.
-          </p>
-          <div className="vocab-sheet-type-row">
-            <label className="sr-only" htmlFor={inputId}>
-              English word
-            </label>
-            <input
-              ref={inputRef}
-              id={inputId}
-              className="vocab-sheet-type-input"
-              value={draft}
-              onChange={(e) => {
-                setDraft(e.target.value)
-                if (feedback === 'retry') setFeedback(null)
-              }}
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-              enterKeyHint="done"
-              placeholder="Type here…"
-              aria-invalid={feedback === 'retry'}
-              aria-describedby={feedback ? `${inputId}-fb` : undefined}
-            />
-            <button type="submit" className="btn btn-primary vocab-sheet-type-check" disabled={!draft.trim()}>
-              Go
-            </button>
-          </div>
-          <div className="vocab-sheet-type-tools">
-            <button
-              type="button"
-              className="btn btn-ghost vocab-sheet-type-replay"
-              disabled={speaking}
-              onClick={onPlayEnglish}
-            >
-              <SpeakerIconSmall />
-              Hear English again
-            </button>
-          </div>
-          {feedback === 'retry' && (
-            <p id={`${inputId}-fb`} className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
-              Not yet — hear it again, then type what you heard. No rush.
-            </p>
-          )}
-        </form>
-      )}
-
       {typedEnglish && (
         <p className="vocab-sheet-type-fb is-ok" role="status">
           Yes — <strong>{term.english}</strong>.
         </p>
       )}
 
-      {!typingPhase && (
+      {typedEnglish && (
         <>
           <p className="vocab-sheet-definition">{term.definition}</p>
           <p className="vocab-sheet-sentence">{term.sentence}</p>
         </>
       )}
 
-      {!alreadyKnown && !typingPhase && !typedEnglish && (
+      {allowSkipKnown && !alreadyKnown && !productionPhase && !typedEnglish && (
         <button type="button" className="btn btn-ghost vocab-known-btn" onClick={onMarkKnown}>
           I already know this word
         </button>
@@ -348,6 +424,11 @@ type DeckProps = {
    * the Daily Conversation table.
    */
   journeyGateIds?: string[]
+  /**
+   * After the station was finished once: retake framing + skip-known control.
+   * First go stays hear → hear → type with no skip shortcut.
+   */
+  allowSkipKnown?: boolean
 }
 
 export function termLinked(
@@ -384,6 +465,7 @@ export function VocabSheet({
   onTypedCorrect,
   journeyGateCount,
   journeyGateIds,
+  allowSkipKnown = false,
 }: DeckProps) {
   const knownSet = new Set(knownIds)
   const idx = Math.min(Math.max(0, index), Math.max(0, terms.length - 1))
@@ -439,13 +521,23 @@ export function VocabSheet({
       <div className="vocab-lesson-bar" aria-hidden>
         <span style={{ width: `${Math.round((linkedCount / Math.max(1, terms.length)) * 100)}%` }} />
       </div>
-      <p className="vocab-sheet-lede">
-        One word at a time. Hear it in your language. Hear it in English. Type it.
-        Repeat until it feels easy — like practice on the job.
-        {paged
-          ? ` This set has ${terms.length} words in pages of ${VOCAB_PAGE_SIZE}.`
-          : ''}
-      </p>
+      {allowSkipKnown ? (
+        <div className="vocab-retake" role="status">
+          <p className="vocab-retake-kicker">Another round</p>
+          <p className="vocab-retake-lede">
+            Same words, same loop — hear, hear, type. This time you can mark ones you already know;
+            you still hear English once and type it so it sticks.
+          </p>
+        </div>
+      ) : (
+        <p className="vocab-sheet-lede">
+          One word at a time. Hear it in your language. Hear it in English. Type it.
+          Repeat until it feels easy — like practice on the job.
+          {paged
+            ? ` This set has ${terms.length} words in pages of ${VOCAB_PAGE_SIZE}.`
+            : ''}
+        </p>
+      )}
 
       {paged && (
         <div className="vocab-sheet-pages" role="navigation" aria-label="Vocabulary worksheet pages">
@@ -491,6 +583,7 @@ export function VocabSheet({
         typedEnglish={typedEnglish}
         connectedLang={connectedLang}
         alreadyKnown={alreadyKnown}
+        allowSkipKnown={allowSkipKnown}
         onPlayEnglish={() => onPlayEnglish(term)}
         onConnectLang={(lang) => onConnectLang(term, lang)}
         onMarkKnown={() => onMarkKnown(term)}

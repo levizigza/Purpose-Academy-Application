@@ -25,6 +25,7 @@ import {
   type PathwayId,
 } from '../pathways'
 import { followUpSummary, loadFollowUp } from './employmentFollowUp'
+import { hasClearedVocabStation } from './adaptiveVocab'
 import { BoardsClearedToday } from '../practice/PlayClear'
 
 type Props = {
@@ -123,15 +124,18 @@ export function PracticeHub({
     window.addEventListener('pa-practice-restarted', sync)
     window.addEventListener('pa-pathway-changed', sync)
     window.addEventListener('pa-employment-followup-changed', sync)
+    window.addEventListener('pa-vocab-station-cleared-changed', sync)
     return () => {
       window.removeEventListener('pa-mastery-changed', sync)
       window.removeEventListener('pa-practice-restarted', sync)
       window.removeEventListener('pa-pathway-changed', sync)
       window.removeEventListener('pa-employment-followup-changed', sync)
+      window.removeEventListener('pa-vocab-station-cleared-changed', sync)
     }
   }, [])
 
   const pathwayId = getActivePathway()
+  const vocabRetakeOpen = hasClearedVocabStation(pathwayId)
   const meta = pathwayMeta(pathwayId)
   const pack = getPathwayPack(pathwayId)
   const journeySteps = getPathwayJourneySteps(pathwayId)
@@ -280,6 +284,26 @@ export function PracticeHub({
           </div>
         </div>
       </header>
+
+      {vocabRetakeOpen && (
+        <section className="ph-video-section ph-vocab-retake" aria-label="Workplace words again">
+          <div className="ph-video-section-inner">
+            <p className="ph-video-section-kicker">Another round</p>
+            <h2>Workplace words again</h2>
+            <p>
+              Come back to the same pictures anytime. This round you can mark words you already know —
+              you still hear English and type so it sticks. No rush.
+            </p>
+            <button
+              type="button"
+              className="btn btn-primary ph-video-section-btn"
+              onClick={() => onOpenLesson(6)}
+            >
+              Open workplace words
+            </button>
+          </div>
+        </section>
+      )}
 
       <section className="ph-video-section ph-computer-section" aria-label="Basic Computer Skills">
         <div className="ph-video-section-inner ph-computer-section-inner">

@@ -242,7 +242,7 @@ These are load-bearing across all layers.
 - Every vocabulary English word must speak when the learner bridges or presses Hear English.
 - Priority stays: baked neural → live neural → Free Dictionary (works without our API) → browser `speechSynthesis`.
 - After a home-language connect, auto-speak the English workplace word.
-- **Then type it:** English title hides; picture + Hear again stay; soft retry (“Not yet — hear it again”) — never Incorrect / Expected. Gate = heard + typed + (bridged or known).
+- **Then type it (every VV card):** English spelling stays hidden from first paint until typed; listen/type panel sits with the photo (langs collapse to the bridge); soft retry (“Not yet — hear it again”) — never Incorrect / Expected. Nearby: “Clear this word · type what you heard”; `firePlayClear` on correct type. TTS failure still unlocks the type beat (Hear again remains). Gate = heard + typed + (bridged or known).
 
 ### 6.4 Sound (foley)
 
@@ -431,6 +431,20 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-27 — Vocab first-go vs retake: skip-known after station clear (L2 / L4)
+
+- **Layers:** L2 content delivery (type-out reps) + L4 attention ethics (no day-one escape hatch that skips the work).
+- **Customer ask:** First go through Visual Vocabulary / Workplace Words should not show “I already know this word.” After they finish and come back for another round, that control (and a clear retake section) may appear.
+- **Fix:** Persist `pa-vocab-station-cleared-v1` when the first-set gate is clear and they continue. `VocabSheet` `allowSkipKnown` only on retake visits; hub gains “Workplace words again”; soft invite after first set clear. Start-over wipes cleared + known. Tone stays crew (“Another round”), not exam retake.
+- **Critic:** Mastery “familiar” alone is too early (hear credits) — station-cleared flag is the truth for skip unlock.
+
+### 2026-10-27 — Vocab type-out + first-go / retake skip-known (L2 / L3)
+
+- **Layers:** L2 (VV loop) + L3 (type beat with photo; English spelling never spoilers).
+- **Type-out:** press-language Visual Vocabulary keeps hear → hear → **type**; production beat sits with the photo; langs collapse to the bridge.
+- **Retake:** “I already know this word” hidden on day-one; unlocked only after `markVocabStationCleared` when the first-set gate is clear. Practice restart clears the flag.
+- **Critic:** Showing skip-known on first intake invited mindless skip; type reps are the station.
+
 ### 2026-10-27 — Phone splash: centered Tap hammer + soft blink (L3)
 
 - **Layers:** L3 information display (next action unmistakable in 3s) on the phone app splash.
@@ -447,6 +461,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Deep Practice pass:** Hub report-card %/marks chrome collapsed; Eye Spy / Sentence / Final check exam lexicon removed; Organize “quiz” gone; observation Competent → habit language; career % fit / RIASEC learner strings cut; pathway unit goals softened; shell motto / counters quieted.
 - **Assumption to challenge next:** whether internal mastery gates should credit more generously so Continue rarely feels like a locked door.
 
+### 2026-10-27 — VV type-out unmistakable (L2 / L3)
+
+- **Layers:** L2 hear→hear→type · L3 first-viewport type beat (phone paper + desktop night).
+- **Customer ask:** Mother-tongue greeting / Visual Vocab must require typing the English word on every card — not only press language + hear.
+- **Critic:** Live mid-listen state still showed English title + definition (spoiler / looked like “forgot type”); type form sat under five langs; TTS failure never unlocked typing.
+- **Fix:** Hide English until typed; listen/type panel with photo; collapse langs to bridge; unlock type after bridge/hear attempt; caption teaches full loop; soft-miss + `firePlayClear` unchanged.
+- **Law restated:** Production (type) is the clear — listening alone never finishes a VV word.
+
 ### 2026-10-26 — Hear → hear → type + fearless learner chrome (L2 / L1 / L4)
 
 - **Layers:** L2 content delivery (vocab reps) + L1 story voice + L4 attention (no shame loops).
@@ -455,6 +477,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Chrome soften (site-wide):** Journey titles Final Exam → Final Check, Interest Assessment → Work Interests; mastery labels → Started/Comfortable/Strong/Solid; Familiar theater → Station clear / Ready; Passport Competent → Checked; hub “mastery gates / Reach Familiar” → one station / comfortable; exam captions / perfect score / RIASEC learner copy cut; Programs volume bullets → hear/hear/type story.
 - **Law:** Prefer **station / check / comfortable** over **exam / assessment / mastery / proficient**. Keep adult crew gravity — never childish gamification.
 - **Follow-up same day:** full doctrine + deeper Practice pass (see entry above).
+- **Follow-up (2026-10-27):** type-out hardened — see entry above.
 
 ### 2026-10-26 — Play craft: casual-game joy without learner fear (L2 / L3 / L4)
 
