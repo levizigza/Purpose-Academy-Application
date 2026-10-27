@@ -441,7 +441,7 @@ export function RoleSelectionPage() {
         <p className="lede">Choose your role. You will use the same email and password on the next screen.</p>
         <div className="role-pick">
           <Link to="/login?role=student">Learner: learn and practise</Link>
-          <Link to="/login?role=instructor">Instructor: teach and assess</Link>
+          <Link to="/login?role=instructor">Instructor: teach and check</Link>
           <Link to="/login?role=admin">Admin: approve and manage</Link>
         </div>
         <p className="muted">

@@ -82,7 +82,7 @@ function MasteryMeter({ percent, label }: { percent: number; label: string }) {
       </svg>
       <div className="ph-meter-label">
         <strong>{clamped}%</strong>
-        <span>Mastery</span>
+        <span>Ready</span>
       </div>
     </div>
   )
@@ -188,7 +188,7 @@ export function PracticeHub({
           <p className="ph-lede">
             {portal
               ? `${practiceName || 'Learner'} — ${meta.programTitle}. One spine. One station at a time. Learn lessons are extra when built.`
-              : `${practiceName ? `${practiceName}, ` : ''}${meta.programTitle}: clear stations, mastery gates, then the next unit. Reach Familiar before you advance.`}
+              : `${practiceName ? `${practiceName}, ` : ''}${meta.programTitle}: one station at a time. Get comfortable here, then the next door opens.`}
           </p>
           <div className="ph-pathway-badge">
             <img src={pathwayIcon(pathwayId)} alt="" />
@@ -234,14 +234,14 @@ export function PracticeHub({
           <h2>{resumeHeading}</h2>
           <p className="ph-resume-lesson">{resumeLesson}</p>
           <p className="ph-today-line">{todayLine}</p>
-          <div className="ph-resume-progress" aria-label={`${unitPct}% unit mastery`}>
+          <div className="ph-resume-progress" aria-label={`${unitPct}% unit ready`}>
             <div className="ph-resume-progress-track">
               <span style={{ width: `${pathComplete ? 100 : unitPct}%` }} />
             </div>
             <em>
               {pathComplete
                 ? 'All units open for review · follow-up schedule active'
-                : `${unitDoneCount}/${unitSteps.length} lessons in this unit · ${unitPct}% mastery`}
+                : `${unitDoneCount}/${unitSteps.length} lessons in this unit · ${unitPct}% ready`}
             </em>
           </div>
           <div className="ph-resume-actions">
@@ -311,7 +311,7 @@ export function PracticeHub({
       </section>
 
       <section className="ph-overview" aria-label="Practice marks">
-        <MasteryMeter percent={overall} label={`Path mastery ${overall} percent`} />
+        <MasteryMeter percent={overall} label={`Path ready ${overall} percent`} />
         <div className="ph-metrics">
           <article className="ph-metric">
             <span className="ph-metric-label">Practice marks</span>
@@ -341,8 +341,8 @@ export function PracticeHub({
       <section className="ph-domains" aria-label="Skill domains">
         <div className="ph-section-head">
           <div>
-            <h2>Craft strength</h2>
-            <p>Skill domains for {meta.programTitle} — same order on every pathway.</p>
+            <h2>Where you are strong</h2>
+            <p>Simple check-ins for {meta.programTitle} — same order on every pathway.</p>
           </div>
         </div>
         <ul className="ph-domain-list">
@@ -364,20 +364,20 @@ export function PracticeHub({
         <div className="ph-section-head">
           <div>
             <h2>Station map</h2>
-            <p>Expand a unit. Locked doors open when the station before is Familiar — not by scrolling past.</p>
+            <p>Expand a unit. Locked doors open when the station before feels comfortable — not by scrolling past.</p>
           </div>
-          <ul className="ph-legend" aria-label="Mastery levels">
+          <ul className="ph-legend" aria-label="Station readiness">
             <li>
-              <span className="ph-level is-attempted" aria-hidden /> Attempted
+              <span className="ph-level is-attempted" aria-hidden /> Started
             </li>
             <li>
-              <span className="ph-level is-familiar" aria-hidden /> Familiar
+              <span className="ph-level is-familiar" aria-hidden /> Comfortable
             </li>
             <li>
-              <span className="ph-level is-proficient" aria-hidden /> Proficient
+              <span className="ph-level is-proficient" aria-hidden /> Strong
             </li>
             <li>
-              <span className="ph-level is-mastered" aria-hidden /> Mastered
+              <span className="ph-level is-mastered" aria-hidden /> Solid
             </li>
           </ul>
         </div>
@@ -430,7 +430,7 @@ export function PracticeHub({
                         <span style={{ width: `${pct}%` }} />
                       </span>
                       <em>
-                        {pct}% mastery · Steps {u.range}
+                        {pct}% ready · Steps {u.range}
                       </em>
                     </span>
                   </span>
@@ -500,7 +500,7 @@ export function PracticeHub({
         <div>
           <h3>How progress works</h3>
           <p>
-            Learn, practise, get feedback, and retry until a skill is Familiar. Finish the station. Then the next door
+            Learn, practise, get feedback, and retry until a station feels comfortable. Finish the station. Then the next door
             opens. Leaving mid-path is fine — use Done for now.
           </p>
         </div>
@@ -539,10 +539,10 @@ export function PracticeStatsStrip({ step, className = '' }: { step: number; cla
         <strong>{stats.dayStreak}</strong> days
       </span>
       <span>
-        <strong>{overall}%</strong> mastery
+        <strong>{overall}%</strong> ready
       </span>
       <span className={ready ? 'is-ready' : 'is-locked'}>
-        {ready ? 'Ready to advance' : 'Practise to Familiar'}
+        {ready ? 'Ready for the next station' : 'Practise until comfortable'}
       </span>
     </div>
   )

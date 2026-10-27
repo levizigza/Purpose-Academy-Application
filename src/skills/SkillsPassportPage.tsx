@@ -14,17 +14,17 @@ const LPC_STAGES: { status: CompetencyStatus; title: string; body: string }[] = 
   {
     status: 'learned',
     title: 'Learned',
-    body: 'Studied in the app or class — understanding, not yet verified on the job.',
+    body: 'Studied in the app or class — you know the idea.',
   },
   {
     status: 'practised',
     title: 'Practised',
-    body: 'Tried with supervision. Still needs authorized instructor confirmation.',
+    body: 'Tried with supervision. Still needs an instructor check on the job.',
   },
   {
     status: 'competent',
-    title: 'Competent',
-    body: 'Authorized instructor confirmed the standard. This is the passport signal.',
+    title: 'Checked',
+    body: 'An instructor confirmed it with you. That is the passport signal.',
   },
 ]
 
@@ -66,7 +66,7 @@ export function SkillsPassportPage() {
       <PageHeader
         kicker="Verified skill"
         title="Skills Passport"
-        help="What you studied, practised, and demonstrated — not Red Seal, apprenticeship certification, or a guaranteed job."
+        help="What you studied, practised, and showed — not a trade ticket, Red Seal, or a guaranteed job."
         backTo="/app/student"
         backLabel="Home"
       />
@@ -89,12 +89,12 @@ export function SkillsPassportPage() {
             </span>
             <span className="skills-passport-count is-competent">
               <strong>{counts.competent}</strong>
-              <span>Competent</span>
+              <span>Checked</span>
             </span>
           </div>
         </div>
         <p className="muted" style={{ margin: 0 }}>
-          Purpose Academy documents progress in three stages. Only Competent is instructor-verified.
+          Three stages. Only Checked means an instructor watched with you.
         </p>
       </div>
 
@@ -109,11 +109,11 @@ export function SkillsPassportPage() {
       </div>
 
       <div className="panel stack">
-        <h2>Competencies</h2>
+        <h2>Skills on record</h2>
         {records.length === 0 ? (
           <p className="muted">
-            No competency records yet. Complete lessons and practical observation. A quiz score alone
-            cannot mark you Competent.
+            Nothing on record yet. Finish stations and an instructor check. Finishing a practice round alone
+            cannot mark you Checked.
           </p>
         ) : (
           <div className="table-wrap">

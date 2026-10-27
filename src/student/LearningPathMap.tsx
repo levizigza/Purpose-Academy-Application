@@ -61,7 +61,7 @@ export function LearningPathMap({
           Unit {currentUnit.id}: {currentUnit.label}
         </strong>
         <span className="lp-fold-meta">
-          {unitPct}% mastery
+          {unitPct}% ready
           {practice ? ` · ${stats.xp} marks` : ''}
           {' · '}
           {collapsedByDefault ? 'Show full path' : 'Path'}
@@ -76,8 +76,8 @@ export function LearningPathMap({
           </h2>
         </div>
         <div className="lp-head-meta">
-          <p className="lp-mastery" aria-label="Unit mastery">
-            Unit mastery <strong>{unitPct}%</strong>
+          <p className="lp-mastery" aria-label="Unit ready">
+            Unit ready <strong>{unitPct}%</strong>
           </p>
           {practice && (
             <p className="lp-xp" aria-label="Practice marks">
@@ -111,7 +111,7 @@ export function LearningPathMap({
               <div className="lp-unit-copy">
                 <strong>{unit.label}</strong>
                 <span>Steps {unit.range}</span>
-                {(state !== 'locked' || reviewOpen) && <em>{pct}% mastery</em>}
+                {(state !== 'locked' || reviewOpen) && <em>{pct}% ready</em>}
               </div>
               {showLessons && (
                 <ol className="lp-lessons">
@@ -182,8 +182,8 @@ export function UnitIntroCard({
     <details className="unit-intro-card" aria-label={`Unit ${unitId} introduction`}>
       <summary className="unit-intro-summary">
         <span className="unit-intro-kicker">Unit {unit.id} · {unit.label}</span>
-        <strong>What you will learn</strong>
-        <span className="unit-intro-summary-hint">Tap for goals</span>
+        <strong>Today’s work</strong>
+        <span className="unit-intro-summary-hint">Tap to see</span>
       </summary>
       <p className="unit-intro-goal">{goal}</p>
       <ul className="unit-intro-outcomes">

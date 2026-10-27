@@ -491,7 +491,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       />
       {masteryBlocked && (
         <p className="train-mastery-gate" role="status">
-          {masteryBlocked} Keep answering until this lesson is Familiar.
+          {masteryBlocked} Keep practising until this station feels comfortable.
         </p>
       )}
 
@@ -619,14 +619,14 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
       <div className="train-quiz-summary">
         <p className="train-score">{score} / {items.length} correct</p>
         {gated && score < items.length && (
-          <p className="alert warn">Safety requires a perfect score. Review and try again.</p>
+          <p className="alert warn">Safety needs every answer clear. Look again, then try the set once more.</p>
         )}
         {(!gated || score === items.length) && (
           <button type="button" className="btn btn-primary" onClick={handleComplete}>Continue</button>
         )}
         {gated && score < items.length && (
           <button type="button" className="btn btn-primary" onClick={() => { setIdx(0); setScore(0); setDone(false); setAnswered(null); setCorrect(false); }}>
-            Retry quiz
+            Try again
           </button>
         )}
         {feedbackPrompt && (
@@ -776,9 +776,10 @@ export function StudentSequencePage() {
     preferred_language: 'Amharic', previous_experience: '',
   })
 
-  /* Step 7 visual vocabulary — all five languages; press yours → connect to English */
+  /* Step 6 visual vocabulary — hear L1 → hear English → type English */
   const [vocabHeard, setVocabHeard] = useState<Record<string, boolean>>({})
   const [vocabConnected, setVocabConnected] = useState<Record<string, HomeLang>>({})
+  const [vocabTyped, setVocabTyped] = useState<Record<string, boolean>>({})
   const [vocabKnownIds, setVocabKnownIds] = useState<string[]>(() => getKnownVocabIds(getActivePathway()))
   const [vocabSpeakingId, setVocabSpeakingId] = useState<string | null>(null)
   const [vocabIdx, setVocabIdx] = useState(0)
@@ -873,6 +874,7 @@ export function StudentSequencePage() {
     setVocabIdx(0)
     setVocabHeard({})
     setVocabConnected({})
+    setVocabTyped({})
     setVocabKnownIds(getKnownVocabIds(pathwayId))
     setActionIdx(0)
     setActionAnswer(null)
@@ -959,6 +961,7 @@ export function StudentSequencePage() {
     setVocabIdx(0)
     setVocabHeard({})
     setVocabConnected({})
+    setVocabTyped({})
     setVocabSpeakingId(null)
   }
 
@@ -1060,7 +1063,7 @@ export function StudentSequencePage() {
   /** Practice mode: ask for feedback at unit boundaries before leaving via in-panel Continues. */
   function requestPracticeAdvance(advance: () => void) {
     if (isPracticeMode() && !canAdvanceFromStep(step)) {
-      const reason = advanceBlockedReason(step) || 'Keep practising until this skill is Familiar.'
+      const reason = advanceBlockedReason(step) || 'Keep practising until this station feels comfortable.'
       setAdvanceGateMsg(reason)
       playFoley('wrong')
       window.setTimeout(() => {
@@ -1088,7 +1091,7 @@ export function StudentSequencePage() {
     if (!advanceGateMsg) return null
     return (
       <p className="train-advance-gate alert warn" role="status">
-        {advanceGateMsg} Keep answering until this lesson is Familiar.
+        {advanceGateMsg} Keep practising until this station feels comfortable.
       </p>
     )
   }
@@ -1189,25 +1192,25 @@ export function StudentSequencePage() {
           <p className="section-kicker">Verified skill · Practice</p>
           <h1>Skills Passport</h1>
           <p className="lede">
-            What you studied and practised on this path — not Red Seal, apprenticeship certification, or a guaranteed
-            job. Competent still needs a real instructor later.
+            What you studied and practised on this path — not a trade ticket, Red Seal, or a guaranteed job.
+            A real instructor still checks you on the floor later.
           </p>
         </header>
         <div className="train-learn-grid skills-passport-stages">
           <article className="skills-passport-stage">
             <span className="badge brand">Learned</span>
             <h3>Learned</h3>
-            <p>Studied in the app — understanding, not yet verified on the job.</p>
+            <p>Studied in the app — you know the idea.</p>
           </article>
           <article className="skills-passport-stage">
             <span className="badge brand">Practised</span>
             <h3>Practised</h3>
-            <p>Tried through Practice drills and unit checkpoints.</p>
+            <p>Tried through Practice drills and unit reviews.</p>
           </article>
           <article className="skills-passport-stage">
-            <span className="badge ok">Competent</span>
-            <h3>Competent</h3>
-            <p>Authorized instructor confirmation — not awarded by Practice alone.</p>
+            <span className="badge ok">Checked</span>
+            <h3>Checked</h3>
+            <p>An instructor watches with you on the job — Practice alone does not award this.</p>
           </article>
         </div>
         <div className="panel stack emp-followup">
@@ -1268,11 +1271,11 @@ export function StudentSequencePage() {
         onNext={() => setCheckpointUnit(null)}
       >
         <div className="unit-checkpoint">
-          <p className="section-kicker">Unit checkpoint</p>
+          <p className="section-kicker">Unit review</p>
           <h2>
             Unit {unit.id}: {unit.label} review
           </h2>
-          <p className="lede">Prove the unit stuck. Pass this review, then unlock the next unit.</p>
+          <p className="lede">Quick check that this unit stuck. Clear it, then the next unit can open.</p>
           <QuizRunner
             items={items}
             gated
@@ -1334,6 +1337,12 @@ export function StudentSequencePage() {
     setVocabKnownIds(getKnownVocabIds(pathwayId))
     creditKnownVocabMastery()
     playFoley('whoosh')
+  }
+
+  function markVocabTyped(term: (typeof VOCAB_UNIT)[number]) {
+    setVocabTyped((t) => ({ ...t, [term.id]: true }))
+    recordSkillAttempt('vocab', true, 10)
+    playFoley('latch')
   }
 
   function resetMatch() {
@@ -1608,12 +1617,14 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 6: Visual Vocabulary — pictures and five languages */
+  /* Step 6: Visual Vocabulary — hear → hear → type (reps that stick) */
   if (step === 6) {
     const knownSet = new Set(vocabKnownIds)
-    const linkedCount = VOCAB_UNIT.filter(
-      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
-    ).length
+    const wordDone = (t: (typeof VOCAB_UNIT)[number]) =>
+      !!vocabHeard[t.id] &&
+      !!vocabTyped[t.id] &&
+      (!!vocabConnected[t.id] || knownSet.has(t.id))
+    const linkedCount = VOCAB_UNIT.filter(wordDone).length
     /**
      * Ladder: Daily Conversation Level-1, then specialty pictures.
      * Construction Sentence Structure must not unlock on greetings alone —
@@ -1627,18 +1638,12 @@ export function StudentSequencePage() {
     const journeyGateCount = usesSentenceLadder
       ? undefined
       : Math.min(LEVEL1_PAGE_SIZE, VOCAB_UNIT.length)
-    const gateLinked = ladderGateTerms.filter(
-      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
-    ).length
+    const gateLinked = ladderGateTerms.filter(wordDone).length
     const ready = gateLinked >= ladderGateTerms.length
     const dcGate = ladderGateTerms.filter(isDailyConversationTerm)
     const specialtyGate = ladderGateTerms.filter((t) => !isDailyConversationTerm(t))
-    const dcLinked = dcGate.filter(
-      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
-    ).length
-    const specialtyLinked = specialtyGate.filter(
-      (t) => vocabHeard[t.id] && (vocabConnected[t.id] || knownSet.has(t.id)),
-    ).length
+    const dcLinked = dcGate.filter(wordDone).length
+    const specialtyLinked = specialtyGate.filter(wordDone).length
     const firstSpecialtyIdx = VOCAB_UNIT.findIndex((t) => !isDailyConversationTerm(t))
     const canContinue = ready || isPracticeMode()
 
@@ -1646,7 +1651,7 @@ export function StudentSequencePage() {
       <Shell
         step={6}
         onBack={() => go(5)}
-        onNext={canContinue ? () => go(7, 'Opening language organize quiz…') : undefined}
+        onNext={canContinue ? () => go(7, 'Opening language organize…') : undefined}
         nextLabel="Continue to language organize"
         nextDisabled={!canContinue}
       >
@@ -1656,6 +1661,7 @@ export function StudentSequencePage() {
           speakingId={vocabSpeakingId}
           heard={vocabHeard}
           connected={vocabConnected}
+          typed={vocabTyped}
           knownIds={vocabKnownIds}
           journeyGateCount={journeyGateCount}
           journeyGateIds={journeyGateIds}
@@ -1663,10 +1669,11 @@ export function StudentSequencePage() {
           onPlayEnglish={(term) => void playVocabEnglish(term)}
           onConnectLang={(term, lang) => void connectVocabLang(term, lang)}
           onMarkKnown={(term) => markCurrentVocabKnown(term)}
+          onTypedCorrect={(term) => markVocabTyped(term)}
         />
         {usesSentenceLadder && !ready && dcLinked >= dcGate.length && specialtyGate.length > 0 ? (
           <p className="alert warn train-ladder-nudge" role="status">
-            Daily Conversation Level-1 is done. Next: link workplace pictures
+            Greetings set is done. Next: workplace pictures
             ({specialtyLinked} of {specialtyGate.length})
             {firstSpecialtyIdx >= 0
               ? ` — open the ${
@@ -1675,7 +1682,7 @@ export function StudentSequencePage() {
                     : pathwayId === 'community'
                       ? 'Community'
                       : 'Construction'
-                } vocabulary pages.`
+                } word pages.`
               : '.'}
             {' '}
             {firstSpecialtyIdx >= 0 ? (
@@ -1694,12 +1701,10 @@ export function StudentSequencePage() {
         ) : null}
         <p className="train-vocab-counter">
           {ready
-            ? usesSentenceLadder
-              ? `Ladder ready · Next: Language Organize (match each language group to its picture) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
-              : `Level-1 complete · Next: Language Organize (match each language group to its picture) · Full table ${linkedCount} of ${VOCAB_UNIT.length}`
+            ? `First set done · Next: Language Organize (match each word to its picture) · All words ${linkedCount} of ${VOCAB_UNIT.length}`
             : usesSentenceLadder
-              ? `Ladder ${gateLinked} of ${ladderGateTerms.length} (DC ${dcLinked}/${dcGate.length} · workplace ${specialtyLinked}/${specialtyGate.length}) · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
-              : `Level-1 ${gateLinked} of ${ladderGateTerms.length} to continue · Full table ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
+              ? `First set ${gateLinked} of ${ladderGateTerms.length} (greetings ${dcLinked}/${dcGate.length} · workplace ${specialtyLinked}/${specialtyGate.length}) · All words ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`
+              : `First set ${gateLinked} of ${ladderGateTerms.length} to keep going · All words ${linkedCount} of ${VOCAB_UNIT.length}${vocabKnownIds.length ? ` · ${vocabKnownIds.length} already known` : ''}`}
         </p>
       </Shell>
     )
@@ -2598,11 +2603,11 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={19} onBack={() => go(18)}>
-        <WhyWork>Before a real instructor watches you, rehearse the competent order of a skill.</WhyWork>
+        <WhyWork>Before a real instructor watches with you, practise the calm order of a skill — step by step.</WhyWork>
         <div className="train-learn-grid">
           <LearnCard mark="L" title="Learned" body="Studied in the app or class." />
           <LearnCard mark="P" title="Practised" body="Tried with supervision." />
-          <LearnCard mark="C" title="Competent" body="Authorized instructor confirmed the standard." />
+          <LearnCard mark="C" title="Checked" body="An instructor confirms it with you on the job." />
         </div>
         <p className="train-vocab-counter">Observation drill {obsIdx + 1} of {OBSERVATION_SCENARIOS.length}</p>
         <article className="topic-lesson-card">
@@ -2687,7 +2692,7 @@ export function StudentSequencePage() {
           }))
         } catch { /* */ }
         setFinalPhase('eyespy')
-        go(21, 'Opening final exam…')
+        go(21, 'Opening final check…')
         return
       }
       setSiteIdx((i) => i + 1)
@@ -2697,7 +2702,7 @@ export function StudentSequencePage() {
 
     return (
       <Shell step={20} onBack={() => go(19)}>
-        <WhyWork>On-site days need judgment and a clear log. Practice both before the exam.</WhyWork>
+        <WhyWork>On-site days need judgment and a clear log. Practice both before the final check.</WhyWork>
         <p className="train-vocab-counter">Site decision {siteIdx + 1} of {SITE_DECISIONS.length}</p>
         <article className="topic-lesson-card">
           <h3>{item.title}</h3>
@@ -2722,7 +2727,7 @@ export function StudentSequencePage() {
               </div>
               <button type="button" className="btn btn-primary" onClick={nextSite}>
                 {siteCorrect
-                  ? (isLast ? 'Continue to final exam' : 'Next site decision')
+                  ? (isLast ? 'Continue to final check' : 'Next site decision')
                   : 'Try again'}
               </button>
             </>
@@ -2755,7 +2760,7 @@ export function StudentSequencePage() {
     if (finalPhase === 'eyespy') {
       return (
         <Shell step={21} onBack={() => go(20)}>
-          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Exam mode. Up to 3 tries. 100% required. Pair every picture with its word until each board is empty." />
+          <PictureCard emoji="E" label="Final vocabulary Eye Spy" caption="Clear every picture. You can try up to 3 times. Tap each picture with its word until the board is empty." />
           <EyeSpyQuiz
             scenes={EYE_SPY_SCENES}
             mode="exam"
@@ -2782,7 +2787,7 @@ export function StudentSequencePage() {
         nextDisabled={!honestyChecked}
       >
         <div className="train-passport">
-          <PictureCard emoji="C" label="Purpose Academy Program Certificate" caption="You passed the exam mix. Your Skills Passport collects verified evidence." />
+          <PictureCard emoji="C" label="Purpose Academy Program Certificate" caption="You cleared the final check. Your Skills Passport keeps a record of what you practised." />
           <ul className="list-plain">
             <li>Vocabulary Eye Spy passed at 100%</li>
             <li>Written / knowledge check complete</li>

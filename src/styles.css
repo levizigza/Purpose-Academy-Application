@@ -7634,6 +7634,130 @@ table.data th {
   width: 100%;
 }
 
+/* Hear → hear → type: one quiet production beat (reps that stick, not a test) */
+.vocab-sheet-en.is-hidden-for-type {
+  color: var(--brand, #0b2f5c);
+  font-style: italic;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  opacity: 0.72;
+}
+
+.vocab-sheet-card.is-typed {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ok, #1f7a4d) 35%, transparent);
+}
+
+.vocab-sheet-type {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.85rem 0 0.35rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 14px;
+  background: #fff6de;
+  border: 1px solid color-mix(in srgb, var(--accent, #e8a317) 42%, var(--line, #c5d0dc));
+}
+
+.vocab-sheet-type-prompt {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 650;
+  color: var(--brand-deep, #041526);
+  line-height: 1.35;
+}
+
+.vocab-sheet-type-kicker {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand, #0b2f5c);
+}
+
+.vocab-sheet-type-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+  align-items: stretch;
+}
+
+.vocab-sheet-type-input {
+  width: 100%;
+  min-height: 2.85rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 12px;
+  border: 2px solid color-mix(in srgb, var(--brand, #0b2f5c) 28%, var(--line, #c5d0dc));
+  background: #ffffff;
+  color: var(--brand-deep, #041526);
+  font: inherit;
+  font-size: 1.15rem;
+  font-weight: 650;
+}
+
+.vocab-sheet-type-input:focus {
+  outline: 2px solid var(--accent, #e8a317);
+  outline-offset: 1px;
+  border-color: var(--brand, #0b2f5c);
+}
+
+.vocab-sheet-type-input[aria-invalid='true'] {
+  border-color: color-mix(in srgb, #b45309 55%, var(--line));
+}
+
+.vocab-sheet-type-check {
+  min-height: 2.85rem;
+  padding-inline: 1.1rem !important;
+  white-space: nowrap;
+}
+
+.vocab-sheet-type-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.vocab-sheet-type-replay {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem !important;
+}
+
+.vocab-sheet-type-fb {
+  margin: 0.15rem 0 0;
+  font-size: 0.98rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.vocab-sheet-type-fb.is-ok {
+  color: #1f7a4d;
+}
+
+.vocab-sheet-type-fb.is-retry {
+  color: var(--brand-deep, #041526);
+}
+
+.is-phone-app .vocab-sheet-type {
+  margin-top: 0.65rem;
+  padding: 0.75rem 0.8rem;
+}
+
+.is-phone-app .vocab-sheet-type-input {
+  font-size: 1.05rem;
+}
+
+.is-phone-app .vocab-sheet-type-row {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 520px) {
+  .vocab-sheet-type-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 720px) {
   .vocab-sheet-body.vocab-sheet-body-focus {
     grid-template-columns: 1fr;

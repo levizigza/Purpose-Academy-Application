@@ -16,7 +16,7 @@ This doctrine exists so quality does not depend on memory. When we return months
 
 1. **Challenge assumptions.** Before shipping a “polish,” ask what we might be wrong about (audience, depth, honesty, load).
 2. **Grow with the platform.** When curriculum grows, doctrine grows. When a pathway is thinner, copy says so.
-3. **Protect what already sings.** Tool Chest, VocabSheet, Calgary voice, mother-tongue → English discipline — do not sand these into generic edtech.
+3. **Protect what already sings.** Tool Chest, VocabSheet, Calgary voice, mother-tongue → English → type discipline — do not sand these into generic edtech.
 4. **Leave the trail better.** Every meaningful craft pass ends with a short entry in [§11 Changelog](#11-changelog-living).
 
 ### Builder and critic (same person)
@@ -78,7 +78,7 @@ Craftsmanship is not one blob. Different work needs different chisels. Always kn
 | Layer | Job | Success looks like | Failure looks like |
 |-------|-----|--------------------|--------------------|
 | **L1 · Truth & story** | One school, three doors, honest depth | Home / Programs / Admissions / portal agree | Construction-only copy while three doors are open |
-| **L2 · Content delivery** | Curriculum, vocab, drills, gates, mother-tongue → English | Specialty distractors; Level-1 = 20; instructor Competent honesty | Hammer vs Hi/Hello; fake “busy scene”; quiz = job ready |
+| **L2 · Content delivery** | Curriculum, vocab, drills, gates, mother-tongue → English → type | Specialty distractors; Level-1 = 20; instructor Checked honesty | Hammer vs Hi/Hello; fake “busy scene”; quiz = job ready |
 | **L3 · Aesthetic optics + information display** | How it *looks*, and whether the user can **read the job** | Cool trades gravity; whole-object photos; task → result clear in 3s; shared grammar site-wide | Cheap chrome; mystery crops; silent success; each page invents its own UI dialect |
 | **L4 · Attention ethics** | How human attention is treated | Finite stations; Done for now; metrics serve craft | Infinite feed, streak FOMO, soft-pulse addiction, “one more” |
 | **L5 · Trust & people** | Founding builders, claims, ops honesty | Interim roles framed honestly | Invented bios, inflated enrollment badges |
@@ -106,9 +106,10 @@ UX translation (not SD colour cosplay):
 |------|----------------|
 | Belonging / crew | Pathway identity, Calgary voice, crew-path language |
 | Order | Numbered 20-step spine, Level-1 gates, clear “you are here” |
-| Dignity | Adult tone, tool photos, no casino chrome |
+| Dignity | Adult tone, tool photos, no casino chrome; never make the learner feel dumb |
 | Achievement | One **Today’s station**; Skills Passport; marks = skill |
-| Ascent | After Familiar, next station — never endless novelty |
+| Ascent | After Comfortable (internal Familiar), next station — never endless novelty |
+| Fear of school | Short actions, repetition, one job; refuse exam/assessment/mastery theatre in learner chrome |
 
 ### Anti-doomscroll rules (site-wide)
 
@@ -160,7 +161,7 @@ When you change one node, ask: *What contract did neighbors rely on? Did the han
 These are load-bearing across all layers.
 
 1. **Calgary trades-school voice** — concrete, respectful, short sentences. Not startup hype. Not purple SaaS.
-2. **Mother tongue → English discipline** — home languages support understanding; English is the workplace word.
+2. **Mother tongue → English → type discipline** — hear home language, hear English, type English (reps that stick). Home languages support understanding; English is the workplace word; typing locks production without a “test” feel.
 3. **VocabSheet / Tool Chest craft** — Level-1 gate (Daily Conversation 1–20), full tables stay open to practise, real photos where we have them.
 4. **One learning spine** — same 20-step school path across pathways; pathway packs change craft, not the spine shape.
 5. **Instructor truth** — skills are verified; do not sell “finish the quiz = job ready.”
@@ -235,11 +236,12 @@ These are load-bearing across all layers.
 - Training object photos and pathway program cards use **`object-fit: contain`** so royalty-free imagery is fully readable.
 - Do not crop tool/vocab photos with `cover` on drill surfaces. Full-bleed marketing heroes may still use cover when the composition is intentionally edge-to-edge.
 
-### 6.3c Vocabulary audio
+### 6.3c Vocabulary audio + type reps
 
 - Every vocabulary English word must speak when the learner bridges or presses Hear English.
 - Priority stays: baked neural → live neural → Free Dictionary (works without our API) → browser `speechSynthesis`.
 - After a home-language connect, auto-speak the English workplace word.
+- **Then type it:** English title hides; picture + Hear again stay; soft retry (“Not yet — hear it again”) — never Incorrect / Expected. Gate = heard + typed + (bridged or known).
 
 ### 6.4 Sound (foley)
 
@@ -427,6 +429,15 @@ Revisit when aims change. Ranked by learner / trust harm.
 ---
 
 ## 11. Changelog (living)
+
+### 2026-10-26 — Hear → hear → type + fearless learner chrome (L2 / L1 / L4)
+
+- **Layers:** L2 content delivery (vocab reps) + L1 story voice + L4 attention (no shame loops).
+- **Customer ask:** Vocabulary must not stop at listening — hear in home language, hear English, then **type** it. Train like a dog: repetitive actions that stick. Site/app-wide: many learners fear education and feel “not academic”; intellectual/exam chrome threatens them.
+- **Vocab fix:** `VocabSheet` adds a type beat after English is heard; English title hides during typing; soft “Not yet — hear it again” (never Incorrect); gate requires typed. Counters drop Level-1/ladder math theatre for “first set / greetings / workplace.”
+- **Chrome soften (site-wide):** Journey titles Final Exam → Final Check, Interest Assessment → Work Interests; mastery labels → Started/Comfortable/Strong/Solid; Familiar theater → Station clear / Ready; Passport Competent → Checked; hub “mastery gates / Reach Familiar” → one station / comfortable; exam captions / perfect score / RIASEC learner copy cut; Programs volume bullets → hear/hear/type story.
+- **Law:** Prefer **station / check / comfortable** over **exam / assessment / mastery / proficient**. Keep adult crew gravity — never childish gamification.
+- **Assumption to challenge next:** whether Sentence Structure first-try pass and dark career fit-% bars still intimidate after this pass.
 
 ### 2026-10-26 — Desktop night / phone paper: two shells, two looks (L3 / L6)
 

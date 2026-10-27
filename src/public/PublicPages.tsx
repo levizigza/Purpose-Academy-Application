@@ -38,11 +38,11 @@ export function ProgramsPage() {
             employers in Alberta.
           </p>
           <ul className="school-bullets">
-            <li>Shared 200-word Daily Conversation Vocabulary plus 660-word Construction Visual Vocabulary</li>
-            <li>560 Sentence Structure drills — site-stage motion; wrong guesses show crew consequences</li>
-            <li>Foundation theory + shop practice</li>
-            <li>Instructor observation and Skills Passport</li>
-            <li>Apprenticeship orientation and employer connection</li>
+            <li>Workplace words: hear your language, hear English, type it — then find every picture again</li>
+            <li>Sentence practice on a job-site stage — wrong guesses show what the crew would notice</li>
+            <li>Shop practice with an instructor beside you</li>
+            <li>Skills Passport and apprenticeship orientation</li>
+            <li>Employer connection when you are ready</li>
           </ul>
           <Link className="btn btn-primary" to="/admissions">
             Apply for Construction
@@ -61,8 +61,8 @@ export function ProgramsPage() {
           <span className="badge ok">Enrolling now</span>
           <h2>Logistics Foundations</h2>
           <p>
-            Same {JOURNEY_STEP_COUNT}-step school path as Construction: assess fit, learn vocabulary, practise English, build safety and
-            systems skills, then move toward warehouse and logistics roles with instructor checks.
+            Same {JOURNEY_STEP_COUNT}-step school path as Construction: find your fit, learn workplace words, practise English, build safety and
+            systems skills, then move toward warehouse roles with an instructor beside you.
           </p>
           <ul className="school-bullets">
             <li>Shared 200-word Daily Conversation Vocabulary plus 500-word Logistics Visual Vocabulary</li>

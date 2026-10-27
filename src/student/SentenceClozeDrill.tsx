@@ -336,7 +336,7 @@ export function SentenceClozeDrill({
         <p className="section-kicker">Sentence Structure</p>
         <h2>Keep learning this page</h2>
         <p className="lede">
-          Score {scoreCorrect} of {pageItems.length}. You need {PASS_SCORE} correct on the first try to pass.
+          Clear {scoreCorrect} of {pageItems.length}. Get {PASS_SCORE} right the first time through to keep going.
           Wrong answers move on — you cannot tap every choice. Read each sentence and try the page again.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>

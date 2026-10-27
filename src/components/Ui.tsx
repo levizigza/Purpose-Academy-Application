@@ -55,7 +55,7 @@ export function StatusLabel({ status }: { status: string }) {
     MANUAL_REVIEW: { label: 'Needs instructor review', tone: 'warn' },
     learned: { label: 'Learned', tone: 'brand' },
     practised: { label: 'Practised', tone: 'brand' },
-    competent: { label: 'Competent (verified)', tone: 'ok' },
+    competent: { label: 'Checked (instructor)', tone: 'ok' },
     remediation_required: { label: 'Needs more practice', tone: 'danger' },
     not_assessed: { label: 'Not assessed yet', tone: 'warn' },
   }

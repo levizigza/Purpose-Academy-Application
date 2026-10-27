@@ -84,7 +84,7 @@ export const LIKERT_OPTIONS: { value: LikertValue; label: LangText }[] = [
 export const ASSESSMENT_COPY = {
   introTitle: {
     Spanish: 'Evaluación de carrera',
-      English: 'Career assessment',
+      English: 'Work interests',
     Arabic: 'تقييم المسار المهني',
     Hindi: 'कैरियर आकलन',
     Amharic: 'የሙያ ግምገማ',
@@ -92,7 +92,7 @@ export const ASSESSMENT_COPY = {
   } satisfies LangText,
   introBody: {
     Spanish: 'Primero un quiz corto de estilo de trabajo elige tu camino. Después de practicar, un inventario de intereses más largo afina tu especialización. No hay respuestas correctas o incorrectas.',
-    English: 'First a short work-style quiz chooses your path. After you practise, a longer interest inventory helps you specialize. There are no right or wrong answers.',
+    English: 'First a short work-style quiz chooses your path. After you practise, a longer “what kind of work feels right?” step helps you specialize. There are no right or wrong answers.',
     Arabic:
       'أولاً اختبار قصير لأسلوب العمل يختار مسارك. بعد الممارسة، جرد اهتمامات أطول يساعدك على التخصص. لا توجد إجابات صحيحة أو خاطئة.',
     Hindi:
@@ -225,7 +225,7 @@ export const ASSESSMENT_COPY = {
 
   yourCode: {
     Spanish: 'Tu código de intereses',
-      English: 'Your interest code',
+      English: 'Your top three',
     Arabic: 'رمز اهتماماتك',
     Hindi: 'आपका रुचि कोड',
     Amharic: 'የፍላጎት ኮድዎ',
@@ -233,7 +233,7 @@ export const ASSESSMENT_COPY = {
   } satisfies LangText,
   codeHint: {
     Spanish: 'Como en evaluaciones profesionales (Holland / RIASEC): tus tres áreas más fuertes.',
-      English: 'Like professional assessments (Holland / RIASEC): your three strongest areas.',
+      English: 'Your three strongest work interests — a guide, not a grade.',
     Arabic: 'كما في التقييمات المهنية (Holland / RIASEC): أقوى ثلاث مجالات لديك.',
     Hindi: 'पेशेवर मूल्यांकनों की तरह (Holland / RIASEC): आपकी तीन सबसे मज़बूत रुचियाँ।',
     Amharic: 'እንደ ሙያዊ ግምገማዎች (Holland / RIASEC)፡ ሦስቱ ጠንካራ ፍላጎቶችዎ።',
@@ -241,7 +241,7 @@ export const ASSESSMENT_COPY = {
   } satisfies LangText,
   pathwayFit: {
     Spanish: 'Ajuste a los caminos de Purpose Academy',
-      English: 'Fit with Purpose Academy pathways',
+      English: 'How you match Purpose Academy pathways',
     Arabic: 'مدى ملاءمتك لمسارات Purpose Academy',
     Hindi: 'Purpose Academy मार्गों से मेल',
     Amharic: 'ከ Purpose Academy መንገዶች ጋር መስማማት',
@@ -265,7 +265,7 @@ export const ASSESSMENT_COPY = {
   } satisfies LangText,
   langPickBody: {
     Spanish: 'Toda la evaluación de carrera está en este idioma. no en inglés. para que puedas responder con claridad.',
-      English: 'The full career assessment is in this language so you can answer clearly.',
+      English: 'These work-interest questions are in this language so you can answer clearly.',
     Arabic: 'تقييم المسار المهني بالكامل بهذه اللغة. وليس بالإنجليزية. حتى تجيب بوضوح.',
     Hindi: 'पूरा कैरियर आकलन इसी भाषा में है. अंग्रेज़ी में नहीं. ताकि आप साफ़ जवाब दे सकें।',
     Amharic: 'ሙሉ የሙያ ግምገማ በዚህ ቋንቋ ነው. በእንግሊዝኛ አይደለም. በግልጽ መልስ እንዲችሉ።',
@@ -273,7 +273,7 @@ export const ASSESSMENT_COPY = {
   } satisfies LangText,
   langPickHint: {
     Spanish: 'Elige el idioma que mejor entiendes para la evaluación.',
-      English: 'Choose the language you understand best for the assessment.',
+      English: 'Choose the language you understand best for these questions.',
     Arabic: 'اختر اللغة التي تفهمها أفضل للتقييم.',
     Hindi: 'आकलन के लिए वह भाषा चुनें जो आप सबसे अच्छी समझते हैं।',
     Amharic: 'ለግምገማ በደንብ የሚገባዎትን ቋንቋ ይምረጡ።',
@@ -331,7 +331,7 @@ export const ASSESSMENT_SHELL: Record<
     },
     help: {
       Spanish: 'Elige tu lengua materna para el quiz de camino y la evaluación posterior.',
-      English: 'Choose your language for the path quiz and the later interest assessment.',
+      English: 'Choose your language for the path quiz and the later work-interest questions.',
       Arabic: 'اختر لغتك الأم لاختبار المسار وتقييم الاهتمامات لاحقاً.',
       Hindi: 'पाथ क्विज़ और बाद के रुचि आकलन के लिए अपनी भाषा चुनें।',
       Amharic: 'ለሙያ ግምገማ እናት ቋንቋዎን ይምረጡ።',
@@ -339,7 +339,7 @@ export const ASSESSMENT_SHELL: Record<
     },
     purpose: {
       Spanish: 'El quiz de camino y la evaluación de intereses corren en un idioma que entiendes. El inglés del sitio viene con la práctica.',
-      English: 'The path quiz and interest assessment run in a language you understand. Job-site English comes with practice.',
+      English: 'The path quiz and work-interest questions run in a language you understand. Job-site English comes with practice.',
       Arabic: 'اختبار المسار وتقييم الاهتمامات بلغة تفهمها. إنجليزية موقع العمل تأتي مع الممارسة.',
       Hindi: 'पाथ क्विज़ और रुचि आकलन उस भाषा में हैं जो आप समझते हैं। साइट की अंग्रेज़ी अभ्यास के साथ आएगी।',
       Amharic: 'ሙሉ ግምገማ በሚገባዎት ቋንቋ ነው። የቦታ እንግሊዝኛ በኋላ ይመጣል።',
@@ -401,7 +401,7 @@ export const ASSESSMENT_SHELL: Record<
   14: {
     title: {
       Spanish: 'Evaluación de intereses',
-      English: 'Interest assessment',
+      English: 'Work interests',
       Arabic: 'تقييم الاهتمامات',
       Hindi: 'रुचि आकलन',
       Amharic: 'የፍላጎት ግምገማ',
@@ -417,7 +417,7 @@ export const ASSESSMENT_SHELL: Record<
     },
     purpose: {
       Spanish: 'Inventario profesional de intereses (Holland / RIASEC) después de práctica real — no un examen de aprobado/reprobado.',
-      English: 'A professional interest inventory (Holland / RIASEC) after real practice — not a pass/fail test.',
+      English: 'What kind of work feels right? After real practice — not a pass/fail test.',
       Arabic: 'جرد مهني للاهتمامات (Holland / RIASEC) بعد ممارسة حقيقية — وليس اختبار نجاح/رسوب.',
       Hindi: 'असली अभ्यास के बाद पेशेवर रुचि सूची (Holland / RIASEC) — पास/फेल परीक्षा नहीं।',
       Amharic: 'ሙያዊ የፍላጎት ዝርዝር (Holland / RIASEC). ማለፍ/መውደቅ ፈተና አይደለም።',

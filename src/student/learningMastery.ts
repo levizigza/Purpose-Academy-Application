@@ -1,6 +1,7 @@
 /**
- * Mastery tracking for the Purpose Academy journey.
- * Pattern: Khan Academy style levels: attempted → familiar → proficient → mastered.
+ * Station readiness tracking for the Purpose Academy journey.
+ * Internal levels (attempted → familiar → proficient → mastered) stay for craft gates.
+ * Learner-facing labels prefer crew language: Started → Comfortable → Strong → Solid.
  * Practice marks and “days showed up” serve craft (L4) — not streak FOMO.
  * Persisted in sessionStorage so Practice Mode and student runs keep progress.
  */
@@ -301,18 +302,19 @@ export function resetMastery() {
   }
 }
 
+/** Learner-facing readiness labels — crew language, not report-card tiers. */
 export function masteryLabel(level: MasteryLevel): string {
   switch (level) {
     case 'mastered':
-      return 'Mastered'
+      return 'Solid'
     case 'proficient':
-      return 'Proficient'
+      return 'Strong'
     case 'familiar':
-      return 'Familiar'
+      return 'Comfortable'
     case 'attempted':
       return 'Started'
     default:
-      return 'Locked'
+      return 'Not started'
   }
 }
 
@@ -354,11 +356,11 @@ export function skillStationLabel(id: SkillId): string {
     case 'site-log':
       return 'Floor Training'
     case 'final-exam':
-      return 'Final Exam'
+      return 'Final check'
     case 'employment':
       return 'Employment'
     case 'unit-checkpoint':
-      return 'Unit Checkpoint'
+      return 'Unit review'
     default:
       return 'This skill'
   }
@@ -390,7 +392,7 @@ export function advanceBlockedReason(step: number): string | null {
   if (canAdvanceFromStep(step)) return null
   const skill = SKILL_BY_STEP[step]
   if (!skill) return null
-  return `Keep practising until this skill is Familiar (${masteryLabel(getMasteryLevel(skill))} now).`
+  return `Keep practising this station until it feels comfortable (${masteryLabel(getMasteryLevel(skill))} now).`
 }
 
 /** Soft credit toward Familiar when a learner marks a vocab word as already known. */
