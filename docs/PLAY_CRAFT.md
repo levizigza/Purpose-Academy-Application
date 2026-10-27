@@ -116,7 +116,7 @@ stays real workplace English.
 | Eye Spy | `Clear this board · N left` | Pair + board latch | Not yet · wrong pair — try again |
 | Workplace Words | Type the English word | Word / set clear | Not yet — hear again |
 | Language Organize | Clear this round/word · N left | Picture / round / station | Not yet — wrong box · try again |
-| Sentence Structure | Clear this page · N left | Sentence / page clear | Show answer · keep going |
+| Sentence Structure | Clear this page · N left · type the word | Sentence / page clear | Soft type retry · optional hint chips · show word keep going |
 | Word → Action | Clear this action · N left | Action clear | Not yet · try again |
 | Supported Practice | Clear this match · N left | Match / round clear | Not yet · try again |
 | Workplace Instructions | Clear this instruction · N left | Instruction clear | Not yet · try again |
@@ -189,3 +189,9 @@ Closed:
 
 - VocabSheet production phase: nearby + type (or listen) beside/under photo; langs collapse; English title stays `???` / Type it until typed.  
 - Soft-miss + `firePlayClear` unchanged; dual-shell listen panel (night / phone paper).
+
+### 2026-10-27 — Sentence Structure type-the-blank
+
+- Customer ask: typing belongs on the sentence section too — mindless enjoyment + learning, not worksheet dread.  
+- `SentenceClozeDrill`: primary verb is **Type / Go** the short missing word; soft miss stays on the item; hint chips only after a miss; “Show the word · keep going” after 2 soft tries (counts as miss → repair).  
+- Same nearby + `firePlayClear` grammar; dual-shell type panel (desktop night / phone paper).

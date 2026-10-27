@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from 'react'
 import { pathwayImage } from '../pathways'
 import type { SentenceClozeItem } from '../pathways/packs/constructionSentenceCloze560'
 import { isPracticeMode } from '../practice/PracticeMode'
@@ -6,6 +6,7 @@ import { speakEnglish } from './speech'
 import { playFoley } from '../audio/foley'
 import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
+import { normalizeEnglishAnswer } from './VocabSheet'
 
 /** Worksheet tile from public/sentence-cloze/ when extracted from the PPTX. */
 function sentenceImageUrl(file?: string) {
@@ -96,15 +97,12 @@ type Props = {
 }
 
 /**
- * Sentence Structure — Purpose Academy Questions PPTX mold (Construction / Logistics).
+ * Sentence Structure — Purpose Academy Questions mold (Construction / Logistics / Community).
  *
- * Matches Purpose Academy English • Multiple Choice:
- * - Object illustration beside the cloze sentence (PPTX tile or Visual Vocabulary photo)
- * - White worksheet card + four word choices
- * - One attempt per item (no answer shopping)
- * - Correct word slides into the blank
- * - Wrong → show the answer, then move on
- * - Level-1 = first PPTX page (items 1–10) with ≥8 first-try correct (+ repair for misses)
+ * Play craft: picture + cloze → **type the short missing word** (Type / Go) → soft miss
+ * with rapid retry → firePlayClear joy. Word chips stay as an optional hint after a miss
+ * (mindless enjoyment + learning — not exam chip-shopping).
+ * Reveal-and-continue counts as a soft miss for the repair round.
  */
 export function SentenceClozeDrill({
   items,
@@ -129,7 +127,7 @@ export function SentenceClozeDrill({
   const [page, setPage] = useState(0)
   const [phase, setPhase] = useState<Phase>('drill')
   const [idx, setIdx] = useState(0)
-  const [picked, setPicked] = useState<string | null>(null)
+  const [resolved, setResolved] = useState(false)
   const [correct, setCorrect] = useState(false)
   const [filled, setFilled] = useState(false)
   const [flying, setFlying] = useState(false)
@@ -138,7 +136,13 @@ export function SentenceClozeDrill({
   const [repairDeck, setRepairDeck] = useState<SentenceClozeItem[]>([])
   const [options, setOptions] = useState<string[]>([])
   const [level1Unlocked, setLevel1Unlocked] = useState(false)
+  const [draft, setDraft] = useState('')
+  const [typeFeedback, setTypeFeedback] = useState<'retry' | null>(null)
+  const [softTries, setSoftTries] = useState(0)
+  const [showHintChips, setShowHintChips] = useState(false)
   const practice = isPracticeMode()
+  const inputId = useId()
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const pageItems = useMemo(() => {
     const start = page * SENTENCE_PAGE_SIZE
@@ -152,11 +156,21 @@ export function SentenceClozeDrill({
   useEffect(() => {
     if (!item || phase === 'passed' || phase === 'result') return
     setOptions([...item.options])
-    setPicked(null)
+    setResolved(false)
     setCorrect(false)
     setFilled(false)
     setFlying(false)
+    setDraft('')
+    setTypeFeedback(null)
+    setSoftTries(0)
+    setShowHintChips(false)
   }, [item?.id, phase, page])
+
+  useEffect(() => {
+    if (!item || resolved || phase === 'passed' || phase === 'result') return
+    const t = window.setTimeout(() => inputRef.current?.focus(), 160)
+    return () => window.clearTimeout(t)
+  }, [item?.id, resolved, phase, page])
 
   function finishPagePass(finalScore: number) {
     setPhase('passed')
@@ -176,10 +190,14 @@ export function SentenceClozeDrill({
     window.setTimeout(() => {
       if (!isLast) {
         setIdx((i) => i + 1)
-        setPicked(null)
+        setResolved(false)
         setCorrect(false)
         setFilled(false)
         setFlying(false)
+        setDraft('')
+        setTypeFeedback(null)
+        setSoftTries(0)
+        setShowHintChips(false)
         return
       }
 
@@ -188,10 +206,14 @@ export function SentenceClozeDrill({
           setRepairDeck(shuffle(nextMissed))
           setMissed([])
           setIdx(0)
-          setPicked(null)
+          setResolved(false)
           setCorrect(false)
           setFilled(false)
           setFlying(false)
+          setDraft('')
+          setTypeFeedback(null)
+          setSoftTries(0)
+          setShowHintChips(false)
           playFoley('whoosh')
           return
         }
@@ -210,10 +232,14 @@ export function SentenceClozeDrill({
         setMissed([])
         setIdx(0)
         setPhase('repair')
-        setPicked(null)
+        setResolved(false)
         setCorrect(false)
         setFilled(false)
         setFlying(false)
+        setDraft('')
+        setTypeFeedback(null)
+        setSoftTries(0)
+        setShowHintChips(false)
         playFoley('whoosh')
         return
       }
@@ -221,12 +247,13 @@ export function SentenceClozeDrill({
     }, wasCorrect ? 900 : 1200)
   }
 
-  function pick(opt: string) {
-    if (!item || picked) return
-    const ok = opt === item.answer
-    setPicked(opt)
+  /** Lock the item after a correct type/hint pick or a soft reveal. */
+  function resolveItem(ok: boolean) {
+    if (!item || resolved) return
+    setResolved(true)
     setCorrect(ok)
     setFlying(true)
+    setTypeFeedback(null)
     recordSkillAttempt('sentence-cloze', ok, ok ? 12 : 0)
     if (ok) {
       const leftAfter = deck.length - (idx + 1)
@@ -253,15 +280,44 @@ export function SentenceClozeDrill({
     advanceAfterResolve(ok, newScore, nextMissed)
   }
 
+  function checkType(e: FormEvent) {
+    e.preventDefault()
+    if (!item || resolved) return
+    const ok = normalizeEnglishAnswer(draft) === normalizeEnglishAnswer(item.answer)
+    if (ok) {
+      resolveItem(true)
+      return
+    }
+    playFoley('wrong')
+    setTypeFeedback('retry')
+    setSoftTries((n) => n + 1)
+    setDraft('')
+    inputRef.current?.focus()
+  }
+
+  function pickHint(opt: string) {
+    if (!item || resolved || !showHintChips) return
+    resolveItem(opt === item.answer)
+  }
+
+  function revealAndContinue() {
+    if (!item || resolved) return
+    resolveItem(false)
+  }
+
   function retryPage() {
     setIdx(0)
-    setPicked(null)
+    setResolved(false)
     setCorrect(false)
     setFilled(false)
     setFlying(false)
     setScoreCorrect(0)
     setMissed([])
     setRepairDeck([])
+    setDraft('')
+    setTypeFeedback(null)
+    setSoftTries(0)
+    setShowHintChips(false)
     setPhase('drill')
     playFoley('whoosh')
   }
@@ -274,13 +330,17 @@ export function SentenceClozeDrill({
     if (next < 0 || next >= pageCount) return
     setPage(next)
     setIdx(0)
-    setPicked(null)
+    setResolved(false)
     setCorrect(false)
     setFilled(false)
     setFlying(false)
     setScoreCorrect(0)
     setMissed([])
     setRepairDeck([])
+    setDraft('')
+    setTypeFeedback(null)
+    setSoftTries(0)
+    setShowHintChips(false)
     setPhase('drill')
     playFoley('whoosh')
   }
@@ -351,7 +411,7 @@ export function SentenceClozeDrill({
         <h2>Keep learning this page</h2>
         <p className="lede">
           {scoreCorrect} of {pageItems.length} clear so far. Clear {PASS_SCORE} on this page to keep moving.
-          Misses move on — one try each, then we show the word. Read each sentence and try the page again. No rush.
+          Type the short word that fits — soft try again when it is not yet. No rush.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>
           Not yet · practice this page again
@@ -370,19 +430,20 @@ export function SentenceClozeDrill({
     return <div className="alert warn">Loading sentences…</div>
   }
 
-  const showWord = Boolean(filled || (picked && correct))
+  const showWord = Boolean(filled || (resolved && correct))
   const displayWord = showWord ? item.answer : null
   const before = item.prompt.split('______')[0] ?? ''
   const after = item.prompt.split('______')[1] ?? ''
   const imageSrc = resolveClozeImage(item)
   const choiceLetters = ['A', 'B', 'C', 'D'] as const
+  const typingOpen = !resolved
 
   return (
     <article className="sentence-cloze-card">
       <div className="sentence-cloze-head-row">
         <div>
           <p className="section-kicker">Sentence Structure</p>
-          <p className="sentence-cloze-doc-kicker">{englishBrand} · Pick the word</p>
+          <p className="sentence-cloze-doc-kicker">{englishBrand} · Type the word</p>
         </div>
         {practice && onSkipToActions ? (
           <button
@@ -396,8 +457,8 @@ export function SentenceClozeDrill({
       </div>
       <p className="play-nearby-objective" aria-live="polite">
         {phase === 'repair'
-          ? `Repair · ${deck.length - idx} left`
-          : `Clear this page · ${deck.length - idx} left`}
+          ? `Repair · ${deck.length - idx} left · type the word`
+          : `Clear this page · ${deck.length - idx} left · type the word`}
       </p>
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
@@ -407,12 +468,12 @@ export function SentenceClozeDrill({
       </p>
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
-        Pick the word that fits the blank. One try each — if it is not yet, we show the answer and keep going.
+        Type the short word that fits the blank. Soft try again if not yet — no exam, no rush.
       </p>
 
       <div
         className={`sentence-cloze-item${showWord ? ' is-filled' : ''}${correct && showWord ? ' is-correct' : ''}${
-          picked && !correct && filled ? ' is-wrong' : ''
+          resolved && !correct && filled ? ' is-wrong' : ''
         }`}
       >
         <figure className="sentence-cloze-photo">
@@ -425,7 +486,7 @@ export function SentenceClozeDrill({
 
         <div
           className={`sentence-cloze-line${showWord ? ' is-filled' : ''}${correct && showWord ? ' is-correct' : ''}${
-            picked && !correct && filled ? ' is-wrong' : ''
+            resolved && !correct && filled ? ' is-wrong' : ''
           }`}
           aria-live="polite"
         >
@@ -442,30 +503,86 @@ export function SentenceClozeDrill({
         </div>
       </div>
 
-      <div className="train-choice-grid sentence-cloze-choices" role="group" aria-label="Answer choices">
-        {options.map((opt, i) => {
-          const isPick = picked === opt
-          const showAnswer = !!picked && opt === item.answer
-          const state = isPick ? (correct ? 'correct' : 'wrong') : showAnswer ? 'correct' : 'idle'
-          const letter = choiceLetters[i] ?? String(i + 1)
-          return (
-            <button
-              key={opt}
-              type="button"
-              className={`sentence-cloze-chip state-${state}${isPick && flying ? ' is-flying' : ''}${
-                picked && !isPick && !showAnswer ? ' is-dim' : ''
-              }`}
-              disabled={!!picked}
-              onClick={() => pick(opt)}
-            >
-              <span className="sentence-cloze-chip-letter">{letter}.</span>{' '}
-              <span>{opt}</span>
+      {typingOpen ? (
+        <form className="sentence-cloze-type" onSubmit={checkType}>
+          <p className="sentence-cloze-type-prompt">
+            <span className="sentence-cloze-type-kicker">Your turn</span>
+            Type the missing English word.
+          </p>
+          <div className="sentence-cloze-type-row">
+            <label className="sr-only" htmlFor={inputId}>
+              Missing word
+            </label>
+            <input
+              ref={inputRef}
+              id={inputId}
+              className="sentence-cloze-type-input"
+              value={draft}
+              onChange={(e) => {
+                setDraft(e.target.value)
+                if (typeFeedback === 'retry') setTypeFeedback(null)
+              }}
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              enterKeyHint="done"
+              placeholder="Type here…"
+              aria-invalid={typeFeedback === 'retry'}
+              aria-describedby={typeFeedback ? `${inputId}-fb` : undefined}
+            />
+            <button type="submit" className="btn btn-primary sentence-cloze-type-go" disabled={!draft.trim()}>
+              Go
             </button>
-          )
-        })}
-      </div>
+          </div>
+          {typeFeedback === 'retry' ? (
+            <p id={`${inputId}-fb`} className="play-soft-miss" role="status">
+              {softMissLine('try again. No rush.')}
+            </p>
+          ) : null}
+          {softTries >= 1 ? (
+            <div className="sentence-cloze-type-tools">
+              {!showHintChips ? (
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => {
+                    setShowHintChips(true)
+                    playFoley('whoosh')
+                  }}
+                >
+                  See word choices
+                </button>
+              ) : null}
+              {softTries >= 2 ? (
+                <button type="button" className="btn btn-ghost" onClick={revealAndContinue}>
+                  Show the word · keep going
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+        </form>
+      ) : null}
 
-      {picked &&
+      {typingOpen && showHintChips ? (
+        <div className="train-choice-grid sentence-cloze-choices" role="group" aria-label="Word choices">
+          {options.map((opt, i) => {
+            const letter = choiceLetters[i] ?? String(i + 1)
+            return (
+              <button
+                key={opt}
+                type="button"
+                className="sentence-cloze-chip state-idle"
+                onClick={() => pickHint(opt)}
+              >
+                <span className="sentence-cloze-chip-letter">{letter}.</span>{' '}
+                <span>{opt}</span>
+              </button>
+            )
+          })}
+        </div>
+      ) : null}
+
+      {resolved &&
         (correct ? (
           <div className="alert ok">Yes — the word completes the sentence.</div>
         ) : (
