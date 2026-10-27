@@ -1,52 +1,63 @@
-# Grant TL;DR assets — Purpose Academy
+# Purpose Academy — downloadable overview assets
 
-Concise showcase materials for grant / partnership review. Honest about current product.
+Clear product showcase materials. Honest about what exists today. Not grant theatre.
 
-## Downloads (working)
+## Primary download — PowerPoint
+
+| Asset | Size | Path |
+|-------|------|------|
+| **Product overview PowerPoint** (10 slides, 16:9) | ~4.9 MB | [`purpose-academy-overview.pptx`](./purpose-academy-overview.pptx) |
+
+**Raw download URL** (right-click → Save As, or `curl -LO`):
+
+```text
+https://raw.githubusercontent.com/levizigza/Purpose-Academy-Application/cursor/app-toolbox-emulator-f7c6/docs/grant/purpose-academy-overview.pptx
+```
+
+On GitHub: open the file → **Download raw file** (not “View raw” alone). Normal git blob — not Git LFS.
+
+### Slide list
+
+1. Purpose Academy  
+2. Who it’s for  
+3. Desktop and phone  
+4. Three pathways  
+5. Visual Vocabulary  
+6. Stations that stay clear  
+7. Eye Spy  
+8. Learner dignity  
+9. Skills Passport  
+10. Built in Calgary  
+
+## Also available
 
 | Asset | Size | Download |
 |-------|------|----------|
-| **Explainer video** (~71s, H.264 + AAC VO) | ~7.9 MB | [`purpose-academy-grant-explainer.mp4`](./purpose-academy-grant-explainer.mp4) |
-| **PowerPoint overview** (9 slides) | ~4.6 MB | [`purpose-academy-grant-overview.pptx`](./purpose-academy-grant-overview.pptx) |
-
-Direct raw links (right-click → Save As, or `curl -LO`):
+| Grant-flavoured overview (9 slides) | ~4.6 MB | [`purpose-academy-grant-overview.pptx`](./purpose-academy-grant-overview.pptx) |
+| Explainer video (~71s, H.264 + AAC VO) | ~7.9 MB | [`purpose-academy-grant-explainer.mp4`](./purpose-academy-grant-explainer.mp4) |
 
 ```text
 https://raw.githubusercontent.com/levizigza/Purpose-Academy-Application/cursor/app-toolbox-emulator-f7c6/docs/grant/purpose-academy-grant-overview.pptx
 https://raw.githubusercontent.com/levizigza/Purpose-Academy-Application/cursor/app-toolbox-emulator-f7c6/docs/grant/purpose-academy-grant-explainer.mp4
 ```
 
-On GitHub: open the file → use the **Download raw file** button (not “View raw” alone). Both files are normal git blobs (not Git LFS pointers).
+Cloud agent copies under `/opt/cursor/artifacts/` are for the Cursor artifacts UI only — those absolute paths and `cursor.com/agents/.../artifacts?path=...` links are **not** public file downloads.
 
-Cloud agent copies (same bytes) also live under `/opt/cursor/artifacts/` for the Cursor artifacts UI; those absolute paths and `cursor.com/agents/.../artifacts?path=...` links are **not** public file downloads.
+## Voiceover (video)
 
-## Voiceover
-
-- Engine: **Piper** neural TTS
-- Voice: **en_US-lessac-medium** (`tools/piper-voices/`)
-- Tone: calm adult English; length-scale ~1.06
+- Engine: **Piper** neural TTS  
+- Voice: **en_US-lessac-medium** (`tools/piper-voices/`)  
 - Script: [`voiceover-script.txt`](./voiceover-script.txt)
-
-## Slide list
-
-1. Purpose Academy  
-2. Who it’s for  
-3. Three pathways  
-4. Practice loop  
-5. Clear the board  
-6. Desktop experience  
-7. Learner dignity  
-8. Progress & Skills Passport  
-9. Built in Calgary  
 
 ## Regenerate locally
 
-Needs Vite preview on `:4180`, Piper Lessac voice under `tools/piper-voices/`:
+Needs Vite preview on `:4180` for fresh desktop captures; product PPTX can reuse existing shots:
 
 ```bash
 node scripts/capture-grant-desktop.mjs
-python3 scripts/grant/build-grant-video.py
+python3 scripts/grant/build-product-pptx.py
 python3 scripts/grant/build-grant-pptx.py
+python3 scripts/grant/build-grant-video.py
 ```
 
 ## Product truth (do not overclaim)
