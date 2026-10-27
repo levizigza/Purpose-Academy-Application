@@ -76,9 +76,13 @@ presentation / clear pulses / boards-cleared MUST NOT manufacture evidence
 
 **Pass 2 (shipped):** Organize · Sentence · Word→Action · Supported Practice · Workplace Instructions — same nearby-objective + clear-pulse grammar on desktop night and phone paper.
 
-**Pass 3 (this carve):** QuizRunner shared path · Safety · Tools · Systems · Site Language · Computer Skills check · Equipment videos · Instructor check · Site decisions · Final written · Employment prep — spine complete for moment loop.
+**Pass 3 (shipped):** QuizRunner shared path · Safety · Tools · Systems · Site Language · Computer Skills check · Equipment videos · Instructor check · Site decisions · Final written · Employment prep — spine wired for moment loop.
+
+**Pass 4 (this carve):** Soft-miss grammar site-wide (`softMissLine` / `SOFT_RETRY_LABEL`) · Eye Spy + Organize miss status · Vocab double-latch removed · Computer try-phase whoosh-only · Sentence pass/result copy · dual-shell `.play-soft-miss` · coverage → ~100% on choice/clear stations.
 
 Later: choice-schema content registry, review planner, finite fluency route, weekly challenge.
+
+**Out of moment-loop scope (intentional):** Your Language · Work Style · Career Profile · Work Interests — intake / preference, not board clears. Unit intros / Familiar theater / passport remain chrome, not Candy Crush boards.
 
 ### 0.7 Critic tests before merge
 
@@ -105,9 +109,9 @@ stays real workplace English.
 
 | Surface | Nearby objective | Clear joy | Soft miss |
 |---------|------------------|-----------|-----------|
-| Eye Spy | `Clear this board · N left` | Pair + board latch | Wrong pair · try again |
+| Eye Spy | `Clear this board · N left` | Pair + board latch | Not yet · wrong pair — try again |
 | Workplace Words | Type the English word | Word / set clear | Not yet — hear again |
-| Language Organize | Clear this round/word · N left | Picture / round / station | Shake · try again |
+| Language Organize | Clear this round/word · N left | Picture / round / station | Not yet — wrong box · try again |
 | Sentence Structure | Clear this page · N left | Sentence / page clear | Show answer · keep going |
 | Word → Action | Clear this action · N left | Action clear | Not yet · try again |
 | Supported Practice | Clear this match · N left | Match / round clear | Not yet · try again |
@@ -147,3 +151,16 @@ stays real workplace English.
 - Equipment videos: video-clear pulse once per lesson (ref-guarded).  
 - Critic: Sentence pass/result copy softened; phone `.play-nearby-objective` navy-on-cream beats night amber inside `.course-stage`.  
 - Authority unchanged — presentation clears never write evidence.
+
+### 2026-10-27 — Pass 4: soft-miss + foley authority polish (~100%)
+
+Honest post–Pass-3 audit: nearby + `firePlayClear` ~95% wired; soft-miss status / retry lexicon / double-foley ~88%.
+
+Closed:
+- Shared `softMissLine` + `SOFT_RETRY_LABEL` in `PlayClear.tsx`; QuizRunner / Action / Match / Instructions / Site Language / Tools / Systems / Instructor / Site decisions / Employment / Computer check use them.  
+- Eye Spy + Language Organize: visible “Not yet” status on miss (not shake-only).  
+- Vocab type-clear: removed second `latch` in `markVocabTyped` (pulse owns success sound).  
+- Computer Skills try-Save: whoosh only (check clear still owns Foley).  
+- Sentence pass/result: dropped “first go” / “Wrong answers” grade tone.  
+- Dual-shell `.play-soft-miss` (night amber tip / phone navy-on-cream); phone board pulse slightly shorter.  
+- Intake stations (Language / Work Style / Career / Work Interests) stay N/A by design.

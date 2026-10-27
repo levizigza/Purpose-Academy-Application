@@ -7,7 +7,7 @@ import {
   type ComputerTryKind,
 } from '../pathways/packs/basicComputerSkillsVideos'
 import { playFoley } from '../audio/foley'
-import { firePlayClear } from '../practice/PlayClear'
+import { SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 
@@ -342,7 +342,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
               {checkAnswer ? (
                 <>
                   <div className={`alert ${checkCorrect ? 'ok' : 'warn'}`}>
-                    {checkCorrect ? lesson.checkCorrect : lesson.checkWrong}
+                    {checkCorrect ? lesson.checkCorrect : softMissLine(lesson.checkWrong)}
                   </div>
                   <button type="button" className="btn btn-primary" onClick={goNext}>
                     {checkCorrect
@@ -351,7 +351,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
                           ? 'Continue to site language'
                           : 'Finish this lesson'
                         : `Next · ${lessons[idx + 1]?.title}`
-                      : 'Try again'}
+                      : SOFT_RETRY_LABEL}
                   </button>
                 </>
               ) : null}
@@ -632,7 +632,8 @@ function TrySaveDoc({ onDone }: { onDone: () => void }) {
           className="btn btn-primary"
           onClick={() => {
             setSaved(true)
-            playFoley('correct')
+            /* Try-phase only — check clear owns success Foley via firePlayClear. */
+            playFoley('whoosh')
             window.setTimeout(onDone, 400)
           }}
         >

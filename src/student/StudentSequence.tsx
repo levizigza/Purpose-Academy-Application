@@ -68,7 +68,7 @@ import { ComputerSkillsDrill } from './ComputerSkillsDrill'
 import { EquipmentVideoDrill } from './EquipmentVideoDrill'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
-import { PlayClearPulse, firePlayClear } from '../practice/PlayClear'
+import { PlayClearPulse, SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
 import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
@@ -630,14 +630,14 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
       <div className="train-quiz-summary">
         <p className="train-score">{score} of {items.length} clear</p>
         {gated && score < items.length && (
-          <p className="alert warn">Safety needs every answer clear. Look again, then try the set once more.</p>
+          <p className="alert warn">Safety needs every answer clear. Look again, then try the set once more. No rush.</p>
         )}
         {(!gated || score === items.length) && (
           <button type="button" className="btn btn-primary" onClick={handleComplete}>Continue</button>
         )}
         {gated && score < items.length && (
           <button type="button" className="btn btn-primary" onClick={() => { setIdx(0); setScore(0); setDone(false); setAnswered(null); setCorrect(false); }}>
-            Try again
+            {SOFT_RETRY_LABEL}
           </button>
         )}
         {feedbackPrompt && (
@@ -693,10 +693,10 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
       {answered && (
         <>
           <div className={`alert ${correct ? 'ok' : 'warn'}`}>
-            {correct ? item.teachCorrect : item.teachWrong}
+            {correct ? item.teachCorrect : softMissLine(item.teachWrong)}
           </div>
           <button type="button" className="btn btn-primary" onClick={next}>
-            {gateBlocked ? 'Try again' : idx + 1 >= items.length ? 'Continue' : 'Next'}
+            {gateBlocked ? SOFT_RETRY_LABEL : idx + 1 >= items.length ? 'Continue' : 'Next'}
           </button>
         </>
       )}
@@ -1359,7 +1359,7 @@ export function StudentSequencePage() {
   function markVocabTyped(term: (typeof VOCAB_UNIT)[number]) {
     setVocabTyped((t) => ({ ...t, [term.id]: true }))
     recordSkillAttempt('vocab', true, 10)
-    playFoley('latch')
+    /* Success Foley owned by VocabSheet → firePlayClear — do not double-latch. */
   }
 
   function resetMatch() {
@@ -1947,13 +1947,13 @@ export function StudentSequencePage() {
           {actionAnswer && (
             <>
               <div className={`alert ${actionCorrect ? 'ok' : 'warn'}`}>
-                {actionCorrect ? 'Yes. Word and action match.' : `Not yet. This action uses the ${term?.english}.`}
+                {actionCorrect ? 'Yes. Word and action match.' : softMissLine(`This action uses the ${term?.english}.`)}
               </div>
               <AdvanceGateNote />
               <button type="button" className="btn btn-primary" onClick={nextAction}>
                 {actionCorrect
                   ? (isLast ? 'Continue to supported practice' : 'Next action')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2092,13 +2092,13 @@ export function StudentSequencePage() {
         {matchAnswer && (
           <>
             <div className={`alert ${matchCorrect ? 'ok' : 'warn'}`}>
-              {matchCorrect ? 'Yes. Picture and word match.' : `Not yet. The correct word is ${term.english}. Try again.`}
+              {matchCorrect ? 'Yes. Picture and word match.' : softMissLine(`The word is ${term.english}.`)}
             </div>
             <AdvanceGateNote />
             <button type="button" className="btn btn-primary" onClick={nextMatch}>
               {matchCorrect
                 ? (isLast && matchRound >= roundsNeeded ? 'Continue to workplace instructions' : isLast ? 'Next round' : 'Next match')
-                : 'Try again'}
+                : SOFT_RETRY_LABEL}
             </button>
           </>
         )}
@@ -2203,12 +2203,12 @@ export function StudentSequencePage() {
         {instrAnswer && (
           <>
             <div className={`alert ${instrCorrect ? 'ok' : 'warn'}`}>
-              {instrCorrect ? 'Yes. You heard the tool name and the action.' : `Not yet. The correct action was: "${instr.correct}". Try again.`}
+              {instrCorrect ? 'Yes. You heard the tool name and the action.' : softMissLine(`The action was: "${instr.correct}".`)}
             </div>
             <button type="button" className="btn btn-primary" onClick={nextInstr}>
               {instrCorrect
                 ? (isLast ? 'Continue to Basic Computer Skills' : 'Next instruction')
-                : 'Try again'}
+                : SOFT_RETRY_LABEL}
             </button>
           </>
         )}
@@ -2325,12 +2325,12 @@ export function StudentSequencePage() {
           {phraseAnswer && (
             <>
               <div className={`alert ${phraseCorrect ? 'ok' : 'warn'}`}>
-                {phraseCorrect ? `Yes. ${phrase.why}` : `Not yet. ${phrase.why}`}
+                {phraseCorrect ? `Yes. ${phrase.why}` : softMissLine(phrase.why)}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextPhrase}>
                 {phraseCorrect
                   ? (isLast ? 'Continue to work-interest questions' : 'Next phrase')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2492,12 +2492,12 @@ export function StudentSequencePage() {
           {toolAnswer && (
             <>
               <div className={`alert ${toolCorrect ? 'ok' : 'warn'}`}>
-                {toolCorrect ? 'Yes.' : `Not yet — it’s ${cat.answer}.`}
+                {toolCorrect ? 'Yes.' : softMissLine(`It’s ${cat.answer}.`)}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextTool}>
                 {toolCorrect
                   ? (isLast ? 'Continue to systems' : 'Next tool group')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2571,12 +2571,12 @@ export function StudentSequencePage() {
           {sysAnswer && (
             <>
               <div className={`alert ${sysCorrect ? 'ok' : 'warn'}`}>
-                {sysCorrect ? 'Yes.' : `Not yet — it’s ${topic.answer}.`}
+                {sysCorrect ? 'Yes.' : softMissLine(`It’s ${topic.answer}.`)}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextSys}>
                 {sysCorrect
                   ? (isLast ? 'Continue to instructor check' : 'Next system')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2754,12 +2754,14 @@ export function StudentSequencePage() {
           {obsChecked && (
             <>
               <div className={`alert ${obsCorrect ? 'ok' : 'warn'}`}>
-                {obsCorrect ? scenario.passNote : `Not yet — try this order: ${ordered.map((s) => s.label).join(' → ')}`}
+                {obsCorrect
+                  ? scenario.passNote
+                  : softMissLine(`Try this order: ${ordered.map((s) => s.label).join(' → ')}`)}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextObs}>
                 {obsCorrect
                   ? (isLast ? 'Continue to on-site training' : 'Next practice')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -2840,12 +2842,12 @@ export function StudentSequencePage() {
           {siteAnswer && (
             <>
               <div className={`alert ${siteCorrect ? 'ok' : 'warn'}`}>
-                {siteCorrect ? item.teachCorrect : item.teachWrong}
+                {siteCorrect ? item.teachCorrect : softMissLine(item.teachWrong)}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextSite}>
                 {siteCorrect
                   ? (isLast ? 'Continue to final check' : 'Next site decision')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}
@@ -3025,12 +3027,12 @@ export function StudentSequencePage() {
           {empAnswer && (
             <>
               <div className={`alert ${empCorrect ? 'ok' : 'warn'}`}>
-                {empCorrect ? item.teachCorrect : item.teachWrong}
+                {empCorrect ? item.teachCorrect : softMissLine(item.teachWrong)}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextEmp}>
                 {empCorrect
                   ? (isLast ? 'Continue to partner setup' : 'Next interview question')
-                  : 'Try again'}
+                  : SOFT_RETRY_LABEL}
               </button>
             </>
           )}

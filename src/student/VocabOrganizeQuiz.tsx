@@ -278,6 +278,11 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
         <p className="play-nearby-objective" aria-live="polite">
           {leftOverObjective(matchedCount, page.length, phone)}
         </p>
+        {shakeId ? (
+          <p className="play-soft-miss" role="status">
+            Not yet — that picture belongs on a different word. Try again.
+          </p>
+        ) : null}
         <p className="train-vocab-counter">
           {phone
             ? `Tap a picture, then tap Drop on this word · ${matchedCount} of ${page.length}`

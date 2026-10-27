@@ -48,13 +48,25 @@ export type PlayClearDetail = {
   kind?: 'micro' | 'board'
 }
 
-/** Fire a satisfying clear beat. Safe to call from any Practice station. */
+/** Fire a satisfying clear beat. Safe to call from any Practice station.
+ *  Owns success Foley — callers must not also play correct/latch on the same clear. */
 export function firePlayClear(detail: PlayClearDetail) {
   const kind = detail.kind ?? 'micro'
   if (kind === 'board') bumpBoardsClearedToday()
   playFoley(kind === 'board' ? 'latch' : 'correct')
   window.dispatchEvent(new CustomEvent<PlayClearDetail>('pa-play-clear', { detail: { ...detail, kind } }))
 }
+
+/** Soft miss framing — never Incorrect / Expected / exam voice. */
+export function softMissLine(detail?: string) {
+  const t = (detail || '').trim()
+  if (!t) return 'Not yet — try again. No rush.'
+  if (/^not yet\b/i.test(t)) return t
+  return `Not yet — ${t}`
+}
+
+/** Primary continue after a miss — same words site-wide. */
+export const SOFT_RETRY_LABEL = 'Not yet · try again'
 
 /**
  * Mount once in the Practice shell — listens for pa-play-clear and shows a brief pulse.

@@ -14240,6 +14240,36 @@ html.pa-phone-shell .play-nearby-objective {
   color: #0b2f5c;
 }
 
+.is-phone-app .play-clear-pulse.is-board {
+  animation-duration: 0.72s;
+}
+
+/* Soft miss — night amber tip / phone navy on cream */
+.play-soft-miss {
+  margin: 0 0 0.55rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #f8f4ea;
+  background: color-mix(in srgb, #0b2f5c 55%, transparent);
+  border: 1px solid color-mix(in srgb, #f5c542 35%, transparent);
+}
+
+.course-stage .play-soft-miss {
+  color: #f8f4ea;
+  background: color-mix(in srgb, #041526 70%, #0b2f5c);
+}
+
+.is-phone-app .play-soft-miss,
+.is-phone-app .course-stage .play-soft-miss,
+html.pa-phone-shell .play-soft-miss {
+  color: #0b2f5c;
+  background: color-mix(in srgb, #0b2f5c 7%, #fff8e8);
+  border-color: color-mix(in srgb, #0b2f5c 20%, #c5d0dc);
+}
+
 .ph-play-loop {
   margin: 0.35rem 0 0;
   font-size: 0.88rem;

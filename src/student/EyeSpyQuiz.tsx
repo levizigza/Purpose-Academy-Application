@@ -11,7 +11,7 @@ import {
   openPracticeChat,
   practiceFeedbackKey,
 } from '../practice/PracticeMode'
-import { firePlayClear } from '../practice/PlayClear'
+import { SOFT_RETRY_LABEL, firePlayClear } from '../practice/PlayClear'
 
 type Mode = 'exercise' | 'exam'
 
@@ -236,8 +236,8 @@ export function EyeSpyQuiz({
         ) : (
           <button type="button" className="btn btn-primary" onClick={retryRun}>
             {mode === 'exam' && maxAttempts
-              ? `Try again (${attempt + 1} of ${maxAttempts})`
-              : 'Try again. Clear every picture'}
+              ? `${SOFT_RETRY_LABEL} (${attempt + 1} of ${maxAttempts})`
+              : `${SOFT_RETRY_LABEL}. Clear every picture`}
           </button>
         )}
         {feedbackPrompt && (
@@ -274,9 +274,14 @@ export function EyeSpyQuiz({
       </p>
       <p className="train-quiz-counter">
         Scene {sceneIdx + 1} of {boards.length}
-        {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice — take your time'}
+        {mode === 'exam' && maxAttempts ? ` · Go ${attempt} of ${maxAttempts}` : ' · Practice — take your time'}
       </p>
       <p className="eye-spy-instruction">{CLEAR_ALL_INSTRUCTION}</p>
+      {wrongPair ? (
+        <p className="play-soft-miss" role="status">
+          Not yet · wrong pair — try again. No rush.
+        </p>
+      ) : null}
       <p className="eye-spy-scene-title">{scene.title}</p>
       <p className="eye-spy-progress" aria-live="polite">
         {remaining.length === 0

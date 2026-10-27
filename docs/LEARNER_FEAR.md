@@ -194,3 +194,9 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 - QuizRunner + Safety / Tools / Systems / Computer check / Equipment / Instructor / Site decisions / Final written / Employment prep: nearby + `firePlayClear`.
 - Softened residual grade-like QuizRunner / Sentence summary wording; phone nearby-objective ink locked navy-on-cream.
 - Still presentation-only — no evidence manufactured by clear pulses.
+
+### 2026-10-27 — Play craft pass 4 (soft miss + foley)
+
+- Site-wide soft miss: `Not yet · try again` / `softMissLine` — no bare teachWrong without invitation.
+- Eye Spy / Organize show miss status; Vocab no double-latch; Computer try-phase no success Foley.
+- Intake preference steps remain outside the clear board (not exam theatre either).

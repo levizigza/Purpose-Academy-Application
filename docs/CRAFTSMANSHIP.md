@@ -456,7 +456,8 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Ship:** `PlayClear` pulse engine; Eye Spy “Clear this board · N left”; Workplace Words word-clear; hub boards-cleared (presentation only); night + paper CSS; reduced-motion safe.
 - **Refuse:** lives, scoreboards, % grades, realtime runners, points-as-competence.
 - **Follow-up same day (pass 2):** Organize / Sentence / Word→Action / Supported Practice inherit nearby-objective + clear-pulse grammar (desktop + phone).
-- **Follow-up next day (pass 3):** QuizRunner + Safety/Tools/Systems/Computer/Equipment/Instructor/Site/Final written/Employment prep inherit the same grammar; phone nearby-objective ink specificity hardened; spine moment-loop coverage complete. See [`PLAY_CRAFT.md`](PLAY_CRAFT.md).
+- **Follow-up next day (pass 3):** QuizRunner + Safety/Tools/Systems/Computer/Equipment/Instructor/Site/Final written/Employment prep inherit the same grammar; phone nearby-objective ink specificity hardened; spine moment-loop wiring complete. See [`PLAY_CRAFT.md`](PLAY_CRAFT.md).
+- **Follow-up same week (pass 4):** Soft-miss lexicon centralized; Eye Spy/Organize miss status; Vocab double-latch removed; Computer try whoosh-only; Sentence grade-tone cut; dual-shell `.play-soft-miss` — critic coverage ~100% on clear stations.
 
 ### 2026-10-26 — Desktop night / phone paper: two shells, two looks (L3 / L6)
 
