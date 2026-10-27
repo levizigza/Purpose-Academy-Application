@@ -2,9 +2,7 @@ name: Deploy GitHub Pages
 
 on:
   push:
-    # main = durable production. Feature branch listed only so agent can
-    # ship a live Pages preview before merge (remove after merge).
-    branches: [main, cursor/crew-reps-fearless-f7c6]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
