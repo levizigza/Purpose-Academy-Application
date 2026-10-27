@@ -458,6 +458,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Follow-up same day (pass 2):** Organize / Sentence / Word→Action / Supported Practice inherit nearby-objective + clear-pulse grammar (desktop + phone).
 - **Follow-up next day (pass 3):** QuizRunner + Safety/Tools/Systems/Computer/Equipment/Instructor/Site/Final written/Employment prep inherit the same grammar; phone nearby-objective ink specificity hardened; spine moment-loop wiring complete. See [`PLAY_CRAFT.md`](PLAY_CRAFT.md).
 - **Follow-up same week (pass 4):** Soft-miss lexicon centralized; Eye Spy/Organize miss status; Vocab double-latch removed; Computer try whoosh-only; Sentence grade-tone cut; dual-shell `.play-soft-miss` — critic coverage ~100% on clear stations.
+- **Follow-up same week (pass 5):** Critic overturned “~100% done” — dual-shell soft-miss on all choice stations; intake/unit/passport/hub light nearby; FamiliarTheater Foley authority; residual exam lexicon killed. See [`PLAY_CRAFT.md`](PLAY_CRAFT.md).
 
 ### 2026-10-26 — Desktop night / phone paper: two shells, two looks (L3 / L6)
 

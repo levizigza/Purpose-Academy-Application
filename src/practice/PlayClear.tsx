@@ -68,6 +68,15 @@ export function softMissLine(detail?: string) {
 /** Primary continue after a miss — same words site-wide. */
 export const SOFT_RETRY_LABEL = 'Not yet · try again'
 
+/** Soft-miss status line — dual-shell `.play-soft-miss` (night amber tip / phone navy). */
+export function PlaySoftMissStatus({ children }: { children: string }) {
+  return (
+    <p className="play-soft-miss" role="status">
+      {children}
+    </p>
+  )
+}
+
 /**
  * Mount once in the Practice shell — listens for pa-play-clear and shows a brief pulse.
  */

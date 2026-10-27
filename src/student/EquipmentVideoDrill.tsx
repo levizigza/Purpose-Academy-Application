@@ -257,6 +257,11 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
           </p>
 
           <div className="hero-actions equip-video-actions">
+            {!canAdvanceLesson && !practice ? (
+              <p className="play-soft-miss" role="status">
+                Keep watching — then continue. No rush.
+              </p>
+            ) : null}
             <button
               type="button"
               className="btn btn-primary"

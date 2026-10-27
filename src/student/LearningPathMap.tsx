@@ -182,6 +182,9 @@ export function UnitIntroCard({
         <strong>Today’s work</strong>
         <span className="unit-intro-summary-hint">Tap to see</span>
       </summary>
+      <p className="play-nearby-objective" aria-live="polite">
+        Today’s work · one clear action at a time
+      </p>
       <p className="unit-intro-goal">{goal}</p>
       <ul className="unit-intro-outcomes">
         {outcomes.map((o) => (
@@ -189,7 +192,7 @@ export function UnitIntroCard({
         ))}
       </ul>
       <p className="unit-intro-method">
-        Learn, try, get feedback, try again if you need. Then move forward.
+        Learn, try, soft retry if you need, then move forward. Done for now when you finish.
       </p>
     </details>
   )

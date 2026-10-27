@@ -284,7 +284,7 @@ export function VocabSheetCard({
             </button>
           </div>
           {feedback === 'retry' && (
-            <p id={`${inputId}-fb`} className="vocab-sheet-type-fb is-retry" role="status">
+            <p id={`${inputId}-fb`} className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
               Not yet — hear it again, then type what you heard. No rush.
             </p>
           )}

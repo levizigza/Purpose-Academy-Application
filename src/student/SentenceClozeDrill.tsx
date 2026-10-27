@@ -4,7 +4,7 @@ import type { SentenceClozeItem } from '../pathways/packs/constructionSentenceCl
 import { isPracticeMode } from '../practice/PracticeMode'
 import { speakEnglish } from './speech'
 import { playFoley } from '../audio/foley'
-import { firePlayClear } from '../practice/PlayClear'
+import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 
 /** Worksheet tile from public/sentence-cloze/ when extracted from the PPTX. */
@@ -465,13 +465,14 @@ export function SentenceClozeDrill({
         })}
       </div>
 
-      {picked && (
-        <div className={`alert ${correct ? 'ok' : 'warn'}`}>
-          {correct
-            ? 'Yes — the word completes the sentence.'
-            : `Not this one. The sentence needs “${item.answer}.” Moving on.`}
-        </div>
-      )}
+      {picked &&
+        (correct ? (
+          <div className="alert ok">Yes — the word completes the sentence.</div>
+        ) : (
+          <p className="play-soft-miss" role="status">
+            {softMissLine(`The sentence needs “${item.answer}.” Keep going.`)}
+          </p>
+        ))}
     </article>
   )
 }

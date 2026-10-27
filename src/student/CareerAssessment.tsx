@@ -49,10 +49,16 @@ export function CareerInterestAssessment({ lang, onComplete, onBack }: InterestP
     })
   }
 
+  const left = items.length - idx
+
   return (
     <div className="career-assess" data-assess-idx={idx}>
       <header className="career-assess-head">
         <p className="career-assess-kicker">{t(ASSESSMENT_COPY.introTitle, lang)}</p>
+        <p className="play-nearby-objective" aria-live="polite">
+          {t(ASSESSMENT_COPY.nearbyInterest, lang)}
+          {left > 0 ? ` · ${left}` : ''}
+        </p>
         <h2 className="career-assess-title">{t(ASSESSMENT_COPY.part1Hint, lang)}</h2>
         <p className="career-assess-progress" aria-live="polite">
           {t(ASSESSMENT_COPY.progress, lang)} {idx + 1} {t(ASSESSMENT_COPY.of, lang)} {items.length}
@@ -130,10 +136,16 @@ export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) 
     })
   }
 
+  const left = items.length - idx
+
   return (
     <div className="career-assess" data-assess-idx={idx}>
       <header className="career-assess-head">
         <p className="career-assess-kicker">{t(ASSESSMENT_COPY.introTitle, lang)}</p>
+        <p className="play-nearby-objective" aria-live="polite">
+          {t(ASSESSMENT_COPY.nearbyStyle, lang)}
+          {left > 0 ? ` · ${left}` : ''}
+        </p>
         <h2 className="career-assess-title">{t(ASSESSMENT_COPY.part2Title, lang)}</h2>
         <p className="career-assess-lede">{t(ASSESSMENT_COPY.part2Hint, lang)}</p>
         <p className="career-assess-progress" aria-live="polite">
@@ -221,6 +233,9 @@ export function CareerAssessmentResult({
     <div className="career-result">
       <header className="career-result-head">
         <p className="career-assess-kicker">{t(ASSESSMENT_COPY.resultTitle, lang)}</p>
+        <p className="play-nearby-objective" aria-live="polite">
+          {t(ASSESSMENT_COPY.nearbyResult, lang)}
+        </p>
         <h2 className="career-result-title">{t(result.title, lang)}</h2>
         <p className="career-result-lead">
           {t(allowPathwaySwitch ? ASSESSMENT_COPY.specializeLead : ASSESSMENT_COPY.resultLead, lang)}

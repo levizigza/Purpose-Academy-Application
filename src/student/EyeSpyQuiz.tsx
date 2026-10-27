@@ -274,7 +274,7 @@ export function EyeSpyQuiz({
       </p>
       <p className="train-quiz-counter">
         Scene {sceneIdx + 1} of {boards.length}
-        {mode === 'exam' && maxAttempts ? ` · Go ${attempt} of ${maxAttempts}` : ' · Practice — take your time'}
+        {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice — take your time'}
       </p>
       <p className="eye-spy-instruction">{CLEAR_ALL_INSTRUCTION}</p>
       {wrongPair ? (

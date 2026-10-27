@@ -14275,7 +14275,13 @@ html.pa-phone-shell .play-soft-miss {
   font-size: 0.88rem;
   font-weight: 650;
   line-height: 1.4;
-  color: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+/* Hub resume inherits dual-shell nearby objective; keep card insets */
+.ph-resume .play-nearby-objective.ph-play-loop {
+  margin-left: 1.15rem;
+  margin-right: 1.15rem;
+  margin-top: 0.45rem;
 }
 
 .ph-play-clears {

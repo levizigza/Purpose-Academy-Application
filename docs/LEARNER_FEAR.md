@@ -200,3 +200,10 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 - Site-wide soft miss: `Not yet · try again` / `softMissLine` — no bare teachWrong without invitation.
 - Eye Spy / Organize show miss status; Vocab no double-latch; Computer try-phase no success Foley.
 - Intake preference steps remain outside the clear board (not exam theatre either).
+
+### 2026-10-27 — Play craft pass 5 (true ~100%)
+
+- Dual-shell `.play-soft-miss` on every choice/clear miss (replacing `alert.warn` soft-miss).
+- Residual lexicon: “Wrong answers teach” → “Misses teach”; Eye Spy “Go N” → “Try N”.
+- Intake / unit intro / hub / passport: light next-action nearby only — still no fake board evidence.
+- FamiliarTheater no longer double-latches Foley with `firePlayClear`.

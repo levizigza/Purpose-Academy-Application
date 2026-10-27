@@ -70,6 +70,9 @@ export function SkillsPassportPage() {
         backTo="/app/student"
         backLabel="Home"
       />
+      <p className="play-nearby-objective" aria-live="polite">
+        Review your record · Home when you are done
+      </p>
 
       <div className="panel stack skills-passport-summary">
         <div className="skills-passport-meta">

@@ -692,9 +692,13 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
       </div>
       {answered && (
         <>
-          <div className={`alert ${correct ? 'ok' : 'warn'}`}>
-            {correct ? item.teachCorrect : softMissLine(item.teachWrong)}
-          </div>
+          {correct ? (
+            <div className="alert ok">{item.teachCorrect}</div>
+          ) : (
+            <p className="play-soft-miss" role="status">
+              {softMissLine(item.teachWrong)}
+            </p>
+          )}
           <button type="button" className="btn btn-primary" onClick={next}>
             {gateBlocked ? SOFT_RETRY_LABEL : idx + 1 >= items.length ? 'Continue' : 'Next'}
           </button>
@@ -1208,6 +1212,9 @@ export function StudentSequencePage() {
           </button>
           <p className="section-kicker">Skills record · Practice</p>
           <h1>Skills Passport</h1>
+          <p className="play-nearby-objective" aria-live="polite">
+            Review your record · Path home when you are done
+          </p>
           <p className="lede">
             What you studied and practised on this path — not a trade ticket, Red Seal, or a guaranteed job.
             A real instructor still checks you on the floor later.
@@ -1545,6 +1552,9 @@ export function StudentSequencePage() {
         nextLabel={assessT(ASSESSMENT_COPY.next, supportLang)}
       >
         <div className="train-lang-pick">
+          <p className="play-nearby-objective" aria-live="polite">
+            {assessT(ASSESSMENT_COPY.nearbyLangPick, supportLang)}
+          </p>
           <h2 className="career-assess-title">{assessT(ASSESSMENT_COPY.langPickTitle, supportLang)}</h2>
           <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickBody, supportLang)}</p>
           <div className="train-lang-grid">
@@ -1946,9 +1956,13 @@ export function StudentSequencePage() {
           </div>
           {actionAnswer && (
             <>
-              <div className={`alert ${actionCorrect ? 'ok' : 'warn'}`}>
-                {actionCorrect ? 'Yes. Word and action match.' : softMissLine(`This action uses the ${term?.english}.`)}
-              </div>
+              {actionCorrect ? (
+                <div className="alert ok">Yes. Word and action match.</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(`This action uses the ${term?.english}.`)}
+                </p>
+              )}
               <AdvanceGateNote />
               <button type="button" className="btn btn-primary" onClick={nextAction}>
                 {actionCorrect
@@ -2091,9 +2105,13 @@ export function StudentSequencePage() {
         </div>
         {matchAnswer && (
           <>
-            <div className={`alert ${matchCorrect ? 'ok' : 'warn'}`}>
-              {matchCorrect ? 'Yes. Picture and word match.' : softMissLine(`The word is ${term.english}.`)}
-            </div>
+            {matchCorrect ? (
+              <div className="alert ok">Yes. Picture and word match.</div>
+            ) : (
+              <p className="play-soft-miss" role="status">
+                {softMissLine(`The word is ${term.english}.`)}
+              </p>
+            )}
             <AdvanceGateNote />
             <button type="button" className="btn btn-primary" onClick={nextMatch}>
               {matchCorrect
@@ -2202,9 +2220,13 @@ export function StudentSequencePage() {
         </div>
         {instrAnswer && (
           <>
-            <div className={`alert ${instrCorrect ? 'ok' : 'warn'}`}>
-              {instrCorrect ? 'Yes. You heard the tool name and the action.' : softMissLine(`The action was: "${instr.correct}".`)}
-            </div>
+            {instrCorrect ? (
+              <div className="alert ok">Yes. You heard the tool name and the action.</div>
+            ) : (
+              <p className="play-soft-miss" role="status">
+                {softMissLine(`The action was: "${instr.correct}".`)}
+              </p>
+            )}
             <button type="button" className="btn btn-primary" onClick={nextInstr}>
               {instrCorrect
                 ? (isLast ? 'Continue to Basic Computer Skills' : 'Next instruction')
@@ -2242,7 +2264,7 @@ export function StudentSequencePage() {
             This may be your first computer. Short videos. Simple English. Then you try each step yourself.
           </WhyWork>
           <TeachNote>
-            Pattern for every lesson: Watch → Try → Remember → one check. Wrong answers teach. Take your time.
+            Pattern for every lesson: Watch → Try → Remember → one check. Misses teach — try again, no rush.
           </TeachNote>
         </details>
       </Shell>
@@ -2324,9 +2346,13 @@ export function StudentSequencePage() {
           </div>
           {phraseAnswer && (
             <>
-              <div className={`alert ${phraseCorrect ? 'ok' : 'warn'}`}>
-                {phraseCorrect ? `Yes. ${phrase.why}` : softMissLine(phrase.why)}
-              </div>
+              {phraseCorrect ? (
+                <div className="alert ok">Yes. {phrase.why}</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(phrase.why)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextPhrase}>
                 {phraseCorrect
                   ? (isLast ? 'Continue to work-interest questions' : 'Next phrase')
@@ -2491,9 +2517,13 @@ export function StudentSequencePage() {
           </div>
           {toolAnswer && (
             <>
-              <div className={`alert ${toolCorrect ? 'ok' : 'warn'}`}>
-                {toolCorrect ? 'Yes.' : softMissLine(`It’s ${cat.answer}.`)}
-              </div>
+              {toolCorrect ? (
+                <div className="alert ok">Yes.</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(`It’s ${cat.answer}.`)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextTool}>
                 {toolCorrect
                   ? (isLast ? 'Continue to systems' : 'Next tool group')
@@ -2570,9 +2600,13 @@ export function StudentSequencePage() {
           </div>
           {sysAnswer && (
             <>
-              <div className={`alert ${sysCorrect ? 'ok' : 'warn'}`}>
-                {sysCorrect ? 'Yes.' : softMissLine(`It’s ${topic.answer}.`)}
-              </div>
+              {sysCorrect ? (
+                <div className="alert ok">Yes.</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(`It’s ${topic.answer}.`)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextSys}>
                 {sysCorrect
                   ? (isLast ? 'Continue to instructor check' : 'Next system')
@@ -2753,11 +2787,13 @@ export function StudentSequencePage() {
           )}
           {obsChecked && (
             <>
-              <div className={`alert ${obsCorrect ? 'ok' : 'warn'}`}>
-                {obsCorrect
-                  ? scenario.passNote
-                  : softMissLine(`Try this order: ${ordered.map((s) => s.label).join(' → ')}`)}
-              </div>
+              {obsCorrect ? (
+                <div className="alert ok">{scenario.passNote}</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(`Try this order: ${ordered.map((s) => s.label).join(' → ')}`)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextObs}>
                 {obsCorrect
                   ? (isLast ? 'Continue to on-site training' : 'Next practice')
@@ -2841,9 +2877,13 @@ export function StudentSequencePage() {
           </div>
           {siteAnswer && (
             <>
-              <div className={`alert ${siteCorrect ? 'ok' : 'warn'}`}>
-                {siteCorrect ? item.teachCorrect : softMissLine(item.teachWrong)}
-              </div>
+              {siteCorrect ? (
+                <div className="alert ok">{item.teachCorrect}</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(item.teachWrong)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextSite}>
                 {siteCorrect
                   ? (isLast ? 'Continue to final check' : 'Next site decision')
@@ -3026,9 +3066,13 @@ export function StudentSequencePage() {
           </div>
           {empAnswer && (
             <>
-              <div className={`alert ${empCorrect ? 'ok' : 'warn'}`}>
-                {empCorrect ? item.teachCorrect : softMissLine(item.teachWrong)}
-              </div>
+              {empCorrect ? (
+                <div className="alert ok">{item.teachCorrect}</div>
+              ) : (
+                <p className="play-soft-miss" role="status">
+                  {softMissLine(item.teachWrong)}
+                </p>
+              )}
               <button type="button" className="btn btn-primary" onClick={nextEmp}>
                 {empCorrect
                   ? (isLast ? 'Continue to partner setup' : 'Next interview question')

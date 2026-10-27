@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { playFoley } from '../audio/foley'
 import { skillStationLabel, type SkillId } from './learningMastery'
 
 type FamiliarDetail = {
@@ -12,6 +11,8 @@ const HOLD_MS = 2400
 /**
  * Brief beat when a skill first clears Comfortable (internal Familiar).
  * One idea on stage (§7.2 staging) — door language, not a grading ceremony.
+ * Visual only: success Foley is owned by firePlayClear (avoids double latch
+ * when a board clear and Comfortable land on the same attempt).
  */
 export function FamiliarTheater() {
   const [beat, setBeat] = useState<FamiliarDetail | null>(null)
@@ -21,7 +22,6 @@ export function FamiliarTheater() {
       const detail = (e as CustomEvent<FamiliarDetail>).detail
       if (!detail?.skill) return
       setBeat(detail)
-      playFoley('latch')
     }
     window.addEventListener('pa-familiar-earned', onFamiliar)
     return () => window.removeEventListener('pa-familiar-earned', onFamiliar)

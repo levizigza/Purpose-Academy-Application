@@ -235,7 +235,11 @@ export function PracticeHub({
           <h2>{resumeHeading}</h2>
           <p className="ph-resume-lesson">{resumeLesson}</p>
           <p className="ph-today-line">{todayLine}</p>
-          <p className="ph-play-loop">One clear action · soft retry · Done for now when you finish</p>
+          <p className="play-nearby-objective ph-play-loop" aria-live="polite">
+            {pathComplete
+              ? 'Path clear · Path home or Done for now'
+              : 'Today’s station · one clear action · soft retry'}
+          </p>
           <BoardsClearedToday />
           <div
             className="ph-resume-progress"

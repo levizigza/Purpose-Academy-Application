@@ -341,9 +341,13 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
               </div>
               {checkAnswer ? (
                 <>
-                  <div className={`alert ${checkCorrect ? 'ok' : 'warn'}`}>
-                    {checkCorrect ? lesson.checkCorrect : softMissLine(lesson.checkWrong)}
-                  </div>
+                  {checkCorrect ? (
+                    <div className="alert ok">{lesson.checkCorrect}</div>
+                  ) : (
+                    <p className="play-soft-miss" role="status">
+                      {softMissLine(lesson.checkWrong)}
+                    </p>
+                  )}
                   <button type="button" className="btn btn-primary" onClick={goNext}>
                     {checkCorrect
                       ? idx >= lessons.length - 1

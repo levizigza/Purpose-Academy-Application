@@ -78,11 +78,13 @@ presentation / clear pulses / boards-cleared MUST NOT manufacture evidence
 
 **Pass 3 (shipped):** QuizRunner shared path · Safety · Tools · Systems · Site Language · Computer Skills check · Equipment videos · Instructor check · Site decisions · Final written · Employment prep — spine wired for moment loop.
 
-**Pass 4 (this carve):** Soft-miss grammar site-wide (`softMissLine` / `SOFT_RETRY_LABEL`) · Eye Spy + Organize miss status · Vocab double-latch removed · Computer try-phase whoosh-only · Sentence pass/result copy · dual-shell `.play-soft-miss` · coverage → ~100% on choice/clear stations.
+**Pass 4 (shipped):** Soft-miss grammar site-wide (`softMissLine` / `SOFT_RETRY_LABEL`) · Eye Spy + Organize miss status · Vocab double-latch removed · Computer try-phase whoosh-only · Sentence pass/result copy · dual-shell `.play-soft-miss` · coverage → ~100% on choice/clear stations.
+
+**Pass 5 (this carve):** True ~100% critic pass — dual-shell `.play-soft-miss` on every choice/clear miss (not `alert.warn`) · Sentence + VocabSheet soft-miss · intake/unit/passport/hub light next-action nearby (no fake board evidence) · FamiliarTheater visual-only (no double latch vs `firePlayClear`) · “Wrong answers” / Eye Spy “Go” lexicon · Equipment keep-watching soft tip · Skills Passport chrome.
 
 Later: choice-schema content registry, review planner, finite fluency route, weekly challenge.
 
-**Out of moment-loop scope (intentional):** Your Language · Work Style · Career Profile · Work Interests — intake / preference, not board clears. Unit intros / Familiar theater / passport remain chrome, not Candy Crush boards.
+**Intake / chrome (Pass 5):** Preference steps and passport are **not** board clears — no `firePlayClear` evidence cosplay. They still get a light nearby next-action line so the moment loop reads continuous with Practice stations.
 
 ### 0.7 Critic tests before merge
 
@@ -125,8 +127,12 @@ stays real workplace English.
 | Instructor check | Clear this order · N left | Order clear | Not yet · try again |
 | On-site decisions | Clear this decision · N left | Decision clear | Not yet · try again |
 | Employment prep | Clear this interview question · N left | Prep clear | Not yet · try again |
-| Hub | Today’s station | Boards cleared today (quiet) | — |
+| Hub | Today’s station · one clear action | Boards cleared today (quiet) | — |
 | Shell | Done for now | PlayClearPulse overlay | — |
+| Unit intro | Today’s work · one clear action | Soft retry · Done for now | — |
+| Language / Style / Interests / Profile | Pick / rate / see path (mother tongue) | Soft continue — **no** board latch | — (preference, not evidence) |
+| Passport | Review record · Path home | — | — |
+| Equipment | Clear this video · N left | Video clear | Keep watching soft tip |
 
 ---
 
@@ -152,7 +158,7 @@ stays real workplace English.
 - Critic: Sentence pass/result copy softened; phone `.play-nearby-objective` navy-on-cream beats night amber inside `.course-stage`.  
 - Authority unchanged — presentation clears never write evidence.
 
-### 2026-10-27 — Pass 4: soft-miss + foley authority polish (~100%)
+### 2026-10-27 — Pass 4: soft-miss + foley authority polish (~100% choice/clear)
 
 Honest post–Pass-3 audit: nearby + `firePlayClear` ~95% wired; soft-miss status / retry lexicon / double-foley ~88%.
 
@@ -163,4 +169,16 @@ Closed:
 - Computer Skills try-Save: whoosh only (check clear still owns Foley).  
 - Sentence pass/result: dropped “first go” / “Wrong answers” grade tone.  
 - Dual-shell `.play-soft-miss` (night amber tip / phone navy-on-cream); phone board pulse slightly shorter.  
-- Intake stations (Language / Work Style / Career / Work Interests) stay N/A by design.
+- Intake stations left as preference N/A for board clears.
+
+### 2026-10-27 — Pass 5: true ~100% critic carve
+
+Honest post–Pass-4 audit: choice stations claimed ~100%, but dual-shell miss chrome still used `alert.warn` (~90%), intake/chrome nearby absent, FamiliarTheater double-latched with board clears, residual “Wrong answers” / “Go N of M” lexicon.
+
+Closed:
+- Soft-miss display → `.play-soft-miss` on QuizRunner + every choice station + Sentence + Computer check + VocabSheet retry (night / phone paper).  
+- Intake (Language / Style / Interests / Profile): mother-tongue nearby next-action only — **never** `firePlayClear` / boards-cleared.  
+- Unit intro · Hub resume · Practice + portal passport: light nearby / Done-for-now framing.  
+- FamiliarTheater: visual only (success Foley stays with `firePlayClear`).  
+- Lexicon: Computer TeachNote “Misses teach”; Eye Spy final “Try N of M”; Equipment keep-watching soft tip.  
+- Authority unchanged — pulses never write evidence.
