@@ -427,6 +427,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-26 — Computer Skills narration: Piper Lessac (L2 / L3)
+
+- **Layers:** L2 content delivery + L3 connection (voice that feels human).
+- **Customer defect:** Unit 6 video narration used Edge `JennyNeural` — clear but stock/impersonal; beginners did not feel spoken *to*.
+- **Fix:** Rebuild narration with open-source **Piper** `en_US-lessac-medium` (local neural TTS). Soften Level-4 copy toward “you / your / take your time” without raising reading load. `--narration-refresh` reuses shipped visuals and reburns captions. Voice models download on demand into `tools/piper-voices/` (gitignored).
+- **Assumption to challenge next:** whether vocab `/tts` Edge bakes should also offer a Piper English path for offline/Pages parity.
+
 ### 2026-10-26 — Paper ink lock: full Practice sweep (L3)
 
 - **Layers:** L3 information display (Practical — WCAG body on paper).

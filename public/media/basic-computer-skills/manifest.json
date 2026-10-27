@@ -2,85 +2,97 @@
   {
     "file": "01_Turn_computer_on_off.mp4",
     "title": "Turn the computer on and off",
-    "bytes": 1835835,
-    "seconds": 34.9,
-    "has_audio": true
+    "bytes": 1691900,
+    "seconds": 27.8,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "02_Use_the_mouse.mp4",
     "title": "Use the mouse",
-    "bytes": 4996543,
-    "seconds": 40.6,
-    "has_audio": true
+    "bytes": 3262826,
+    "seconds": 26.0,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "03_Use_the_keyboard.mp4",
     "title": "Use the keyboard",
-    "bytes": 2139106,
-    "seconds": 34.6,
-    "has_audio": true
+    "bytes": 1792678,
+    "seconds": 24.8,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "04_Create_a_folder.mp4",
     "title": "Create a folder",
-    "bytes": 529424,
-    "seconds": 30.3,
-    "has_audio": true
+    "bytes": 490352,
+    "seconds": 22.2,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "05_Create_a_subfolder.mp4",
     "title": "Create a subfolder",
-    "bytes": 715128,
-    "seconds": 34.9,
-    "has_audio": true
+    "bytes": 614597,
+    "seconds": 26.3,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "06_Save_file_with_name.mp4",
     "title": "Save a file with a name",
-    "bytes": 642409,
-    "seconds": 32.4,
-    "has_audio": true
+    "bytes": 532257,
+    "seconds": 23.4,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "07_Write_short_paragraph.mp4",
     "title": "Write a short paragraph",
-    "bytes": 661356,
-    "seconds": 34.7,
-    "has_audio": true
+    "bytes": 554663,
+    "seconds": 24.9,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "08_Save_your_document.mp4",
     "title": "Save your document",
-    "bytes": 685016,
-    "seconds": 33.3,
-    "has_audio": true
+    "bytes": 637919,
+    "seconds": 25.0,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "09_Write_and_send_email.mp4",
     "title": "Write and send an email",
-    "bytes": 615639,
-    "seconds": 32.3,
-    "has_audio": true
+    "bytes": 610583,
+    "seconds": 25.8,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "10_Reply_to_email.mp4",
     "title": "Reply to an email",
-    "bytes": 571367,
-    "seconds": 28.8,
-    "has_audio": true
+    "bytes": 548514,
+    "seconds": 22.3,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "11_Attach_and_save_files.mp4",
     "title": "Attach a file and save an attachment",
-    "bytes": 826724,
-    "seconds": 38.4,
-    "has_audio": true
+    "bytes": 729571,
+    "seconds": 27.9,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   },
   {
     "file": "12_Stay_safe_online.mp4",
     "title": "Stay safe online",
-    "bytes": 761309,
-    "seconds": 33.5,
-    "has_audio": true
+    "bytes": 735428,
+    "seconds": 26.5,
+    "has_audio": true,
+    "voice": "piper:en_US-lessac-medium"
   }
 ]

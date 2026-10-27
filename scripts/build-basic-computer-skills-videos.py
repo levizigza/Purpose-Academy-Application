@@ -2,14 +2,25 @@
 """
 Build Purpose Academy Basic Computer Skills teaching videos.
 
-Each lesson pairs action-matched visuals with natural Edge TTS narration
-(en-US-JennyNeural) and large Level-4 English captions (ASS).
+Each lesson pairs action-matched visuals with warm open-source Piper TTS
+narration (en_US-lessac-medium) and large Level-4 English captions (ASS).
+
+Why Piper (not Edge JennyNeural): local, open neural voice — clearer, more
+human presence for absolute beginners. Lessac medium reads as a patient
+instructor, not a stock assistant.
 
 Visual sources:
   - Hardware lessons: royalty-free Pexels / Mixkit close-up action clips
   - Software lessons: Playwright recordings of scripts/bcs-demos/desktop.html
 
-License: Mixkit Stock Video Free License; Pexels License; teaching copy © Purpose Academy.
+Modes:
+  Full rebuild (needs /tmp clips + demos):
+    python3 scripts/build-basic-computer-skills-videos.py
+  Narration-only refresh (reuses shipped MP4 visuals, reburns captions):
+    python3 scripts/build-basic-computer-skills-videos.py --narration-refresh
+
+License: Mixkit Stock Video Free License; Pexels License; Piper voices
+(rhasspy/piper-voices); teaching copy © Purpose Academy.
 """
 
 from __future__ import annotations
@@ -18,8 +29,10 @@ import hashlib
 import json
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,8 +45,20 @@ ACTION_DIRS = [
     Path("/tmp/bcs-broll"),
     Path("/tmp/bcs-broll2"),
 ]
-EDGE_TTS = Path.home() / ".local" / "bin" / "edge-tts"
-VOICE = "en-US-JennyNeural"
+VOICE_DIR = ROOT / "tools" / "piper-voices"
+VOICE_MODEL = VOICE_DIR / "en_US-lessac-medium.onnx"
+VOICE_CONFIG = VOICE_DIR / "en_US-lessac-medium.onnx.json"
+VOICE_URL = (
+    "https://huggingface.co/rhasspy/piper-voices/resolve/main/"
+    "en/en_US/lessac/medium/en_US-lessac-medium.onnx"
+)
+VOICE_CFG_URL = (
+    "https://huggingface.co/rhasspy/piper-voices/resolve/main/"
+    "en/en_US/lessac/medium/en_US-lessac-medium.onnx.json"
+)
+# Slightly slower than default so Level-4 learners can follow
+PIPER_LENGTH_SCALE = "1.08"
+PIPER_BIN = Path.home() / ".local" / "bin" / "piper"
 FONT_NAME = "DejaVu Sans"
 W, H = 1280, 720
 FPS = 24
@@ -66,15 +91,15 @@ LESSONS: list[dict] = [
             {"kind": "demo", "name": "power", "seconds": 32},
         ],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 1 — Turn the computer on and off"),
-            (10, 18, "Find the power button on the computer or laptop."),
-            (18, 26, "Press it one time to turn the computer ON."),
-            (26, 34, "Wait. The screen will light up."),
-            (34, 42, "To turn OFF: click the Start button,"),
-            (42, 50, "then click Power, then click Shut down."),
-            (50, 58, "Do not pull the plug while it is working."),
-            (58, 66, "Remember: On with the button. Off with Shut down."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson one — turning the computer on and off."),
+            (10, 18, "First, find the power button on your computer or laptop."),
+            (18, 26, "Press it once. That turns the computer on."),
+            (26, 34, "Give it a moment — the screen will light up."),
+            (34, 42, "When you are ready to turn it off, click Start,"),
+            (42, 50, "then Power, then Shut down."),
+            (50, 58, "Please do not pull the plug while it is still working."),
+            (58, 66, "You have got this: on with the button, off with Shut down."),
         ],
     },
     {
@@ -82,14 +107,14 @@ LESSONS: list[dict] = [
         "title": "Use the mouse",
         "parts": [{"kind": "clip", "src": "mouse-17669.mp4", "seconds": 58}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 2 — Use the mouse"),
-            (10, 18, "Move the mouse. The arrow on the screen moves too."),
-            (18, 26, "One click = select. Press the left button one time."),
-            (26, 34, "Double-click = open. Click two times fast."),
-            (34, 42, "Right-click = more choices. Press the right button."),
-            (42, 50, "Scroll = move the page. Roll the wheel."),
-            (50, 58, "Remember: Point. Click. Open. Scroll."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson two — using the mouse."),
+            (10, 18, "Move the mouse, and the arrow on the screen moves with you."),
+            (18, 26, "One click selects. Press the left button one time."),
+            (26, 34, "Double-click opens. Two quick clicks."),
+            (34, 42, "Right-click shows more choices. Use the right button."),
+            (42, 50, "To scroll the page, gently roll the wheel."),
+            (50, 58, "Take your time: point, click, open, and scroll."),
         ],
     },
     {
@@ -101,14 +126,14 @@ LESSONS: list[dict] = [
             {"kind": "demo", "name": "keyboard", "seconds": 40},
         ],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 3 — Use the keyboard"),
-            (10, 18, "Letters and numbers type words on the screen."),
-            (18, 26, "Space bar = make a space between words."),
-            (26, 34, "Enter = go to the next line or say OK."),
-            (34, 42, "Backspace = erase the letter behind the cursor."),
-            (42, 50, "Shift + letter = make a CAPITAL letter."),
-            (50, 58, "Remember: Type. Space. Enter. Backspace."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson three — using the keyboard."),
+            (10, 18, "Letters and numbers put your words on the screen."),
+            (18, 26, "The space bar makes a space between words."),
+            (26, 34, "Enter starts a new line, or says O K."),
+            (34, 42, "Backspace erases the letter behind the cursor."),
+            (42, 50, "Hold Shift and a letter to make a capital."),
+            (50, 58, "You can do this: type, space, Enter, and Backspace."),
         ],
     },
     {
@@ -116,14 +141,14 @@ LESSONS: list[dict] = [
         "title": "Create a folder",
         "parts": [{"kind": "demo", "name": "folder", "seconds": 58}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 4 — Create a folder"),
-            (10, 18, "A folder holds your files in one place."),
-            (18, 26, "Right-click on an empty place on the desktop."),
-            (26, 34, "Click New, then click Folder."),
-            (34, 42, "Type a clear name. Example: School Work."),
-            (42, 50, "Press Enter to keep the name."),
-            (50, 58, "Remember: New, Folder, type a clear name."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson four — creating a folder."),
+            (10, 18, "A folder keeps your files together in one place."),
+            (18, 26, "Right-click on an empty spot on the desktop."),
+            (26, 34, "Click New, then Folder."),
+            (34, 42, "Type a clear name — something like School Work."),
+            (42, 50, "Press Enter to keep that name."),
+            (50, 58, "Nice work: New, Folder, then a clear name."),
         ],
     },
     {
@@ -131,14 +156,14 @@ LESSONS: list[dict] = [
         "title": "Create a subfolder",
         "parts": [{"kind": "demo", "name": "subfolder", "seconds": 58}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 5 — Create a subfolder"),
-            (10, 18, "A subfolder is a folder inside another folder."),
-            (18, 26, "Open your main folder. Example: School Work."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson five — creating a subfolder."),
+            (10, 18, "A subfolder is simply a folder inside another folder."),
+            (18, 26, "Open your main folder — for example, School Work."),
             (26, 34, "Right-click inside it. Click New, then Folder."),
-            (34, 42, "Name it. Example: Week 1."),
-            (42, 50, "Now Week 1 lives inside School Work."),
-            (50, 58, "Remember: Open folder, New, Folder, name it."),
+            (34, 42, "Name it something clear, like Week One."),
+            (42, 50, "Now Week One lives safely inside School Work."),
+            (50, 58, "You did it: open the folder, New, Folder, name it."),
         ],
     },
     {
@@ -146,14 +171,14 @@ LESSONS: list[dict] = [
         "title": "Save a file with a name",
         "parts": [{"kind": "demo", "name": "save-name", "seconds": 58}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 6 — Save a file with a name"),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson six — saving a file with a name."),
             (10, 18, "Saving keeps your work so you can find it later."),
             (18, 26, "Click File, then click Save As."),
-            (26, 34, "Choose a folder. Example: School Work."),
-            (34, 42, "Type a clear name. Example: Safety Notes."),
-            (42, 50, "Click Save."),
-            (50, 58, "Remember: Save As, folder, clear name, Save."),
+            (26, 34, "Choose a folder you know — School Work works well."),
+            (34, 42, "Type a clear name, like Safety Notes."),
+            (42, 50, "Then click Save."),
+            (50, 58, "Remember the rhythm: Save As, folder, clear name, Save."),
         ],
     },
     {
@@ -161,14 +186,14 @@ LESSONS: list[dict] = [
         "title": "Write a short paragraph",
         "parts": [{"kind": "demo", "name": "paragraph", "seconds": 58}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 7 — Write a short paragraph"),
-            (10, 18, "Open a document program. Example: Word or Docs."),
-            (18, 26, "Click in the white page. Type slowly."),
-            (26, 34, "Write 2 or 3 short sentences."),
-            (34, 42, "Use Enter to start a new line when you need it."),
-            (42, 50, "Check spelling. Fix mistakes with Backspace."),
-            (50, 58, "Remember: Open, type short sentences, check."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson seven — writing a short paragraph."),
+            (10, 18, "Open a document program — Word or Docs is fine."),
+            (18, 26, "Click in the white page, then type at your own pace."),
+            (26, 34, "Write two or three short sentences."),
+            (34, 42, "Press Enter when you want a new line."),
+            (42, 50, "Check your spelling. Fix mistakes with Backspace."),
+            (50, 58, "You are writing: open, type short sentences, then check."),
         ],
     },
     {
@@ -176,14 +201,14 @@ LESSONS: list[dict] = [
         "title": "Save your document",
         "parts": [{"kind": "demo", "name": "save-doc", "seconds": 58}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 8 — Save your document"),
-            (10, 18, "Save often so you do not lose your work."),
-            (18, 26, "Click File, Save, or press Ctrl and S."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson eight — saving your document."),
+            (10, 18, "Save often so you do not lose your hard work."),
+            (18, 26, "Click File, then Save — or press Control and S."),
             (26, 34, "If it asks for a name, type one and click Save."),
-            (34, 42, "Look at the top of the window. You should see the name."),
+            (34, 42, "Glance at the top of the window — you should see the name."),
             (42, 50, "Save again after you add more words."),
-            (50, 58, "Remember: Save often. Ctrl and S is fast."),
+            (50, 58, "A good habit: save often. Control and S is quick."),
         ],
     },
     {
@@ -191,14 +216,14 @@ LESSONS: list[dict] = [
         "title": "Write and send an email",
         "parts": [{"kind": "demo", "name": "email-send", "seconds": 58}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 9 — Write and send an email"),
-            (10, 18, "Open your email. Click Compose or New."),
-            (18, 26, "To: type the other person's email address."),
-            (26, 34, "Subject: write a short title. Example: Homework."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson nine — writing and sending an email."),
+            (10, 18, "Open your email, then click Compose or New."),
+            (18, 26, "In To, type the other person's email address."),
+            (26, 34, "In Subject, write a short title — like Homework."),
             (34, 42, "Type your message in clear, short sentences."),
-            (42, 50, "Click Send."),
-            (50, 58, "Remember: To, Subject, message, Send."),
+            (42, 50, "When you are ready, click Send."),
+            (50, 58, "That is the path: To, Subject, message, then Send."),
         ],
     },
     {
@@ -206,14 +231,14 @@ LESSONS: list[dict] = [
         "title": "Reply to an email",
         "parts": [{"kind": "demo", "name": "email-reply", "seconds": 58}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 10 — Reply to an email"),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson ten — replying to an email."),
             (10, 18, "Open the email you want to answer."),
-            (18, 26, "Click Reply. Do not start a brand new email."),
+            (18, 26, "Click Reply — no need to start a brand new email."),
             (26, 34, "Type your answer under their message."),
-            (34, 42, "Check the To box still has the right person."),
-            (42, 50, "Click Send."),
-            (50, 58, "Remember: Open, Reply, type, Send."),
+            (34, 42, "Quick check: the To box still has the right person."),
+            (42, 50, "Then click Send."),
+            (50, 58, "You are set: open, Reply, type, and Send."),
         ],
     },
     {
@@ -221,15 +246,15 @@ LESSONS: list[dict] = [
         "title": "Attach a file and save an attachment",
         "parts": [{"kind": "demo", "name": "attach-save", "seconds": 66}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 11 — Attach and save files"),
-            (10, 18, "To send a file: click Attach or the paperclip."),
-            (18, 26, "Choose your file. Wait until you see its name."),
-            (26, 34, "Then click Send."),
-            (34, 42, "To keep a file someone sent you: open the email."),
-            (42, 50, "Click the file. Click Download or Save."),
-            (50, 58, "Choose your folder. Click Save."),
-            (58, 66, "Remember: Attach before Send. Save attachments to a folder."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson eleven — attaching and saving files."),
+            (10, 18, "To send a file, click Attach or the paperclip."),
+            (18, 26, "Choose your file, then wait until you see its name."),
+            (26, 34, "After that, click Send."),
+            (34, 42, "To keep a file someone sent you, open the email."),
+            (42, 50, "Click the file, then Download or Save."),
+            (50, 58, "Choose your folder, then click Save."),
+            (58, 66, "Keep it simple: attach before Send, and save attachments to a folder."),
         ],
     },
     {
@@ -237,14 +262,14 @@ LESSONS: list[dict] = [
         "title": "Stay safe online",
         "parts": [{"kind": "demo", "name": "safe", "seconds": 58}],
         "lines": [
-            (0, 4, "Basic Computer Skills"),
-            (4, 10, "Lesson 12 — Stay safe online"),
-            (10, 18, "Keep your password private. Do not share it."),
+            (0, 4, "Welcome to Basic Computer Skills."),
+            (4, 10, "Lesson twelve — staying safe online."),
+            (10, 18, "Keep your password private. Please do not share it."),
             (18, 26, "Do not click strange links in email."),
-            (26, 34, "Ask your instructor if you are not sure."),
+            (26, 34, "If you are not sure, ask your instructor — that is wise."),
             (34, 42, "Log out when you finish on a shared computer."),
-            (42, 50, "Only upload YOUR school work — never passwords."),
-            (50, 58, "Remember: Private password. Careful clicks. Ask for help."),
+            (42, 50, "Only upload your school work — never passwords."),
+            (50, 58, "Stay safe: private password, careful clicks, and ask for help."),
         ],
     },
 ]
@@ -304,40 +329,83 @@ Dialogue: 0,0:00:00.00,{ass_time(end)},Brand,,0,0,0,,PURPOSE ACADEMY
     path.write_text(header + "\n".join(events) + "\n", encoding="utf-8")
 
 
-TTS_CACHE = Path("/tmp/bcs-tts-cache")
+TTS_CACHE = Path("/tmp/bcs-tts-cache-piper-lessac")
+
+
+def ensure_piper_voice() -> Path:
+    """Download the open-source Lessac medium voice once into tools/piper-voices/."""
+    VOICE_DIR.mkdir(parents=True, exist_ok=True)
+    if not VOICE_MODEL.exists() or VOICE_MODEL.stat().st_size < 1_000_000:
+        print("Downloading Piper voice en_US-lessac-medium …")
+        urllib.request.urlretrieve(VOICE_URL, VOICE_MODEL)
+    if not VOICE_CONFIG.exists():
+        urllib.request.urlretrieve(VOICE_CFG_URL, VOICE_CONFIG)
+    piper = PIPER_BIN if PIPER_BIN.exists() else Path(shutil.which("piper") or "")
+    if not piper or not piper.exists():
+        raise FileNotFoundError(
+            "piper CLI not found. Install with: pip install --user piper-tts"
+        )
+    return piper
 
 
 def synth_line(text: str, out_mp3: Path) -> None:
-    if not EDGE_TTS.exists():
-        raise FileNotFoundError(f"edge-tts not found at {EDGE_TTS}")
+    """Synthesize one caption line with Piper Lessac (open neural TTS)."""
+    piper = ensure_piper_voice()
     TTS_CACHE.mkdir(parents=True, exist_ok=True)
-    key = hashlib.sha1(f"{VOICE}|-5%|{text}".encode("utf-8")).hexdigest()
-    cached = TTS_CACHE / f"{key}.mp3"
+    key = hashlib.sha1(
+        f"lessac-medium|{PIPER_LENGTH_SCALE}|{text}".encode("utf-8")
+    ).hexdigest()
+    cached = TTS_CACHE / f"{key}.wav"
+    wav = out_mp3.with_suffix(".wav")
     if cached.exists() and cached.stat().st_size > 500:
-        shutil.copy(cached, out_mp3)
-        return
-    last_err: Exception | None = None
-    for attempt in range(1, 6):
-        try:
-            run(
-                [
-                    str(EDGE_TTS),
-                    "--voice",
-                    VOICE,
-                    "--rate=-5%",
-                    "--text",
-                    text,
-                    "--write-media",
-                    str(out_mp3),
-                ]
-            )
-            if out_mp3.exists() and out_mp3.stat().st_size > 500:
-                shutil.copy(out_mp3, cached)
-                return
-        except Exception as exc:  # noqa: BLE001 — retry transient DNS/network
-            last_err = exc
-            time.sleep(2 * attempt)
-    raise RuntimeError(f"TTS failed for: {text!r}") from last_err
+        shutil.copy(cached, wav)
+    else:
+        last_err: Exception | None = None
+        for attempt in range(1, 4):
+            try:
+                proc = subprocess.run(
+                    [
+                        str(piper),
+                        "--model",
+                        str(VOICE_MODEL),
+                        "--length-scale",
+                        PIPER_LENGTH_SCALE,
+                        "--output_file",
+                        str(wav),
+                    ],
+                    input=text + "\n",
+                    text=True,
+                    check=True,
+                    capture_output=True,
+                )
+                if wav.exists() and wav.stat().st_size > 500:
+                    shutil.copy(wav, cached)
+                    break
+                last_err = RuntimeError(proc.stderr[-400:] if proc.stderr else "empty wav")
+            except Exception as exc:  # noqa: BLE001
+                last_err = exc
+                time.sleep(attempt)
+        else:
+            raise RuntimeError(f"Piper TTS failed for: {text!r}") from last_err
+
+    # Encode to mp3 for the concat pipeline
+    run(
+        [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(wav),
+            "-c:a",
+            "libmp3lame",
+            "-q:a",
+            "4",
+            str(out_mp3),
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    if not out_mp3.exists() or out_mp3.stat().st_size < 400:
+        raise RuntimeError(f"mp3 encode failed for: {text!r}")
 
 
 def build_narration(
@@ -559,17 +627,9 @@ def compose_visual(work: Path, lesson: dict, total_seconds: float) -> Path:
     return visual
 
 
-def build_lesson(lesson: dict) -> Path:
-    BUILD.mkdir(parents=True, exist_ok=True)
-    OUT.mkdir(parents=True, exist_ok=True)
-    work = Path(tempfile.mkdtemp(prefix="bcs_lesson_", dir=str(BUILD)))
-    print("BUILD", lesson["file"])
-
-    narr, timed = build_narration(work, lesson["lines"])
-    audio_dur = ffprobe_duration(narr)
-    visual = compose_visual(work, lesson, audio_dur)
-
-    ass_path = work / "captions.ass"
+def mux_visual_narration(visual: Path, narr: Path, timed: list[tuple[float, float, str]], out: Path) -> None:
+    """Burn captions + mux Piper narration onto a silent (or ignored-audio) visual."""
+    ass_path = visual.parent / "captions.ass"
     write_ass(ass_path, timed)
     ass_esc = str(ass_path).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
     vf = (
@@ -579,8 +639,6 @@ def build_lesson(lesson: dict) -> Path:
         f"drawbox=x=0:y=ih-160:w=iw:h=160:color=black@0.55:t=fill,"
         f"subtitles={ass_esc}"
     )
-
-    out = OUT / lesson["file"]
     run(
         [
             "ffmpeg",
@@ -589,6 +647,10 @@ def build_lesson(lesson: dict) -> Path:
             str(visual),
             "-i",
             str(narr),
+            "-map",
+            "0:v:0",
+            "-map",
+            "1:a:0",
             "-vf",
             vf,
             "-r",
@@ -609,14 +671,146 @@ def build_lesson(lesson: dict) -> Path:
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
+
+
+def build_lesson(lesson: dict) -> Path:
+    BUILD.mkdir(parents=True, exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
+    work = Path(tempfile.mkdtemp(prefix="bcs_lesson_", dir=str(BUILD)))
+    print("BUILD", lesson["file"])
+
+    narr, timed = build_narration(work, lesson["lines"])
+    audio_dur = ffprobe_duration(narr)
+    visual = compose_visual(work, lesson, audio_dur)
+    out = OUT / lesson["file"]
+    mux_visual_narration(visual, narr, timed, out)
     print("  ->", out, f"({ffprobe_duration(out):.1f}s, {out.stat().st_size // 1024} KB)")
     return out
 
 
+def refresh_narration(lesson: dict) -> Path:
+    """
+    Reuse the shipped MP4 as the visual bed. Cover the old caption strip,
+    burn new Level-4 captions, and replace audio with Piper Lessac.
+    """
+    BUILD.mkdir(parents=True, exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
+    src = OUT / lesson["file"]
+    if not src.exists():
+        raise FileNotFoundError(f"Missing shipped video for refresh: {src}")
+
+    work = Path(tempfile.mkdtemp(prefix="bcs_refresh_", dir=str(BUILD)))
+    print("REFRESH", lesson["file"])
+
+    narr, timed = build_narration(work, lesson["lines"])
+    audio_dur = ffprobe_duration(narr)
+    video_dur = ffprobe_duration(src)
+
+    # Stretch or loop the existing visual so it covers the new narration length
+    visual = work / "visual.mp4"
+    if abs(video_dur - audio_dur) < 0.35:
+        # Drop old audio; keep frames
+        run(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(src),
+                "-an",
+                "-c:v",
+                "copy",
+                str(visual),
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    elif video_dur < audio_dur:
+        # Loop the bed until narration ends
+        run(
+            [
+                "ffmpeg",
+                "-y",
+                "-stream_loop",
+                "-1",
+                "-i",
+                str(src),
+                "-t",
+                f"{audio_dur:.3f}",
+                "-an",
+                "-c:v",
+                "libx264",
+                "-pix_fmt",
+                "yuv420p",
+                str(visual),
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    else:
+        # Gently slow the bed so action still fills the narration
+        factor = audio_dur / max(video_dur, 0.1)
+        factor = min(max(factor, 0.85), 1.35)
+        run(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(src),
+                "-vf",
+                f"setpts={factor:.4f}*PTS,fps={FPS}",
+                "-an",
+                "-c:v",
+                "libx264",
+                "-pix_fmt",
+                "yuv420p",
+                str(visual),
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+
+    out = OUT / lesson["file"]
+    mux_visual_narration(visual, narr, timed, out)
+    print("  ->", out, f"({ffprobe_duration(out):.1f}s, {out.stat().st_size // 1024} KB)")
+    return out
+
+
+def write_manifest(built: list[dict]) -> None:
+    (OUT / "manifest.json").write_text(json.dumps(built, indent=2) + "\n")
+    (OUT / "README.md").write_text(
+        """# Basic Computer Skills videos
+
+Royalty-free teaching clips for Purpose Academy Unit 6 / journey step 12.
+
+- Hardware lessons use Pexels / Mixkit close-up action footage.
+- Software lessons use recorded practice-desktop demos (folder, email, save, safety).
+- Each MP4 includes warm English narration via **Piper** open-source neural TTS
+  (`en_US-lessac-medium`) and burned-in Level-4 captions.
+
+Rebuild (full — needs `/tmp` action clips + demos):
+
+```bash
+node scripts/bcs-demos/record-bcs-demos.mjs
+python3 scripts/build-basic-computer-skills-videos.py
+```
+
+Refresh narration only (reuses shipped visuals):
+
+```bash
+pip install --user piper-tts
+python3 scripts/build-basic-computer-skills-videos.py --narration-refresh
+```
+""",
+        encoding="utf-8",
+    )
+
+
 def main() -> None:
+    refresh = "--narration-refresh" in sys.argv
+    ensure_piper_voice()
     built = []
     for lesson in LESSONS:
-        path = build_lesson(lesson)
+        path = refresh_narration(lesson) if refresh else build_lesson(lesson)
         built.append(
             {
                 "file": lesson["file"],
@@ -624,29 +818,11 @@ def main() -> None:
                 "bytes": path.stat().st_size,
                 "seconds": round(ffprobe_duration(path), 1),
                 "has_audio": True,
+                "voice": "piper:en_US-lessac-medium",
             }
         )
-    (OUT / "manifest.json").write_text(json.dumps(built, indent=2) + "\n")
-    readme = OUT / "README.md"
-    readme.write_text(
-        """# Basic Computer Skills videos
-
-Royalty-free teaching clips for Purpose Academy Unit 6 / journey step 12.
-
-- Hardware lessons use Pexels / Mixkit close-up action footage.
-- Software lessons use recorded practice-desktop demos (folder, email, save, safety).
-- Each MP4 includes natural English narration (Edge neural TTS) and burned-in Level-4 captions.
-
-Rebuild:
-
-```bash
-node scripts/bcs-demos/record-bcs-demos.mjs
-python3 scripts/build-basic-computer-skills-videos.py
-```
-""",
-        encoding="utf-8",
-    )
-    print("Wrote", len(built), "videos to", OUT)
+    write_manifest(built)
+    print("Wrote", len(built), "videos to", OUT, "(refresh)" if refresh else "(full)")
 
 
 if __name__ == "__main__":
