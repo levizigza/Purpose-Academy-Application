@@ -431,6 +431,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-27 — Phone splash: centered Tap hammer + soft blink (L3)
+
+- **Layers:** L3 information display (next action unmistakable in 3s) on the phone app splash.
+- **Customer overturn:** Corner hammer + “Strike to enter” was too quiet. Wanted the hammer **in the middle**, text that says **Tap**, and a **blink** so the next action is obvious.
+- **Fix (v44, embedded/phone only):** Hammer rests mid-frame (`left/top 50%/52%`); hint reads **Tap**; soft opacity/scale blink on hammer + label after settle. Pathways drop below mid so the CTA owns the middle. Desktop night splash keeps quiet lower-right “Strike to enter.” `prefers-reduced-motion` freezes mid-frame, no blink. Pre-change frozen as `docs/splash-versions/v44/`.
+- **Critic:** Blink is a door affordance, not work-chrome attention spam — stops on smash; no glow/casino pulse.
+- **Assumption to challenge next:** whether desktop should mirror Tap/center on narrow viewports, or stay rule-of-thirds corner forever.
+
 ### 2026-10-26 — Learner-fear doctrine + deep Practice pass (L1 / L2 / L4)
 
 - **Layers:** L1 story + L2 delivery + L4 attention ethics.

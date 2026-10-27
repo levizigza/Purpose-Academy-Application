@@ -2780,7 +2780,7 @@ table.data th {
   }
 }
 
-/* Embedded phone: door is geometrically centered — bias contact toward 50% × 42% */
+/* Embedded phone: hammer rests mid-frame — strike rises into door at 50% × 42% */
 .threshold.is-embedded .threshold-hammer.is-smashing {
   animation-name: hammer-door-strike-embedded;
 }
@@ -2788,26 +2788,59 @@ table.data th {
 @keyframes hammer-door-strike-embedded {
   0% {
     opacity: 1;
-    transform: translateX(0) translateY(0) rotate(6deg) scale(1);
+    transform: translate(-50%, -50%) rotate(4deg) scale(1);
   }
   12% {
-    transform: translateX(10px) translateY(8px) rotate(20deg) scale(1.04);
+    transform: translate(-50%, -42%) rotate(18deg) scale(1.04);
   }
   24% {
-    transform: translateX(12px) translateY(10px) rotate(30deg) scale(1.06);
+    transform: translate(-50%, -38%) rotate(28deg) scale(1.06);
   }
   40% {
-    transform: translate(-16cqw, -14cqh) rotate(-2deg) scale(1.1);
+    transform: translate(-50%, -28cqh) rotate(-4deg) scale(1.1);
   }
   54% {
-    transform: translate(-40cqw, -28cqh) rotate(-26deg) scale(1.16);
+    /* Contact — head into the glowing doorway cavity mid */
+    transform: translate(-50%, -36cqh) rotate(-22deg) scale(1.16);
   }
   68% {
-    transform: translate(-42cqw, -26cqh) rotate(-10deg) scale(1.06);
+    transform: translate(-50%, -34cqh) rotate(-8deg) scale(1.06);
   }
   100% {
     opacity: 0;
-    transform: translate(-44cqw, -16cqh) rotate(14deg) scale(0.9);
+    transform: translate(-50%, -22cqh) rotate(12deg) scale(0.9);
+  }
+}
+
+/* Phone app: rise into mid-frame (not corner slide-in) */
+@keyframes hammer-center-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.9);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(-50%, -52%) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(4deg) scale(1);
+  }
+}
+
+/*
+  Soft blink on phone Tap CTA — draws the next action without casino glow.
+  Opacity + slight scale only; stopped while smashing / under reduced motion.
+*/
+@keyframes hammer-tap-blink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.42;
+    transform: scale(1.06);
   }
 }
 
@@ -2933,6 +2966,20 @@ table.data th {
   .threshold-hammer.is-visible {
     opacity: 1;
     transform: rotate(6deg);
+  }
+
+  .threshold.is-embedded .threshold-hammer,
+  .threshold.is-embedded .threshold-hammer.is-visible,
+  .threshold.is-embedded .threshold-hammer.is-phone-tap {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(4deg);
+  }
+
+  .threshold.is-embedded .threshold-hammer.is-phone-tap .threshold-hammer-icon,
+  .threshold.is-embedded .threshold-hammer.is-phone-tap .threshold-hammer-hint {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
   }
 
   .threshold-door-zoom.is-closed,
@@ -15011,9 +15058,16 @@ html.pa-phone-shell .play-soft-miss {
   transform: translate(-50%, -50%);
 }
 
+/*
+  Critic overturn (user): phone hammer was a quiet corner CTA — next action
+  was unclear. Center it, label Tap, soft blink. Pathways lift above mid so
+  the hammer owns the middle of the phone frame. Desktop night splash unchanged.
+*/
 .threshold.is-embedded .threshold-pathways {
-  bottom: 22%;
-  width: 94%;
+  /* Below mid-frame hammer so the Tap CTA owns the middle */
+  bottom: auto;
+  top: 72%;
+  width: 88%;
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.72rem;
@@ -15024,31 +15078,68 @@ html.pa-phone-shell .play-soft-miss {
   justify-content: space-between;
 }
 
-.threshold.is-embedded .threshold-pathways {
-  bottom: 26%;
-  width: 90%;
-}
-
 .threshold.is-embedded .threshold-path-lede {
   font-size: 0.58rem;
   letter-spacing: 0.1em;
 }
 
-.threshold.is-embedded .threshold-hammer {
-  right: 6%;
-  bottom: 5%;
-  width: 3.4rem;
-  z-index: 6;
+.threshold.is-embedded .threshold-hammer,
+.threshold.is-embedded .threshold-hammer.is-phone-tap {
+  left: 50%;
+  right: auto;
+  top: 52%;
+  bottom: auto;
+  width: auto;
+  max-width: none;
+  z-index: 12;
+  gap: 0.35rem;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 8px 14px rgba(40, 24, 4, 0.42));
+}
+
+.threshold.is-embedded .threshold-hammer.is-visible {
+  animation: hammer-center-in 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
+}
+
+.threshold.is-embedded .threshold-hammer:hover:not(:disabled) {
+  transform: translate(-50%, -52%) rotate(2deg);
+  filter: drop-shadow(0 14px 22px rgba(90, 55, 8, 0.55));
+}
+
+.threshold.is-embedded .threshold-hammer:active:not(:disabled) {
+  transform: translate(-50%, -50%) rotate(0deg) scale(0.97);
 }
 
 .threshold.is-embedded .threshold-hammer-icon {
-  width: 100%;
+  width: clamp(3.6rem, 28cqi, 5.2rem);
   height: auto;
 }
 
 .threshold.is-embedded .threshold-hammer-hint {
-  font-size: 0.55rem;
-  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: rgba(255, 244, 210, 0.95);
+  text-shadow: 0 1px 2px rgba(4, 21, 38, 0.55);
+  opacity: 1;
+  animation: none;
+}
+
+/* Soft blink after settle — hammer + Tap read as the one next action */
+.threshold.is-embedded .threshold-hammer.is-phone-tap.is-visible:not(.is-smashing) .threshold-hammer-icon {
+  animation: hammer-tap-blink 1.55s ease-in-out 1.05s infinite;
+  transform-origin: 50% 40%;
+}
+
+.threshold.is-embedded .threshold-hammer.is-phone-tap.is-visible:not(.is-smashing) .threshold-hammer-hint {
+  animation: hammer-tap-blink 1.55s ease-in-out 1.05s infinite;
+}
+
+.threshold.is-embedded .threshold-hammer.is-smashing .threshold-hammer-icon,
+.threshold.is-embedded .threshold-hammer.is-smashing .threshold-hammer-hint {
+  animation: none !important;
+  opacity: 0;
 }
 
 .threshold.is-embedded .threshold-foley {

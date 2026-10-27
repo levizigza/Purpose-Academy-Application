@@ -1,0 +1,1412 @@
+/* === SPLASH_CRAFT_BEGIN === */
+/* ——— Threshold opening: door swings open in the P ——— */
+/* Archive/restore: node scripts/splash-version.mjs — see docs/splash-versions/ */
+.threshold,
+.threshold-stage-opening,
+.threshold-stage-open,
+.threshold-stage-open.is-brand,
+.threshold.is-brand,
+.threshold.is-ready {
+  position: relative;
+  /* Size container so hammer strike + shatter aim at the door mid in-frame (not browser vw) */
+  container-type: size;
+  container-name: splash-stage;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding:
+    max(0.4rem, env(safe-area-inset-top))
+    max(0.75rem, env(safe-area-inset-right))
+    max(0.55rem, env(safe-area-inset-bottom))
+    max(0.75rem, env(safe-area-inset-left));
+  /*
+    Critic v41: cool light floor hid the doorway glow. Dusk shop stage —
+    deep slate/navy so daylight from the P reads as real light escaping.
+    (Not purple, not cream. Gold stays inside the cavity only.)
+  */
+  background:
+    radial-gradient(ellipse 48% 42% at 42% 48%, rgba(255, 252, 240, 0.16) 0%, transparent 58%),
+    radial-gradient(ellipse 95% 70% at 50% 115%, rgba(0, 0, 0, 0.55), transparent 52%),
+    linear-gradient(165deg, #1a3348 0%, #102638 38%, #0a1a2c 100%);
+  color: #e8eef5;
+}
+
+.threshold::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image:
+    repeating-linear-gradient(
+      -18deg,
+      transparent,
+      transparent 11px,
+      rgba(232, 238, 245, 0.14) 11px,
+      rgba(232, 238, 245, 0.14) 12px
+    );
+  z-index: 0;
+}
+
+/*
+  Rule-of-thirds composition stage (splash v33).
+  Upper third → name. Mid → doorway focal (stem biased left).
+  Lower third → pathways (left) + hammer CTA (right, fixed).
+*/
+.threshold-compose {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.threshold-compose > * {
+  pointer-events: auto;
+}
+
+.threshold-stage {
+  /* legacy alias — keep selectors that still reference it from breaking */
+  position: relative;
+  z-index: 1;
+  width: min(100%, 560px);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: clamp(0.4rem, 1.4vh, 0.85rem);
+  padding-block: 0.2rem;
+}
+
+/*
+  Shared brand frame — door in the P, then logo-full lockup.
+  FLIP rule: never animate layout width/height; only opacity + transform.
+*/
+.threshold-brand-frame {
+  position: relative;
+  width: min(78vw, 420px);
+  aspect-ratio: 1024 / 682;
+  /* Clip only at the page (.threshold); keep frame open so zoom isn't a hard card */
+  overflow: visible;
+}
+
+.threshold-brand-zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: 52.5% 25%;
+  transition: transform 1.85s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.threshold-brand-zoom.is-closed {
+  transform: scale(2.85);
+}
+
+.threshold-brand-zoom.is-opening {
+  transform: scale(2.55);
+}
+
+.threshold-brand-zoom.is-open,
+.threshold-brand-zoom.is-ready {
+  transform: scale(1);
+}
+
+.threshold-lockup {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 12px 28px rgba(11, 47, 92, 0.1));
+  z-index: 1;
+}
+
+.threshold-lockup.is-visible {
+  opacity: 1;
+}
+
+/* Slot sized so SVG glyph lands on logo-full P ink */
+.threshold-door-slot {
+  position: absolute;
+  left: 17.1%;
+  top: 0.4%;
+  width: 56.75%;
+  height: 45%;
+  z-index: 2;
+  overflow: visible;
+  opacity: 0;
+  transition: opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+
+.threshold-door-slot.is-active {
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.threshold-door-slot.is-done {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.doorway {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 100%;
+  transform: translate(-50%, -50%);
+  /* Clip anything that would paint above the P lintel */
+  overflow: hidden;
+}
+
+.doorway-frame {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+  /* No SVG-wide filter — drop-shadow on light layers causes top poke */
+}
+
+.doorway-prelight {
+  opacity: 0.06;
+}
+
+.doorway-open .doorway-prelight {
+  opacity: 1;
+}
+
+/* Critic v40: light must feel like it exits the doorway — soft stage bloom */
+.doorway-open::after {
+  content: '';
+  position: absolute;
+  left: 22%;
+  top: 28%;
+  width: 46%;
+  height: 66%;
+  border-radius: 42% 50% 58% 48%;
+  background:
+    radial-gradient(ellipse 72% 82% at 48% 50%, rgba(255, 254, 248, 0.88) 0%, rgba(255, 248, 230, 0.45) 30%, rgba(245, 236, 210, 0.16) 52%, transparent 74%);
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
+  filter: blur(2.5px);
+}
+
+.doorway-open .doorway-leaf-back {
+  box-shadow:
+    inset -10px 0 18px rgba(255, 252, 240, 0.35),
+    inset 0 0 12px rgba(255, 248, 230, 0.18);
+}
+
+.doorway-spill-layer {
+  mix-blend-mode: screen;
+}
+
+.threshold-door-stage:has(.doorway-open)::before {
+  content: '';
+  position: absolute;
+  left: 30%;
+  top: 38%;
+  width: 38%;
+  height: 48%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 45% 55%, rgba(255, 252, 240, 0.45), transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+  filter: blur(6px);
+}
+
+/*
+  Hinge = cavity (viewBox 41→69 × 34→108).
+  Perspective on the PARENT; origin to the RIGHT so the open leaf keeps
+  visible face (does not foreshorten into a knife-edge). See craft §7.3.
+*/
+.doorway-hinge {
+  position: absolute;
+  left: 32%;
+  top: 26.6%;
+  width: 21.9%;
+  height: 57.8%;
+  perspective: 920px;
+  perspective-origin: 155% 42%;
+  transform-style: preserve-3d;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Caps the stem lintel above the swinging leaf */
+.doorway-lintel {
+  position: absolute;
+  left: 29.5%;
+  top: 17.2%;
+  width: 26.6%;
+  height: 10%;
+  background: #0b2f5c;
+  z-index: 6;
+  pointer-events: none;
+  box-shadow: 0 1px 0 rgba(7, 30, 61, 0.9);
+}
+
+.doorway-leaf {
+  /*
+    Critic v38: pure ~96° sold cavity but erased door mass (thin bar).
+    Desktop/tablet settle ~90° — cavity still owns the stem, leaf still a slab.
+    Narrow phones override further open/closed — see ≤640px.
+  */
+  --door-settle: -90deg;
+  --door-overshoot: -96deg;
+  --door-hold-a: -92deg;
+  --door-hold-b: -88deg;
+  --door-cross-mid: -108deg;
+  --door-cross-end: -124deg;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+}
+
+/*
+  Creative open (not purely literal): crack of daylight → hesitation →
+  commit → soft overshoot → settle. linear playback; spacing = the acting.
+*/
+.doorway-opening .doorway-leaf {
+  animation: pa-door-chart 2.85s linear forwards;
+}
+
+.doorway-opening .doorway-prelight {
+  animation: pa-light-chart 2.85s linear forwards;
+}
+
+.doorway-open .doorway-leaf {
+  /* Settle angle from --door-settle (desktop ~90°, phone ~78°). */
+  transform: rotateY(var(--door-settle));
+  animation: pa-door-moving-hold 3.2s ease-in-out 1 forwards;
+}
+
+.doorway-open .doorway-motes {
+  animation: pa-mote-drift 4.5s ease-in-out infinite;
+}
+
+.doorway-leaf-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+
+.doorway-leaf-front {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12), transparent 22%),
+    linear-gradient(180deg, #1a457a 0%, #0b2f5c 52%, #06182f 100%);
+  box-shadow:
+    inset -2px 0 0 rgba(255, 255, 255, 0.16),
+    inset 2px 0 0 rgba(0, 0, 0, 0.28),
+    8px 0 20px rgba(0, 0, 0, 0.38);
+}
+
+/* Interior: stained shop door — never gold (gold = room light only) */
+.doorway-leaf-back {
+  background:
+    linear-gradient(270deg, rgba(255, 254, 248, 0.14), transparent 34%),
+    linear-gradient(180deg, #163e72 0%, #0a2748 55%, #06182f 100%);
+  transform: rotateY(180deg);
+  box-shadow: inset 3px 0 0 rgba(232, 238, 245, 0.22);
+}
+
+/* Leading-edge thickness — must read when the leaf is nearly edge-on */
+.doorway-leaf-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -11%;
+  width: 12%;
+  background: linear-gradient(90deg, #071e3d, #3a5f8a 40%, #163e72 70%, #0b2f5c);
+  transform: rotateY(90deg) translateZ(3px);
+  transform-origin: left center;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.doorway-panel {
+  position: absolute;
+  left: 14%;
+  right: 20%;
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  border-radius: 2px;
+  background: rgba(7, 30, 61, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.doorway-panel-top { top: 9%; height: 32%; }
+.doorway-panel-bot { top: 52%; height: 34%; }
+
+.doorway-rail {
+  position: absolute;
+  left: 12%;
+  right: 18%;
+  top: 44%;
+  height: 5%;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.doorway-leaf-back .doorway-panel {
+  border-color: rgba(232, 163, 23, 0.22);
+  background: rgba(4, 21, 38, 0.35);
+}
+
+.doorway-hinge-pin {
+  position: absolute;
+  left: -10%;
+  width: 24%;
+  height: 6.5%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #e8edf3, #6d7682 70%, #4a5562);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.doorway-hinge-pin-a { top: 12%; }
+.doorway-hinge-pin-b { bottom: 14%; }
+
+.doorway-knob {
+  position: absolute;
+  top: 50%;
+  right: 14%;
+  width: 26%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #f4f0e6, #c4a574 52%, #6a5430);
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.45),
+    inset 0 -2px 2px rgba(0, 0, 0, 0.25);
+  transform: translateY(-50%);
+}
+
+/* —— Timing charts (linear playback; crowding = slow) —— */
+
+@keyframes pa-door-chart {
+  0%, 8% { transform: rotateY(0deg); }
+  /* crack */
+  14% { transform: rotateY(-8deg); }
+  20% { transform: rotateY(-12deg); }
+  /* hesitation */
+  28% { transform: rotateY(-10deg); }
+  34% { transform: rotateY(-16deg); }
+  /* commit — clear the cavity so daylight owns the stem */
+  42% { transform: rotateY(-34deg); }
+  52% { transform: rotateY(-58deg); }
+  62% { transform: rotateY(-78deg); }
+  /* overshoot past settle, ease back — leaf as open edge, cavity as door */
+  74% { transform: rotateY(var(--door-overshoot)); }
+  86% { transform: rotateY(var(--door-hold-a)); }
+  100% { transform: rotateY(var(--door-settle)); }
+}
+
+@keyframes pa-door-moving-hold {
+  0% { transform: rotateY(var(--door-settle)); }
+  40% { transform: rotateY(var(--door-hold-a)); }
+  70% { transform: rotateY(var(--door-hold-b)); }
+  100% { transform: rotateY(var(--door-settle)); }
+}
+
+@keyframes pa-light-chart {
+  /* Light leads — crack brightens early so spill reads before the leaf settles */
+  0%, 8% { opacity: 0.05; }
+  14% { opacity: 0.38; }
+  22% { opacity: 0.55; }
+  34% { opacity: 0.68; }
+  48% { opacity: 0.84; }
+  62% { opacity: 0.94; }
+  80% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes pa-mote-drift {
+  0%, 100% { transform: translateY(0); opacity: 0.45; }
+  35% { transform: translateY(-2px); opacity: 0.7; }
+  65% { transform: translateY(1px); opacity: 0.55; }
+}
+
+@keyframes pa-camera-chart {
+  /* Hold on cavity (build), then ease-out pullback with a slight arc bias via origin */
+  0% { transform: scale(2.55) translate(2%, 0); }
+  18% { transform: scale(2.48) translate(1.5%, 0); }
+  40% { transform: scale(1.85) translate(0.5%, 0); }
+  62% { transform: scale(1.28) translate(0, 0); }
+  82% { transform: scale(1.02) translate(0, 0); }
+  100% { transform: scale(1) translate(0, 0); }
+}
+
+@keyframes pa-mark-settle {
+  0% {
+    opacity: 0.15;
+    transform: scale(2.7);
+    filter: blur(3px);
+  }
+  40% {
+    opacity: 0.85;
+    transform: scale(2.58);
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(2.55);
+    filter: none;
+  }
+}
+
+@keyframes pa-name-chart {
+  /* Different entrance adverb than paths — letter-spacing settle from above */
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 14px) scale(0.97);
+    letter-spacing: 0.42em;
+  }
+  55% {
+    opacity: 1;
+    transform: translate(-50%, -2px) scale(1.01);
+    letter-spacing: 0.12em;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+    letter-spacing: 0.14em;
+  }
+}
+
+@keyframes pa-path-rise {
+  /* Enter from the left (vary direction vs name’s vertical settle) */
+  0% {
+    opacity: 0;
+    transform: translateX(-18px) translateY(8px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(2px) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}
+
+/*
+  Critic v40: left-stacked legend felt unnatural and cut Construction.
+  Three doors sit centered under the mark again — middle of the lower third.
+  Hammer stays lower-right CTA; pathways own the center.
+*/
+.threshold-pathways {
+  position: absolute;
+  left: 50%;
+  bottom: max(10%, calc(env(safe-area-inset-bottom) + 2.25rem));
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  width: min(78vw, 340px);
+  margin: 0;
+  opacity: 0;
+  transform: translate(-50%, 14px);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.threshold-pathways.is-live {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.threshold-path-lede {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(232, 238, 245, 0.72);
+  text-align: center;
+}
+
+.threshold-path-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.threshold-brand,
+.threshold-p {
+  display: none;
+}
+
+.threshold-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Dusk weight — periphery falls away so cavity light owns the frame */
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 105%, rgba(0, 0, 0, 0.35), transparent 60%);
+  opacity: 0.55;
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), background 1.1s ease;
+}
+
+.threshold-stage-breath .threshold-atmosphere,
+.threshold-stage-closed .threshold-atmosphere {
+  opacity: 0.35;
+}
+
+/* Staging: dim the periphery so the eye has one place to land — the cavity */
+.threshold-stage-opening .threshold-atmosphere {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse 38% 44% at 42% 48%, transparent 0%, transparent 32%, rgba(2, 10, 20, 0.62) 100%),
+    radial-gradient(ellipse 80% 55% at 50% 105%, rgba(0, 0, 0, 0.4), transparent 60%);
+}
+
+.threshold-stage-named .threshold-atmosphere,
+.threshold.is-ready .threshold-atmosphere {
+  opacity: 0.85;
+  background:
+    radial-gradient(ellipse 55% 52% at 42% 46%, transparent 0%, transparent 42%, rgba(2, 10, 20, 0.48) 100%),
+    radial-gradient(ellipse 80% 55% at 50% 105%, rgba(0, 0, 0, 0.38), transparent 60%);
+}
+
+/* Upper horizontal third — brand lands here after the door breathes */
+.threshold-school-name {
+  position: absolute;
+  top: 22%;
+  left: 50%;
+  width: min(92vw, 640px);
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.35rem, 4.2vw, 2rem);
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: #f2f6fb;
+  text-align: center;
+  opacity: 0;
+  transform: translate(-50%, 12px) scale(0.97);
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.35),
+    0 0 28px rgba(255, 252, 240, 0.18);
+  z-index: 4;
+}
+
+.threshold-school-name.is-live {
+  animation: pa-name-chart 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Focal mark — biased so stem/cavity sits nearer the left-third × mid intersection */
+.threshold-door-stage {
+  position: absolute;
+  left: 46%;
+  top: 46%;
+  width: min(52vw, 300px);
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  transform: translate(-42%, -48%);
+  filter: drop-shadow(0 18px 36px rgba(11, 47, 92, 0.18));
+  perspective: 1200px;
+  z-index: 3;
+}
+
+.threshold-door-zoom {
+  position: absolute;
+  inset: 0;
+  /* Origin on the wider doorway cavity — staging the focal point */
+  transform-origin: 43% 48%;
+  will-change: transform;
+}
+
+/* Build: hold close on the cavity. Breathe: ease-out pullback (not linear smear). */
+.threshold-door-zoom.is-closed { transform: scale(2.55); }
+.threshold-door-zoom.is-opening {
+  animation: pa-camera-chart 2.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.threshold-door-zoom.is-ready { transform: scale(1); }
+
+.threshold-stage-breath .threshold-door-zoom.is-closed {
+  opacity: 0.25;
+  transform: scale(2.55);
+  filter: blur(2.5px);
+}
+
+.threshold-stage-closed .threshold-door-zoom.is-closed {
+  animation: pa-mark-settle 0.72s linear forwards;
+}
+
+.threshold-door-stage .threshold-door-slot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  overflow: visible;
+  opacity: 1;
+}
+
+.threshold-door-ground {
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: -2%;
+  height: 12%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 35%, rgba(255, 252, 240, 0.28), rgba(255, 248, 230, 0.08) 45%, transparent 72%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.threshold-door-stage:has(.doorway-open) .threshold-door-ground {
+  background: radial-gradient(ellipse at 48% 30%, rgba(255, 254, 248, 0.5), rgba(255, 248, 230, 0.18) 48%, transparent 74%);
+  filter: blur(0.5px);
+}
+
+.threshold-path {
+  display: grid;
+  justify-items: center;
+  gap: 0.32rem;
+  padding: 0.5rem 0.35rem 0.55rem;
+  border-radius: 0;
+  border: 0;
+  border-top: 3px solid transparent;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  min-width: 0;
+}
+
+.threshold-pathways.is-live .threshold-path {
+  animation: pa-path-rise 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-origin: 0% 100%;
+}
+
+/* Stagger by importance (Construction flagship first) — overlap, don't wait */
+.threshold-pathways.is-live .path-construction { animation-delay: 0.06s; }
+.threshold-pathways.is-live .path-logistics { animation-delay: 0.16s; }
+.threshold-pathways.is-live .path-community { animation-delay: 0.26s; }
+
+.threshold-path strong {
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #eef3f8;
+  max-width: 100%;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.threshold-path-art {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+}
+
+.threshold-path-art img {
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+}
+
+/* Icons lag their labels slightly — drag hierarchy */
+.path-icon-settle {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.threshold-pathways.is-live .path-icon-settle {
+  animation: path-icon-settle 0.65s linear forwards;
+}
+
+.threshold-pathways.is-live .path-construction .path-icon-settle { animation-delay: 0.12s; }
+.threshold-pathways.is-live .path-logistics .path-icon-settle { animation-delay: 0.22s; }
+.threshold-pathways.is-live .path-community .path-icon-settle { animation-delay: 0.32s; }
+
+@keyframes path-icon-settle {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.92);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.threshold-path.path-construction { border-top-color: var(--path-construction); }
+.threshold-path.path-logistics { border-top-color: var(--path-logistics); }
+.threshold-path.path-community { border-top-color: var(--path-community); }
+
+@media (max-width: 640px) {
+  /*
+    Critic v40: restore three-across centered under the P.
+    Keep phone door settle; hammer stays a quiet corner CTA.
+  */
+  .doorway-leaf {
+    --door-settle: -78deg;
+    --door-overshoot: -84deg;
+    --door-hold-a: -80deg;
+    --door-hold-b: -76deg;
+    --door-cross-mid: -94deg;
+    --door-cross-end: -110deg;
+  }
+
+  .doorway-leaf-edge {
+    right: -13%;
+    width: 14%;
+    transform: rotateY(90deg) translateZ(4px);
+  }
+
+  .threshold-pathways {
+    left: 50%;
+    width: min(78vw, 270px);
+    /* Centered under the P; clear air above the corner hammer */
+    bottom: max(28%, calc(env(safe-area-inset-bottom) + 11.5rem));
+    gap: 0.28rem;
+  }
+
+  .threshold-path-lede {
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+    text-align: center;
+  }
+
+  .threshold-path-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  .threshold-path {
+    padding: 0.4rem 0.2rem 0.45rem;
+    gap: 0.28rem;
+  }
+
+  .threshold-path-art {
+    width: 36px;
+    height: 36px;
+  }
+
+  .threshold-path strong {
+    font-size: 0.58rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .threshold-door-stage {
+    width: min(56vw, 280px);
+    left: 48%;
+    top: 42%;
+  }
+
+  .threshold-school-name {
+    top: 16%;
+    letter-spacing: 0.2em;
+  }
+
+  .threshold-hammer {
+    right: max(3%, env(safe-area-inset-right));
+    bottom: max(5%, calc(env(safe-area-inset-bottom) + 0.5rem));
+    max-width: 26vw;
+  }
+
+  .threshold-hammer-icon {
+    width: clamp(2.7rem, 11vw, 3.6rem);
+  }
+
+  .threshold-hammer-hint {
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (max-height: 620px) {
+  .threshold-path {
+    padding: 0.35rem 0.25rem 0.4rem;
+    gap: 0.15rem;
+  }
+
+  .threshold-path-art {
+    width: 30px;
+    height: 30px;
+  }
+
+  .threshold-path strong {
+    font-size: 0.65rem;
+  }
+
+  .threshold-hammer-icon {
+    width: clamp(3.4rem, 12vh, 4.6rem);
+  }
+}
+
+/* Short phones — preserve thirds; tighten scale so nothing scrolls */
+@media (max-height: 780px) {
+  .threshold-school-name {
+    top: 10%;
+    font-size: clamp(1.05rem, 3vh, 1.4rem);
+  }
+
+  .threshold-door-stage {
+    width: min(48vw, 260px);
+    top: 44%;
+  }
+
+  .threshold-door-zoom.is-ready {
+    transform: scale(1);
+  }
+
+  .threshold-pathways {
+    width: min(76vw, 260px);
+    gap: 0.28rem;
+    bottom: max(27%, calc(env(safe-area-inset-bottom) + 11.25rem));
+  }
+
+  .threshold-hammer-icon {
+    width: clamp(2.6rem, 10vw, 3.4rem);
+  }
+}
+
+@media (max-width: 420px) and (max-height: 740px) {
+  .threshold-pathways {
+    width: min(78vw, 270px);
+    bottom: max(26%, calc(env(safe-area-inset-bottom) + 10.75rem));
+  }
+
+  .threshold-path strong {
+    font-size: 0.55rem;
+  }
+}
+
+
+.threshold-glass {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.threshold-glass.is-gone {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/*
+  Critic: hammer is CTA, not a second hero. Lower-right third, quiet mass.
+*/
+.threshold-hammer {
+  /* Absolute inside .threshold so strike math uses the splash frame (cqw/cqh), not the browser vw */
+  position: absolute;
+  right: max(6%, env(safe-area-inset-right));
+  top: auto;
+  bottom: max(6%, calc(env(safe-area-inset-bottom) + 0.65rem));
+  z-index: 12;
+  display: grid;
+  justify-items: center;
+  gap: 0.22rem;
+  width: auto;
+  margin: 0;
+  padding: 0.2rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #0b2f5c;
+  box-shadow: none;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(28px) rotate(8deg);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), filter 0.28s ease;
+  filter: drop-shadow(0 10px 16px rgba(40, 24, 4, 0.38));
+}
+
+.threshold-hammer.is-visible {
+  animation: hammer-side-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
+}
+
+.threshold-hammer:hover:not(:disabled) {
+  transform: translateX(-4px) rotate(4deg);
+  filter: drop-shadow(0 20px 34px rgba(90, 55, 8, 0.58));
+}
+
+.threshold-hammer:active:not(:disabled) {
+  transform: translateX(-6px) rotate(0deg) scale(0.98);
+}
+
+.threshold-hammer-icon {
+  width: clamp(3.2rem, 7vw, 4.4rem);
+  height: auto;
+  display: block;
+}
+
+.threshold-hammer-icon .threshold-enter-word {
+  paint-order: stroke fill;
+  stroke: rgba(255, 248, 210, 0.28);
+  stroke-width: 0.4px;
+  fill: #041526;
+}
+
+.threshold-hammer-hint {
+  font-family: var(--display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(232, 238, 245, 0.7);
+  opacity: 0;
+  animation: fade-rise 0.55s ease 0.45s forwards;
+}
+
+.threshold-hammer.is-smashing {
+  /* Head aims at doorway cavity mid (~44% × 46%), not screen dead-center */
+  animation: hammer-door-strike 0.78s linear forwards;
+  pointer-events: none;
+  z-index: 14;
+}
+
+.threshold-hammer.is-smashing .threshold-hammer-hint {
+  opacity: 0;
+  animation: none;
+}
+
+.foley-toggle.is-compact {
+  padding: 0.45rem;
+  min-width: 2.4rem;
+  justify-content: center;
+}
+
+.threshold-foley {
+  position: absolute;
+  bottom: max(0.85rem, env(safe-area-inset-bottom));
+  right: max(0.85rem, env(safe-area-inset-right));
+  z-index: 5;
+}
+
+/* ── Mirror smash: cracks on the door, then shards fall with the opening ── */
+
+.mirror-break {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.mirror-cracks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
+.mirror-cracks .crack {
+  fill: none;
+  stroke: rgba(255, 248, 230, 0.78);
+  stroke-width: 0.28;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  /* Hold until hammer contact (~54% of 0.78s strike ≈ 0.42s) */
+  animation: crack-draw 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
+  filter: drop-shadow(0 0 1px rgba(11, 47, 92, 0.55));
+}
+
+.mirror-cracks .c2 { animation-delay: 0.42s; stroke-width: 0.2; }
+.mirror-cracks .c3 { animation-delay: 0.44s; }
+.mirror-cracks .c4 { animation-delay: 0.43s; }
+.mirror-cracks .c5 { animation-delay: 0.46s; }
+.mirror-cracks .c6 { animation-delay: 0.45s; }
+.mirror-cracks .c7 { animation-delay: 0.41s; stroke-width: 0.34; }
+.mirror-cracks .c8 { animation-delay: 0.43s; stroke-width: 0.3; }
+.mirror-cracks .c9 { animation-delay: 0.48s; }
+.mirror-cracks .c10 { animation-delay: 0.49s; }
+.mirror-cracks .c11 { animation-delay: 0.5s; stroke-width: 0.16; }
+.mirror-cracks .c12 { animation-delay: 0.51s; stroke-width: 0.16; }
+
+.mirror-impact {
+  position: absolute;
+  /* Same hub as cracks — middle of the doorway cavity / daylight */
+  left: 47%;
+  top: 45%;
+  width: 26vmin;
+  height: 26vmin;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.15);
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(245, 197, 66, 0.4) 28%, transparent 68%);
+  opacity: 0;
+  z-index: 4;
+  animation: smash-impact 0.5s ease-out 0.4s forwards;
+}
+
+.mirror-shards {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+}
+
+.mirror-break.is-active .mirror-shards {
+  opacity: 1;
+}
+
+.mirror-break.is-active .mirror-cracks {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.mirror-shard {
+  position: absolute;
+  inset: 0;
+  transform-origin: 47% 45%;
+  will-change: transform, opacity, filter;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45));
+}
+
+.threshold.is-embedded .mirror-shard {
+  transform-origin: 50% 42%;
+}
+
+.mirror-break.is-active .mirror-shard {
+  animation: mirror-fall 1.45s cubic-bezier(0.33, 0.05, 0.55, 1) var(--delay, 0ms) forwards;
+}
+
+.mirror-shard-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse 48% 42% at 42% 48%, rgba(255, 252, 240, 0.16) 0%, transparent 58%),
+    linear-gradient(165deg, #1a3348 0%, #102638 38%, #0a1a2c 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.mirror-shard-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 42%, rgba(11, 47, 92, 0.08));
+  pointer-events: none;
+  z-index: 2;
+}
+
+.mirror-shard-face .threshold-compose {
+  position: absolute;
+  inset: 0;
+}
+
+.threshold.is-smashing .threshold-glass.is-live {
+  animation: glass-hold 0.48s ease-out forwards;
+}
+
+.threshold.is-shattering .threshold-glass {
+  visibility: hidden;
+}
+
+/* Soft handoff after shatter — cool paper, not a warm cream cut */
+.threshold-cross {
+  position: absolute;
+  inset: 0;
+  z-index: 16;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.threshold-cross.is-active {
+  animation: threshold-cross-veil 1.1s cubic-bezier(0.33, 0, 0.2, 1) 0.35s forwards;
+}
+
+.threshold-cross-beam {
+  position: absolute;
+  left: 47%;
+  top: 45%;
+  width: 18vmin;
+  height: 18vmin;
+  transform: translate(-50%, -50%) scale(0.2);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 244, 196, 0.92) 0%, rgba(232, 163, 23, 0.35) 34%, transparent 68%);
+  opacity: 0;
+}
+
+.threshold-cross.is-active .threshold-cross-beam {
+  animation: threshold-cross-beam 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Arc into the lower-right third — anticipation dip, then settle */
+@keyframes hammer-side-in {
+  0% {
+    opacity: 0;
+    transform: translateX(56px) translateY(18px) rotate(24deg);
+  }
+  22% {
+    opacity: 1;
+    transform: translateX(22px) translateY(6px) rotate(14deg);
+  }
+  48% {
+    transform: translateX(-6px) translateY(-4px) rotate(2deg);
+  }
+  72% {
+    transform: translateX(3px) translateY(2px) rotate(8deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) rotate(6deg);
+  }
+}
+
+/*
+  Strike chart: wind-up → accelerate on arc → CONTACT at doorway cavity mid
+  (~44% × 46% of the splash container) → follow-through. Head hits the leaf.
+  Uses cqw/cqh so desktop + in-phone embedded share the same aim.
+*/
+@keyframes hammer-door-strike {
+  0% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) rotate(6deg) scale(1);
+  }
+  12% {
+    transform: translateX(14px) translateY(10px) rotate(22deg) scale(1.03);
+  }
+  22% {
+    transform: translateX(18px) translateY(14px) rotate(34deg) scale(1.06);
+  }
+  30% {
+    transform: translateX(18px) translateY(14px) rotate(35deg) scale(1.06);
+  }
+  42% {
+    transform: translate(-16cqw, -16cqh) rotate(-6deg) scale(1.1);
+  }
+  54% {
+    /* Contact — sledge head into the glowing doorway cavity mid */
+    transform: translate(-42cqw, -28cqh) rotate(-20deg) scale(1.14);
+  }
+  66% {
+    transform: translate(-43cqw, -26cqh) rotate(-6deg) scale(1.06);
+  }
+  82% {
+    opacity: 1;
+    transform: translate(-44cqw, -22cqh) rotate(8deg) scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-46cqw, -12cqh) rotate(18deg) scale(0.88);
+  }
+}
+
+/* Embedded phone: door is geometrically centered — bias contact toward 50% × 42% */
+.threshold.is-embedded .threshold-hammer.is-smashing {
+  animation-name: hammer-door-strike-embedded;
+}
+
+@keyframes hammer-door-strike-embedded {
+  0% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) rotate(6deg) scale(1);
+  }
+  12% {
+    transform: translateX(10px) translateY(8px) rotate(20deg) scale(1.04);
+  }
+  24% {
+    transform: translateX(12px) translateY(10px) rotate(30deg) scale(1.06);
+  }
+  40% {
+    transform: translate(-16cqw, -14cqh) rotate(-2deg) scale(1.1);
+  }
+  54% {
+    transform: translate(-40cqw, -28cqh) rotate(-26deg) scale(1.16);
+  }
+  68% {
+    transform: translate(-42cqw, -26cqh) rotate(-10deg) scale(1.06);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-44cqw, -16cqh) rotate(14deg) scale(0.9);
+  }
+}
+
+.threshold.is-embedded .mirror-impact,
+.threshold.is-embedded .threshold-cross-beam {
+  left: 50%;
+  top: 42%;
+}
+
+.threshold.is-embedded .mirror-cracks {
+  /* Shift crack hub from desktop door bias (44,46) toward phone-centered door (50,42) */
+  transform: translate(6%, -4%);
+}
+
+@keyframes crack-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes smash-impact {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.12); }
+  35% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.55); }
+}
+
+@keyframes mirror-fall {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45));
+  }
+  18% {
+    opacity: 1;
+    transform: translate3d(0, 2%, 0) rotate(calc(var(--rot) * 0.12));
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--rot));
+    filter: drop-shadow(0 18px 24px rgba(11, 47, 92, 0.22));
+  }
+}
+
+@keyframes glass-hold {
+  0%, 70% { opacity: 1; filter: none; }
+  100% { opacity: 1; filter: contrast(1.05) brightness(1.04); }
+}
+
+/* Handoff contract: veil matches splash/home cool floor — not a warm cream hard cut */
+@keyframes threshold-cross-veil {
+  0% { opacity: 0; background: transparent; }
+  40% { opacity: 1; background: rgba(232, 238, 245, 0.55); }
+  100% { opacity: 1; background: #eef2f7; }
+}
+
+@keyframes threshold-cross-beam {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+  40% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1.35);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3);
+  }
+}
+
+@media (max-width: 640px) {
+  /* Keep hammer pinned to the right edge — never pull it left into pathways */
+  .threshold-hammer {
+    right: max(3.5%, env(safe-area-inset-right));
+  }
+
+  .threshold-hammer-icon {
+    width: clamp(2.9rem, 12vw, 3.8rem);
+  }
+}
+
+@media (max-height: 620px) {
+  .threshold-hammer-icon {
+    width: clamp(3.4rem, 12vh, 4.6rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .threshold-cross,
+  .threshold-hammer.is-smashing,
+  .mirror-break,
+  .threshold-atmosphere {
+    animation: none !important;
+  }
+
+  .mirror-break {
+    display: none !important;
+  }
+
+  .threshold-school-name,
+  .threshold-school-name.is-live,
+  .threshold-door-zoom,
+  .doorway-leaf,
+  .doorway-prelight,
+  .threshold-path,
+  .path-icon-settle,
+  .threshold-hammer {
+    animation: none !important;
+  }
+
+  .threshold-school-name,
+  .threshold-school-name.is-live {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    letter-spacing: 0.14em;
+  }
+
+  .threshold-pathways,
+  .threshold-pathways.is-live {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .threshold-hammer,
+  .threshold-hammer.is-visible {
+    opacity: 1;
+    transform: rotate(6deg);
+  }
+
+  .threshold-door-zoom.is-closed,
+  .threshold-door-zoom.is-opening,
+  .threshold-door-zoom.is-ready {
+    transform: scale(1);
+    opacity: 1;
+    filter: none;
+  }
+
+  .doorway-opening .doorway-leaf,
+  .doorway-open .doorway-leaf {
+    transform: rotateY(var(--door-settle));
+  }
+
+  .doorway-open .doorway-motes {
+    animation: none;
+  }
+
+  .doorway-prelight,
+  .threshold-path,
+  .path-icon-settle {
+    opacity: 1;
+    transform: none;
+  }
+
+  .threshold-hammer-icon .threshold-enter-word {
+    animation: none;
+    fill: #041526;
+  }
+}
+/* === SPLASH_CRAFT_END === */
