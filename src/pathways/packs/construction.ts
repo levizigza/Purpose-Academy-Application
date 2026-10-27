@@ -100,8 +100,8 @@ export const constructionPack: PathwayPack = {
     },
     9: {
       title: 'Sentence Structure',
-      help: 'Choose the word that completes the sentence. One try — if it is wrong, we show the answer and move on. Correct words slide into the blank.',
-      purpose: 'Construction Questions worksheet mold (blank + four choices), then Word → Action.',
+      help: 'Type the short word that fits the blank. Soft try again if not yet — optional word choices after a miss. Correct words slide into the blank.',
+      purpose: 'Construction Questions mold — type the specialty word (play craft), then Word → Action.',
     },
     12: {
       title: 'Basic Computer Skills',

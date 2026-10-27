@@ -11083,12 +11083,19 @@ video {
 }
 
 .is-phone-app .sentence-cloze-type-row {
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .is-phone-app .sentence-cloze-type-input {
-  font-size: 1.05rem !important;
-  padding: 0.65rem 0.75rem !important;
+  flex: 1 1 100%;
+  min-height: 2.75rem;
+  font-size: 1.08rem !important;
+  padding: 0.7rem 0.8rem !important;
+}
+
+.is-phone-app .sentence-cloze-type-go {
+  flex: 1 1 100%;
+  min-height: 2.75rem;
 }
 
 .sentence-cloze-choices {

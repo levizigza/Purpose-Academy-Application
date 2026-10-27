@@ -1,7 +1,8 @@
 /**
  * Logistics Foundations — Sentence Structure (cloze) bank.
  * Source: Purpose Academy Logistics Questions 1–560 (converted worksheet text).
- * Fill the blank with one specialty word. One attempt per item in the learner UI.
+ * Fill the blank with one specialty word. Learner UI: type the short word (soft retry);
+ * optional word-choice hint after a miss.
  * Images: Visual Vocabulary / pathway photos via imageKey (worksheet tiles not extracted).
  */
 import type { SentenceClozeItem } from './constructionSentenceCloze560'
