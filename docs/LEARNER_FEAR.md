@@ -167,3 +167,10 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 - Soft / path: equipment familiarization → videos; StatusLabel Graded → Feedback ready; Work Interests purpose without “test”.
 - Computer Skills: School Work folder → Job Files; Check → Done; instructor@school.ca → @work.ca.
 - Multi / Learn: examen / اختبار / परीक्षा / ፈተና “not a test” lines → guide for your path; assignment Grade/100 chrome removed.
+
+### 2026-10-26 — Residual leak close-out (true 100%)
+
+- Practice banner CTA: School path → Practice path.
+- Computer Skills lesson pack (`basicComputerSkillsVideos.ts`) aligned to Job Files (UI + checks match).
+- Learner notification: Assignment graded /100 → feedback ready.
+- Public + seed: school path/spine → practice path/spine (pathway copy).

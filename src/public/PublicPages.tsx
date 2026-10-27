@@ -23,7 +23,7 @@ export function ProgramsPage() {
         <p className="section-kicker">Programs</p>
         <h1>Three pathways that lead somewhere</h1>
         <p className="lede">
-          Construction, Logistics, and Community Support share one school spine. Build language and safety, practise
+          Construction, Logistics, and Community Support share one practice spine. Build language and safety, practise
           with instructors, then move toward work or apprenticeship with employer partners.
         </p>
       </Reveal>
@@ -33,7 +33,7 @@ export function ProgramsPage() {
           <span className="badge ok">Flagship program</span>
           <h2>Construction Foundations</h2>
           <p>
-            A full school pathway: site English, safety gear, hand and power tools, measurement, systems awareness, and
+            A full practice pathway: site English, safety gear, hand and power tools, measurement, systems awareness, and
             supervised practice. Graduates are prepared to enter registered apprenticeship and work with construction
             employers in Alberta.
           </p>
@@ -61,7 +61,7 @@ export function ProgramsPage() {
           <span className="badge ok">Enrolling now</span>
           <h2>Logistics Foundations</h2>
           <p>
-            Same {JOURNEY_STEP_COUNT}-step school path as Construction: find your fit, learn workplace words, practise English, build safety and
+            Same {JOURNEY_STEP_COUNT}-step practice path as Construction: find your fit, learn workplace words, practise English, build safety and
             systems skills, then move toward warehouse roles with an instructor beside you.
           </p>
           <ul className="school-bullets">

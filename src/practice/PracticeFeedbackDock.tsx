@@ -370,7 +370,7 @@ export function PracticeModeBanner() {
           </Link>
           {!onJourney && (
             <Link className="practice-banner-cta" to="/journey">
-              School path
+              Practice path
             </Link>
           )}
           <button type="button" className="practice-banner-cta" onClick={startOver}>
