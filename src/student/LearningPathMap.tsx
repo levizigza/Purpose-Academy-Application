@@ -54,7 +54,7 @@ export function LearningPathMap({
       open={collapsedByDefault ? undefined : true}
     >
       <summary className="lp-fold-summary">
-        <span className="lp-kicker">{practice ? 'Student Practice · path' : 'Your learning path'}</span>
+        <span className="lp-kicker">{practice ? 'Practice · path' : 'Your learning path'}</span>
         <strong className="lp-fold-title">
           Unit {currentUnit.id}: {currentUnit.label}
         </strong>
@@ -68,7 +68,7 @@ export function LearningPathMap({
 
       <header className="lp-head">
         <div>
-          <p className="lp-kicker">{practice ? 'Student Practice · full school path' : 'Your learning path'}</p>
+          <p className="lp-kicker">{practice ? 'Practice · your path' : 'Your learning path'}</p>
           <h2 className="lp-title">
             Unit {currentUnit.id}: {currentUnit.label}
           </h2>

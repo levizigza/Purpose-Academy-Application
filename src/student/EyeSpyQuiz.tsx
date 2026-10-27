@@ -209,11 +209,11 @@ export function EyeSpyQuiz({
     return (
       <div className="train-quiz-summary eye-spy-summary">
         <p className="train-score">
-          {correctCount} / {need} identified
+          {correctCount} of {need} pictures named
           {misses > 0 ? ` · ${misses} miss${misses === 1 ? '' : 'es'} — try again` : ' · board clear'}
         </p>
         <p className="muted">
-          You must pair every picture with its English name until each board is empty.
+          Pair every picture with its English name until each board is empty.
         </p>
         {pass ? (
           <button type="button" className="btn btn-primary" onClick={handleComplete}>
@@ -221,7 +221,7 @@ export function EyeSpyQuiz({
           </button>
         ) : examLocked ? (
           <p className="alert warn">
-            Exam tries used ({maxAttempts}). Review the words, then ask an instructor for another try.
+            Three tries used. Review the words, then ask an instructor for another go.
           </p>
         ) : (
           <button type="button" className="btn btn-primary" onClick={retryRun}>

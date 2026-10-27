@@ -360,7 +360,7 @@ export function skillStationLabel(id: SkillId): string {
     case 'employment':
       return 'Employment'
     case 'unit-checkpoint':
-      return 'Unit review'
+      return 'Unit practice'
     default:
       return 'This skill'
   }

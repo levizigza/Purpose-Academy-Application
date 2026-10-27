@@ -223,7 +223,7 @@ export function StudentProgressPage() {
             const lesson = db.lessons.find((l) => l.id === p.lesson_id)
             return (
               <li key={p.id}>
-                {lesson?.title} {p.quiz_score != null ? `· quiz ${p.quiz_score}%` : ''}
+                {lesson?.title} {p.quiz_score != null ? `· practice ${p.quiz_score >= 80 ? 'clear' : 'in progress'}` : ''}
                 {p.completed_at ? ` · ${formatWhen(p.completed_at)}` : ''}
               </li>
             )

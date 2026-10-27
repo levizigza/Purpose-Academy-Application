@@ -283,7 +283,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
                   disabled={!canLeaveWatch}
                   onClick={goTry}
                 >
-                  {canLeaveWatch ? 'Try it now' : 'Watch to unlock practice'}
+                  {canLeaveWatch ? 'Try it now' : 'Keep watching, then try'}
                 </button>
               </div>
             </>
@@ -300,7 +300,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
 
           {phase === 'check' ? (
             <div className="comp-skills-check topic-lesson-card">
-              <h3>Quick check</h3>
+              <h3>One practice question</h3>
               <p className="train-check-prompt">{lesson.checkPrompt}</p>
               <div className="train-choice-grid">
                 {lesson.checkOptions.map((opt) => {

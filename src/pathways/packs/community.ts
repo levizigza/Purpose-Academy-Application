@@ -72,7 +72,7 @@ export const communityPack: PathwayPack = {
       goal: 'Practise with an instructor, then connect to community-support employment.',
       outcomes: [
         'Complete observation scenarios with dignity and escalate-when-unsure',
-        'Prepare employment materials that lead with privacy and verified skills',
+        'Prepare employment materials that lead with privacy and what you practised',
       ],
     },
   },
@@ -772,8 +772,8 @@ export const communityPack: PathwayPack = {
       ],
       answer:
         'I learned community support foundations for disability support, older adults, and settlement settings - privacy, support plans, and workplace English - with instructors who checked my skills',
-      teachCorrect: 'Connect your training to safety, dignity, language, and verified skill.',
-      teachWrong: 'Employers want proof of foundations, not shortcuts.',
+      teachCorrect: 'Connect your training to safety, dignity, language, and what you practised.',
+      teachWrong: 'Employers want to see what you practised — not shortcuts.',
     },
     {
       id: 'com-privacy',
@@ -1033,12 +1033,12 @@ export const communityPack: PathwayPack = {
         emoji: 'P',
         imageKey: 'com-welcome',
         options: [
-          'Privacy, dignity, foundations, and verified skills',
+          'Privacy, dignity, foundations, and what you practised',
           'Skipping training',
           'Avoiding English',
           'Guessing support words',
         ],
-        answer: 'Privacy, dignity, foundations, and verified skills',
+        answer: 'Privacy, dignity, foundations, and what you practised',
         teachCorrect: 'Employers want person-centred practice and proof of skill.',
         teachWrong: 'Talk about privacy, dignity, and what you can do.',
       },

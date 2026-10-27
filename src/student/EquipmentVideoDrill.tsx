@@ -248,11 +248,11 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
             >
               {idx >= lessons.length - 1
                 ? allDone || canAdvanceLesson
-                  ? 'Continue to observation'
+                  ? 'Continue to instructor check'
                   : 'Finish this video to continue'
                 : canAdvanceLesson
                   ? `Next · ${lessons[idx + 1]?.title}`
-                  : 'Watch to unlock next'}
+                  : 'Keep watching, then continue'}
             </button>
           </div>
         </div>

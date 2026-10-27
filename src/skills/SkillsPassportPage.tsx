@@ -64,7 +64,7 @@ export function SkillsPassportPage() {
   return (
     <div className="stack skills-passport">
       <PageHeader
-        kicker="Verified skill"
+        kicker="What you practised"
         title="Skills Passport"
         help="What you studied, practised, and showed — not a trade ticket, Red Seal, or a guaranteed job."
         backTo="/app/student"
@@ -78,7 +78,7 @@ export function SkillsPassportPage() {
             <strong>{user.full_name}</strong>
             <div className="muted">{pathwayLabel} pathway</div>
           </div>
-          <div className="skills-passport-lpc-counts" aria-label="Competency stage counts">
+          <div className="skills-passport-lpc-counts" aria-label="Practice stage counts">
             <span className="skills-passport-count">
               <strong>{counts.learned}</strong>
               <span>Learned</span>

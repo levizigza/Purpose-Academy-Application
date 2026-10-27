@@ -151,3 +151,12 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 - Customer ask: deeper learner-fear redesign of **all** Practice; documentation that agents must implement everywhere.
 - Created this file; wired from `AGENTS.md` + Craft non-negotiable + §3 fear row.
 - Deep pass shipped: hub %/marks report card → stations finished; Eye Spy / Sentence / Organize / Final check exam lexicon; pathway unit goals; observation Competent → habit language; career Holland/RIASEC learner strings + % labels; shell motto Keep going; Workplace Words title; stats strip coach-only.
+
+### 2026-10-26 — Close-out to 100% learner-facing chrome
+
+- Computer Skills / Equipment: “Watch to unlock” → keep watching / try; Quick check → one practice question.
+- Unit review → unit practice; employment “verified skill” → what you practised (packs + curriculum).
+- Career mother-tongue (AR/HI/AM/TI): assessment / quiz / inventory lexicon → work questions; See my path.
+- Learn portal: Retry quiz / Score % / Expected / Mastery prototype → soft crew language.
+- Public join path + seed pathway blurbs: verified skills → clear stations / instructor-checked practice.
+- Assignments progress: quiz % → practice clear / in progress.

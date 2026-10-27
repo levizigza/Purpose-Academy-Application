@@ -314,7 +314,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         <div className="train-header-top">
           <p className="train-kicker">
             {stepKicker}
-            {practice ? ' · Student Practice' : ''}
+            {practice ? ' · Practice' : ''}
           </p>
           <div className="train-sound-slot">
             {/* Desktop wide: keep Path home / Done visible. Phone folds them into Station menu. */}
@@ -1271,11 +1271,11 @@ export function StudentSequencePage() {
         onNext={() => setCheckpointUnit(null)}
       >
         <div className="unit-checkpoint">
-          <p className="section-kicker">Unit review</p>
+          <p className="section-kicker">Unit practice</p>
           <h2>
-            Unit {unit.id}: {unit.label} review
+            Unit {unit.id}: {unit.label} practice
           </h2>
-          <p className="lede">Quick check that this unit stuck. Clear it, then the next unit can open.</p>
+          <p className="lede">A few pictures to clear this unit. Finish them, then the next unit can open.</p>
           <QuizRunner
             items={items}
             gated
@@ -2409,7 +2409,7 @@ export function StudentSequencePage() {
           {toolAnswer && (
             <>
               <div className={`alert ${toolCorrect ? 'ok' : 'warn'}`}>
-                {toolCorrect ? 'Correct.' : `Not yet. The answer is ${cat.answer}.`}
+                {toolCorrect ? 'Yes.' : `Not yet — it’s ${cat.answer}.`}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextTool}>
                 {toolCorrect
@@ -2476,11 +2476,11 @@ export function StudentSequencePage() {
           {sysAnswer && (
             <>
               <div className={`alert ${sysCorrect ? 'ok' : 'warn'}`}>
-                {sysCorrect ? 'Correct.' : `Not yet. The answer is ${topic.answer}.`}
+                {sysCorrect ? 'Yes.' : `Not yet — it’s ${topic.answer}.`}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextSys}>
                 {sysCorrect
-                  ? (isLast ? 'Continue to observation' : 'Next system')
+                  ? (isLast ? 'Continue to instructor check' : 'Next system')
                   : 'Try again'}
               </button>
             </>
@@ -2507,14 +2507,14 @@ export function StudentSequencePage() {
             <EquipmentVideoDrill
               onComplete={() =>
                 requestPracticeAdvance(() =>
-                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
                 )
               }
               onSkip={
                 isPracticeMode()
                   ? () =>
                       requestPracticeAdvance(() =>
-                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
                       )
                   : undefined
               }
@@ -2547,7 +2547,7 @@ export function StudentSequencePage() {
                 onClick={() => {
                   recordSkillAttempt('equipment-videos', true, 15)
                   requestPracticeAdvance(() =>
-                    advanceWithOptionalCheckpoint(18, 19, 'Opening instructor observation…'),
+                    advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
                   )
                 }}
               >
@@ -2647,11 +2647,11 @@ export function StudentSequencePage() {
           {obsChecked && (
             <>
               <div className={`alert ${obsCorrect ? 'ok' : 'warn'}`}>
-                {obsCorrect ? scenario.passNote : `Not yet. Correct order: ${ordered.map((s) => s.label).join(' → ')}`}
+                {obsCorrect ? scenario.passNote : `Not yet — try this order: ${ordered.map((s) => s.label).join(' → ')}`}
               </div>
               <button type="button" className="btn btn-primary" onClick={nextObs}>
                 {obsCorrect
-                  ? (isLast ? 'Continue to on-site training' : 'Next observation drill')
+                  ? (isLast ? 'Continue to on-site training' : 'Next practice')
                   : 'Try again'}
               </button>
             </>
@@ -2925,12 +2925,12 @@ export function StudentSequencePage() {
             <label htmlFor="emp-avail">Availability</label>
             <input id="emp-avail" value={empForm.availability} onChange={(e) => setEmpForm({ ...empForm, availability: e.target.value })} required placeholder="e.g. Weekdays, full-time" />
           </div>
-          <button className="btn btn-primary" type="submit">Complete student training path</button>
+          <button className="btn btn-primary" type="submit">Finish this path</button>
         </form>
       ) : (
         <>
           <div className="alert ok">
-            Student training path complete. Your Skills Passport and 30 / 90 / 180 day follow-up are open.
+            Path complete. Your Skills Passport and 30 / 90 / 180 day follow-up are open.
           </div>
           <div className="train-learn-grid">
             <LearnCard title="Hiring partner match" body={`Connect with ${meta.label.toLowerCase()} partners hiring from this pathway.`} />

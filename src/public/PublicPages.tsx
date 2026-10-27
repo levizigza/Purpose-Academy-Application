@@ -125,7 +125,7 @@ export function AdmissionsPage() {
             <li>Create your student account</li>
             <li>Complete registration. Admin confirms your place</li>
             <li>Choose your pathway — Construction, Logistics, or Community Support</li>
-            <li>Practise with instructors and earn verified skills</li>
+            <li>Practise with instructors and clear each station</li>
             <li>Move into work readiness and employer connection</li>
           </ol>
           <div className="hero-actions">

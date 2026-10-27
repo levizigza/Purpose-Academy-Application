@@ -124,7 +124,7 @@ export const constructionPack: PathwayPack = {
       purpose: 'Your task feeds the whole building.',
     },
     18: {
-      title: 'Equipment Familiarization',
+      title: 'Equipment videos',
       help: 'Construction equipment habits are practised with your instructor after systems. Continue when you are ready for observation.',
       purpose: 'Bridge from systems knowledge to supervised hands-on checks.',
     },
