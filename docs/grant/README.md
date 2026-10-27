@@ -11,7 +11,7 @@ Clear product showcase materials. Honest about what exists today. Not grant thea
 **Raw download URL** (right-click → Save As, or `curl -LO`):
 
 ```text
-https://raw.githubusercontent.com/levizigza/Purpose-Academy-Application/main/docs/grant/purpose-academy-overview.pptx
+https://raw.githubusercontent.com/levizigza/Purpose-Academy-Application/cursor/app-toolbox-emulator-f7c6/docs/grant/purpose-academy-overview.pptx
 ```
 
 On GitHub: open the file → **Download raw file** (not “View raw” alone). Normal git blob — not Git LFS.
@@ -37,8 +37,8 @@ On GitHub: open the file → **Download raw file** (not “View raw” alone). N
 | Explainer video (~71s, H.264 + AAC VO) | ~7.9 MB | [`purpose-academy-grant-explainer.mp4`](./purpose-academy-grant-explainer.mp4) |
 
 ```text
-https://raw.githubusercontent.com/levizigza/Purpose-Academy-Application/main/docs/grant/purpose-academy-grant-overview.pptx
-https://raw.githubusercontent.com/levizigza/Purpose-Academy-Application/main/docs/grant/purpose-academy-grant-explainer.mp4
+https://raw.githubusercontent.com/levizigza/Purpose-Academy-Application/cursor/app-toolbox-emulator-f7c6/docs/grant/purpose-academy-grant-overview.pptx
+https://raw.githubusercontent.com/levizigza/Purpose-Academy-Application/cursor/app-toolbox-emulator-f7c6/docs/grant/purpose-academy-grant-explainer.mp4
 ```
 
 Cloud agent copies under `/opt/cursor/artifacts/` are for the Cursor artifacts UI only — those absolute paths and `cursor.com/agents/.../artifacts?path=...` links are **not** public file downloads.

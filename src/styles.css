@@ -10507,32 +10507,6 @@ video {
   color: #1f5f3a;
 }
 
-/* Retake framing — appears only after Workplace Words was finished once. */
-.vocab-retake {
-  margin: 0 0 0.85rem;
-  padding: 0.85rem 1rem;
-  border-radius: 12px;
-  border-left: 3px solid var(--train-amber, #e8a317);
-  background: var(--train-amber-soft, rgba(232, 163, 23, 0.1));
-}
-
-.vocab-retake-kicker {
-  margin: 0 0 0.2rem;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--train-amber, #c98912);
-}
-
-.vocab-retake-lede {
-  margin: 0;
-  font-size: 0.92rem;
-  font-weight: 600;
-  line-height: 1.45;
-  color: var(--train-text, #e6edf5);
-}
-
 .vocab-retake-invite {
   margin: 0.75rem 0 0;
   padding: 0.75rem 0.9rem;
@@ -10545,13 +10519,9 @@ video {
   color: var(--train-text, #e6edf5);
 }
 
-.is-phone-app .vocab-retake,
 .is-phone-app .vocab-retake-invite {
   color: #1a2b3c;
-}
-
-.is-phone-app .vocab-retake-lede {
-  color: #1a2b3c;
+  background: rgba(42, 122, 75, 0.1);
 }
 
 .emp-followup h2,
