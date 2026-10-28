@@ -119,15 +119,13 @@ export function VocabSheetCard({
 
   useEffect(() => {
     if (!typingPhase) return
-    /* Language bridge auto-plays English — move coach to the type beat. */
-    if (coachFirst) advanceStationCoach('workplace-words')
     const t = window.setTimeout(() => {
       inputRef.current?.focus()
       /* Desktop night: tall photo can push Type/Go below the fold — bring the beat in. */
       inputRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     }, 180)
     return () => window.clearTimeout(t)
-  }, [typingPhase, term.id, coachFirst])
+  }, [typingPhase, term.id])
 
   /** Worksheet / studio-white object cards — keep the mat light for all VV streams. */
   const studioPhoto =
