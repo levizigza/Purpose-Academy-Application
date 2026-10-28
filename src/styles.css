@@ -2553,11 +2553,14 @@ table.data th {
 
 /*
   Desktop night: same Tap affordance as phone — center + blink — without
-  turning the night splash into paper. Pathways stay above mid.
+  turning the night splash into paper.
+  Critic: pathways at top:12% collided with PURPOSE ACADEMY (upper third).
+  Keep brand + door + Tap as the mid hero; three doors own the lower third.
+  Phone (.is-embedded) keeps its own top:72% placement below mid Tap.
 */
 .threshold:not(.is-embedded) .threshold-pathways {
-  bottom: auto;
-  top: 12%;
+  top: auto;
+  bottom: max(4.5%, calc(env(safe-area-inset-bottom) + 1.25rem));
 }
 
 .threshold:not(.is-embedded) .threshold-hammer.is-tap-cue {

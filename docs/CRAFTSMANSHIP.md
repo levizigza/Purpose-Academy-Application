@@ -432,6 +432,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-28 — Desktop splash pathways → lower third (L3)
+
+- **Layers:** L1 (three doors visible) + L3 (brand + door hero; pathways don’t steal the title).
+- **Defect:** Desktop Tap-cue climb pinned `.threshold:not(.is-embedded) .threshold-pathways` to `top: 12%`, so “THREE DOORS INTO WORK” + Construction / Logistics / Community sat on top of PURPOSE ACADEMY.
+- **Fix:** Desktop pathways return to the **lower third** (`bottom` under door / ENTER / Tap). Phone embedded splash keeps `top: 72%` below mid Tap — dual-shell intentional.
+- **Critic:** Centered Tap owns mid; pathways must not compete with the brand line. Do not “lift above mid” on Desktop night again.
+
 ### 2026-10-28 — Station demo VO/visual sync (beat-locked) (L3 / L2)
 
 - **Layers:** L3 (what’s said must match what’s shown in three seconds of watching) + L2 (explainer still teaches the real press).
