@@ -113,8 +113,8 @@ import {
 import { learnerGet, learnerSet } from '../practice/learnerStore'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
-import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
-import { NAV_CUE } from '../practice/navCues'
+import { NavCueTarget, NavGlowRegion, NavGlowWrap } from '../practice/NavCue'
+import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 
 const JOURNEY_KEY = 'pa-student-journey-step-v1'
 const OBS_KEY = 'pa-student-observation-v1'
@@ -791,7 +791,7 @@ export function StudentSequencePage() {
   }, [])
 
   const [supportLang, setSupportLang] = useState<SupportLang>(
-    (student?.preferred_language as SupportLang) || 'Amharic',
+    (student?.preferred_language as SupportLang) || 'English',
   )
   const [interest, setInterest] = useState<PathwayId | null>(null)
   const [careerInterestDone, setCareerInterestDone] = useState(false)
@@ -831,10 +831,10 @@ export function StudentSequencePage() {
   const [phraseAnswer, setPhraseAnswer] = useState<string | null>(null)
   const [phraseCorrect, setPhraseCorrect] = useState(false)
 
-  /* Step 2 registration form */
+  /* Step 2 registration form — English-first until the learner picks another tongue */
   const [regForm, setRegForm] = useState({
     full_name: '', email: '', phone: '', password: '', confirm: '',
-    preferred_language: 'Amharic', previous_experience: '',
+    preferred_language: 'English', previous_experience: '',
   })
 
   /* Step 6 visual vocabulary — hear L1 → hear English → type English */
@@ -1609,6 +1609,7 @@ export function StudentSequencePage() {
         step={3}
         onBack={() => (isPracticeMode() ? navigate('/') : go(2))}
         onNext={() => {
+          markNavCueSeen(NAV_CUE.langPick)
           setRegForm((f) => ({ ...f, preferred_language: supportLang }))
           go(4)
         }}
@@ -1620,32 +1621,42 @@ export function StudentSequencePage() {
           </p>
           <h2 className="career-assess-title">{assessT(ASSESSMENT_COPY.langPickTitle, supportLang)}</h2>
           <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickBody, supportLang)}</p>
-          <div className="train-lang-grid">
-            {SUPPORT_LANGUAGES.map((l) => (
-              <button
-                key={l.id}
-                type="button"
-                className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`}
-                onClick={() => setSupportLang(l.id)}
-                lang={
-                  l.id === 'English'
-                    ? 'en'
-                    : l.id === 'Arabic'
-                      ? 'ar'
-                      : l.id === 'Hindi'
-                        ? 'hi'
-                        : l.id === 'Amharic'
-                          ? 'am'
-                          : l.id === 'Tigrinya'
-                            ? 'ti'
-                            : 'es'
-                }
-              >
-                <span aria-hidden>{l.flag}</span>
-                <strong>{assessT(LANG_NATIVE, l.id)}</strong>
-              </button>
-            ))}
-          </div>
+          <NavCueTarget
+            cueId={NAV_CUE.langPick}
+            arrowLabel="Languages here"
+            arrowSide="above"
+            className="train-lang-cue"
+          >
+            <NavGlowRegion cueId={NAV_CUE.langPick} className="train-lang-grid" dismissOnClick={false}>
+              {SUPPORT_LANGUAGES.map((l) => (
+                <button
+                  key={l.id}
+                  type="button"
+                  className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`}
+                  onClick={() => {
+                    markNavCueSeen(NAV_CUE.langPick)
+                    setSupportLang(l.id)
+                  }}
+                  lang={
+                    l.id === 'English'
+                      ? 'en'
+                      : l.id === 'Arabic'
+                        ? 'ar'
+                        : l.id === 'Hindi'
+                          ? 'hi'
+                          : l.id === 'Amharic'
+                            ? 'am'
+                            : l.id === 'Tigrinya'
+                              ? 'ti'
+                              : 'es'
+                  }
+                >
+                  <span aria-hidden>{l.flag}</span>
+                  <strong>{assessT(LANG_NATIVE, l.id)}</strong>
+                </button>
+              ))}
+            </NavGlowRegion>
+          </NavCueTarget>
           <div className="train-bridge">
             <p><strong>{assessT(ASSESSMENT_COPY.introTitle, supportLang)}</strong></p>
             <p>{assessT(ASSESSMENT_COPY.introBody, supportLang)}</p>

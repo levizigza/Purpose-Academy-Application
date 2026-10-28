@@ -59,6 +59,10 @@ export const NAV_CUE = {
   modePhone: 'mode-phone',
   toolboxPractice: 'toolbox-practice',
   hubContinue: 'hub-continue',
+  /** Step 3 mother-tongue picker — point at the language chip grid once. */
+  langPick: 'lang-pick',
+  /** Workplace Words language row — point at mother-tongue chips once. */
+  vocabLang: 'vocab-lang',
   stationContinue: (step: number) => `station-continue-${step}`,
   explainerWatch: (stationId: string) => `explainer-${stationId}`,
 } as const

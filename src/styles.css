@@ -15825,6 +15825,38 @@ html.pa-phone-shell .play-soft-miss {
   width: 100%;
 }
 
+/* Language pick + VV mother-tongue row — full-width cue, soft region glow (not a card). */
+.train-lang-cue,
+.vocab-lang-cue {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+}
+
+.train-lang-cue .nav-glow-region,
+.vocab-lang-cue .nav-glow-region {
+  width: 100%;
+  border-radius: 14px;
+}
+
+.train-lang-cue .train-lang-grid.nav-glow-region {
+  padding: 0.35rem;
+}
+
+.vocab-lang-cue .nav-glow-region.nav-glow-cta {
+  padding: 0.2rem 0.15rem;
+}
+
+.course-stage .vocab-lang-cue .nav-glow-region.nav-glow-cta,
+.is-course-app .vocab-lang-cue .nav-glow-region.nav-glow-cta {
+  border-radius: 10px;
+}
+
+.is-phone-app .train-lang-cue .nav-glow-region.nav-glow-cta,
+.is-phone-app .vocab-lang-cue .nav-glow-region.nav-glow-cta {
+  border-radius: 12px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nav-arrow,
   .nav-glow-cta {
