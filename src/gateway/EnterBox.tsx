@@ -46,7 +46,7 @@ const ENTRIES: Entry[] = [
   },
   {
     to: '/journey',
-    label: 'Practice',
+    label: 'Student Practice',
     help: PRACTICE_TRAY_HELP,
     tone: 'journey',
     tool: 'wrench',
@@ -158,9 +158,9 @@ function PracticeNameGate({
 }) {
   const [name, setName] = useState(() => getPracticeName() || 'Showcase')
   return (
-    <div className="practice-gate" role="dialog" aria-modal="true" aria-label="Practice name">
+    <div className="practice-gate" role="dialog" aria-modal="true" aria-label="Student Practice name">
       <div className="practice-gate-card site-crate">
-        <p className="section-kicker">Practice</p>
+        <p className="section-kicker">Student Practice</p>
         <h2>Who is exploring?</h2>
         <p className="lede">
           Walk the learner path without registration — good for demos and walkthroughs. Pick a name so
@@ -195,7 +195,7 @@ function PracticeNameGate({
             disabled={!name.trim()}
             onClick={() => onReady(name.trim())}
           >
-            Enter Practice
+            Enter Student Practice
           </button>
           <button type="button" className="btn btn-ghost" onClick={onCancel}>
             Cancel
@@ -206,7 +206,7 @@ function PracticeNameGate({
   )
 }
 
-/** Metal toolbox entry panel — Student, Practice, Admin, Instructor. */
+/** Metal toolbox entry panel — Student, Student Practice, Admin, Instructor. */
 export function EnterBox() {
   const navigate = useNavigate()
   const boxRef = useRef<HTMLElement>(null)
@@ -218,7 +218,7 @@ export function EnterBox() {
 
   useEffect(() => subscribeSequenceProgress(() => setTick((t) => t + 1)), [])
 
-  /* Re-show Practice tray glow/arrow after Start over clears pa-nav-cues-seen-v1. */
+  /* Re-show Student Practice tray glow/arrow after Start over clears pa-nav-cues-seen-v1. */
   useEffect(() => {
     const sync = () => setTick((t) => t + 1)
     window.addEventListener('pa-nav-cues-changed', sync)
@@ -260,12 +260,12 @@ export function EnterBox() {
     /* Resume shared Desktop↔Phone history — Start over / Restart path still wipe. */
     resumeOrEnterPractice(name)
     setPracticeGate(false)
-    setOpenTray('Practice')
+    setOpenTray('Student Practice')
     void unlockFoley().then(() => {
       playFoley('latch')
       playFoley('metal')
     })
-    window.setTimeout(() => launchTo('/journey', 'Practice'), 380)
+    window.setTimeout(() => launchTo('/journey', 'Student Practice'), 380)
   }
 
   return (
@@ -303,8 +303,8 @@ export function EnterBox() {
           </div>
           <nav className="toolbox-tray" aria-label="Workshop entry">
             {ENTRIES.map((item, i) => {
-              /* Always keep Practice visible — hiding it when the flag is set
-               * made "← Toolbox" / Exit-to-modes → re-enter look like Practice vanished. */
+              /* Always keep Student Practice visible — hiding it when the flag is set
+               * made "← Toolbox" / Exit-to-modes → re-enter look like the tray vanished. */
               const practiceActive = Boolean(item.practice && isPracticeMode())
               const done =
                 item.completeIds.length > 0 &&
@@ -333,12 +333,12 @@ export function EnterBox() {
                       : item.help
               const inner: ReactNode = (
                 <>
-                  {/* Once-then-quiet finger at Practice — same grammar as Mode/Hub arrows. */}
+                  {/* Once-then-quiet finger at Student Practice — same grammar as Mode/Hub arrows. */}
                   {practiceCueActive && (
                     <span className="practice-point" aria-hidden>
                       <span className="practice-point-arrow">➜</span>
                       <span className="practice-point-label">
-                        {practiceActive ? 'Continue' : 'Practice'}
+                        {practiceActive ? 'Continue' : 'Student Practice'}
                       </span>
                     </span>
                   )}
@@ -384,7 +384,7 @@ export function EnterBox() {
                       void unlockFoley().then(() => playFoley('metal'))
                       if (isPracticeMode()) {
                         setOpenTray(item.label)
-                        window.setTimeout(() => launchTo('/journey', 'Practice'), 280)
+                        window.setTimeout(() => launchTo('/journey', 'Student Practice'), 280)
                         return
                       }
                       setPracticeGate(true)

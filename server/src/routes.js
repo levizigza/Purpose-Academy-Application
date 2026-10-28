@@ -345,7 +345,7 @@ export function registerRoutes(app) {
   })
 
   /**
-   * Neural text-to-speech for Practice Mode / student vocab.
+   * Neural text-to-speech for Student Practice Mode / student vocab.
    * Public (no auth) so Student Practice Mode can hear human-sounding voices.
    * Query: text, lang (en|es|ar|hi|am|ti or language name)
    */
@@ -787,7 +787,7 @@ export function registerRoutes(app) {
     res.json({ ok: true, users: db.users.length })
   })
 
-  /** Practice Mode reviewer feedback — public submit, admin read, change-loop review. */
+  /** Student Practice Mode reviewer feedback — public submit, admin read, change-loop review. */
   app.post('/api/practice/feedback', async (req, res) => {
     const authorGuard = guardUserText(req.body?.author || '', { field: 'Name', maxLen: 80 })
     const bodyGuard = guardUserText(req.body?.body || '', { field: 'Feedback', maxLen: 4000 })

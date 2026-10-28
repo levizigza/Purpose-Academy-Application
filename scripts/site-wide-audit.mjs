@@ -291,15 +291,15 @@ async function seed(page, opts = {}) {
   await seed(page, { shell: 'course', crossed: true, practice: false, phonePhase: 'toolbox' })
   await page.waitForTimeout(1200)
   await shot(page, '04-desktop-toolbox')
-  const practiceBtn = page.locator('button').filter({ hasText: /^Practice$/i })
-  const continuePractice = page.locator('button').filter({ hasText: /Continue Practice/i })
+  const practiceBtn = page.locator('button').filter({ hasText: /^Student Practice$/i })
+  const continuePractice = page.locator('a, button').filter({ hasText: /Continue Student Practice/i })
   const desktopDoor = page.locator('button, a').filter({ hasText: /Desktop/i })
   const phoneDoor = page.locator('button, a').filter({ hasText: /Phone/i })
   const practiceVisible = await practiceBtn.first().isVisible().catch(() => false)
   const contVisible = await continuePractice.first().isVisible().catch(() => false)
-  /* Practice tray may say Practice or Continue Practice depending on state */
+  /* Student Practice tray may say Student Practice; chrome may say Continue Student Practice */
   if (!practiceVisible && !contVisible) {
-    note('Desktop', 'Toolbox', 'high', 'Practice tray CTA not visible')
+    note('Desktop', 'Toolbox', 'high', 'Student Practice tray CTA not visible')
   }
   /* Escape doors */
   const body = await page.locator('body').innerText()
@@ -308,7 +308,7 @@ async function seed(page, opts = {}) {
   }
   const arrows = await page.locator('.nav-arrow').count()
   await layoutProbe(page, 'Desktop', 'Toolbox', {
-    practice: 'button:has-text("Practice"), button:has-text("Continue Practice")',
+    practice: 'button:has-text("Student Practice"), a:has-text("Continue Student Practice")',
     brand: '.enter-box, .toolbox, .workshop-brand, header',
   })
   console.log(
@@ -333,11 +333,11 @@ async function seed(page, opts = {}) {
   await shot(page, '05-phone-toolbox')
   const practiceVisible = await page
     .locator('button')
-    .filter({ hasText: /Practice|Continue Practice/i })
+    .filter({ hasText: /Student Practice|Continue Student Practice/i })
     .first()
     .isVisible()
     .catch(() => false)
-  if (!practiceVisible) note('Phone', 'Toolbox', 'high', 'Practice tray not visible in phone toolbox')
+  if (!practiceVisible) note('Phone', 'Toolbox', 'high', 'Student Practice tray not visible in phone toolbox')
   /* Check frame cutoff */
   const frame = await page
     .locator('.phone-screen, .device-screen, .phone-bezel, .is-phone-app')
@@ -349,7 +349,7 @@ async function seed(page, opts = {}) {
     .catch(() => null)
   const practiceRect = await page
     .locator('button')
-    .filter({ hasText: /Practice|Continue Practice/i })
+    .filter({ hasText: /Student Practice|Continue Student Practice/i })
     .first()
     .evaluate((el) => {
       const r = el.getBoundingClientRect()

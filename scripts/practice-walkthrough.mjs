@@ -1,5 +1,5 @@
 /**
- * Practice Mode front-to-back smoke walkthrough against local preview.
+ * Student Practice Mode front-to-back smoke walkthrough against local preview.
  */
 import { chromium } from 'playwright'
 import { mkdirSync } from 'fs'
@@ -33,7 +33,7 @@ async function seedPractice(page, step = 3) {
 
 async function smashEnterIfNeeded(page) {
   for (let i = 0; i < 30; i++) {
-    const practice = page.getByRole('button', { name: /Practice Mode/i })
+    const practice = page.getByRole('button', { name: /Student Practice/i })
     if (await practice.isVisible().catch(() => false)) return true
     const hammer = page.getByRole('button', { name: /Enter Purpose Academy/i })
     if (await hammer.isVisible().catch(() => false)) {
@@ -68,9 +68,9 @@ async function main() {
   await smashEnterIfNeeded(page)
   await shot(page, 'pw-01-home-before-practice.png')
 
-  const practiceBtn = page.getByRole('button', { name: /Practice Mode/i })
+  const practiceBtn = page.getByRole('button', { name: /Student Practice/i })
   if (!(await practiceBtn.isVisible().catch(() => false))) {
-    note('FAIL', 'Practice Mode tray button not found on home')
+    note('FAIL', 'Student Practice tray button not found on home')
     await seedPractice(page)
     await page.goto(BASE + '/', { waitUntil: 'networkidle' })
   } else {
@@ -80,7 +80,7 @@ async function main() {
     const levi = page.getByRole('button', { name: /^Levi$/ })
     if (await levi.isVisible().catch(() => false)) await levi.click()
     else await page.fill('#practice-gate-name', 'Levi')
-    await page.getByRole('button', { name: /Enter Practice Mode/i }).click()
+    await page.getByRole('button', { name: /Enter Student Practice/i }).click()
     await page.waitForTimeout(1600)
   }
 

@@ -84,7 +84,7 @@ export function StudentSchoolPathPage() {
             ← Home
           </Link>
           <p className="section-kicker on-dark">One practice spine</p>
-          <h1>Practice path</h1>
+          <h1>Student Practice path</h1>
           <p className="school-path-stage-lede">
             {meta.programTitle}. Clear order. One station. Leave with pride when you are done for now —
             this is training, not a feed.

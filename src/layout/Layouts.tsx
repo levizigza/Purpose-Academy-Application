@@ -54,7 +54,7 @@ function ToolboxLayout({ children }: { children: React.ReactNode }) {
         <nav className="toolbox-layout-nav" aria-label="Workshop">
           {practice && (
             <Link className="toolbox-layout-practice" to="/journey">
-              Continue Practice
+              Continue Student Practice
             </Link>
           )}
           <Link to="/splash">Replay opening</Link>
@@ -134,7 +134,7 @@ export function PublicLayout() {
 
   /*
    * Phone mode: entire public surface runs inside the device frame
-   * (home → splash → toolbox → Practice / enter).
+   * (home → splash → toolbox → Student Practice / enter).
    */
   if (shellMode === 'phone') {
     return (

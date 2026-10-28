@@ -1522,7 +1522,7 @@ export const MATCH_PRACTICE_ROUNDS = 2
 
 /**
  * Unit-end checkpoint quizzes (Duolingo-style unit review).
- * Shown in Practice Mode after finishing the last lesson of a unit.
+ * Shown in Student Practice Mode after finishing the last lesson of a unit.
  */
 export const UNIT_CHECKPOINTS: Record<number, QuizItem[]> = {
   3: [

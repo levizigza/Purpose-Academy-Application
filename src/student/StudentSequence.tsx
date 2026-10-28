@@ -995,7 +995,7 @@ export function StudentSequencePage() {
     setFinalPhase('eyespy')
   }, [pathwayId])
 
-  /* Practice mode skips registration entirely */
+  /* Student Practice Mode skips registration entirely */
   useEffect(() => {
     if (!isPracticeMode()) return
     if (step < PRACTICE_ENTRY_STEP) {
@@ -1045,7 +1045,7 @@ export function StudentSequencePage() {
     setVocabSpeakingId(null)
   }
 
-  /* Banner "Start over" / fresh Practice Mode entry — jump back to language step */
+  /* Banner "Start over" / fresh Student Practice Mode entry — jump back to language step */
   useEffect(() => {
     const onRestart = () => {
       if (!isPracticeMode()) return
@@ -1127,7 +1127,7 @@ export function StudentSequencePage() {
     }, 900)
   }
 
-  /** After finishing a unit's last lesson, run the unit checkpoint in Practice Mode. */
+  /** After finishing a unit's last lesson, run the unit checkpoint in Student Practice Mode. */
   function advanceWithOptionalCheckpoint(fromStep: number, nextStep: number, message?: string) {
     const unit = unitForStep(fromStep)
     const unitSteps = JOURNEY_STEPS.filter((s) => s.unit === unit.id).map((s) => s.n)
@@ -1141,7 +1141,7 @@ export function StudentSequencePage() {
     go(nextStep, message)
   }
 
-  /** Practice mode: ask for feedback at unit boundaries before leaving via in-panel Continues. */
+  /** Student Practice Mode: ask for feedback at unit boundaries before leaving via in-panel Continues. */
   function requestPracticeAdvance(advance: () => void) {
     if (isPracticeMode() && !canAdvanceFromStep(step)) {
       const reason = advanceBlockedReason(step) || 'Keep practising until this station feels comfortable.'
