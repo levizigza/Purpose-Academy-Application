@@ -432,6 +432,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-28 — Station demo VO/visual sync (beat-locked) (L3 / L2)
+
+- **Layers:** L3 (what’s said must match what’s shown in three seconds of watching) + L2 (explainer still teaches the real press).
+- **Defect:** Mouse demos muxed one continuous take against a longer concatenated Jenny track. Choice stations ran ~6–8s picture vs ~15s VO — last frame froze while narration described clicks that had already happened (or never lined up). `word-action` was the reverse (long silent prep under short VO).
+- **Fix:** `recordSyncedStation` — synth beats first, `setup` (silent), then each beat `act` + hold for that line’s duration; VO laid onto the visual timeline (`buildTimelineVo`). Re-record all 14 content stations. Site reflection = GitHub Pages only.
+- **Critic:** Prefer lengthening the hold on the relevant UI over rushing the mouse to “catch up” to VO. Do not revive freeform `tpad` last-frame pads as the sync strategy.
+
 ### 2026-10-28 — Station explainer demos: real UI + mouse + Jenny VO (L2 / L3)
 
 - **Layers:** L2 (how-it-works before the drill) + L3 (task visible in the real app chrome, not a slide deck).
