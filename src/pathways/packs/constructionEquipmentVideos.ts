@@ -243,22 +243,22 @@ export const CONSTRUCTION_EQUIPMENT_VIDEOS: ConstructionEquipmentLesson[] = [
   },
 ]
 
-/** Raw Purpose Academy Final filenames from answer keys (for media drop). */
+/** Raw Purpose Academy Final filenames as shipped in the Drive collection. */
 export const CONSTRUCTION_EQUIPMENT_SOURCE_VIDEOS: Record<string, string> = {
-  'excavator': 'Purpose_Academy_Excavator_Final(1).mp4',
-  'backhoe': 'Purpose_Academy_Backhoe_Final(1).mp4',
-  'bulldozer': 'Purpose_Academy_Bulldozer_Final(1).mp4',
-  'wheel-loader': 'Purpose_Academy_Wheel_Loader_Final(1).mp4',
-  'bobcat': 'Purpose_Academy_Bobcat_Final.mp4',
-  'motor-grader': 'Purpose_Academy_Motor_Grader_Final.mp4',
-  'roller-compactor': 'Purpose_Academy_Roller_Compactor_Final(1).mp4',
-  'construction-forklift': 'Purpose_Academy_Forklift_Final(2).mp4',
-  'telehandler': 'Purpose_Academy_Telehandler_Final(1).mp4',
-  'mobile-crane': 'Purpose_Academy_Mobile_Crane_Final(1).mp4',
-  'tower-crane': 'Purpose_Academy_Tower_Crane_Final(1).mp4',
-  'boom-lift': 'Purpose_Academy_Boom_Lift_Final(1).mp4',
-  'scissor-lift': 'Purpose_Academy_Scissor_Lift_Final(1).mp4',
-  'mobile-scaffold': 'Purpose_Academy_Mobile_Scaffold_Final(2).mp4',
+  'excavator': 'Purpose_Academy_Excavator_Final.mp4',
+  'backhoe': 'Purpose_Academy_Backhoe_Final.mp4',
+  'bulldozer': 'Purpose_Academy_Bulldozer_Final.mp4',
+  'wheel-loader': 'Purpose_Academy_Wheel_Loader_Final.mp4',
+  'bobcat': 'Purpose_Academy_Bobcat_Final (1).mp4',
+  'motor-grader': 'Purpose_Academy_Motor_Grader_Final (1).mp4',
+  'roller-compactor': 'Purpose_Academy_Roller_Compactor_Final.mp4',
+  'construction-forklift': 'Purpose_Academy_Forklift_Final.mp4',
+  'telehandler': 'Purpose_Academy_Telehandler_Final.mp4',
+  'mobile-crane': 'Purpose_Academy_Mobile_Crane_Final.mp4',
+  'tower-crane': 'Purpose_Academy_Tower_Crane_Final.mp4',
+  'boom-lift': 'Purpose_Academy_Boom_Lift_Final.mp4',
+  'scissor-lift': 'Purpose_Academy_Scissor_Lift_Final.mp4',
+  'mobile-scaffold': 'Purpose_Academy_Mobile_Scaffold_Final.mp4',
 }
 
 export function constructionEquipmentVideoUrl(file: string) {
