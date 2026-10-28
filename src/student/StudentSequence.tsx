@@ -2771,8 +2771,8 @@ export function StudentSequencePage() {
               area — then practise with an instructor.
             </WhyWork>
             <TeachNote>
-              Fourteen short lessons in equipment families. Finish each video to unlock the next. Powered lift trucks
-              are stay-clear awareness only — not operator certification.
+              Fourteen short lessons in equipment families. Watch each video, then answer the practice questions.
+              Powered lift trucks are stay-clear awareness only — not operator certification.
             </TeachNote>
             <EquipmentVideoDrill
               onComplete={() =>

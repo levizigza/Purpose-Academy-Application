@@ -1,6 +1,7 @@
 /**
  * Assert logistics equipment video quiz teach-backs match answer-key explanations
- * (no softened "The video shows: <choice>" paraphrases on known AK spots).
+ * (no softened "The video shows: <choice>" paraphrases on known AK spots),
+ * plus station honesty guards (gates flag, replay endSec, unlock copy).
  * Usage: node scripts/smoke-warehouse-quiz-teach.mjs
  */
 import { readFileSync } from 'node:fs'
@@ -12,6 +13,9 @@ const json = JSON.parse(
   readFileSync(join(root, 'src/pathways/packs/warehouseEquipmentVideoQuizzes.json'), 'utf8'),
 )
 const ts = readFileSync(join(root, 'src/pathways/packs/warehouseEquipmentVideoQuizzes.ts'), 'utf8')
+const drill = readFileSync(join(root, 'src/student/EquipmentVideoDrill.tsx'), 'utf8')
+const sequence = readFileSync(join(root, 'src/student/StudentSequence.tsx'), 'utf8')
+const css = readFileSync(join(root, 'src/styles.css'), 'utf8')
 
 function assert(cond, msg) {
   if (!cond) throw new Error(msg)
@@ -32,6 +36,11 @@ const spots = [
     'Use the designated steps and handholds, adjust the seat and use the restraint as trained.',
   ],
   [
+    'reach-truck',
+    7,
+    'The mast lifts the pallet, and the reach mechanism moves the forks forward.',
+  ],
+  [
     'conveyor',
     9,
     'Keep hands, hair and clothing clear of the moving conveyor parts.',
@@ -40,6 +49,11 @@ const spots = [
     'barcode-scanner',
     8,
     'If the scanner has a laser, avoid looking into its aiming beam.',
+  ],
+  [
+    'parcel-scale',
+    10,
+    'Follow the workplace procedure for accuracy checks and unexpected or unstable readings.',
   ],
 ]
 
@@ -73,6 +87,47 @@ console.log('OK   VIDEO_SEGMENT_GATES_ENABLED = false')
 const total = json.reduce((n, q) => n + q.questions.length, 0)
 assert(total === 140, `expected 140 questions, got ${total}`)
 console.log(`OK   ${total} questions across ${json.length} lessons`)
+
+for (const lesson of json) {
+  assert(lesson.questions.length === 10, `${lesson.lessonId} should have 10 questions`)
+  for (const q of lesson.questions) {
+    assert(q.choices.length === 4, `${q.id} needs 4 choices`)
+    assert(['A', 'B', 'C', 'D'].includes(q.answer), `${q.id} bad answer letter`)
+    assert(
+      q.choices.some((c) => c.id === q.answer),
+      `${q.id} answer letter missing from choices`,
+    )
+    assert(q.replay.endSec > q.replay.startSec, `${q.id} replay end must be after start`)
+    const m = String(q.replay.label).match(/^(\d+):(\d+)-(\d+):(\d+)$/)
+    assert(m, `${q.id} replay label ${q.replay.label}`)
+    const start = Number(m[1]) * 60 + Number(m[2])
+    const end = Number(m[3]) * 60 + Number(m[4])
+    assert(
+      start === q.replay.startSec && end === q.replay.endSec,
+      `${q.id} replay label/seconds mismatch`,
+    )
+  }
+}
+console.log('OK   10×14 choices/answers/replay labels intact')
+
+assert(
+  /replayEndRef/.test(drill) && /endSec/.test(drill),
+  'EquipmentVideoDrill must pause practice replays at replay.endSec',
+)
+console.log('OK   replay endSec guard present in drill')
+
+assert(
+  !/Finish each video to unlock the next/.test(sequence),
+  'TeachNote must not claim unlock-the-next while soft-gates are off',
+)
+console.log('OK   no dishonest unlock copy on Unit 8 teach note')
+
+assert(
+  /\.is-phone-app \.train-choice\.is-correct/.test(css) &&
+    /\.is-phone-app \.train-choice\.is-wrong/.test(css),
+  'Phone paper must keep train-choice correct/wrong result states',
+)
+console.log('OK   phone train-choice result states remapped')
 
 if (failed) {
   console.error(`\n${failed} assertion group(s) failed`)
