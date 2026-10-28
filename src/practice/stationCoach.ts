@@ -108,4 +108,8 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
   'systems': [
     { target: '[data-coach="choice-opt"]', say: 'Press the systems answer' },
   ],
+  'equipment-video': [
+    { target: '[data-coach="equip-watch"]', say: 'Press play on the equipment video' },
+    { target: '[data-coach="equip-next"]', say: 'Continue when the video is clear' },
+  ],
 }

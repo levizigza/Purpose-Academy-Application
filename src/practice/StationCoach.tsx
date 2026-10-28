@@ -52,6 +52,23 @@ type Props = {
   steps?: CoachStep[]
 }
 
+function focusCoachTarget(selector: string) {
+  const root = document.querySelector(selector)
+  if (!(root instanceof HTMLElement)) return
+  const focusable =
+    root.matches('button, a[href], input, select, textarea, video, [tabindex]:not([tabindex="-1"])')
+      ? root
+      : root.querySelector<HTMLElement>(
+          'button, a[href], input:not([type="hidden"]), select, textarea, video, [tabindex]:not([tabindex="-1"])',
+        )
+  const el = focusable ?? root
+  try {
+    el.focus({ preventScroll: true })
+  } catch {
+    /* some nodes (e.g. div) are not focusable without tabindex */
+  }
+}
+
 /**
  * First-example coach: spotlight the real control + plain instruction.
  * Call `window` event `pa-station-coach-advance` with `{ stationId }` when
@@ -62,6 +79,8 @@ type Props = {
  *
  * Overlay portals to document.body so phone emulator CSS transforms do not
  * skew fixed spotlight coordinates (getBoundingClientRect is viewport-space).
+ *
+ * Escape or Skip marks the station seen and stays quiet (once-then-don't-think).
  */
 export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) {
   const steps = stepsProp ?? STATION_COACH[stationId] ?? []
@@ -71,6 +90,14 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
   const [, bump] = useState(0)
   const consumedSteps = useRef<Set<number>>(new Set())
   const stepIdxRef = useRef(stepIdx)
+  const focusedStepRef = useRef<string | null>(null)
+
+  const dismiss = useCallback(() => {
+    markStationCoachSeen(stationId)
+    setActive(false)
+    setRect(null)
+    focusedStepRef.current = null
+  }, [stationId])
 
   useEffect(() => {
     const sync = () => {
@@ -80,12 +107,14 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
         setStepIdx(0)
         stepIdxRef.current = 0
         consumedSteps.current = new Set()
+        focusedStepRef.current = null
         clearCoachProgress(stationId)
         return
       }
       /* Start over / remount: clear progress and show step 1 again. */
       clearCoachProgress(stationId)
       consumedSteps.current = new Set()
+      focusedStepRef.current = null
       stepIdxRef.current = 0
       setStepIdx(0)
       setActive(steps.length > 0)
@@ -126,6 +155,16 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
     refresh()
   }, [refresh, layoutKey, stepIdx, active])
 
+  /* Move keyboard focus onto the highlighted control when a step becomes measurable. */
+  useEffect(() => {
+    if (!active || !step || !rect) return
+    const key = `${stationId}:${stepIdx}:${step.target}`
+    if (focusedStepRef.current === key) return
+    focusedStepRef.current = key
+    const t = window.setTimeout(() => focusCoachTarget(step.target), 40)
+    return () => window.clearTimeout(t)
+  }, [active, step, rect, stationId, stepIdx])
+
   useEffect(() => {
     if (!active) return
     const onResize = () => refresh()
@@ -161,6 +200,17 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
     return () => window.removeEventListener('pa-station-coach-advance', onAdvance)
   }, [active, stationId, steps.length])
 
+  useEffect(() => {
+    if (!active) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      e.preventDefault()
+      dismiss()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [active, dismiss])
+
   if (!active || !step || typeof document === 'undefined') return null
 
   /* Wait for the real control — e.g. VV type form mounts only after English plays. */
@@ -177,8 +227,8 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
   /* Prefer below the hole; flip above when clipped. Prefer right of tall holes so the prompt does not cover Type/Go. */
   const bubbleW = Math.min(280, window.innerWidth - 24)
   const below = hole.top + hole.height + 12
-  const above = Math.max(12, hole.top - 92)
-  const roomBelow = below + 88 <= window.innerHeight
+  const above = Math.max(12, hole.top - 108)
+  const roomBelow = below + 104 <= window.innerHeight
   const top = roomBelow ? below : above
   const preferRight =
     hole.height > 72 && hole.left + hole.width + 12 + bubbleW < window.innerWidth - 8
@@ -205,6 +255,13 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
           First example · {stepIdx + 1} of {steps.length}
         </p>
         <p className="station-coach-say">{step.say}</p>
+        <button
+          type="button"
+          className="station-coach-skip"
+          onClick={dismiss}
+        >
+          Skip
+        </button>
       </div>
     </div>,
     document.body,
