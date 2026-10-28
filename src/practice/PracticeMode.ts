@@ -36,6 +36,7 @@ const PROGRESS_KEYS = [
   'pa-play-clears-day-v1',
   'pa-nav-cues-seen-v1',
   'pa-station-explainers-seen-v1',
+  'pa-station-coach-seen-v1',
 ] as const
 
 function migrateLegacy() {
@@ -73,6 +74,7 @@ export function resetPracticeProgress() {
   try {
     for (const key of PROGRESS_KEYS) learnerRemove(key)
     learnerSet(JOURNEY_STEP_KEY, String(PRACTICE_ENTRY_STEP))
+    void import('./stationCoach').then((m) => m.clearCoachProgress())
     window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: PRACTICE_ENTRY_STEP } }))
     window.dispatchEvent(new CustomEvent('pa-employment-followup-changed'))
     window.dispatchEvent(new CustomEvent('pa-vocab-known-changed'))

@@ -11,6 +11,7 @@ import { playFoley } from '../audio/foley'
 import { firePlayClear } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 
 const WATCHED_KEY = 'pa-warehouse-equipment-watched-v1'
 
@@ -50,6 +51,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   const [progress, setProgress] = useState(0)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const clearedIdsRef = useRef<Set<string>>(new Set())
+  const watchCoachedRef = useRef(false)
   const practice = isPracticeMode()
 
   const lesson = lessons[Math.min(idx, lessons.length - 1)]
@@ -57,6 +59,13 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   const watchedCount = lessons.filter((l) => watched.has(l.id)).length
   const allDone = watchedCount >= lessons.length
   const canAdvanceLesson = ended || progress >= 0.9 || watched.has(lesson.id)
+  const coachFirst = idx === 0
+
+  function coachWatchDone() {
+    if (idx !== 0 || watchCoachedRef.current) return
+    watchCoachedRef.current = true
+    advanceStationCoach('equipment-video')
+  }
 
   useEffect(() => {
     setEnded(false)
@@ -127,6 +136,10 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     if (!canAdvanceLesson && !practice) return
     if (!watched.has(lesson.id)) markWatched(lesson)
     pulseVideoClear(lesson, idx)
+    if (idx === 0) {
+      coachWatchDone()
+      advanceStationCoach('equipment-video')
+    }
     if (idx >= lessons.length - 1) {
       if (allDone || watched.has(lesson.id) || practice) {
         recordSkillAttempt('equipment-videos', true, 20)
@@ -216,7 +229,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
         </nav>
 
         <div className="equip-video-main">
-          <div className="equip-video-stage">
+          <div className="equip-video-stage" data-coach={coachFirst ? 'equip-watch' : undefined}>
             <video
               key={lesson.id}
               ref={videoRef}
@@ -226,6 +239,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
               preload="metadata"
               poster={poster}
               src={src}
+              onPlay={() => coachWatchDone()}
               onTimeUpdate={onTimeUpdate}
               onEnded={onEnded}
             >
@@ -266,6 +280,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
             <button
               type="button"
               className="btn btn-primary"
+              data-coach={coachFirst ? 'equip-next' : undefined}
               disabled={!canAdvanceLesson && !practice}
               onClick={goNext}
             >
@@ -280,6 +295,9 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
           </div>
         </div>
       </div>
+      {coachFirst ? (
+        <StationCoach stationId="equipment-video" layoutKey={`${lesson.id}-${canAdvanceLesson}`} />
+      ) : null}
     </article>
   )
 }

@@ -439,6 +439,16 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Always show Practice in the tool chest (resume when already in Practice); toolbox chrome **Continue Practice**; desktop splash **Desktop / Phone** escape. App URL remains GitHub Pages — not purposeacademy.ca.
 - **Critic:** Flag-gated tray hide was clever for “already in” — wrong for a learner who stepped back one door.
 
+### 2026-10-28 — Station first-example coach (L3 / L4)
+
+- **Layers:** L3 (spotlight the real control + plain “Press / Type” in 3s) + L4 (once per station, then quiet — not casino coaching).
+- Interactive coach on first item only: Workplace Words, Organize, Eye Spy, Sentence, Word→Action, Supported Practice, Computer Skills, Site Language, Safety, Tools, Systems, Equipment Video.
+- Dual-shell CSS: desktop night amber ring + cool dim; phone paper navy veil + brand ring. Clicks pass through the spotlight.
+- Seen map `pa-station-coach-seen-v1` cleared on Practice Start over.
+- **Critic (same day):** Phone emulator `transform: scale` skewed fixed hole coords — coach now portals to `document.body` and styles off `html.pa-*-shell`. VV Hear / Site Language “Hear again” must not consume the type/choice step. Sentence coach is type-only (chips are reference, not buttons). Start over must re-activate the coach, not only clear storage.
+- **Critic (100% pass):** Infinite hole soft-pulse read as L4 tension — replaced with a one-shot settle. Escape / Skip marks the station seen so it stays quiet. Focus moves to the highlighted control when a step starts. Equipment Video joins the coach map.
+- **Assumption to challenge next:** whether multi-step coaches (VV / Eye Spy) still feel game-like on the smallest phone fold without stealing the task.
+
 ### 2026-10-27 — First-computer nav cues + station explainer videos (L3 / L4 / L2)
 
 - **Layers:** L3 (where to go in 3s) + L4 (cues quiet after first use — not casino) + L2 (how-it-works before the drill).

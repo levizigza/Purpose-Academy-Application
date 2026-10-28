@@ -6,6 +6,7 @@ import { playFoley } from '../audio/foley'
 import { firePlayClear } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 import { speakEnglish, speakSupport, stopSpeech } from './speech'
 import { specialtyVocabPool } from './vocabDistractors'
 
@@ -127,6 +128,8 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
   const unmatched = page.filter((t) => !matched[t.id])
   const matchedCount = Object.keys(matched).length
   const lastRound = round >= rounds.length - 1
+  /** First picture of round 1 — then coach stays quiet for the rest of Organize. */
+  const coachFirst = round === 0 && matchedCount === 0
 
   /* Keep focus on an unmatched word when the current one is cleared */
   useEffect(() => {
@@ -189,10 +192,12 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
     if (roundClear || passed || matched[termId]) return
     setPicked((cur) => (cur?.termId === termId ? null : { kind: 'image', termId }))
     playFoley('whoosh')
+    if (coachFirst) advanceStationCoach('language-organize')
   }
 
   function tapBox(wordId: string) {
     if (!picked) return
+    if (coachFirst) advanceStationCoach('language-organize')
     placeImage(picked.termId, wordId)
   }
 
@@ -313,12 +318,14 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   type="button"
                   className={`vocab-organize-piece is-image${active ? ' is-selected' : ''}`}
                   data-term-id={termId}
+                  data-coach={termId === leftoverImages[0] ? 'org-pic' : undefined}
                   draggable={!phone}
                   onDragStart={(e) => {
                     if (phone) return
                     e.dataTransfer.setData('text/plain', termId)
                     e.dataTransfer.effectAllowed = 'move'
                     setPicked({ kind: 'image', termId })
+                    if (coachFirst) advanceStationCoach('language-organize')
                   }}
                   onClick={() => tapImage(termId)}
                   aria-pressed={active}
@@ -358,6 +365,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   picked && !done ? ' is-target' : ''
                 }`}
                 data-box-id={term.id}
+                data-coach={!done ? 'org-drop' : undefined}
                 onClick={() => tapBox(term.id)}
                 onDragOver={(e) => {
                   if (phone) return
@@ -370,7 +378,10 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   e.preventDefault()
                   setDragOverId(null)
                   const imageId = e.dataTransfer.getData('text/plain') || picked?.termId
-                  if (imageId) placeImage(imageId, term.id)
+                  if (imageId) {
+                    if (coachFirst) advanceStationCoach('language-organize')
+                    placeImage(imageId, term.id)
+                  }
                 }}
                 aria-label={done ? `Picture for ${term.english}` : `Empty picture box for ${term.english}`}
               >
@@ -446,6 +457,12 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
           Mix pictures again
         </button>
       </div>
+      {coachFirst ? (
+        <StationCoach
+          stationId="language-organize"
+          layoutKey={`${pageKey}-${picked?.termId ?? 'none'}-${phone ? 'phone' : 'desk'}`}
+        />
+      ) : null}
     </article>
   )
 }
