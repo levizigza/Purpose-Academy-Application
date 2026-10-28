@@ -432,6 +432,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-27 — Desktop night: same play-craft flow, distinct aesthetics (L3 / L6)
+
+- **Layers:** L3 (task first viewport) + L6 (spine continuity phone ↔ desktop).
+- **Customer ask:** Mindless entertainment + learning from the app must flow the same on desktop — without making night stage look like phone paper.
+- **Finding:** Moment loops / type-out / soft-miss / clears were already shared in TSX; desktop buried them under coaching chrome.
+- **Fix:** Task-first chrome fold under `.course-stage` for VV / Organize / Eye Spy / Sentence / Computer / Equipment / choice stations (stats strip, jump fold, unit pill, why, progress, intro cards). VV type panel remapped to night ink (not phone cream). Type/Go scrolls into view on desktop. Organize keeps four boards (desktop density); phone keeps one-word focus.
+- **Critic:** Unifying skins would erase the night-vs-paper contrast the customer wants. Fold density, keep amber-on-navy.
+
 ### 2026-10-27 — Sentence Structure: options visible, type to clear (L2 / L3)
 
 - **Layers:** L2 (sentence production reps) + L3 (four choices + Type / Go unmistakable).
