@@ -93,7 +93,7 @@ export const logisticsPack: PathwayPack = {
     },
     9: {
       title: 'Sentence Structure',
-      help: 'Type the short word that fits the blank. Soft try again if not yet — optional word choices after a miss. Correct words slide into the blank.',
+      help: 'Four word choices stay visible. Type the matching word into the blank — soft try again if not yet. Correct words slide in.',
       purpose: 'Logistics Questions mold — type the specialty word (play craft), then Word → Action.',
     },
     12: {

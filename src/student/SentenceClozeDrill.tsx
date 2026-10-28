@@ -99,10 +99,9 @@ type Props = {
 /**
  * Sentence Structure — Purpose Academy Questions mold (Construction / Logistics / Community).
  *
- * Play craft: picture + cloze → **type the short missing word** (Type / Go) → soft miss
- * with rapid retry → firePlayClear joy. Word chips stay as an optional hint after a miss
- * (mindless enjoyment + learning — not exam chip-shopping).
- * Reveal-and-continue counts as a soft miss for the repair round.
+ * Play craft: picture + cloze + **four word choices always visible** → type the matching
+ * word (Type / Go) → soft miss with rapid retry → firePlayClear joy.
+ * Choices are a reference board — not tap-to-answer (typing is the clear).
  */
 export function SentenceClozeDrill({
   items,
@@ -138,8 +137,6 @@ export function SentenceClozeDrill({
   const [level1Unlocked, setLevel1Unlocked] = useState(false)
   const [draft, setDraft] = useState('')
   const [typeFeedback, setTypeFeedback] = useState<'retry' | null>(null)
-  const [softTries, setSoftTries] = useState(0)
-  const [showHintChips, setShowHintChips] = useState(false)
   const practice = isPracticeMode()
   const inputId = useId()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -162,8 +159,6 @@ export function SentenceClozeDrill({
     setFlying(false)
     setDraft('')
     setTypeFeedback(null)
-    setSoftTries(0)
-    setShowHintChips(false)
   }, [item?.id, phase, page])
 
   useEffect(() => {
@@ -186,18 +181,20 @@ export function SentenceClozeDrill({
     void finalScore
   }
 
+  function resetItemChrome() {
+    setResolved(false)
+    setCorrect(false)
+    setFilled(false)
+    setFlying(false)
+    setDraft('')
+    setTypeFeedback(null)
+  }
+
   function advanceAfterResolve(wasCorrect: boolean, newScore: number, nextMissed: SentenceClozeItem[]) {
     window.setTimeout(() => {
       if (!isLast) {
         setIdx((i) => i + 1)
-        setResolved(false)
-        setCorrect(false)
-        setFilled(false)
-        setFlying(false)
-        setDraft('')
-        setTypeFeedback(null)
-        setSoftTries(0)
-        setShowHintChips(false)
+        resetItemChrome()
         return
       }
 
@@ -206,14 +203,7 @@ export function SentenceClozeDrill({
           setRepairDeck(shuffle(nextMissed))
           setMissed([])
           setIdx(0)
-          setResolved(false)
-          setCorrect(false)
-          setFilled(false)
-          setFlying(false)
-          setDraft('')
-          setTypeFeedback(null)
-          setSoftTries(0)
-          setShowHintChips(false)
+          resetItemChrome()
           playFoley('whoosh')
           return
         }
@@ -232,14 +222,7 @@ export function SentenceClozeDrill({
         setMissed([])
         setIdx(0)
         setPhase('repair')
-        setResolved(false)
-        setCorrect(false)
-        setFilled(false)
-        setFlying(false)
-        setDraft('')
-        setTypeFeedback(null)
-        setSoftTries(0)
-        setShowHintChips(false)
+        resetItemChrome()
         playFoley('whoosh')
         return
       }
@@ -247,7 +230,7 @@ export function SentenceClozeDrill({
     }, wasCorrect ? 900 : 1200)
   }
 
-  /** Lock the item after a correct type/hint pick or a soft reveal. */
+  /** Lock the item after a correct typed clear. */
   function resolveItem(ok: boolean) {
     if (!item || resolved) return
     setResolved(true)
@@ -290,34 +273,16 @@ export function SentenceClozeDrill({
     }
     playFoley('wrong')
     setTypeFeedback('retry')
-    setSoftTries((n) => n + 1)
     setDraft('')
     inputRef.current?.focus()
   }
 
-  function pickHint(opt: string) {
-    if (!item || resolved || !showHintChips) return
-    resolveItem(opt === item.answer)
-  }
-
-  function revealAndContinue() {
-    if (!item || resolved) return
-    resolveItem(false)
-  }
-
   function retryPage() {
     setIdx(0)
-    setResolved(false)
-    setCorrect(false)
-    setFilled(false)
-    setFlying(false)
     setScoreCorrect(0)
     setMissed([])
     setRepairDeck([])
-    setDraft('')
-    setTypeFeedback(null)
-    setSoftTries(0)
-    setShowHintChips(false)
+    resetItemChrome()
     setPhase('drill')
     playFoley('whoosh')
   }
@@ -330,17 +295,10 @@ export function SentenceClozeDrill({
     if (next < 0 || next >= pageCount) return
     setPage(next)
     setIdx(0)
-    setResolved(false)
-    setCorrect(false)
-    setFilled(false)
-    setFlying(false)
     setScoreCorrect(0)
     setMissed([])
     setRepairDeck([])
-    setDraft('')
-    setTypeFeedback(null)
-    setSoftTries(0)
-    setShowHintChips(false)
+    resetItemChrome()
     setPhase('drill')
     playFoley('whoosh')
   }
@@ -411,7 +369,7 @@ export function SentenceClozeDrill({
         <h2>Keep learning this page</h2>
         <p className="lede">
           {scoreCorrect} of {pageItems.length} clear so far. Clear {PASS_SCORE} on this page to keep moving.
-          Type the short word that fits — soft try again when it is not yet. No rush.
+          Read the four words, then type the one that fits — soft try again when it is not yet. No rush.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>
           Not yet · practice this page again
@@ -443,7 +401,7 @@ export function SentenceClozeDrill({
       <div className="sentence-cloze-head-row">
         <div>
           <p className="section-kicker">Sentence Structure</p>
-          <p className="sentence-cloze-doc-kicker">{englishBrand} · Type the word</p>
+          <p className="sentence-cloze-doc-kicker">{englishBrand} · Type the matching word</p>
         </div>
         {practice && onSkipToActions ? (
           <button
@@ -457,8 +415,8 @@ export function SentenceClozeDrill({
       </div>
       <p className="play-nearby-objective" aria-live="polite">
         {phase === 'repair'
-          ? `Repair · ${deck.length - idx} left · type the word`
-          : `Clear this page · ${deck.length - idx} left · type the word`}
+          ? `Repair · ${deck.length - idx} left · type the matching word`
+          : `Clear this page · ${deck.length - idx} left · type the matching word`}
       </p>
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
@@ -468,7 +426,7 @@ export function SentenceClozeDrill({
       </p>
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
-        Type the short word that fits the blank. Soft try again if not yet — no exam, no rush.
+        Four words below. Type the one that fits the blank — soft try again if not yet. No exam, no rush.
       </p>
 
       <div
@@ -507,7 +465,7 @@ export function SentenceClozeDrill({
         <form className="sentence-cloze-type" onSubmit={checkType}>
           <p className="sentence-cloze-type-prompt">
             <span className="sentence-cloze-type-kicker">Your turn</span>
-            Type the missing English word.
+            Type the matching word from the four choices.
           </p>
           <div className="sentence-cloze-type-row">
             <label className="sr-only" htmlFor={inputId}>
@@ -536,60 +494,38 @@ export function SentenceClozeDrill({
           </div>
           {typeFeedback === 'retry' ? (
             <p id={`${inputId}-fb`} className="play-soft-miss" role="status">
-              {softMissLine('try again. No rush.')}
+              {softMissLine('try again. Look at the four words.')}
             </p>
-          ) : null}
-          {softTries >= 1 ? (
-            <div className="sentence-cloze-type-tools">
-              {!showHintChips ? (
-                <button
-                  type="button"
-                  className="btn btn-ghost"
-                  onClick={() => {
-                    setShowHintChips(true)
-                    playFoley('whoosh')
-                  }}
-                >
-                  See word choices
-                </button>
-              ) : null}
-              {softTries >= 2 ? (
-                <button type="button" className="btn btn-ghost" onClick={revealAndContinue}>
-                  Show the word · keep going
-                </button>
-              ) : null}
-            </div>
           ) : null}
         </form>
       ) : null}
 
-      {typingOpen && showHintChips ? (
-        <div className="train-choice-grid sentence-cloze-choices" role="group" aria-label="Word choices">
-          {options.map((opt, i) => {
-            const letter = choiceLetters[i] ?? String(i + 1)
-            return (
-              <button
-                key={opt}
-                type="button"
-                className="sentence-cloze-chip state-idle"
-                onClick={() => pickHint(opt)}
-              >
-                <span className="sentence-cloze-chip-letter">{letter}.</span>{' '}
-                <span>{opt}</span>
-              </button>
-            )
-          })}
-        </div>
-      ) : null}
+      <div
+        className="train-choice-grid sentence-cloze-choices"
+        role="list"
+        aria-label="Word choices — type the correct one"
+      >
+        {options.map((opt, i) => {
+          const letter = choiceLetters[i] ?? String(i + 1)
+          const showAnswer = resolved && opt === item.answer
+          return (
+            <div
+              key={opt}
+              role="listitem"
+              className={`sentence-cloze-chip state-${showAnswer ? 'correct' : 'idle'}${
+                showAnswer && flying ? ' is-flying' : ''
+              }${resolved && !showAnswer ? ' is-dim' : ''} is-reference`}
+            >
+              <span className="sentence-cloze-chip-letter">{letter}.</span>{' '}
+              <span>{opt}</span>
+            </div>
+          )
+        })}
+      </div>
 
-      {resolved &&
-        (correct ? (
-          <div className="alert ok">Yes — the word completes the sentence.</div>
-        ) : (
-          <p className="play-soft-miss" role="status">
-            {softMissLine(`The sentence needs “${item.answer}.” Keep going.`)}
-          </p>
-        ))}
+      {resolved && correct ? (
+        <div className="alert ok">Yes — the word completes the sentence.</div>
+      ) : null}
     </article>
   )
 }

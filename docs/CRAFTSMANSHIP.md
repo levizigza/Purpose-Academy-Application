@@ -432,12 +432,16 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
-### 2026-10-27 — Sentence Structure type-the-blank (L2 / L3)
+### 2026-10-27 — Sentence Structure: options visible, type to clear (L2 / L3)
 
-- **Layers:** L2 (sentence production reps) + L3 (Type / Go unmistakable; dual-shell type panel).
-- **Customer ask:** Typing belongs on the sentence section too — keep mindless play-craft joy (clear next action, soft miss, clear pulse) without exam chip shopping.
-- **Fix:** `SentenceClozeDrill` primary loop is type the short missing word → Go → soft retry on miss; optional “See word choices” after first miss; “Show the word · keep going” after two soft tries (repair path). Nearby: “Clear this page · N left · type the word”; `firePlayClear` unchanged. Desktop night + phone paper inherit.
-- **Critic:** Long essay typing would recreate worksheet dread — answers stay one specialty word; chips demoted to soft hint.
+- **Layers:** L2 (sentence production reps) + L3 (four choices + Type / Go unmistakable).
+- **Customer overturn:** Pure type-out hid the familiar A–D board. Wanted the **old four options at the bottom**, but **typing** the correct word — not tap-to-answer.
+- **Fix:** Choices always visible as reference chips (not clickable answers). Type / Go is the only clear; soft miss stays on the item; matching chip lights on clear. Nearby: “type the matching word.”
+- **Critic:** Tap chips would recreate mindless shopping; hide-until-hint chips fought the worksheet mold. Reference board + type keeps both enjoyment and production.
+
+### 2026-10-27 — Sentence Structure type-the-blank (L2 / L3) — superseded
+
+- Earlier pass hid choices until after a miss. Overturned by options-visible + type-to-clear above.
 
 ### 2026-10-27 — Vocab type-out + first-go / retake skip-known (L2 / L3 / L4)
 
