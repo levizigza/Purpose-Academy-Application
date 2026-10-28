@@ -129,6 +129,16 @@ assert(
 )
 console.log('OK   phone train-choice result states remapped')
 
+const practiceMode = readFileSync(join(root, 'src/practice/PracticeMode.ts'), 'utf8')
+assert(
+  /pa-warehouse-equipment-watched-v1/.test(practiceMode) &&
+    /pa-warehouse-equipment-cleared-v1/.test(practiceMode),
+  'Practice Start over must reset warehouse watched + cleared keys',
+)
+assert(/pack === 'warehouse'|pack = 'warehouse'|pack\?: EquipmentVideoPack/.test(drill), 'drill still supports warehouse pack')
+assert(/pack="warehouse"/.test(sequence), 'StudentSequence still wires warehouse EquipmentVideoDrill')
+console.log('OK   warehouse pack + Practice reset keys intact (no Construction regression)')
+
 if (failed) {
   console.error(`\n${failed} assertion group(s) failed`)
   process.exit(1)

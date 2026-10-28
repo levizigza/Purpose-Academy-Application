@@ -73,6 +73,7 @@ export const logisticsPack: PathwayPack = {
       outcomes: [
         'Open Unit 8: Video · Warehouse Equipment (step 18)',
         'Watch each machine lesson: know, inspect, protect',
+        'Answer practice questions after each video',
         'Stay clear of powered lift trucks unless certified elsewhere',
       ],
     },

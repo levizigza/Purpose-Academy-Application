@@ -4,7 +4,7 @@
  * Vocab → Language Organize → English Eye Spy → Sentences / Word→Action →
  * Supported practice → Instructions → Site language →
  * Workplace Instructions → Basic Computer Skills (step 12 / Unit 6) → Site Language →
- * Interest assessment → Safety → Tools → Systems → Warehouse Video → Observation → Employment
+ * Interest assessment → Safety → Tools → Systems → Equipment Video (Unit 8) → Observation → Employment
  *
  * Support languages: English, Spanish, Arabic, Hindi, Amharic, Tigrinya (no French).
  */
@@ -35,7 +35,7 @@ export const JOURNEY_STEPS = [
   { n: 17, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 7 },
   {
     n: 18,
-    title: 'Video · Warehouse Equipment',
+    title: 'Video · Equipment',
     help: 'Watch each equipment lesson. Know it, inspect it, protect the area — then continue to hands-on training.',
     purpose: 'Real equipment habits before supervised practice.',
     unit: 8,
@@ -59,7 +59,7 @@ export const LEARNING_UNITS = [
   { id: 6, label: 'Basic Computer Skills', range: '12' },
   { id: 5, label: 'Site language & specialize', range: '13–14' },
   { id: 7, label: 'Site ready', range: '15–17' },
-  { id: 8, label: 'Video · Warehouse Equipment', range: '18' },
+  { id: 8, label: 'Video · Equipment', range: '18' },
   { id: 9, label: 'Work ready', range: '19–22' },
 ] as const
 

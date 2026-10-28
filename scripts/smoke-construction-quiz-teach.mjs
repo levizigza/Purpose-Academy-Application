@@ -4,7 +4,7 @@
  * plus station honesty guards (gates flag, replay endSec, unlock copy).
  * Usage: node scripts/smoke-construction-quiz-teach.mjs
  */
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
@@ -171,6 +171,44 @@ assert(
   'Phone paper must keep train-choice correct/wrong result states',
 )
 console.log('OK   phone train-choice result states remapped')
+
+const constructionPack = readFileSync(join(root, 'src/pathways/packs/construction.ts'), 'utf8')
+const journey = readFileSync(join(root, 'src/student/journeyCurriculum.ts'), 'utf8')
+const practiceMode = readFileSync(join(root, 'src/practice/PracticeMode.ts'), 'utf8')
+
+assert(
+  /Video · Construction Equipment/.test(constructionPack),
+  'Construction step 18 title must be Video · Construction Equipment (Logistics parity)',
+)
+assert(
+  /watch construction equipment videos/.test(constructionPack),
+  'Construction Unit 8 goal must describe construction equipment videos',
+)
+assert(
+  !/Warehouse Equipment\) when training on Logistics/.test(constructionPack),
+  'Construction Unit 8 must not redirect learners to Logistics Warehouse Equipment',
+)
+assert(
+  /label: 'Video · Equipment'/.test(journey),
+  'Shared LEARNING_UNITS Unit 8 label must be pathway-neutral Video · Equipment',
+)
+assert(
+  /pa-construction-equipment-watched-v1/.test(practiceMode) &&
+    /pa-construction-equipment-cleared-v1/.test(practiceMode) &&
+    /pa-warehouse-equipment-cleared-v1/.test(practiceMode),
+  'Practice Start over must reset construction + warehouse equipment progress keys',
+)
+console.log('OK   construction journey honesty + Practice reset keys')
+
+/* Media: Finals must be real files, not tiny stubs */
+const mediaDir = join(root, 'public/media/construction-equipment')
+const mp4s = readdirSync(mediaDir).filter((f) => f.endsWith('.mp4'))
+assert(mp4s.length === 14, `expected 14 construction MP4s, got ${mp4s.length}`)
+for (const f of mp4s) {
+  const bytes = statSync(join(mediaDir, f)).size
+  assert(bytes > 1_000_000, `${f} looks like a stub (${bytes} bytes) — expect Final >1MB`)
+}
+console.log('OK   14 construction Final MP4s present (>1MB each)')
 
 if (failed) {
   console.error(`\n${failed} assertion group(s) failed`)
