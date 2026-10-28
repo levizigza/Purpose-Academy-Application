@@ -11,6 +11,7 @@ import { playFoley } from '../audio/foley'
 import { SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 
 const WATCHED_KEY = 'pa-basic-computer-skills-watched-v1'
 const DONE_KEY = 'pa-basic-computer-skills-done-v1'
@@ -57,6 +58,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
   const [checkAnswer, setCheckAnswer] = useState<string | null>(null)
   const [checkCorrect, setCheckCorrect] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const watchCoachedRef = useRef(false)
   const practice = isPracticeMode()
 
   const lesson = lessons[Math.min(idx, lessons.length - 1)]
@@ -73,13 +75,14 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
     setTryReady(false)
     setCheckAnswer(null)
     setCheckCorrect(false)
+    if (idx === 0) watchCoachedRef.current = false
     const el = videoRef.current
     if (el) {
       el.pause()
       el.currentTime = 0
       el.load()
     }
-  }, [lesson.id])
+  }, [lesson.id, idx])
 
   useEffect(() => {
     /*
@@ -133,14 +136,23 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
     playFoley('whoosh')
   }
 
+  function coachWatchDone() {
+    if (idx !== 0 || watchCoachedRef.current) return
+    watchCoachedRef.current = true
+    advanceStationCoach('computer-skills')
+  }
+
   function goTry() {
     if (!canLeaveWatch) return
     markWatched(lesson)
+    /* Practice may skip the video — still clear the first coach beat. */
+    coachWatchDone()
     setPhase('try')
     playFoley('whoosh')
   }
 
   function onTryComplete() {
+    if (idx === 0) advanceStationCoach('computer-skills')
     setTryReady(true)
     setPhase('check')
     playFoley('whoosh')
@@ -193,6 +205,8 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
   }
 
   const src = computerSkillsVideoUrl(lesson.file)
+  /** First-example coach on lesson 1 only — then quiet for the rest of the station. */
+  const coachFirst = idx === 0 && !done.has(lesson.id)
 
   return (
     <article className="comp-skills-card equip-video-card">
@@ -263,7 +277,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
         <div className="equip-video-main">
           {phase === 'watch' ? (
             <>
-              <div className="equip-video-stage">
+              <div className="equip-video-stage" data-coach="comp-watch">
                 <video
                   key={lesson.id}
                   ref={videoRef}
@@ -272,6 +286,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
                   playsInline
                   preload="metadata"
                   src={src}
+                  onPlay={() => coachWatchDone()}
                   onTimeUpdate={onTimeUpdate}
                   onEnded={onEnded}
                 >
@@ -308,12 +323,14 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
           ) : null}
 
           {phase === 'try' || phase === 'check' ? (
-            <ComputerTryPanel
-              kind={lesson.tryKind}
-              lesson={lesson}
-              completed={tryReady}
-              onComplete={onTryComplete}
-            />
+            <div data-coach="comp-try">
+              <ComputerTryPanel
+                kind={lesson.tryKind}
+                lesson={lesson}
+                completed={tryReady}
+                onComplete={onTryComplete}
+              />
+            </div>
           ) : null}
 
           {phase === 'check' ? (
@@ -368,6 +385,12 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
           </p>
         </div>
       </div>
+      {coachFirst ? (
+        <StationCoach
+          stationId="computer-skills"
+          layoutKey={`${lesson.id}-${phase}-${tryReady}`}
+        />
+      ) : null}
     </article>
   )
 }

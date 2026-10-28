@@ -112,6 +112,7 @@ import {
 } from '../practice/PracticeMode'
 import { learnerGet, learnerSet } from '../practice/learnerStore'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
 import { NAV_CUE } from '../practice/navCues'
 
@@ -544,7 +545,18 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 
 /* ─── Multi-item quiz runner ─── */
 
-function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplete: () => void; gated?: boolean }) {
+function QuizRunner({
+  items,
+  onComplete,
+  gated,
+  coachStationId,
+}: {
+  items: QuizItem[]
+  onComplete: () => void
+  gated?: boolean
+  /** When set, first-example coach runs once on item 1 of this station. */
+  coachStationId?: string
+}) {
   const [idx, setIdx] = useState(0)
   const [score, setScore] = useState(0)
   const [answered, setAnswered] = useState<string | null>(null)
@@ -553,6 +565,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
   const [gateBlocked, setGateBlocked] = useState(false)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
   const item = items[idx]
+  const coachFirst = Boolean(coachStationId) && idx === 0 && !answered
 
   useEffect(() => {
     window.dispatchEvent(new Event('pa-quiz-start'))
@@ -618,6 +631,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
     const isCorrect = opt === item.answer
     setAnswered(opt)
     setCorrect(isCorrect)
+    if (coachFirst && coachStationId) advanceStationCoach(coachStationId)
     if (isCorrect) {
       const cleared = score + 1
       const left = items.length - cleared
@@ -708,7 +722,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
             : 'Read the question. Choose the best answer.'
         }
       />
-      <div className="train-choice-grid">
+      <div className="train-choice-grid" data-coach="choice-opt">
         {item.options.map((opt) => (
           <ChoiceButton key={opt} state={answered === opt ? (opt === item.answer ? 'correct' : 'wrong') : answered ? (opt === item.answer ? 'correct' : 'idle') : 'idle'} disabled={!!answered && opt !== answered && opt !== item.answer} onClick={() => pick(opt)}>
             {opt}
@@ -729,6 +743,9 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
           </button>
         </>
       )}
+      {coachFirst && coachStationId ? (
+        <StationCoach stationId={coachStationId} layoutKey={`${item.prompt}-${idx}`} />
+      ) : null}
     </div>
   )
 }
@@ -1931,11 +1948,14 @@ export function StudentSequencePage() {
       ...pickSpecialtyDistractors(VOCAB_UNIT, item.termId, 3, actionTermIds).map((t) => t.english),
     ])
 
+    const coachFirst = safeIdx === 0 && !actionAnswer
+
     function pickAction(opt: string) {
       if (actionAnswer) return
       const ok = opt === term?.english
       setActionAnswer(opt)
       setActionCorrect(ok)
+      if (coachFirst) advanceStationCoach('word-action')
       recordSkillAttempt('word-action', ok)
       if (ok) {
         const left = safeDeck.length - (safeIdx + 1)
@@ -2003,7 +2023,7 @@ export function StudentSequencePage() {
                 ? 'Which warehouse item is this action for?'
                 : 'Which tool or material is this action for?'}
           </p>
-          <div className="train-choice-grid">
+          <div className="train-choice-grid" data-coach="choice-opt">
             {options.map((opt) => (
               <ChoiceButton
                 key={opt}
@@ -2032,6 +2052,9 @@ export function StudentSequencePage() {
               </button>
             </>
           )}
+          {coachFirst ? (
+            <StationCoach stationId="word-action" layoutKey={`${item.termId}-${safeIdx}`} />
+          ) : null}
         </article>
       </Shell>
     )
@@ -2056,11 +2079,14 @@ export function StudentSequencePage() {
     const roundsNeeded =
       isPracticeMode() && matchDeck.length <= 3 ? 1 : isPracticeMode() ? MATCH_PRACTICE_ROUNDS : 1
 
+    const coachFirst = matchRound === 1 && safeIdx === 0 && !matchAnswer
+
     function pickMatch(opt: string) {
       if (matchAnswer) return
       const ok = opt === term.english
       setMatchAnswer(opt)
       setMatchCorrect(ok)
+      if (coachFirst) advanceStationCoach('supported-practice')
       recordSkillAttempt('matching', ok)
       if (ok) {
         const left = matchDeck.length - (safeIdx + 1)
@@ -2152,7 +2178,7 @@ export function StudentSequencePage() {
         <div className="train-audio-row">
           <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>Hear English</button>
         </div>
-        <div className="train-choice-grid">
+        <div className="train-choice-grid" data-coach="choice-opt">
           {matchOptions.map((opt) => (
             <ChoiceButton
               key={opt.id}
@@ -2181,6 +2207,9 @@ export function StudentSequencePage() {
             </button>
           </>
         )}
+        {coachFirst ? (
+          <StationCoach stationId="supported-practice" layoutKey={`${term.id}-${matchRound}`} />
+        ) : null}
       </Shell>
     )
   }
@@ -2337,11 +2366,14 @@ export function StudentSequencePage() {
     const phrase = SITE_PHRASES[Math.min(phraseIdx, SITE_PHRASES.length - 1)]
     const isLast = phraseIdx >= SITE_PHRASES.length - 1
 
+    const coachFirst = phraseIdx === 0 && !phraseAnswer
+
     function pickPhrase(opt: string) {
       if (!phraseHeard || phraseAnswer) return
       const ok = opt === phrase.answer
       setPhraseAnswer(opt)
       setPhraseCorrect(ok)
+      if (coachFirst) advanceStationCoach('site-language')
       recordSkillAttempt('site-phrases', ok)
       if (ok) {
         const left = SITE_PHRASES.length - (phraseIdx + 1)
@@ -2382,8 +2414,10 @@ export function StudentSequencePage() {
           <button
             type="button"
             className={`btn ${phraseHeard ? 'btn-secondary on-light' : 'btn-primary'}`}
+            data-coach="phrase-hear"
             disabled={speaking !== null}
             onClick={() => {
+              if (coachFirst) advanceStationCoach('site-language')
               void (async () => {
                 await playEnglish(phrase.en)
                 setPhraseHeard(true)
@@ -2393,7 +2427,7 @@ export function StudentSequencePage() {
             {phraseHeard ? 'Heard ✓ · Hear again' : 'Hear English'}
           </button>
           <p className="train-check-prompt">What does this phrase mean on site?</p>
-          <div className="train-choice-grid">
+          <div className="train-choice-grid" data-coach="choice-opt">
             {phrase.options.map((opt) => (
               <ChoiceButton
                 key={opt}
@@ -2405,6 +2439,12 @@ export function StudentSequencePage() {
               </ChoiceButton>
             ))}
           </div>
+          {coachFirst ? (
+            <StationCoach
+              stationId="site-language"
+              layoutKey={`${phrase.en}-${phraseHeard}-${phraseAnswer ?? 'none'}`}
+            />
+          ) : null}
           {phraseAnswer && (
             <>
               {phraseCorrect ? (
@@ -2508,7 +2548,12 @@ export function StudentSequencePage() {
   if (step === 15) {
     return (
       <Shell step={15} onBack={() => { setCareerInterestDone(false); go(14) }}>
-        <QuizRunner items={SAFETY_QUIZ} onComplete={() => { setToolIdx(0); setToolAnswer(null); setToolCorrect(false); go(16) }} gated />
+        <QuizRunner
+          items={SAFETY_QUIZ}
+          coachStationId="safety"
+          onComplete={() => { setToolIdx(0); setToolAnswer(null); setToolCorrect(false); go(16) }}
+          gated
+        />
       </Shell>
     )
   }
@@ -2517,11 +2562,14 @@ export function StudentSequencePage() {
     const cat = TOOL_CATEGORIES[Math.min(toolIdx, TOOL_CATEGORIES.length - 1)]
     const isLast = toolIdx >= TOOL_CATEGORIES.length - 1
 
+    const coachFirst = toolIdx === 0 && !toolAnswer
+
     function pickTool(opt: string) {
       if (toolAnswer) return
       const ok = opt === cat.answer
       setToolAnswer(opt)
       setToolCorrect(ok)
+      if (coachFirst) advanceStationCoach('tools')
       recordSkillAttempt('tools', ok)
       if (ok) {
         const left = TOOL_CATEGORIES.length - (toolIdx + 1)
@@ -2564,7 +2612,7 @@ export function StudentSequencePage() {
           <h3>{cat.title}</h3>
           <p>{cat.why}</p>
           <p className="train-check-prompt">{cat.prompt}</p>
-          <div className="train-choice-grid">
+          <div className="train-choice-grid" data-coach="choice-opt">
             {cat.options.map((opt) => (
               <ChoiceButton
                 key={opt}
@@ -2592,6 +2640,9 @@ export function StudentSequencePage() {
               </button>
             </>
           )}
+          {coachFirst ? (
+            <StationCoach stationId="tools" layoutKey={`${cat.title}-${toolIdx}`} />
+          ) : null}
         </article>
       </Shell>
     )
@@ -2601,11 +2652,14 @@ export function StudentSequencePage() {
     const topic = SYSTEM_TOPICS[Math.min(sysIdx, SYSTEM_TOPICS.length - 1)]
     const isLast = sysIdx >= SYSTEM_TOPICS.length - 1
 
+    const coachFirst = sysIdx === 0 && !sysAnswer
+
     function pickSys(opt: string) {
       if (sysAnswer) return
       const ok = opt === topic.answer
       setSysAnswer(opt)
       setSysCorrect(ok)
+      if (coachFirst) advanceStationCoach('systems')
       recordSkillAttempt('systems', ok)
       if (ok) {
         const left = SYSTEM_TOPICS.length - (sysIdx + 1)
@@ -2647,7 +2701,7 @@ export function StudentSequencePage() {
           <h3>{topic.title}</h3>
           <p>{topic.why}</p>
           <p className="train-check-prompt">{topic.prompt}</p>
-          <div className="train-choice-grid">
+          <div className="train-choice-grid" data-coach="choice-opt">
             {topic.options.map((opt) => (
               <ChoiceButton
                 key={opt}
@@ -2675,6 +2729,9 @@ export function StudentSequencePage() {
               </button>
             </>
           )}
+          {coachFirst ? (
+            <StationCoach stationId="systems" layoutKey={`${topic.title}-${sysIdx}`} />
+          ) : null}
         </article>
       </Shell>
     )

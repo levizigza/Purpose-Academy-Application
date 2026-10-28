@@ -4,6 +4,7 @@ import { SUPPORT_LANGUAGES } from './journeyCurriculum'
 import { pathwayImage } from '../pathways'
 import { firePlayClear } from '../practice/PlayClear'
 import { playFoley } from '../audio/foley'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 
 /**
  * Official Purpose Academy visual-vocabulary language order
@@ -134,6 +135,8 @@ export function VocabSheetCard({
     term.imageKey.startsWith('com-') ||
     term.imageKey.startsWith('con-')
 
+  const coachFirst = index === 1
+
   function checkType(e: FormEvent) {
     e.preventDefault()
     const ok = normalizeEnglishAnswer(draft) === normalizeEnglishAnswer(term.english)
@@ -145,6 +148,7 @@ export function VocabSheetCard({
         remnant: leftAfter > 0 ? `${leftAfter} left in this set` : 'Set clear',
         kind: leftAfter === 0 ? 'board' : 'micro',
       })
+      if (coachFirst) advanceStationCoach('workplace-words')
       onTypedCorrect()
       return
     }
@@ -182,7 +186,7 @@ export function VocabSheetCard({
         : VOCAB_SHEET_LANGS
 
   const typeForm = typingPhase ? (
-    <form className="vocab-sheet-type" onSubmit={checkType}>
+    <form className="vocab-sheet-type" data-coach="vv-type" onSubmit={checkType}>
       <p className="play-nearby-objective" aria-live="polite">
         Clear this word · type what you heard
       </p>
@@ -245,7 +249,15 @@ export function VocabSheetCard({
           : 'Press Hear English if you need it again — then type the word.'}
       </p>
       {!speaking && (
-        <button type="button" className="btn btn-secondary vocab-sheet-listen-go" onClick={onPlayEnglish}>
+        <button
+          type="button"
+          data-coach="vv-hear"
+          className="btn btn-secondary vocab-sheet-listen-go"
+          onClick={() => {
+            if (coachFirst) advanceStationCoach('workplace-words')
+            onPlayEnglish()
+          }}
+        >
           <SpeakerIconSmall />
           Hear English
         </button>
@@ -277,10 +289,14 @@ export function VocabSheetCard({
         )}
         <button
           type="button"
+          data-coach="vv-hear"
           className={`vocab-sheet-audio${heardEnglish ? ' is-done' : ''}`}
           aria-label="Listen to the English workplace word"
           disabled={speaking || !bridged}
-          onClick={onPlayEnglish}
+          onClick={() => {
+            if (coachFirst && bridged) advanceStationCoach('workplace-words')
+            onPlayEnglish()
+          }}
           title={bridged ? 'Listen to English' : 'Press your language first'}
         >
           <SpeakerIcon />
@@ -338,6 +354,7 @@ export function VocabSheetCard({
 
         <ul
           className={`vocab-sheet-langs${productionPhase ? ' is-collapsed' : ''}`}
+          data-coach="vv-lang"
           aria-label="Press the language you understand"
         >
           {langsToShow.map((lang) => {
@@ -348,7 +365,10 @@ export function VocabSheetCard({
                   type="button"
                   className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}`}
                   disabled={speaking || alreadyKnown || productionPhase}
-                  onClick={() => onConnectLang(lang)}
+                  onClick={() => {
+                    if (coachFirst) advanceStationCoach('workplace-words')
+                    onConnectLang(lang)
+                  }}
                   aria-pressed={selected}
                   aria-label={`Hear ${term.gloss[lang]} in ${lang}, then hear and type English`}
                 >
@@ -394,6 +414,12 @@ export function VocabSheetCard({
           Marked known — hear English once, then type it so it sticks.
         </p>
       )}
+      {coachFirst ? (
+        <StationCoach
+          stationId="workplace-words"
+          layoutKey={`${bridged}-${heardEnglish}-${typingPhase}-${typedEnglish}`}
+        />
+      ) : null}
     </article>
   )
 }

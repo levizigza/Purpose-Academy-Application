@@ -432,6 +432,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-28 — Station first-example coach (L3 / L4)
+
+- **Layers:** L3 (spotlight the real control + plain “Press / Type” in 3s) + L4 (once per station, then quiet — not casino coaching).
+- Interactive coach on first item only: Workplace Words, Organize, Eye Spy, Sentence, Word→Action, Supported Practice, Computer Skills, Site Language, Safety, Tools, Systems.
+- Dual-shell CSS: desktop night amber ring + cool dim; phone paper navy veil + brand ring. Clicks pass through the spotlight.
+- Seen map `pa-station-coach-seen-v1` cleared on Practice Start over.
+- **Assumption to challenge next:** whether multi-step coaches (VV / Eye Spy) still feel game-like on the smallest phone fold without stealing the task.
+
 ### 2026-10-27 — First-computer nav cues + station explainer videos (L3 / L4 / L2)
 
 - **Layers:** L3 (where to go in 3s) + L4 (cues quiet after first use — not casino) + L2 (how-it-works before the drill).

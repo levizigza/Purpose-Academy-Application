@@ -15873,3 +15873,127 @@ html.pa-phone-shell .play-soft-miss {
 .course-stage .station-explainer-lede {
   color: color-mix(in srgb, #f5f8fc 88%, transparent);
 }
+
+/* —— Station first-example coach (L3 / L4) — dual-shell ——
+ * Spotlight the live control; clicks pass through (pointer-events: none).
+ * Desktop night: cool dim + amber ring. Phone paper: soft navy veil + brand ring.
+ */
+.station-coach {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  pointer-events: none;
+}
+
+.station-coach-dim {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+}
+
+.station-coach-hole {
+  position: fixed;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--accent, #e8a317) 80%, #fff),
+    0 0 0 9999px rgba(4, 21, 38, 0.52);
+  outline: 2px solid color-mix(in srgb, var(--accent, #e8a317) 55%, transparent);
+  outline-offset: 2px;
+  animation: station-coach-pulse 1.7s ease-in-out infinite;
+}
+
+.course-stage .station-coach-hole,
+.is-course-app .station-coach-hole {
+  box-shadow:
+    0 0 0 2px rgba(232, 163, 23, 0.95),
+    0 0 0 9999px rgba(4, 14, 28, 0.62);
+  outline-color: rgba(232, 163, 23, 0.7);
+}
+
+.is-phone-app .station-coach-hole,
+html.pa-phone-shell .station-coach-hole {
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--brand, #0b2f5c) 55%, var(--accent, #e8a317)),
+    0 0 0 9999px rgba(11, 47, 92, 0.38);
+  outline-color: color-mix(in srgb, var(--brand, #0b2f5c) 40%, var(--accent, #e8a317));
+}
+
+.station-coach-bubble {
+  position: fixed;
+  z-index: 86;
+  max-width: min(18.5rem, calc(100vw - 1.5rem));
+  padding: 0.7rem 0.9rem 0.8rem;
+  border-radius: 12px;
+  background: #0b2f5c;
+  color: #f5f8fc;
+  border: 1px solid color-mix(in srgb, #e8a317 55%, #0b2f5c);
+  box-shadow: 0 10px 28px rgba(4, 21, 38, 0.35);
+  animation: station-coach-bubble-in 0.35s ease-out both;
+}
+
+.is-phone-app .station-coach-bubble,
+html.pa-phone-shell .station-coach-bubble {
+  background: #fff;
+  color: var(--brand, #0b2f5c);
+  border: 1px solid color-mix(in srgb, var(--brand, #0b2f5c) 22%, var(--line, #c5d0de));
+  box-shadow: 0 8px 22px rgba(11, 47, 92, 0.14);
+}
+
+.course-stage .station-coach-bubble,
+.is-course-app .station-coach-bubble {
+  background: color-mix(in srgb, #071828 88%, #0b2f5c);
+  color: #f5f8fc;
+  border-color: rgba(232, 163, 23, 0.55);
+}
+
+.station-coach-kicker {
+  margin: 0 0 0.2rem;
+  font-family: var(--display, Georgia, serif);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #e8a317;
+}
+
+.is-phone-app .station-coach-kicker,
+html.pa-phone-shell .station-coach-kicker {
+  color: color-mix(in srgb, var(--brand, #0b2f5c) 70%, var(--accent, #e8a317));
+}
+
+.station-coach-say {
+  margin: 0;
+  font-family: var(--body, 'Source Sans 3', system-ui, sans-serif);
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+@keyframes station-coach-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.06);
+  }
+}
+
+@keyframes station-coach-bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .station-coach-hole,
+  .station-coach-bubble {
+    animation: none !important;
+  }
+}
