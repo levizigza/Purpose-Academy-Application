@@ -18,7 +18,7 @@ export const JOURNEY_STEPS = [
   { n: 6, title: 'Workplace Words', help: 'See the picture. Hear your language. Hear English. Type the word. One word at a time.', purpose: 'Reps that stick: hear → hear → type — job practice.', unit: 3 },
   { n: 7, title: 'Language Organize', help: 'Five rounds. Hear a language if you want, then drop the picture into the empty box.', purpose: 'Match the picture to the word you already practised.', unit: 3 },
   { n: 8, title: 'English Eye Spy', help: 'Tap a picture and its English name. Correct pairs disappear until the board is clear.', purpose: 'See the same words again in a busy scene before sentences.', unit: 3 },
-  { n: 9, title: 'Word → Action', help: 'See the action. Pick which tool it uses.', purpose: 'After pictures are solid, link English words to real movement.', unit: 4 },
+  { n: 9, title: 'Sentence Structure → Word → Action', help: 'Type the word that fits the blank. Then connect each tool to its action.', purpose: 'After pictures are solid, build the sentence and link words to real movement.', unit: 4 },
   { n: 10, title: 'Supported Practice', help: 'Match words to pictures with help.', purpose: 'Practice with help. Mistakes are how you learn.', unit: 4 },
   { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   {

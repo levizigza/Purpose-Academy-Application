@@ -224,11 +224,13 @@ function LearnCard({ title, body, mark }: { title: string; body: string; mark?: 
 
 /* ─── Step shell — SiteWise-inspired training chrome ─── */
 
-function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, onOpenHub, onJumpLesson }: {
+function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, onOpenHub, onJumpLesson, explainerStationId = null }: {
   step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
   transitioning?: boolean; transitionMsg?: string; supportLang?: SupportLang
   onOpenHub?: () => void
   onJumpLesson?: (n: number) => void
+  /** When step 9 is in Word→Action phase, force that explainer. */
+  explainerStationId?: string | null
 }) {
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
@@ -475,7 +477,9 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             outcomes={getPathwayUnitGoal(unit.id)!.outcomes}
           />
         )}
-        <StationExplainerGate step={step}>{children}</StationExplainerGate>
+        <StationExplainerGate step={step} stationId={explainerStationId}>
+          {children}
+        </StationExplainerGate>
       </Reveal>
 
       <div className="train-actions">
@@ -1202,6 +1206,7 @@ export function StudentSequencePage() {
           }
           onOpenHub={isPracticeMode() ? () => setPracticeView('hub') : undefined}
           onJumpLesson={(n) => go(n, `Opening step ${n}…`)}
+          explainerStationId={props.step === 9 && step8Phase === 'actions' ? 'word-action' : null}
         />
         {practiceAdvancePrompt && (
           <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">

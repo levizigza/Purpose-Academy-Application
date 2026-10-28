@@ -11,12 +11,14 @@ const OUT = process.env.PA_ARTIFACTS || '/tmp/cursor/artifacts'
 mkdirSync(OUT, { recursive: true })
 
 const STATION_EXPLAINERS = [
+  'your-language',
   'workplace-words',
   'language-organize',
   'eye-spy',
   'sentence-structure',
   'word-action',
   'supported-practice',
+  'workplace-instructions',
   'computer-skills',
   'site-language',
   'safety',

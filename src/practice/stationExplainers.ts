@@ -9,7 +9,10 @@ const KEY = 'pa-station-explainers-seen-v1'
 
 export type StationExplainer = {
   id: string
-  /** Journey steps that share this explainer (first match wins). */
+  /**
+   * Journey steps that open this explainer (first match wins).
+   * Empty = only via explicit stationId (e.g. Word→Action after Sentence on step 9).
+   */
   steps: number[]
   title: string
   lede: string
@@ -54,18 +57,26 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     video: 'explainers/sentence-structure.mp4',
   },
   {
+    /* Same journey step as Sentence Structure (phase 2). Gate via stationId override. */
     id: 'word-action',
-    steps: [10],
+    steps: [],
     title: 'Word → Action',
     lede: 'See the action. Pick which tool it uses.',
     video: 'explainers/word-action.mp4',
   },
   {
     id: 'supported-practice',
-    steps: [11],
+    steps: [10],
     title: 'Supported Practice',
     lede: 'Match words to pictures with help. Mistakes teach.',
     video: 'explainers/supported-practice.mp4',
+  },
+  {
+    id: 'workplace-instructions',
+    steps: [11],
+    title: 'Workplace Instructions',
+    lede: 'Hear a short direction. Show you understood.',
+    video: 'explainers/workplace-instructions.mp4',
   },
   {
     id: 'computer-skills',
@@ -133,7 +144,12 @@ function saveSeen(map: SeenMap) {
   }
 }
 
-export function explainerForStep(step: number): StationExplainer | null {
+export function explainerById(id: string): StationExplainer | null {
+  return STATION_EXPLAINERS.find((e) => e.id === id) ?? null
+}
+
+export function explainerForStep(step: number, stationId?: string | null): StationExplainer | null {
+  if (stationId) return explainerById(stationId)
   return STATION_EXPLAINERS.find((e) => e.steps.includes(step)) ?? null
 }
 
