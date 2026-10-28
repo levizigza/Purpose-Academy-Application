@@ -6,7 +6,7 @@ import { chromium } from 'playwright'
 import { mkdirSync } from 'fs'
 import { dirname, join } from 'path'
 
-const BASE = process.env.PA_BASE || 'http://127.0.0.1:5173'
+const BASE = process.env.PA_BASE || 'http://127.0.0.1:5175/Purpose-Academy-Application'
 const OUT = process.env.PA_ARTIFACTS || '/tmp/cursor/artifacts'
 mkdirSync(OUT, { recursive: true })
 
