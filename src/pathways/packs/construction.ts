@@ -125,7 +125,7 @@ export const constructionPack: PathwayPack = {
     },
     18: {
       title: 'Equipment videos',
-      help: 'Construction equipment habits are practised with your instructor after systems. Continue when you are ready for observation.',
+      help: 'Fourteen construction machines. Watch each video, then answer the practice questions — awareness and stay-clear, not operator certification.',
       purpose: 'Bridge from systems knowledge to supervised hands-on checks.',
     },
     20: {

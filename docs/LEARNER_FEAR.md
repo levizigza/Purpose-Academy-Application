@@ -166,7 +166,7 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 ### 2026-10-26 — Close-out to 100% learner-facing chrome
 
-- Computer Skills / Equipment: “Watch to unlock” → keep watching / try; Quick check → one practice question. Warehouse Equipment now: watch → practice questions (10/video, soft retry); soft-gate flag off for showcase.
+- Computer Skills / Equipment: “Watch to unlock” → keep watching / try; Quick check → one practice question. Warehouse + Construction Equipment now: watch → practice questions (10/video, soft retry); soft-gate flag off for showcase.
 - Unit review → unit practice; employment “verified skill” → what you practised (packs + curriculum).
 - Career mother-tongue (AR/HI/AM/TI): assessment / quiz / inventory lexicon → work questions; See my path.
 - Learn portal: Retry quiz / Score % / Expected / Mastery prototype → soft crew language.

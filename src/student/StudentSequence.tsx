@@ -2761,10 +2761,15 @@ export function StudentSequencePage() {
   }
 
   if (step === 18) {
-    const hasWarehouseVideos = pathwayId === 'logistics'
+    const equipmentPack =
+      pathwayId === 'logistics'
+        ? ('warehouse' as const)
+        : pathwayId === 'construction'
+          ? ('construction' as const)
+          : null
     return (
       <Shell step={18} onBack={() => go(17)}>
-        {hasWarehouseVideos ? (
+        {equipmentPack === 'warehouse' ? (
           <>
             <WhyWork>
               After systems, watch each warehouse machine before hands-on training. Know it, inspect it, protect the
@@ -2772,9 +2777,39 @@ export function StudentSequencePage() {
             </WhyWork>
             <TeachNote>
               Fourteen short lessons in equipment families. Watch each video, then answer the practice questions.
-              Powered lift trucks are stay-clear awareness only — not operator certification.
+              Powered lift trucks are stay-clear awareness only — not operator certification. Soft-gates stay off for
+              showcase — every video is open.
             </TeachNote>
             <EquipmentVideoDrill
+              pack="warehouse"
+              onComplete={() =>
+                requestPracticeAdvance(() =>
+                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                )
+              }
+              onSkip={
+                isPracticeMode()
+                  ? () =>
+                      requestPracticeAdvance(() =>
+                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                      )
+                  : undefined
+              }
+            />
+          </>
+        ) : equipmentPack === 'construction' ? (
+          <>
+            <WhyWork>
+              After systems, watch each construction machine before hands-on training. Know it, inspect it, protect the
+              area — then practise with an instructor.
+            </WhyWork>
+            <TeachNote>
+              Fourteen short lessons in equipment families. Watch each video, then answer the practice questions.
+              Powered machines are stay-clear awareness only — not operator certification. Soft-gates stay off for
+              showcase — every video is open.
+            </TeachNote>
+            <EquipmentVideoDrill
+              pack="construction"
               onComplete={() =>
                 requestPracticeAdvance(() =>
                   advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
@@ -2793,16 +2828,27 @@ export function StudentSequencePage() {
         ) : (
           <article className="topic-lesson-card">
             <p className="section-kicker">Equipment videos</p>
-            <h2>Video section · Warehouse Equipment</h2>
+            <h2>Video section · Equipment</h2>
             <p className="lede">
-              The fourteen machine lessons (forklift, pallet jack, scanner, and more) are their own unit —{' '}
-              <strong>Unit 8 · Video · Warehouse Equipment</strong> on <strong>Logistics</strong>. Switch pathways
-              to watch them, or continue this pathway to instructor observation.
+              Construction and Logistics each have fourteen machine lessons with practice questions —{' '}
+              <strong>Unit 8 · Video</strong>. Switch pathways to watch them, or continue this pathway to instructor
+              observation.
             </p>
             <div className="hero-actions">
               <button
                 type="button"
                 className="btn btn-primary"
+                onClick={() => {
+                  setActivePathway('construction')
+                  setPathwayId('construction')
+                  playFoley('whoosh')
+                }}
+              >
+                Open Video section · Construction
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary on-light"
                 onClick={() => {
                   setActivePathway('logistics')
                   setPathwayId('logistics')
@@ -2813,7 +2859,7 @@ export function StudentSequencePage() {
               </button>
               <button
                 type="button"
-                className="btn btn-secondary on-light"
+                className="btn btn-ghost"
                 onClick={() => {
                   recordSkillAttempt('equipment-videos', true, 15)
                   requestPracticeAdvance(() =>

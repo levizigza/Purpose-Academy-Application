@@ -117,10 +117,11 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   8: {
-    goal: 'Watch warehouse equipment videos before hands-on training.',
+    goal: 'Watch pathway equipment videos before hands-on training.',
     outcomes: [
-      'Open Warehouse Equipment video lessons (Logistics)',
+      'Open equipment video lessons (Construction or Logistics)',
       'Watch each machine: know, inspect, protect',
+      'Answer practice questions after each video',
       'Stay clear of powered equipment unless certified elsewhere',
     ],
   },
