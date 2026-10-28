@@ -11115,7 +11115,12 @@ video {
   transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
 }
 
-.sentence-cloze-chip:hover:not(:disabled) {
+.sentence-cloze-chip.is-reference {
+  cursor: default;
+  user-select: none;
+}
+
+.sentence-cloze-chip:hover:not(:disabled):not(.is-reference) {
   border-color: #e8a317;
   transform: translateY(-1px);
 }

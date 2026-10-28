@@ -101,7 +101,7 @@ Run this on every station before merge:
 | 6 | Visual Vocabulary | Hear → hear → type; one calm counter |
 | 7 | Language Organize | Match pictures — never “quiz” |
 | 8 | English Eye Spy | Clear the board; no prove / 100% / exam |
-| 9 | Sentences / Word→Action | Type the short blank word; soft retry — no quiz chips-first |
+| 9 | Sentences / Word→Action | Four choices visible; type the matching word; soft retry — not tap-to-answer |
 | 10 | Supported Practice | Help is strength, not remediation shame |
 | 11 | Workplace Instructions | Hear + choose what to do |
 | 12 | Computer Skills | Watch → try; first-computer friendly |
@@ -151,8 +151,7 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 ### 2026-10-27 — Sentence Structure type-the-blank
 
-- Customer ask: typing should also live on the sentence section — mindless enjoyment + learning, not exam/worksheet dread.
-- Ship: `SentenceClozeDrill` primary verb Type / Go (short missing word); soft “Not yet · try again”; optional hint chips after a miss; reveal keep-going after two soft tries. No score theatre.
+- Customer overturn: four choices stay visible; type the matching word (not tap-to-answer). Soft “Not yet · try again.” No score theatre.
 
 ### 2026-10-27 — First-go type-out; skip-known only on retake
 

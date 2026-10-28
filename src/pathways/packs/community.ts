@@ -89,7 +89,7 @@ export const communityPack: PathwayPack = {
     },
     9: {
       title: 'Sentence Structure',
-      help: 'Community Sentence Practice — type the short specialty word that fits the blank. Soft try again if not yet.',
+      help: 'Community Sentence Practice — four word choices stay visible; type the matching word. Soft try again if not yet.',
       purpose: 'Move from single words into full Community Support sentences.',
     },
     11: {
