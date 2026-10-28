@@ -60,7 +60,9 @@ export function LearningPathMap({
         </strong>
         <span className="lp-fold-meta">
           This stretch
-          {practice ? ` · ${stats.dayStreak} days showed up` : ''}
+          {practice
+            ? ` · ${stats.dayStreak} day${stats.dayStreak === 1 ? '' : 's'} showed up`
+            : ''}
           {' · '}
           {collapsedByDefault ? 'Show full path' : 'Path'}
         </span>
@@ -79,7 +81,8 @@ export function LearningPathMap({
           </p>
           {practice && (
             <p className="lp-xp" aria-label="Practice marks">
-              <strong>{stats.dayStreak}</strong> days showed up · keep going
+              <strong>{stats.dayStreak}</strong> day{stats.dayStreak === 1 ? '' : 's'} showed up ·
+              keep going
             </p>
           )}
           {practice && onOpenHub && (

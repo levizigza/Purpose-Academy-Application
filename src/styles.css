@@ -12432,7 +12432,72 @@ video {
 }
 
 .shell.is-toolbox .toolbox {
-  width: min(100%, 400px);
+  width: min(100%, 380px);
+  padding-bottom: 0.65rem;
+}
+
+/*
+  Critic (site audit 2026-10-28): Desktop night toolbox clipped Admin + Instructor
+  below the first viewport (~118px over at 1400×900) even after the earlier tighten.
+  Compress hero + tray density so all five trays read without scroll (L3).
+  Phone .is-in-phone keeps its own denser rules.
+*/
+.shell.is-toolbox .toolbox-station {
+  place-items: start center;
+  align-content: start;
+  padding: clamp(0.65rem, 1.8vw, 1.35rem) 1rem 1.15rem;
+  overflow: auto;
+}
+
+.shell.is-toolbox .toolbox-station-inner {
+  gap: 0.7rem;
+  width: min(100%, 880px);
+}
+
+.shell.is-toolbox .toolbox-station-logo {
+  width: min(100%, 142px);
+  margin-bottom: 0.3rem;
+}
+
+.shell.is-toolbox .toolbox-station-title {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.5rem, 3.1vw, 2.05rem);
+}
+
+.shell.is-toolbox .toolbox-station-lede {
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.shell.is-toolbox .toolbox-lid {
+  margin: 0.15rem 0.6rem 0;
+  padding: 0.45rem 0.8rem 0.55rem;
+}
+
+.shell.is-toolbox .toolbox-handle {
+  padding: 0.4rem 1rem 0.1rem;
+}
+
+.shell.is-toolbox .toolbox-tray {
+  gap: 0.28rem;
+  padding: 0.25rem 0.28rem 0.1rem;
+}
+
+.shell.is-toolbox .toolbox-slot {
+  padding: 0.4rem 0.55rem;
+  gap: 0.55rem;
+}
+
+.shell.is-toolbox .toolbox-etch {
+  width: 2.15rem;
+  height: 2.15rem;
+}
+
+.shell.is-toolbox .toolbox-slot-journey .toolbox-text > span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .toolbox-station-kicker {
@@ -14144,6 +14209,69 @@ html.pa-phone-shell .practice-feedback-dock {
 .is-phone-app .train-actions {
   flex-direction: column;
   align-items: stretch;
+}
+
+/*
+  Critic (site audit 2026-10-28): Phone language station buried NEXT ~420px
+  under the fold — primary continue failed the 3-second read (L3).
+  Dock header + actions to the phone screen; let the lesson panel scroll inside.
+*/
+.iphone-scroll.is-phone-app.phone-phase-app {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: 0.35rem !important;
+}
+
+.iphone-scroll.is-phone-app.phone-phase-app .shell-main.train-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.iphone-scroll.is-phone-app.phone-phase-app .train-header {
+  flex: 0 0 auto;
+}
+
+.iphone-scroll.is-phone-app.phone-phase-app .reveal.train-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.iphone-scroll.is-phone-app.phone-phase-app .train-actions {
+  flex: 0 0 auto;
+  z-index: 6;
+  margin-top: 0.15rem;
+  padding: 0.45rem 0.15rem 0.55rem;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--paper) 0%, transparent) 0%,
+    color-mix(in srgb, var(--paper) 88%, #fff) 32%,
+    var(--paper) 100%
+  );
+  border-top: 1px solid color-mix(in srgb, var(--brand) 12%, transparent);
+}
+
+/*
+  Station menu already owns path on phone. The compact bottom map stole ~90px
+  from the lesson panel and clipped chips under a docked NEXT — hide it here.
+*/
+.iphone-scroll.is-phone-app.phone-phase-app .learning-path-map.is-compact {
+  display: none;
+}
+
+.iphone-scroll.is-phone-app.phone-phase-app .train-header {
+  padding-bottom: 0.15rem;
+}
+
+.iphone-scroll.is-phone-app.phone-phase-app .train-station-menu {
+  margin: 0.15rem 0 0.2rem !important;
 }
 
 .is-phone-app .train-header-top {
