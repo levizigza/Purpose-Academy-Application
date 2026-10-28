@@ -415,7 +415,8 @@ export async function recordSyncedStation(browser, work, station) {
   const webm = join(work, 'raw.webm')
   if (raw !== webm) renameSync(raw, webm)
   const vDurRaw = durationOf(webm)
-  /* Refine setup offset if Playwright's muxed length disagrees with wall clock */
+  /* Refine setup offset if Playwright's muxed length disagrees with wall clock.
+     Clamp so beats never start before ~0.2s into the file. */
   if (timeline.length) {
     const pacedEnd = timeline[timeline.length - 1].end - setupDur
     const inferredSetup = Math.max(0, vDurRaw - pacedEnd - 0.55)
@@ -427,6 +428,14 @@ export async function recordSyncedStation(browser, work, station) {
         b.end += drift
       }
       setupDur = inferredSetup
+      if (timeline[0].start < 0.2) {
+        const bump = 0.2 - timeline[0].start
+        for (const b of timeline) {
+          b.start += bump
+          b.end += bump
+        }
+        setupDur += bump
+      }
     }
   }
   writeFileSync(join(work, 'timeline.json'), JSON.stringify({ setupDur, timeline, durs }, null, 2))

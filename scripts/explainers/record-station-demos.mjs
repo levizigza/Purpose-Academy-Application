@@ -121,14 +121,21 @@ const STATIONS = {
         async act(page) {
           const langRow = page.locator('[data-coach="vv-lang"]').first()
           await langRow.scrollIntoViewIfNeeded()
-          await moveTo(page, langRow, { steps: 24, settle: 400 })
+          await moveTo(page, langRow, { steps: 24, settle: 500 })
           const langButtons = page.locator('[data-coach="vv-lang"] button, .vocab-sheet-lang-btn')
+          /* Hover a couple languages first so VO can name the row before the press */
+          const n = await langButtons.count()
+          for (let i = 0; i < Math.min(n, 2); i++) {
+            await moveTo(page, langButtons.nth(i), { steps: 14, settle: 280 })
+          }
           const pick =
             (await langButtons.filter({ hasText: /Spanish/i }).first().isVisible().catch(() => false))
               ? langButtons.filter({ hasText: /Spanish/i }).first()
               : langButtons.first()
           await pick.scrollIntoViewIfNeeded()
-          await clickAt(page, pick, { steps: 24, settle: 400, after: 1000 })
+          /* Short after — keep camera on the language press; bridge audio is silenced in demos */
+          await clickAt(page, pick, { steps: 24, settle: 350, after: 450 })
+          await moveTo(page, pick, { steps: 8, settle: 400 })
         },
       },
       {
@@ -138,11 +145,11 @@ const STATIONS = {
           const hear = page.locator('button:has-text("Hear English"), [data-coach="vv-hear"]').first()
           if (await hear.isVisible().catch(() => false)) {
             await hear.scrollIntoViewIfNeeded()
-            await moveTo(page, hear, { steps: 22, settle: 700 })
+            await clickAt(page, hear, { steps: 22, settle: 350, after: 900 })
           } else {
-            /* English auto-plays after bridge — hold on the card */
-            const card = page.locator('.vocab-sheet, [data-coach="vv-type"]').first()
-            await moveTo(page, card, { steps: 18, settle: 900 })
+            /* English auto-plays after bridge — hold on the card / hear control */
+            const card = page.locator('.vocab-sheet, [data-coach="vv-type"], [data-coach="vv-hear"]').first()
+            await moveTo(page, card, { steps: 18, settle: 1100 })
           }
         },
       },
@@ -156,9 +163,11 @@ const STATIONS = {
           const input = page.locator('[data-coach="vv-type"] input, .vocab-sheet-type-input').first()
           await input.scrollIntoViewIfNeeded()
           await typeInto(page, input, 'Hi', { delay: 140 })
+          /* Rest on the filled field so VO can say “type” before Go */
+          await page.waitForTimeout(900)
           const go = page.locator('.vocab-sheet-type-check, button:has-text("Go")').first()
           await go.scrollIntoViewIfNeeded()
-          await clickAt(page, go, { steps: 20, settle: 300, after: 1200 })
+          await clickAt(page, go, { steps: 20, settle: 300, after: 900 })
         },
       },
     ],
@@ -284,7 +293,7 @@ const STATIONS = {
     async setup(page) {
       await gotoStation(page, BASE, { step: 9 })
       await page.waitForSelector(
-        '.sentence-cloze, [data-coach="sent-type"], .word-action-card, [data-coach="choice-opt"]',
+        '[data-coach="sent-type"], .sentence-cloze-type, [data-coach="sent-choices"]',
         { timeout: 30000 },
       )
       await page.waitForTimeout(500)
@@ -294,7 +303,9 @@ const STATIONS = {
         id: 'intro',
         text: 'Sentence Structure. Four words. Type the match.',
         async act(page) {
-          const stage = page.locator('.sentence-cloze, .word-action-card').first()
+          const stage = page
+            .locator('[data-coach="sent-type"], .sentence-cloze-type, .train-panel')
+            .first()
           await stage.scrollIntoViewIfNeeded()
           await moveTo(page, stage, { steps: 22, settle: 800 })
         },
@@ -303,7 +314,9 @@ const STATIONS = {
         id: 'read',
         text: 'Read the sentence. Look at the four choices at the bottom.',
         async act(page) {
-          const choices = page.locator('.sentence-cloze-choices, [data-coach="choice-opt"]').first()
+          const choices = page
+            .locator('[data-coach="sent-choices"], .sentence-cloze-choices')
+            .first()
           if (await choices.isVisible().catch(() => false)) {
             await moveTo(page, choices, { steps: 22, settle: 900 })
           } else {
@@ -315,43 +328,29 @@ const STATIONS = {
         id: 'type',
         text: 'Type the word that fits the blank. Soft try again if not yet.',
         async act(page) {
-          const typeOpen = await page
-            .locator('[data-coach="sent-type"] input, .sentence-cloze-type-input')
-            .first()
-            .isVisible()
-            .catch(() => false)
-          if (typeOpen) {
-            const chips = page.locator('.sentence-cloze-chip span:not(.sentence-cloze-chip-letter)')
-            let answer = ((await chips.nth(0).textContent()) || '').trim()
-            for (const w of ['Hammer', 'Drill', 'Saw', 'Level', 'Tape']) {
-              const hit = page
-                .locator('.sentence-cloze-chip')
-                .filter({ hasText: new RegExp(`^\\s*[A-D]\\.\\s*${w}\\s*$|${w}`, 'i') })
-              if (await hit.first().isVisible().catch(() => false)) {
-                answer = w
-                break
-              }
-            }
-            const chipTexts = await page.locator('.sentence-cloze-chip').allTextContents()
-            const cleaned = chipTexts.map((t) => t.replace(/^[A-D]\.\s*/i, '').trim()).filter(Boolean)
-            if (cleaned.length)
-              answer =
-                cleaned.find((t) => /hammer|drill|saw|level|tape|hard|ppe|safety/i.test(t)) ||
-                cleaned[0]
-            const input = page.locator('[data-coach="sent-type"] input, .sentence-cloze-type-input').first()
-            await typeInto(page, input, answer, { delay: 110 })
-            const go = page.locator('.sentence-cloze-type-go, button:has-text("Go")').first()
-            await clickAt(page, go, { steps: 18, settle: 280, after: 1200 })
-            const retry = page.locator('.play-soft-miss').first()
-            if (await retry.isVisible().catch(() => false)) {
-              const alt = cleaned.find((t) => t !== answer) || 'Hammer'
-              await page.locator('[data-coach="sent-type"] input').first().fill('')
-              await typeInto(page, input, alt, { delay: 100 })
-              await clickAt(page, go, { steps: 16, settle: 250, after: 1000 })
-            }
-          } else {
-            const opt = page.locator('[data-coach="choice-opt"] button').first()
-            await clickAt(page, opt, { steps: 24, settle: 400, after: 1200 })
+          const input = page.locator('[data-coach="sent-type"] input, .sentence-cloze-type-input').first()
+          await input.waitFor({ state: 'visible', timeout: 10000 })
+          const chipTexts = await page.locator('.sentence-cloze-chip').allTextContents()
+          const cleaned = chipTexts
+            .map((t) => t.replace(/^[A-D]\.\s*/i, '').trim())
+            .filter((t) => t && !/^[A-D]\.?$/i.test(t))
+          /* Prefer workplace/structure words; Construction Q1 answer is Foundation */
+          let answer =
+            cleaned.find((t) => /foundation|hammer|drill|saw|level|tape|hard|ppe|safety|scaffold/i.test(t)) ||
+            cleaned[1] ||
+            cleaned[0] ||
+            'Foundation'
+          await typeInto(page, input, answer, { delay: 110 })
+          /* Hold on filled blank so mid-beat still shows typing, not the next item */
+          await moveTo(page, input, { steps: 10, settle: 1100 })
+          const go = page.locator('.sentence-cloze-type-go, button:has-text("Go")').first()
+          await clickAt(page, go, { steps: 18, settle: 280, after: 700 })
+          const retry = page.locator('.play-soft-miss').first()
+          if (await retry.isVisible().catch(() => false)) {
+            const alt = cleaned.find((t) => t.toLowerCase() !== answer.toLowerCase()) || 'Foundation'
+            await input.fill('')
+            await typeInto(page, input, alt, { delay: 100 })
+            await clickAt(page, go, { steps: 16, settle: 250, after: 700 })
           }
         },
       },
@@ -363,35 +362,16 @@ const STATIONS = {
     step: 9,
     async setup(page) {
       await gotoStation(page, BASE, { step: 9 })
-      await page.waitForTimeout(600)
-      /* Reach Word→Action phase before VO beats (silent prep) */
-      const skip = page
-        .locator(
-          'button:has-text("Skip to actions"), button:has-text("Word → Action"), button:has-text("Continue to actions")',
+      await page.waitForSelector('[data-coach="sent-type"], .sentence-cloze-type', { timeout: 30000 })
+      await page.waitForTimeout(400)
+      /* Skip control lives in a collapsed fold — click via DOM so prep stays silent */
+      await page.evaluate(() => {
+        const b = [...document.querySelectorAll('button')].find((x) =>
+          /Skip to Word/i.test(x.textContent || ''),
         )
-        .first()
-      if (await skip.isVisible().catch(() => false)) {
-        await clickAt(page, skip, { steps: 18, settle: 250, after: 800 })
-      }
-      const input = page.locator('[data-coach="sent-type"] input').first()
-      if (await input.isVisible().catch(() => false)) {
-        const chips = await page.locator('.sentence-cloze-chip').allTextContents()
-        const cleaned = chips.map((t) => t.replace(/^[A-D]\.\s*/i, '').trim()).filter(Boolean)
-        const answer = cleaned.find((t) => /Hammer/i.test(t)) || cleaned[0] || 'Hammer'
-        await typeInto(page, input, answer, { delay: 80 })
-        await clickAt(page, page.locator('.sentence-cloze-type-go').first(), {
-          steps: 14,
-          settle: 180,
-          after: 700,
-        })
-        const cont = page
-          .locator('button:has-text("Continue"), button:has-text("actions"), button:has-text("Word")')
-          .first()
-        if (await cont.isVisible().catch(() => false)) {
-          await clickAt(page, cont, { steps: 18, settle: 250, after: 900 })
-        }
-      }
-      await page.waitForSelector('.word-action-card, [data-coach="choice-opt"]', { timeout: 25000 })
+        if (b) b.click()
+      })
+      await page.waitForSelector('[data-coach="choice-opt"]', { timeout: 25000 })
       await page.waitForTimeout(400)
     },
     beats: [
@@ -399,7 +379,7 @@ const STATIONS = {
         id: 'intro',
         text: 'Word to Action. Connect the tool to the job.',
         async act(page) {
-          const card = page.locator('.word-action-card, [data-coach="choice-opt"]').first()
+          const card = page.locator('[data-coach="choice-opt"], .train-panel').first()
           await card.scrollIntoViewIfNeeded()
           await moveTo(page, card, { steps: 24, settle: 800 })
         },
@@ -417,11 +397,15 @@ const STATIONS = {
         id: 'pick',
         text: 'One clear pick. Soft try again. Then continue.',
         async act(page) {
-          const hammer = page.locator('[data-coach="choice-opt"] button').filter({ hasText: /^Hammer$/i })
+          const hammer = page
+            .locator('[data-coach="choice-opt"] button')
+            .filter({ hasText: /^Hammer$/i })
           const btn = (await hammer.first().isVisible().catch(() => false))
             ? hammer.first()
             : page.locator('[data-coach="choice-opt"] button').first()
-          await clickAt(page, btn, { steps: 26, settle: 400, after: 1200 })
+          await clickAt(page, btn, { steps: 26, settle: 400, after: 800 })
+          /* Stay on the chosen answer — don’t wander during the VO hold */
+          await moveTo(page, btn, { steps: 8, settle: 500 })
         },
       },
     ],
