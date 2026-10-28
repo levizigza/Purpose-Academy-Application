@@ -203,6 +203,12 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     setPicked(id)
     setQCorrect(ok)
     playFoley(ok ? 'correct' : 'wrong')
+    /* Phone fold: keep teach / soft-miss above the sticky Back chrome. */
+    requestAnimationFrame(() => {
+      document
+        .querySelector('.equip-video-check .alert.ok, .equip-video-check .play-soft-miss')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    })
   }
 
   function afterQuestion() {
