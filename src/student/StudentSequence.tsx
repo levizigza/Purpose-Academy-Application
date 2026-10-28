@@ -110,6 +110,7 @@ import {
   resetPracticeProgress,
   shouldAskPracticeFeedback,
 } from '../practice/PracticeMode'
+import { learnerGet, learnerSet } from '../practice/learnerStore'
 
 const JOURNEY_KEY = 'pa-student-journey-step-v1'
 const OBS_KEY = 'pa-student-observation-v1'
@@ -118,14 +119,14 @@ const EMP_KEY = 'pa-student-employment-v1'
 
 function saveStep(step: number) {
   try {
-    sessionStorage.setItem(JOURNEY_KEY, String(step))
+    learnerSet(JOURNEY_KEY, String(step))
     window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step } }))
   } catch { /* */ }
 }
 
 function loadStep() {
   try {
-    const n = Number(sessionStorage.getItem(JOURNEY_KEY) || '1')
+    const n = Number(learnerGet(JOURNEY_KEY) || '1')
     return Number.isFinite(n) && n >= 1 && n <= JOURNEY_STEP_COUNT ? n : 1
   } catch { return 1 }
 }
@@ -554,7 +555,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
 
   function currentStepKey() {
     try {
-      const step = Number(sessionStorage.getItem(JOURNEY_KEY) || '0')
+      const step = Number(learnerGet(JOURNEY_KEY) || '0')
       return practiceFeedbackKey('/journey', step || undefined)
     } catch {
       return practiceFeedbackKey('/journey')
@@ -568,7 +569,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
       return
     }
     try {
-      const step = Number(sessionStorage.getItem(JOURNEY_KEY) || '0')
+      const step = Number(learnerGet(JOURNEY_KEY) || '0')
       if (!shouldAskPracticeFeedback(step)) {
         playFoley('wood')
         onComplete()
@@ -619,7 +620,7 @@ function QuizRunner({ items, onComplete, gated }: { items: QuizItem[]; onComplet
     }
     if (gated && !isCorrect) setGateBlocked(true)
     try {
-      const step = Number(sessionStorage.getItem(JOURNEY_KEY) || '0')
+      const step = Number(learnerGet(JOURNEY_KEY) || '0')
       const skill = SKILL_BY_STEP[step]
       if (skill) recordSkillAttempt(skill, isCorrect)
     } catch {
@@ -794,7 +795,7 @@ export function StudentSequencePage() {
   const [checkpointUnit, setCheckpointUnit] = useState<number | null>(null)
   const [matchRound, setMatchRound] = useState(1)
   const [empDone, setEmpDone] = useState(() => {
-    try { return !!sessionStorage.getItem(EMP_KEY) } catch { return false }
+    try { return !!learnerGet(EMP_KEY) } catch { return false }
   })
   const [phraseIdx, setPhraseIdx] = useState(0)
   const [phraseHeard, setPhraseHeard] = useState(false)
@@ -2764,7 +2765,7 @@ export function StudentSequencePage() {
         playFoley('wrong')
       }
       try {
-        sessionStorage.setItem(OBS_KEY, JSON.stringify({ scenario: scenario.id, picked: obsPicked, ok }))
+        learnerSet(OBS_KEY, JSON.stringify({ scenario: scenario.id, picked: obsPicked, ok }))
       } catch { /* */ }
     }
 
@@ -2884,7 +2885,7 @@ export function StudentSequencePage() {
       }
       if (isLast) {
         try {
-          sessionStorage.setItem(LOG_KEY, JSON.stringify({
+          learnerSet(LOG_KEY, JSON.stringify({
             date: logForm.date || new Date().toISOString().slice(0, 10),
             tasks: logForm.tasks || 'Completed site decision practice',
             supervisor: logForm.supervisor || 'Practice supervisor',
@@ -3032,7 +3033,7 @@ export function StudentSequencePage() {
     })
     saveFollowUp(plan)
     setFollowUp(plan)
-    try { sessionStorage.setItem(EMP_KEY, JSON.stringify({ ...empForm, prepDone: true, followUp: true })) } catch { /* */ }
+    try { learnerSet(EMP_KEY, JSON.stringify({ ...empForm, prepDone: true, followUp: true })) } catch { /* */ }
     markSequenceComplete('student', { detail: user?.full_name || 'Student' })
     recordSkillAttempt('employment', true)
     playFoley('metal')

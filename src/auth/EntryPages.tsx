@@ -385,15 +385,15 @@ export function SplashPage({
       {showEnter && (
         <button
           type="button"
-          className={`threshold-hammer is-visible${isSmashing ? ' is-smashing' : ''}${
+          className={`threshold-hammer is-visible is-tap-cue${isSmashing ? ' is-smashing' : ''}${
             embedded ? ' is-phone-tap' : ''
           }`}
           onClick={enter}
-          aria-label={embedded ? 'Tap to enter Purpose Academy' : 'Enter Purpose Academy'}
+          aria-label="Tap to enter Purpose Academy"
           disabled={exiting}
         >
           <EnterHammer className="threshold-hammer-icon" />
-          <span className="threshold-hammer-hint">{embedded ? 'Tap' : 'Strike to enter'}</span>
+          <span className="threshold-hammer-hint">Tap</span>
         </button>
       )}
 

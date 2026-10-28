@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { pathwayImage } from '../pathways'
+import { learnerGet, learnerSet } from '../practice/learnerStore'
 import {
   EQUIPMENT_FAMILIES,
   WAREHOUSE_EQUIPMENT_VIDEOS,
@@ -15,7 +16,7 @@ const WATCHED_KEY = 'pa-warehouse-equipment-watched-v1'
 
 function loadWatched(): Set<string> {
   try {
-    const raw = sessionStorage.getItem(WATCHED_KEY)
+    const raw = learnerGet(WATCHED_KEY)
     if (!raw) return new Set()
     const arr = JSON.parse(raw) as string[]
     return new Set(Array.isArray(arr) ? arr : [])
@@ -26,7 +27,7 @@ function loadWatched(): Set<string> {
 
 function saveWatched(ids: Set<string>) {
   try {
-    sessionStorage.setItem(WATCHED_KEY, JSON.stringify([...ids]))
+    learnerSet(WATCHED_KEY, JSON.stringify([...ids]))
   } catch {
     /* ignore */
   }

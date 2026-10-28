@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSession } from '../auth/Session'
+import { learnerGet } from '../practice/learnerStore'
 import {
   enterPracticeLesson,
   getJourneyStep,
@@ -22,7 +23,7 @@ export function StudentSchoolPathPage() {
   const [step, setStep] = useState(() => getJourneyStep())
   const [pathComplete, setPathComplete] = useState(() => {
     try {
-      return !!sessionStorage.getItem('pa-student-employment-v1')
+      return !!learnerGet('pa-student-employment-v1')
     } catch {
       return false
     }
@@ -39,7 +40,7 @@ export function StudentSchoolPathPage() {
     const sync = () => {
       setStep(getJourneyStep())
       try {
-        setPathComplete(!!sessionStorage.getItem('pa-student-employment-v1'))
+        setPathComplete(!!learnerGet('pa-student-employment-v1'))
       } catch {
         /* ignore */
       }

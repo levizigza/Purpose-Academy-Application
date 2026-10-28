@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { playFoley } from '../audio/foley'
+import { learnerGet, learnerSet } from './learnerStore'
 
 /**
  * Play craft — Candy Crush–style clear joy without scoreboard fear.
@@ -17,7 +18,7 @@ function todayKey() {
 
 export function readBoardsClearedToday(): number {
   try {
-    const raw = sessionStorage.getItem(CLEARS_KEY)
+    const raw = learnerGet(CLEARS_KEY)
     if (!raw) return 0
     const parsed = JSON.parse(raw) as ClearsDay
     if (parsed.day !== todayKey()) return 0
@@ -31,7 +32,7 @@ function bumpBoardsClearedToday() {
   const day = todayKey()
   const next = readBoardsClearedToday() + 1
   try {
-    sessionStorage.setItem(CLEARS_KEY, JSON.stringify({ day, count: next }))
+    learnerSet(CLEARS_KEY, JSON.stringify({ day, count: next }))
   } catch {
     /* ignore */
   }

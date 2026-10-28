@@ -3,6 +3,8 @@
  * Stored in localStorage so progress stays visible on the site after refresh.
  */
 
+import { learnerGet } from '../practice/learnerStore'
+
 export type SequenceId =
   | 'contact'
   | 'student'
@@ -137,7 +139,7 @@ export function clearSequenceProgress() {
 
 export function getStudentJourneyStep(): number {
   try {
-    const n = Number(sessionStorage.getItem(STUDENT_STEP_KEY) || '0')
+    const n = Number(learnerGet(STUDENT_STEP_KEY) || '0')
     return Number.isFinite(n) ? n : 0
   } catch {
     return 0

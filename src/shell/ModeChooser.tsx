@@ -38,6 +38,7 @@ export function ModeChooser() {
         <h1 className="mode-chooser-title">How do you want to train?</h1>
         <p className="mode-chooser-lede">
           Desktop for the full web course. Phone for a live app demo inside a real device frame.
+          Your practice history stays with you when you switch — same progress on both.
         </p>
       </header>
 

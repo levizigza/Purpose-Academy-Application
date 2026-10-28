@@ -1,3 +1,4 @@
+import { learnerGet, learnerSet } from '../practice/learnerStore'
 /**
  * Employment follow-up — Purpose Academy mold (chart step 20).
  * Training does not end at graduation: 30 / 90 / 180 day check-ins
@@ -55,7 +56,7 @@ export function createFollowUpPlan(input: {
 
 export function loadFollowUp(): EmploymentFollowUp | null {
   try {
-    const raw = sessionStorage.getItem(KEY)
+    const raw = learnerGet(KEY)
     if (!raw) return null
     return JSON.parse(raw) as EmploymentFollowUp
   } catch {
@@ -65,7 +66,7 @@ export function loadFollowUp(): EmploymentFollowUp | null {
 
 export function saveFollowUp(plan: EmploymentFollowUp) {
   try {
-    sessionStorage.setItem(KEY, JSON.stringify(plan))
+    learnerSet(KEY, JSON.stringify(plan))
     window.dispatchEvent(new CustomEvent('pa-employment-followup-changed'))
   } catch {
     /* ignore */

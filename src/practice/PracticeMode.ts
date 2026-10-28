@@ -1,5 +1,6 @@
 /** Practice: full-site student path preview (no registration). */
 import { JOURNEY_STEP_COUNT } from '../student/journeyCurriculum'
+import { learnerGet, learnerRemove, learnerSet } from './learnerStore'
 
 export const PRACTICE_REVIEWERS = ['ChuChu', 'Yonas', 'Kinfe', 'Saba', 'Levi', 'Teklish', 'Henok'] as const
 export type PracticeReviewer = (typeof PRACTICE_REVIEWERS)[number] | string
@@ -17,12 +18,30 @@ const FORCE_LESSON_KEY = 'pa-practice-force-lesson-v1'
 const LEGACY_FLAG = 'pa-dev-preview-v1'
 const LEGACY_NAME = 'pa-dev-preview-name-v1'
 
+const PROGRESS_KEYS = [
+  ACK_KEY,
+  'pa-student-observation-v1',
+  'pa-student-daily-log-v1',
+  'pa-student-employment-v1',
+  'pa-employment-followup-v1',
+  'pa-vocab-known-v1',
+  'pa-vocab-station-cleared-v1',
+  'pa-learning-mastery-v1',
+  'pa-learning-stats-v1',
+  'pa-active-pathway-v1',
+  'pa-recommended-pathway-v1',
+  'pa-basic-computer-skills-watched-v1',
+  'pa-basic-computer-skills-done-v1',
+  'pa-warehouse-equipment-watched-v1',
+  'pa-play-clears-day-v1',
+] as const
+
 function migrateLegacy() {
   try {
-    if (sessionStorage.getItem(FLAG_KEY) !== '1' && sessionStorage.getItem(LEGACY_FLAG) === '1') {
-      sessionStorage.setItem(FLAG_KEY, '1')
-      const n = sessionStorage.getItem(LEGACY_NAME)
-      if (n) sessionStorage.setItem(NAME_KEY, n)
+    if (learnerGet(FLAG_KEY) !== '1' && learnerGet(LEGACY_FLAG) === '1') {
+      learnerSet(FLAG_KEY, '1')
+      const n = learnerGet(LEGACY_NAME)
+      if (n) learnerSet(NAME_KEY, n)
     }
   } catch {
     /* ignore */
@@ -32,7 +51,7 @@ function migrateLegacy() {
 export function isPracticeMode(): boolean {
   migrateLegacy()
   try {
-    return sessionStorage.getItem(FLAG_KEY) === '1'
+    return learnerGet(FLAG_KEY) === '1'
   } catch {
     return false
   }
@@ -41,7 +60,7 @@ export function isPracticeMode(): boolean {
 export function getPracticeName(): string {
   migrateLegacy()
   try {
-    return sessionStorage.getItem(NAME_KEY) || ''
+    return learnerGet(NAME_KEY) || ''
   } catch {
     return ''
   }
@@ -50,20 +69,13 @@ export function getPracticeName(): string {
 /** Clear journey progress / feedback acks so a reviewer can run the path again from the top. */
 export function resetPracticeProgress() {
   try {
-    sessionStorage.removeItem(ACK_KEY)
-    sessionStorage.removeItem('pa-student-observation-v1')
-    sessionStorage.removeItem('pa-student-daily-log-v1')
-    sessionStorage.removeItem('pa-student-employment-v1')
-    sessionStorage.removeItem('pa-employment-followup-v1')
-    sessionStorage.removeItem('pa-vocab-known-v1')
-    sessionStorage.removeItem('pa-vocab-station-cleared-v1')
-    sessionStorage.removeItem('pa-learning-mastery-v1')
-    sessionStorage.removeItem('pa-learning-stats-v1')
-    sessionStorage.setItem(JOURNEY_STEP_KEY, String(PRACTICE_ENTRY_STEP))
+    for (const key of PROGRESS_KEYS) learnerRemove(key)
+    learnerSet(JOURNEY_STEP_KEY, String(PRACTICE_ENTRY_STEP))
     window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: PRACTICE_ENTRY_STEP } }))
     window.dispatchEvent(new CustomEvent('pa-employment-followup-changed'))
     window.dispatchEvent(new CustomEvent('pa-vocab-known-changed'))
     window.dispatchEvent(new CustomEvent('pa-vocab-station-cleared-changed'))
+    window.dispatchEvent(new CustomEvent('pa-pathway-changed', { detail: { pathway: 'construction' } }))
     window.dispatchEvent(new Event('pa-practice-restarted'))
     window.dispatchEvent(new Event('pa-mastery-changed'))
   } catch {
@@ -78,13 +90,33 @@ export function shouldAskPracticeFeedback(step: number) {
   return PRACTICE_FEEDBACK_STEPS.has(step)
 }
 
+/** Fresh Practice run (Start over / new reviewer name with wipe). */
 export function startPracticeMode(fullName: string) {
   const name = fullName.trim()
   try {
-    sessionStorage.setItem(FLAG_KEY, '1')
-    if (name) sessionStorage.setItem(NAME_KEY, name)
-    /* Fresh run every time — skip registration, land on language / real training process */
+    learnerSet(FLAG_KEY, '1')
+    if (name) learnerSet(NAME_KEY, name)
     resetPracticeProgress()
+    window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
+  } catch {
+    /* ignore */
+  }
+}
+
+/**
+ * Open Practice from the toolbox without wiping history.
+ * Desktop ↔ Phone share the same local store — resume where they left off.
+ */
+export function resumeOrEnterPractice(fullName: string) {
+  const name = fullName.trim()
+  try {
+    learnerSet(FLAG_KEY, '1')
+    if (name) learnerSet(NAME_KEY, name)
+    const raw = learnerGet(JOURNEY_STEP_KEY)
+    const step = Number(raw)
+    if (!raw || !Number.isFinite(step) || step < PRACTICE_ENTRY_STEP) {
+      learnerSet(JOURNEY_STEP_KEY, String(PRACTICE_ENTRY_STEP))
+    }
     window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
   } catch {
     /* ignore */
@@ -95,8 +127,8 @@ export function startPracticeMode(fullName: string) {
 export function restartPracticeFromTop() {
   const name = getPracticeName()
   try {
-    sessionStorage.setItem(FLAG_KEY, '1')
-    if (name) sessionStorage.setItem(NAME_KEY, name)
+    learnerSet(FLAG_KEY, '1')
+    if (name) learnerSet(NAME_KEY, name)
     resetPracticeProgress()
     window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
   } catch {
@@ -108,8 +140,8 @@ export function setPracticeName(fullName: string) {
   const name = fullName.trim()
   if (!name) return
   try {
-    sessionStorage.setItem(NAME_KEY, name)
-    sessionStorage.setItem(FLAG_KEY, '1')
+    learnerSet(NAME_KEY, name)
+    learnerSet(FLAG_KEY, '1')
     window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
   } catch {
     /* ignore */
@@ -118,7 +150,7 @@ export function setPracticeName(fullName: string) {
 
 export function getJourneyStep(): number {
   try {
-    const n = Number(sessionStorage.getItem(JOURNEY_STEP_KEY) || '0')
+    const n = Number(learnerGet(JOURNEY_STEP_KEY) || '0')
     return Number.isFinite(n) && n > 0 ? Math.min(JOURNEY_STEP_COUNT, Math.max(1, Math.floor(n))) : PRACTICE_ENTRY_STEP
   } catch {
     return PRACTICE_ENTRY_STEP
@@ -128,7 +160,7 @@ export function getJourneyStep(): number {
 export function setJourneyStep(step: number) {
   const target = Math.min(JOURNEY_STEP_COUNT, Math.max(PRACTICE_ENTRY_STEP, Math.floor(step)))
   try {
-    sessionStorage.setItem(JOURNEY_STEP_KEY, String(target))
+    learnerSet(JOURNEY_STEP_KEY, String(target))
     window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: target } }))
   } catch {
     /* ignore */
@@ -140,19 +172,7 @@ export function setJourneyStep(step: number) {
  * existing journey progress.
  */
 export function openPracticeSpine(fullName: string) {
-  const name = fullName.trim()
-  try {
-    sessionStorage.setItem(FLAG_KEY, '1')
-    if (name) sessionStorage.setItem(NAME_KEY, name)
-    const raw = sessionStorage.getItem(JOURNEY_STEP_KEY)
-    const step = Number(raw)
-    if (!raw || !Number.isFinite(step) || step < PRACTICE_ENTRY_STEP) {
-      sessionStorage.setItem(JOURNEY_STEP_KEY, String(PRACTICE_ENTRY_STEP))
-    }
-    window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
-  } catch {
-    /* ignore */
-  }
+  resumeOrEnterPractice(fullName)
 }
 
 /** Enter a specific spine lesson from the portal School path (skip double hub). */
@@ -160,7 +180,7 @@ export function enterPracticeLesson(fullName: string, step: number) {
   openPracticeSpine(fullName)
   setJourneyStep(step)
   try {
-    sessionStorage.setItem(FORCE_LESSON_KEY, '1')
+    learnerSet(FORCE_LESSON_KEY, '1')
   } catch {
     /* ignore */
   }
@@ -168,7 +188,7 @@ export function enterPracticeLesson(fullName: string, step: number) {
 
 export function peekForcePracticeLesson(): boolean {
   try {
-    return sessionStorage.getItem(FORCE_LESSON_KEY) === '1'
+    return learnerGet(FORCE_LESSON_KEY) === '1'
   } catch {
     return false
   }
@@ -176,8 +196,8 @@ export function peekForcePracticeLesson(): boolean {
 
 export function consumeForcePracticeLesson(): boolean {
   try {
-    if (sessionStorage.getItem(FORCE_LESSON_KEY) === '1') {
-      sessionStorage.removeItem(FORCE_LESSON_KEY)
+    if (learnerGet(FORCE_LESSON_KEY) === '1') {
+      learnerRemove(FORCE_LESSON_KEY)
       return true
     }
   } catch {
@@ -186,13 +206,14 @@ export function consumeForcePracticeLesson(): boolean {
   return false
 }
 
+/** Leave Practice UI flag only — does not wipe journey history (shared across modes). */
 export function clearPracticeMode() {
   try {
-    sessionStorage.removeItem(FLAG_KEY)
-    sessionStorage.removeItem(NAME_KEY)
-    sessionStorage.removeItem(LEGACY_FLAG)
-    sessionStorage.removeItem(LEGACY_NAME)
-    sessionStorage.removeItem(ACK_KEY)
+    learnerRemove(FLAG_KEY)
+    learnerRemove(NAME_KEY)
+    learnerRemove(LEGACY_FLAG)
+    learnerRemove(LEGACY_NAME)
+    learnerRemove(ACK_KEY)
   } catch {
     /* ignore */
   }
@@ -200,7 +221,7 @@ export function clearPracticeMode() {
 
 function readAcks(): Record<string, boolean> {
   try {
-    const raw = sessionStorage.getItem(ACK_KEY)
+    const raw = learnerGet(ACK_KEY)
     if (!raw) return {}
     const parsed = JSON.parse(raw) as Record<string, boolean>
     return parsed && typeof parsed === 'object' ? parsed : {}
@@ -211,7 +232,7 @@ function readAcks(): Record<string, boolean> {
 
 function writeAcks(map: Record<string, boolean>) {
   try {
-    sessionStorage.setItem(ACK_KEY, JSON.stringify(map))
+    learnerSet(ACK_KEY, JSON.stringify(map))
   } catch {
     /* ignore */
   }

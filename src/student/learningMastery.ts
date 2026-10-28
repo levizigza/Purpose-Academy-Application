@@ -1,9 +1,10 @@
+import { learnerGet, learnerRemove, learnerSet } from '../practice/learnerStore'
 /**
  * Station readiness tracking for the Purpose Academy journey.
  * Internal levels (attempted → familiar → proficient → mastered) stay for craft gates.
  * Learner-facing labels prefer crew language: Started → Comfortable → Strong → Solid.
  * Practice marks and “days showed up” serve craft (L4) — not streak FOMO.
- * Persisted in sessionStorage so Practice Mode and student runs keep progress.
+ * Persisted in localStorage (learnerStore) so Desktop and Phone share progress.
  */
 
 export type MasteryLevel = 'locked' | 'attempted' | 'familiar' | 'proficient' | 'mastered'
@@ -120,7 +121,7 @@ function todayKey() {
 
 function loadAll(): Record<SkillId, SkillRecord> {
   try {
-    const raw = sessionStorage.getItem(KEY)
+    const raw = learnerGet(KEY)
     if (!raw) return structuredCloneSafe()
     const parsed = JSON.parse(raw) as Record<string, SkillRecord>
     const base = structuredCloneSafe()
@@ -139,7 +140,7 @@ function structuredCloneSafe(): Record<SkillId, SkillRecord> {
 
 function saveAll(data: Record<SkillId, SkillRecord>) {
   try {
-    sessionStorage.setItem(KEY, JSON.stringify(data))
+    learnerSet(KEY, JSON.stringify(data))
     window.dispatchEvent(new Event('pa-mastery-changed'))
   } catch {
     /* ignore */
@@ -148,7 +149,7 @@ function saveAll(data: Record<SkillId, SkillRecord>) {
 
 function loadStats(): PlatformStats {
   try {
-    const raw = sessionStorage.getItem(STATS_KEY)
+    const raw = learnerGet(STATS_KEY)
     if (!raw) return { xp: 0, dayStreak: 0, lastActiveDay: '', lessonsCompleted: 0, perfectRounds: 0 }
     return { xp: 0, dayStreak: 0, lastActiveDay: '', lessonsCompleted: 0, perfectRounds: 0, ...JSON.parse(raw) }
   } catch {
@@ -158,7 +159,7 @@ function loadStats(): PlatformStats {
 
 function saveStats(stats: PlatformStats) {
   try {
-    sessionStorage.setItem(STATS_KEY, JSON.stringify(stats))
+    learnerSet(STATS_KEY, JSON.stringify(stats))
     window.dispatchEvent(new Event('pa-mastery-changed'))
   } catch {
     /* ignore */
@@ -294,8 +295,8 @@ export function markSkillOpened(id: SkillId) {
 
 export function resetMastery() {
   try {
-    sessionStorage.removeItem(KEY)
-    sessionStorage.removeItem(STATS_KEY)
+    learnerRemove(KEY)
+    learnerRemove(STATS_KEY)
     window.dispatchEvent(new Event('pa-mastery-changed'))
   } catch {
     /* ignore */

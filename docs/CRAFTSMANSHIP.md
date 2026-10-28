@@ -432,6 +432,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-27 — Desktop Tap hammer + shared Desktop↔Phone progress (L3 / L6)
+
+- **Layers:** L3 (splash next-action) + L6 (one learner history across shells).
+- **Customer ask:** Desktop hammer mid-frame blinking Tap like phone; Desktop and Phone stay connected with the same saved progress.
+- **Hammer:** Desktop night splash uses centered **Tap** + soft blink (`is-tap-cue`); night atmosphere unchanged.
+- **Progress:** `learnerStore` (localStorage) for journey step, vocab, pathway, mastery, employment, computer/equipment watches, play clears. Toolbox Practice **resumes** (Start over / Restart path still wipe). Leaving Phone modes no longer clears Practice identity.
+- **Critic:** sessionStorage made modes feel separate; wiping on mode exit broke the “same data” promise.
+
 ### 2026-10-27 — Desktop night: same play-craft flow, distinct aesthetics (L3 / L6)
 
 - **Layers:** L3 (task first viewport) + L6 (spine continuity phone ↔ desktop).

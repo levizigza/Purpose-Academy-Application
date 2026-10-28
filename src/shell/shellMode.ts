@@ -5,6 +5,9 @@
  * 1. Mode chooser (Desktop | Phone) — no shell yet
  * 2a. Desktop → opening animation → toolbox → Practice / Student / …
  * 2b. Phone → home with PA icon → opening animation on device → toolbox → Practice / …
+ *
+ * Shell choice is presentation-only. Learner progress lives in learnerStore
+ * (localStorage) and is shared across Desktop and Phone.
  */
 
 export type ShellMode = 'phone' | 'course'
@@ -15,9 +18,54 @@ const PHASE_KEY = 'pa-phone-phase-v1'
 const EVENT = 'pa-shell-mode'
 const PHASE_EVENT = 'pa-phone-phase'
 
+function storeGet(key: string): string | null {
+  try {
+    const local = localStorage.getItem(key)
+    if (local != null) return local
+    const sess = sessionStorage.getItem(key)
+    if (sess != null) {
+      localStorage.setItem(key, sess)
+      return sess
+    }
+  } catch {
+    try {
+      return sessionStorage.getItem(key)
+    } catch {
+      return null
+    }
+  }
+  return null
+}
+
+function storeSet(key: string, value: string) {
+  try {
+    localStorage.setItem(key, value)
+  } catch {
+    /* ignore */
+  }
+  try {
+    sessionStorage.setItem(key, value)
+  } catch {
+    /* ignore */
+  }
+}
+
+function storeRemove(key: string) {
+  try {
+    localStorage.removeItem(key)
+  } catch {
+    /* ignore */
+  }
+  try {
+    sessionStorage.removeItem(key)
+  } catch {
+    /* ignore */
+  }
+}
+
 export function getShellMode(): ShellMode | null {
   try {
-    const v = sessionStorage.getItem(MODE_KEY)
+    const v = storeGet(MODE_KEY)
     if (v === 'phone' || v === 'course') return v
   } catch {
     /* private mode */
@@ -27,10 +75,10 @@ export function getShellMode(): ShellMode | null {
 
 export function setShellMode(mode: ShellMode | null) {
   try {
-    if (mode) sessionStorage.setItem(MODE_KEY, mode)
+    if (mode) storeSet(MODE_KEY, mode)
     else {
-      sessionStorage.removeItem(MODE_KEY)
-      sessionStorage.removeItem(PHASE_KEY)
+      storeRemove(MODE_KEY)
+      storeRemove(PHASE_KEY)
     }
   } catch {
     /* ignore */
@@ -58,7 +106,7 @@ export function subscribeShellMode(cb: () => void) {
 
 export function getPhonePhase(): PhonePhase {
   try {
-    const v = sessionStorage.getItem(PHASE_KEY)
+    const v = storeGet(PHASE_KEY)
     if (v === 'home' || v === 'splash' || v === 'toolbox' || v === 'app') return v
   } catch {
     /* ignore */
@@ -68,7 +116,7 @@ export function getPhonePhase(): PhonePhase {
 
 export function setPhonePhase(phase: PhonePhase) {
   try {
-    sessionStorage.setItem(PHASE_KEY, phase)
+    storeSet(PHASE_KEY, phase)
   } catch {
     /* ignore */
   }

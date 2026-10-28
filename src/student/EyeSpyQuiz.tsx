@@ -4,6 +4,7 @@ import { EYE_SPY_ATMOSPHERE, pathwayImage } from '../pathways'
 import type { PathwayId } from '../pathways/types'
 import { playFoley } from '../audio/foley'
 import { recordSkillAttempt } from './learningMastery'
+import { learnerGet } from '../practice/learnerStore'
 import {
   hasPracticeFeedbackAck,
   isPracticeMode,
@@ -172,7 +173,7 @@ export function EyeSpyQuiz({
 
   function currentStepKey() {
     try {
-      const step = Number(sessionStorage.getItem('pa-student-journey-step-v1') || '0')
+      const step = Number(learnerGet('pa-student-journey-step-v1') || '0')
       return practiceFeedbackKey('/journey', step || undefined)
     } catch {
       return practiceFeedbackKey('/journey')
