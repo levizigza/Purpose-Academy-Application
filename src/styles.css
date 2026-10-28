@@ -12020,6 +12020,83 @@ video {
   margin-top: 0.15rem;
 }
 
+/* Practice questions after each warehouse video (watch → answer → continue) */
+.equip-video-check {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, #fff 5%, #122033);
+  border: 1px solid color-mix(in srgb, #c9a227 32%, #2a3d55);
+}
+
+.equip-video-check-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #c9a227;
+}
+
+.equip-video-check h3 {
+  margin: 0;
+  font-family: var(--display, Georgia, serif);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  color: var(--train-text, #f4f7fb);
+}
+
+.equip-video-check .train-check-prompt {
+  margin: 0;
+  color: #dce6f2;
+  font-size: 1.02rem;
+  line-height: 1.45;
+}
+
+.equip-video-choice-id {
+  font-weight: 800;
+  color: #c9a227;
+  margin-right: 0.2rem;
+}
+
+.equip-video-rail-btn.is-watched:not(.is-done) .equip-video-rail-name {
+  color: #a8c0d8;
+}
+
+.equip-video-rail-btn.is-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.equip-video-rail-lock {
+  color: #8aa0b8;
+  font-weight: 800;
+}
+
+.is-phone-app .equip-video-check {
+  background: #fff !important;
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line)) !important;
+}
+
+.is-phone-app .equip-video-check-kicker {
+  color: var(--brand) !important;
+}
+
+.is-phone-app .equip-video-check h3,
+.is-phone-app .equip-video-check .train-check-prompt,
+.is-phone-app .equip-video-check .lede {
+  color: var(--brand-deep, #0b1c2e) !important;
+}
+
+.is-phone-app .equip-video-choice-id {
+  color: var(--accent) !important;
+}
+
+.course-stage .equip-video-check {
+  background: color-mix(in srgb, #fff 6%, #122033);
+  border-color: color-mix(in srgb, #c9a227 36%, #2a3d55);
+}
+
 /* Practice hub — pathway switcher (Warehouse Equipment is Logistics-only) */
 .ph-pathway-switch {
   margin-top: 0.85rem;

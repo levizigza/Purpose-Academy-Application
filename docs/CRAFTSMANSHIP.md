@@ -440,6 +440,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Critic:** Mirror Phone — never play Desktop open before the mode door; never skip the open after the door.
 - **Assumption to challenge next:** whether Desktop phase should stay in sessionStorage only so a new browser session always starts at ModeChooser even mid-`ready`.
 
+### 2026-10-28 — Logistics warehouse video practice questions (L2 / L3)
+
+- **Layers:** L2 content delivery (140 practice questions paired to 14 equipment videos) + L3 dual-shell optics (Desktop night check card / Phone paper check card).
+- **Ingest:** Forklift Quiz PPTX + Warehouse Video Q&A DOCX + student quiz / answer-key PDFs → `warehouseEquipmentVideoQuizzes.ts` (+ JSON). Each question carries answer, teach line, and replay window inside the matching MP4.
+- **Flow:** Watch whole video → practice questions (one at a time, soft retry, optional clip replay) → continue. Learner chrome says **practice questions**, never quiz/exam.
+- **Soft-gate:** `VIDEO_SEGMENT_GATES_ENABLED = false` (showcase — all videos open). Architecture ready: flip the flag to require cleared practice before the next video unlocks. Do not hard-lock for showcase demos.
+- **Critic:** Information display first — video + one primary continue remain unmistakable; questions sit under the player, not as a separate exam room. Dual-shell: night check card on Desktop course; paper + brand-deep on Phone.
+
 ### 2026-10-28 — Site-wide Desktop/Phone audit after pathways-bottom (L3 / L6)
 
 - **Layers:** L3 information display + L6 dual-shell continuity (Desktop night toolbox ↔ Phone paper stations).
