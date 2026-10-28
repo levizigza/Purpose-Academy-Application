@@ -5,6 +5,7 @@ import { isPracticeMode } from '../practice/PracticeMode'
 import { speakEnglish } from './speech'
 import { playFoley } from '../audio/foley'
 import { firePlayClear, softMissLine } from '../practice/PlayClear'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 import { recordSkillAttempt } from './learningMastery'
 import { normalizeEnglishAnswer } from './VocabSheet'
 
@@ -263,11 +264,14 @@ export function SentenceClozeDrill({
     advanceAfterResolve(ok, newScore, nextMissed)
   }
 
+  const coachFirst = phase === 'drill' && page === 0 && idx === 0
+
   function checkType(e: FormEvent) {
     e.preventDefault()
     if (!item || resolved) return
     const ok = normalizeEnglishAnswer(draft) === normalizeEnglishAnswer(item.answer)
     if (ok) {
+      if (coachFirst) advanceStationCoach('sentence-structure')
       resolveItem(true)
       return
     }
@@ -462,7 +466,7 @@ export function SentenceClozeDrill({
       </div>
 
       {typingOpen ? (
-        <form className="sentence-cloze-type" onSubmit={checkType}>
+        <form className="sentence-cloze-type" data-coach="sent-type" onSubmit={checkType}>
           <p className="sentence-cloze-type-prompt">
             <span className="sentence-cloze-type-kicker">Your turn</span>
             Type the matching word from the four choices.
@@ -503,6 +507,7 @@ export function SentenceClozeDrill({
       <div
         className="train-choice-grid sentence-cloze-choices"
         role="list"
+        data-coach="sent-choices"
         aria-label="Word choices — type the correct one"
       >
         {options.map((opt, i) => {
@@ -525,6 +530,12 @@ export function SentenceClozeDrill({
 
       {resolved && correct ? (
         <div className="alert ok">Yes — the word completes the sentence.</div>
+      ) : null}
+      {coachFirst ? (
+        <StationCoach
+          stationId="sentence-structure"
+          layoutKey={`${item.id}-${resolved}-${typingOpen}`}
+        />
       ) : null}
     </article>
   )

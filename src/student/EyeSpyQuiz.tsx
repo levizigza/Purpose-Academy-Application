@@ -13,6 +13,7 @@ import {
   practiceFeedbackKey,
 } from '../practice/PracticeMode'
 import { SOFT_RETRY_LABEL, firePlayClear } from '../practice/PlayClear'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 
 type Mode = 'exercise' | 'exam'
 
@@ -95,6 +96,8 @@ export function EyeSpyQuiz({
   const sceneMode = Boolean(sceneBg)
   /** Baked floors already include the tool photos — hotspots are transparent taps. */
   const bakedMode = Boolean(scene && pathwayId && !scene.sceneBgKey && sceneBg?.includes('/media/eye-spy/'))
+  /** First-example coach once at the start of this station, then stay quiet. */
+  const coachFirst = mode === 'exercise' && attempt === 1 && sceneIdx === 0 && foundIds.length === 0
 
   useEffect(() => {
     window.dispatchEvent(new Event('pa-quiz-start'))
@@ -327,7 +330,12 @@ export function EyeSpyQuiz({
                 wrongPair && selected ? ' is-wrong' : ''
               }`}
               style={style}
-              onClick={() => phase === 'play' && setPickedHotspot(h.id)}
+              data-coach={index === 0 && !foundSet.has(h.id) ? 'spy-pic' : undefined}
+              onClick={() => {
+                if (phase !== 'play') return
+                setPickedHotspot(h.id)
+                if (coachFirst) advanceStationCoach('eye-spy')
+              }}
               disabled={phase !== 'play'}
               aria-label={h.label || `Tool spot ${index + 1}`}
             >
@@ -340,7 +348,7 @@ export function EyeSpyQuiz({
       {phase === 'play' && remaining.length > 0 && (
         <>
           <p className="eye-spy-prompt">What English name matches the picture you tapped?</p>
-          <div className="train-choice-grid">
+          <div className="train-choice-grid" data-coach="spy-word">
             {nameOptions.map((opt) => {
               let cls = 'train-choice'
               if (pickedName === opt) cls += wrongPair ? ' is-wrong' : ' is-selected'
@@ -350,7 +358,10 @@ export function EyeSpyQuiz({
                   type="button"
                   className={cls}
                   disabled={phase !== 'play'}
-                  onClick={() => setPickedName(opt)}
+                  onClick={() => {
+                    setPickedName(opt)
+                    if (coachFirst && pickedHotspot) advanceStationCoach('eye-spy')
+                  }}
                 >
                   {opt}
                 </button>
@@ -360,8 +371,12 @@ export function EyeSpyQuiz({
           <button
             type="button"
             className="btn btn-primary"
+            data-coach="spy-match"
             disabled={!pickedHotspot || !pickedName}
-            onClick={confirm}
+            onClick={() => {
+              if (coachFirst) advanceStationCoach('eye-spy')
+              confirm()
+            }}
           >
             Match
           </button>
@@ -373,6 +388,12 @@ export function EyeSpyQuiz({
           {sceneIdx + 1 >= boards.length ? 'Finish' : 'Next scene'}
         </button>
       )}
+      {coachFirst && phase === 'play' ? (
+        <StationCoach
+          stationId="eye-spy"
+          layoutKey={`${scene.id}-${pickedHotspot}-${pickedName}-${remaining.length}`}
+        />
+      ) : null}
     </div>
   )
 }
