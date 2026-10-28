@@ -5,6 +5,8 @@ import { pathwayImage } from '../pathways'
 import { firePlayClear } from '../practice/PlayClear'
 import { playFoley } from '../audio/foley'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { NavCueTarget, NavGlowRegion } from '../practice/NavCue'
+import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 
 /**
  * Official Purpose Academy visual-vocabulary language order
@@ -350,43 +352,63 @@ export function VocabSheetCard({
           </div>
         )}
 
-        <ul
-          className={`vocab-sheet-langs${productionPhase ? ' is-collapsed' : ''}`}
-          data-coach="vv-lang"
-          aria-label="Press the language you understand"
-        >
-          {langsToShow.map((lang) => {
-            const selected = connectedLang === lang
-            return (
-              <li key={lang} className={selected ? 'is-connected-lang' : ''}>
-                <button
-                  type="button"
-                  className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}`}
-                  disabled={speaking || alreadyKnown || productionPhase}
-                  onClick={() => {
-                    if (coachFirst) advanceStationCoach('workplace-words')
-                    onConnectLang(lang)
-                  }}
-                  aria-pressed={selected}
-                  aria-label={`Hear ${term.gloss[lang]} in ${lang}, then hear and type English`}
-                >
-                  <span className="vocab-sheet-flag" aria-hidden>
-                    {FLAG[lang]}
-                  </span>
-                  <span className="vocab-sheet-lang-meta">
-                    <span className="vocab-sheet-lang-name">{lang}</span>
-                    <span className="vocab-sheet-lang-word">{term.gloss[lang]}</span>
-                  </span>
-                  {selected && (
-                    <span className="vocab-sheet-lang-link">
-                      {typedEnglish ? `→ ${term.english}` : speaking ? '→ …' : '→ type next'}
-                    </span>
-                  )}
-                </button>
-              </li>
-            )
-          })}
-        </ul>
+        {(() => {
+          const showLangCue = !productionPhase && langsToShow.length > 0
+          const langList = (
+            <ul
+              className={`vocab-sheet-langs${productionPhase ? ' is-collapsed' : ''}`}
+              data-coach="vv-lang"
+              aria-label="Press the language you understand"
+            >
+              {langsToShow.map((lang) => {
+                const selected = connectedLang === lang
+                return (
+                  <li key={lang} className={selected ? 'is-connected-lang' : ''}>
+                    <button
+                      type="button"
+                      className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}`}
+                      disabled={speaking || alreadyKnown || productionPhase}
+                      onClick={() => {
+                        markNavCueSeen(NAV_CUE.vocabLang)
+                        if (coachFirst) advanceStationCoach('workplace-words')
+                        onConnectLang(lang)
+                      }}
+                      aria-pressed={selected}
+                      aria-label={`Hear ${term.gloss[lang]} in ${lang}, then hear and type English`}
+                    >
+                      <span className="vocab-sheet-flag" aria-hidden>
+                        {FLAG[lang]}
+                      </span>
+                      <span className="vocab-sheet-lang-meta">
+                        <span className="vocab-sheet-lang-name">{lang}</span>
+                        <span className="vocab-sheet-lang-word">{term.gloss[lang]}</span>
+                      </span>
+                      {selected && (
+                        <span className="vocab-sheet-lang-link">
+                          {typedEnglish ? `→ ${term.english}` : speaking ? '→ …' : '→ type next'}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )
+          /* Nav cue: once-then-quiet arrow/glow at mother-tongue chips (same grammar as Mode/Hub). */
+          if (!showLangCue) return langList
+          return (
+            <NavCueTarget
+              cueId={NAV_CUE.vocabLang}
+              arrowLabel="Your languages"
+              arrowSide="above"
+              className="vocab-lang-cue"
+            >
+              <NavGlowRegion cueId={NAV_CUE.vocabLang} dismissOnClick={false}>
+                {langList}
+              </NavGlowRegion>
+            </NavCueTarget>
+          )
+        })()}
       </div>
 
       {typedEnglish && (

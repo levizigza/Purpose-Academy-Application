@@ -91,6 +91,10 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
   'supported-practice': [
     { target: '[data-coach="choice-opt"]', say: 'Press the matching word' },
   ],
+  'workplace-instructions': [
+    { target: '[data-coach="instr-hear"]', say: 'Press Hear English' },
+    { target: '[data-coach="instr-choice"]', say: 'Press what you should do' },
+  ],
   'computer-skills': [
     { target: '[data-coach="comp-watch"]', say: 'Press play on the lesson video' },
     { target: '[data-coach="comp-try"]', say: 'Try the task · then check' },

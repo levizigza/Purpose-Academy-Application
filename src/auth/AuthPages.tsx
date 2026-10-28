@@ -201,7 +201,7 @@ export function RegisterPage() {
     confirm: '',
     address: 'Calgary, AB',
     emergency_contact: '',
-    preferred_language: 'Amharic',
+    preferred_language: 'English',
   })
 
   useEffect(() => {

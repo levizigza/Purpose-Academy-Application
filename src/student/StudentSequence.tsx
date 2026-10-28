@@ -113,8 +113,8 @@ import {
 import { learnerGet, learnerSet } from '../practice/learnerStore'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
-import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
-import { NAV_CUE } from '../practice/navCues'
+import { NavCueTarget, NavGlowRegion, NavGlowWrap } from '../practice/NavCue'
+import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 
 const JOURNEY_KEY = 'pa-student-journey-step-v1'
 const OBS_KEY = 'pa-student-observation-v1'
@@ -224,11 +224,13 @@ function LearnCard({ title, body, mark }: { title: string; body: string; mark?: 
 
 /* ─── Step shell — SiteWise-inspired training chrome ─── */
 
-function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, onOpenHub, onJumpLesson }: {
+function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, onOpenHub, onJumpLesson, explainerStationId = null }: {
   step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
   transitioning?: boolean; transitionMsg?: string; supportLang?: SupportLang
   onOpenHub?: () => void
   onJumpLesson?: (n: number) => void
+  /** When step 9 is in Word→Action phase, force that explainer. */
+  explainerStationId?: string | null
 }) {
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
@@ -475,7 +477,9 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             outcomes={getPathwayUnitGoal(unit.id)!.outcomes}
           />
         )}
-        <StationExplainerGate step={step}>{children}</StationExplainerGate>
+        <StationExplainerGate step={step} stationId={explainerStationId}>
+          {children}
+        </StationExplainerGate>
       </Reveal>
 
       <div className="train-actions">
@@ -791,7 +795,7 @@ export function StudentSequencePage() {
   }, [])
 
   const [supportLang, setSupportLang] = useState<SupportLang>(
-    (student?.preferred_language as SupportLang) || 'Amharic',
+    (student?.preferred_language as SupportLang) || 'English',
   )
   const [interest, setInterest] = useState<PathwayId | null>(null)
   const [careerInterestDone, setCareerInterestDone] = useState(false)
@@ -831,10 +835,10 @@ export function StudentSequencePage() {
   const [phraseAnswer, setPhraseAnswer] = useState<string | null>(null)
   const [phraseCorrect, setPhraseCorrect] = useState(false)
 
-  /* Step 2 registration form */
+  /* Step 2 registration form — English-first until the learner picks another tongue */
   const [regForm, setRegForm] = useState({
     full_name: '', email: '', phone: '', password: '', confirm: '',
-    preferred_language: 'Amharic', previous_experience: '',
+    preferred_language: 'English', previous_experience: '',
   })
 
   /* Step 6 visual vocabulary — hear L1 → hear English → type English */
@@ -1202,6 +1206,7 @@ export function StudentSequencePage() {
           }
           onOpenHub={isPracticeMode() ? () => setPracticeView('hub') : undefined}
           onJumpLesson={(n) => go(n, `Opening step ${n}…`)}
+          explainerStationId={props.step === 9 && step8Phase === 'actions' ? 'word-action' : null}
         />
         {practiceAdvancePrompt && (
           <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">
@@ -1609,6 +1614,7 @@ export function StudentSequencePage() {
         step={3}
         onBack={() => (isPracticeMode() ? navigate('/') : go(2))}
         onNext={() => {
+          markNavCueSeen(NAV_CUE.langPick)
           setRegForm((f) => ({ ...f, preferred_language: supportLang }))
           go(4)
         }}
@@ -1620,32 +1626,42 @@ export function StudentSequencePage() {
           </p>
           <h2 className="career-assess-title">{assessT(ASSESSMENT_COPY.langPickTitle, supportLang)}</h2>
           <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickBody, supportLang)}</p>
-          <div className="train-lang-grid">
-            {SUPPORT_LANGUAGES.map((l) => (
-              <button
-                key={l.id}
-                type="button"
-                className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`}
-                onClick={() => setSupportLang(l.id)}
-                lang={
-                  l.id === 'English'
-                    ? 'en'
-                    : l.id === 'Arabic'
-                      ? 'ar'
-                      : l.id === 'Hindi'
-                        ? 'hi'
-                        : l.id === 'Amharic'
-                          ? 'am'
-                          : l.id === 'Tigrinya'
-                            ? 'ti'
-                            : 'es'
-                }
-              >
-                <span aria-hidden>{l.flag}</span>
-                <strong>{assessT(LANG_NATIVE, l.id)}</strong>
-              </button>
-            ))}
-          </div>
+          <NavCueTarget
+            cueId={NAV_CUE.langPick}
+            arrowLabel="Languages here"
+            arrowSide="above"
+            className="train-lang-cue"
+          >
+            <NavGlowRegion cueId={NAV_CUE.langPick} className="train-lang-grid" dismissOnClick={false}>
+              {SUPPORT_LANGUAGES.map((l) => (
+                <button
+                  key={l.id}
+                  type="button"
+                  className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`}
+                  onClick={() => {
+                    markNavCueSeen(NAV_CUE.langPick)
+                    setSupportLang(l.id)
+                  }}
+                  lang={
+                    l.id === 'English'
+                      ? 'en'
+                      : l.id === 'Arabic'
+                        ? 'ar'
+                        : l.id === 'Hindi'
+                          ? 'hi'
+                          : l.id === 'Amharic'
+                            ? 'am'
+                            : l.id === 'Tigrinya'
+                              ? 'ti'
+                              : 'es'
+                  }
+                >
+                  <span aria-hidden>{l.flag}</span>
+                  <strong>{assessT(LANG_NATIVE, l.id)}</strong>
+                </button>
+              ))}
+            </NavGlowRegion>
+          </NavCueTarget>
           <div className="train-bridge">
             <p><strong>{assessT(ASSESSMENT_COPY.introTitle, supportLang)}</strong></p>
             <p>{assessT(ASSESSMENT_COPY.introBody, supportLang)}</p>
@@ -2218,12 +2234,14 @@ export function StudentSequencePage() {
   if (step === 11) {
     const instr = WORKPLACE_INSTRUCTIONS[instrIdx]
     const isLast = instrIdx >= WORKPLACE_INSTRUCTIONS.length - 1
+    const coachFirst = instrIdx === 0 && !instrAnswer
 
     function pickInstr(opt: string) {
       if (instrAnswer || !instrHeard) return
       const ok = opt === instr.correct
       setInstrAnswer(opt)
       setInstrCorrect(ok)
+      if (coachFirst) advanceStationCoach('workplace-instructions')
       recordSkillAttempt('instructions', ok)
       if (ok) {
         const left = WORKPLACE_INSTRUCTIONS.length - (instrIdx + 1)
@@ -2268,7 +2286,7 @@ export function StudentSequencePage() {
             caption="Listen in English (required). Mother-tongue help is optional only."
           />
           <blockquote>&ldquo;{instr.text}&rdquo;</blockquote>
-          <div className="train-audio-row">
+          <div className="train-audio-row" data-coach="instr-hear">
             <button
               type="button"
               className="btn btn-primary"
@@ -2277,6 +2295,7 @@ export function StudentSequencePage() {
                 void (async () => {
                   await playEnglish(instr.text)
                   setInstrHeard(true)
+                  if (coachFirst) advanceStationCoach('workplace-instructions')
                 })()
               }}
             >
@@ -2295,7 +2314,7 @@ export function StudentSequencePage() {
           </div>
           {!instrHeard && <p className="muted">Hear the English instruction at least once before you answer.</p>}
           <p><strong>What should you do?</strong></p>
-          <div className="train-choice-grid">
+          <div className="train-choice-grid" data-coach="instr-choice">
             {instr.options.map((opt) => (
               <ChoiceButton
                 key={opt}
@@ -2324,6 +2343,9 @@ export function StudentSequencePage() {
             </button>
           </>
         )}
+        {coachFirst ? (
+          <StationCoach stationId="workplace-instructions" layoutKey={`instr-${instrIdx}-${instrHeard}`} />
+        ) : null}
       </Shell>
     )
   }

@@ -130,6 +130,49 @@ export function NavGlowWrap({ cueId, children, dismissOnClick = true }: WrapProp
   })
 }
 
+type RegionProps = {
+  cueId: string
+  children: ReactNode
+  /** Mark cue seen on click inside the region (default true). */
+  dismissOnClick?: boolean
+  className?: string
+}
+
+/**
+ * Soft glow around a non-button region (language grids, chip rows).
+ * Same once-then-quiet grammar as NavGlowButton — shared Desktop ↔ Phone.
+ */
+export function NavGlowRegion({
+  cueId,
+  children,
+  dismissOnClick = true,
+  className = '',
+}: RegionProps) {
+  const [, bump] = useState(0)
+  useEffect(() => {
+    const sync = () => bump((n) => n + 1)
+    window.addEventListener('pa-nav-cues-changed', sync)
+    window.addEventListener('pa-practice-restarted', sync)
+    return () => {
+      window.removeEventListener('pa-nav-cues-changed', sync)
+      window.removeEventListener('pa-practice-restarted', sync)
+    }
+  }, [])
+
+  const active = navCueActive(cueId)
+  const cls = `${className}${active ? ' nav-glow-cta nav-glow-region' : ''}`.trim()
+
+  function handleClick() {
+    if (dismissOnClick && active) markNavCueSeen(cueId)
+  }
+
+  return (
+    <div className={cls} onClick={handleClick}>
+      {children}
+    </div>
+  )
+}
+
 type TargetProps = {
   cueId: string
   arrowLabel: string

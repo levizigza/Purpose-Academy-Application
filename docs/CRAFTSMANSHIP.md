@@ -432,6 +432,21 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-28 — Station explainer demos: real UI + mouse + Jenny VO (L2 / L3)
+
+- **Layers:** L2 (how-it-works before the drill) + L3 (task visible in the real app chrome, not a slide deck).
+- **Defect:** Ken Burns photo cards with VO taught the idea but not the *press* — first-computer learners still guessed where to click. Step→explainer map was also wrong for Supported Practice / Workplace Instructions (Word→Action stole step 10).
+- **Fix:** Playwright mouse demos (`scripts/explainers/record-station-demos.mjs` + `demo-lib.mjs`) record the live Practice UI with a visible cursor, then ffmpeg-mux Edge **JennyNeural** VO. All contentful stations get an mp4 in `public/explainers/`. Gate map: step 3 language, 6–8 words board, 9 sentence (+ Word→Action via `stationId` when phase flips), 10 supported, **11 workplace instructions** (new), 12 computer, 13 site language, 15–18 site-ready.
+- **Skips (empty / non-drill shells — no demo mp4):** 1 Start, 2 Registration, 4 Work Style, 5 Career Profile, 14 Work Interests, 19 Instructor Check, 20 On-Site Training, 21 Final Check, 22 Employment. Re-record with `PA_ONLY=id1,id2 node scripts/explainers/record-station-demos.mjs`.
+- **Critic:** Keep StationExplainerGate once-per-station; do not autoplay demos on return. Prefer mouse-over-real-UI over regenerating Ken Burns. Site reflection = GitHub Pages only.
+
+### 2026-10-28 — Your language: English-first + nav mark + explainer VO (L3 / L4 / L2)
+
+- **Layers:** L3 (language job readable in 3s — start in English, see where other tongues live) + L4 (once-then-quiet cue, not permanent glow) + L2 (how-it-works video before the pick).
+- **Defect:** Step 3 “Your language” booted with **Amharic** selected, so first-open chrome (title, lede, Continue) dropped the learner into non-English before they chose. Arrow-only without VO left first-computer learners guessing the job.
+- **Fix:** Default `supportLang` / registration preferred language → **English**. `NavCueTarget` + `NavGlowRegion` point at the language chip grid (`NAV_CUE.langPick`) and Workplace Words mother-tongue row (`NAV_CUE.vocabLang`). Seen keys live in existing `pa-nav-cues-seen-v1` (`lang-pick`, `vocab-lang`). `StationExplainerGate` for step 3 (`your-language.mp4`, JennyNeural) teaches: start English → mark points at chips once → choose another tongue if needed → continue.
+- **Critic:** Do not invent a new cue dialect — reuse Mode/Hub arrow+glow. Do not add an English chip on VV that skips mother-tongue → English → type (that sands L2 craft). Coach spotlight + lang nav cue can overlap on word 1; both quiet after the first language press — acceptable for first-computer, revisit if it feels loud on the smallest phone fold. Explainer is the teacher; nav mark is the finger — keep both, never arrow-only.
+
 ### 2026-10-28 — Practice tray must stay visible after toolbox return (L3 / L6)
 
 - **Layers:** L3 (doors readable in 3s) + L6 (shell continuity).

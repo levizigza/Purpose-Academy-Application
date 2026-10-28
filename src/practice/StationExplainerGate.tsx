@@ -11,6 +11,8 @@ import { NavGlowButton } from './NavCue'
 
 type Props = {
   step: number
+  /** Override when one journey step hosts two stations (Sentence → Word→Action). */
+  stationId?: string | null
   children: ReactNode
 }
 
@@ -18,15 +20,15 @@ type Props = {
  * First visit to a station: short how-it-works video, then the drill.
  * Desktop night + phone paper inherit the same gate (dual-shell CSS).
  */
-export function StationExplainerGate({ step, children }: Props) {
-  const explainer = explainerForStep(step)
+export function StationExplainerGate({ step, stationId = null, children }: Props) {
+  const explainer = explainerForStep(step, stationId)
   const [ready, setReady] = useState(() => (explainer ? hasWatchedExplainer(explainer.id) : true))
   const [, bump] = useState(0)
 
   useEffect(() => {
     const sync = () => {
       bump((n) => n + 1)
-      const next = explainerForStep(step)
+      const next = explainerForStep(step, stationId)
       setReady(next ? hasWatchedExplainer(next.id) : true)
     }
     window.addEventListener('pa-station-explainers-changed', sync)
@@ -35,12 +37,12 @@ export function StationExplainerGate({ step, children }: Props) {
       window.removeEventListener('pa-station-explainers-changed', sync)
       window.removeEventListener('pa-practice-restarted', sync)
     }
-  }, [step])
+  }, [step, stationId])
 
   useEffect(() => {
-    const next = explainerForStep(step)
+    const next = explainerForStep(step, stationId)
     setReady(next ? hasWatchedExplainer(next.id) : true)
-  }, [step])
+  }, [step, stationId])
 
   if (!explainer || ready) return <>{children}</>
   return (
