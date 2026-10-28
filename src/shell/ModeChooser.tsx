@@ -4,13 +4,16 @@ import { BRAND } from '../brand/copy'
 import { clearEnteredSite } from '../auth/EntryPages'
 import { playFoley, unlockFoley } from '../audio/foley'
 import { PaAppIcon } from './PaAppIcon'
-import { setPhonePhase, setShellMode, type ShellMode } from './shellMode'
+import { setDesktopPhase, setPhonePhase, setShellMode, type ShellMode } from './shellMode'
 import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
 import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 
 /**
  * First screen after load — split Desktop | Phone.
  * Craft L3/L4: one composition, two doors, brand hero-level.
+ *
+ * Desktop door arms phase `opening` so App plays the threshold sequence
+ * only after this press — never from a bare shell-mode restore.
  */
 export function ModeChooser() {
   const navigate = useNavigate()
@@ -25,11 +28,14 @@ export function ModeChooser() {
     navigate('/', { replace: true })
     if (mode === 'phone') {
       clearEnteredSite()
+      setDesktopPhase(null)
       setPhonePhase('home')
       setShellMode('phone')
       return
     }
+    /* Arm opening before shell mode so the first course render shows splash. */
     clearEnteredSite()
+    setDesktopPhase('opening')
     setShellMode('course')
   }
 

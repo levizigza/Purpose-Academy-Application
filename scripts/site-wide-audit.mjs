@@ -150,6 +150,7 @@ async function seed(page, opts = {}) {
       if (shell) {
         localStorage.setItem('pa-shell-mode-v2', shell)
         if (shell === 'phone') localStorage.setItem('pa-phone-phase-v1', phonePhase)
+        if (shell === 'course') localStorage.setItem('pa-desktop-phase-v1', 'ready')
       }
       if (crossed) sessionStorage.setItem('pa-crossed-threshold-v44', '1')
       if (practice) {

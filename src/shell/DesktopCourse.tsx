@@ -5,6 +5,7 @@ import { BRAND } from '../brand/copy'
 import { FoleyToggle } from '../components/CrewLoading'
 import { PracticeFeedbackDock, PracticeModeBanner } from '../practice/PracticeFeedbackDock'
 import { restartPracticeFromTop } from '../practice/PracticeMode'
+import { clearEnteredSite } from '../auth/EntryPages'
 import { clearShellMode } from './shellMode'
 
 /**
@@ -24,6 +25,7 @@ export function DesktopCourseShell({ children }: { children: ReactNode }) {
   }
 
   function exitToModes() {
+    clearEnteredSite()
     clearShellMode()
     navigate('/', { replace: true })
   }
