@@ -5,6 +5,7 @@ import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
+import { clearShellMode } from '../shell/shellMode'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
 const ENTERED_KEY = 'pa-crossed-threshold-v44'
@@ -401,6 +402,21 @@ export function SplashPage({
         <div className="threshold-foley">
           <FoleyToggle compact />
         </div>
+      )}
+
+      {/* Desktop splash only: escape back to Desktop | Phone so "THREE DOORS" never looks like modes vanished. */}
+      {!embedded && showEnter && !exiting && (
+        <button
+          type="button"
+          className="threshold-modes-escape"
+          onClick={() => {
+            clearEnteredSite()
+            clearShellMode()
+            navigate('/', { replace: true })
+          }}
+        >
+          Desktop / Phone
+        </button>
       )}
     </div>
   )
