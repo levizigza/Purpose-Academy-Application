@@ -1,6 +1,6 @@
 # Construction equipment videos
 
-Purpose Academy Construction Equipment Video Collection (Finals from Drive), mapped 1:1 to Unit 8 practice questions:
+Purpose Academy Construction Equipment Video Collection — Full HD Final MP4s (landed from Drive), mapped 1:1 to Unit 8 practice questions:
 
 1. `01_Excavator.mp4` ← `Purpose_Academy_Excavator_Final.mp4`
 2. `02_Backhoe_loader.mp4` ← `Purpose_Academy_Backhoe_Final.mp4`
@@ -19,4 +19,4 @@ Purpose Academy Construction Equipment Video Collection (Finals from Drive), map
 
 Journey placement: **after Construction Systems (17), before Instructor Observation (19)** — the bridge into hands-on site training.
 
-Paired with `constructionEquipmentVideoQuizzes` (10 practice questions + answer-key teach per machine). Soft video gates stay off for showcase (`VIDEO_SEGMENT_GATES_ENABLED = false`).
+All 14 Finals are real HD (1920×1080) lesson videos with English narration and burned-in captions. Paired with `constructionEquipmentVideoQuizzes` (10 practice questions + answer-key teach per machine). Soft video gates stay off for showcase (`VIDEO_SEGMENT_GATES_ENABLED = false`).
