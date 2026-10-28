@@ -2234,12 +2234,14 @@ export function StudentSequencePage() {
   if (step === 11) {
     const instr = WORKPLACE_INSTRUCTIONS[instrIdx]
     const isLast = instrIdx >= WORKPLACE_INSTRUCTIONS.length - 1
+    const coachFirst = instrIdx === 0 && !instrAnswer
 
     function pickInstr(opt: string) {
       if (instrAnswer || !instrHeard) return
       const ok = opt === instr.correct
       setInstrAnswer(opt)
       setInstrCorrect(ok)
+      if (coachFirst) advanceStationCoach('workplace-instructions')
       recordSkillAttempt('instructions', ok)
       if (ok) {
         const left = WORKPLACE_INSTRUCTIONS.length - (instrIdx + 1)
@@ -2284,7 +2286,7 @@ export function StudentSequencePage() {
             caption="Listen in English (required). Mother-tongue help is optional only."
           />
           <blockquote>&ldquo;{instr.text}&rdquo;</blockquote>
-          <div className="train-audio-row">
+          <div className="train-audio-row" data-coach="instr-hear">
             <button
               type="button"
               className="btn btn-primary"
@@ -2293,6 +2295,7 @@ export function StudentSequencePage() {
                 void (async () => {
                   await playEnglish(instr.text)
                   setInstrHeard(true)
+                  if (coachFirst) advanceStationCoach('workplace-instructions')
                 })()
               }}
             >
@@ -2311,7 +2314,7 @@ export function StudentSequencePage() {
           </div>
           {!instrHeard && <p className="muted">Hear the English instruction at least once before you answer.</p>}
           <p><strong>What should you do?</strong></p>
-          <div className="train-choice-grid">
+          <div className="train-choice-grid" data-coach="instr-choice">
             {instr.options.map((opt) => (
               <ChoiceButton
                 key={opt}
@@ -2340,6 +2343,9 @@ export function StudentSequencePage() {
             </button>
           </>
         )}
+        {coachFirst ? (
+          <StationCoach stationId="workplace-instructions" layoutKey={`instr-${instrIdx}-${instrHeard}`} />
+        ) : null}
       </Shell>
     )
   }

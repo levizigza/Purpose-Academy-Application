@@ -92,8 +92,8 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
     { target: '[data-coach="choice-opt"]', say: 'Press the matching word' },
   ],
   'workplace-instructions': [
-    { target: 'button:has-text("Hear English")', say: 'Press Hear English' },
-    { target: '.train-choice-grid', say: 'Press what you should do' },
+    { target: '[data-coach="instr-hear"]', say: 'Press Hear English' },
+    { target: '[data-coach="instr-choice"]', say: 'Press what you should do' },
   ],
   'computer-skills': [
     { target: '[data-coach="comp-watch"]', say: 'Press play on the lesson video' },
