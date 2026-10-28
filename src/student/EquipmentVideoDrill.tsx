@@ -8,20 +8,36 @@ import {
   type WarehouseEquipmentLesson,
 } from '../pathways/packs/warehouseEquipmentVideos'
 import {
-  VIDEO_SEGMENT_GATES_ENABLED,
+  VIDEO_SEGMENT_GATES_ENABLED as WAREHOUSE_GATES_ENABLED,
   isEquipmentVideoUnlocked,
   quizForEquipmentLesson,
   type WarehouseVideoChoiceId,
   type WarehouseVideoQuestion,
 } from '../pathways/packs/warehouseEquipmentVideoQuizzes'
+import {
+  CONSTRUCTION_EQUIPMENT_FAMILIES,
+  CONSTRUCTION_EQUIPMENT_VIDEOS,
+  constructionEquipmentVideoUrl,
+  type ConstructionEquipmentLesson,
+} from '../pathways/packs/constructionEquipmentVideos'
+import {
+  VIDEO_SEGMENT_GATES_ENABLED as CONSTRUCTION_GATES_ENABLED,
+  isConstructionEquipmentVideoUnlocked,
+  quizForConstructionEquipmentLesson,
+  type ConstructionVideoChoiceId,
+  type ConstructionVideoQuestion,
+} from '../pathways/packs/constructionEquipmentVideoQuizzes'
 import { playFoley } from '../audio/foley'
 import { SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 
-const WATCHED_KEY = 'pa-warehouse-equipment-watched-v1'
-const CLEARED_KEY = 'pa-warehouse-equipment-cleared-v1'
+export type EquipmentVideoPack = 'warehouse' | 'construction'
+
+type EquipLesson = WarehouseEquipmentLesson | ConstructionEquipmentLesson
+type EquipChoiceId = WarehouseVideoChoiceId | ConstructionVideoChoiceId
+type EquipQuestion = WarehouseVideoQuestion | ConstructionVideoQuestion
 
 type Phase = 'watch' | 'answer'
 
@@ -45,25 +61,51 @@ function saveSet(key: string, ids: Set<string>) {
 }
 
 type Props = {
+  /** Default warehouse — Logistics Unit 8. Construction uses the site-equipment pack. */
+  pack?: EquipmentVideoPack
   onComplete: () => void
   onSkip?: () => void
 }
 
+const PACK_META = {
+  warehouse: {
+    watchedKey: 'pa-warehouse-equipment-watched-v1',
+    clearedKey: 'pa-warehouse-equipment-cleared-v1',
+    unitKicker: 'Unit 8 · Video · Warehouse Equipment',
+    clearFloor:
+      'practice questions done. This video pairs with the warehouse floor — stay clear of powered equipment unless you are certified elsewhere.',
+    gatesEnabled: WAREHOUSE_GATES_ENABLED,
+  },
+  construction: {
+    watchedKey: 'pa-construction-equipment-watched-v1',
+    clearedKey: 'pa-construction-equipment-cleared-v1',
+    unitKicker: 'Unit 8 · Video · Construction Equipment',
+    clearFloor:
+      'practice questions done. This video pairs with the construction site — stay clear of powered equipment unless you are certified elsewhere.',
+    gatesEnabled: CONSTRUCTION_GATES_ENABLED,
+  },
+} as const
+
 /**
- * Warehouse Equipment Video — watch whole video → practice questions → continue.
+ * Equipment Video — watch whole video → practice questions → continue.
  * Soft-gate architecture ready (`VIDEO_SEGMENT_GATES_ENABLED`); showcase keeps all open.
+ * Packs: warehouse (Logistics) · construction (Construction).
  */
-export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
-  const lessons = WAREHOUSE_EQUIPMENT_VIDEOS
+export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: Props) {
+  const meta = PACK_META[pack]
+  const lessons: EquipLesson[] =
+    pack === 'construction' ? CONSTRUCTION_EQUIPMENT_VIDEOS : WAREHOUSE_EQUIPMENT_VIDEOS
+  const families =
+    pack === 'construction' ? CONSTRUCTION_EQUIPMENT_FAMILIES : EQUIPMENT_FAMILIES
   const lessonIds = useMemo(() => lessons.map((l) => l.id), [lessons])
   const [idx, setIdx] = useState(0)
-  const [watched, setWatched] = useState<Set<string>>(() => loadSet(WATCHED_KEY))
-  const [cleared, setCleared] = useState<Set<string>>(() => loadSet(CLEARED_KEY))
+  const [watched, setWatched] = useState<Set<string>>(() => loadSet(meta.watchedKey))
+  const [cleared, setCleared] = useState<Set<string>>(() => loadSet(meta.clearedKey))
   const [ended, setEnded] = useState(false)
   const [progress, setProgress] = useState(0)
   const [phase, setPhase] = useState<Phase>('watch')
   const [qIdx, setQIdx] = useState(0)
-  const [picked, setPicked] = useState<WarehouseVideoChoiceId | null>(null)
+  const [picked, setPicked] = useState<EquipChoiceId | null>(null)
   const [qCorrect, setQCorrect] = useState(false)
   const [setJustCleared, setSetJustCleared] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -73,10 +115,13 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   const practice = isPracticeMode()
 
   const lesson = lessons[Math.min(idx, lessons.length - 1)]
-  const familyMeta = EQUIPMENT_FAMILIES.find((f) => f.id === lesson.family)
-  const quiz = quizForEquipmentLesson(lesson.id)
-  const questions = quiz?.questions ?? []
-  const question: WarehouseVideoQuestion | undefined = questions[qIdx]
+  const familyMeta = families.find((f) => f.id === lesson.family)
+  const quiz =
+    pack === 'construction'
+      ? quizForConstructionEquipmentLesson(lesson.id)
+      : quizForEquipmentLesson(lesson.id)
+  const questions: EquipQuestion[] = quiz?.questions ?? []
+  const question: EquipQuestion | undefined = questions[qIdx]
   const watchedCount = lessons.filter((l) => watched.has(l.id)).length
   const clearedCount = lessons.filter((l) => cleared.has(l.id)).length
   const allCleared = clearedCount >= lessons.length
@@ -84,7 +129,13 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     ended || progress >= 0.9 || watched.has(lesson.id) || cleared.has(lesson.id) || practice
   const lessonCleared = cleared.has(lesson.id)
   const coachFirst = idx === 0
-  const gatesOn = VIDEO_SEGMENT_GATES_ENABLED
+  const gatesOn = meta.gatesEnabled
+
+  function isUnlocked(index: number, clearedIds: ReadonlySet<string>): boolean {
+    return pack === 'construction'
+      ? isConstructionEquipmentVideoUnlocked(index, clearedIds, lessonIds, gatesOn)
+      : isEquipmentVideoUnlocked(index, clearedIds, lessonIds, gatesOn)
+  }
 
   function coachWatchDone() {
     if (idx !== 0 || watchCoachedRef.current) return
@@ -128,29 +179,29 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     [lessons, lesson.family],
   )
 
-  function markWatched(item: WarehouseEquipmentLesson) {
+  function markWatched(item: EquipLesson) {
     setWatched((prev) => {
       if (prev.has(item.id)) return prev
       const next = new Set(prev)
       next.add(item.id)
-      saveSet(WATCHED_KEY, next)
+      saveSet(meta.watchedKey, next)
       recordSkillAttempt('equipment-videos', true, 8)
       return next
     })
   }
 
-  function markCleared(item: WarehouseEquipmentLesson) {
+  function markCleared(item: EquipLesson) {
     setCleared((prev) => {
       if (prev.has(item.id)) return prev
       const next = new Set(prev)
       next.add(item.id)
-      saveSet(CLEARED_KEY, next)
+      saveSet(meta.clearedKey, next)
       recordSkillAttempt('equipment-videos', true, 12)
       return next
     })
   }
 
-  function pulseVideoWatched(item: WarehouseEquipmentLesson, atIndex: number) {
+  function pulseVideoWatched(item: EquipLesson, atIndex: number) {
     if (pulseWatchedRef.current.has(item.id)) return
     pulseWatchedRef.current.add(item.id)
     const left = lessons.length - (atIndex + 1)
@@ -197,7 +248,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     advanceStationCoach('equipment-video')
   }
 
-  function pickChoice(id: WarehouseVideoChoiceId) {
+  function pickChoice(id: EquipChoiceId) {
     if (!question || picked) return
     const ok = id === question.answer
     setPicked(id)
@@ -269,12 +320,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
       return
     }
     const nextIdx = idx + 1
-    const unlocked = isEquipmentVideoUnlocked(
-      nextIdx,
-      new Set([...cleared, lesson.id]),
-      lessonIds,
-      gatesOn,
-    )
+    const unlocked = isUnlocked(nextIdx, new Set([...cleared, lesson.id]))
     if (!unlocked && !practice) return
     setIdx(nextIdx)
     playFoley('whoosh')
@@ -283,13 +329,16 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   function jumpTo(i: number) {
     if (i < 0 || i >= lessons.length) return
     if (i === idx) return
-    if (!isEquipmentVideoUnlocked(i, cleared, lessonIds, gatesOn) && !practice) return
+    if (!isUnlocked(i, cleared) && !practice) return
     setIdx(i)
     playFoley('whoosh')
   }
 
   const poster = pathwayImage(lesson.posterKey)
-  const src = equipmentVideoUrl(lesson.file)
+  const src =
+    pack === 'construction'
+      ? constructionEquipmentVideoUrl(lesson.file)
+      : equipmentVideoUrl(lesson.file)
   const showContinue =
     phase === 'answer' && (setJustCleared || (lessonCleared && qIdx >= questions.length - 1 && qCorrect))
 
@@ -297,7 +346,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     <article className="equip-video-card">
       <div className="equip-video-head">
         <div>
-          <p className="section-kicker">Unit 8 · Video · Warehouse Equipment</p>
+          <p className="section-kicker">{meta.unitKicker}</p>
           <h2 className="equip-video-title">{lesson.title}</h2>
           <p className="lede equip-video-purpose">{lesson.purpose}</p>
         </div>
@@ -329,7 +378,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
 
       <div className="equip-video-layout">
         <nav className="equip-video-rail" aria-label="Equipment lessons">
-          {EQUIPMENT_FAMILIES.map((fam) => {
+          {families.map((fam) => {
             const items = lessons.filter((l) => l.family === fam.id)
             return (
               <div key={fam.id} className="equip-video-family">
@@ -340,7 +389,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
                     const done = cleared.has(item.id)
                     const seen = watched.has(item.id)
                     const flatIdx = lessons.findIndex((l) => l.id === item.id)
-                    const unlocked = isEquipmentVideoUnlocked(flatIdx, cleared, lessonIds, gatesOn)
+                    const unlocked = isUnlocked(flatIdx, cleared)
                     const locked = gatesOn && !unlocked
                     return (
                       <li key={item.id}>
@@ -540,8 +589,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
               <p className="equip-video-check-kicker">Station clear</p>
               <h3>{lesson.title} · practice cleared</h3>
               <p className="lede">
-                {questions.length} practice questions done. This video pairs with the warehouse floor
-                — stay clear of powered equipment unless you are certified elsewhere.
+                {questions.length} {meta.clearFloor}
               </p>
               <div className="hero-actions equip-video-actions">
                 <button
@@ -562,7 +610,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
       {coachFirst ? (
         <StationCoach
           stationId="equipment-video"
-          layoutKey={`${lesson.id}-${phase}-${canLeaveWatch}-${qIdx}-${setJustCleared}`}
+          layoutKey={`${pack}-${lesson.id}-${phase}-${canLeaveWatch}-${qIdx}-${setJustCleared}`}
         />
       ) : null}
     </article>

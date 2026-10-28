@@ -432,6 +432,15 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-28 — Construction equipment video practice questions (L2 / L3)
+
+- **Layers:** L2 content delivery (140 practice questions paired to 14 construction machines) + L3 dual-shell optics (same Desktop night / Phone paper check-card grammar as Logistics Unit 8).
+- **Ingest:** 14× Student Quiz + Answer Key PDFs (Backhoe through Wheel Loader) → `constructionEquipmentVideoQuizzes.ts` (+ JSON) + `constructionEquipmentVideos.ts`. Each question carries answer, **verbatim / faithful AK teach**, and replay window.
+- **Flow:** Watch whole video → practice questions (soft retry, optional clip replay) → continue. Construction pathway step 18 now runs the equipment drill (no longer redirects only to Logistics).
+- **Soft-gate:** `VIDEO_SEGMENT_GATES_ENABLED = false` on the construction pack (showcase — all videos open). Architecture ready; teach notes stay honest (do not claim unlock while gates are off).
+- **Media gap:** Full Purpose Academy Final MP4s are not yet in-repo — `public/media/construction-equipment/` ships 1.5s stubs + README mapping app filenames ↔ source Final names. Replace before production review.
+- **Critic:** Same information-display grammar as warehouse — video + one primary continue; questions under the player; powered machines stay-clear awareness only.
+
 ### 2026-10-28 — Desktop opening only after ModeChooser (L3 / L6)
 
 - **Layers:** L3 (door → open beat unmistakable) + L6 (Desktop ↔ Phone shell continuity).

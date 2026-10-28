@@ -336,23 +336,55 @@ export function PracticeHub({
 
       <section className="ph-video-section" aria-label="Video section">
         <div className="ph-video-section-inner">
-          <p className="ph-video-section-kicker">Video section</p>
-          <h2>Warehouse Equipment</h2>
+          <p className="ph-video-section-kicker">Video section · Unit 8</p>
+          <h2>
+            {pathwayId === 'construction'
+              ? 'Construction Equipment'
+              : pathwayId === 'logistics'
+                ? 'Warehouse Equipment'
+                : 'Equipment videos'}
+          </h2>
           <p>
-            Warehouse machine videos on the Logistics pathway. Watch each one before hands-on training.
+            {pathwayId === 'construction'
+              ? 'Fourteen construction machines — watch each video, then answer the practice questions before hands-on training.'
+              : pathwayId === 'logistics'
+                ? 'Fourteen warehouse machines — watch each video, then answer the practice questions before hands-on training.'
+                : 'Construction and Logistics each have fourteen machine lessons with practice questions.'}
           </p>
-          <button
-            type="button"
-            className="btn btn-primary ph-video-section-btn"
-            onClick={() => {
-              if (pathwayId !== 'logistics') setActivePathway('logistics')
-              onOpenLesson(18)
-            }}
-          >
-            {pathwayId === 'logistics'
-              ? 'Open Warehouse Equipment videos'
-              : 'Switch to Logistics · open equipment videos'}
-          </button>
+          {pathwayId === 'construction' || pathwayId === 'logistics' ? (
+            <button
+              type="button"
+              className="btn btn-primary ph-video-section-btn"
+              onClick={() => onOpenLesson(18)}
+            >
+              {pathwayId === 'construction'
+                ? 'Open Construction Equipment videos'
+                : 'Open Warehouse Equipment videos'}
+            </button>
+          ) : (
+            <div className="hero-actions" style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
+              <button
+                type="button"
+                className="btn btn-primary ph-video-section-btn"
+                onClick={() => {
+                  setActivePathway('construction')
+                  onOpenLesson(18)
+                }}
+              >
+                Construction Equipment
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary on-light ph-video-section-btn"
+                onClick={() => {
+                  setActivePathway('logistics')
+                  onOpenLesson(18)
+                }}
+              >
+                Warehouse Equipment
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
