@@ -74,8 +74,22 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
 
   useEffect(() => {
     const sync = () => {
+      const seen = stationCoachSeen(stationId)
+      if (seen) {
+        setActive(false)
+        setStepIdx(0)
+        stepIdxRef.current = 0
+        consumedSteps.current = new Set()
+        clearCoachProgress(stationId)
+        return
+      }
+      /* Start over / remount: clear progress and show step 1 again. */
+      clearCoachProgress(stationId)
+      consumedSteps.current = new Set()
+      stepIdxRef.current = 0
+      setStepIdx(0)
+      setActive(steps.length > 0)
       bump((n) => n + 1)
-      resetCoachState(stationId, steps.length, setActive, setStepIdx, stepIdxRef, consumedSteps)
     }
     window.addEventListener('pa-station-coach-changed', sync)
     window.addEventListener('pa-practice-restarted', sync)
@@ -159,19 +173,19 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
       }
     : null
 
-  /* Prefer below the hole; flip above when the strip would cover the control or clip the fold. */
+  /* Prefer below the hole; flip above when clipped. Prefer right of tall holes so the prompt does not cover Type/Go. */
   const bubbleStyle = hole
     ? (() => {
+        const bubbleW = Math.min(280, window.innerWidth - 24)
         const below = hole.top + hole.height + 12
         const above = Math.max(12, hole.top - 92)
-        const top =
-          below + 88 > window.innerHeight || below < hole.top + 4
-            ? above
-            : Math.min(window.innerHeight - 88, below)
-        return {
-          top,
-          left: Math.min(window.innerWidth - 280, Math.max(12, hole.left)),
-        }
+        const roomBelow = below + 88 <= window.innerHeight
+        const top = roomBelow ? below : above
+        const preferRight = hole.height > 96 && hole.left + hole.width + 12 + bubbleW < window.innerWidth
+        const left = preferRight
+          ? hole.left + hole.width + 12
+          : Math.min(window.innerWidth - bubbleW - 12, Math.max(12, hole.left))
+        return { top, left }
       })()
     : { top: '30%', left: '50%', transform: 'translateX(-50%)' as const }
 
