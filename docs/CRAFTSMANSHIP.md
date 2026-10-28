@@ -432,6 +432,21 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-28 — Site-wide Desktop/Phone audit after pathways-bottom (L3 / L6)
+
+- **Layers:** L3 information display + L6 dual-shell continuity (Desktop night toolbox ↔ Phone paper stations).
+- **Audit (Desktop + Phone):** ModeChooser amber doors OK; Desktop splash pathways under door/TAP (#46) OK; English-first lang + nav marks + explainer/coach OK on both shells. Live Pages still top-pins pathways until #46 merges.
+- **Critic fixed:** (1) Desktop toolbox clipped Admin + Instructor ~118px under the fold — further compressed hero/tray density so all five trays fit the first view. (2) Phone language station buried NEXT ~420px under the fold — dock header + actions to the phone screen, scroll the lesson panel inside, hide compact bottom path map (Station menu owns path). (3) “1 days showed up” → singular/plural.
+- **Left alone:** Desktop lang NEXT below fold is reachable by normal page scroll; phone lang chips may need one panel scroll under “LANGUAGES HERE” while NEXT stays docked — acceptable vs losing continue.
+- **Assumption to challenge next:** whether phone Station Menu should surface a one-tap “path strip” so hiding the compact map never feels like a missing door.
+
+### 2026-10-28 — Desktop splash pathways → lower third (L3)
+
+- **Layers:** L1 (three doors visible) + L3 (brand + door hero; pathways don’t steal the title).
+- **Defect:** Desktop Tap-cue climb pinned `.threshold:not(.is-embedded) .threshold-pathways` to `top: 12%`, so “THREE DOORS INTO WORK” + Construction / Logistics / Community sat on top of PURPOSE ACADEMY.
+- **Fix:** Desktop pathways return to the **lower third** (`bottom` under door / ENTER / Tap). Phone embedded splash keeps `top: 72%` below mid Tap — dual-shell intentional.
+- **Critic:** Centered Tap owns mid; pathways must not compete with the brand line. Do not “lift above mid” on Desktop night again.
+
 ### 2026-10-28 — Station demo VO/visual sync (beat-locked) (L3 / L2)
 
 - **Layers:** L3 (what’s said must match what’s shown in three seconds of watching) + L2 (explainer still teaches the real press).
