@@ -1035,6 +1035,13 @@ Newest first.
 
 - First pass: shop-floor atmosphere, calmer light, pathway one-shot settle, no ENTER glow flash (`v27`).
 
+### 2026-10-28 — Logistics video teach-backs = full answer key (L1/L2)
+
+- Restored ~50 softened warehouse-equipment practice `teach` lines that paraphrased as `The video shows: <correct choice>` to the **verbatim / faithful answer-key explanations** from the Warehouse Q&A + AK.
+- Prompts, choices, correct letters, and replay windows unchanged; `VIDEO_SEGMENT_GATES_ENABLED` stays `false` (showcase unlock).
+- Smoke: `node scripts/smoke-warehouse-quiz-teach.mjs` (CB Q7, Conveyor Q9, no soft prefixes).
+- **Assumption to challenge next:** whether teach-back length on phone still reads in three seconds after the longer AK lines.
+
 ### 2026-10-16 — Layered craft + site-wide attention sweep
 
 - Documented **craft layers L1–L6** (truth, content delivery, aesthetic optics, attention ethics, trust, systems spine) — different chisels for different jobs; L2 content delivery and L3 aesthetic optics stay distinct and will deepen by pathway.
