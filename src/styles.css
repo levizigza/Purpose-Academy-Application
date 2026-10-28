@@ -12021,6 +12021,16 @@ video {
   margin-top: 0.15rem;
 }
 
+/* Phone: keep check-card continue clear of docked Back chrome */
+.is-phone-app .equip-video-check .equip-video-actions {
+  scroll-margin-bottom: 1.25rem;
+  padding-bottom: 0.35rem;
+}
+
+.is-phone-app .equip-video-check .btn-primary {
+  scroll-margin-bottom: 1.25rem;
+}
+
 /* Practice questions after each warehouse video (watch → answer → continue) */
 .equip-video-check {
   display: grid;

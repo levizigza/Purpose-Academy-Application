@@ -63,8 +63,9 @@ export const communityPack: PathwayPack = {
       ],
     },
     8: {
-      goal: 'Video section lives on Logistics (Warehouse Equipment). Community continues to observation.',
+      goal: 'Video section lives on Construction and Logistics. Community continues to observation.',
       outcomes: [
+        'Know Construction and Logistics each run Unit 8 equipment videos at step 18',
         'Continue Community into instructor observation when ready',
       ],
     },
@@ -113,9 +114,9 @@ export const communityPack: PathwayPack = {
       purpose: 'Your task helps people stay safe, informed, and supported with dignity.',
     },
     18: {
-      title: 'Video · Warehouse Equipment',
-      help: 'Unit 8 · Video section (warehouse machine lessons) is on Logistics. Stay here for Community observation, or switch pathways to watch the videos.',
-      purpose: 'Bridge from systems knowledge — Video unit is Logistics; Community continues to observation.',
+      title: 'Video · Equipment',
+      help: 'Unit 8 · Video section (construction or warehouse machines) lives on Construction and Logistics. Stay here for Community observation, or switch pathways to watch the videos.',
+      purpose: 'Bridge from systems knowledge — Video unit is on Construction / Logistics; Community continues to observation.',
     },
     20: {
       title: 'Placement Training',

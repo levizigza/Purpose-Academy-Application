@@ -159,11 +159,21 @@ export function prepScript({ step, pathway = 'construction', forceExplainersSeen
   }
 }
 
-export async function gotoStation(page, base, { step, pathway = 'construction' }) {
+export async function gotoStation(
+  page,
+  base,
+  { step, pathway = 'construction', shell = 'course' } = {},
+) {
   await page.addInitScript(
-    ({ step, pathway, explainers }) => {
-      localStorage.setItem('pa-shell-mode-v2', 'course')
-      localStorage.setItem('pa-desktop-phase-v1', 'ready')
+    ({ step, pathway, explainers, shell }) => {
+      localStorage.setItem('pa-shell-mode-v2', shell === 'phone' ? 'phone' : 'course')
+      if (shell === 'phone') {
+        localStorage.setItem('pa-phone-phase-v1', 'app')
+        sessionStorage.setItem('pa-phone-phase-v1', 'app')
+      } else {
+        localStorage.setItem('pa-desktop-phase-v1', 'ready')
+        sessionStorage.setItem('pa-desktop-phase-v1', 'ready')
+      }
       sessionStorage.setItem('pa-crossed-threshold-v44', '1')
       localStorage.setItem('pa-practice-mode-v1', '1')
       localStorage.setItem('pa-practice-name-v1', 'DemoLearner')
@@ -180,7 +190,7 @@ export async function gotoStation(page, base, { step, pathway = 'construction' }
       )
       localStorage.setItem('pa-nav-cues-seen-v1', JSON.stringify({}))
     },
-    prepScript({ step, pathway }),
+    { ...prepScript({ step, pathway }), shell },
   )
   await page.goto(`${base}/journey`, { waitUntil: 'networkidle', timeout: 90000 })
   await page.waitForTimeout(900)

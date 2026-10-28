@@ -254,11 +254,29 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
     setPicked(id)
     setQCorrect(ok)
     playFoley(ok ? 'correct' : 'wrong')
-    /* Phone fold: keep teach / soft-miss above the sticky Back chrome. */
+    /* Phone fold: keep teach + primary continue above docked train-actions chrome. */
     requestAnimationFrame(() => {
-      document
-        .querySelector('.equip-video-check .alert.ok, .equip-video-check .play-soft-miss')
-        ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      const primary = document.querySelector(
+        '.equip-video-check .equip-video-actions .btn-primary',
+      )
+      const teach = document.querySelector(
+        '.equip-video-check .alert.ok, .equip-video-check .play-soft-miss',
+      )
+      const target = primary || teach
+      if (!(target instanceof HTMLElement)) return
+      const panel = document.querySelector('.reveal.train-panel')
+      if (panel instanceof HTMLElement && panel.contains(target)) {
+        const t = target.getBoundingClientRect()
+        const p = panel.getBoundingClientRect()
+        const pad = 12
+        if (t.bottom > p.bottom - pad) {
+          panel.scrollTop += t.bottom - p.bottom + pad
+        } else if (t.top < p.top + pad) {
+          panel.scrollTop -= p.top + pad - t.top
+        }
+        return
+      }
+      target.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     })
   }
 

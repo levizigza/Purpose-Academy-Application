@@ -77,10 +77,12 @@ export const constructionPack: PathwayPack = {
       ],
     },
     8: {
-      goal: 'Open the Video section (Warehouse Equipment) when training on Logistics — Construction continues to observation.',
+      goal: 'Video section — watch construction equipment videos before hands-on training.',
       outcomes: [
-        'Know where Unit 8 · Video · Warehouse Equipment lives (Logistics · step 18)',
-        'Continue Construction into instructor observation when ready',
+        'Open Unit 8: Video · Construction Equipment (step 18)',
+        'Watch each machine lesson: know, inspect, protect',
+        'Answer practice questions after each video',
+        'Stay clear of powered machines unless certified elsewhere',
       ],
     },
     9: {
@@ -124,9 +126,9 @@ export const constructionPack: PathwayPack = {
       purpose: 'Your task feeds the whole building.',
     },
     18: {
-      title: 'Equipment videos',
-      help: 'Fourteen construction machines. Watch each video, then answer the practice questions — awareness and stay-clear, not operator certification.',
-      purpose: 'Bridge from systems knowledge to supervised hands-on checks.',
+      title: 'Video · Construction Equipment',
+      help: 'Unit 8 · Video section — fourteen short lessons. Watch each machine: know it, inspect it, protect the area. Powered machines are stay-clear awareness only.',
+      purpose: 'Dedicated Video unit after systems — before observation and site training.',
     },
     20: {
       title: 'On-Site Training',

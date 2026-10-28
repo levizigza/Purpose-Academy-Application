@@ -432,13 +432,20 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-28 — Construction equipment video parity polish (L2 / L3 / L6)
+
+- **Layers:** L2 journey honesty + L3 dual-shell continuity + L6 Practice reset spine.
+- **Critic found after #51:** Construction Unit 8 goal / step title still pointed learners at Warehouse Equipment; shared `LEARNING_UNITS` label said Warehouse while Construction runs its own drill; Practice “Start over” cleared warehouse watched only — missed warehouse cleared + both construction keys; craft note still claimed stub MP4s after Finals landed.
+- **Fix:** Construction unit goal + `Video · Construction Equipment` step title match Logistics naming; shared Unit 8 label → `Video · Equipment`; Community copy acknowledges both pathways; PracticeMode resets all four equipment progress keys; changelog truth matches real Finals in `public/media/construction-equipment/`.
+- **Shared drill:** `EquipmentVideoDrill` stays one component with `pack: 'warehouse' | 'construction'` — no fork.
+
 ### 2026-10-28 — Construction equipment video practice questions (L2 / L3)
 
 - **Layers:** L2 content delivery (140 practice questions paired to 14 construction machines) + L3 dual-shell optics (same Desktop night / Phone paper check-card grammar as Logistics Unit 8).
 - **Ingest:** 14× Student Quiz + Answer Key PDFs (Backhoe through Wheel Loader) → `constructionEquipmentVideoQuizzes.ts` (+ JSON) + `constructionEquipmentVideos.ts`. Each question carries answer, **verbatim / faithful AK teach**, and replay window.
 - **Flow:** Watch whole video → practice questions (soft retry, optional clip replay) → continue. Construction pathway step 18 now runs the equipment drill (no longer redirects only to Logistics).
 - **Soft-gate:** `VIDEO_SEGMENT_GATES_ENABLED = false` on the construction pack (showcase — all videos open). Architecture ready; teach notes stay honest (do not claim unlock while gates are off).
-- **Media gap:** Full Purpose Academy Final MP4s are not yet in-repo — `public/media/construction-equipment/` ships 1.5s stubs + README mapping app filenames ↔ source Final names. Replace before production review.
+- **Media:** Purpose Academy Final MP4s live under `public/media/construction-equipment/` (mapped in README). Replay windows sit inside each file’s duration.
 - **Critic:** Same information-display grammar as warehouse — video + one primary continue; questions under the player; powered machines stay-clear awareness only.
 
 ### 2026-10-28 — Desktop opening only after ModeChooser (L3 / L6)
