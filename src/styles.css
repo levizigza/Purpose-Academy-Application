@@ -13669,6 +13669,19 @@ video {
   border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line)) !important;
 }
 
+/* Keep result states visible on paper — base paper rule must not wipe green/red. */
+.is-phone-app .train-choice.is-correct {
+  background: color-mix(in srgb, #2e7d32 14%, #fff) !important;
+  border-color: #2e7d32 !important;
+  color: #0b3d14 !important;
+}
+
+.is-phone-app .train-choice.is-wrong {
+  background: color-mix(in srgb, #c62828 12%, #fff) !important;
+  border-color: #b71c1c !important;
+  color: #5c1010 !important;
+}
+
 .is-phone-app .train-choice.is-selected,
 .is-phone-app .train-choice:focus-visible {
   background: #fff6de !important;

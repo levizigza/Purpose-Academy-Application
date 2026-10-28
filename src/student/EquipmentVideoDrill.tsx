@@ -67,6 +67,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   const [qCorrect, setQCorrect] = useState(false)
   const [setJustCleared, setSetJustCleared] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const replayEndRef = useRef<number | null>(null)
   const pulseWatchedRef = useRef<Set<string>>(new Set())
   const watchCoachedRef = useRef(false)
   const practice = isPracticeMode()
@@ -99,6 +100,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     setPicked(null)
     setQCorrect(false)
     setSetJustCleared(false)
+    replayEndRef.current = null
     if (idx === 0) watchCoachedRef.current = false
     const el = videoRef.current
     if (el) {
@@ -162,6 +164,12 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   function onTimeUpdate() {
     const el = videoRef.current
     if (!el || !el.duration) return
+    const replayEnd = replayEndRef.current
+    if (replayEnd != null && el.currentTime >= replayEnd) {
+      el.pause()
+      replayEndRef.current = null
+      return
+    }
     const p = el.currentTime / el.duration
     setProgress(p)
     if (p >= 0.9) markWatched(lesson)
@@ -177,6 +185,9 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     if (!canLeaveWatch) return
     if (!watched.has(lesson.id)) markWatched(lesson)
     coachWatchDone()
+    replayEndRef.current = null
+    const el = videoRef.current
+    if (el) el.pause()
     setPhase('answer')
     setQIdx(0)
     setPicked(null)
@@ -192,15 +203,25 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     setPicked(id)
     setQCorrect(ok)
     playFoley(ok ? 'correct' : 'wrong')
+    /* Phone fold: keep teach / soft-miss above the sticky Back chrome. */
+    requestAnimationFrame(() => {
+      document
+        .querySelector('.equip-video-check .alert.ok, .equip-video-check .play-soft-miss')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    })
   }
 
   function afterQuestion() {
     if (!question) return
     if (!qCorrect) {
+      replayEndRef.current = null
       setPicked(null)
       setQCorrect(false)
       return
     }
+    replayEndRef.current = null
+    const el = videoRef.current
+    if (el) el.pause()
     if (qIdx < questions.length - 1) {
       setQIdx((i) => i + 1)
       setPicked(null)
@@ -225,7 +246,9 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
     if (!question) return
     const el = videoRef.current
     if (!el) return
-    el.currentTime = question.replay.startSec
+    const { startSec, endSec } = question.replay
+    replayEndRef.current = endSec
+    el.currentTime = startSec
     void el.play()
     playFoley('whoosh')
   }
@@ -447,7 +470,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
 
           {phase === 'answer' && question && !setJustCleared ? (
             <div
-              className="equip-video-check topic-lesson-card"
+              className="equip-video-check"
               data-coach={coachFirst ? 'equip-answer' : undefined}
             >
               <p className="equip-video-check-kicker">Practice questions</p>
@@ -513,7 +536,7 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
           ) : null}
 
           {phase === 'answer' && setJustCleared ? (
-            <div className="equip-video-check topic-lesson-card">
+            <div className="equip-video-check">
               <p className="equip-video-check-kicker">Station clear</p>
               <h3>{lesson.title} · practice cleared</h3>
               <p className="lede">

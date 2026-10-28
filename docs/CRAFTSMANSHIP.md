@@ -1042,6 +1042,13 @@ Newest first.
 - Smoke: `node scripts/smoke-warehouse-quiz-teach.mjs` (CB Q7, Conveyor Q9, no soft prefixes).
 - **Assumption to challenge next:** whether teach-back length on phone still reads in three seconds after the longer AK lines.
 
+### 2026-10-28 — Logistics equipment check card honesty (L2 / L3)
+
+- Replay clip now pauses at `replay.endSec` (was seek-and-play-forever).
+- Station teach note no longer claims “unlock the next” while soft-gates stay off.
+- Check card dropped the shared `topic-lesson-card` night class; phone paper keeps green/red choice result states (paper `.train-choice` rule was wiping them).
+- **Assumption to challenge next:** whether phone teach-back length still clears the three-second read after AK restore.
+
 ### 2026-10-16 — Layered craft + site-wide attention sweep
 
 - Documented **craft layers L1–L6** (truth, content delivery, aesthetic optics, attention ethics, trust, systems spine) — different chisels for different jobs; L2 content delivery and L3 aesthetic optics stay distinct and will deepen by pathway.
