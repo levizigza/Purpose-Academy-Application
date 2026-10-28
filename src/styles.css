@@ -2630,6 +2630,29 @@ table.data th {
   z-index: 5;
 }
 
+.threshold-modes-escape {
+  position: absolute;
+  top: max(0.85rem, env(safe-area-inset-top));
+  left: max(0.85rem, env(safe-area-inset-left));
+  z-index: 6;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: rgba(244, 247, 251, 0.72);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  padding: 0.35rem 0.15rem;
+}
+
+.threshold-modes-escape:hover,
+.threshold-modes-escape:focus-visible {
+  color: #f5c542;
+  outline: none;
+}
+
 /* ── Mirror smash: cracks on the door, then shards fall with the opening ── */
 
 .mirror-break {
@@ -12341,6 +12364,11 @@ video {
 
 .toolbox-layout-nav a:hover {
   color: #f5c542;
+}
+
+.toolbox-layout-nav .toolbox-layout-practice {
+  color: #f5c542;
+  font-weight: 700;
 }
 
 .toolbox-station {

@@ -432,6 +432,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-28 — Practice tray must stay visible after toolbox return (L3 / L6)
+
+- **Layers:** L3 (doors readable in 3s) + L6 (shell continuity).
+- **Failure:** Hiding the Practice tray while `pa-practice-mode-v1` was set made “← Toolbox” / Exit-to-modes → re-enter Desktop look like Practice vanished; splash “THREE DOORS” also read as if Desktop/Phone modes were gone.
+- **Fix:** Always show Practice in the tool chest (resume when already in Practice); toolbox chrome **Continue Practice**; desktop splash **Desktop / Phone** escape. App URL remains GitHub Pages — not purposeacademy.ca.
+- **Critic:** Flag-gated tray hide was clever for “already in” — wrong for a learner who stepped back one door.
+
 ### 2026-10-27 — First-computer nav cues + station explainer videos (L3 / L4 / L2)
 
 - **Layers:** L3 (where to go in 3s) + L4 (cues quiet after first use — not casino) + L2 (how-it-works before the drill).

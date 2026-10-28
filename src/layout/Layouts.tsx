@@ -33,12 +33,30 @@ function useLiveShellMode(): ShellMode | null {
 /** Minimal chrome for the post-splash toolbox station (desktop). */
 function ToolboxLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
+  const [practice, setPractice] = useState(() => isPracticeMode())
+
+  useEffect(() => {
+    const sync = () => setPractice(isPracticeMode())
+    sync()
+    window.addEventListener('pa-practice-started', sync)
+    window.addEventListener('pa-practice-restarted', sync)
+    return () => {
+      window.removeEventListener('pa-practice-started', sync)
+      window.removeEventListener('pa-practice-restarted', sync)
+    }
+  }, [])
+
   return (
     <div className="shell is-toolbox">
       <SkipLink />
       <header className="toolbox-layout-bar">
         <BrandLockup to="/" dark />
         <nav className="toolbox-layout-nav" aria-label="Workshop">
+          {practice && (
+            <Link className="toolbox-layout-practice" to="/journey">
+              Continue Practice
+            </Link>
+          )}
           <Link to="/splash">Replay opening</Link>
           <Link to="/privacy">Privacy</Link>
           <button

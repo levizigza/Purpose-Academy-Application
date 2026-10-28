@@ -292,7 +292,9 @@ export function EnterBox() {
           </div>
           <nav className="toolbox-tray" aria-label="Workshop entry">
             {ENTRIES.map((item, i) => {
-              if (item.practice && isPracticeMode()) return null
+              /* Always keep Practice visible — hiding it when the flag is set
+               * made "← Toolbox" / Exit-to-modes → re-enter look like Practice vanished. */
+              const practiceActive = Boolean(item.practice && isPracticeMode())
               const done =
                 item.completeIds.length > 0 &&
                 item.completeIds.every((id) => isSequenceComplete(id))
@@ -305,21 +307,25 @@ export function EnterBox() {
                 done ? ' is-complete' : partial ? ' is-partial' : ''
               }${item.placeholder ? ' is-placeholder' : ''}${isOpen ? ' is-open' : ''}${
                 item.practice ? ' is-practice' : ''
-              }${practiceCue}`
+              }${practiceActive ? ' is-practice-active' : ''}${practiceCue}`
               const style = { animationDelay: `${0.14 + i * 0.07}s` }
               const help = item.placeholder
                 ? item.help
-                : done
-                  ? 'Done. Open again'
-                  : partial
-                    ? 'Partly done. Continue'
-                    : item.help
+                : practiceActive
+                  ? 'Continue your path'
+                  : done
+                    ? 'Done. Open again'
+                    : partial
+                      ? 'Partly done. Continue'
+                      : item.help
               const inner: ReactNode = (
                 <>
                   {item.practice && (
                     <span className="practice-point" aria-hidden>
                       <span className="practice-point-arrow">➜</span>
-                      <span className="practice-point-label">Practice</span>
+                      <span className="practice-point-label">
+                        {practiceActive ? 'Continue' : 'Practice'}
+                      </span>
                     </span>
                   )}
                   <span className="toolbox-etch" aria-hidden>
@@ -362,6 +368,11 @@ export function EnterBox() {
                     if (item.practice) {
                       markNavCueSeen(NAV_CUE.toolboxPractice)
                       void unlockFoley().then(() => playFoley('metal'))
+                      if (isPracticeMode()) {
+                        setOpenTray(item.label)
+                        window.setTimeout(() => launchTo('/journey', 'Practice'), 280)
+                        return
+                      }
                       setPracticeGate(true)
                       return
                     }
