@@ -25,7 +25,7 @@ export type WarehouseVideoQuestion = {
   choices: WarehouseVideoChoice[]
   /** Correct choice id */
   answer: WarehouseVideoChoiceId
-  /** Soft teach line after a miss or confirm */
+  /** Answer-key explanation shown after a miss or confirm (verbatim / faithful to AK) */
   teach: string
   /** Replay window inside the matching warehouse MP4 */
   replay: WarehouseVideoReplay
@@ -146,7 +146,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Climb using the forks and leave the seat unchanged' },
         ],
         answer: 'B',
-        teach: 'The video shows: Use steps and handholds, adjust the seat and use the restraint.',
+        teach: 'Use the designated steps and handholds, adjust the seat and use the restraint as trained.',
         replay: { startSec: 54, endSec: 61, label: '0:54-1:01' },
       },
       {
@@ -188,7 +188,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Report it before use and follow the workplace procedure' },
         ],
         answer: 'D',
-        teach: 'The video shows: Report it before use and follow the workplace procedure.',
+        teach: 'Report it before use and follow the workplace procedure.',
         replay: { startSec: 35, endSec: 44, label: '0:35-0:44' },
       },
     ],
@@ -293,7 +293,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Mast tilts the rack; reach mechanism weighs the pallet' },
         ],
         answer: 'B',
-        teach: 'The video shows: Mast lifts; reach mechanism moves forks forward.',
+        teach: 'The mast lifts the pallet, and the reach mechanism moves the forks forward.',
         replay: { startSec: 81, endSec: 89, label: '1:21-1:29' },
       },
       {
@@ -307,7 +307,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Only the location of the charging socket' },
         ],
         answer: 'B',
-        teach: 'The video shows: Model controls and required operator protection.',
+        teach: 'The controls, operator compartment, and required operator protection for that model.',
         replay: { startSec: 53, endSec: 61, label: '0:53-1:01' },
       },
       {
@@ -335,7 +335,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Parcel count, barcode color and label layout' },
         ],
         answer: 'A',
-        teach: 'The video shows: Storage position, load weight, height, capacity and space.',
+        teach: 'The task checks show rated capacity, rack space and overhead clearance.',
         replay: { startSec: 44, endSec: 51, label: '0:44-0:51' },
       },
     ],
@@ -412,7 +412,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Turns the load wheels without lifting the pallet' },
         ],
         answer: 'A',
-        teach: 'The video shows: Operates the hydraulic lift to raise the pallet slightly.',
+        teach: 'It operates the hydraulic lift and raises the pallet slightly.',
         replay: { startSec: 29, endSec: 35, label: '0:29-0:35' },
       },
       {
@@ -482,7 +482,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'A pallet that does not fit the forks but carries a light load' },
         ],
         answer: 'B',
-        teach: 'The video shows: An undamaged compatible pallet with a stable load within capacity.',
+        teach: 'The pallet must suit the jack, be undamaged, and hold a stable load within the jack\'s capacity.',
         replay: { startSec: 45, endSec: 51, label: '0:45-0:51' },
       },
     ],
@@ -587,7 +587,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Equipment condition and required model checks' },
         ],
         answer: 'D',
-        teach: 'The video shows: Equipment condition and required model checks.',
+        teach: 'Inspect the condition before use and follow the checks required for that model.',
         replay: { startSec: 35, endSec: 43, label: '0:35-0:43' },
       },
       {
@@ -629,7 +629,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'A stable load within capacity and suitable for the route' },
         ],
         answer: 'D',
-        teach: 'The video shows: A stable load within capacity and suitable for the route.',
+        teach: 'It should be stable, within capacity, and suitable for the planned route.',
         replay: { startSec: 45, endSec: 53, label: '0:45-0:53' },
       },
     ],
@@ -720,7 +720,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'To confirm capacity for the load and lift height' },
         ],
         answer: 'D',
-        teach: 'The video shows: To confirm capacity for the load and lift height.',
+        teach: 'Check rated capacity for the intended lift and follow the model instructions.',
         replay: { startSec: 18, endSec: 26, label: '0:18-0:26' },
       },
       {
@@ -748,7 +748,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Lift, lower, travel and stop at the designated position' },
         ],
         answer: 'D',
-        teach: 'The video shows: Lift, lower, travel and stop at the designated position.',
+        teach: 'Lift, lower, travel, and stop, using the designated operating position.',
         replay: { startSec: 53, endSec: 61, label: '0:53-1:01' },
       },
       {
@@ -762,7 +762,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Beside the raised pallet to steady its corners' },
         ],
         answer: 'B',
-        teach: 'The video shows: Clear of the mast and raised load.',
+        teach: 'Keep people away from the mast and raised load during lifting.',
         replay: { startSec: 47, endSec: 51, label: '0:47-0:51' },
       },
       {
@@ -776,7 +776,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Display brightness, barcode length and scan sound' },
         ],
         answer: 'A',
-        teach: 'The video shows: Rack condition, overhead clearance, lift height and space.',
+        teach: 'The task checks show a suitable storage position, capacity and clear space.',
         replay: { startSec: 44, endSec: 51, label: '0:44-0:51' },
       },
     ],
@@ -867,7 +867,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Close them only when the platform is at floor level' },
         ],
         answer: 'B',
-        teach: 'The video shows: Keep them closed as the machine instructions require.',
+        teach: 'Keep them closed and follow the machine instructions.',
         replay: { startSec: 48, endSec: 52, label: '0:48-0:52' },
       },
       {
@@ -881,7 +881,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'As trained, following the manual and site rules' },
         ],
         answer: 'D',
-        teach: 'The video shows: As trained, following the manual and site rules.',
+        teach: 'Exactly as trained, following the operator manual and site rules.',
         replay: { startSec: 44, endSec: 61, label: '0:44-1:01' },
       },
       {
@@ -895,7 +895,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Film roll and wrapping program' },
         ],
         answer: 'A',
-        teach: 'The video shows: Platform gates and required fall protection.',
+        teach: 'The pre-use scene shows the platform, gates and required operator protection checks.',
         replay: { startSec: 34, endSec: 43, label: '0:34-0:43' },
       },
       {
@@ -909,7 +909,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Only the position of the power indicator' },
         ],
         answer: 'B',
-        teach: 'The video shows: Capacity, load arrangement, overhead clearance and lifting area.',
+        teach: 'The task scene lists platform capacity, stable goods and overhead or aisle clearance.',
         replay: { startSec: 44, endSec: 53, label: '0:44-0:53' },
       },
       {
@@ -923,7 +923,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Ask people to hold the goods while the platform rises' },
         ],
         answer: 'A',
-        teach: 'The video shows: Keep people clear and follow the site communication procedure.',
+        teach: 'Keep people clear of the lifting area and use the workplace communication procedure.',
         replay: { startSec: 48, endSec: 61, label: '0:48-1:01' },
       },
     ],
@@ -1042,7 +1042,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Loose at the top to make them easy to remove' },
         ],
         answer: 'A',
-        teach: 'The video shows: Stable against the frame and secured when required.',
+        teach: 'Stable against the frame, within the load limit, and secured when required.',
         replay: { startSec: 44, endSec: 52, label: '0:44-0:52' },
       },
       {
@@ -1056,7 +1056,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Unit selection, tare value and display brightness' },
         ],
         answer: 'A',
-        teach: 'The video shows: Load, balance, floor, route and loading space.',
+        teach: 'Plan the load and route before moving; the task checks also show balance and load limit.',
         replay: { startSec: 92, endSec: 99, label: '1:32-1:39' },
       },
       {
@@ -1070,7 +1070,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Add another carton to improve the balance' },
         ],
         answer: 'C',
-        teach: 'The video shows: Get help or use different equipment.',
+        teach: 'Get help or use different equipment.',
         replay: { startSec: 94, endSec: 99, label: '1:34-1:39' },
       },
     ],
@@ -1175,7 +1175,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Against one side with the opposite side unsupported' },
         ],
         answer: 'B',
-        teach: 'The video shows: Inside the deck and arranged to remain stable.',
+        teach: 'Inside the deck, arranged so it remains stable.',
         replay: { startSec: 18, endSec: 25, label: '0:18-0:25' },
       },
       {
@@ -1203,7 +1203,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Doors, corners, floor, stopping space and unloading area' },
         ],
         answer: 'D',
-        teach: 'The video shows: Doors, corners, floor, stopping space and unloading area.',
+        teach: 'Plan the route, corners and stopping space, then follow the workplace handling procedure.',
         replay: { startSec: 92, endSec: 100, label: '1:32-1:40' },
       },
       {
@@ -1217,7 +1217,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Keep moving and ask someone to walk ahead' },
         ],
         answer: 'C',
-        teach: 'The video shows: Rearrange it to stay stable, within the deck and allow a view.',
+        teach: 'Keep the items within the deck, stable and low enough to see the route.',
         replay: { startSec: 44, endSec: 51, label: '0:44-0:51' },
       },
     ],
@@ -1322,7 +1322,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Any size of parcel, no spacing and a full receiving area' },
         ],
         answer: 'B',
-        teach: 'The video shows: Suitable stable parcels, correct spacing and a clear receiving area.',
+        teach: 'The task scene shows suitable stable parcels, spacing and a clear receiving area.',
         replay: { startSec: 44, endSec: 53, label: '0:44-0:53' },
       },
       {
@@ -1336,7 +1336,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Only that the parcel labels face upward' },
         ],
         answer: 'A',
-        teach: 'The video shows: Authorized start-up procedure followed and people clear.',
+        teach: 'Follow the authorized start-up procedure and confirm that people are clear.',
         replay: { startSec: 53, endSec: 61, label: '0:53-1:01' },
       },
       {
@@ -1350,7 +1350,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Only damaged cartons' },
         ],
         answer: 'A',
-        teach: 'The video shows: Hands, hair and clothing.',
+        teach: 'Keep hands, hair and clothing clear of the moving conveyor parts.',
         replay: { startSec: 46, endSec: 50, label: '0:46-0:50' },
       },
       {
@@ -1364,7 +1364,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Restart repeatedly until the parcel moves' },
         ],
         answer: 'C',
-        teach: 'The video shows: Stop and report it; only authorized people may clear the jam.',
+        teach: 'Stop and report the jam. Only authorized people may clear it.',
         replay: { startSec: 48, endSec: 53, label: '0:48-0:53' },
       },
     ],
@@ -1483,7 +1483,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Stable, above capacity and positioned by eye' },
         ],
         answer: 'C',
-        teach: 'The video shows: Stable, within capacity and positioned as instructed.',
+        teach: 'The task checks show a stable load within capacity and a pallet centred as instructed.',
         replay: { startSec: 45, endSec: 53, label: '0:45-0:53' },
       },
       {
@@ -1497,7 +1497,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Only the power-indicator light' },
         ],
         answer: 'B',
-        teach: 'The video shows: Start, stop and wrapping-program controls.',
+        teach: 'The start, stop, and wrapping-program controls for that machine.',
         replay: { startSec: 54, endSec: 62, label: '0:54-1:02' },
       },
       {
@@ -1511,7 +1511,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Only the edge of a stationary pallet label' },
         ],
         answer: 'B',
-        teach: 'The video shows: Rotating load or turntable and moving film carriage.',
+        teach: 'The rotating load or turntable and the moving film carriage.',
         replay: { startSec: 92, endSec: 100, label: '1:32-1:40' },
       },
     ],
@@ -1588,7 +1588,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Unsecured, with the driver waiting nearby' },
         ],
         answer: 'C',
-        teach: 'The video shows: Secured, with required restraint and signals confirmed.',
+        teach: 'It must be secured, with the required restraint and signals confirmed.',
         replay: { startSec: 46, endSec: 53, label: '0:46-0:53' },
       },
       {
@@ -1602,7 +1602,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'To suit only the weight of the empty pallet' },
         ],
         answer: 'C',
-        teach: 'The video shows: To suit both the load and handling equipment crossing.',
+        teach: 'It must suit the load and handling equipment that will cross.',
         replay: { startSec: 26, endSec: 33, label: '0:26-0:33' },
       },
       {
@@ -1616,7 +1616,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Turntable condition and stretch-film tension' },
         ],
         answer: 'B',
-        teach: 'The video shows: Platform and lip condition, plus trailer-floor condition.',
+        teach: 'Inspect before use; the task checks include the platform, lip and trailer floor.',
         replay: { startSec: 34, endSec: 53, label: '0:34-0:53' },
       },
       {
@@ -1630,7 +1630,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Only that the trailer doors are open' },
         ],
         answer: 'A',
-        teach: 'The video shows: Authorized crossing with restraint, signals, capacity and lip checked.',
+        teach: 'Confirm restraint, signals, capacity and lip support, and authorize the crossing.',
         replay: { startSec: 44, endSec: 61, label: '0:44-1:01' },
       },
       {
@@ -1658,7 +1658,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Send an empty truck across before checking' },
         ],
         answer: 'B',
-        teach: 'The video shows: Do not cross until checks are complete and crossing is authorized.',
+        teach: 'Complete the required dock checks and confirm authorization before anyone crosses.',
         replay: { startSec: 44, endSec: 61, label: '0:44-1:01' },
       },
     ],
@@ -1749,7 +1749,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Only the scanner brand and its serial number' },
         ],
         answer: 'A',
-        teach: 'The video shows: Required task, correct entry field and confirmation signal.',
+        teach: 'Open the required task, select the correct entry field and learn the confirmation signal.',
         replay: { startSec: 54, endSec: 62, label: '0:54-1:02' },
       },
       {
@@ -1763,7 +1763,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Relaxed grip, straight wrist and label within easy reach' },
         ],
         answer: 'D',
-        teach: 'The video shows: Relaxed grip, straight wrist and label within easy reach.',
+        teach: 'Hold the scanner comfortably with a straight wrist and the label within easy reach.',
         replay: { startSec: 63, endSec: 69, label: '1:03-1:09' },
       },
       {
@@ -1777,7 +1777,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Item description on the screen' },
         ],
         answer: 'B',
-        teach: 'The video shows: Laser aiming beam.',
+        teach: 'If the scanner has a laser, avoid looking into its aiming beam.',
         replay: { startSec: 66, endSec: 70, label: '1:06-1:10' },
       },
       {
@@ -1791,7 +1791,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'The screen shows the intended item or location' },
         ],
         answer: 'D',
-        teach: 'The video shows: The screen shows the intended item or location.',
+        teach: 'Confirm that the screen shows the intended item or location before continuing.',
         replay: { startSec: 45, endSec: 52, label: '0:45-0:52' },
       },
       {
@@ -1805,7 +1805,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Use a barcode from a different item to complete the task' },
         ],
         answer: 'C',
-        teach: 'The video shows: Correct or report the issue before continuing.',
+        teach: 'Correct a mismatch and report an incorrect or unreadable label before continuing.',
         replay: { startSec: 95, endSec: 101, label: '1:35-1:41' },
       },
     ],
@@ -1882,7 +1882,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Firm level surface, correct unit and empty scale at zero' },
         ],
         answer: 'D',
-        teach: 'The video shows: Firm level surface, correct unit and empty scale at zero.',
+        teach: 'Use a firm, level surface and confirm the required unit and empty scale zero.',
         replay: { startSec: 53, endSec: 61, label: '0:53-1:01' },
       },
       {
@@ -1896,7 +1896,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Partly hanging off and above capacity' },
         ],
         answer: 'B',
-        teach: 'The video shows: Securely, fully supported and within capacity.',
+        teach: 'Keep within capacity and place the parcel securely and fully on the platform.',
         replay: { startSec: 62, endSec: 72, label: '1:02-1:12' },
       },
       {
@@ -1910,7 +1910,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'As soon as any number first appears' },
         ],
         answer: 'A',
-        teach: 'The video shows: When stable, with the correct unit.',
+        teach: 'When the reading is stable. Record the correct unit with the result.',
         replay: { startSec: 71, endSec: 79, label: '1:11-1:19' },
       },
       {
@@ -1924,7 +1924,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'To make an overweight parcel appear within capacity' },
         ],
         answer: 'B',
-        teach: 'The video shows: When the task requires it, following the workplace procedure.',
+        teach: 'When the task requires it, following the workplace weighing procedure.',
         replay: { startSec: 71, endSec: 79, label: '1:11-1:19' },
       },
       {
@@ -1938,7 +1938,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Lift it alone quickly and place it above capacity' },
         ],
         answer: 'A',
-        teach: 'The video shows: Get help or suitable lifting equipment and respect scale capacity.',
+        teach: 'Get help or use lifting equipment for a heavy parcel and stay within scale capacity.',
         replay: { startSec: 62, endSec: 72, label: '1:02-1:12' },
       },
       {
@@ -1952,7 +1952,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Record the highest number that appears' },
         ],
         answer: 'B',
-        teach: 'The video shows: Seek a stable result and follow the procedure before recording.',
+        teach: 'Follow the workplace procedure for accuracy checks and unexpected or unstable readings.',
         replay: { startSec: 91, endSec: 101, label: '1:31-1:41' },
       },
     ],
@@ -2071,7 +2071,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'A product chosen only for its colour or smell' },
         ],
         answer: 'C',
-        teach: 'The video shows: An approved product suited to machine, floor and procedure.',
+        teach: 'Use an approved product suited to the machine, floor and cleaning procedure.',
         replay: { startSec: 45, endSec: 54, label: '0:45-0:54' },
       },
       {
@@ -2085,7 +2085,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Cleaning route and wet-floor access control' },
         ],
         answer: 'D',
-        teach: 'The video shows: Cleaning route and wet-floor access control.',
+        teach: 'Plan the cleaning route and control access to wet floors as the site procedure requires.',
         replay: { startSec: 92, endSec: 101, label: '1:32-1:41' },
       },
       {
@@ -2099,7 +2099,7 @@ export const WAREHOUSE_EQUIPMENT_VIDEO_QUIZZES: WarehouseVideoQuiz[] = [
           { id: 'D', text: 'Park with dirty water and leave all parts unchecked' },
         ],
         answer: 'A',
-        teach: 'The video shows: Empty, clean and park according to procedure.',
+        teach: 'Follow the required procedure for emptying, cleaning, and parking the machine.',
         replay: { startSec: 92, endSec: 101, label: '1:32-1:41' },
       },
     ],
