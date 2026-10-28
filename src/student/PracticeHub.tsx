@@ -96,7 +96,7 @@ function StationMeter({ done, total, label }: { done: number; total: number; lab
 }
 
 /**
- * Professional learning dashboard for Practice.
+ * Professional learning dashboard for Student Practice Mode.
  * Pathway-aware: same skeleton for Construction, Logistics, Community Support.
  */
 export function PracticeHub({
@@ -190,7 +190,7 @@ export function PracticeHub({
     >
       <header className="ph-hero">
         <div className="ph-hero-copy">
-          <p className="ph-kicker">{portal ? 'Practice path · crew order' : 'Practice · crew order'}</p>
+          <p className="ph-kicker">{portal ? 'Student Practice path · crew order' : 'Student Practice · crew order'}</p>
           <h1>{portal ? `Your ${JOURNEY_STEP_COUNT}-step path` : 'Your training path'}</h1>
           <p className="ph-lede">
             {portal

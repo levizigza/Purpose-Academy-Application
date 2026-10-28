@@ -1,5 +1,5 @@
 /**
- * Bake Microsoft Edge neural MP3s for Practice Mode speech into public/tts/.
+ * Bake Microsoft Edge neural MP3s for Student Practice Mode speech into public/tts/.
  * Used by GitHub Pages (no API) so Hear English stays human-sounding.
  *
  * Usage: node scripts/bake-tts.mjs

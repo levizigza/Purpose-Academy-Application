@@ -54,7 +54,7 @@ function useLivePhonePhase(): PhonePhase {
 
 /**
  * Live phone presentation shell.
- * Phases: home (PA icon) → splash → toolbox → app (Practice / enter routes).
+ * Phases: home (PA icon) → splash → toolbox → app (Student Practice / enter routes).
  *
  * Layout uses `.is-phone-app` + container queries so content follows device width,
  * not the outer desktop viewport.
@@ -250,7 +250,7 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
           : phase === 'splash'
             ? 'Watch the opening on the phone, then strike Enter to open the toolbox.'
             : phase === 'toolbox'
-              ? 'Open a tray — Practice, Student, Instructor, or Admin — inside the device.'
+              ? 'Open a tray — Student Practice, Student, Instructor, or Admin — inside the device.'
               : 'Live learner path inside the device. Pick a phone size above, then scroll and tap.'}
       </p>
     </div>

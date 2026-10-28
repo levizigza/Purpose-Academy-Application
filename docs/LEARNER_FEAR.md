@@ -175,14 +175,14 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 ### 2026-10-26 — Board to 100% on every prior gap row
 
-- Hub / portal: School path → Practice path; home % grades → Comfortable / Started; no Holland letter codes on career result.
+- Hub / portal: School path → Student Practice path; home % grades → Comfortable / Started; no Holland letter codes on career result.
 - Soft / path: equipment familiarization → videos; StatusLabel Graded → Feedback ready; Work Interests purpose without “test”.
 - Computer Skills: School Work folder → Job Files; Check → Done; instructor@school.ca → @work.ca.
 - Multi / Learn: examen / اختبار / परीक्षा / ፈተና “not a test” lines → guide for your path; assignment Grade/100 chrome removed.
 
 ### 2026-10-26 — Residual leak close-out (true 100%)
 
-- Practice banner CTA: School path → Practice path.
+- Student Practice banner CTA: School path → Student Practice path.
 - Computer Skills lesson pack (`basicComputerSkillsVideos.ts`) aligned to Job Files (UI + checks match).
 - Learner notification: Assignment graded /100 → feedback ready.
 - Public + seed: school path/spine → practice path/spine (pathway copy).

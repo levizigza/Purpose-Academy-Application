@@ -1,4 +1,4 @@
-/** Practice: full-site student path preview (no registration). */
+/** Student Practice Mode: full-site student path preview (no registration). */
 import { JOURNEY_STEP_COUNT } from '../student/journeyCurriculum'
 import { learnerGet, learnerRemove, learnerSet } from './learnerStore'
 
@@ -110,7 +110,7 @@ export function startPracticeMode(fullName: string) {
 }
 
 /**
- * Open Practice from the toolbox without wiping history.
+ * Open Student Practice from the toolbox without wiping history.
  * Desktop ↔ Phone share the same local store — resume where they left off.
  */
 export function resumeOrEnterPractice(fullName: string) {

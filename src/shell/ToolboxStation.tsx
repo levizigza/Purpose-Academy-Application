@@ -5,7 +5,7 @@ import { SitePaMark } from '../components/SitePaMark'
 import { getShellMode } from './shellMode'
 
 /**
- * Post-opening toolbox — Student, Practice, Instructor, Admin.
+ * Post-opening toolbox — Student, Student Practice, Instructor, Admin.
  * Shown after desktop splash Enter, or inside the phone after the in-device opening.
  */
 export function ToolboxStation() {
@@ -28,8 +28,8 @@ export function ToolboxStation() {
           <h1 className="toolbox-station-title">Open the toolbox</h1>
           <p className="toolbox-station-lede">
             {inPhone
-              ? 'Pull a tray on the phone — Practice, Student, Instructor, or Admin.'
-              : 'Pull a tray — Practice, Student, Instructor, or Admin — and step onto the path.'}
+              ? 'Pull a tray on the phone — Student Practice, Student, Instructor, or Admin.'
+              : 'Pull a tray — Student Practice, Student, Instructor, or Admin — and step onto the path.'}
           </p>
         </header>
 

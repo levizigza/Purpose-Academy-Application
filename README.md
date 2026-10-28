@@ -2,7 +2,7 @@
 
 Calgary school platform with **three doors into work**: Construction, Logistics, and Community Support Foundations.
 
-- **Shared spine:** Daily Conversation Vocabulary + the same 21-step Practice path (`/journey`)
+- **Shared spine:** Daily Conversation Vocabulary + the same 21-step Student Practice path (`/journey`)
 - **Flagship depth today:** Construction Visual Vocabulary (660) + shop/site craft; Logistics VV (500); Community focused specialty set (growing)
 - **Frontend:** Vite + React + TypeScript
 - **Backend:** Express (Node) + persistent JSON database

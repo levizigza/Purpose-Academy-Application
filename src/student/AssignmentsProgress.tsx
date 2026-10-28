@@ -194,7 +194,7 @@ export function StudentProgressPage() {
                   openPracticeSpine(user.full_name)
                 }}
               >
-                Open Practice path
+                Open Student Practice path
               </Link>
             </>
           ) : (

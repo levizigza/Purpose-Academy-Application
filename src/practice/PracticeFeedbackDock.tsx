@@ -24,11 +24,11 @@ function pageTitleFromPath(pathname: string) {
   if (pathname === '/journey') {
     try {
       const step = Number(learnerGet('pa-student-journey-step-v1') || '0')
-      if (step > 0) return `Practice · step ${step}`
+      if (step > 0) return `Student Practice · step ${step}`
     } catch {
       /* ignore */
     }
-    return 'Practice'
+    return 'Student Practice'
   }
   const bit = pathname.split('/').filter(Boolean).pop() || pathname
   return bit.replace(/-/g, ' ')
@@ -94,7 +94,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       {
         id: 'sys-1',
         role: 'bot',
-        text: `You’re in Practice on ${pageTitleFromPath(pathname)}. Tell me what to fix or improve — it becomes a change request. You’ll preview the fix here, then Approve or ask for another pass before it goes live.`,
+        text: `You’re in Student Practice on ${pageTitleFromPath(pathname)}. Tell me what to fix or improve — it becomes a change request. You’ll preview the fix here, then Approve or ask for another pass before it goes live.`,
       },
     ])
   }, [pathname, quizComplete, journeyTick])
@@ -221,7 +221,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
           className="practice-chat-tab"
           onClick={() => setOpen(true)}
           aria-expanded={false}
-          aria-label="Open practice feedback chat"
+          aria-label="Open Student Practice feedback chat"
         >
           <span className="practice-chat-tab-dot" aria-hidden />
           Feedback
@@ -229,11 +229,11 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       )}
 
       {open && (
-        <aside className="practice-chat-panel" role="dialog" aria-label="Practice feedback chat">
+        <aside className="practice-chat-panel" role="dialog" aria-label="Student Practice feedback chat">
           <header className="practice-chat-head">
             <div>
               <strong>Feedback chat</strong>
-              <p>Practice · {pageTitleFromPath(pathname)}</p>
+              <p>Student Practice · {pageTitleFromPath(pathname)}</p>
             </div>
             <button type="button" className="linkish" onClick={() => setOpen(false)}>
               Close
@@ -362,7 +362,7 @@ export function PracticeModeBanner() {
   return (
     <div className={`practice-banner${inCourseShell ? ' is-status-only' : ''}`} role="status">
       <span>
-        Practice{name ? ` · ${name}` : ''}. One station at a time — take your time.
+        Student Practice{name ? ` · ${name}` : ''}. One station at a time — take your time.
       </span>
       {!inCourseShell && (
         <span className="practice-banner-actions">
@@ -371,7 +371,7 @@ export function PracticeModeBanner() {
           </Link>
           {!onJourney && (
             <Link className="practice-banner-cta" to="/journey">
-              Practice path
+              Student Practice path
             </Link>
           )}
           <button type="button" className="practice-banner-cta" onClick={startOver}>

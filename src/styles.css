@@ -9338,7 +9338,7 @@ html.pa-page-wipe .hero-inner {
   }
 }
 
-/* ——— Practice Mode + reviewer feedback ——— */
+/* ——— Student Practice Mode + reviewer feedback ——— */
 .toolbox-slot.is-practice {
   position: relative;
   outline: 2px solid rgba(232, 163, 23, 0.85);
@@ -9369,15 +9369,16 @@ html.pa-page-wipe .hero-inner {
 
 .practice-point-label {
   font-family: var(--display);
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #ffe08a;
   background: rgba(7, 30, 61, 0.88);
   border: 1px solid rgba(232, 163, 23, 0.55);
   border-radius: 999px;
-  padding: 0.18rem 0.45rem;
+  padding: 0.18rem 0.4rem;
+  white-space: nowrap;
 }
 
 @keyframes practice-point-bob {
@@ -10755,7 +10756,7 @@ video {
   font-size: 0.9rem;
 }
 
-/* ---- Practice Mode walkthrough polish ---- */
+/* ---- Student Practice Mode walkthrough polish ---- */
 .ph-resume-actions {
   display: flex;
   flex-wrap: wrap;
@@ -15912,7 +15913,7 @@ html.pa-phone-shell .play-soft-miss {
   height: 1.85rem;
 }
 
-/* Phone tool chest: keep the once-then-quiet Practice finger inside the frame
+/* Phone tool chest: keep the once-then-quiet Student Practice finger inside the frame
  * (was display:none — markers looked gone under dual-shell). Compact top sit. */
 .iphone-scroll .practice-point {
   left: auto;

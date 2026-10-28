@@ -145,7 +145,7 @@ Every surface is a **module**. Modules must be excellent in isolation *and* spea
 
 ```
 Splash (gateway) → Home (orient) → Admissions/Enter (identity)
-        → Portal School path (spine) ↔ Practice /journey (station)
+        → Portal School path (spine) ↔ Student Practice /journey (station)
         → Learn/LMS (depth when built) → Skills Passport (proof)
 ```
 
@@ -203,7 +203,7 @@ These are load-bearing across all layers.
 
 - Inside a lesson, the Learning Path Map is **compact**. Full path lives on Path home / School path.
 - Header: brand of the step (title, help, progress) before secondary meta.
-- Practice Mode and LMS share the same spine language; Practice may skip early admin steps but must not invent a second curriculum.
+- Student Practice Mode and LMS share the same spine language; Student Practice may skip early admin steps but must not invent a second curriculum.
 
 ### 6.3 Vocabulary honesty
 
@@ -492,11 +492,18 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Default `supportLang` / registration preferred language → **English**. `NavCueTarget` + `NavGlowRegion` point at the language chip grid (`NAV_CUE.langPick`) and Workplace Words mother-tongue row (`NAV_CUE.vocabLang`). Seen keys live in existing `pa-nav-cues-seen-v1` (`lang-pick`, `vocab-lang`). `StationExplainerGate` for step 3 (`your-language.mp4`, JennyNeural) teaches: start English → mark points at chips once → choose another tongue if needed → continue.
 - **Critic:** Do not invent a new cue dialect — reuse Mode/Hub arrow+glow. Do not add an English chip on VV that skips mother-tongue → English → type (that sands L2 craft). Coach spotlight + lang nav cue can overlap on word 1; both quiet after the first language press — acceptable for first-computer, revisit if it feels loud on the smallest phone fold. Explainer is the teacher; nav mark is the finger — keep both, never arrow-only.
 
+### 2026-10-28 — Student Practice Mode rename (L3 / L6)
+
+- **Layers:** L3 (mode name readable in chrome) + L6 (Desktop night + Phone paper + portal share one label).
+- **Customer ask:** Call the toolbox /journey surface **Student Practice Mode** (short **Student Practice** in trays and kickers).
+- **Surfaces:** ModeChooser, ToolboxStation, EnterBox tray + gate, PracticeHub kickers, banner/dock, LearningPathMap, portal Student Practice path, LMS home CTAs. Kept `pa-practice-mode-v1` and code ids.
+- **Critic:** Do not rename curriculum stations like Supported Practice or vocab English “Practice.” Prefer full name when copy said Practice Mode; short form only where chrome already used short “Practice.”
+
 ### 2026-10-28 — Practice tray must stay visible after toolbox return (L3 / L6)
 
 - **Layers:** L3 (doors readable in 3s) + L6 (shell continuity).
 - **Failure:** Hiding the Practice tray while `pa-practice-mode-v1` was set made “← Toolbox” / Exit-to-modes → re-enter Desktop look like Practice vanished; splash “THREE DOORS” also read as if Desktop/Phone modes were gone.
-- **Fix:** Always show Practice in the tool chest (resume when already in Practice); toolbox chrome **Continue Practice**; desktop splash **Desktop / Phone** escape. App URL remains GitHub Pages — not purposeacademy.ca.
+- **Fix:** Always show Student Practice in the tool chest (resume when already in Student Practice); toolbox chrome **Continue Student Practice**; desktop splash **Desktop / Phone** escape. App URL remains GitHub Pages — not purposeacademy.ca.
 - **Critic:** Flag-gated tray hide was clever for “already in” — wrong for a learner who stepped back one door.
 
 ### 2026-10-28 — Station first-example coach (L3 / L4)
@@ -513,7 +520,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 - **Layers:** L3 (where to go in 3s) + L4 (cues quiet after first use — not casino) + L2 (how-it-works before the drill).
 - **Customer ask:** Desktop (and phone) overwhelm first-time computer users; Continue should glow; arrows should point; every station needs a short human-voiced explainer before play.
-- **Nav cues:** `NavGlowButton` / `NavArrow` / `NavCueTarget` on Mode doors, Toolbox Practice tray, Hub **Continue to station**, station Continue. Amber pulse on night; navy/amber on paper. `prefers-reduced-motion` kills bob/glow.
+- **Nav cues:** `NavGlowButton` / `NavArrow` / `NavCueTarget` on Mode doors, Toolbox Student Practice tray, Hub **Continue to station**, station Continue. Amber pulse on night; navy/amber on paper. `prefers-reduced-motion` kills bob/glow.
 - **Explainers:** `StationExplainerGate` before each wired station; watch-to-unlock Continue. 12 videos in `public/explainers/` via Edge **JennyNeural** (friendly/considerate — not Piper Lessac). Editing: VO leads cut, slow Ken Burns only on photo beats, hard cuts on sentence ends.
 - **Critic:** Piper read as robotic on the grant cut — Edge neural is the free human path for now. Cues dismiss once followed so return visits stay calm.
 
@@ -1033,7 +1040,7 @@ Newest first.
 - Documented **craft layers L1–L6** (truth, content delivery, aesthetic optics, attention ethics, trust, systems spine) — different chisels for different jobs; L2 content delivery and L3 aesthetic optics stay distinct and will deepen by pathway.
 - Site-wide rule: layers apply to public, splash, auth, Practice, School path, Learn — not only the last surface polished.
 - Calm Practice banner (no soft-pulse); Done for now / School path links; Learning path “practice marks”; Welcome + Foundation + Home pillars speak finite crew path.
-- Brand promise carries station-by-station path language; Practice tray help matches.
+- Brand promise carries station-by-station path language; Student Practice tray help matches.
 - **Assumption to challenge next:** whether learners feel one coherent school across marketing → splash → portal → lesson without a “mode switch” shock — and whether pathway-specific L2/L3 standards need their own climb rows soon.
 
 ### 2026-03-27 — Optics climb: cool trades UI + attention ethics

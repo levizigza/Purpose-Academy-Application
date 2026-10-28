@@ -160,17 +160,17 @@ export function StudentHomePage() {
           }
         : !hasPathwayLessons
           ? {
-              title: `Continue ${pathwayLabel} on Practice path`,
-              body: `Account lessons for ${pathwayLabel} are not in Learn yet. Your real ${JOURNEY_STEP_COUNT}-step practice path — vocabulary, drills, and checks — is under Practice path.`,
+              title: `Continue ${pathwayLabel} on Student Practice path`,
+              body: `Account lessons for ${pathwayLabel} are not in Learn yet. Your real ${JOURNEY_STEP_COUNT}-step Student Practice path — vocabulary, drills, and checks — is under Student Practice path.`,
               to: '/app/student/path',
-              cta: 'Open Practice path',
+              cta: 'Open Student Practice path',
               onBeforeNavigate: openPathwayPractice,
             }
           : {
-              title: 'Keep training on Practice path',
-              body: `Account lessons look current. Keep building vocabulary and drills on the shared ${JOURNEY_STEP_COUNT}-step Practice path.`,
+              title: 'Keep training on Student Practice path',
+              body: `Account lessons look current. Keep building vocabulary and drills on the shared ${JOURNEY_STEP_COUNT}-step Student Practice path.`,
               to: '/app/student/path',
-              cta: 'Open Practice path',
+              cta: 'Open Student Practice path',
               onBeforeNavigate: openPathwayPractice,
             }
 
@@ -192,7 +192,7 @@ export function StudentHomePage() {
           />
         </div>
         <div className="school-path-home-copy stack">
-          <p className="section-kicker">Practice path</p>
+          <p className="section-kicker">Student Practice path</p>
           <h2>Your {JOURNEY_STEP_COUNT}-step spine</h2>
           <p>
             {pathwayLabel ? `${pathwayLabel} Foundations` : 'Your pathway'} — units, vocabulary, and checks in clear
@@ -200,7 +200,7 @@ export function StudentHomePage() {
           </p>
           <div className="hero-actions">
             <Link className="btn btn-primary" to="/app/student/path" onClick={openPathwayPractice}>
-              Enter Practice path
+              Enter Student Practice path
             </Link>
             <Link className="btn btn-secondary on-light" to="/app/student/programs">
               {student.pathway ? 'Change pathway' : 'Choose pathway'}
@@ -230,7 +230,7 @@ export function StudentHomePage() {
                     : pathProg > 0
                       ? 'Started'
                       : 'Not started'
-                  : 'Practice path (Learn lessons coming)'}
+                  : 'Student Practice path (Learn lessons coming)'}
             </strong>
           </p>
           <div className="progress" aria-hidden>
@@ -240,7 +240,7 @@ export function StudentHomePage() {
             <p className="muted" style={{ margin: 0 }}>
               Train on the shared spine under{' '}
               <Link className="inline-link" to="/app/student/path" onClick={openPathwayPractice}>
-                Practice path
+                Student Practice path
               </Link>
               .
             </p>
@@ -337,7 +337,7 @@ export function StudentProfilePage() {
         <h2>More pages</h2>
         <ul className="list-plain">
           <li>
-            <Link to="/app/student/path">Practice path ({JOURNEY_STEP_COUNT} steps)</Link>
+            <Link to="/app/student/path">Student Practice path ({JOURNEY_STEP_COUNT} steps)</Link>
           </li>
           <li>
             <Link to="/app/student/foundation">Foundation lessons</Link>

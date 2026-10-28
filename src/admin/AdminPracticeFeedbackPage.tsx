@@ -152,8 +152,8 @@ export function AdminPracticeFeedbackPage() {
   return (
     <div className="stack">
       <div>
-        <p className="section-kicker">Practice</p>
-        <h1>Student practice feedback</h1>
+        <p className="section-kicker">Student Practice</p>
+        <h1>Student Practice Mode feedback</h1>
         <p className="lede">
           Notes become change requests. Attach an isolated preview (safe overlay and/or branch URL), ask the reviewer
           to Approve or iterate, then ship — overlapping sitewide scopes are blocked so cross-changes do not collide.
