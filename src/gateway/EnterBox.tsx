@@ -218,6 +218,17 @@ export function EnterBox() {
 
   useEffect(() => subscribeSequenceProgress(() => setTick((t) => t + 1)), [])
 
+  /* Re-show Practice tray glow/arrow after Start over clears pa-nav-cues-seen-v1. */
+  useEffect(() => {
+    const sync = () => setTick((t) => t + 1)
+    window.addEventListener('pa-nav-cues-changed', sync)
+    window.addEventListener('pa-practice-restarted', sync)
+    return () => {
+      window.removeEventListener('pa-nav-cues-changed', sync)
+      window.removeEventListener('pa-practice-restarted', sync)
+    }
+  }, [])
+
   function markPhoneAppPhase() {
     if (getShellMode() === 'phone') setPhonePhase('app')
   }
@@ -301,8 +312,10 @@ export function EnterBox() {
               const partial =
                 !done && item.completeIds.some((id) => isSequenceComplete(id))
               const isOpen = openTray === item.label
-              const practiceCue =
-                item.practice && navCueActive(NAV_CUE.toolboxPractice) ? ' nav-glow-cta' : ''
+              const practiceCueActive = Boolean(
+                item.practice && navCueActive(NAV_CUE.toolboxPractice),
+              )
+              const practiceCue = practiceCueActive ? ' nav-glow-cta' : ''
               const className = `toolbox-slot toolbox-slot-${item.tone}${
                 done ? ' is-complete' : partial ? ' is-partial' : ''
               }${item.placeholder ? ' is-placeholder' : ''}${isOpen ? ' is-open' : ''}${
@@ -320,7 +333,8 @@ export function EnterBox() {
                       : item.help
               const inner: ReactNode = (
                 <>
-                  {item.practice && (
+                  {/* Once-then-quiet finger at Practice — same grammar as Mode/Hub arrows. */}
+                  {practiceCueActive && (
                     <span className="practice-point" aria-hidden>
                       <span className="practice-point-arrow">➜</span>
                       <span className="practice-point-label">

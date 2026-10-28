@@ -75,6 +75,8 @@ export function resetPracticeProgress() {
     for (const key of PROGRESS_KEYS) learnerRemove(key)
     learnerSet(JOURNEY_STEP_KEY, String(PRACTICE_ENTRY_STEP))
     void import('./stationCoach').then((m) => m.clearCoachProgress())
+    /* Match coach: Start over re-activates once-then-quiet nav marks (Mode/tray/lang/hub). */
+    window.dispatchEvent(new CustomEvent('pa-nav-cues-changed'))
     window.dispatchEvent(new CustomEvent('pa-journey-step', { detail: { step: PRACTICE_ENTRY_STEP } }))
     window.dispatchEvent(new CustomEvent('pa-employment-followup-changed'))
     window.dispatchEvent(new CustomEvent('pa-vocab-known-changed'))

@@ -447,6 +447,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Skips (empty / non-drill shells — no demo mp4):** 1 Start, 2 Registration, 4 Work Style, 5 Career Profile, 14 Work Interests, 19 Instructor Check, 20 On-Site Training, 21 Final Check, 22 Employment. Re-record with `PA_ONLY=id1,id2 node scripts/explainers/record-station-demos.mjs`.
 - **Critic:** Keep StationExplainerGate once-per-station; do not autoplay demos on return. Prefer mouse-over-real-UI over regenerating Ken Burns. Site reflection = GitHub Pages only.
 
+### 2026-10-28 — Restore once-then-quiet nav markers (L3 / L4)
+
+- **Layers:** L3 (where to go in 3s) + L4 (quiet after first use — not casino).
+- **Defect:** ModeChooser arrows used default brand-navy on the night chooser (read as gone). Phone tool chest CSS set `.practice-point { display: none }`, so the Practice tray finger vanished under dual-shell even while `nav-glow-cta` was wired. EnterBox did not re-render after Start over cleared `pa-nav-cues-seen-v1`. Hub `.ph-resume { overflow: hidden }` could clip the Continue arrow bob.
+- **Fix:** Amber ModeChooser arrows; Practice `practice-point` gated on `NAV_CUE.toolboxPractice` (once-then-quiet) and restored inside the phone frame; EnterBox listens to `pa-nav-cues-changed` / `pa-practice-restarted`; Start over also dispatches cue change (aligned with coach reset); hub resume overflow visible for the finger.
+- **Critic:** Do not make Practice outline a permanent second dialect — the finger + glow quiet after first tray open; outline may stay as tray identity. Language-row marks (`Languages here` / `Your languages`) were already wired — keep them, do not invent a new cue grammar.
+
 ### 2026-10-28 — Your language: English-first + nav mark + explainer VO (L3 / L4 / L2)
 
 - **Layers:** L3 (language job readable in 3s — start in English, see where other tongues live) + L4 (once-then-quiet cue, not permanent glow) + L2 (how-it-works video before the pick).
