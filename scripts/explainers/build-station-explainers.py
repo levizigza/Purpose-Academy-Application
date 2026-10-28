@@ -48,8 +48,8 @@ STATIONS: list[dict] = [
         ],
     },
     {
-        # Prefer the real mouse demo: scripts/explainers/record-workplace-words-demo.mjs
-        # This Ken-Burns path remains as a fallback rebuild for other stations' style only.
+        # Prefer real mouse demos: scripts/explainers/record-station-demos.mjs
+        # This Ken-Burns path remains as a fallback rebuild only.
         "id": "workplace-words",
         "title": "Workplace Words",
         "beats": [

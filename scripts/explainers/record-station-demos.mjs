@@ -53,15 +53,26 @@ const STATIONS = {
     async scene(page) {
       await gotoStation(page, BASE, { step: 3 })
       await page.waitForSelector('.train-lang-grid, .train-lang', { timeout: 30000 })
-      await page.waitForTimeout(1000)
+      const grid = page.locator('.train-lang-grid, .train-lang-cue').first()
+      await grid.scrollIntoViewIfNeeded()
+      await page.waitForTimeout(900)
       const english = page.locator('.train-lang').filter({ hasText: /English|EN/i }).first()
+      await english.scrollIntoViewIfNeeded()
       await moveTo(page, english, { steps: 36, settle: 800 })
       await page.waitForTimeout(1400)
       const spanish = page.locator('.train-lang').filter({ hasText: /Spanish|Español|ES/i }).first()
+      await spanish.scrollIntoViewIfNeeded()
       await clickAt(page, spanish, { steps: 40, settle: 400, after: 1200 })
+      const amharic = page.locator('.train-lang').filter({ hasText: /Amharic|አማርኛ|AM/i }).first()
+      if (await amharic.isVisible().catch(() => false)) {
+        await amharic.scrollIntoViewIfNeeded()
+        await clickAt(page, amharic, { steps: 30, settle: 350, after: 1000 })
+      }
+      await english.scrollIntoViewIfNeeded()
       await clickAt(page, english, { steps: 28, settle: 350, after: 900 })
       const cont = page.locator('button.btn-primary, button:has-text("Continue")').first()
       if (await cont.isVisible().catch(() => false)) {
+        await cont.scrollIntoViewIfNeeded()
         await moveTo(page, cont, { steps: 24, settle: 600 })
         await page.waitForTimeout(1000)
       } else {
@@ -85,30 +96,38 @@ const STATIONS = {
     async scene(page) {
       await gotoStation(page, BASE, { step: 6 })
       await page.waitForSelector('.vocab-sheet, [data-coach="vv-lang"]', { timeout: 30000 })
-      await page.waitForTimeout(800)
+      await page.waitForTimeout(600)
       const langRow = page.locator('[data-coach="vv-lang"]').first()
+      await langRow.scrollIntoViewIfNeeded()
+      await page.waitForTimeout(500)
       await moveTo(page, langRow, { steps: 30, settle: 500 })
       const langButtons = page.locator('[data-coach="vv-lang"] button, .vocab-sheet-lang-btn')
+      const n = await langButtons.count()
+      for (let i = 0; i < Math.min(n, 3); i++) {
+        await langButtons.nth(i).scrollIntoViewIfNeeded()
+        await moveTo(page, langButtons.nth(i), { steps: 14, settle: 220 })
+      }
       const pick =
         (await langButtons.filter({ hasText: /Spanish/i }).first().isVisible().catch(() => false))
           ? langButtons.filter({ hasText: /Spanish/i }).first()
           : langButtons.first()
+      await pick.scrollIntoViewIfNeeded()
       await clickAt(page, pick, { steps: 24, settle: 400, after: 900 })
       const hear = page.locator('button:has-text("Hear English"), [data-coach="vv-hear"]').first()
       if (await hear.isVisible().catch(() => false)) {
+        await hear.scrollIntoViewIfNeeded()
         await moveTo(page, hear, { steps: 22, settle: 500 })
       }
-      /* English often auto-plays after the language bridge — wait for type form. */
+      /* English auto-plays after bridge — DC word 1 is Hi (not specialty Hammer). */
       await page.waitForSelector('[data-coach="vv-type"] input, .vocab-sheet-type-input', {
         timeout: 35000,
       })
-      await page.waitForTimeout(500)
       const input = page.locator('[data-coach="vv-type"] input, .vocab-sheet-type-input').first()
-      /* Construction word 1 is Hammer; read live card title if present. */
-      const cardTitle = ((await page.locator('.vocab-sheet-card-focus h2, .vocab-sheet h2, .vocab-sheet-en').first().textContent().catch(() => '')) || '').trim()
-      const word = cardTitle && cardTitle.length < 40 ? cardTitle.replace(/^English:\s*/i, '').trim() : 'Hammer'
-      await typeInto(page, input, word || 'Hammer', { delay: 130 })
+      await input.scrollIntoViewIfNeeded()
+      await page.waitForTimeout(500)
+      await typeInto(page, input, 'Hi', { delay: 150 })
       const go = page.locator('.vocab-sheet-type-check, button:has-text("Go")').first()
+      await go.scrollIntoViewIfNeeded()
       await clickAt(page, go, { steps: 20, settle: 300, after: 1600 })
       await page.waitForTimeout(900)
     },
