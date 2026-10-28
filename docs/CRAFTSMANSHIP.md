@@ -432,12 +432,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
-### 2026-10-28 — Your language: English-first + nav mark (L3 / L4)
+### 2026-10-28 — Your language: English-first + nav mark + explainer VO (L3 / L4 / L2)
 
-- **Layers:** L3 (language job readable in 3s — start in English, see where other tongues live) + L4 (once-then-quiet cue, not permanent glow).
-- **Defect:** Step 3 “Your language” booted with **Amharic** selected, so first-open chrome (title, lede, Continue) dropped the learner into non-English before they chose.
-- **Fix:** Default `supportLang` / registration preferred language → **English**. `NavCueTarget` + `NavGlowRegion` point at the language chip grid (`NAV_CUE.langPick`) and Workplace Words mother-tongue row (`NAV_CUE.vocabLang`). Seen keys live in existing `pa-nav-cues-seen-v1` (`lang-pick`, `vocab-lang`).
-- **Critic:** Do not invent a new cue dialect — reuse Mode/Hub arrow+glow. Do not add an English chip on VV that skips mother-tongue → English → type (that sands L2 craft). Coach spotlight + lang nav cue can overlap on word 1; both quiet after the first language press — acceptable for first-computer, revisit if it feels loud on the smallest phone fold.
+- **Layers:** L3 (language job readable in 3s — start in English, see where other tongues live) + L4 (once-then-quiet cue, not permanent glow) + L2 (how-it-works video before the pick).
+- **Defect:** Step 3 “Your language” booted with **Amharic** selected, so first-open chrome (title, lede, Continue) dropped the learner into non-English before they chose. Arrow-only without VO left first-computer learners guessing the job.
+- **Fix:** Default `supportLang` / registration preferred language → **English**. `NavCueTarget` + `NavGlowRegion` point at the language chip grid (`NAV_CUE.langPick`) and Workplace Words mother-tongue row (`NAV_CUE.vocabLang`). Seen keys live in existing `pa-nav-cues-seen-v1` (`lang-pick`, `vocab-lang`). `StationExplainerGate` for step 3 (`your-language.mp4`, JennyNeural) teaches: start English → mark points at chips once → choose another tongue if needed → continue.
+- **Critic:** Do not invent a new cue dialect — reuse Mode/Hub arrow+glow. Do not add an English chip on VV that skips mother-tongue → English → type (that sands L2 craft). Coach spotlight + lang nav cue can overlap on word 1; both quiet after the first language press — acceptable for first-computer, revisit if it feels loud on the smallest phone fold. Explainer is the teacher; nav mark is the finger — keep both, never arrow-only.
 
 ### 2026-10-28 — Practice tray must stay visible after toolbox return (L3 / L6)
 

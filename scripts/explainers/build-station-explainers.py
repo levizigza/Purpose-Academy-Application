@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -32,12 +33,29 @@ PITCH = "-2Hz"
 # Each beat: (image_key | None for title, text)
 STATIONS: list[dict] = [
     {
+        "id": "your-language",
+        "title": "Your Language",
+        "beats": [
+            (None, "Your Language. We start in English."),
+            (
+                "assess-english-lang",
+                "A mark points at the language chips once. Stay in English, or press the language you understand best.",
+            ),
+            (
+                "career-after-lang",
+                "Then continue. The next path questions speak that language.",
+            ),
+        ],
+    },
+    {
+        # Prefer the real mouse demo: scripts/explainers/record-workplace-words-demo.mjs
+        # This Ken-Burns path remains as a fallback rebuild for other stations' style only.
         "id": "workplace-words",
         "title": "Workplace Words",
         "beats": [
             (None, "Workplace Words. One picture. One word. No rush."),
-            ("grant_visual_vocab", "First, press the language you understand. Hear it."),
-            ("grant_visual_vocab", "Then hear the English workplace word."),
+            ("grant_visual_vocab", "Your language starts in English. You can choose another tongue any time."),
+            ("grant_visual_vocab", "Press the language you understand. Hear it. Then hear the English workplace word."),
             ("grant_visual_vocab", "Type what you heard. Soft try again if not yet. That is the whole loop."),
         ],
     },
@@ -340,9 +358,14 @@ def build_station(station: dict) -> Path:
 
 
 def main() -> None:
+    only = set(sys.argv[1:]) if len(sys.argv) > 1 else None
+    built = 0
     for station in STATIONS:
+        if only and station["id"] not in only:
+            continue
         build_station(station)
-    print("done", len(STATIONS), "explainers →", OUT)
+        built += 1
+    print("done", built, "explainers →", OUT)
 
 
 if __name__ == "__main__":

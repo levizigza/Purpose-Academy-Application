@@ -19,6 +19,13 @@ export type StationExplainer = {
 
 export const STATION_EXPLAINERS: StationExplainer[] = [
   {
+    id: 'your-language',
+    steps: [3],
+    title: 'Your Language',
+    lede: 'We start in English. A mark points at the language chips once — stay in English, or pick the tongue you understand best.',
+    video: 'explainers/your-language.mp4',
+  },
+  {
     id: 'workplace-words',
     steps: [6],
     title: 'Workplace Words',
