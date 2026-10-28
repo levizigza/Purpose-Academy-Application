@@ -111,6 +111,9 @@ import {
   shouldAskPracticeFeedback,
 } from '../practice/PracticeMode'
 import { learnerGet, learnerSet } from '../practice/learnerStore'
+import { StationExplainerGate } from '../practice/StationExplainerGate'
+import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
+import { NAV_CUE } from '../practice/navCues'
 
 const JOURNEY_KEY = 'pa-student-journey-step-v1'
 const OBS_KEY = 'pa-student-observation-v1'
@@ -471,7 +474,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             outcomes={getPathwayUnitGoal(unit.id)!.outcomes}
           />
         )}
-        {children}
+        <StationExplainerGate step={step}>{children}</StationExplainerGate>
       </Reveal>
 
       <div className="train-actions">
@@ -481,15 +484,24 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
           </button>
         )}
         {onNext && (
-          <button
-            type="button"
-            className="btn btn-primary train-next"
-            onClick={handleNext}
-            disabled={nextDisabled || Boolean(masteryBlocked)}
-            title={masteryBlocked || undefined}
+          <NavCueTarget
+            cueId={NAV_CUE.stationContinue(step)}
+            arrowLabel="Next door"
+            arrowSide="above"
+            className="train-next-cue"
           >
-            {nextLabel}
-          </button>
+            <NavGlowWrap cueId={NAV_CUE.stationContinue(step)}>
+              <button
+                type="button"
+                className="btn btn-primary train-next"
+                onClick={handleNext}
+                disabled={nextDisabled || Boolean(masteryBlocked)}
+                title={masteryBlocked || undefined}
+              >
+                {nextLabel}
+              </button>
+            </NavGlowWrap>
+          </NavCueTarget>
         )}
       </div>
 

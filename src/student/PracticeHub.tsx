@@ -27,6 +27,8 @@ import {
 import { followUpSummary, loadFollowUp } from './employmentFollowUp'
 import { hasClearedVocabStation } from './adaptiveVocab'
 import { BoardsClearedToday } from '../practice/PlayClear'
+import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
+import { NAV_CUE } from '../practice/navCues'
 
 type Props = {
   currentStep: number
@@ -263,9 +265,18 @@ export function PracticeHub({
             </em>
           </div>
           <div className="ph-resume-actions">
-            <button type="button" className="btn btn-primary ph-resume-btn" onClick={onContinue}>
-              {resumeLabel}
-            </button>
+            <NavCueTarget
+              cueId={NAV_CUE.hubContinue}
+              arrowLabel={freshStart ? 'Start here' : 'Continue here'}
+              arrowSide="above"
+              className="ph-resume-cue"
+            >
+              <NavGlowWrap cueId={NAV_CUE.hubContinue}>
+                <button type="button" className="btn btn-primary ph-resume-btn" onClick={onContinue}>
+                  {freshStart ? 'Continue to station' : resumeLabel}
+                </button>
+              </NavGlowWrap>
+            </NavCueTarget>
             {onDoneForNow && (
               <button type="button" className="btn btn-ghost ph-done-btn" onClick={onDoneForNow}>
                 Done for now

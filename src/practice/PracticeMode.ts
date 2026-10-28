@@ -34,6 +34,8 @@ const PROGRESS_KEYS = [
   'pa-basic-computer-skills-done-v1',
   'pa-warehouse-equipment-watched-v1',
   'pa-play-clears-day-v1',
+  'pa-nav-cues-seen-v1',
+  'pa-station-explainers-seen-v1',
 ] as const
 
 function migrateLegacy() {

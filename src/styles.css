@@ -15691,3 +15691,185 @@ html.pa-phone-shell .play-soft-miss {
   inset: 0;
   z-index: 30;
 }
+
+/* —— First-computer nav cues (L3 / L4) — dual-shell —— */
+.nav-cue-target {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+  max-width: 100%;
+}
+
+.nav-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-family: var(--display, Georgia, serif);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand, #0b2f5c);
+  pointer-events: none;
+  animation: nav-arrow-bob 1.4s ease-in-out infinite;
+}
+
+.nav-arrow-glyph {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.course-stage .nav-arrow,
+.is-course-app .nav-arrow {
+  color: #e8a317;
+  text-shadow: 0 1px 2px rgba(4, 21, 38, 0.45);
+}
+
+.is-phone-app .nav-arrow {
+  color: var(--brand, #0b2f5c);
+}
+
+@keyframes nav-arrow-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+}
+
+.nav-glow-cta {
+  position: relative;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--accent, #e8a317) 65%, transparent),
+    0 0 18px color-mix(in srgb, var(--accent, #e8a317) 45%, transparent) !important;
+  animation: nav-glow-pulse 1.65s ease-in-out infinite;
+}
+
+.course-stage .nav-glow-cta,
+.is-course-app .nav-glow-cta {
+  box-shadow:
+    0 0 0 2px rgba(232, 163, 23, 0.85),
+    0 0 22px rgba(232, 163, 23, 0.55) !important;
+}
+
+.is-phone-app .nav-glow-cta {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--brand, #0b2f5c) 35%, var(--accent, #e8a317)),
+    0 0 16px color-mix(in srgb, var(--accent, #e8a317) 40%, transparent) !important;
+}
+
+@keyframes nav-glow-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.08);
+  }
+}
+
+.mode-chooser-split > .nav-cue-target {
+  display: flex;
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.mode-chooser-split > .nav-cue-target > .mode-door,
+.mode-chooser-split > .nav-cue-target > .nav-glow-cta {
+  width: 100%;
+  height: 100%;
+}
+
+.ph-resume-cue,
+.train-next-cue {
+  width: min(100%, 22rem);
+}
+
+.ph-resume-cue .ph-resume-btn,
+.train-next-cue .train-next {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-arrow,
+  .nav-glow-cta {
+    animation: none !important;
+  }
+}
+
+/* —— Station explainer gate —— */
+.station-explainer {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem 0.15rem 0.35rem;
+  max-width: 42rem;
+}
+
+.station-explainer-lede {
+  margin: 0;
+}
+
+.station-explainer-stage {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #041526;
+  border: 1px solid color-mix(in srgb, #e8a317 35%, transparent);
+  aspect-ratio: 16 / 10;
+}
+
+.station-explainer-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #041526;
+}
+
+.station-explainer-fallback {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  padding: 1.25rem;
+  color: #f5f8fc;
+}
+
+.station-explainer-fallback p {
+  margin: 0;
+  max-width: 28rem;
+  line-height: 1.45;
+}
+
+.station-explainer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.station-explainer-continue.is-wait {
+  opacity: 0.72;
+}
+
+.is-phone-app .station-explainer-stage {
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line));
+  background: #0b2f5c;
+}
+
+.course-stage .station-explainer .section-kicker {
+  color: #e8a317;
+}
+
+.course-stage .station-explainer h2 {
+  color: #f5f8fc;
+}
+
+.course-stage .station-explainer-lede {
+  color: color-mix(in srgb, #f5f8fc 88%, transparent);
+}
