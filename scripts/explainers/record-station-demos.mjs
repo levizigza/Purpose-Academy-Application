@@ -93,19 +93,21 @@ const STATIONS = {
         (await langButtons.filter({ hasText: /Spanish/i }).first().isVisible().catch(() => false))
           ? langButtons.filter({ hasText: /Spanish/i }).first()
           : langButtons.first()
-      await clickAt(page, pick, { steps: 24, settle: 400, after: 1600 })
+      await clickAt(page, pick, { steps: 24, settle: 400, after: 900 })
       const hear = page.locator('button:has-text("Hear English"), [data-coach="vv-hear"]').first()
       if (await hear.isVisible().catch(() => false)) {
         await moveTo(page, hear, { steps: 22, settle: 500 })
-        await page.waitForTimeout(900)
-      } else {
-        await page.waitForTimeout(1000)
       }
+      /* English often auto-plays after the language bridge — wait for type form. */
       await page.waitForSelector('[data-coach="vv-type"] input, .vocab-sheet-type-input', {
-        timeout: 20000,
+        timeout: 35000,
       })
+      await page.waitForTimeout(500)
       const input = page.locator('[data-coach="vv-type"] input, .vocab-sheet-type-input').first()
-      await typeInto(page, input, 'Hammer', { delay: 130 })
+      /* Construction word 1 is Hammer; read live card title if present. */
+      const cardTitle = ((await page.locator('.vocab-sheet-card-focus h2, .vocab-sheet h2, .vocab-sheet-en').first().textContent().catch(() => '')) || '').trim()
+      const word = cardTitle && cardTitle.length < 40 ? cardTitle.replace(/^English:\s*/i, '').trim() : 'Hammer'
+      await typeInto(page, input, word || 'Hammer', { delay: 130 })
       const go = page.locator('.vocab-sheet-type-check, button:has-text("Go")').first()
       await clickAt(page, go, { steps: 20, settle: 300, after: 1600 })
       await page.waitForTimeout(900)

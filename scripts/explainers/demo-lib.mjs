@@ -38,7 +38,10 @@ export function run(cmd, args, opts = {}) {
 }
 
 export function synth(text, outMp3) {
-  run('edge-tts', [
+  /* python -m: edge-tts console script is often missing from PATH in cloud agents */
+  run('python3', [
+    '-m',
+    'edge_tts',
     `--voice=${VOICE}`,
     `--rate=${RATE}`,
     `--pitch=${PITCH}`,
