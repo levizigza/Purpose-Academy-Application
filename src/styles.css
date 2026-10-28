@@ -7874,6 +7874,31 @@ table.data th {
   color: #f5f8fc;
 }
 
+/* Type panel inherits night stage (not phone cream) — same play beat, distinct skin */
+.course-stage .vocab-sheet-type {
+  background: color-mix(in srgb, #0b2f5c 55%, transparent);
+  border-color: color-mix(in srgb, #e8a317 42%, transparent);
+}
+
+.course-stage .vocab-sheet-type-prompt,
+.course-stage .vocab-sheet-type-kicker {
+  color: #f5f8fc;
+}
+
+.course-stage .vocab-sheet-type-kicker {
+  color: #e8a317;
+}
+
+.course-stage .vocab-sheet-type-input {
+  background: #ffffff;
+  color: #041526;
+  border-color: color-mix(in srgb, #e8a317 40%, #c5d0dc);
+}
+
+.course-stage .vocab-sheet-type-fb.is-retry {
+  color: #f5f8fc;
+}
+
 .is-phone-app .vocab-sheet-body-focus.is-production,
 html.pa-phone-shell .vocab-sheet-body-focus.is-production {
   grid-template-columns: 1fr !important;
@@ -14189,60 +14214,92 @@ html.pa-phone-shell .practice-feedback-dock {
 }
 
 /*
- * Task-first phone stations: hide coaching chrome that duplicates the header
- * so the picture / cloze / Watch / Organize panel clears the first viewport (L3).
+ * Task-first play stations (phone paper + desktop night):
+ * Hide coaching chrome that duplicates the header so picture / cloze / Watch /
+ * Organize clears the first viewport (L3). Night ink stays under .course-stage —
+ * this only folds density, it does not unify skins.
  */
-.is-phone-app .train-shell.is-computer-skills .unit-intro-card,
-.is-phone-app .train-shell.is-equipment-video .unit-intro-card,
-.is-phone-app .train-shell.is-visual-vocabulary .unit-intro-card,
-.is-phone-app .train-shell.is-organize-wide .unit-intro-card,
-.is-phone-app .train-shell.is-sentence-structure .unit-intro-card,
-.is-phone-app .train-shell.is-eye-spy .unit-intro-card,
-.is-phone-app .train-shell.is-computer-skills .station-context-fold,
-.is-phone-app .train-shell.is-equipment-video .station-context-fold,
-.is-phone-app .train-shell.is-visual-vocabulary .station-context-fold,
-.is-phone-app .train-shell.is-organize-wide .station-context-fold,
-.is-phone-app .train-shell.is-sentence-structure .station-context-fold,
-.is-phone-app .train-shell.is-eye-spy .station-context-fold {
+:is(.is-phone-app, .course-stage) .train-shell.is-computer-skills .unit-intro-card,
+:is(.is-phone-app, .course-stage) .train-shell.is-equipment-video .unit-intro-card,
+:is(.is-phone-app, .course-stage) .train-shell.is-visual-vocabulary .unit-intro-card,
+:is(.is-phone-app, .course-stage) .train-shell.is-organize-wide .unit-intro-card,
+:is(.is-phone-app, .course-stage) .train-shell.is-sentence-structure .unit-intro-card,
+:is(.is-phone-app, .course-stage) .train-shell.is-eye-spy .unit-intro-card,
+:is(.is-phone-app, .course-stage) .train-shell.is-play-choice .unit-intro-card,
+:is(.is-phone-app, .course-stage) .train-shell.is-computer-skills .station-context-fold,
+:is(.is-phone-app, .course-stage) .train-shell.is-equipment-video .station-context-fold,
+:is(.is-phone-app, .course-stage) .train-shell.is-visual-vocabulary .station-context-fold,
+:is(.is-phone-app, .course-stage) .train-shell.is-organize-wide .station-context-fold,
+:is(.is-phone-app, .course-stage) .train-shell.is-sentence-structure .station-context-fold,
+:is(.is-phone-app, .course-stage) .train-shell.is-eye-spy .station-context-fold,
+:is(.is-phone-app, .course-stage) .train-shell.is-play-choice .station-context-fold {
   display: none !important;
 }
 
-.is-phone-app .train-shell.is-computer-skills .train-progress,
-.is-phone-app .train-shell.is-equipment-video .train-progress,
-.is-phone-app .train-shell.is-visual-vocabulary .train-progress,
-.is-phone-app .train-shell.is-organize-wide .train-progress,
-.is-phone-app .train-shell.is-sentence-structure .train-progress,
-.is-phone-app .train-shell.is-eye-spy .train-progress {
+:is(.is-phone-app, .course-stage) .train-shell.is-computer-skills .train-progress,
+:is(.is-phone-app, .course-stage) .train-shell.is-equipment-video .train-progress,
+:is(.is-phone-app, .course-stage) .train-shell.is-visual-vocabulary .train-progress,
+:is(.is-phone-app, .course-stage) .train-shell.is-organize-wide .train-progress,
+:is(.is-phone-app, .course-stage) .train-shell.is-sentence-structure .train-progress,
+:is(.is-phone-app, .course-stage) .train-shell.is-eye-spy .train-progress,
+:is(.is-phone-app, .course-stage) .train-shell.is-play-choice .train-progress {
   display: none !important;
 }
 
-.is-phone-app .train-shell.is-computer-skills .train-why-details,
-.is-phone-app .train-shell.is-equipment-video .train-why-details,
-.is-phone-app .train-shell.is-visual-vocabulary .train-why-details,
-.is-phone-app .train-shell.is-organize-wide .train-why-details,
-.is-phone-app .train-shell.is-sentence-structure .train-why-details,
-.is-phone-app .train-shell.is-eye-spy .train-why-details {
+:is(.is-phone-app, .course-stage) .train-shell.is-computer-skills .train-why-details,
+:is(.is-phone-app, .course-stage) .train-shell.is-equipment-video .train-why-details,
+:is(.is-phone-app, .course-stage) .train-shell.is-visual-vocabulary .train-why-details,
+:is(.is-phone-app, .course-stage) .train-shell.is-organize-wide .train-why-details,
+:is(.is-phone-app, .course-stage) .train-shell.is-sentence-structure .train-why-details,
+:is(.is-phone-app, .course-stage) .train-shell.is-eye-spy .train-why-details,
+:is(.is-phone-app, .course-stage) .train-shell.is-play-choice .train-why-details {
   display: none !important;
 }
 
 /* Organize: bare WhyWork/TeachNote must never sit above the picture strip */
-.is-phone-app .train-shell.is-organize-wide > .train-why,
-.is-phone-app .train-shell.is-organize-wide > .train-teach,
-.is-phone-app .train-shell.is-organize-wide .train-panel > .train-why,
-.is-phone-app .train-shell.is-organize-wide .train-panel > .train-teach {
+:is(.is-phone-app, .course-stage) .train-shell.is-organize-wide > .train-why,
+:is(.is-phone-app, .course-stage) .train-shell.is-organize-wide > .train-teach,
+:is(.is-phone-app, .course-stage) .train-shell.is-organize-wide .train-panel > .train-why,
+:is(.is-phone-app, .course-stage) .train-shell.is-organize-wide .train-panel > .train-teach {
   display: none !important;
 }
 
-.is-phone-app .train-shell.is-computer-skills .train-simple-line,
-.is-phone-app .train-shell.is-equipment-video .train-simple-line,
-.is-phone-app .train-shell.is-visual-vocabulary .train-simple-line,
-.is-phone-app .train-shell.is-sentence-structure .train-simple-line,
-.is-phone-app .train-shell.is-eye-spy .train-simple-line {
+:is(.is-phone-app, .course-stage) .train-shell.is-computer-skills .train-simple-line,
+:is(.is-phone-app, .course-stage) .train-shell.is-equipment-video .train-simple-line,
+:is(.is-phone-app, .course-stage) .train-shell.is-visual-vocabulary .train-simple-line,
+:is(.is-phone-app, .course-stage) .train-shell.is-sentence-structure .train-simple-line,
+:is(.is-phone-app, .course-stage) .train-shell.is-eye-spy .train-simple-line,
+:is(.is-phone-app, .course-stage) .train-shell.is-play-choice .train-simple-line {
   font-size: 0.84rem !important;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Desktop night: fold review chrome on play stations so Path home / Done stay, task owns the stage */
+.course-stage .train-shell.is-computer-skills .practice-stats-strip-desktop,
+.course-stage .train-shell.is-equipment-video .practice-stats-strip-desktop,
+.course-stage .train-shell.is-visual-vocabulary .practice-stats-strip-desktop,
+.course-stage .train-shell.is-organize-wide .practice-stats-strip-desktop,
+.course-stage .train-shell.is-sentence-structure .practice-stats-strip-desktop,
+.course-stage .train-shell.is-eye-spy .practice-stats-strip-desktop,
+.course-stage .train-shell.is-play-choice .practice-stats-strip-desktop,
+.course-stage .train-shell.is-computer-skills .practice-section-skip-fold,
+.course-stage .train-shell.is-equipment-video .practice-section-skip-fold,
+.course-stage .train-shell.is-visual-vocabulary .practice-section-skip-fold,
+.course-stage .train-shell.is-organize-wide .practice-section-skip-fold,
+.course-stage .train-shell.is-sentence-structure .practice-section-skip-fold,
+.course-stage .train-shell.is-eye-spy .practice-section-skip-fold,
+.course-stage .train-shell.is-play-choice .practice-section-skip-fold,
+.course-stage .train-shell.is-computer-skills .train-unit-pill,
+.course-stage .train-shell.is-equipment-video .train-unit-pill,
+.course-stage .train-shell.is-visual-vocabulary .train-unit-pill,
+.course-stage .train-shell.is-organize-wide .train-unit-pill,
+.course-stage .train-shell.is-sentence-structure .train-unit-pill,
+.course-stage .train-shell.is-eye-spy .train-unit-pill,
+.course-stage .train-shell.is-play-choice .train-unit-pill {
+  display: none !important;
 }
 
 /* Organize: station title alone is enough — long help stole the Drop fold */
@@ -14263,7 +14320,7 @@ html.pa-phone-shell .practice-feedback-dock {
 }
 
 /* Header already carries the VV lede — drop the duplicate inside the sheet */
-.is-phone-app .train-shell.is-visual-vocabulary .vocab-sheet-lede {
+:is(.is-phone-app, .course-stage) .train-shell.is-visual-vocabulary .vocab-sheet-lede {
   display: none !important;
 }
 
@@ -14345,9 +14402,9 @@ html.pa-phone-shell .practice-feedback-dock {
 }
 
 /* Sentence Structure: head chrome before the photo/cloze steals the fold */
-.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-help,
-.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-skip,
-.is-phone-app .train-shell.is-sentence-structure .sentence-cloze-head-row .section-kicker {
+:is(.is-phone-app, .course-stage) .train-shell.is-sentence-structure .sentence-cloze-help,
+:is(.is-phone-app, .course-stage) .train-shell.is-sentence-structure .sentence-cloze-skip,
+:is(.is-phone-app, .course-stage) .train-shell.is-sentence-structure .sentence-cloze-head-row .section-kicker {
   display: none !important;
 }
 

@@ -117,7 +117,11 @@ export function VocabSheetCard({
 
   useEffect(() => {
     if (!typingPhase) return
-    const t = window.setTimeout(() => inputRef.current?.focus(), 180)
+    const t = window.setTimeout(() => {
+      inputRef.current?.focus()
+      /* Desktop night: tall photo can push Type/Go below the fold — bring the beat in. */
+      inputRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    }, 180)
     return () => window.clearTimeout(t)
   }, [typingPhase, term.id])
 

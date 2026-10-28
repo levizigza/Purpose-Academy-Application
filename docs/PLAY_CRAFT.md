@@ -29,7 +29,7 @@ Carve **system first**, then **stations**, then **shell aesthetics**. Never bolt
 |------|----------------------------------|-------------------------------|---------------|
 | Promise | Hub resume card, amber on navy | Same words, paper ink | `PracticeHub.tsx` |
 | Entry | Continue / resume into station | Same; sticky task-first | `StudentSequence` shell |
-| Action | Hear→type · pair · choose | Same grammar; denser chrome fold | `VocabSheet`, `EyeSpyQuiz` |
+| Action | Hear→type · pair · choose · task-first chrome fold | Same grammar; denser chrome fold | `VocabSheet`, `EyeSpyQuiz` |
 | Response | Clear pulse + foley + short line | Same pulse; paper-safe ink | `PlayClear.tsx` + CSS |
 | Challenge | “N left” nearby objective | Same line, first viewport | Eye Spy / VV |
 | Progress | Stations finished · boards today | Quiet metric under resume | Hub + `PlayClear` |
@@ -194,3 +194,9 @@ Closed:
 
 - Customer overturn: keep the four A–D choices visible; clear by **Type / Go** the matching word (not tap-to-answer).  
 - Soft miss stays on the item; matching chip lights on clear. Same nearby + `firePlayClear` grammar; dual-shell.
+
+### 2026-10-27 — Desktop night play-craft parity (flow, not skin)
+
+- Shared TSX already ran moment loops on both shells; desktop coaching chrome buried the beat.  
+- `.course-stage` now uses the same task-first fold as phone for play stations; night amber-on-navy ink unchanged.  
+- VV type panel night-remapped; Organize stays multi-board on desktop (distinct density).

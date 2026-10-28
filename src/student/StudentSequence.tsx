@@ -313,7 +313,12 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         step === 6 ? ' is-visual-vocabulary' : ''
       }${step === 8 ? ' is-eye-spy' : ''}${step === 9 ? ' is-sentence-structure' : ''}${
         step === 12 ? ' is-computer-skills' : ''
-      }${step === 18 ? ' is-equipment-video' : ''}`}
+      }${step === 18 ? ' is-equipment-video' : ''}${
+        /* Choice / match play stations — same task-first fold on desktop night + phone */
+        step === 10 || step === 11 || step === 13 || step === 15 || step === 16 || step === 17
+          ? ' is-play-choice'
+          : ''
+      }`}
     >
       <StepTransition active={!!transitioning} message={transitionMsg || 'Moving to the next station…'} />
       <header className="train-header">
