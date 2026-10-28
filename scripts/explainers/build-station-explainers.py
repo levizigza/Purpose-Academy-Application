@@ -105,6 +105,16 @@ STATIONS: list[dict] = [
         ],
     },
     {
+        # Prefer mouse demo from record-station-demos.mjs
+        "id": "workplace-instructions",
+        "title": "Workplace Instructions",
+        "beats": [
+            (None, "Workplace Instructions. Hear a direction. Show you understood."),
+            ("grant_practice_hub", "Press Hear English at least once."),
+            ("grant_practice_hub", "Then choose what you should do. Soft try again if not yet."),
+        ],
+    },
+    {
         "id": "computer-skills",
         "title": "Basic Computer Skills",
         "beats": [

@@ -436,7 +436,8 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 - **Layers:** L2 (how-it-works before the drill) + L3 (task visible in the real app chrome, not a slide deck).
 - **Defect:** Ken Burns photo cards with VO taught the idea but not the *press* — first-computer learners still guessed where to click. Step→explainer map was also wrong for Supported Practice / Workplace Instructions (Word→Action stole step 10).
-- **Fix:** Playwright mouse demos (`scripts/explainers/record-station-demos.mjs` + `demo-lib.mjs`) record the live Practice UI with a visible cursor, then ffmpeg-mux Edge **JennyNeural** VO. All contentful stations get an mp4 in `public/explainers/`. Gate map: step 3 language, 6–8 words board, 9 sentence (+ Word→Action via `stationId` when phase flips), 10 supported, **11 workplace instructions** (new), 12 computer, 13 site language, 15–18 site-ready. Empty shells (1–2, 4–5, 14, 19–22) stay without demos — documented as skips.
+- **Fix:** Playwright mouse demos (`scripts/explainers/record-station-demos.mjs` + `demo-lib.mjs`) record the live Practice UI with a visible cursor, then ffmpeg-mux Edge **JennyNeural** VO. All contentful stations get an mp4 in `public/explainers/`. Gate map: step 3 language, 6–8 words board, 9 sentence (+ Word→Action via `stationId` when phase flips), 10 supported, **11 workplace instructions** (new), 12 computer, 13 site language, 15–18 site-ready.
+- **Skips (empty / non-drill shells — no demo mp4):** 1 Start, 2 Registration, 4 Work Style, 5 Career Profile, 14 Work Interests, 19 Instructor Check, 20 On-Site Training, 21 Final Check, 22 Employment. Re-record with `PA_ONLY=id1,id2 node scripts/explainers/record-station-demos.mjs`.
 - **Critic:** Keep StationExplainerGate once-per-station; do not autoplay demos on return. Prefer mouse-over-real-UI over regenerating Ken Burns. Site reflection = GitHub Pages only.
 
 ### 2026-10-28 — Your language: English-first + nav mark + explainer VO (L3 / L4 / L2)
