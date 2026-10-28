@@ -2417,7 +2417,8 @@ export function StudentSequencePage() {
             data-coach="phrase-hear"
             disabled={speaking !== null}
             onClick={() => {
-              if (coachFirst) advanceStationCoach('site-language')
+              /* Only the first Hear clears the hear step — Hear again must not skip the choice beat. */
+              if (coachFirst && !phraseHeard) advanceStationCoach('site-language')
               void (async () => {
                 await playEnglish(phrase.en)
                 setPhraseHeard(true)

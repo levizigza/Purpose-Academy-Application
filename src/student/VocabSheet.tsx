@@ -253,7 +253,7 @@ export function VocabSheetCard({
           data-coach="vv-hear"
           className="btn btn-secondary vocab-sheet-listen-go"
           onClick={() => {
-            if (coachFirst) advanceStationCoach('workplace-words')
+            /* Hear is not a coach step (English auto-plays after language). */
             onPlayEnglish()
           }}
         >
@@ -293,7 +293,6 @@ export function VocabSheetCard({
           aria-label="Listen to the English workplace word"
           disabled={speaking || !bridged}
           onClick={() => {
-            if (coachFirst && bridged) advanceStationCoach('workplace-words')
             onPlayEnglish()
           }}
           title={bridged ? 'Listen to English' : 'Press your language first'}

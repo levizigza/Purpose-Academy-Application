@@ -438,6 +438,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - Interactive coach on first item only: Workplace Words, Organize, Eye Spy, Sentence, Word→Action, Supported Practice, Computer Skills, Site Language, Safety, Tools, Systems.
 - Dual-shell CSS: desktop night amber ring + cool dim; phone paper navy veil + brand ring. Clicks pass through the spotlight.
 - Seen map `pa-station-coach-seen-v1` cleared on Practice Start over.
+- **Critic (same day):** Phone emulator `transform: scale` skewed fixed hole coords — coach now portals to `document.body` and styles off `html.pa-*-shell`. VV Hear / Site Language “Hear again” must not consume the type/choice step. Sentence coach is type-only (chips are reference, not buttons). Start over must re-activate the coach, not only clear storage.
 - **Assumption to challenge next:** whether multi-step coaches (VV / Eye Spy) still feel game-like on the smallest phone fold without stealing the task.
 
 ### 2026-10-27 — First-computer nav cues + station explainer videos (L3 / L4 / L2)

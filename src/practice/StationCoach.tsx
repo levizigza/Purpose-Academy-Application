@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import {
   clearCoachProgress,
   getCoachProgress,
@@ -19,6 +20,30 @@ function measure(selector: string): Rect | null {
   return { top: r.top, left: r.left, width: r.width, height: r.height }
 }
 
+function resetCoachState(
+  stationId: string,
+  stepsLen: number,
+  setActive: (v: boolean) => void,
+  setStepIdx: (v: number) => void,
+  stepIdxRef: { current: number },
+  consumedSteps: { current: Set<number> },
+) {
+  const seen = stationCoachSeen(stationId)
+  if (seen) {
+    setActive(false)
+    setStepIdx(0)
+    stepIdxRef.current = 0
+    consumedSteps.current = new Set()
+    clearCoachProgress(stationId)
+    return
+  }
+  const saved = getCoachProgress(stationId)
+  setActive(stepsLen > 0)
+  setStepIdx(saved)
+  stepIdxRef.current = saved
+  consumedSteps.current = new Set(Array.from({ length: saved }, (_, i) => i))
+}
+
 type Props = {
   stationId: string
   /** Bump when the drill UI changes so we re-measure (e.g. production phase). */
@@ -34,6 +59,9 @@ type Props = {
  *
  * Step progress lives in module memory so a card remount after the first
  * press (e.g. VV language → listen layout) does not rewind the coach.
+ *
+ * Overlay portals to document.body so phone emulator CSS transforms do not
+ * skew fixed spotlight coordinates (getBoundingClientRect is viewport-space).
  */
 export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) {
   const steps = stepsProp ?? STATION_COACH[stationId] ?? []
@@ -47,10 +75,7 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
   useEffect(() => {
     const sync = () => {
       bump((n) => n + 1)
-      if (stationCoachSeen(stationId)) {
-        setActive(false)
-        clearCoachProgress(stationId)
-      }
+      resetCoachState(stationId, steps.length, setActive, setStepIdx, stepIdxRef, consumedSteps)
     }
     window.addEventListener('pa-station-coach-changed', sync)
     window.addEventListener('pa-practice-restarted', sync)
@@ -58,24 +83,10 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
       window.removeEventListener('pa-station-coach-changed', sync)
       window.removeEventListener('pa-practice-restarted', sync)
     }
-  }, [stationId])
+  }, [stationId, steps.length])
 
   useEffect(() => {
-    const seen = stationCoachSeen(stationId)
-    setActive(!seen && steps.length > 0)
-    if (seen) {
-      setStepIdx(0)
-      stepIdxRef.current = 0
-      consumedSteps.current = new Set()
-      clearCoachProgress(stationId)
-      return
-    }
-    const saved = getCoachProgress(stationId)
-    setStepIdx(saved)
-    stepIdxRef.current = saved
-    consumedSteps.current = new Set(
-      Array.from({ length: saved }, (_, i) => i),
-    )
+    resetCoachState(stationId, steps.length, setActive, setStepIdx, stepIdxRef, consumedSteps)
   }, [stationId, steps.length])
 
   stepIdxRef.current = stepIdx
@@ -136,7 +147,7 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
     return () => window.removeEventListener('pa-station-coach-advance', onAdvance)
   }, [active, stationId, steps.length])
 
-  if (!active || !step) return null
+  if (!active || !step || typeof document === 'undefined') return null
 
   const pad = 8
   const hole = rect
@@ -148,14 +159,23 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
       }
     : null
 
+  /* Prefer below the hole; flip above when the strip would cover the control or clip the fold. */
   const bubbleStyle = hole
-    ? {
-        top: Math.min(window.innerHeight - 88, hole.top + hole.height + 12),
-        left: Math.min(window.innerWidth - 280, Math.max(12, hole.left)),
-      }
+    ? (() => {
+        const below = hole.top + hole.height + 12
+        const above = Math.max(12, hole.top - 92)
+        const top =
+          below + 88 > window.innerHeight || below < hole.top + 4
+            ? above
+            : Math.min(window.innerHeight - 88, below)
+        return {
+          top,
+          left: Math.min(window.innerWidth - 280, Math.max(12, hole.left)),
+        }
+      })()
     : { top: '30%', left: '50%', transform: 'translateX(-50%)' as const }
 
-  return (
+  return createPortal(
     <div className="station-coach" aria-live="polite">
       <div className="station-coach-dim" aria-hidden />
       {hole ? (
@@ -176,7 +196,8 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
         </p>
         <p className="station-coach-say">{step.say}</p>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

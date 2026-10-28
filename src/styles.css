@@ -15902,6 +15902,8 @@ html.pa-phone-shell .play-soft-miss {
   animation: station-coach-pulse 1.7s ease-in-out infinite;
 }
 
+/* Portal to body — match shell via html class (not descendant of .course-stage). */
+html.pa-course-shell .station-coach-hole,
 .course-stage .station-coach-hole,
 .is-course-app .station-coach-hole {
   box-shadow:
@@ -15910,8 +15912,8 @@ html.pa-phone-shell .play-soft-miss {
   outline-color: rgba(232, 163, 23, 0.7);
 }
 
-.is-phone-app .station-coach-hole,
-html.pa-phone-shell .station-coach-hole {
+html.pa-phone-shell .station-coach-hole,
+.is-phone-app .station-coach-hole {
   border-radius: 14px;
   box-shadow:
     0 0 0 2px color-mix(in srgb, var(--brand, #0b2f5c) 55%, var(--accent, #e8a317)),
@@ -15932,14 +15934,15 @@ html.pa-phone-shell .station-coach-hole {
   animation: station-coach-bubble-in 0.35s ease-out both;
 }
 
-.is-phone-app .station-coach-bubble,
-html.pa-phone-shell .station-coach-bubble {
+html.pa-phone-shell .station-coach-bubble,
+.is-phone-app .station-coach-bubble {
   background: #fff;
   color: var(--brand, #0b2f5c);
   border: 1px solid color-mix(in srgb, var(--brand, #0b2f5c) 22%, var(--line, #c5d0de));
   box-shadow: 0 8px 22px rgba(11, 47, 92, 0.14);
 }
 
+html.pa-course-shell .station-coach-bubble,
 .course-stage .station-coach-bubble,
 .is-course-app .station-coach-bubble {
   background: color-mix(in srgb, #071828 88%, #0b2f5c);
@@ -15957,8 +15960,8 @@ html.pa-phone-shell .station-coach-bubble {
   color: #e8a317;
 }
 
-.is-phone-app .station-coach-kicker,
-html.pa-phone-shell .station-coach-kicker {
+html.pa-phone-shell .station-coach-kicker,
+.is-phone-app .station-coach-kicker {
   color: color-mix(in srgb, var(--brand, #0b2f5c) 70%, var(--accent, #e8a317));
 }
 

@@ -509,12 +509,6 @@ export function SentenceClozeDrill({
         role="list"
         data-coach="sent-choices"
         aria-label="Word choices — type the correct one"
-        onClick={() => {
-          if (coachFirst && typingOpen) advanceStationCoach('sentence-structure')
-        }}
-        onKeyDown={() => {
-          if (coachFirst && typingOpen) advanceStationCoach('sentence-structure')
-        }}
       >
         {options.map((opt, i) => {
           const letter = choiceLetters[i] ?? String(i + 1)
