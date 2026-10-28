@@ -305,12 +305,12 @@ export const ASSESSMENT_COPY = {
     Tigrinya: 'ብእንግሊዝኛ ንጅምር። ናይ ስራሕ ሕቶታት ብንጹር ንምምላስ እንተደሊኻ ኻልእ ቋንቋ ምረጽ።',
   } satisfies LangText,
   langPickHint: {
-    Spanish: 'Inglés está seleccionado. Pulsa otro chip si entiendes mejor ese idioma.',
-      English: 'English is selected. Press another chip if you understand that language better.',
-    Arabic: 'الإنجليزية محددة. اضغط رقاقة أخرى إذا فهمت تلك اللغة أفضل.',
-    Hindi: 'अंग्रेज़ी चुनी हुई है। जो भाषा बेहतर समझते हैं, वह चिपक चुनें।',
-    Amharic: 'እንግሊዝኛ ተመርጧል። በደንብ የሚገባዎትን ሌላ ቋንቋ ከሆነ ያንን ይጫኑ።',
-    Tigrinya: 'እንግሊዝኛ ተመሪጹ። ዝበለጸ ዝርድኣካ ቋንቋ እንተኾይኑ ካልእ ጠውቕ።',
+    Spanish: 'Empezamos en inglés. Pulsa otro chip si entiendes mejor ese idioma — o quédate en inglés.',
+      English: 'We start in English. Press another chip if you understand that language better — or stay in English.',
+    Arabic: 'نبدأ بالإنجليزية. اضغط رقاقة أخرى إذا فهمت تلك اللغة أفضل — أو ابقَ على الإنجليزية.',
+    Hindi: 'हम अंग्रेज़ी से शुरू करते हैं। बेहतर समझने वाली भाषा का चिपक दबाएँ — या अंग्रेज़ी पर रहें।',
+    Amharic: 'በእንግሊዝኛ እንጀምራለን። በደንብ የሚገባዎትን ቋንቋ ይጫኑ — ወይም በእንግሊዝኛ ይቆዩ።',
+    Tigrinya: 'ብእንግሊዝኛ ንጅምር። ዝበለጸ ዝርድኣካ ቋንቋ ጠውቕ — ወይ ብእንግሊዝኛ ጽናሕ።',
   } satisfies LangText,
   stepOf: {
     Spanish: 'Paso',
