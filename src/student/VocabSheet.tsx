@@ -110,6 +110,7 @@ export function VocabSheetCard({
   const inputRef = useRef<HTMLInputElement>(null)
   const [draft, setDraft] = useState('')
   const [feedback, setFeedback] = useState<'ok' | 'retry' | null>(null)
+  const coachFirst = index === 1
 
   useEffect(() => {
     setDraft('')
@@ -118,13 +119,15 @@ export function VocabSheetCard({
 
   useEffect(() => {
     if (!typingPhase) return
+    /* Language bridge auto-plays English — move coach to the type beat. */
+    if (coachFirst) advanceStationCoach('workplace-words')
     const t = window.setTimeout(() => {
       inputRef.current?.focus()
       /* Desktop night: tall photo can push Type/Go below the fold — bring the beat in. */
       inputRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     }, 180)
     return () => window.clearTimeout(t)
-  }, [typingPhase, term.id])
+  }, [typingPhase, term.id, coachFirst])
 
   /** Worksheet / studio-white object cards — keep the mat light for all VV streams. */
   const studioPhoto =
@@ -134,8 +137,6 @@ export function VocabSheetCard({
     term.imageKey.startsWith('com-vv-') ||
     term.imageKey.startsWith('com-') ||
     term.imageKey.startsWith('con-')
-
-  const coachFirst = index === 1
 
   function checkType(e: FormEvent) {
     e.preventDefault()

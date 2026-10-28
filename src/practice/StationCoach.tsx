@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import {
+  clearCoachProgress,
+  getCoachProgress,
   markStationCoachSeen,
+  setCoachProgress,
   STATION_COACH,
   stationCoachSeen,
   type CoachStep,
@@ -28,20 +31,26 @@ type Props = {
  * First-example coach: spotlight the real control + plain instruction.
  * Call `window` event `pa-station-coach-advance` with `{ stationId }` when
  * the learner does the asked action — or use `advanceStationCoach(stationId)`.
+ *
+ * Step progress lives in module memory so a card remount after the first
+ * press (e.g. VV language → listen layout) does not rewind the coach.
  */
 export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) {
   const steps = stepsProp ?? STATION_COACH[stationId] ?? []
-  const [stepIdx, setStepIdx] = useState(0)
+  const [stepIdx, setStepIdx] = useState(() => getCoachProgress(stationId))
   const [rect, setRect] = useState<Rect | null>(null)
   const [active, setActive] = useState(() => !stationCoachSeen(stationId) && steps.length > 0)
   const [, bump] = useState(0)
-  /** One advance per step — pressing the same control twice must not skip ahead. */
   const consumedSteps = useRef<Set<number>>(new Set())
+  const stepIdxRef = useRef(stepIdx)
 
   useEffect(() => {
     const sync = () => {
       bump((n) => n + 1)
-      if (stationCoachSeen(stationId)) setActive(false)
+      if (stationCoachSeen(stationId)) {
+        setActive(false)
+        clearCoachProgress(stationId)
+      }
     }
     window.addEventListener('pa-station-coach-changed', sync)
     window.addEventListener('pa-practice-restarted', sync)
@@ -52,10 +61,24 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
   }, [stationId])
 
   useEffect(() => {
-    setActive(!stationCoachSeen(stationId) && steps.length > 0)
-    setStepIdx(0)
-    consumedSteps.current = new Set()
+    const seen = stationCoachSeen(stationId)
+    setActive(!seen && steps.length > 0)
+    if (seen) {
+      setStepIdx(0)
+      stepIdxRef.current = 0
+      consumedSteps.current = new Set()
+      clearCoachProgress(stationId)
+      return
+    }
+    const saved = getCoachProgress(stationId)
+    setStepIdx(saved)
+    stepIdxRef.current = saved
+    consumedSteps.current = new Set(
+      Array.from({ length: saved }, (_, i) => i),
+    )
   }, [stationId, steps.length])
+
+  stepIdxRef.current = stepIdx
 
   const step: CoachStep | undefined = active ? steps[stepIdx] : undefined
 
@@ -96,17 +119,18 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
     const onAdvance = (e: Event) => {
       const detail = (e as CustomEvent<{ stationId?: string }>).detail
       if (detail?.stationId && detail.stationId !== stationId) return
-      setStepIdx((i) => {
-        if (consumedSteps.current.has(i)) return i
-        consumedSteps.current.add(i)
-        const next = i + 1
-        if (next >= steps.length) {
-          markStationCoachSeen(stationId)
-          setActive(false)
-          return i
-        }
-        return next
-      })
+      const i = stepIdxRef.current
+      if (consumedSteps.current.has(i)) return
+      consumedSteps.current.add(i)
+      const next = i + 1
+      if (next >= steps.length) {
+        markStationCoachSeen(stationId)
+        setActive(false)
+        return
+      }
+      stepIdxRef.current = next
+      setCoachProgress(stationId, next)
+      setStepIdx(next)
     }
     window.addEventListener('pa-station-coach-advance', onAdvance)
     return () => window.removeEventListener('pa-station-coach-advance', onAdvance)

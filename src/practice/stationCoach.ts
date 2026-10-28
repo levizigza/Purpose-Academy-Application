@@ -40,6 +40,23 @@ export function markStationCoachSeen(stationId: string) {
   if (map[stationId]) return
   map[stationId] = true
   save(map)
+  clearCoachProgress(stationId)
+}
+
+/** In-flight step index — survives React remounts when the first action re-renders the card. */
+const progress = new Map<string, number>()
+
+export function getCoachProgress(stationId: string): number {
+  return progress.get(stationId) ?? 0
+}
+
+export function setCoachProgress(stationId: string, step: number) {
+  progress.set(stationId, step)
+}
+
+export function clearCoachProgress(stationId?: string) {
+  if (stationId) progress.delete(stationId)
+  else progress.clear()
 }
 
 export type CoachStep = {
@@ -51,8 +68,8 @@ export type CoachStep = {
 
 export const STATION_COACH: Record<string, CoachStep[]> = {
   'workplace-words': [
+    /* English auto-plays after the language bridge — coach the two presses that matter. */
     { target: '[data-coach="vv-lang"]', say: 'Press your language' },
-    { target: '[data-coach="vv-hear"]', say: 'Press Hear English' },
     { target: '[data-coach="vv-type"]', say: 'Type the English word · then Go' },
   ],
   'language-organize': [
