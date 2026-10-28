@@ -7,17 +7,27 @@ import {
   equipmentVideoUrl,
   type WarehouseEquipmentLesson,
 } from '../pathways/packs/warehouseEquipmentVideos'
+import {
+  VIDEO_SEGMENT_GATES_ENABLED,
+  isEquipmentVideoUnlocked,
+  quizForEquipmentLesson,
+  type WarehouseVideoChoiceId,
+  type WarehouseVideoQuestion,
+} from '../pathways/packs/warehouseEquipmentVideoQuizzes'
 import { playFoley } from '../audio/foley'
-import { firePlayClear } from '../practice/PlayClear'
+import { SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 
 const WATCHED_KEY = 'pa-warehouse-equipment-watched-v1'
+const CLEARED_KEY = 'pa-warehouse-equipment-cleared-v1'
 
-function loadWatched(): Set<string> {
+type Phase = 'watch' | 'answer'
+
+function loadSet(key: string): Set<string> {
   try {
-    const raw = learnerGet(WATCHED_KEY)
+    const raw = learnerGet(key)
     if (!raw) return new Set()
     const arr = JSON.parse(raw) as string[]
     return new Set(Array.isArray(arr) ? arr : [])
@@ -26,9 +36,9 @@ function loadWatched(): Set<string> {
   }
 }
 
-function saveWatched(ids: Set<string>) {
+function saveSet(key: string, ids: Set<string>) {
   try {
-    learnerSet(WATCHED_KEY, JSON.stringify([...ids]))
+    learnerSet(key, JSON.stringify([...ids]))
   } catch {
     /* ignore */
   }
@@ -40,26 +50,40 @@ type Props = {
 }
 
 /**
- * One equipment lesson at a time: family context → 16:9 player → Know / Inspect / Protect.
- * Continue unlocks after the learner finishes (or nearly finishes) each video.
+ * Warehouse Equipment Video — watch whole video → practice questions → continue.
+ * Soft-gate architecture ready (`VIDEO_SEGMENT_GATES_ENABLED`); showcase keeps all open.
  */
 export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   const lessons = WAREHOUSE_EQUIPMENT_VIDEOS
+  const lessonIds = useMemo(() => lessons.map((l) => l.id), [lessons])
   const [idx, setIdx] = useState(0)
-  const [watched, setWatched] = useState<Set<string>>(() => loadWatched())
+  const [watched, setWatched] = useState<Set<string>>(() => loadSet(WATCHED_KEY))
+  const [cleared, setCleared] = useState<Set<string>>(() => loadSet(CLEARED_KEY))
   const [ended, setEnded] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [phase, setPhase] = useState<Phase>('watch')
+  const [qIdx, setQIdx] = useState(0)
+  const [picked, setPicked] = useState<WarehouseVideoChoiceId | null>(null)
+  const [qCorrect, setQCorrect] = useState(false)
+  const [setJustCleared, setSetJustCleared] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const clearedIdsRef = useRef<Set<string>>(new Set())
+  const pulseWatchedRef = useRef<Set<string>>(new Set())
   const watchCoachedRef = useRef(false)
   const practice = isPracticeMode()
 
   const lesson = lessons[Math.min(idx, lessons.length - 1)]
   const familyMeta = EQUIPMENT_FAMILIES.find((f) => f.id === lesson.family)
+  const quiz = quizForEquipmentLesson(lesson.id)
+  const questions = quiz?.questions ?? []
+  const question: WarehouseVideoQuestion | undefined = questions[qIdx]
   const watchedCount = lessons.filter((l) => watched.has(l.id)).length
-  const allDone = watchedCount >= lessons.length
-  const canAdvanceLesson = ended || progress >= 0.9 || watched.has(lesson.id)
+  const clearedCount = lessons.filter((l) => cleared.has(l.id)).length
+  const allCleared = clearedCount >= lessons.length
+  const canLeaveWatch =
+    ended || progress >= 0.9 || watched.has(lesson.id) || cleared.has(lesson.id) || practice
+  const lessonCleared = cleared.has(lesson.id)
   const coachFirst = idx === 0
+  const gatesOn = VIDEO_SEGMENT_GATES_ENABLED
 
   function coachWatchDone() {
     if (idx !== 0 || watchCoachedRef.current) return
@@ -70,24 +94,19 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   useEffect(() => {
     setEnded(false)
     setProgress(0)
+    setPhase('watch')
+    setQIdx(0)
+    setPicked(null)
+    setQCorrect(false)
+    setSetJustCleared(false)
+    if (idx === 0) watchCoachedRef.current = false
     const el = videoRef.current
     if (el) {
       el.pause()
       el.currentTime = 0
       el.load()
     }
-  }, [lesson.id])
-
-  function pulseVideoClear(item: WarehouseEquipmentLesson, atIndex: number) {
-    if (clearedIdsRef.current.has(item.id)) return
-    clearedIdsRef.current.add(item.id)
-    const left = lessons.length - (atIndex + 1)
-    firePlayClear({
-      label: 'Video clear',
-      remnant: left > 0 ? `${left} left` : 'Equipment set clear — continue when ready',
-      kind: left === 0 ? 'board' : 'micro',
-    })
-  }
+  }, [lesson.id, idx])
 
   useEffect(() => {
     /* Same phone rule as Computer Skills — do not scroll the title off the fold. */
@@ -112,9 +131,31 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
       if (prev.has(item.id)) return prev
       const next = new Set(prev)
       next.add(item.id)
-      saveWatched(next)
+      saveSet(WATCHED_KEY, next)
       recordSkillAttempt('equipment-videos', true, 8)
       return next
+    })
+  }
+
+  function markCleared(item: WarehouseEquipmentLesson) {
+    setCleared((prev) => {
+      if (prev.has(item.id)) return prev
+      const next = new Set(prev)
+      next.add(item.id)
+      saveSet(CLEARED_KEY, next)
+      recordSkillAttempt('equipment-videos', true, 12)
+      return next
+    })
+  }
+
+  function pulseVideoWatched(item: WarehouseEquipmentLesson, atIndex: number) {
+    if (pulseWatchedRef.current.has(item.id)) return
+    pulseWatchedRef.current.add(item.id)
+    const left = lessons.length - (atIndex + 1)
+    firePlayClear({
+      label: 'Video clear',
+      remnant: left > 0 ? `${left} left · practice questions next` : 'Practice questions next',
+      kind: 'micro',
     })
   }
 
@@ -129,42 +170,105 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
   function onEnded() {
     setEnded(true)
     markWatched(lesson)
-    pulseVideoClear(lesson, idx)
+    pulseVideoWatched(lesson, idx)
+  }
+
+  function goAnswer() {
+    if (!canLeaveWatch) return
+    if (!watched.has(lesson.id)) markWatched(lesson)
+    coachWatchDone()
+    setPhase('answer')
+    setQIdx(0)
+    setPicked(null)
+    setQCorrect(false)
+    setSetJustCleared(false)
+    playFoley('whoosh')
+    advanceStationCoach('equipment-video')
+  }
+
+  function pickChoice(id: WarehouseVideoChoiceId) {
+    if (!question || picked) return
+    const ok = id === question.answer
+    setPicked(id)
+    setQCorrect(ok)
+    playFoley(ok ? 'correct' : 'wrong')
+  }
+
+  function afterQuestion() {
+    if (!question) return
+    if (!qCorrect) {
+      setPicked(null)
+      setQCorrect(false)
+      return
+    }
+    if (qIdx < questions.length - 1) {
+      setQIdx((i) => i + 1)
+      setPicked(null)
+      setQCorrect(false)
+      playFoley('whoosh')
+      return
+    }
+    markCleared(lesson)
+    setSetJustCleared(true)
+    firePlayClear({
+      label: 'Practice clear',
+      remnant:
+        idx >= lessons.length - 1
+          ? 'Equipment set clear — continue when ready'
+          : `${lessons.length - (idx + 1)} videos left`,
+      kind: idx >= lessons.length - 1 ? 'board' : 'micro',
+    })
+    playFoley('correct')
+  }
+
+  function replayClip() {
+    if (!question) return
+    const el = videoRef.current
+    if (!el) return
+    el.currentTime = question.replay.startSec
+    void el.play()
+    playFoley('whoosh')
   }
 
   function goNext() {
-    if (!canAdvanceLesson && !practice) return
+    if (!lessonCleared && !setJustCleared && !practice) return
     if (!watched.has(lesson.id)) markWatched(lesson)
-    pulseVideoClear(lesson, idx)
     if (idx === 0) {
       coachWatchDone()
       advanceStationCoach('equipment-video')
     }
     if (idx >= lessons.length - 1) {
-      if (allDone || watched.has(lesson.id) || practice) {
+      if (allCleared || lessonCleared || setJustCleared || practice) {
         recordSkillAttempt('equipment-videos', true, 20)
         playFoley('whoosh')
         onComplete()
       }
       return
     }
-    setIdx((i) => i + 1)
+    const nextIdx = idx + 1
+    const unlocked = isEquipmentVideoUnlocked(
+      nextIdx,
+      new Set([...cleared, lesson.id]),
+      lessonIds,
+      gatesOn,
+    )
+    if (!unlocked && !practice) return
+    setIdx(nextIdx)
     playFoley('whoosh')
   }
 
   function jumpTo(i: number) {
     if (i < 0 || i >= lessons.length) return
-    // Allow revisit anytime; forward jump only to watched or next unwatched in order
-    if (i > idx) {
-      const priorOk = lessons.slice(0, i).every((l) => watched.has(l.id))
-      if (!priorOk && !practice) return
-    }
+    if (i === idx) return
+    if (!isEquipmentVideoUnlocked(i, cleared, lessonIds, gatesOn) && !practice) return
     setIdx(i)
     playFoley('whoosh')
   }
 
   const poster = pathwayImage(lesson.posterKey)
   const src = equipmentVideoUrl(lesson.file)
+  const showContinue =
+    phase === 'answer' && (setJustCleared || (lessonCleared && qIdx >= questions.length - 1 && qCorrect))
 
   return (
     <article className="equip-video-card">
@@ -177,14 +281,19 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
       </div>
 
       <p className="play-nearby-objective" aria-live="polite">
-        Clear this video · {lessons.length - idx} left
+        {phase === 'watch'
+          ? `Clear this video · ${lessons.length - idx} left`
+          : setJustCleared || (lessonCleared && showContinue)
+            ? `Cleared · ${lesson.title}`
+            : `Practice questions · ${Math.max(questions.length - qIdx, 1)} left on this machine`}
       </p>
       <p className="train-vocab-counter">
         Lesson {lesson.n} of {lessons.length}
         {' · '}
         {familyMeta?.label ?? lesson.familyLabel}
         {' · '}
-        {watchedCount} watched
+        {watchedCount} watched · {clearedCount} cleared
+        {gatesOn ? ' · gates on' : null}
         {practice && onSkip ? (
           <>
             {' · '}
@@ -205,19 +314,37 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
                 <ol className="equip-video-list">
                   {items.map((item) => {
                     const active = item.id === lesson.id
-                    const done = watched.has(item.id)
+                    const done = cleared.has(item.id)
+                    const seen = watched.has(item.id)
                     const flatIdx = lessons.findIndex((l) => l.id === item.id)
+                    const unlocked = isEquipmentVideoUnlocked(flatIdx, cleared, lessonIds, gatesOn)
+                    const locked = gatesOn && !unlocked
                     return (
                       <li key={item.id}>
                         <button
                           type="button"
-                          className={`equip-video-rail-btn${active ? ' is-active' : ''}${done ? ' is-done' : ''}`}
+                          className={`equip-video-rail-btn${active ? ' is-active' : ''}${done ? ' is-done' : ''}${seen && !done ? ' is-watched' : ''}${locked ? ' is-locked' : ''}`}
                           onClick={() => jumpTo(flatIdx)}
+                          disabled={locked}
                           aria-current={active ? 'step' : undefined}
+                          aria-disabled={locked || undefined}
+                          title={
+                            locked
+                              ? 'Finish the practice questions on the earlier video first'
+                              : undefined
+                          }
                         >
                           <span className="equip-video-rail-n">{item.n}</span>
                           <span className="equip-video-rail-name">{item.title}</span>
-                          {done ? <span className="equip-video-rail-check" aria-hidden>✓</span> : null}
+                          {locked ? (
+                            <span className="equip-video-rail-lock" aria-hidden>
+                              ·
+                            </span>
+                          ) : done ? (
+                            <span className="equip-video-rail-check" aria-hidden>
+                              ✓
+                            </span>
+                          ) : null}
                         </button>
                       </li>
                     )
@@ -229,7 +356,10 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
         </nav>
 
         <div className="equip-video-main">
-          <div className="equip-video-stage" data-coach={coachFirst ? 'equip-watch' : undefined}>
+          <div
+            className="equip-video-stage"
+            data-coach={coachFirst && phase === 'watch' ? 'equip-watch' : undefined}
+          >
             <video
               key={lesson.id}
               ref={videoRef}
@@ -247,56 +377,170 @@ export function EquipmentVideoDrill({ onComplete, onSkip }: Props) {
             </video>
             {lesson.poweredStayClear ? (
               <p className="equip-video-stayclear" role="note">
-                Powered equipment — stay clear unless you are certified elsewhere. This lesson is awareness only.
+                Powered equipment — stay clear unless you are certified elsewhere. This lesson is
+                awareness only.
               </p>
             ) : null}
           </div>
 
-          <div className="equip-video-kip" aria-label="Know, inspect, protect">
-            <div className="equip-video-kip-item">
-              <p className="equip-video-kip-label">Know</p>
-              <p>{lesson.know}</p>
-            </div>
-            <div className="equip-video-kip-item">
-              <p className="equip-video-kip-label">Inspect</p>
-              <p>{lesson.inspect}</p>
-            </div>
-            <div className="equip-video-kip-item">
-              <p className="equip-video-kip-label">Protect</p>
-              <p>{lesson.protect}</p>
-            </div>
-          </div>
+          {phase === 'watch' ? (
+            <>
+              <div className="equip-video-kip" aria-label="Know, inspect, protect">
+                <div className="equip-video-kip-item">
+                  <p className="equip-video-kip-label">Know</p>
+                  <p>{lesson.know}</p>
+                </div>
+                <div className="equip-video-kip-item">
+                  <p className="equip-video-kip-label">Inspect</p>
+                  <p>{lesson.inspect}</p>
+                </div>
+                <div className="equip-video-kip-item">
+                  <p className="equip-video-kip-label">Protect</p>
+                  <p>{lesson.protect}</p>
+                </div>
+              </div>
 
-          <p className="equip-video-family-blurb">
-            {familyMeta?.blurb} · {familyLessons.length} lessons in this group.
-          </p>
-
-          <div className="hero-actions equip-video-actions">
-            {!canAdvanceLesson && !practice ? (
-              <p className="play-soft-miss" role="status">
-                Keep watching — then continue. No rush.
+              <p className="equip-video-family-blurb">
+                {familyMeta?.blurb} · {familyLessons.length} lessons in this group.
               </p>
-            ) : null}
-            <button
-              type="button"
-              className="btn btn-primary"
-              data-coach={coachFirst ? 'equip-next' : undefined}
-              disabled={!canAdvanceLesson && !practice}
-              onClick={goNext}
+
+              <div className="hero-actions equip-video-actions">
+                {!canLeaveWatch && !practice ? (
+                  <p className="play-soft-miss" role="status">
+                    Keep watching — then answer a few practice questions. No rush.
+                  </p>
+                ) : null}
+                {lessonCleared ? (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-coach={coachFirst ? 'equip-next' : undefined}
+                    onClick={goNext}
+                  >
+                    {idx >= lessons.length - 1
+                      ? 'Continue to instructor check'
+                      : `Next · ${lessons[idx + 1]?.title}`}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-coach={coachFirst ? 'equip-next' : undefined}
+                    disabled={!canLeaveWatch && !practice}
+                    onClick={goAnswer}
+                  >
+                    {canLeaveWatch
+                      ? questions.length
+                        ? 'Answer practice questions'
+                        : 'Continue'
+                      : 'Keep watching, then continue'}
+                  </button>
+                )}
+                {lessonCleared ? (
+                  <button type="button" className="btn btn-ghost" onClick={goAnswer}>
+                    Practice questions again
+                  </button>
+                ) : null}
+              </div>
+            </>
+          ) : null}
+
+          {phase === 'answer' && question && !setJustCleared ? (
+            <div
+              className="equip-video-check topic-lesson-card"
+              data-coach={coachFirst ? 'equip-answer' : undefined}
             >
-              {idx >= lessons.length - 1
-                ? allDone || canAdvanceLesson
-                  ? 'Continue to instructor check'
-                  : 'Finish this video to continue'
-                : canAdvanceLesson
-                  ? `Next · ${lessons[idx + 1]?.title}`
-                  : 'Keep watching, then continue'}
-            </button>
-          </div>
+              <p className="equip-video-check-kicker">Practice questions</p>
+              <h3>
+                Question {question.n} of {questions.length}
+              </h3>
+              <p className="train-check-prompt">{question.prompt}</p>
+              <div className="train-choice-grid">
+                {question.choices.map((opt) => {
+                  let state: 'idle' | 'correct' | 'wrong' = 'idle'
+                  if (picked) {
+                    if (opt.id === question.answer) state = 'correct'
+                    else if (opt.id === picked) state = 'wrong'
+                  }
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      className={`train-choice${state !== 'idle' ? ` is-${state}` : ''}`}
+                      disabled={!!picked && opt.id !== picked && opt.id !== question.answer}
+                      onClick={() => pickChoice(opt.id)}
+                    >
+                      <span className="equip-video-choice-id">{opt.id}.</span> {opt.text}
+                    </button>
+                  )
+                })}
+              </div>
+              {picked ? (
+                <>
+                  {qCorrect ? (
+                    <div className="alert ok">{question.teach}</div>
+                  ) : (
+                    <p className="play-soft-miss" role="status">
+                      {softMissLine(question.teach)}
+                    </p>
+                  )}
+                  <div className="hero-actions equip-video-actions">
+                    {!qCorrect ? (
+                      <button type="button" className="btn btn-ghost" onClick={replayClip}>
+                        Replay that part · {question.replay.label}
+                      </button>
+                    ) : null}
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      data-coach={coachFirst ? 'equip-next' : undefined}
+                      onClick={afterQuestion}
+                    >
+                      {qCorrect
+                        ? qIdx >= questions.length - 1
+                          ? 'Clear this machine'
+                          : 'Next question'
+                        : SOFT_RETRY_LABEL}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <p className="equip-video-family-blurb">
+                  Watch first, then choose. Replay a short clip if you need a reminder.
+                </p>
+              )}
+            </div>
+          ) : null}
+
+          {phase === 'answer' && setJustCleared ? (
+            <div className="equip-video-check topic-lesson-card">
+              <p className="equip-video-check-kicker">Station clear</p>
+              <h3>{lesson.title} · practice cleared</h3>
+              <p className="lede">
+                {questions.length} practice questions done. This video pairs with the warehouse floor
+                — stay clear of powered equipment unless you are certified elsewhere.
+              </p>
+              <div className="hero-actions equip-video-actions">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  data-coach={coachFirst ? 'equip-next' : undefined}
+                  onClick={goNext}
+                >
+                  {idx >= lessons.length - 1
+                    ? 'Continue to instructor check'
+                    : `Next · ${lessons[idx + 1]?.title}`}
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
       {coachFirst ? (
-        <StationCoach stationId="equipment-video" layoutKey={`${lesson.id}-${canAdvanceLesson}`} />
+        <StationCoach
+          stationId="equipment-video"
+          layoutKey={`${lesson.id}-${phase}-${canLeaveWatch}-${qIdx}-${setJustCleared}`}
+        />
       ) : null}
     </article>
   )

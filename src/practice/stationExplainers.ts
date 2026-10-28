@@ -117,7 +117,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'equipment-video',
     steps: [18],
     title: 'Equipment Videos',
-    lede: 'Watch each equipment lesson, then continue.',
+    lede: 'Watch each warehouse machine, then answer practice questions.',
     video: 'explainers/equipment-video.mp4',
   },
 ]

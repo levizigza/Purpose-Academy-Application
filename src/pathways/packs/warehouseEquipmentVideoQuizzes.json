@@ -1,0 +1,4300 @@
+[
+  {
+    "lessonId": "counterbalance-forklift",
+    "title": "Counterbalance Forklift",
+    "sourceVideo": "01_Counterbalance_forklift.mp4",
+    "questions": [
+      {
+        "id": "counterbalance-forklift-q1",
+        "n": 1,
+        "prompt": "What affects the stability of a counterbalance forklift?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The number of storage aisles"
+          },
+          {
+            "id": "B",
+            "text": "The colour of the pallet"
+          },
+          {
+            "id": "C",
+            "text": "Load weight and position"
+          },
+          {
+            "id": "D",
+            "text": "The warehouse label design"
+          }
+        ],
+        "answer": "C",
+        "teach": "Load weight and position affect stability even though the counterweight helps balance the truck.",
+        "replay": {
+          "startSec": 27,
+          "endSec": 33,
+          "label": "0:27-0:33"
+        }
+      },
+      {
+        "id": "counterbalance-forklift-q2",
+        "n": 2,
+        "prompt": "What is its main job?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Lift and move pallet loads"
+          },
+          {
+            "id": "B",
+            "text": "Wrap pallets in stretch film"
+          },
+          {
+            "id": "C",
+            "text": "Measure the weight of parcels"
+          },
+          {
+            "id": "D",
+            "text": "Collect and store dirty water"
+          }
+        ],
+        "answer": "A",
+        "teach": "It lifts and moves pallet loads.",
+        "replay": {
+          "startSec": 11,
+          "endSec": 14,
+          "label": "0:11-0:14"
+        }
+      },
+      {
+        "id": "counterbalance-forklift-q3",
+        "n": 3,
+        "prompt": "What are the two arms supporting the pallet called?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Handholds"
+          },
+          {
+            "id": "B",
+            "text": "Forks"
+          },
+          {
+            "id": "C",
+            "text": "Mast channels"
+          },
+          {
+            "id": "D",
+            "text": "Load wheels"
+          }
+        ],
+        "answer": "B",
+        "teach": "The forks. They support the pallet and its load.",
+        "replay": {
+          "startSec": 19,
+          "endSec": 22,
+          "label": "0:19-0:22"
+        }
+      },
+      {
+        "id": "counterbalance-forklift-q4",
+        "n": 4,
+        "prompt": "Which upright part raises and lowers the load?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Counterweight"
+          },
+          {
+            "id": "B",
+            "text": "Overhead guard"
+          },
+          {
+            "id": "C",
+            "text": "Steering wheel"
+          },
+          {
+            "id": "D",
+            "text": "Mast"
+          }
+        ],
+        "answer": "D",
+        "teach": "The mast raises and lowers the load within the truck's rated capacity.",
+        "replay": {
+          "startSec": 21,
+          "endSec": 26,
+          "label": "0:21-0:26"
+        }
+      },
+      {
+        "id": "counterbalance-forklift-q5",
+        "n": 5,
+        "prompt": "Which part at the back helps balance the truck?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Operator seat"
+          },
+          {
+            "id": "B",
+            "text": "Mast"
+          },
+          {
+            "id": "C",
+            "text": "Counterweight"
+          },
+          {
+            "id": "D",
+            "text": "Fork carriage"
+          }
+        ],
+        "answer": "C",
+        "teach": "The counterweight. Load weight and position still affect stability.",
+        "replay": {
+          "startSec": 27,
+          "endSec": 33,
+          "label": "0:27-0:33"
+        }
+      },
+      {
+        "id": "counterbalance-forklift-q6",
+        "n": 6,
+        "prompt": "Which pair belongs in the pre-use check?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Capacity plate and pallet"
+          },
+          {
+            "id": "B",
+            "text": "Film roll and turntable"
+          },
+          {
+            "id": "C",
+            "text": "Scan window and display"
+          },
+          {
+            "id": "D",
+            "text": "Platform gates and fall protection"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video asks the operator to check the capacity plate, pallet and travel route.",
+        "replay": {
+          "startSec": 35,
+          "endSec": 53,
+          "label": "0:35-0:53"
+        }
+      },
+      {
+        "id": "counterbalance-forklift-q7",
+        "n": 7,
+        "prompt": "How should the operator enter and prepare?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Use the steps and leave the restraint unused"
+          },
+          {
+            "id": "B",
+            "text": "Use steps and handholds, adjust the seat and use the restraint"
+          },
+          {
+            "id": "C",
+            "text": "Enter from any side and adjust the seat while moving"
+          },
+          {
+            "id": "D",
+            "text": "Climb using the forks and leave the seat unchanged"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Use steps and handholds, adjust the seat and use the restraint.",
+        "replay": {
+          "startSec": 54,
+          "endSec": 61,
+          "label": "0:54-1:01"
+        }
+      },
+      {
+        "id": "counterbalance-forklift-q8",
+        "n": 8,
+        "prompt": "Where is the load carried during travel in the video?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "At the top of the rack"
+          },
+          {
+            "id": "B",
+            "text": "Near floor level"
+          },
+          {
+            "id": "C",
+            "text": "At the middle of the mast"
+          },
+          {
+            "id": "D",
+            "text": "At the highest mast position"
+          }
+        ],
+        "answer": "B",
+        "teach": "The demonstration shows the load carried near floor level.",
+        "replay": {
+          "startSec": 81,
+          "endSec": 89,
+          "label": "1:21-1:29"
+        }
+      },
+      {
+        "id": "counterbalance-forklift-q9",
+        "n": 9,
+        "prompt": "What should be planned before moving a pallet?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The load, route, clearances and destination"
+          },
+          {
+            "id": "B",
+            "text": "The parcel unit and tare setting"
+          },
+          {
+            "id": "C",
+            "text": "The wrapping program and film overlap"
+          },
+          {
+            "id": "D",
+            "text": "Only the pallet colour and label design"
+          }
+        ],
+        "answer": "A",
+        "teach": "Plan the load, travel route and destination before moving.",
+        "replay": {
+          "startSec": 92,
+          "endSec": 101,
+          "label": "1:32-1:41"
+        }
+      },
+      {
+        "id": "counterbalance-forklift-q10",
+        "n": 10,
+        "prompt": "A pre-use check reveals a defect. What should you do?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Repair it yourself without authorization"
+          },
+          {
+            "id": "B",
+            "text": "Ask another operator to use it without reporting it"
+          },
+          {
+            "id": "C",
+            "text": "Use the truck and report it after the shift"
+          },
+          {
+            "id": "D",
+            "text": "Report it before use and follow the workplace procedure"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: Report it before use and follow the workplace procedure.",
+        "replay": {
+          "startSec": 35,
+          "endSec": 44,
+          "label": "0:35-0:44"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "reach-truck",
+    "title": "Reach Truck",
+    "sourceVideo": "02_Reach_truck.mp4",
+    "questions": [
+      {
+        "id": "reach-truck-q1",
+        "n": 1,
+        "prompt": "What should you check above the planned reach-truck lift?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Overhead clearance"
+          },
+          {
+            "id": "B",
+            "text": "The height of the battery charger"
+          },
+          {
+            "id": "C",
+            "text": "The number of cartons in the next aisle"
+          },
+          {
+            "id": "D",
+            "text": "The colour of the rack labels"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video requires an overhead-clearance check before positioning the pallet.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 49,
+          "label": "0:44-0:49"
+        }
+      },
+      {
+        "id": "reach-truck-q2",
+        "n": 2,
+        "prompt": "What is its main warehouse job?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Wrap cartons on a turntable"
+          },
+          {
+            "id": "B",
+            "text": "Carry an operator up to individual picking shelves"
+          },
+          {
+            "id": "C",
+            "text": "Move individual cartons on a belt"
+          },
+          {
+            "id": "D",
+            "text": "Place pallets in warehouse racks"
+          }
+        ],
+        "answer": "D",
+        "teach": "It places pallets in warehouse racks.",
+        "replay": {
+          "startSec": 10,
+          "endSec": 13,
+          "label": "0:10-0:13"
+        }
+      },
+      {
+        "id": "reach-truck-q3",
+        "n": 3,
+        "prompt": "Which mechanism moves the forks forward?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Counterweight mechanism"
+          },
+          {
+            "id": "B",
+            "text": "Brake mechanism"
+          },
+          {
+            "id": "C",
+            "text": "Reach mechanism"
+          },
+          {
+            "id": "D",
+            "text": "Steering mechanism"
+          }
+        ],
+        "answer": "C",
+        "teach": "The reach mechanism moves the forks forward to the pallet position.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 25,
+          "label": "0:18-0:25"
+        }
+      },
+      {
+        "id": "reach-truck-q4",
+        "n": 4,
+        "prompt": "Which part provides the upward lift?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Chassis"
+          },
+          {
+            "id": "B",
+            "text": "Mast"
+          },
+          {
+            "id": "C",
+            "text": "Steering axle"
+          },
+          {
+            "id": "D",
+            "text": "Load wheels"
+          }
+        ],
+        "answer": "B",
+        "teach": "The mast provides the upward lift.",
+        "replay": {
+          "startSec": 26,
+          "endSec": 29,
+          "label": "0:26-0:29"
+        }
+      },
+      {
+        "id": "reach-truck-q5",
+        "n": 5,
+        "prompt": "Which parts support the truck as the pallet is positioned?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Operator gates and handholds"
+          },
+          {
+            "id": "B",
+            "text": "Film carriage and turntable"
+          },
+          {
+            "id": "C",
+            "text": "Chassis and load wheels"
+          },
+          {
+            "id": "D",
+            "text": "Platform gates and handholds"
+          }
+        ],
+        "answer": "C",
+        "teach": "The chassis and load wheels support the truck during pallet positioning.",
+        "replay": {
+          "startSec": 28,
+          "endSec": 34,
+          "label": "0:28-0:34"
+        }
+      },
+      {
+        "id": "reach-truck-q6",
+        "n": 6,
+        "prompt": "Which pair should be checked before placing a pallet in a rack?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Film length and wrapping speed"
+          },
+          {
+            "id": "B",
+            "text": "Scan signal and entry field"
+          },
+          {
+            "id": "C",
+            "text": "Display brightness and barcode length"
+          },
+          {
+            "id": "D",
+            "text": "Rated capacity and rack condition"
+          }
+        ],
+        "answer": "D",
+        "teach": "rated capacity, pallet condition, rack condition, or overhead clearance.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 51,
+          "label": "0:44-0:51"
+        }
+      },
+      {
+        "id": "reach-truck-q7",
+        "n": 7,
+        "prompt": "Which two movements are shown at the rack?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Mast steers; reach mechanism applies the brakes"
+          },
+          {
+            "id": "B",
+            "text": "Mast lifts; reach mechanism moves forks forward"
+          },
+          {
+            "id": "C",
+            "text": "Mast lowers the pallet and reach mechanism steers the truck"
+          },
+          {
+            "id": "D",
+            "text": "Mast tilts the rack; reach mechanism weighs the pallet"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Mast lifts; reach mechanism moves forks forward.",
+        "replay": {
+          "startSec": 81,
+          "endSec": 89,
+          "label": "1:21-1:29"
+        }
+      },
+      {
+        "id": "reach-truck-q8",
+        "n": 8,
+        "prompt": "What should you learn with an instructor before use?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the location of the nearest storage shelf"
+          },
+          {
+            "id": "B",
+            "text": "Model controls and required operator protection"
+          },
+          {
+            "id": "C",
+            "text": "Only the color of the rack labels"
+          },
+          {
+            "id": "D",
+            "text": "Only the location of the charging socket"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Model controls and required operator protection.",
+        "replay": {
+          "startSec": 53,
+          "endSec": 61,
+          "label": "0:53-1:01"
+        }
+      },
+      {
+        "id": "reach-truck-q9",
+        "n": 9,
+        "prompt": "Where must people stay while a load is raised?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Between the truck and the rack"
+          },
+          {
+            "id": "B",
+            "text": "Beside the raised pallet to steady its corners"
+          },
+          {
+            "id": "C",
+            "text": "Clear of the truck and raised load"
+          },
+          {
+            "id": "D",
+            "text": "Under the pallet to guide it"
+          }
+        ],
+        "answer": "C",
+        "teach": "People must stay clear of the truck and raised load.",
+        "replay": {
+          "startSec": 48,
+          "endSec": 51,
+          "label": "0:48-0:51"
+        }
+      },
+      {
+        "id": "reach-truck-q10",
+        "n": 10,
+        "prompt": "Which plan is needed before storing the pallet?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Storage position, load weight, height, capacity and space"
+          },
+          {
+            "id": "B",
+            "text": "Wrapping speed, film width and number of layers"
+          },
+          {
+            "id": "C",
+            "text": "Only the number of cartons and their label colour"
+          },
+          {
+            "id": "D",
+            "text": "Parcel count, barcode color and label layout"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Storage position, load weight, height, capacity and space.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 51,
+          "label": "0:44-0:51"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "manual-pallet-jack",
+    "title": "Manual Pallet Jack",
+    "sourceVideo": "03_Manual_pallet_jack.mp4",
+    "questions": [
+      {
+        "id": "manual-pallet-jack-q1",
+        "n": 1,
+        "prompt": "When should the required pallet-jack inspection be completed?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only after a load becomes difficult to move"
+          },
+          {
+            "id": "B",
+            "text": "Only at the end of the shift"
+          },
+          {
+            "id": "C",
+            "text": "After the first pallet move"
+          },
+          {
+            "id": "D",
+            "text": "Before work begins"
+          }
+        ],
+        "answer": "D",
+        "teach": "Complete the required equipment checklist before work and report defects before use.",
+        "replay": {
+          "startSec": 35,
+          "endSec": 43,
+          "label": "0:35-0:43"
+        }
+      },
+      {
+        "id": "manual-pallet-jack-q2",
+        "n": 2,
+        "prompt": "What does it move, and at what height?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Parcels along an overhead belt"
+          },
+          {
+            "id": "B",
+            "text": "Operators up to picking shelves"
+          },
+          {
+            "id": "C",
+            "text": "Pallets close to floor level"
+          },
+          {
+            "id": "D",
+            "text": "Cartons balanced on two wheels"
+          }
+        ],
+        "answer": "C",
+        "teach": "It moves pallets close to floor level.",
+        "replay": {
+          "startSec": 11,
+          "endSec": 14,
+          "label": "0:11-0:14"
+        }
+      },
+      {
+        "id": "manual-pallet-jack-q3",
+        "n": 3,
+        "prompt": "Which parts enter and support the pallet?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Steering wheels"
+          },
+          {
+            "id": "B",
+            "text": "Forks"
+          },
+          {
+            "id": "C",
+            "text": "Hydraulic release lever"
+          },
+          {
+            "id": "D",
+            "text": "Handle grips"
+          }
+        ],
+        "answer": "B",
+        "teach": "The forks slide into and support a compatible pallet.",
+        "replay": {
+          "startSec": 19,
+          "endSec": 26,
+          "label": "0:19-0:26"
+        }
+      },
+      {
+        "id": "manual-pallet-jack-q4",
+        "n": 4,
+        "prompt": "Which part is used to steer it?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Release control"
+          },
+          {
+            "id": "B",
+            "text": "Fork tips"
+          },
+          {
+            "id": "C",
+            "text": "Handle"
+          },
+          {
+            "id": "D",
+            "text": "Toe plate"
+          }
+        ],
+        "answer": "C",
+        "teach": "The handle steers the pallet jack.",
+        "replay": {
+          "startSec": 27,
+          "endSec": 30,
+          "label": "0:27-0:30"
+        }
+      },
+      {
+        "id": "manual-pallet-jack-q5",
+        "n": 5,
+        "prompt": "What does pumping the handle do?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Operates the hydraulic lift to raise the pallet slightly"
+          },
+          {
+            "id": "B",
+            "text": "Starts an electric drive to move the jack"
+          },
+          {
+            "id": "C",
+            "text": "Lowers the forks without using the release control"
+          },
+          {
+            "id": "D",
+            "text": "Turns the load wheels without lifting the pallet"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Operates the hydraulic lift to raise the pallet slightly.",
+        "replay": {
+          "startSec": 29,
+          "endSec": 35,
+          "label": "0:29-0:35"
+        }
+      },
+      {
+        "id": "manual-pallet-jack-q6",
+        "n": 6,
+        "prompt": "Which control lowers the pallet?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Travel control"
+          },
+          {
+            "id": "B",
+            "text": "Steering control"
+          },
+          {
+            "id": "C",
+            "text": "Emergency stop button"
+          },
+          {
+            "id": "D",
+            "text": "Release control"
+          }
+        ],
+        "answer": "D",
+        "teach": "The release control lowers the pallet after the hydraulic lift raises it.",
+        "replay": {
+          "startSec": 29,
+          "endSec": 35,
+          "label": "0:29-0:35"
+        }
+      },
+      {
+        "id": "manual-pallet-jack-q7",
+        "n": 7,
+        "prompt": "Which pair belongs in the pre-use check?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Battery charge and electric motor"
+          },
+          {
+            "id": "B",
+            "text": "Film carriage and wrapping program"
+          },
+          {
+            "id": "C",
+            "text": "Wheels and forks"
+          },
+          {
+            "id": "D",
+            "text": "Trailer signals and dock lip support"
+          }
+        ],
+        "answer": "C",
+        "teach": "The video specifically names the wheels, forks, load and route in the check.",
+        "replay": {
+          "startSec": 35,
+          "endSec": 51,
+          "label": "0:35-0:51"
+        }
+      },
+      {
+        "id": "manual-pallet-jack-q8",
+        "n": 8,
+        "prompt": "How far is the pallet raised for the short move shown?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Just clear of the floor"
+          },
+          {
+            "id": "B",
+            "text": "To the height of the highest rack"
+          },
+          {
+            "id": "C",
+            "text": "To the top of the handle"
+          },
+          {
+            "id": "D",
+            "text": "To the height of the operator\u2019s shoulders"
+          }
+        ],
+        "answer": "A",
+        "teach": "The demonstration raises the pallet slightly for a short move.",
+        "replay": {
+          "startSec": 81,
+          "endSec": 89,
+          "label": "1:21-1:29"
+        }
+      },
+      {
+        "id": "manual-pallet-jack-q9",
+        "n": 9,
+        "prompt": "What should your feet be kept clear of?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the top of the pallet"
+          },
+          {
+            "id": "B",
+            "text": "Only the top of the handle"
+          },
+          {
+            "id": "C",
+            "text": "Only the pallet label"
+          },
+          {
+            "id": "D",
+            "text": "Forks, wheels and load"
+          }
+        ],
+        "answer": "D",
+        "teach": "Keep feet clear of the forks, wheels and load while handling the jack.",
+        "replay": {
+          "startSec": 54,
+          "endSec": 60,
+          "label": "0:54-1:00"
+        }
+      },
+      {
+        "id": "manual-pallet-jack-q10",
+        "n": 10,
+        "prompt": "Which pallet and load are suitable?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "A compatible pallet with an unstable load above capacity"
+          },
+          {
+            "id": "B",
+            "text": "An undamaged compatible pallet with a stable load within capacity"
+          },
+          {
+            "id": "C",
+            "text": "A damaged pallet with a stable load within capacity"
+          },
+          {
+            "id": "D",
+            "text": "A pallet that does not fit the forks but carries a light load"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: An undamaged compatible pallet with a stable load within capacity.",
+        "replay": {
+          "startSec": 45,
+          "endSec": 51,
+          "label": "0:45-0:51"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "powered-pallet-jack",
+    "title": "Powered Pallet Jack",
+    "sourceVideo": "04_Powered_pallet_jack.mp4",
+    "questions": [
+      {
+        "id": "powered-pallet-jack-q1",
+        "n": 1,
+        "prompt": "You find a defect before using the powered pallet jack. What should you do?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Use it for a short trip before reporting it"
+          },
+          {
+            "id": "B",
+            "text": "Continue if the load is light"
+          },
+          {
+            "id": "C",
+            "text": "Ask another learner to try it first"
+          },
+          {
+            "id": "D",
+            "text": "Report it before use and follow the workplace procedure"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video says to check equipment condition and report defects before use.",
+        "replay": {
+          "startSec": 35,
+          "endSec": 43,
+          "label": "0:35-0:43"
+        }
+      },
+      {
+        "id": "powered-pallet-jack-q2",
+        "n": 2,
+        "prompt": "What moves the truck and pallet?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "An electric motor"
+          },
+          {
+            "id": "B",
+            "text": "A conveyor belt under the pallet"
+          },
+          {
+            "id": "C",
+            "text": "Pumping the handle by hand"
+          },
+          {
+            "id": "D",
+            "text": "The operator pulls an unpowered truck by hand"
+          }
+        ],
+        "answer": "A",
+        "teach": "An electric motor moves the truck and pallet.",
+        "replay": {
+          "startSec": 11,
+          "endSec": 14,
+          "label": "0:11-0:14"
+        }
+      },
+      {
+        "id": "powered-pallet-jack-q3",
+        "n": 3,
+        "prompt": "Where are the travel controls?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "On the tiller handle"
+          },
+          {
+            "id": "B",
+            "text": "Under the fork tips"
+          },
+          {
+            "id": "C",
+            "text": "On a separate rack-mounted panel"
+          },
+          {
+            "id": "D",
+            "text": "On the pallet label"
+          }
+        ],
+        "answer": "A",
+        "teach": "The travel controls are carried on the tiller handle.",
+        "replay": {
+          "startSec": 19,
+          "endSec": 26,
+          "label": "0:19-0:26"
+        }
+      },
+      {
+        "id": "powered-pallet-jack-q4",
+        "n": 4,
+        "prompt": "What supplies power to the electric drive?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Hydraulic release lever"
+          },
+          {
+            "id": "B",
+            "text": "Load wheels"
+          },
+          {
+            "id": "C",
+            "text": "Battery"
+          },
+          {
+            "id": "D",
+            "text": "External compressed air"
+          }
+        ],
+        "answer": "C",
+        "teach": "The battery supplies power to the electric drive.",
+        "replay": {
+          "startSec": 27,
+          "endSec": 30,
+          "label": "0:27-0:30"
+        }
+      },
+      {
+        "id": "powered-pallet-jack-q5",
+        "n": 5,
+        "prompt": "Which type is shown in the video?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Elevating operator platform"
+          },
+          {
+            "id": "B",
+            "text": "Walk-behind truck"
+          },
+          {
+            "id": "C",
+            "text": "Seated rider truck"
+          },
+          {
+            "id": "D",
+            "text": "Manual push cart"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video identifies the model as a walk-behind design.",
+        "replay": {
+          "startSec": 29,
+          "endSec": 34,
+          "label": "0:29-0:34"
+        }
+      },
+      {
+        "id": "powered-pallet-jack-q6",
+        "n": 6,
+        "prompt": "Which controls should you learn with an instructor?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Travel, lift, brake and stop controls"
+          },
+          {
+            "id": "B",
+            "text": "Only the steering direction"
+          },
+          {
+            "id": "C",
+            "text": "Only the lift control"
+          },
+          {
+            "id": "D",
+            "text": "Only the battery indicator"
+          }
+        ],
+        "answer": "A",
+        "teach": "The travel, lift, brake, and stop controls for that model.",
+        "replay": {
+          "startSec": 45,
+          "endSec": 61,
+          "label": "0:45-1:01"
+        }
+      },
+      {
+        "id": "powered-pallet-jack-q7",
+        "n": 7,
+        "prompt": "Which pair belongs in the pre-use check?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Film roll and turntable"
+          },
+          {
+            "id": "B",
+            "text": "Select a wrapping program before checking the pallet"
+          },
+          {
+            "id": "C",
+            "text": "Scan window and label quality"
+          },
+          {
+            "id": "D",
+            "text": "Equipment condition and required model checks"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: Equipment condition and required model checks.",
+        "replay": {
+          "startSec": 35,
+          "endSec": 43,
+          "label": "0:35-0:43"
+        }
+      },
+      {
+        "id": "powered-pallet-jack-q8",
+        "n": 8,
+        "prompt": "Where should the load stay during travel?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "At the operator\u2019s head height"
+          },
+          {
+            "id": "B",
+            "text": "At the highest lift position"
+          },
+          {
+            "id": "C",
+            "text": "Near floor level"
+          },
+          {
+            "id": "D",
+            "text": "At the level of the tiller handle"
+          }
+        ],
+        "answer": "C",
+        "teach": "The movement shown keeps the pallet near floor level.",
+        "replay": {
+          "startSec": 81,
+          "endSec": 89,
+          "label": "1:21-1:29"
+        }
+      },
+      {
+        "id": "powered-pallet-jack-q9",
+        "n": 9,
+        "prompt": "What space must the operator allow along the route?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only enough room to turn the tiller"
+          },
+          {
+            "id": "B",
+            "text": "Travel, stopping and escape space"
+          },
+          {
+            "id": "C",
+            "text": "Only enough space for the pallet width"
+          },
+          {
+            "id": "D",
+            "text": "Only enough room for the fork tips"
+          }
+        ],
+        "answer": "B",
+        "teach": "Allow stopping and escape space, protect your feet and avoid trapping points.",
+        "replay": {
+          "startSec": 45,
+          "endSec": 53,
+          "label": "0:45-0:53"
+        }
+      },
+      {
+        "id": "powered-pallet-jack-q10",
+        "n": 10,
+        "prompt": "Which load is suitable for the move?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "An unstable load within capacity if moved slowly"
+          },
+          {
+            "id": "B",
+            "text": "A stable load above capacity if the trip is short"
+          },
+          {
+            "id": "C",
+            "text": "Any load that fits between the forks, regardless of capacity"
+          },
+          {
+            "id": "D",
+            "text": "A stable load within capacity and suitable for the route"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: A stable load within capacity and suitable for the route.",
+        "replay": {
+          "startSec": 45,
+          "endSec": 53,
+          "label": "0:45-0:53"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "pallet-stacker",
+    "title": "Pallet Stacker",
+    "sourceVideo": "05_Pallet_stacker.mp4",
+    "questions": [
+      {
+        "id": "pallet-stacker-q1",
+        "n": 1,
+        "prompt": "Why should you learn the specific pallet-stacker model?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Every stacker has the same controls and pallet requirements"
+          },
+          {
+            "id": "B",
+            "text": "Only the paint colour changes between models"
+          },
+          {
+            "id": "C",
+            "text": "Controls and compatible pallet types vary by model"
+          },
+          {
+            "id": "D",
+            "text": "All pallet types fit every stacker"
+          }
+        ],
+        "answer": "C",
+        "teach": "The control arrangement and compatible pallet types depend on the stacker model.",
+        "replay": {
+          "startSec": 26,
+          "endSec": 34,
+          "label": "0:26-0:34"
+        }
+      },
+      {
+        "id": "pallet-stacker-q2",
+        "n": 2,
+        "prompt": "What is its main job?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Apply stretch film around a pallet"
+          },
+          {
+            "id": "B",
+            "text": "Lift pallets into storage positions"
+          },
+          {
+            "id": "C",
+            "text": "Move goods only on a flat wheeled deck"
+          },
+          {
+            "id": "D",
+            "text": "Lift an operator to collect individual items"
+          }
+        ],
+        "answer": "B",
+        "teach": "It lifts pallets into storage positions.",
+        "replay": {
+          "startSec": 10,
+          "endSec": 13,
+          "label": "0:10-0:13"
+        }
+      },
+      {
+        "id": "pallet-stacker-q3",
+        "n": 3,
+        "prompt": "Which parts support the pallet?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Support wheels"
+          },
+          {
+            "id": "B",
+            "text": "Mast rails"
+          },
+          {
+            "id": "C",
+            "text": "Forks"
+          },
+          {
+            "id": "D",
+            "text": "Control handle"
+          }
+        ],
+        "answer": "C",
+        "teach": "The forks support the pallet while the mast raises it.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 23,
+          "label": "0:18-0:23"
+        }
+      },
+      {
+        "id": "pallet-stacker-q4",
+        "n": 4,
+        "prompt": "Which upright part raises the load?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Mast"
+          },
+          {
+            "id": "B",
+            "text": "Control tiller"
+          },
+          {
+            "id": "C",
+            "text": "Steering handle"
+          },
+          {
+            "id": "D",
+            "text": "Chassis"
+          }
+        ],
+        "answer": "A",
+        "teach": "The mast raises the pallet load toward the storage position.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 23,
+          "label": "0:18-0:23"
+        }
+      },
+      {
+        "id": "pallet-stacker-q5",
+        "n": 5,
+        "prompt": "Which part supports the mast?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Chassis"
+          },
+          {
+            "id": "B",
+            "text": "Fork carriage"
+          },
+          {
+            "id": "C",
+            "text": "Fork tips"
+          },
+          {
+            "id": "D",
+            "text": "Control panel"
+          }
+        ],
+        "answer": "A",
+        "teach": "The chassis supports the mast.",
+        "replay": {
+          "startSec": 26,
+          "endSec": 30,
+          "label": "0:26-0:30"
+        }
+      },
+      {
+        "id": "pallet-stacker-q6",
+        "n": 6,
+        "prompt": "Why check the capacity plate before a lift?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "To choose the stretch-film thickness"
+          },
+          {
+            "id": "B",
+            "text": "To identify the pallet destination code"
+          },
+          {
+            "id": "C",
+            "text": "To find the parcel\u2019s barcode number"
+          },
+          {
+            "id": "D",
+            "text": "To confirm capacity for the load and lift height"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: To confirm capacity for the load and lift height.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 26,
+          "label": "0:18-0:26"
+        }
+      },
+      {
+        "id": "pallet-stacker-q7",
+        "n": 7,
+        "prompt": "What must be true of the pallet type?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "It has the same color as the stacker"
+          },
+          {
+            "id": "B",
+            "text": "It is compatible with the stacker model"
+          },
+          {
+            "id": "C",
+            "text": "It is suitable whenever the load looks light"
+          },
+          {
+            "id": "D",
+            "text": "It is larger than every pallet already stored"
+          }
+        ],
+        "answer": "B",
+        "teach": "It must be compatible with that stacker model.",
+        "replay": {
+          "startSec": 28,
+          "endSec": 34,
+          "label": "0:28-0:34"
+        }
+      },
+      {
+        "id": "pallet-stacker-q8",
+        "n": 8,
+        "prompt": "Which controls should you learn before use?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only lift and lower from any convenient position"
+          },
+          {
+            "id": "B",
+            "text": "Only steering and horn from behind the storage rack"
+          },
+          {
+            "id": "C",
+            "text": "Only travel and horn from beside the raised load"
+          },
+          {
+            "id": "D",
+            "text": "Lift, lower, travel and stop at the designated position"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: Lift, lower, travel and stop at the designated position.",
+        "replay": {
+          "startSec": 53,
+          "endSec": 61,
+          "label": "0:53-1:01"
+        }
+      },
+      {
+        "id": "pallet-stacker-q9",
+        "n": 9,
+        "prompt": "Where should people stay during lifting?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Between the load and the rack"
+          },
+          {
+            "id": "B",
+            "text": "Clear of the mast and raised load"
+          },
+          {
+            "id": "C",
+            "text": "Under the forks to check alignment"
+          },
+          {
+            "id": "D",
+            "text": "Beside the raised pallet to steady its corners"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Clear of the mast and raised load.",
+        "replay": {
+          "startSec": 47,
+          "endSec": 51,
+          "label": "0:47-0:51"
+        }
+      },
+      {
+        "id": "pallet-stacker-q10",
+        "n": 10,
+        "prompt": "What should you check at the storage position?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Rack condition, overhead clearance, lift height and space"
+          },
+          {
+            "id": "B",
+            "text": "Film overlap, turntable speed and film tension"
+          },
+          {
+            "id": "C",
+            "text": "Only the colour and number of shelf labels"
+          },
+          {
+            "id": "D",
+            "text": "Display brightness, barcode length and scan sound"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Rack condition, overhead clearance, lift height and space.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 51,
+          "label": "0:44-0:51"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "order-picker",
+    "title": "Order Picker",
+    "sourceVideo": "06_Order_picker.mp4",
+    "questions": [
+      {
+        "id": "order-picker-q1",
+        "n": 1,
+        "prompt": "Where does the operator platform rise during picking?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Below the warehouse floor"
+          },
+          {
+            "id": "B",
+            "text": "Beside the warehouse rack"
+          },
+          {
+            "id": "C",
+            "text": "Inside the trailer cab"
+          },
+          {
+            "id": "D",
+            "text": "Across the dock leveller"
+          }
+        ],
+        "answer": "B",
+        "teach": "The operator platform moves up and down beside the rack to provide access to stored items.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 26,
+          "label": "0:18-0:26"
+        }
+      },
+      {
+        "id": "order-picker-q2",
+        "n": 2,
+        "prompt": "What does it help the operator collect?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Dirty water from the warehouse floor"
+          },
+          {
+            "id": "B",
+            "text": "Entire trailers from a loading dock"
+          },
+          {
+            "id": "C",
+            "text": "Individual items from warehouse racks"
+          },
+          {
+            "id": "D",
+            "text": "Weight readings from parcel labels"
+          }
+        ],
+        "answer": "C",
+        "teach": "The raised platform gives the operator access to individual stored items.",
+        "replay": {
+          "startSec": 10,
+          "endSec": 13,
+          "label": "0:10-0:13"
+        }
+      },
+      {
+        "id": "order-picker-q3",
+        "n": 3,
+        "prompt": "Which part carries the operator up and down?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Rear counterweight"
+          },
+          {
+            "id": "B",
+            "text": "Fork carriage"
+          },
+          {
+            "id": "C",
+            "text": "Load wheels"
+          },
+          {
+            "id": "D",
+            "text": "Operator platform"
+          }
+        ],
+        "answer": "D",
+        "teach": "The operator platform carries the operator beside the rack.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 26,
+          "label": "0:18-0:26"
+        }
+      },
+      {
+        "id": "order-picker-q4",
+        "n": 4,
+        "prompt": "Which part raises the platform?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Platform gate"
+          },
+          {
+            "id": "B",
+            "text": "Steering wheel"
+          },
+          {
+            "id": "C",
+            "text": "Mast"
+          },
+          {
+            "id": "D",
+            "text": "Platform floor"
+          }
+        ],
+        "answer": "C",
+        "teach": "The mast raises the operator platform.",
+        "replay": {
+          "startSec": 26,
+          "endSec": 29,
+          "label": "0:26-0:29"
+        }
+      },
+      {
+        "id": "order-picker-q5",
+        "n": 5,
+        "prompt": "Which two forms of protection are mentioned?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Film guard and turntable cover"
+          },
+          {
+            "id": "B",
+            "text": "Scan window and trigger guard"
+          },
+          {
+            "id": "C",
+            "text": "Platform gates and specified fall protection"
+          },
+          {
+            "id": "D",
+            "text": "Steering wheel and battery cover"
+          }
+        ],
+        "answer": "C",
+        "teach": "The platform gates and the specified fall protection.",
+        "replay": {
+          "startSec": 28,
+          "endSec": 34,
+          "label": "0:28-0:34"
+        }
+      },
+      {
+        "id": "order-picker-q6",
+        "n": 6,
+        "prompt": "What should happen to the gates during use?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Open them whenever the platform is raised"
+          },
+          {
+            "id": "B",
+            "text": "Keep them closed as the machine instructions require"
+          },
+          {
+            "id": "C",
+            "text": "Leave them open to make picking quicker"
+          },
+          {
+            "id": "D",
+            "text": "Close them only when the platform is at floor level"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Keep them closed as the machine instructions require.",
+        "replay": {
+          "startSec": 48,
+          "endSec": 52,
+          "label": "0:48-0:52"
+        }
+      },
+      {
+        "id": "order-picker-q7",
+        "n": 7,
+        "prompt": "How should the required fall protection be used?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only after reaching the top shelf"
+          },
+          {
+            "id": "B",
+            "text": "Only when the operator personally feels it is needed"
+          },
+          {
+            "id": "C",
+            "text": "According to instructions for any similar truck"
+          },
+          {
+            "id": "D",
+            "text": "As trained, following the manual and site rules"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: As trained, following the manual and site rules.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 61,
+          "label": "0:44-1:01"
+        }
+      },
+      {
+        "id": "order-picker-q8",
+        "n": 8,
+        "prompt": "Which pair belongs in the pre-use check?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Platform gates and required fall protection"
+          },
+          {
+            "id": "B",
+            "text": "Weighing platform and unit display"
+          },
+          {
+            "id": "C",
+            "text": "Turntable and film carriage"
+          },
+          {
+            "id": "D",
+            "text": "Film roll and wrapping program"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Platform gates and required fall protection.",
+        "replay": {
+          "startSec": 34,
+          "endSec": 43,
+          "label": "0:34-0:43"
+        }
+      },
+      {
+        "id": "order-picker-q9",
+        "n": 9,
+        "prompt": "What should be checked before raising the platform?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the height printed on the shelf label"
+          },
+          {
+            "id": "B",
+            "text": "Capacity, load arrangement, overhead clearance and lifting area"
+          },
+          {
+            "id": "C",
+            "text": "Only the number of cartons in the next aisle"
+          },
+          {
+            "id": "D",
+            "text": "Only the position of the power indicator"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Capacity, load arrangement, overhead clearance and lifting area.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 53,
+          "label": "0:44-0:53"
+        }
+      },
+      {
+        "id": "order-picker-q10",
+        "n": 10,
+        "prompt": "What rule applies if people enter the lifting area?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Keep people clear and follow the site communication procedure"
+          },
+          {
+            "id": "B",
+            "text": "Continue lifting and ask them to pass underneath"
+          },
+          {
+            "id": "C",
+            "text": "Ask them to steady the platform from below"
+          },
+          {
+            "id": "D",
+            "text": "Ask people to hold the goods while the platform rises"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Keep people clear and follow the site communication procedure.",
+        "replay": {
+          "startSec": 48,
+          "endSec": 61,
+          "label": "0:48-1:01"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "hand-truck",
+    "title": "Hand Truck",
+    "sourceVideo": "07_Hand_truck.mp4",
+    "questions": [
+      {
+        "id": "hand-truck-q1",
+        "n": 1,
+        "prompt": "Which handling method should you use with the hand truck?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Any method used with a powered pallet truck"
+          },
+          {
+            "id": "B",
+            "text": "A method that avoids checking the load"
+          },
+          {
+            "id": "C",
+            "text": "A method chosen only to increase speed"
+          },
+          {
+            "id": "D",
+            "text": "The method you were taught for the task"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video requires the handling method taught for the task and load restraint when needed.",
+        "replay": {
+          "startSec": 53,
+          "endSec": 60,
+          "label": "0:53-1:00"
+        }
+      },
+      {
+        "id": "hand-truck-q2",
+        "n": 2,
+        "prompt": "What is it used to move?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Operators to elevated shelves"
+          },
+          {
+            "id": "B",
+            "text": "Pallets into high racks"
+          },
+          {
+            "id": "C",
+            "text": "Cartons over short distances"
+          },
+          {
+            "id": "D",
+            "text": "Parcels along a fixed belt route"
+          }
+        ],
+        "answer": "C",
+        "teach": "The hand truck moves cartons over short distances.",
+        "replay": {
+          "startSec": 10,
+          "endSec": 13,
+          "label": "0:10-0:13"
+        }
+      },
+      {
+        "id": "hand-truck-q3",
+        "n": 3,
+        "prompt": "Which small plate supports the bottom of the load?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Wheel guard"
+          },
+          {
+            "id": "B",
+            "text": "Wheel axle"
+          },
+          {
+            "id": "C",
+            "text": "Toe plate"
+          },
+          {
+            "id": "D",
+            "text": "Back frame"
+          }
+        ],
+        "answer": "C",
+        "teach": "The toe plate supports the bottom of the load.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 21,
+          "label": "0:18-0:21"
+        }
+      },
+      {
+        "id": "hand-truck-q4",
+        "n": 4,
+        "prompt": "Which upright part supports the backs of the cartons?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Handles"
+          },
+          {
+            "id": "B",
+            "text": "Frame"
+          },
+          {
+            "id": "C",
+            "text": "Wheel axle"
+          },
+          {
+            "id": "D",
+            "text": "Toe plate"
+          }
+        ],
+        "answer": "B",
+        "teach": "The upright frame supports the backs of the cartons.",
+        "replay": {
+          "startSec": 21,
+          "endSec": 25,
+          "label": "0:21-0:25"
+        }
+      },
+      {
+        "id": "hand-truck-q5",
+        "n": 5,
+        "prompt": "Which parts carry the balanced load?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Two rollers under pallet forks"
+          },
+          {
+            "id": "B",
+            "text": "Four castors"
+          },
+          {
+            "id": "C",
+            "text": "Two forks"
+          },
+          {
+            "id": "D",
+            "text": "Two wheels"
+          }
+        ],
+        "answer": "D",
+        "teach": "The two wheels carry the balanced load during movement.",
+        "replay": {
+          "startSec": 26,
+          "endSec": 29,
+          "label": "0:26-0:29"
+        }
+      },
+      {
+        "id": "hand-truck-q6",
+        "n": 6,
+        "prompt": "Which parts help the operator control movement?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Wheel axle"
+          },
+          {
+            "id": "B",
+            "text": "Toe plate"
+          },
+          {
+            "id": "C",
+            "text": "Wheel rims"
+          },
+          {
+            "id": "D",
+            "text": "Handles"
+          }
+        ],
+        "answer": "D",
+        "teach": "The handles help the operator control the hand truck's movement.",
+        "replay": {
+          "startSec": 28,
+          "endSec": 33,
+          "label": "0:28-0:33"
+        }
+      },
+      {
+        "id": "hand-truck-q7",
+        "n": 7,
+        "prompt": "Which checks belong before use?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Battery, drive motor, charger and travel switch"
+          },
+          {
+            "id": "B",
+            "text": "Wheels, frame and load limit"
+          },
+          {
+            "id": "C",
+            "text": "Scan window, entry field, display and scan signal"
+          },
+          {
+            "id": "D",
+            "text": "Turntable, film carriage, guards and wrapping program"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video names wheels and frame, and shows weight within the load limit.",
+        "replay": {
+          "startSec": 34,
+          "endSec": 52,
+          "label": "0:34-0:52"
+        }
+      },
+      {
+        "id": "hand-truck-q8",
+        "n": 8,
+        "prompt": "How should cartons be arranged?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Stable against the frame and secured when required"
+          },
+          {
+            "id": "B",
+            "text": "Balanced on the handles above the operator\u2019s hands"
+          },
+          {
+            "id": "C",
+            "text": "Hanging beyond the toe plate with no support"
+          },
+          {
+            "id": "D",
+            "text": "Loose at the top to make them easy to remove"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Stable against the frame and secured when required.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 52,
+          "label": "0:44-0:52"
+        }
+      },
+      {
+        "id": "hand-truck-q9",
+        "n": 9,
+        "prompt": "What should be planned before moving?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Load, balance, floor, route and loading space"
+          },
+          {
+            "id": "B",
+            "text": "Wrapping program, film tension and cycle time"
+          },
+          {
+            "id": "C",
+            "text": "Only the height of the cartons"
+          },
+          {
+            "id": "D",
+            "text": "Unit selection, tare value and display brightness"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Load, balance, floor, route and loading space.",
+        "replay": {
+          "startSec": 92,
+          "endSec": 99,
+          "label": "1:32-1:39"
+        }
+      },
+      {
+        "id": "hand-truck-q10",
+        "n": 10,
+        "prompt": "You cannot control the load safely. What should you do?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Move faster to reduce the time spent holding it"
+          },
+          {
+            "id": "B",
+            "text": "Continue alone if the distance is short"
+          },
+          {
+            "id": "C",
+            "text": "Get help or use different equipment"
+          },
+          {
+            "id": "D",
+            "text": "Add another carton to improve the balance"
+          }
+        ],
+        "answer": "C",
+        "teach": "The video shows: Get help or use different equipment.",
+        "replay": {
+          "startSec": 94,
+          "endSec": 99,
+          "label": "1:34-1:39"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "platform-cart",
+    "title": "Platform Cart",
+    "sourceVideo": "08_Platform_cart.mp4",
+    "questions": [
+      {
+        "id": "platform-cart-q1",
+        "n": 1,
+        "prompt": "Where should your hands be kept while guiding the platform cart?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Between the deck and a doorway"
+          },
+          {
+            "id": "B",
+            "text": "Against a turning castor"
+          },
+          {
+            "id": "C",
+            "text": "Between the load and a fixed obstacle"
+          },
+          {
+            "id": "D",
+            "text": "Away from trapping points"
+          }
+        ],
+        "answer": "D",
+        "teach": "Use the taught handling method and avoid placing hands at trapping points.",
+        "replay": {
+          "startSec": 53,
+          "endSec": 61,
+          "label": "0:53-1:01"
+        }
+      },
+      {
+        "id": "platform-cart-q2",
+        "n": 2,
+        "prompt": "What is its main job?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Lift pallets into high racks"
+          },
+          {
+            "id": "B",
+            "text": "Read item and location labels"
+          },
+          {
+            "id": "C",
+            "text": "Rotate pallets while applying stretch film"
+          },
+          {
+            "id": "D",
+            "text": "Carry warehouse goods on a flat deck"
+          }
+        ],
+        "answer": "D",
+        "teach": "It carries warehouse goods on a flat deck.",
+        "replay": {
+          "startSec": 10,
+          "endSec": 13,
+          "label": "0:10-0:13"
+        }
+      },
+      {
+        "id": "platform-cart-q3",
+        "n": 3,
+        "prompt": "Which part supports the cartons?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Wheel axle"
+          },
+          {
+            "id": "B",
+            "text": "Platform or deck"
+          },
+          {
+            "id": "C",
+            "text": "Push handle"
+          },
+          {
+            "id": "D",
+            "text": "Push handle grips"
+          }
+        ],
+        "answer": "B",
+        "teach": "The platform or deck supports the cartons.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 25,
+          "label": "0:18-0:25"
+        }
+      },
+      {
+        "id": "platform-cart-q4",
+        "n": 4,
+        "prompt": "How many wheels support the cart shown?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Four"
+          },
+          {
+            "id": "B",
+            "text": "Six"
+          },
+          {
+            "id": "C",
+            "text": "Eight"
+          },
+          {
+            "id": "D",
+            "text": "Two"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video identifies four wheels supporting the platform.",
+        "replay": {
+          "startSec": 26,
+          "endSec": 29,
+          "label": "0:26-0:29"
+        }
+      },
+      {
+        "id": "platform-cart-q5",
+        "n": 5,
+        "prompt": "Which part is used to guide the cart?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Push handle"
+          },
+          {
+            "id": "B",
+            "text": "Front castor"
+          },
+          {
+            "id": "C",
+            "text": "Deck edge"
+          },
+          {
+            "id": "D",
+            "text": "Rear axle"
+          }
+        ],
+        "answer": "A",
+        "teach": "The push handle helps the operator guide the cart.",
+        "replay": {
+          "startSec": 28,
+          "endSec": 33,
+          "label": "0:28-0:33"
+        }
+      },
+      {
+        "id": "platform-cart-q6",
+        "n": 6,
+        "prompt": "Which pair belongs in the pre-use check?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Battery and lift motor"
+          },
+          {
+            "id": "B",
+            "text": "Film roll and wrapping program"
+          },
+          {
+            "id": "C",
+            "text": "Wheels or castors and load limit"
+          },
+          {
+            "id": "D",
+            "text": "Scan window and trigger"
+          }
+        ],
+        "answer": "C",
+        "teach": "wheels or castors, deck, handle, load limit, or brakes if fitted.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 50,
+          "label": "0:44-0:50"
+        }
+      },
+      {
+        "id": "platform-cart-q7",
+        "n": 7,
+        "prompt": "Where should the load sit?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Stacked mainly on the push handle"
+          },
+          {
+            "id": "B",
+            "text": "Inside the deck and arranged to remain stable"
+          },
+          {
+            "id": "C",
+            "text": "Over the deck edges to fit more cartons"
+          },
+          {
+            "id": "D",
+            "text": "Against one side with the opposite side unsupported"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Inside the deck and arranged to remain stable.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 25,
+          "label": "0:18-0:25"
+        }
+      },
+      {
+        "id": "platform-cart-q8",
+        "n": 8,
+        "prompt": "How high should the load be in relation to your view?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Low enough to see the route"
+          },
+          {
+            "id": "B",
+            "text": "Always higher than the operator\u2019s head"
+          },
+          {
+            "id": "C",
+            "text": "High enough to block the route from view"
+          },
+          {
+            "id": "D",
+            "text": "At a height that makes steering difficult"
+          }
+        ],
+        "answer": "A",
+        "teach": "Low enough for the operator to see the route.",
+        "replay": {
+          "startSec": 46,
+          "endSec": 51,
+          "label": "0:46-0:51"
+        }
+      },
+      {
+        "id": "platform-cart-q9",
+        "n": 9,
+        "prompt": "What route features should be planned for?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the number of nearby storage racks"
+          },
+          {
+            "id": "B",
+            "text": "Only the total number of cartons on the deck"
+          },
+          {
+            "id": "C",
+            "text": "Only the color of doors along the route"
+          },
+          {
+            "id": "D",
+            "text": "Doors, corners, floor, stopping space and unloading area"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: Doors, corners, floor, stopping space and unloading area.",
+        "replay": {
+          "startSec": 92,
+          "endSec": 100,
+          "label": "1:32-1:40"
+        }
+      },
+      {
+        "id": "platform-cart-q10",
+        "n": 10,
+        "prompt": "The load blocks your view or extends outside the deck. What should you do?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Add more cartons to stop the existing ones moving"
+          },
+          {
+            "id": "B",
+            "text": "Keep the arrangement and travel faster"
+          },
+          {
+            "id": "C",
+            "text": "Rearrange it to stay stable, within the deck and allow a view"
+          },
+          {
+            "id": "D",
+            "text": "Keep moving and ask someone to walk ahead"
+          }
+        ],
+        "answer": "C",
+        "teach": "The video shows: Rearrange it to stay stable, within the deck and allow a view.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 51,
+          "label": "0:44-0:51"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "conveyor",
+    "title": "Conveyor",
+    "sourceVideo": "09_Conveyor.mp4",
+    "questions": [
+      {
+        "id": "conveyor-q1",
+        "n": 1,
+        "prompt": "What should be planned before goods enter the conveyor?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the number of people on the shift"
+          },
+          {
+            "id": "B",
+            "text": "Only the colour of the parcel labels"
+          },
+          {
+            "id": "C",
+            "text": "How to reach into a moving conveyor"
+          },
+          {
+            "id": "D",
+            "text": "How the goods enter and leave the conveyor"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video calls for planning how goods enter and leave the conveyor.",
+        "replay": {
+          "startSec": 92,
+          "endSec": 99,
+          "label": "1:32-1:39"
+        }
+      },
+      {
+        "id": "conveyor-q2",
+        "n": 2,
+        "prompt": "What is its main job?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Raise an operator to pick from storage racks"
+          },
+          {
+            "id": "B",
+            "text": "Weigh parcels before dispatch"
+          },
+          {
+            "id": "C",
+            "text": "Move suitable parcels along a fixed route"
+          },
+          {
+            "id": "D",
+            "text": "Wrap stretch film around pallets"
+          }
+        ],
+        "answer": "C",
+        "teach": "It moves suitable parcels along a fixed route to the next work area.",
+        "replay": {
+          "startSec": 9,
+          "endSec": 25,
+          "label": "0:09-0:25"
+        }
+      },
+      {
+        "id": "conveyor-q3",
+        "n": 3,
+        "prompt": "Which parts support and move the goods?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Platform and extending lip"
+          },
+          {
+            "id": "B",
+            "text": "Forks and mast"
+          },
+          {
+            "id": "C",
+            "text": "Turntable and film carriage"
+          },
+          {
+            "id": "D",
+            "text": "Rollers or a moving belt"
+          }
+        ],
+        "answer": "D",
+        "teach": "Rollers or a moving belt, depending on the conveyor design.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 25,
+          "label": "0:18-0:25"
+        }
+      },
+      {
+        "id": "conveyor-q4",
+        "n": 4,
+        "prompt": "Which parts help prevent contact with moving components?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Parcel labels"
+          },
+          {
+            "id": "B",
+            "text": "Guards"
+          },
+          {
+            "id": "C",
+            "text": "Control-panel labels"
+          },
+          {
+            "id": "D",
+            "text": "Support legs"
+          }
+        ],
+        "answer": "B",
+        "teach": "Guards help prevent contact with the conveyor's moving parts.",
+        "replay": {
+          "startSec": 26,
+          "endSec": 30,
+          "label": "0:26-0:30"
+        }
+      },
+      {
+        "id": "conveyor-q5",
+        "n": 5,
+        "prompt": "Which stop controls should you locate before work?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Emergency stops"
+          },
+          {
+            "id": "B",
+            "text": "Start buttons"
+          },
+          {
+            "id": "C",
+            "text": "Speed selectors"
+          },
+          {
+            "id": "D",
+            "text": "Wrapping-program controls"
+          }
+        ],
+        "answer": "A",
+        "teach": "The emergency stops. Learn their purpose and location.",
+        "replay": {
+          "startSec": 29,
+          "endSec": 34,
+          "label": "0:29-0:34"
+        }
+      },
+      {
+        "id": "conveyor-q6",
+        "n": 6,
+        "prompt": "Which pair belongs in the pre-use check?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Weighing platform and display unit"
+          },
+          {
+            "id": "B",
+            "text": "Guards in position and visible damage"
+          },
+          {
+            "id": "C",
+            "text": "Film tension and film overlap"
+          },
+          {
+            "id": "D",
+            "text": "Tare setting and weighing unit"
+          }
+        ],
+        "answer": "B",
+        "teach": "Inspect before use and keep guards in place.",
+        "replay": {
+          "startSec": 34,
+          "endSec": 47,
+          "label": "0:34-0:47"
+        }
+      },
+      {
+        "id": "conveyor-q7",
+        "n": 7,
+        "prompt": "Which parcel and receiving-area check is needed?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Loose parcels, close packing and an unchecked receiving area"
+          },
+          {
+            "id": "B",
+            "text": "Suitable stable parcels, correct spacing and a clear receiving area"
+          },
+          {
+            "id": "C",
+            "text": "Parcels above the belt capacity with no receiving plan"
+          },
+          {
+            "id": "D",
+            "text": "Any size of parcel, no spacing and a full receiving area"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Suitable stable parcels, correct spacing and a clear receiving area.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 53,
+          "label": "0:44-0:53"
+        }
+      },
+      {
+        "id": "conveyor-q8",
+        "n": 8,
+        "prompt": "What should be confirmed before starting or restarting?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Authorized start-up procedure followed and people clear"
+          },
+          {
+            "id": "B",
+            "text": "Only that the previous shift has ended"
+          },
+          {
+            "id": "C",
+            "text": "Only that the emergency stop has not been pressed"
+          },
+          {
+            "id": "D",
+            "text": "Only that the parcel labels face upward"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Authorized start-up procedure followed and people clear.",
+        "replay": {
+          "startSec": 53,
+          "endSec": 61,
+          "label": "0:53-1:01"
+        }
+      },
+      {
+        "id": "conveyor-q9",
+        "n": 9,
+        "prompt": "What must stay away from moving parts?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Hands, hair and clothing"
+          },
+          {
+            "id": "B",
+            "text": "Only the parcel labels"
+          },
+          {
+            "id": "C",
+            "text": "Only empty pallets"
+          },
+          {
+            "id": "D",
+            "text": "Only damaged cartons"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Hands, hair and clothing.",
+        "replay": {
+          "startSec": 46,
+          "endSec": 50,
+          "label": "0:46-0:50"
+        }
+      },
+      {
+        "id": "conveyor-q10",
+        "n": 10,
+        "prompt": "A parcel jams. What should you do?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Push the next parcel into it to free the jam"
+          },
+          {
+            "id": "B",
+            "text": "Reach between moving rollers to pull it free"
+          },
+          {
+            "id": "C",
+            "text": "Stop and report it; only authorized people may clear the jam"
+          },
+          {
+            "id": "D",
+            "text": "Restart repeatedly until the parcel moves"
+          }
+        ],
+        "answer": "C",
+        "teach": "The video shows: Stop and report it; only authorized people may clear the jam.",
+        "replay": {
+          "startSec": 48,
+          "endSec": 53,
+          "label": "0:48-0:53"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "pallet-stretch-wrapper",
+    "title": "Pallet Stretch Wrapper",
+    "sourceVideo": "10_Pallet_stretch_wrapper.mp4",
+    "questions": [
+      {
+        "id": "pallet-stretch-wrapper-q1",
+        "n": 1,
+        "prompt": "What should guide loading film onto the stretch wrapper?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The required machine procedure"
+          },
+          {
+            "id": "B",
+            "text": "The colour of the film roll"
+          },
+          {
+            "id": "C",
+            "text": "The fastest method available"
+          },
+          {
+            "id": "D",
+            "text": "Instructions for an unrelated machine"
+          }
+        ],
+        "answer": "A",
+        "teach": "Load film only by the required procedure for that machine.",
+        "replay": {
+          "startSec": 54,
+          "endSec": 62,
+          "label": "0:54-1:02"
+        }
+      },
+      {
+        "id": "pallet-stretch-wrapper-q2",
+        "n": 2,
+        "prompt": "What does it put around the pallet load?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Adhesive barcode labels"
+          },
+          {
+            "id": "B",
+            "text": "Metal shelving"
+          },
+          {
+            "id": "C",
+            "text": "Stretch film"
+          },
+          {
+            "id": "D",
+            "text": "Metal straps"
+          }
+        ],
+        "answer": "C",
+        "teach": "Stretch film, which helps hold the cartons together.",
+        "replay": {
+          "startSec": 11,
+          "endSec": 14,
+          "label": "0:11-0:14"
+        }
+      },
+      {
+        "id": "pallet-stretch-wrapper-q3",
+        "n": 3,
+        "prompt": "Which part supports and rotates the pallet on this design?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Film roll spindle"
+          },
+          {
+            "id": "B",
+            "text": "Vertical mast"
+          },
+          {
+            "id": "C",
+            "text": "Turntable"
+          },
+          {
+            "id": "D",
+            "text": "Film carriage"
+          }
+        ],
+        "answer": "C",
+        "teach": "On this design, the turntable supports and rotates the pallet.",
+        "replay": {
+          "startSec": 19,
+          "endSec": 26,
+          "label": "0:19-0:26"
+        }
+      },
+      {
+        "id": "pallet-stretch-wrapper-q4",
+        "n": 4,
+        "prompt": "Which part holds the film roll?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Turntable"
+          },
+          {
+            "id": "B",
+            "text": "Film carriage"
+          },
+          {
+            "id": "C",
+            "text": "Pallet deck"
+          },
+          {
+            "id": "D",
+            "text": "Control panel"
+          }
+        ],
+        "answer": "B",
+        "teach": "The film carriage holds the stretch-film roll.",
+        "replay": {
+          "startSec": 27,
+          "endSec": 31,
+          "label": "0:27-0:31"
+        }
+      },
+      {
+        "id": "pallet-stretch-wrapper-q5",
+        "n": 5,
+        "prompt": "What does the film carriage travel along?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The edge of the pallet deck"
+          },
+          {
+            "id": "B",
+            "text": "The edge of the turntable"
+          },
+          {
+            "id": "C",
+            "text": "The conveyor rollers"
+          },
+          {
+            "id": "D",
+            "text": "Its vertical mast"
+          }
+        ],
+        "answer": "D",
+        "teach": "The film carriage travels along its vertical mast.",
+        "replay": {
+          "startSec": 27,
+          "endSec": 31,
+          "label": "0:27-0:31"
+        }
+      },
+      {
+        "id": "pallet-stretch-wrapper-q6",
+        "n": 6,
+        "prompt": "Which other wrapper design is mentioned?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "A rotating-arm machine"
+          },
+          {
+            "id": "B",
+            "text": "A fork-lift-only machine"
+          },
+          {
+            "id": "C",
+            "text": "A platform cart with no film carriage"
+          },
+          {
+            "id": "D",
+            "text": "A weighing-platform machine"
+          }
+        ],
+        "answer": "A",
+        "teach": "A machine with a rotating arm instead of a rotating turntable.",
+        "replay": {
+          "startSec": 30,
+          "endSec": 34,
+          "label": "0:30-0:34"
+        }
+      },
+      {
+        "id": "pallet-stretch-wrapper-q7",
+        "n": 7,
+        "prompt": "Which pair belongs in the pre-use check?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Trailer floor and dock signals"
+          },
+          {
+            "id": "B",
+            "text": "Weighing platform and unit display"
+          },
+          {
+            "id": "C",
+            "text": "Scan window and entry field"
+          },
+          {
+            "id": "D",
+            "text": "Film carriage and safety devices"
+          }
+        ],
+        "answer": "D",
+        "teach": "The pre-use scene calls for the required equipment checklist and defect reporting.",
+        "replay": {
+          "startSec": 35,
+          "endSec": 43,
+          "label": "0:35-0:43"
+        }
+      },
+      {
+        "id": "pallet-stretch-wrapper-q8",
+        "n": 8,
+        "prompt": "What should be true of the pallet before wrapping?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Stable but overhanging the turntable without checking"
+          },
+          {
+            "id": "B",
+            "text": "Unstable, above capacity and placed near the edge"
+          },
+          {
+            "id": "C",
+            "text": "Stable, within capacity and positioned as instructed"
+          },
+          {
+            "id": "D",
+            "text": "Stable, above capacity and positioned by eye"
+          }
+        ],
+        "answer": "C",
+        "teach": "The video shows: Stable, within capacity and positioned as instructed.",
+        "replay": {
+          "startSec": 45,
+          "endSec": 53,
+          "label": "0:45-0:53"
+        }
+      },
+      {
+        "id": "pallet-stretch-wrapper-q9",
+        "n": 9,
+        "prompt": "Which controls should you learn before starting?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the display brightness control"
+          },
+          {
+            "id": "B",
+            "text": "Start, stop and wrapping-program controls"
+          },
+          {
+            "id": "C",
+            "text": "Only the film-roll height setting"
+          },
+          {
+            "id": "D",
+            "text": "Only the power-indicator light"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Start, stop and wrapping-program controls.",
+        "replay": {
+          "startSec": 54,
+          "endSec": 62,
+          "label": "0:54-1:02"
+        }
+      },
+      {
+        "id": "pallet-stretch-wrapper-q10",
+        "n": 10,
+        "prompt": "Which moving areas must people stay clear of?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the printed label on the cartons"
+          },
+          {
+            "id": "B",
+            "text": "Rotating load or turntable and moving film carriage"
+          },
+          {
+            "id": "C",
+            "text": "Only the stationary control-panel face"
+          },
+          {
+            "id": "D",
+            "text": "Only the edge of a stationary pallet label"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Rotating load or turntable and moving film carriage.",
+        "replay": {
+          "startSec": 92,
+          "endSec": 100,
+          "label": "1:32-1:40"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "dock-leveller",
+    "title": "Dock Leveller",
+    "sourceVideo": "11_Dock_leveller.mp4",
+    "questions": [
+      {
+        "id": "dock-leveller-q1",
+        "n": 1,
+        "prompt": "Who should help plan the dock crossing?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "A learner working alone"
+          },
+          {
+            "id": "B",
+            "text": "Anyone who can see the open trailer"
+          },
+          {
+            "id": "C",
+            "text": "A visitor who has just arrived"
+          },
+          {
+            "id": "D",
+            "text": "The dock team"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video says to plan the crossing with the dock team.",
+        "replay": {
+          "startSec": 92,
+          "endSec": 99,
+          "label": "1:32-1:39"
+        }
+      },
+      {
+        "id": "dock-leveller-q2",
+        "n": 2,
+        "prompt": "Which two surfaces does it connect?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Warehouse dock and trailer floor"
+          },
+          {
+            "id": "B",
+            "text": "The floor and an operator platform"
+          },
+          {
+            "id": "C",
+            "text": "The dock floor and the top of the trailer roof"
+          },
+          {
+            "id": "D",
+            "text": "Two shelves in a storage rack"
+          }
+        ],
+        "answer": "A",
+        "teach": "The leveller bridges the warehouse dock and trailer floor.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 25,
+          "label": "0:18-0:25"
+        }
+      },
+      {
+        "id": "dock-leveller-q3",
+        "n": 3,
+        "prompt": "Which main parts form the supported bridge?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Mast and fork carriage"
+          },
+          {
+            "id": "B",
+            "text": "Frame and toe plate"
+          },
+          {
+            "id": "C",
+            "text": "Rollers and moving belt"
+          },
+          {
+            "id": "D",
+            "text": "Platform and extending lip"
+          }
+        ],
+        "answer": "D",
+        "teach": "The platform and extending lip form the supported bridge.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 25,
+          "label": "0:18-0:25"
+        }
+      },
+      {
+        "id": "dock-leveller-q4",
+        "n": 4,
+        "prompt": "What must be correct about the lip before crossing?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "It hangs freely beyond the trailer floor"
+          },
+          {
+            "id": "B",
+            "text": "It touches only the edge of the trailer floor"
+          },
+          {
+            "id": "C",
+            "text": "It is raised clear of the trailer floor"
+          },
+          {
+            "id": "D",
+            "text": "It has the required support on the trailer"
+          }
+        ],
+        "answer": "D",
+        "teach": "It must have the correct support on the trailer, following the dock procedure.",
+        "replay": {
+          "startSec": 29,
+          "endSec": 33,
+          "label": "0:29-0:33"
+        }
+      },
+      {
+        "id": "dock-leveller-q5",
+        "n": 5,
+        "prompt": "What must be confirmed about the trailer?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Secured, with all dock signals ignored"
+          },
+          {
+            "id": "B",
+            "text": "It is free to move away during the crossing"
+          },
+          {
+            "id": "C",
+            "text": "Secured, with required restraint and signals confirmed"
+          },
+          {
+            "id": "D",
+            "text": "Unsecured, with the driver waiting nearby"
+          }
+        ],
+        "answer": "C",
+        "teach": "The video shows: Secured, with required restraint and signals confirmed.",
+        "replay": {
+          "startSec": 46,
+          "endSec": 53,
+          "label": "0:46-0:53"
+        }
+      },
+      {
+        "id": "dock-leveller-q6",
+        "n": 6,
+        "prompt": "Why should the leveller\u2019s capacity be checked?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "To suit only the number of cartons on the load"
+          },
+          {
+            "id": "B",
+            "text": "To suit only the weight of the handling truck"
+          },
+          {
+            "id": "C",
+            "text": "To suit both the load and handling equipment crossing"
+          },
+          {
+            "id": "D",
+            "text": "To suit only the weight of the empty pallet"
+          }
+        ],
+        "answer": "C",
+        "teach": "The video shows: To suit both the load and handling equipment crossing.",
+        "replay": {
+          "startSec": 26,
+          "endSec": 33,
+          "label": "0:26-0:33"
+        }
+      },
+      {
+        "id": "dock-leveller-q7",
+        "n": 7,
+        "prompt": "Which pair belongs in the condition checks?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Film-roll size and wrapping-program setting"
+          },
+          {
+            "id": "B",
+            "text": "Platform and lip condition, plus trailer-floor condition"
+          },
+          {
+            "id": "C",
+            "text": "Scan-window condition and label contrast"
+          },
+          {
+            "id": "D",
+            "text": "Turntable condition and stretch-film tension"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Platform and lip condition, plus trailer-floor condition.",
+        "replay": {
+          "startSec": 34,
+          "endSec": 53,
+          "label": "0:34-0:53"
+        }
+      },
+      {
+        "id": "dock-leveller-q8",
+        "n": 8,
+        "prompt": "What must be confirmed before anyone crosses?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Authorized crossing with restraint, signals, capacity and lip checked"
+          },
+          {
+            "id": "B",
+            "text": "Only that a pallet is waiting to cross"
+          },
+          {
+            "id": "C",
+            "text": "Only that the dock light is switched on"
+          },
+          {
+            "id": "D",
+            "text": "Only that the trailer doors are open"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Authorized crossing with restraint, signals, capacity and lip checked.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 61,
+          "label": "0:44-1:01"
+        }
+      },
+      {
+        "id": "dock-leveller-q9",
+        "n": 9,
+        "prompt": "Where should people stay clear?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the printed label on the control panel"
+          },
+          {
+            "id": "B",
+            "text": "Only the center of the trailer roof"
+          },
+          {
+            "id": "C",
+            "text": "Dock edge and equipment working area"
+          },
+          {
+            "id": "D",
+            "text": "Only the warehouse office entrance"
+          }
+        ],
+        "answer": "C",
+        "teach": "The dock edge and the equipment's working area.",
+        "replay": {
+          "startSec": 92,
+          "endSec": 100,
+          "label": "1:32-1:40"
+        }
+      },
+      {
+        "id": "dock-leveller-q10",
+        "n": 10,
+        "prompt": "Trailer security or lip support is unconfirmed. What should happen?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Ask someone to hold the lip while a truck crosses"
+          },
+          {
+            "id": "B",
+            "text": "Do not cross until checks are complete and crossing is authorized"
+          },
+          {
+            "id": "C",
+            "text": "Cross once slowly to test the bridge"
+          },
+          {
+            "id": "D",
+            "text": "Send an empty truck across before checking"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Do not cross until checks are complete and crossing is authorized.",
+        "replay": {
+          "startSec": 44,
+          "endSec": 61,
+          "label": "0:44-1:01"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "barcode-scanner",
+    "title": "Barcode Scanner",
+    "sourceVideo": "12_Barcode_scanner.mp4",
+    "questions": [
+      {
+        "id": "barcode-scanner-q1",
+        "n": 1,
+        "prompt": "Which label should you present to the scanner?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The first label found in the aisle"
+          },
+          {
+            "id": "B",
+            "text": "Any readable label on the workbench"
+          },
+          {
+            "id": "C",
+            "text": "A label from a similar item nearby"
+          },
+          {
+            "id": "D",
+            "text": "The intended item or location label"
+          }
+        ],
+        "answer": "D",
+        "teach": "Choose the intended item or location label before scanning it.",
+        "replay": {
+          "startSec": 19,
+          "endSec": 26,
+          "label": "0:19-0:26"
+        }
+      },
+      {
+        "id": "barcode-scanner-q2",
+        "n": 2,
+        "prompt": "What does it read?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "A barcode on an item or location label"
+          },
+          {
+            "id": "B",
+            "text": "The temperature of an item or storage location"
+          },
+          {
+            "id": "C",
+            "text": "The weight of a parcel on a platform"
+          },
+          {
+            "id": "D",
+            "text": "The height of a pallet in a rack"
+          }
+        ],
+        "answer": "A",
+        "teach": "It reads a barcode on an item or location label. The system records the related item or location.",
+        "replay": {
+          "startSec": 10,
+          "endSec": 14,
+          "label": "0:10-0:14"
+        }
+      },
+      {
+        "id": "barcode-scanner-q3",
+        "n": 3,
+        "prompt": "Which part reads the barcode?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Scan window"
+          },
+          {
+            "id": "B",
+            "text": "Handle grip"
+          },
+          {
+            "id": "C",
+            "text": "Battery cover"
+          },
+          {
+            "id": "D",
+            "text": "Trigger housing"
+          }
+        ],
+        "answer": "A",
+        "teach": "The scan window reads the correctly presented barcode.",
+        "replay": {
+          "startSec": 19,
+          "endSec": 26,
+          "label": "0:19-0:26"
+        }
+      },
+      {
+        "id": "barcode-scanner-q4",
+        "n": 4,
+        "prompt": "Which control starts the read?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Tare control"
+          },
+          {
+            "id": "B",
+            "text": "Lift control"
+          },
+          {
+            "id": "C",
+            "text": "Trigger or scan control"
+          },
+          {
+            "id": "D",
+            "text": "Power cable connector"
+          }
+        ],
+        "answer": "C",
+        "teach": "The trigger or scan control starts the barcode read.",
+        "replay": {
+          "startSec": 27,
+          "endSec": 30,
+          "label": "0:27-0:30"
+        }
+      },
+      {
+        "id": "barcode-scanner-q5",
+        "n": 5,
+        "prompt": "Where do you check the recorded item or location?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Parcel weighing platform"
+          },
+          {
+            "id": "B",
+            "text": "Connected screen or display"
+          },
+          {
+            "id": "C",
+            "text": "Barcode label colour"
+          },
+          {
+            "id": "D",
+            "text": "Scanner handle grip"
+          }
+        ],
+        "answer": "B",
+        "teach": "The connected screen shows the item or location recorded by the system.",
+        "replay": {
+          "startSec": 29,
+          "endSec": 35,
+          "label": "0:29-0:35"
+        }
+      },
+      {
+        "id": "barcode-scanner-q6",
+        "n": 6,
+        "prompt": "What should you prepare before scanning?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Required task, correct entry field and confirmation signal"
+          },
+          {
+            "id": "B",
+            "text": "Only the screen brightness and label color"
+          },
+          {
+            "id": "C",
+            "text": "Only the number of labels in the warehouse"
+          },
+          {
+            "id": "D",
+            "text": "Only the scanner brand and its serial number"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Required task, correct entry field and confirmation signal.",
+        "replay": {
+          "startSec": 54,
+          "endSec": 62,
+          "label": "0:54-1:02"
+        }
+      },
+      {
+        "id": "barcode-scanner-q7",
+        "n": 7,
+        "prompt": "How should you hold the scanner?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Tight grip, sharply bent wrist and label far away"
+          },
+          {
+            "id": "B",
+            "text": "Loose fingertip grip with the wrist twisted outward"
+          },
+          {
+            "id": "C",
+            "text": "Firm grip with the wrist bent and the label above shoulder height"
+          },
+          {
+            "id": "D",
+            "text": "Relaxed grip, straight wrist and label within easy reach"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: Relaxed grip, straight wrist and label within easy reach.",
+        "replay": {
+          "startSec": 63,
+          "endSec": 69,
+          "label": "1:03-1:09"
+        }
+      },
+      {
+        "id": "barcode-scanner-q8",
+        "n": 8,
+        "prompt": "If the scanner has a laser, what should you avoid looking into?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Printed barcode on the label"
+          },
+          {
+            "id": "B",
+            "text": "Laser aiming beam"
+          },
+          {
+            "id": "C",
+            "text": "Scanner handle grip"
+          },
+          {
+            "id": "D",
+            "text": "Item description on the screen"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Laser aiming beam.",
+        "replay": {
+          "startSec": 66,
+          "endSec": 70,
+          "label": "1:06-1:10"
+        }
+      },
+      {
+        "id": "barcode-scanner-q9",
+        "n": 9,
+        "prompt": "What should you confirm after scanning a label?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The parcel has moved to the next conveyor"
+          },
+          {
+            "id": "B",
+            "text": "Only that the confirmation sound is loud"
+          },
+          {
+            "id": "C",
+            "text": "The scanner is the same color as the label"
+          },
+          {
+            "id": "D",
+            "text": "The screen shows the intended item or location"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: The screen shows the intended item or location.",
+        "replay": {
+          "startSec": 45,
+          "endSec": 52,
+          "label": "0:45-0:52"
+        }
+      },
+      {
+        "id": "barcode-scanner-q10",
+        "n": 10,
+        "prompt": "The result is wrong or the label cannot be read. What should you do?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Enter a guessed item number and carry on"
+          },
+          {
+            "id": "B",
+            "text": "Accept the result and continue with the next item"
+          },
+          {
+            "id": "C",
+            "text": "Correct or report the issue before continuing"
+          },
+          {
+            "id": "D",
+            "text": "Use a barcode from a different item to complete the task"
+          }
+        ],
+        "answer": "C",
+        "teach": "The video shows: Correct or report the issue before continuing.",
+        "replay": {
+          "startSec": 95,
+          "endSec": 101,
+          "label": "1:35-1:41"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "parcel-scale",
+    "title": "Parcel Scale",
+    "sourceVideo": "13_Parcel_scale.mp4",
+    "questions": [
+      {
+        "id": "parcel-scale-q1",
+        "n": 1,
+        "prompt": "What should be true of the weighing platform?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Clean, stable and suitable for the parcel"
+          },
+          {
+            "id": "B",
+            "text": "Sloping, soft and larger than the room"
+          },
+          {
+            "id": "C",
+            "text": "Unstable but within easy reach"
+          },
+          {
+            "id": "D",
+            "text": "Supported partly by the operator's hand"
+          }
+        ],
+        "answer": "A",
+        "teach": "The platform must be clean, stable and suitable for the parcel's size and weight.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 26,
+          "label": "0:18-0:26"
+        }
+      },
+      {
+        "id": "parcel-scale-q2",
+        "n": 2,
+        "prompt": "What does it measure?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The height of a warehouse rack"
+          },
+          {
+            "id": "B",
+            "text": "The volume of air inside a carton"
+          },
+          {
+            "id": "C",
+            "text": "The number of items in a barcode"
+          },
+          {
+            "id": "D",
+            "text": "Parcel or package weight"
+          }
+        ],
+        "answer": "D",
+        "teach": "The scale measures the weight of a parcel or package.",
+        "replay": {
+          "startSec": 10,
+          "endSec": 13,
+          "label": "0:10-0:13"
+        }
+      },
+      {
+        "id": "parcel-scale-q3",
+        "n": 3,
+        "prompt": "Which part supports the parcel?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Display housing"
+          },
+          {
+            "id": "B",
+            "text": "Display stand"
+          },
+          {
+            "id": "C",
+            "text": "Weighing platform"
+          },
+          {
+            "id": "D",
+            "text": "Control buttons"
+          }
+        ],
+        "answer": "C",
+        "teach": "The weighing platform supports the parcel during weighing.",
+        "replay": {
+          "startSec": 18,
+          "endSec": 26,
+          "label": "0:18-0:26"
+        }
+      },
+      {
+        "id": "parcel-scale-q4",
+        "n": 4,
+        "prompt": "What does the display show?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the parcel destination"
+          },
+          {
+            "id": "B",
+            "text": "Only the barcode number"
+          },
+          {
+            "id": "C",
+            "text": "Measured weight and its unit"
+          },
+          {
+            "id": "D",
+            "text": "The number of cartons on the conveyor"
+          }
+        ],
+        "answer": "C",
+        "teach": "The display shows both the measured weight and the unit.",
+        "replay": {
+          "startSec": 26,
+          "endSec": 33,
+          "label": "0:26-0:33"
+        }
+      },
+      {
+        "id": "parcel-scale-q5",
+        "n": 5,
+        "prompt": "How should the scale be prepared before weighing?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Soft sloping surface, any unit and no zero check"
+          },
+          {
+            "id": "B",
+            "text": "Firm surface, any unit and an object left on the platform"
+          },
+          {
+            "id": "C",
+            "text": "A sloping surface with a unit chosen after weighing"
+          },
+          {
+            "id": "D",
+            "text": "Firm level surface, correct unit and empty scale at zero"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: Firm level surface, correct unit and empty scale at zero.",
+        "replay": {
+          "startSec": 53,
+          "endSec": 61,
+          "label": "0:53-1:01"
+        }
+      },
+      {
+        "id": "parcel-scale-q6",
+        "n": 6,
+        "prompt": "How should the parcel be placed?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Leaning against another object while being weighed"
+          },
+          {
+            "id": "B",
+            "text": "Securely, fully supported and within capacity"
+          },
+          {
+            "id": "C",
+            "text": "Held partly by hand while the scale reads"
+          },
+          {
+            "id": "D",
+            "text": "Partly hanging off and above capacity"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Securely, fully supported and within capacity.",
+        "replay": {
+          "startSec": 62,
+          "endSec": 72,
+          "label": "1:02-1:12"
+        }
+      },
+      {
+        "id": "parcel-scale-q7",
+        "n": 7,
+        "prompt": "When should you record the weight?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "When stable, with the correct unit"
+          },
+          {
+            "id": "B",
+            "text": "Before checking which weight unit is selected"
+          },
+          {
+            "id": "C",
+            "text": "While the parcel is still being placed"
+          },
+          {
+            "id": "D",
+            "text": "As soon as any number first appears"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: When stable, with the correct unit.",
+        "replay": {
+          "startSec": 71,
+          "endSec": 79,
+          "label": "1:11-1:19"
+        }
+      },
+      {
+        "id": "parcel-scale-q8",
+        "n": 8,
+        "prompt": "When should tare be used?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Before every reading regardless of the task"
+          },
+          {
+            "id": "B",
+            "text": "When the task requires it, following the workplace procedure"
+          },
+          {
+            "id": "C",
+            "text": "Only after recording a result in the wrong unit"
+          },
+          {
+            "id": "D",
+            "text": "To make an overweight parcel appear within capacity"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: When the task requires it, following the workplace procedure.",
+        "replay": {
+          "startSec": 71,
+          "endSec": 79,
+          "label": "1:11-1:19"
+        }
+      },
+      {
+        "id": "parcel-scale-q9",
+        "n": 9,
+        "prompt": "The parcel is too heavy to handle safely. What should you do?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Get help or suitable lifting equipment and respect scale capacity"
+          },
+          {
+            "id": "B",
+            "text": "Roll the parcel off the platform before it settles"
+          },
+          {
+            "id": "C",
+            "text": "Ask someone to hold half the parcel during the reading"
+          },
+          {
+            "id": "D",
+            "text": "Lift it alone quickly and place it above capacity"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Get help or suitable lifting equipment and respect scale capacity.",
+        "replay": {
+          "startSec": 62,
+          "endSec": 72,
+          "label": "1:02-1:12"
+        }
+      },
+      {
+        "id": "parcel-scale-q10",
+        "n": 10,
+        "prompt": "The reading changes or seems unexpected. What should you do?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Choose the lowest reading and record it immediately"
+          },
+          {
+            "id": "B",
+            "text": "Seek a stable result and follow the procedure before recording"
+          },
+          {
+            "id": "C",
+            "text": "Record the first number and ignore later changes"
+          },
+          {
+            "id": "D",
+            "text": "Record the highest number that appears"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video shows: Seek a stable result and follow the procedure before recording.",
+        "replay": {
+          "startSec": 91,
+          "endSec": 101,
+          "label": "1:31-1:41"
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": "floor-scrubber-dryer",
+    "title": "Floor Scrubber Dryer",
+    "sourceVideo": "14_Floor_scrubber_dryer.mp4",
+    "questions": [
+      {
+        "id": "floor-scrubber-dryer-q1",
+        "n": 1,
+        "prompt": "What helps determine the correct brush or pad and cleaning solution?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the colour of the machine"
+          },
+          {
+            "id": "B",
+            "text": "The number of cartons in the warehouse"
+          },
+          {
+            "id": "C",
+            "text": "The floor surface and machine instructions"
+          },
+          {
+            "id": "D",
+            "text": "Only the time remaining in the shift"
+          }
+        ],
+        "answer": "C",
+        "teach": "The correct brush or pad and approved cleaning solution depend on the surface.",
+        "replay": {
+          "startSec": 19,
+          "endSec": 27,
+          "label": "0:19-0:27"
+        }
+      },
+      {
+        "id": "floor-scrubber-dryer-q2",
+        "n": 2,
+        "prompt": "What are its two main jobs?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Scan labels and weigh parcels"
+          },
+          {
+            "id": "B",
+            "text": "Lift pallets and stack cartons"
+          },
+          {
+            "id": "C",
+            "text": "Scrub the floor and collect dirty water"
+          },
+          {
+            "id": "D",
+            "text": "Dry cartons and apply parcel labels"
+          }
+        ],
+        "answer": "C",
+        "teach": "It scrubs the floor and collects dirty water.",
+        "replay": {
+          "startSec": 11,
+          "endSec": 14,
+          "label": "0:11-0:14"
+        }
+      },
+      {
+        "id": "floor-scrubber-dryer-q3",
+        "n": 3,
+        "prompt": "Which part scrubs the floor surface?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Recovery tank"
+          },
+          {
+            "id": "B",
+            "text": "Brush or pad"
+          },
+          {
+            "id": "C",
+            "text": "Rear squeegee"
+          },
+          {
+            "id": "D",
+            "text": "Drive wheel"
+          }
+        ],
+        "answer": "B",
+        "teach": "The brush or pad works on the floor with the approved cleaning solution.",
+        "replay": {
+          "startSec": 19,
+          "endSec": 27,
+          "label": "0:19-0:27"
+        }
+      },
+      {
+        "id": "floor-scrubber-dryer-q4",
+        "n": 4,
+        "prompt": "Which rear part gathers the water?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Squeegee"
+          },
+          {
+            "id": "B",
+            "text": "Solution-tank cap"
+          },
+          {
+            "id": "C",
+            "text": "Brush motor"
+          },
+          {
+            "id": "D",
+            "text": "Front brush guard"
+          }
+        ],
+        "answer": "A",
+        "teach": "The rear squeegee gathers the water as the machine moves.",
+        "replay": {
+          "startSec": 27,
+          "endSec": 30,
+          "label": "0:27-0:30"
+        }
+      },
+      {
+        "id": "floor-scrubber-dryer-q5",
+        "n": 5,
+        "prompt": "What draws water into the recovery tank?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Solution-tank pump"
+          },
+          {
+            "id": "B",
+            "text": "Drive wheels"
+          },
+          {
+            "id": "C",
+            "text": "Brush guard"
+          },
+          {
+            "id": "D",
+            "text": "Vacuum system"
+          }
+        ],
+        "answer": "D",
+        "teach": "The vacuum draws the gathered water into the recovery tank.",
+        "replay": {
+          "startSec": 29,
+          "endSec": 34,
+          "label": "0:29-0:34"
+        }
+      },
+      {
+        "id": "floor-scrubber-dryer-q6",
+        "n": 6,
+        "prompt": "Which tank collects the dirty water?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Clean water supply tank"
+          },
+          {
+            "id": "B",
+            "text": "Recovery tank"
+          },
+          {
+            "id": "C",
+            "text": "Battery compartment"
+          },
+          {
+            "id": "D",
+            "text": "Clean-solution tank"
+          }
+        ],
+        "answer": "B",
+        "teach": "Dirty water collects in the recovery tank.",
+        "replay": {
+          "startSec": 29,
+          "endSec": 34,
+          "label": "0:29-0:34"
+        }
+      },
+      {
+        "id": "floor-scrubber-dryer-q7",
+        "n": 7,
+        "prompt": "Which pair belongs in the pre-use check?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Scan window and entry field"
+          },
+          {
+            "id": "B",
+            "text": "Brush or pad and squeegee"
+          },
+          {
+            "id": "C",
+            "text": "Forks and capacity plate"
+          },
+          {
+            "id": "D",
+            "text": "Barcode labels and scan window"
+          }
+        ],
+        "answer": "B",
+        "teach": "The video names the brush, squeegee and tanks in the check.",
+        "replay": {
+          "startSec": 35,
+          "endSec": 54,
+          "label": "0:35-0:54"
+        }
+      },
+      {
+        "id": "floor-scrubber-dryer-q8",
+        "n": 8,
+        "prompt": "What cleaning product should be used?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Any strong product mixed with other cleaners"
+          },
+          {
+            "id": "B",
+            "text": "Any household product regardless of machine instructions"
+          },
+          {
+            "id": "C",
+            "text": "An approved product suited to machine, floor and procedure"
+          },
+          {
+            "id": "D",
+            "text": "A product chosen only for its colour or smell"
+          }
+        ],
+        "answer": "C",
+        "teach": "The video shows: An approved product suited to machine, floor and procedure.",
+        "replay": {
+          "startSec": 45,
+          "endSec": 54,
+          "label": "0:45-0:54"
+        }
+      },
+      {
+        "id": "floor-scrubber-dryer-q9",
+        "n": 9,
+        "prompt": "What should be planned to protect people during cleaning?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only the colour of the machine\u2019s controls"
+          },
+          {
+            "id": "B",
+            "text": "Only the amount of dirt in the recovery tank"
+          },
+          {
+            "id": "C",
+            "text": "Only the time the operator wants to finish"
+          },
+          {
+            "id": "D",
+            "text": "Cleaning route and wet-floor access control"
+          }
+        ],
+        "answer": "D",
+        "teach": "The video shows: Cleaning route and wet-floor access control.",
+        "replay": {
+          "startSec": 92,
+          "endSec": 101,
+          "label": "1:32-1:41"
+        }
+      },
+      {
+        "id": "floor-scrubber-dryer-q10",
+        "n": 10,
+        "prompt": "What should happen after cleaning?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Empty, clean and park according to procedure"
+          },
+          {
+            "id": "B",
+            "text": "Leave the machine in the route until the next shift"
+          },
+          {
+            "id": "C",
+            "text": "Refill it and leave it unattended in the aisle"
+          },
+          {
+            "id": "D",
+            "text": "Park with dirty water and leave all parts unchecked"
+          }
+        ],
+        "answer": "A",
+        "teach": "The video shows: Empty, clean and park according to procedure.",
+        "replay": {
+          "startSec": 92,
+          "endSec": 101,
+          "label": "1:32-1:41"
+        }
+      }
+    ]
+  }
+]
