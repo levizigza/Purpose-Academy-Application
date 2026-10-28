@@ -2551,6 +2551,72 @@ table.data th {
   animation: none;
 }
 
+/*
+  Desktop night: same Tap affordance as phone — center + blink — without
+  turning the night splash into paper. Pathways stay above mid.
+*/
+.threshold:not(.is-embedded) .threshold-pathways {
+  bottom: auto;
+  top: 12%;
+}
+
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue {
+  left: 50%;
+  right: auto;
+  top: 52%;
+  bottom: auto;
+  width: auto;
+  max-width: none;
+  z-index: 12;
+  gap: 0.4rem;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 12px 20px rgba(40, 24, 4, 0.5));
+}
+
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue.is-visible {
+  animation: hammer-center-in 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
+}
+
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue:hover:not(:disabled) {
+  transform: translate(-50%, -52%) rotate(2deg);
+  filter: drop-shadow(0 18px 28px rgba(90, 55, 8, 0.58));
+}
+
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue:active:not(:disabled) {
+  transform: translate(-50%, -50%) rotate(0deg) scale(0.97);
+}
+
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue .threshold-hammer-icon {
+  width: clamp(4.2rem, 9vw, 6.2rem);
+  height: auto;
+}
+
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue .threshold-hammer-hint {
+  font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: rgba(255, 244, 210, 0.98);
+  text-shadow: 0 1px 4px rgba(4, 21, 38, 0.7);
+  opacity: 1;
+  animation: none;
+}
+
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue.is-visible:not(.is-smashing) .threshold-hammer-icon {
+  animation: hammer-tap-blink 1.55s ease-in-out 1.05s infinite;
+  transform-origin: 50% 40%;
+}
+
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue.is-visible:not(.is-smashing) .threshold-hammer-hint {
+  animation: hammer-tap-blink 1.55s ease-in-out 1.05s infinite;
+}
+
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue.is-smashing .threshold-hammer-icon,
+.threshold:not(.is-embedded) .threshold-hammer.is-tap-cue.is-smashing .threshold-hammer-hint {
+  animation: none !important;
+  opacity: 0;
+}
+
 .foley-toggle.is-compact {
   padding: 0.45rem;
   min-width: 2.4rem;
@@ -2970,13 +3036,17 @@ table.data th {
 
   .threshold.is-embedded .threshold-hammer,
   .threshold.is-embedded .threshold-hammer.is-visible,
-  .threshold.is-embedded .threshold-hammer.is-phone-tap {
+  .threshold.is-embedded .threshold-hammer.is-phone-tap,
+  .threshold:not(.is-embedded) .threshold-hammer.is-tap-cue,
+  .threshold:not(.is-embedded) .threshold-hammer.is-tap-cue.is-visible {
     opacity: 1;
     transform: translate(-50%, -50%) rotate(4deg);
   }
 
   .threshold.is-embedded .threshold-hammer.is-phone-tap .threshold-hammer-icon,
-  .threshold.is-embedded .threshold-hammer.is-phone-tap .threshold-hammer-hint {
+  .threshold.is-embedded .threshold-hammer.is-phone-tap .threshold-hammer-hint,
+  .threshold:not(.is-embedded) .threshold-hammer.is-tap-cue .threshold-hammer-icon,
+  .threshold:not(.is-embedded) .threshold-hammer.is-tap-cue .threshold-hammer-hint {
     animation: none !important;
     opacity: 1;
     transform: none;
@@ -15405,7 +15475,9 @@ html.pa-phone-shell .play-soft-miss {
 /*
   Critic overturn (user): phone hammer was a quiet corner CTA — next action
   was unclear. Center it, label Tap, soft blink. Pathways lift above mid so
-  the hammer owns the middle of the phone frame. Desktop night splash unchanged.
+  the hammer owns the middle of the phone frame. Desktop night now matches
+  that Tap cue (see .threshold:not(.is-embedded) .is-tap-cue) while keeping
+  amber-on-navy atmosphere.
 */
 .threshold.is-embedded .threshold-pathways {
   /* Below mid-frame hammer so the Tap CTA owns the middle */

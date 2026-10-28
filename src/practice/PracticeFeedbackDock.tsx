@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { learnerGet } from './learnerStore'
 import {
   getPracticeName,
   isPracticeMode,
@@ -22,7 +23,7 @@ function pageTitleFromPath(pathname: string) {
   if (pathname === '/') return 'Home'
   if (pathname === '/journey') {
     try {
-      const step = Number(sessionStorage.getItem('pa-student-journey-step-v1') || '0')
+      const step = Number(learnerGet('pa-student-journey-step-v1') || '0')
       if (step > 0) return `Practice · step ${step}`
     } catch {
       /* ignore */
@@ -35,7 +36,7 @@ function pageTitleFromPath(pathname: string) {
 
 function currentJourneyStep() {
   try {
-    const n = Number(sessionStorage.getItem('pa-student-journey-step-v1') || '0')
+    const n = Number(learnerGet('pa-student-journey-step-v1') || '0')
     return Number.isFinite(n) ? n : 0
   } catch {
     return 0

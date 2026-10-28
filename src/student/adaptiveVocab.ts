@@ -6,6 +6,7 @@
  */
 
 import type { PathwayId } from '../pathways/types'
+import { learnerGet, learnerSet } from '../practice/learnerStore'
 
 const KEY = 'pa-vocab-known-v1'
 /** Pathways where the learner has finished Workplace Words / Visual Vocab once. */
@@ -16,7 +17,7 @@ type ClearedMap = Record<string, true>
 
 function load(): KnownMap {
   try {
-    const raw = sessionStorage.getItem(KEY)
+    const raw = learnerGet(KEY)
     if (!raw) return {}
     return JSON.parse(raw) as KnownMap
   } catch {
@@ -26,7 +27,7 @@ function load(): KnownMap {
 
 function save(map: KnownMap) {
   try {
-    sessionStorage.setItem(KEY, JSON.stringify(map))
+    learnerSet(KEY, JSON.stringify(map))
     window.dispatchEvent(new CustomEvent('pa-vocab-known-changed'))
   } catch {
     /* ignore */
@@ -35,7 +36,7 @@ function save(map: KnownMap) {
 
 function loadCleared(): ClearedMap {
   try {
-    const raw = sessionStorage.getItem(CLEARED_KEY)
+    const raw = learnerGet(CLEARED_KEY)
     if (!raw) return {}
     return JSON.parse(raw) as ClearedMap
   } catch {
@@ -45,7 +46,7 @@ function loadCleared(): ClearedMap {
 
 function saveCleared(map: ClearedMap) {
   try {
-    sessionStorage.setItem(CLEARED_KEY, JSON.stringify(map))
+    learnerSet(CLEARED_KEY, JSON.stringify(map))
     window.dispatchEvent(new CustomEvent('pa-vocab-station-cleared-changed'))
   } catch {
     /* ignore */

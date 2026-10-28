@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { learnerGet, learnerSet } from '../practice/learnerStore'
 import {
   BASIC_COMPUTER_SKILLS_VIDEOS,
   COMPUTER_SKILL_FAMILIES,
@@ -16,7 +17,7 @@ const DONE_KEY = 'pa-basic-computer-skills-done-v1'
 
 function loadSet(key: string): Set<string> {
   try {
-    const raw = sessionStorage.getItem(key)
+    const raw = learnerGet(key)
     if (!raw) return new Set()
     const arr = JSON.parse(raw) as string[]
     return new Set(Array.isArray(arr) ? arr : [])
@@ -27,7 +28,7 @@ function loadSet(key: string): Set<string> {
 
 function saveSet(key: string, ids: Set<string>) {
   try {
-    sessionStorage.setItem(key, JSON.stringify([...ids]))
+    learnerSet(key, JSON.stringify([...ids]))
   } catch {
     /* ignore */
   }

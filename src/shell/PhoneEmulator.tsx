@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperti
 import { useNavigate } from 'react-router-dom'
 import { FoleyToggle } from '../components/CrewLoading'
 import { SplashPage } from '../auth/EntryPages'
-import { clearPracticeMode, restartPracticeFromTop } from '../practice/PracticeMode'
+import { restartPracticeFromTop } from '../practice/PracticeMode'
 import {
   getSavedPhoneDeviceId,
   PHONE_DEVICES,
@@ -83,7 +83,7 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
   }, [deviceId, phase])
 
   function exitToModes() {
-    clearPracticeMode()
+    /* Keep learner history — Desktop and Phone share one progress store. */
     clearShellMode()
     navigate('/', { replace: true })
   }

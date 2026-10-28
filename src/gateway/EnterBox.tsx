@@ -11,7 +11,7 @@ import {
   isPracticeMode,
   PRACTICE_REVIEWERS,
   PRACTICE_TRAY_HELP,
-  startPracticeMode,
+  resumeOrEnterPractice,
 } from '../practice/PracticeMode'
 import { getShellMode, setPhonePhase } from '../shell/shellMode'
 
@@ -245,7 +245,8 @@ export function EnterBox() {
   }
 
   function beginPractice(name: string) {
-    startPracticeMode(name)
+    /* Resume shared Desktop↔Phone history — Start over / Restart path still wipe. */
+    resumeOrEnterPractice(name)
     setPracticeGate(false)
     setOpenTray('Practice')
     void unlockFoley().then(() => {
