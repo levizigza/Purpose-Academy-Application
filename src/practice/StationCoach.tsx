@@ -163,47 +163,43 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
 
   if (!active || !step || typeof document === 'undefined') return null
 
+  /* Wait for the real control — e.g. VV type form mounts only after English plays. */
+  if (!rect) return null
+
   const pad = 8
-  const hole = rect
-    ? {
-        top: Math.max(0, rect.top - pad),
-        left: Math.max(0, rect.left - pad),
-        width: rect.width + pad * 2,
-        height: rect.height + pad * 2,
-      }
-    : null
+  const hole = {
+    top: Math.max(0, rect.top - pad),
+    left: Math.max(0, rect.left - pad),
+    width: rect.width + pad * 2,
+    height: rect.height + pad * 2,
+  }
 
   /* Prefer below the hole; flip above when clipped. Prefer right of tall holes so the prompt does not cover Type/Go. */
-  const bubbleStyle = hole
-    ? (() => {
-        const bubbleW = Math.min(280, window.innerWidth - 24)
-        const below = hole.top + hole.height + 12
-        const above = Math.max(12, hole.top - 92)
-        const roomBelow = below + 88 <= window.innerHeight
-        const top = roomBelow ? below : above
-        const preferRight = hole.height > 96 && hole.left + hole.width + 12 + bubbleW < window.innerWidth
-        const left = preferRight
-          ? hole.left + hole.width + 12
-          : Math.min(window.innerWidth - bubbleW - 12, Math.max(12, hole.left))
-        return { top, left }
-      })()
-    : { top: '30%', left: '50%', transform: 'translateX(-50%)' as const }
+  const bubbleW = Math.min(280, window.innerWidth - 24)
+  const below = hole.top + hole.height + 12
+  const above = Math.max(12, hole.top - 92)
+  const roomBelow = below + 88 <= window.innerHeight
+  const top = roomBelow ? below : above
+  const preferRight =
+    hole.height > 72 && hole.left + hole.width + 12 + bubbleW < window.innerWidth - 8
+  const left = preferRight
+    ? hole.left + hole.width + 12
+    : Math.min(window.innerWidth - bubbleW - 12, Math.max(12, hole.left))
+  const bubbleStyle = { top, left }
 
   return createPortal(
     <div className="station-coach" aria-live="polite">
       <div className="station-coach-dim" aria-hidden />
-      {hole ? (
-        <div
-          className="station-coach-hole"
-          style={{
-            top: hole.top,
-            left: hole.left,
-            width: hole.width,
-            height: hole.height,
-          }}
-          aria-hidden
-        />
-      ) : null}
+      <div
+        className="station-coach-hole"
+        style={{
+          top: hole.top,
+          left: hole.left,
+          width: hole.width,
+          height: hole.height,
+        }}
+        aria-hidden
+      />
       <div className="station-coach-bubble" style={bubbleStyle} role="status">
         <p className="station-coach-kicker">
           First example · {stepIdx + 1} of {steps.length}
