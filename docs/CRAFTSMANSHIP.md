@@ -432,6 +432,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-27 — First-computer nav cues + station explainer videos (L3 / L4 / L2)
+
+- **Layers:** L3 (where to go in 3s) + L4 (cues quiet after first use — not casino) + L2 (how-it-works before the drill).
+- **Customer ask:** Desktop (and phone) overwhelm first-time computer users; Continue should glow; arrows should point; every station needs a short human-voiced explainer before play.
+- **Nav cues:** `NavGlowButton` / `NavArrow` / `NavCueTarget` on Mode doors, Toolbox Practice tray, Hub **Continue to station**, station Continue. Amber pulse on night; navy/amber on paper. `prefers-reduced-motion` kills bob/glow.
+- **Explainers:** `StationExplainerGate` before each wired station; watch-to-unlock Continue. 12 videos in `public/explainers/` via Edge **JennyNeural** (friendly/considerate — not Piper Lessac). Editing: VO leads cut, slow Ken Burns only on photo beats, hard cuts on sentence ends.
+- **Critic:** Piper read as robotic on the grant cut — Edge neural is the free human path for now. Cues dismiss once followed so return visits stay calm.
+
 ### 2026-10-27 — Desktop Tap hammer + shared Desktop↔Phone progress (L3 / L6)
 
 - **Layers:** L3 (splash next-action) + L6 (one learner history across shells).

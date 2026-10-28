@@ -14,6 +14,7 @@ import {
   resumeOrEnterPractice,
 } from '../practice/PracticeMode'
 import { getShellMode, setPhonePhase } from '../shell/shellMode'
+import { markNavCueSeen, NAV_CUE, navCueActive } from '../practice/navCues'
 
 type ToolKind = 'screwdriver' | 'hammer' | 'tape' | 'level' | 'wrench' | 'latch'
 
@@ -298,11 +299,13 @@ export function EnterBox() {
               const partial =
                 !done && item.completeIds.some((id) => isSequenceComplete(id))
               const isOpen = openTray === item.label
+              const practiceCue =
+                item.practice && navCueActive(NAV_CUE.toolboxPractice) ? ' nav-glow-cta' : ''
               const className = `toolbox-slot toolbox-slot-${item.tone}${
                 done ? ' is-complete' : partial ? ' is-partial' : ''
               }${item.placeholder ? ' is-placeholder' : ''}${isOpen ? ' is-open' : ''}${
                 item.practice ? ' is-practice' : ''
-              }`
+              }${practiceCue}`
               const style = { animationDelay: `${0.14 + i * 0.07}s` }
               const help = item.placeholder
                 ? item.help
@@ -357,6 +360,7 @@ export function EnterBox() {
                   style={style}
                   onClick={() => {
                     if (item.practice) {
+                      markNavCueSeen(NAV_CUE.toolboxPractice)
                       void unlockFoley().then(() => playFoley('metal'))
                       setPracticeGate(true)
                       return
