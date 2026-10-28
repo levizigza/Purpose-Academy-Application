@@ -8,15 +8,22 @@
  *
  * Shell choice is presentation-only. Learner progress lives in learnerStore
  * (localStorage) and is shared across Desktop and Phone.
+ *
+ * Desktop phase mirrors Phone phase so the opening never plays before a
+ * ModeChooser Desktop press, and never gets skipped by a stale entered flag.
  */
 
 export type ShellMode = 'phone' | 'course'
 export type PhonePhase = 'home' | 'splash' | 'toolbox' | 'app'
+/** Desktop: opening = threshold splash after ModeChooser; ready = toolbox / course. */
+export type DesktopPhase = 'opening' | 'ready'
 
 const MODE_KEY = 'pa-shell-mode-v2'
 const PHASE_KEY = 'pa-phone-phase-v1'
+const DESKTOP_PHASE_KEY = 'pa-desktop-phase-v1'
 const EVENT = 'pa-shell-mode'
 const PHASE_EVENT = 'pa-phone-phase'
+const DESKTOP_PHASE_EVENT = 'pa-desktop-phase'
 
 function storeGet(key: string): string | null {
   try {
@@ -79,6 +86,7 @@ export function setShellMode(mode: ShellMode | null) {
     else {
       storeRemove(MODE_KEY)
       storeRemove(PHASE_KEY)
+      storeRemove(DESKTOP_PHASE_KEY)
     }
   } catch {
     /* ignore */
@@ -92,14 +100,16 @@ export function clearShellMode() {
 
 export function subscribeShellMode(cb: () => void) {
   const onStorage = (e: StorageEvent) => {
-    if (e.key === MODE_KEY || e.key === PHASE_KEY) cb()
+    if (e.key === MODE_KEY || e.key === PHASE_KEY || e.key === DESKTOP_PHASE_KEY) cb()
   }
   window.addEventListener(EVENT, cb)
   window.addEventListener(PHASE_EVENT, cb)
+  window.addEventListener(DESKTOP_PHASE_EVENT, cb)
   window.addEventListener('storage', onStorage)
   return () => {
     window.removeEventListener(EVENT, cb)
     window.removeEventListener(PHASE_EVENT, cb)
+    window.removeEventListener(DESKTOP_PHASE_EVENT, cb)
     window.removeEventListener('storage', onStorage)
   }
 }
@@ -131,6 +141,57 @@ export function subscribePhonePhase(cb: () => void) {
   window.addEventListener('storage', onStorage)
   return () => {
     window.removeEventListener(PHASE_EVENT, cb)
+    window.removeEventListener('storage', onStorage)
+  }
+}
+
+export function getDesktopPhase(): DesktopPhase | null {
+  try {
+    const v = storeGet(DESKTOP_PHASE_KEY)
+    if (v === 'opening' || v === 'ready') return v
+  } catch {
+    /* ignore */
+  }
+  return null
+}
+
+export function setDesktopPhase(phase: DesktopPhase | null) {
+  try {
+    if (phase) storeSet(DESKTOP_PHASE_KEY, phase)
+    else storeRemove(DESKTOP_PHASE_KEY)
+  } catch {
+    /* ignore */
+  }
+  window.dispatchEvent(new CustomEvent(DESKTOP_PHASE_EVENT, { detail: { phase } }))
+}
+
+/**
+ * Cold-load hygiene for Desktop:
+ * - course + opening → replay threshold (refresh mid-open)
+ * - course + ready → toolbox
+ * - course with no phase (legacy restore) → clear shell so ModeChooser is first
+ *   unless this session already crossed the threshold (then mark ready)
+ */
+export function reconcileDesktopShellOnBoot(hasCrossedThreshold: boolean) {
+  if (getShellMode() !== 'course') return
+  const phase = getDesktopPhase()
+  if (phase === 'opening' || phase === 'ready') return
+  if (hasCrossedThreshold) {
+    setDesktopPhase('ready')
+    return
+  }
+  /* Stale localStorage course with no Desktop press this session — back to doors. */
+  clearShellMode()
+}
+
+export function subscribeDesktopPhase(cb: () => void) {
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === DESKTOP_PHASE_KEY) cb()
+  }
+  window.addEventListener(DESKTOP_PHASE_EVENT, cb)
+  window.addEventListener('storage', onStorage)
+  return () => {
+    window.removeEventListener(DESKTOP_PHASE_EVENT, cb)
     window.removeEventListener('storage', onStorage)
   }
 }

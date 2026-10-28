@@ -32,7 +32,8 @@ async function prep(page, { step = 6, phone = false } = {}) {
     ({ step, phone, explainers }) => {
       localStorage.setItem('pa-shell-mode-v2', phone ? 'phone' : 'course')
       if (phone) localStorage.setItem('pa-phone-phase-v1', 'app')
-      localStorage.setItem('pa-crossed-threshold-v44', '1')
+      else localStorage.setItem('pa-desktop-phase-v1', 'ready')
+      sessionStorage.setItem('pa-crossed-threshold-v44', '1')
       localStorage.setItem('pa-practice-mode-v1', '1')
       localStorage.setItem('pa-practice-name-v1', 'CoachSmoke')
       localStorage.setItem('pa-practice-force-lesson-v1', '1')

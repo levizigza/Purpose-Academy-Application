@@ -27,6 +27,8 @@ async function seedPractice(
       sessionStorage.clear()
       localStorage.setItem('pa-shell-mode-v2', shell)
       if (shell === 'phone') localStorage.setItem('pa-phone-phase-v1', 'app')
+      if (shell === 'course') localStorage.setItem('pa-desktop-phase-v1', 'ready')
+      sessionStorage.setItem('pa-crossed-threshold-v44', '1')
       localStorage.setItem('pa-practice-mode-v1', '1')
       localStorage.setItem('pa-practice-name-v1', 'Smoke Tester')
       localStorage.setItem('pa-student-journey-step-v1', String(step))

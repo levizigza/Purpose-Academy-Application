@@ -432,6 +432,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-28 — Desktop opening only after ModeChooser (L3 / L6)
+
+- **Layers:** L3 (door → open beat unmistakable) + L6 (Desktop ↔ Phone shell continuity).
+- **Defect:** Restoring `pa-shell-mode-v2=course` skipped ModeChooser and could play the threshold open before a Desktop press; Exit→Modes→Desktop raced a stale `pa-crossed-threshold` React flag and dumped into a static toolbox without the open. Phone already gated open on app press (`pa-phone-phase`).
+- **Fix:** Desktop phase `pa-desktop-phase-v1` (`opening` | `ready`). ModeChooser Desktop door arms `opening` then shell; App shows SplashPage only for `opening`; Enter marks `ready`. Boot reconciles legacy course-without-phase → ModeChooser (or `ready` if this session already crossed). Exit-to-modes clears entered + shell.
+- **Critic:** Mirror Phone — never play Desktop open before the mode door; never skip the open after the door.
+- **Assumption to challenge next:** whether Desktop phase should stay in sessionStorage only so a new browser session always starts at ModeChooser even mid-`ready`.
+
 ### 2026-10-28 — Site-wide Desktop/Phone audit after pathways-bottom (L3 / L6)
 
 - **Layers:** L3 information display + L6 dual-shell continuity (Desktop night toolbox ↔ Phone paper stations).

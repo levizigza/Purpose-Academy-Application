@@ -163,7 +163,8 @@ export async function gotoStation(page, base, { step, pathway = 'construction' }
   await page.addInitScript(
     ({ step, pathway, explainers }) => {
       localStorage.setItem('pa-shell-mode-v2', 'course')
-      localStorage.setItem('pa-crossed-threshold-v44', '1')
+      localStorage.setItem('pa-desktop-phase-v1', 'ready')
+      sessionStorage.setItem('pa-crossed-threshold-v44', '1')
       localStorage.setItem('pa-practice-mode-v1', '1')
       localStorage.setItem('pa-practice-name-v1', 'DemoLearner')
       localStorage.setItem('pa-practice-force-lesson-v1', '1')

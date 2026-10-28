@@ -4,7 +4,14 @@ import { LoginPage, RegisterPage, ForgotPasswordPage } from './auth/AuthPages'
 import { RoleSelectionPage, SplashPage, WelcomePage, hasEnteredSite, markEnteredSite } from './auth/EntryPages'
 import { SessionProvider, useSession, homeForRole } from './auth/Session'
 import { ModeChooser } from './shell/ModeChooser'
-import { getShellMode, subscribeShellMode, type ShellMode } from './shell/shellMode'
+import {
+  getDesktopPhase,
+  getShellMode,
+  reconcileDesktopShellOnBoot,
+  subscribeShellMode,
+  type DesktopPhase,
+  type ShellMode,
+} from './shell/shellMode'
 import { AdminCoursesPage, AdminDashboardPage, AdminPrivacyPage, AdminReportsPage, AdminSchedulesPage, AdminStudentsPage } from './admin/AdminPages'
 import { AdminPracticeFeedbackPage } from './admin/AdminPracticeFeedbackPage'
 import {
@@ -72,14 +79,25 @@ const SPLASH_BYPASS = new Set([
 ])
 
 function useLiveShellMode(): ShellMode | null {
-  const [mode, setMode] = useState<ShellMode | null>(() => getShellMode())
+  const [mode, setMode] = useState<ShellMode | null>(() => {
+    /* Sync before first paint — avoid toolbox flash from legacy course restore. */
+    reconcileDesktopShellOnBoot(hasEnteredSite())
+    return getShellMode()
+  })
   useEffect(() => subscribeShellMode(() => setMode(getShellMode())), [])
   return mode
+}
+
+function useLiveDesktopPhase(): DesktopPhase | null {
+  const [phase, setPhase] = useState<DesktopPhase | null>(() => getDesktopPhase())
+  useEffect(() => subscribeShellMode(() => setPhase(getDesktopPhase())), [])
+  return phase
 }
 
 function AppRoutes() {
   const location = useLocation()
   const shellMode = useLiveShellMode()
+  const desktopPhase = useLiveDesktopPhase()
   const [entered, setEntered] = useState(() => hasEnteredSite())
   const bypassSplash =
     SPLASH_BYPASS.has(location.pathname) || location.pathname.startsWith('/enter/')
@@ -91,10 +109,10 @@ function AppRoutes() {
     }
   }, [bypassSplash])
 
-  /* Re-read splash flag when Desktop/Phone mode changes (ModeChooser clears it). */
+  /* Re-read splash flag when Desktop/Phone mode or desktop phase changes. */
   useEffect(() => {
     setEntered(hasEnteredSite())
-  }, [shellMode])
+  }, [shellMode, desktopPhase])
 
   /* Auth / legal paths skip the mode chooser and splash. */
   const isAuthPath =
@@ -105,17 +123,36 @@ function AppRoutes() {
     location.pathname.startsWith('/forgot-password') ||
     location.pathname.startsWith('/app')
 
-  /* First screen: Desktop | Phone split (unless already mid-session or on auth). */
-  if (!shellMode && !isAuthPath && location.pathname !== '/privacy' && location.pathname !== '/contact') {
+  /*
+   * First screen: Desktop | Phone split.
+   * Also treat legacy course-without-phase (no Desktop press) as chooser.
+   */
+  const showModeChooser =
+    !shellMode ||
+    (shellMode === 'course' && desktopPhase == null && !entered && !bypassSplash)
+
+  if (
+    showModeChooser &&
+    !isAuthPath &&
+    location.pathname !== '/privacy' &&
+    location.pathname !== '/contact'
+  ) {
     return <ModeChooser />
   }
 
   /*
-   * Desktop mode: opening animation, then toolbox (not the marketing site).
+   * Desktop mode: opening only when ModeChooser armed phase `opening`
+   * (not bare !entered — that raced Exit→Desktop into the toolbox).
    * Phone mode: splash runs inside the device after the PA icon — skip here.
    */
-  if (shellMode === 'course' && !entered && !bypassSplash) {
-    return <SplashPage onEnter={() => setEntered(true)} />
+  if (shellMode === 'course' && desktopPhase === 'opening' && !bypassSplash) {
+    return (
+      <SplashPage
+        onEnter={() => {
+          setEntered(true)
+        }}
+      />
+    )
   }
 
   return (

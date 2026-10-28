@@ -5,7 +5,7 @@ import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
-import { clearShellMode } from '../shell/shellMode'
+import { clearShellMode, setDesktopPhase } from '../shell/shellMode'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
 const ENTERED_KEY = 'pa-crossed-threshold-v44'
@@ -272,9 +272,11 @@ export function SplashPage({
 
   const finishEnter = useCallback(() => {
     markEnteredSite()
+    /* Desktop shell only — phone embedded splash advances via PhoneEmulator phase. */
+    if (!embedded) setDesktopPhase('ready')
     if (onEnter) onEnter()
     else navigate('/', { replace: true })
-  }, [navigate, onEnter])
+  }, [navigate, onEnter, embedded])
 
   const enter = useCallback(() => {
     if (EXIT_STAGES.has(stage)) return
