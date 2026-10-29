@@ -7631,7 +7631,8 @@ table.data th {
 
 .vocab-sheet-body-focus .vocab-sheet-langs {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* Six chips (EN + five mother tongues): 3×2 on desktop night; wraps on phone paper. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.45rem;
   list-style: none;
   margin: 0;
@@ -13478,8 +13479,14 @@ video {
 }
 
 .is-phone-app .vocab-sheet-body-focus .vocab-sheet-langs {
-  grid-template-columns: 1fr !important;
+  /* Six hear chips (EN + five): 2×3 on phone paper — scannable, not a tall stack. */
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 0.5rem !important;
+}
+
+.is-phone-app .vocab-sheet-body-focus .vocab-sheet-langs.is-collapsed,
+.is-phone-app .vocab-sheet-body-focus.is-production .vocab-sheet-langs {
+  grid-template-columns: 1fr !important;
 }
 
 .is-phone-app .vocab-sheet-body-focus .vocab-sheet-lang-btn {
@@ -14090,8 +14097,8 @@ video {
   font-size: 0.84rem !important;
 }
 
-@container phone-screen (max-width: 480px) {
-  .vocab-sheet-body-focus .vocab-sheet-langs {
+@container phone-screen (max-width: 360px) {
+  .vocab-sheet-body-focus .vocab-sheet-langs:not(.is-collapsed) {
     grid-template-columns: 1fr !important;
   }
 }

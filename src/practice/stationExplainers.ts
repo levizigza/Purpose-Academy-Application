@@ -32,7 +32,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'workplace-words',
     steps: [6],
     title: 'Workplace Words',
-    lede: 'See the picture. Hear your language. Hear English. Type the word.',
+    lede: 'See the picture. Press a language you know — English is on the row. Pick and type the word.',
     video: 'explainers/workplace-words.mp4',
   },
   {

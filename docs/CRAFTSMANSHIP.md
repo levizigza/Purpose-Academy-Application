@@ -474,6 +474,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Left alone:** Desktop lang NEXT below fold is reachable by normal page scroll; phone lang chips may need one panel scroll under “LANGUAGES HERE” while NEXT stays docked — acceptable vs losing continue.
 - **Assumption to challenge next:** whether phone Station Menu should surface a one-tap “path strip” so hiding the compact map never feels like a missing door.
 
+### 2026-10-29 — VV English hear chip (L3 / L2 / LEARNER_FEAR)
+
+- **Layers:** L3 (task clear in 3s for EN-only learners) + L2 (same hear→pick→type spine) + soft fear (no locked-out bridge).
+- **Customer ask:** Workplace Words hear row showed AM/TI/AR/ES/HI only — English-only learners had no chip that spoke their language.
+- **Fix:** `VOCAB_HEAR_LANGS` adds **English** first beside the five mother tongues. EN press plays English once and unlocks pick+type (no redundant second Hear English). Mother-tongue press still gloss → English. Desktop night 3×2; Phone paper 2×3 wrap.
+- **Critic:** English on the hear row is the bridge, not a spoiler title — spelling stays hidden until typed. Do not remove mother-tongue chips to “make room.”
+
 ### 2026-10-29 — VV pick + type + shuffle (L2 / L3 / LEARNER_FEAR)
 
 - **Layers:** L2 (honest production reps) + L3 (task / media / pick bank / type result in one beat) + learner-fear (soft miss, no exam chrome).

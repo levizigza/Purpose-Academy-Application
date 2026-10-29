@@ -61,7 +61,7 @@ export const NAV_CUE = {
   hubContinue: 'hub-continue',
   /** Step 3 mother-tongue picker — point at the language chip grid once. */
   langPick: 'lang-pick',
-  /** Workplace Words language row — point at mother-tongue chips once. */
+  /** Workplace Words hear row — EN + mother-tongue chips (once-then-quiet). */
   vocabLang: 'vocab-lang',
   stationContinue: (step: number) => `station-continue-${step}`,
   explainerWatch: (stationId: string) => `explainer-${stationId}`,

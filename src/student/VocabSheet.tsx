@@ -14,10 +14,9 @@ import {
 } from './vocabDistractors'
 
 /**
- * Official Purpose Academy visual-vocabulary language order
+ * Official Purpose Academy visual-vocabulary mother-tongue order
  * (Logistics Visual Vocabulary worksheet — No French).
- * All five languages are always shown; the learner presses the one they understand
- * and connects it to the English word.
+ * Used by Language Organize and as the non-English hear chips.
  */
 export const VOCAB_SHEET_LANGS: HomeLang[] = [
   'Amharic',
@@ -26,6 +25,18 @@ export const VOCAB_SHEET_LANGS: HomeLang[] = [
   'Spanish',
   'Hindi',
 ]
+
+/**
+ * Workplace Words hear row — English first so EN-only learners can bridge,
+ * then the five mother tongues. Press plays that tongue (or English once),
+ * then pick + type. English pick skips a redundant second Hear English.
+ */
+export const VOCAB_HEAR_LANGS: SupportLang[] = ['English', ...VOCAB_SHEET_LANGS]
+
+/** Gloss or English title for a hear-row language chip. */
+export function vocabHearWord(term: VocabTerm, lang: SupportLang): string {
+  return lang === 'English' ? term.english : term.gloss[lang]
+}
 
 /** Worksheet page size used by Purpose Academy visual vocabulary PDFs. */
 export const VOCAB_PAGE_SIZE = 20
@@ -80,8 +91,8 @@ type CardProps = {
   speaking: boolean
   heardEnglish: boolean
   typedEnglish: boolean
-  /** Language the learner pressed to bridge meaning → English */
-  connectedLang: HomeLang | null
+  /** Language the learner pressed to bridge meaning → English (may be English itself) */
+  connectedLang: SupportLang | null
   alreadyKnown: boolean
   /**
    * Retake only: show “I already know this word”.
@@ -89,7 +100,7 @@ type CardProps = {
    */
   allowSkipKnown: boolean
   onPlayEnglish: () => void
-  onConnectLang: (lang: HomeLang) => void
+  onConnectLang: (lang: SupportLang) => void
   onMarkKnown: () => void
   onTypedCorrect: () => void
 }
@@ -241,15 +252,19 @@ export function VocabSheetCard({
         : ' · Hear English, then pick and type it'
     }
     if (alreadyKnown) return ' · Already known — hear English, then pick and type it'
-    return ' · Press the language you understand'
+    return ' · Press a language you understand (English included)'
   })()
 
   const caption = (() => {
     if (typedEnglish) return `Yes — ${term.english}.`
-    if (typingPhase) return 'Look. Hear your language. Hear English. Pick the match. Type it.'
-    if (listeningPhase) return 'Listening… Then pick the match and type the English word so it sticks.'
-    if (studioPhoto) return 'Look at the object. Press your language. Hear English. Pick and type it.'
-    return 'Look at the picture. Press your language. Hear English. Pick and type it.'
+    if (typingPhase) return 'Look. Hear. Pick the match. Type it.'
+    if (listeningPhase) {
+      return connectedLang === 'English'
+        ? 'Listening to English… Then pick the match and type it.'
+        : 'Listening… Then pick the match and type the English word so it sticks.'
+    }
+    if (studioPhoto) return 'Look at the object. Press a language you know. Pick and type the English word.'
+    return 'Look at the picture. Press a language you know — English is included. Pick and type it.'
   })()
 
   const langsToShow =
@@ -257,7 +272,7 @@ export function VocabSheetCard({
       ? [connectedLang]
       : productionPhase
         ? []
-        : VOCAB_SHEET_LANGS
+        : VOCAB_HEAR_LANGS
 
   const typeForm = typingPhase ? (
     <form className="vocab-sheet-type" data-coach="vv-type" onSubmit={checkType}>
@@ -366,7 +381,9 @@ export function VocabSheetCard({
       </p>
       <p className="vocab-sheet-listen-prompt">
         {speaking
-          ? 'Hear your language, then English…'
+          ? connectedLang === 'English'
+            ? 'Hear English…'
+            : 'Hear your language, then English…'
           : 'Press Hear English if you need it again — then pick and type the word.'}
       </p>
       {!speaking && (
@@ -441,7 +458,7 @@ export function VocabSheetCard({
 
       {!productionPhase && !typedEnglish && (
         <p className="play-nearby-objective vocab-sheet-nearby-pre" aria-live="polite">
-          Clear this word · press your language, then pick and type
+          Clear this word · press a language you know, then pick and type
         </p>
       )}
 
@@ -478,15 +495,17 @@ export function VocabSheetCard({
             <ul
               className={`vocab-sheet-langs${productionPhase ? ' is-collapsed' : ''}`}
               data-coach="vv-lang"
-              aria-label="Press the language you understand"
+              aria-label="Press a language you understand — English included"
             >
               {langsToShow.map((lang) => {
                 const selected = connectedLang === lang
+                const hearWord = vocabHearWord(term, lang)
+                const enBridge = lang === 'English'
                 return (
                   <li key={lang} className={selected ? 'is-connected-lang' : ''}>
                     <button
                       type="button"
-                      className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}`}
+                      className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}${enBridge ? ' is-en-hear' : ''}`}
                       disabled={speaking || alreadyKnown || productionPhase}
                       onClick={() => {
                         markNavCueSeen(NAV_CUE.vocabLang)
@@ -494,14 +513,18 @@ export function VocabSheetCard({
                         onConnectLang(lang)
                       }}
                       aria-pressed={selected}
-                      aria-label={`Hear ${term.gloss[lang]} in ${lang}, then hear, pick, and type English`}
+                      aria-label={
+                        enBridge
+                          ? `Hear ${hearWord} in English, then pick and type it`
+                          : `Hear ${hearWord} in ${lang}, then hear, pick, and type English`
+                      }
                     >
                       <span className="vocab-sheet-flag" aria-hidden>
                         {FLAG[lang]}
                       </span>
                       <span className="vocab-sheet-lang-meta">
                         <span className="vocab-sheet-lang-name">{lang}</span>
-                        <span className="vocab-sheet-lang-word">{term.gloss[lang]}</span>
+                        <span className="vocab-sheet-lang-word">{hearWord}</span>
                       </span>
                       {selected && (
                         <span className="vocab-sheet-lang-link">
@@ -519,7 +542,7 @@ export function VocabSheetCard({
           return (
             <NavCueTarget
               cueId={NAV_CUE.vocabLang}
-              arrowLabel="Your languages"
+              arrowLabel="Languages here"
               arrowSide="above"
               className="vocab-lang-cue"
             >
@@ -570,15 +593,15 @@ type DeckProps = {
   speakingId: string | null
   /** English audio completed for each term id */
   heard: Record<string, boolean>
-  /** Home language pressed for each term id (bridge to English) */
-  connected: Record<string, HomeLang>
+  /** Language pressed for each term id (mother tongue or English bridge) */
+  connected: Record<string, SupportLang>
   /** English spelling typed correctly for each term id */
   typed: Record<string, boolean>
   /** Adaptive: term ids the learner already knows */
   knownIds: string[]
   onIndexChange: (index: number) => void
   onPlayEnglish: (term: VocabTerm) => void
-  onConnectLang: (term: VocabTerm, lang: HomeLang) => void
+  onConnectLang: (term: VocabTerm, lang: SupportLang) => void
   onMarkKnown: (term: VocabTerm) => void
   onTypedCorrect: (term: VocabTerm) => void
   /**
@@ -604,7 +627,7 @@ type DeckProps = {
 export function termLinked(
   term: VocabTerm,
   heard: Record<string, boolean>,
-  connected: Record<string, HomeLang>,
+  connected: Record<string, SupportLang>,
   typed: Record<string, boolean>,
   knownSet: Set<string>,
 ) {
@@ -617,7 +640,7 @@ export function termLinked(
 
 /**
  * One-by-one vocabulary deck (worksheet mold).
- * Pattern: see picture → hear your language → hear English → pick match + type → next.
+ * Pattern: see picture → hear a language (incl. English) → hear English if needed → pick + type.
  * Large tables page in worksheet banks of 20.
  */
 export function VocabSheet({
@@ -706,7 +729,7 @@ export function VocabSheet({
         </div>
       ) : (
         <p className="vocab-sheet-lede">
-          One word at a time. Hear it in your language. Hear it in English. Pick the match. Type it.
+          One word at a time. Press a language you understand (English is included). Hear English when you need it. Pick the match. Type it.
           Choices switch when you miss — so the word sticks, not the button.
           {paged
             ? ` This set has ${terms.length} words in pages of ${VOCAB_PAGE_SIZE}.`
@@ -777,7 +800,7 @@ export function VocabSheet({
           onClick={goNext}
         >
           {!bridged
-            ? 'Press your language first'
+            ? 'Press a language first'
             : !heardEnglish
               ? 'Hear English next'
               : !typedEnglish

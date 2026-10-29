@@ -843,7 +843,7 @@ export function StudentSequencePage() {
 
   /* Step 6 visual vocabulary — hear L1 → hear English → type English */
   const [vocabHeard, setVocabHeard] = useState<Record<string, boolean>>({})
-  const [vocabConnected, setVocabConnected] = useState<Record<string, HomeLang>>({})
+  const [vocabConnected, setVocabConnected] = useState<Record<string, SupportLang>>({})
   const [vocabTyped, setVocabTyped] = useState<Record<string, boolean>>({})
   const [vocabKnownIds, setVocabKnownIds] = useState<string[]>(() => getKnownVocabIds(getActivePathway()))
   /** Snapshot at visit: skip-known only on retake after station was cleared once. */
@@ -1404,14 +1404,22 @@ export function StudentSequencePage() {
     if (ok) recordSkillAttempt('vocab', true, 8)
   }
 
-  async function connectVocabLang(term: (typeof VOCAB_UNIT)[number], lang: HomeLang) {
+  async function connectVocabLang(term: (typeof VOCAB_UNIT)[number], lang: SupportLang) {
     setVocabConnected((c) => ({ ...c, [term.id]: lang }))
     setVocabSpeakingId(term.id)
     stopSpeech()
-    await speakSupport(term.gloss[lang], lang)
-    /* Always speak the English workplace word after the home-language bridge. */
-    await new Promise((r) => setTimeout(r, 220))
-    const heard = await speakEnglish(term.english)
+    /*
+     * EN chip: play English once and unlock pick+type (no redundant second Hear English).
+     * Mother-tongue chips: gloss first, then English — same bridge as before.
+     */
+    let heard: boolean
+    if (lang === 'English') {
+      heard = await speakEnglish(term.english)
+    } else {
+      await speakSupport(term.gloss[lang], lang)
+      await new Promise((r) => setTimeout(r, 220))
+      heard = await speakEnglish(term.english)
+    }
     /*
      * Unlock the type beat after the bridge attempt even if TTS fails
      * (locked autoplay / missing neural). Hear-again stays available;
