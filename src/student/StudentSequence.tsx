@@ -61,9 +61,16 @@ import {
 import {
   primeSpeech,
   speakEnglish,
+  speakLangCode,
   speakSupport,
   stopSpeech,
 } from './speech'
+import type { HearLanguage } from './hearLanguages'
+import {
+  translateVocabWord,
+  type UniversalBridge,
+  type UniversalHearStatus,
+} from './universalHear'
 import { ComputerSkillsDrill } from './ComputerSkillsDrill'
 import { EquipmentVideoDrill } from './EquipmentVideoDrill'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
@@ -844,6 +851,11 @@ export function StudentSequencePage() {
   /* Step 6 visual vocabulary — hear L1 → hear English → type English */
   const [vocabHeard, setVocabHeard] = useState<Record<string, boolean>>({})
   const [vocabConnected, setVocabConnected] = useState<Record<string, SupportLang>>({})
+  const [vocabUniversal, setVocabUniversal] = useState<Record<string, UniversalBridge>>({})
+  const [vocabUniversalBusyId, setVocabUniversalBusyId] = useState<string | null>(null)
+  const [vocabUniversalStatus, setVocabUniversalStatus] = useState<UniversalHearStatus>({
+    kind: 'idle',
+  })
   const [vocabTyped, setVocabTyped] = useState<Record<string, boolean>>({})
   const [vocabKnownIds, setVocabKnownIds] = useState<string[]>(() => getKnownVocabIds(getActivePathway()))
   /** Snapshot at visit: skip-known only on retake after station was cleared once. */
@@ -1406,6 +1418,13 @@ export function StudentSequencePage() {
 
   async function connectVocabLang(term: (typeof VOCAB_UNIT)[number], lang: SupportLang) {
     setVocabConnected((c) => ({ ...c, [term.id]: lang }))
+    setVocabUniversal((u) => {
+      if (!u[term.id]) return u
+      const next = { ...u }
+      delete next[term.id]
+      return next
+    })
+    setVocabUniversalStatus({ kind: 'idle' })
     setVocabSpeakingId(term.id)
     stopSpeech()
     /*
@@ -1428,6 +1447,81 @@ export function StudentSequencePage() {
     setVocabHeard((h) => ({ ...h, [term.id]: true }))
     if (heard) recordSkillAttempt('vocab', true, 8)
     setVocabSpeakingId(null)
+  }
+
+  /**
+   * More languages: translate English vocab → speak translation → speak English → unlock pick+type.
+   * Soft errors stay on-card; EN / mother-tongue chips remain available.
+   */
+  async function connectVocabUniversal(
+    term: (typeof VOCAB_UNIT)[number],
+    lang: HearLanguage,
+  ) {
+    setVocabUniversalBusyId(term.id)
+    setVocabSpeakingId(term.id)
+    setVocabUniversalStatus({ kind: 'loading', phase: 'translate' })
+    stopSpeech()
+
+    if (lang.code === 'en' || lang.bcp47.toLowerCase().startsWith('en')) {
+      setVocabConnected((c) => ({ ...c, [term.id]: 'English' }))
+      setVocabUniversal((u) => {
+        if (!u[term.id]) return u
+        const next = { ...u }
+        delete next[term.id]
+        return next
+      })
+      const heard = await speakEnglish(term.english)
+      setVocabHeard((h) => ({ ...h, [term.id]: true }))
+      setVocabUniversalStatus({
+        kind: 'ready',
+        translated: term.english,
+        lang,
+        source: 'passthrough',
+        spoken: heard,
+      })
+      if (heard) recordSkillAttempt('vocab', true, 8)
+      setVocabSpeakingId(null)
+      setVocabUniversalBusyId(null)
+      return
+    }
+
+    try {
+      const { translated, source } = await translateVocabWord(term.english, lang)
+      setVocabUniversalStatus({ kind: 'loading', phase: 'speak' })
+      const spoken = await speakLangCode(translated, lang.code, lang.bcp47)
+      setVocabUniversal((u) => ({
+        ...u,
+        [term.id]: { code: lang.code, name: lang.name, translated, source },
+      }))
+      setVocabConnected((c) => {
+        if (!c[term.id]) return c
+        const next = { ...c }
+        delete next[term.id]
+        return next
+      })
+      await new Promise((r) => setTimeout(r, 220))
+      const heardEn = await speakEnglish(term.english)
+      setVocabHeard((h) => ({ ...h, [term.id]: true }))
+      setVocabUniversalStatus({
+        kind: 'ready',
+        translated,
+        lang,
+        source,
+        spoken: spoken || heardEn,
+      })
+      if (spoken || heardEn) recordSkillAttempt('vocab', true, 8)
+    } catch (e) {
+      const err = e as Error & { unsupported?: boolean }
+      const detail = err?.message || 'Could not translate that language right now.'
+      setVocabUniversalStatus(
+        err?.unsupported
+          ? { kind: 'unsupported', lang, detail }
+          : { kind: 'error', detail },
+      )
+    } finally {
+      setVocabSpeakingId(null)
+      setVocabUniversalBusyId(null)
+    }
   }
 
   function markCurrentVocabKnown(term: (typeof VOCAB_UNIT)[number]) {
@@ -1737,7 +1831,7 @@ export function StudentSequencePage() {
     const wordDone = (t: (typeof VOCAB_UNIT)[number]) =>
       !!vocabHeard[t.id] &&
       !!vocabTyped[t.id] &&
-      (!!vocabConnected[t.id] || knownSet.has(t.id))
+      (!!vocabConnected[t.id] || !!vocabUniversal[t.id] || knownSet.has(t.id))
     const linkedCount = VOCAB_UNIT.filter(wordDone).length
     /**
      * Ladder: Daily Conversation Level-1, then specialty pictures.
@@ -1783,14 +1877,22 @@ export function StudentSequencePage() {
           speakingId={vocabSpeakingId}
           heard={vocabHeard}
           connected={vocabConnected}
+          universal={vocabUniversal}
+          universalBusyId={vocabUniversalBusyId}
+          universalStatus={vocabUniversalStatus}
           typed={vocabTyped}
           knownIds={vocabKnownIds}
           journeyGateCount={journeyGateCount}
           journeyGateIds={journeyGateIds}
           allowSkipKnown={vocabRetake}
-          onIndexChange={setVocabIdx}
+          onIndexChange={(i) => {
+            setVocabIdx(i)
+            setVocabUniversalStatus({ kind: 'idle' })
+          }}
           onPlayEnglish={(term) => void playVocabEnglish(term)}
           onConnectLang={(term, lang) => void connectVocabLang(term, lang)}
+          onUniversalHear={(term, lang) => void connectVocabUniversal(term, lang)}
+          onClearUniversalStatus={() => setVocabUniversalStatus({ kind: 'idle' })}
           onMarkKnown={(term) => markCurrentVocabKnown(term)}
           onTypedCorrect={(term) => markVocabTyped(term)}
         />

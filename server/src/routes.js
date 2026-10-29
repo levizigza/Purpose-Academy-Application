@@ -321,14 +321,20 @@ export function registerRoutes(app) {
     }
   })
 
-  app.get('/api/enrich/translate', authRequired, async (req, res) => {
+  /**
+   * Translate short workplace vocab (MyMemory). Public like /tts so Student Practice
+   * universal hear works without a login — soft 422 when the language pair is unsupported.
+   * Query: q (text), to (ISO or language name), from (default en)
+   */
+  app.get('/api/enrich/translate', async (req, res) => {
     try {
       const text = String(req.query.q || '')
       const to = apis.langCode(String(req.query.to || 'Spanish'))
       const from = String(req.query.from || 'en')
       res.json(await apis.translateText(text, from, to))
     } catch (e) {
-      res.status(502).json({ error: e.message })
+      const status = e.code === 'UNSUPPORTED_LANG' ? 422 : 502
+      res.status(status).json({ error: e.message || 'Translation unavailable', code: e.code || null })
     }
   })
 

@@ -242,6 +242,7 @@ These are load-bearing across all layers.
 - Every vocabulary English word must speak when the learner bridges or presses Hear English.
 - Priority stays: baked neural → live neural → Free Dictionary (works without our API) → browser `speechSynthesis`.
 - After a home-language connect, auto-speak the English workplace word.
+- Hear row offers **English + five mother tongues**; **More languages** translates the English word (MyMemory) and speaks it (neural TTS → browser) before the same English bridge. Session-cache translations; soft loading / unsupported copy — never silent fail.
 - **Then pick + type (every VV card):** English spelling stays hidden from first paint until typed; listen/type panel sits with the photo (langs collapse to the bridge). Under Type/Go: a **~5-option shuffled bank** from the same worksheet page (same language level). Learner must **pick the correct English word** (wrong pick soft-misses and **reshuffles** — never the same order twice in a row) **and type it** (existing Type/Go). Soft retry (“Not yet…”) — never Incorrect / Expected. Nearby: “Clear this word · pick the match, then type it”; `firePlayClear` on correct type after a correct pick. TTS failure still unlocks the pick+type beat (Hear again remains). Gate = heard + typed + (bridged or known).
 - **Anti-cheat / real learning:** Choices switch after a wrong pick and when the card advances so position-tapping cannot clear a word. Typing remains the production clear — pick alone never finishes.
 - **Sentence Structure differs:** cloze keeps four **reference** chips (type-only clear). VV pick chips are **required presses** plus type.
@@ -480,6 +481,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Customer ask:** Workplace Words hear row showed AM/TI/AR/ES/HI only — English-only learners had no chip that spoke their language.
 - **Fix:** `VOCAB_HEAR_LANGS` adds **English** first beside the five mother tongues. EN press plays English once and unlocks pick+type (no redundant second Hear English). Mother-tongue press still gloss → English. Desktop night 3×2; Phone paper 2×3 wrap.
 - **Critic:** English on the hear row is the bridge, not a spoiler title — spelling stays hidden until typed. Do not remove mother-tongue chips to “make room.”
+
+### 2026-10-29 — VV universal hear (translate + speak) (L3 / L2 / LEARNER_FEAR)
+
+- **Layers:** L3 (language task unmistakable) + L2 (same hear→pick→type gate) + soft fear (loading / unsupported copy, never silent fail).
+- **Customer ask:** Learners outside AM/TI/AR/ES/HI/EN need any-language hear for the current vocab word.
+- **Fix:** **More languages** under the six hear chips — searchable ISO list → MyMemory translate (session-cached per word+lang; optional `/api/enrich/translate`) → neural TTS (`/api/enrich/tts` / Edge / Google TTS) with browser `speechSynthesis` fallback (`speakLangCode`). Bridges like a mother-tongue press: translated audio → English → unlock pick+type. Soft status for unsupported pairs / audio miss.
+- **APIs:** MyMemory Translation (no key, CORS); Microsoft Edge neural TTS via `msedge-tts` + Google Translate TTS fallback; browser Web Speech. LibreTranslate public now requires a key — not used.
+- **Critic:** Not a purple “AI translator” sticker — same navy/amber paper grammar as chips. Do not skip pick+type. Do not invent a seventh pinned chip per language. Edge must not speak unknown langs with an English voice (skip to Google / browser).
 
 ### 2026-10-29 — VV pick + type + shuffle (L2 / L3 / LEARNER_FEAR)
 

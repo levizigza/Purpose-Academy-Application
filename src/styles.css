@@ -8389,6 +8389,242 @@ html.pa-phone-shell .vocab-sheet-body-focus.is-production {
   white-space: nowrap;
 }
 
+/* EN hear chip — same family as mother tongues; slight brand edge, not a sticker. */
+.vocab-sheet-lang-btn.is-en-hear .vocab-sheet-flag {
+  background: #163f73;
+  color: #f5c542;
+}
+
+/* Universal hear — searchable translate+speak under the six chips (L3, dual-shell). */
+.vocab-universal {
+  margin-top: 0.55rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.vocab-universal-bar {
+  display: grid;
+}
+
+.vocab-universal-toggle {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.45rem 0.65rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--line, #c5d0de));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--brand-soft, #e8eef7) 70%, #fff);
+  color: var(--brand-deep, #0b2f5c);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vocab-universal-toggle:hover,
+.vocab-universal-toggle:focus-visible {
+  border-color: color-mix(in srgb, var(--brand) 55%, #e8a317);
+  outline: none;
+}
+
+.vocab-universal-toggle.is-open,
+.vocab-universal-toggle.is-bridged {
+  background: #fff8e8;
+  border-color: #e8a317;
+}
+
+.vocab-universal-toggle:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.vocab-universal-glyph {
+  font-size: 0.95rem;
+  color: #a16207;
+  line-height: 1;
+}
+
+.vocab-universal-label {
+  font-weight: 750;
+  font-size: 0.95rem;
+  color: var(--brand-deep, #0b2f5c);
+}
+
+.vocab-universal-hint {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5a6f86;
+}
+
+.vocab-universal-panel {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.7rem 0.75rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line, #c5d0de));
+  border-radius: 10px;
+  background: #f7f9fc;
+}
+
+.vocab-universal-search-label {
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #5a6f86;
+}
+
+.vocab-universal-search {
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 22%, #c5d0de);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--brand-deep, #0b2f5c);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.vocab-universal-search:focus {
+  outline: 2px solid color-mix(in srgb, #e8a317 55%, transparent);
+  outline-offset: 1px;
+}
+
+.vocab-universal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 12.5rem;
+  overflow: auto;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.vocab-universal-option {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.45rem 0.55rem;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--brand-deep, #0b2f5c);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vocab-universal-option:hover,
+.vocab-universal-option:focus-visible {
+  background: #e8f0ff;
+  outline: none;
+}
+
+.vocab-universal-option-name {
+  font-weight: 650;
+  font-size: 0.92rem;
+}
+
+.vocab-universal-option-native {
+  font-weight: 500;
+  color: #5a6f86;
+}
+
+.vocab-universal-option-code {
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5a6f86;
+}
+
+.vocab-universal-empty {
+  padding: 0.55rem 0.4rem;
+  color: #5a6f86;
+  font-size: 0.9rem;
+}
+
+.vocab-universal-footnote {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #5a6f86;
+}
+
+.vocab-universal-status {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.75rem;
+  align-items: center;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  color: var(--brand-deep, #0b2f5c);
+  background: #eef3f9;
+}
+
+.vocab-universal-status.is-loading {
+  background: #fff6de;
+  color: #7a4e00;
+}
+
+.vocab-universal-status.is-ok {
+  background: #e8f5ec;
+  color: #14532d;
+}
+
+.vocab-universal-status.is-soft-miss {
+  background: #fff4e5;
+  color: #7a4e00;
+}
+
+.vocab-universal-dismiss {
+  margin-left: auto;
+  border: 0;
+  border-radius: 6px;
+  padding: 0.2rem 0.55rem;
+  background: rgba(11, 47, 92, 0.08);
+  color: inherit;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.is-phone-app .vocab-universal-toggle {
+  background: #ffffff !important;
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+  color: var(--brand-deep) !important;
+  min-height: 3rem;
+}
+
+.is-phone-app .vocab-universal-panel {
+  background: #ffffff !important;
+  border-color: color-mix(in srgb, var(--brand) 16%, var(--line)) !important;
+}
+
+.is-phone-app .vocab-universal-status {
+  background: #eef3f9 !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .vocab-universal-status.is-loading,
+.is-phone-app .vocab-universal-status.is-soft-miss {
+  background: #fff6de !important;
+  color: #7a4e00 !important;
+}
+
+.is-phone-app .vocab-universal-status.is-ok {
+  background: #e8f5ec !important;
+  color: #14532d !important;
+}
+
 .vocab-match-langs {
   margin: 0.75rem 0 0.5rem;
   max-height: none;
@@ -8432,6 +8668,234 @@ html.pa-phone-shell .vocab-sheet-body-focus.is-production {
   font-weight: 750;
   color: #0b2f5c;
   line-height: 1.2;
+}
+
+/* EN hear chip — same grammar as mother tongues; slight brand edge so EN-only finds it. */
+.vocab-sheet-lang-btn.is-en-hear {
+  border: 1px solid color-mix(in srgb, #e8a317 40%, transparent);
+}
+
+/* Universal / More languages — interaction panel under the six chips (L3: one job). */
+.vocab-universal {
+  margin-top: 0.55rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.vocab-universal-toggle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, #0b2f5c 22%, transparent);
+  background: color-mix(in srgb, #0b2f5c 8%, transparent);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vocab-universal-toggle:hover,
+.vocab-universal-toggle:focus-visible {
+  border-color: #e8a317;
+  outline: none;
+}
+
+.vocab-universal-toggle.is-open,
+.vocab-universal-toggle.is-bridged {
+  border-color: #e8a317;
+  background: color-mix(in srgb, #e8a317 14%, transparent);
+}
+
+.vocab-universal-glyph {
+  color: #c48900;
+  font-weight: 800;
+}
+
+.vocab-universal-label {
+  font-weight: 750;
+  font-size: 0.92rem;
+}
+
+.vocab-universal-hint {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5a6f86;
+}
+
+.vocab-universal-panel {
+  border: 1px solid color-mix(in srgb, #0b2f5c 18%, transparent);
+  border-radius: 8px;
+  padding: 0.65rem 0.7rem;
+  background: color-mix(in srgb, #ffffff 88%, #dce7f5);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.vocab-universal-search-label {
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #3a5168;
+}
+
+.vocab-universal-search {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, #0b2f5c 22%, transparent);
+  border-radius: 6px;
+  padding: 0.45rem 0.55rem;
+  font: inherit;
+  background: #fff;
+}
+
+.vocab-universal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 11rem;
+  overflow: auto;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.vocab-universal-option {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem;
+  align-items: center;
+  padding: 0.4rem 0.45rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vocab-universal-option:hover,
+.vocab-universal-option:focus-visible {
+  background: #fff0c2;
+  outline: none;
+}
+
+.vocab-universal-option-name {
+  font-weight: 650;
+  color: #0b2f5c;
+}
+
+.vocab-universal-option-native {
+  font-weight: 550;
+  color: #3a5168;
+}
+
+.vocab-universal-option-code {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #5a6f86;
+  text-transform: uppercase;
+}
+
+.vocab-universal-empty {
+  padding: 0.45rem;
+  color: #5a6f86;
+  font-size: 0.88rem;
+}
+
+.vocab-universal-footnote {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #5a6f86;
+  line-height: 1.35;
+}
+
+.vocab-universal-status {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.55rem;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: #0b2f5c;
+}
+
+.vocab-universal-status.is-loading {
+  color: #3a5168;
+}
+
+.vocab-universal-status.is-soft-miss {
+  color: #8a4b12;
+}
+
+.vocab-universal-status.is-ok {
+  color: #1f5a2e;
+}
+
+.vocab-universal-dismiss {
+  border: 0;
+  background: transparent;
+  color: #8a4b12;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.course-stage .vocab-universal-toggle {
+  background: color-mix(in srgb, #0b2f5c 45%, transparent);
+  border-color: color-mix(in srgb, #e8a317 35%, transparent);
+  color: #f5f8fc;
+}
+
+.course-stage .vocab-universal-hint {
+  color: #c9d7e8;
+}
+
+.course-stage .vocab-universal-panel {
+  background: color-mix(in srgb, #0b2f5c 72%, #061018);
+  border-color: color-mix(in srgb, #e8a317 28%, transparent);
+  color: #f5f8fc;
+}
+
+.course-stage .vocab-universal-search {
+  background: #0a1828;
+  color: #f5f8fc;
+  border-color: color-mix(in srgb, #e8a317 28%, transparent);
+}
+
+.course-stage .vocab-universal-option-name,
+.course-stage .vocab-universal-status.is-ok {
+  color: #f5f8fc;
+}
+
+.course-stage .vocab-universal-option:hover,
+.course-stage .vocab-universal-option:focus-visible {
+  background: color-mix(in srgb, #e8a317 22%, transparent);
+}
+
+.is-phone-app .vocab-universal-toggle {
+  background: #ffffff !important;
+  border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+  color: var(--brand-deep) !important;
+  min-height: 3rem;
+}
+
+.is-phone-app .vocab-universal-panel {
+  background: #ffffff !important;
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
+  color: var(--brand-deep) !important;
+}
+
+.is-phone-app .vocab-universal-option-name {
+  color: var(--brand-deep) !important;
+}
   word-break: break-word;
 }
 

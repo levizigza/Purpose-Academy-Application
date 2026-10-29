@@ -236,8 +236,17 @@ function speakBrowser(text: string, lang: string): Promise<boolean> {
       }
       const u = new SpeechSynthesisUtterance(text)
       u.lang = lang
-      const voice = pickVoice(voices, lang) || pickVoice(voices, 'en-US') || voices[0]
-      if (voice) u.voice = voice
+      /*
+       * Prefer a matching voice. For non-English, do not force an English voice —
+       * leave voice unset so the engine can honor utterance.lang (universal hear).
+       */
+      const matched = pickVoice(voices, lang)
+      if (matched) {
+        u.voice = matched
+      } else if (/^en\b/i.test(lang)) {
+        const en = pickVoice(voices, 'en-US') || voices[0]
+        if (en) u.voice = en
+      }
       /* Slightly slower / lower pitch softens the default robotic cadence. */
       u.rate = 0.92
       u.pitch = 1
@@ -277,6 +286,28 @@ async function speak(text: string, langCode: string, browserLang: string): Promi
 
 export async function speakEnglish(text: string): Promise<boolean> {
   return speak(text, 'en', 'en-US')
+}
+
+/**
+ * Speak arbitrary-language text (universal hear).
+ * `langCode` feeds neural / Google TTS; `bcp47` feeds browser speechSynthesis.
+ */
+export async function speakLangCode(
+  text: string,
+  langCode: string,
+  bcp47?: string,
+): Promise<boolean> {
+  const code = String(langCode || 'en').toLowerCase()
+  const browser = bcp47 || code
+  /* Neural path uses the short ISO family (zh-CN → zh) plus full tag for Google. */
+  const short = code.split('-')[0]
+  const neuralOk = await speak(text, code, browser)
+  if (neuralOk) return true
+  if (short !== code) {
+    const shortOk = await speak(text, short, browser)
+    if (shortOk) return true
+  }
+  return speakBrowser(text, browser)
 }
 
 export async function speakSupport(text: string, lang: SupportLang): Promise<boolean> {
