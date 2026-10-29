@@ -29,7 +29,8 @@ const EXPLAINERS = [
   'your-language',
 ]
 
-async function gotoVocab(page, shell) {
+async function gotoVocab(page, shellName) {
+  shell = shellName
   await page.addInitScript(
     ({ shell, explainers }) => {
       localStorage.setItem('pa-shell-mode-v2', shell === 'phone' ? 'phone' : 'course')
@@ -56,11 +57,30 @@ async function gotoVocab(page, shell) {
       )
       localStorage.setItem('pa-nav-cues-seen-v1', JSON.stringify({ all: true }))
     },
-    { shell, explainers: EXPLAINERS },
+    { shell: shellName, explainers: EXPLAINERS },
   )
-  await page.goto(`${BASE}/journey`, { waitUntil: 'networkidle', timeout: 90000 })
-  await page.waitForSelector('.vocab-sheet, [data-coach="vv-lang"]', { timeout: 30000 })
+  await page.goto(`${BASE}/journey`, { waitUntil: 'domcontentloaded', timeout: 90000 })
+  /* Explainer gate only — do not match journey Continue. */
+  const skip = page.locator(
+    '.station-explainer button, .station-explainer-gate button, [data-explainer] button',
+  )
+  try {
+    await skip.filter({ hasText: /open|start|watch|skip|got it/i }).first().click({ timeout: 2500 })
+  } catch {
+    /* already on station */
+  }
+  try {
+    await page.waitForSelector('.vocab-sheet-lang-btn, [data-coach="vv-lang"]', { timeout: 45000 })
+  } catch (err) {
+    await page.screenshot({ path: join(OUT, `${shell || 'debug'}-FAIL.png`), fullPage: true })
+    console.error('FAIL url', page.url())
+    console.error('FAIL body', (await page.locator('body').innerText()).slice(0, 1200))
+    throw err
+  }
 }
+
+/* shell is passed for fail artifact naming */
+let shell = 'desktop'
 
 function chipWord(label) {
   return label.replace(/^[A-E]\.\s*/, '').trim()
