@@ -14097,11 +14097,9 @@ video {
   font-size: 0.84rem !important;
 }
 
-@container phone-screen (max-width: 360px) {
-  .vocab-sheet-body-focus .vocab-sheet-langs:not(.is-collapsed) {
-    grid-template-columns: 1fr !important;
-  }
-}
+/* Keep VV hear chips 2-col inside the phone frame (six EN+MT chips).
+ * Do not collapse to 1-col via phone-screen container — inner width is often
+ * <360px even on 15 Pro and would force a tall stack. */
 
 .is-phone-app img,
 .is-phone-app video {
