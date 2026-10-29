@@ -1,7 +1,7 @@
 /**
  * Adaptive vocabulary — Purpose Academy narration mold.
  * Skip-known is a *retake* affordance only: first go through Visual Vocabulary
- * always does hear → hear → type. After the station is cleared once, a later
+ * always does hear → hear → pick → type. After the station is cleared once, a later
  * visit may mark words already known (still hear English + type so it sticks).
  */
 

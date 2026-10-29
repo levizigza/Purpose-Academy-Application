@@ -237,13 +237,15 @@ These are load-bearing across all layers.
 - Training object photos and pathway program cards use **`object-fit: contain`** so royalty-free imagery is fully readable.
 - Do not crop tool/vocab photos with `cover` on drill surfaces. Full-bleed marketing heroes may still use cover when the composition is intentionally edge-to-edge.
 
-### 6.3c Vocabulary audio + type reps
+### 6.3c Vocabulary audio + pick + type reps
 
 - Every vocabulary English word must speak when the learner bridges or presses Hear English.
 - Priority stays: baked neural → live neural → Free Dictionary (works without our API) → browser `speechSynthesis`.
 - After a home-language connect, auto-speak the English workplace word.
-- **Then type it (every VV card):** English spelling stays hidden from first paint until typed; listen/type panel sits with the photo (langs collapse to the bridge); soft retry (“Not yet — hear it again”) — never Incorrect / Expected. Nearby: “Clear this word · type what you heard”; `firePlayClear` on correct type. TTS failure still unlocks the type beat (Hear again remains). Gate = heard + typed + (bridged or known).
-- **First go vs retake:** “I already know this word” is hidden on day-one intake. Skip-known unlocks only after the station was cleared once for that pathway (`pa-vocab-station-cleared-v1`). Retake still requires hear English + type.
+- **Then pick + type (every VV card):** English spelling stays hidden from first paint until typed; listen/type panel sits with the photo (langs collapse to the bridge). Under Type/Go: a **~5-option shuffled bank** from the same worksheet page (same language level). Learner must **pick the correct English word** (wrong pick soft-misses and **reshuffles** — never the same order twice in a row) **and type it** (existing Type/Go). Soft retry (“Not yet…”) — never Incorrect / Expected. Nearby: “Clear this word · pick the match, then type it”; `firePlayClear` on correct type after a correct pick. TTS failure still unlocks the pick+type beat (Hear again remains). Gate = heard + typed + (bridged or known).
+- **Anti-cheat / real learning:** Choices switch after a wrong pick and when the card advances so position-tapping cannot clear a word. Typing remains the production clear — pick alone never finishes.
+- **Sentence Structure differs:** cloze keeps four **reference** chips (type-only clear). VV pick chips are **required presses** plus type.
+- **First go vs retake:** “I already know this word” is hidden on day-one intake. Skip-known unlocks only after the station was cleared once for that pathway (`pa-vocab-station-cleared-v1`). Retake still requires hear English + pick + type.
 
 ### 6.4 Sound (foley)
 
@@ -471,6 +473,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Critic fixed:** (1) Desktop toolbox clipped Admin + Instructor ~118px under the fold — further compressed hero/tray density so all five trays fit the first view. (2) Phone language station buried NEXT ~420px under the fold — dock header + actions to the phone screen, scroll the lesson panel inside, hide compact bottom path map (Station menu owns path). (3) “1 days showed up” → singular/plural.
 - **Left alone:** Desktop lang NEXT below fold is reachable by normal page scroll; phone lang chips may need one panel scroll under “LANGUAGES HERE” while NEXT stays docked — acceptable vs losing continue.
 - **Assumption to challenge next:** whether phone Station Menu should surface a one-tap “path strip” so hiding the compact map never feels like a missing door.
+
+### 2026-10-29 — VV pick + type + shuffle (L2 / L3 / LEARNER_FEAR)
+
+- **Layers:** L2 (honest production reps) + L3 (task / media / pick bank / type result in one beat) + learner-fear (soft miss, no exam chrome).
+- **Customer ask:** Workplace Words must show ~5 shuffled choices; learner picks the correct one **and** types it. Choices switch so tapping until right cannot cheat.
+- **Fix:** `VocabSheet` typing phase adds a same-page 5-option bank under Type/Go. Wrong pick → soft miss + reshuffle (order never repeats twice in a row). Go without a correct pick soft-coaches “pick the matching word…”. Clear still requires typed English (`firePlayClear`). Sentence Structure stays reference-chips + type-only.
+- **Critic:** Pick alone would be shopping; type alone invited guess-from-audio without looking. Dual lock forces looking + producing. Reshuffle is teach, not fear — “choices switched — pick again.”
+- **Law restated (§6.3c):** hear → hear → **pick + type**; shuffle after miss and on card advance.
 
 ### 2026-10-28 — Desktop splash pathways → lower third (L3)
 

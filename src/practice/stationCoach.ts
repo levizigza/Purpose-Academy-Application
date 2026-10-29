@@ -68,9 +68,10 @@ export type CoachStep = {
 
 export const STATION_COACH: Record<string, CoachStep[]> = {
   'workplace-words': [
-    /* English auto-plays after the language bridge — coach the two presses that matter. */
+    /* English auto-plays after the language bridge — coach lang, then pick + type. */
     { target: '[data-coach="vv-lang"]', say: 'Press your language' },
-    { target: '[data-coach="vv-type"]', say: 'Type the English word · then Go' },
+    { target: '[data-coach="vv-pick"]', say: 'Pick the matching English word' },
+    { target: '[data-coach="vv-type"]', say: 'Type that word · then Go' },
   ],
   'language-organize': [
     { target: '[data-coach="org-pic"]', say: 'Press a picture' },

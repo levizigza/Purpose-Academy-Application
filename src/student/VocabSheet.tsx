@@ -1,12 +1,17 @@
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from 'react'
 import type { HomeLang, SupportLang, VocabTerm } from './journeyCurriculum'
 import { SUPPORT_LANGUAGES } from './journeyCurriculum'
 import { pathwayImage } from '../pathways'
-import { firePlayClear } from '../practice/PlayClear'
+import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { playFoley } from '../audio/foley'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 import { NavCueTarget, NavGlowRegion } from '../practice/NavCue'
 import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
+import {
+  buildVocabPickBank,
+  choiceOrderKey,
+  shuffleChoicesFresh,
+} from './vocabDistractors'
 
 /**
  * Official Purpose Academy visual-vocabulary language order
@@ -60,10 +65,18 @@ function SpeakerIconSmall() {
   )
 }
 
+/** How many English choices appear under the type panel (correct + distractors). */
+const VV_PICK_BANK_SIZE = 5
+
 type CardProps = {
   index: number
   total: number
   term: VocabTerm
+  /**
+   * Same worksheet page / station pool for distractors (same language level).
+   * Never includes only the current term — peers from the page feed the bank.
+   */
+  choicePool: VocabTerm[]
   speaking: boolean
   heardEnglish: boolean
   typedEnglish: boolean
@@ -83,13 +96,15 @@ type CardProps = {
 
 /**
  * Visual vocabulary card — Purpose Academy worksheet mold (one word per page):
- * picture → home language → Hear English → type English (reps that stick).
+ * picture → home language → Hear English → pick match + type English (reps that stick).
  * English spelling stays hidden until the learner types it — no spoiler title.
+ * Pick bank is required (wrong pick reshuffles); typing remains the production clear.
  */
 export function VocabSheetCard({
   index,
   total,
   term,
+  choicePool,
   speaking,
   heardEnglish,
   typedEnglish,
@@ -104,20 +119,49 @@ export function VocabSheetCard({
   const img = pathwayImage(term.imageKey)
   const bridged = !!connectedLang || alreadyKnown
   const ready = bridged && heardEnglish && typedEnglish
-  /** After bridge: listen → type. Typing unlocks once English was offered (heard). */
+  /** After bridge: listen → pick + type. Typing unlocks once English was offered (heard). */
   const listeningPhase = bridged && !heardEnglish && !typedEnglish
   const typingPhase = bridged && heardEnglish && !typedEnglish
   const productionPhase = bridged && !typedEnglish
   const inputId = useId()
   const inputRef = useRef<HTMLInputElement>(null)
   const [draft, setDraft] = useState('')
-  const [feedback, setFeedback] = useState<'ok' | 'retry' | null>(null)
+  const [feedback, setFeedback] = useState<'ok' | 'retry' | 'need-pick' | null>(null)
+  const [options, setOptions] = useState<string[]>([])
+  const [picked, setPicked] = useState<string | null>(null)
+  const [pickMiss, setPickMiss] = useState(false)
+  const prevOrderKeyRef = useRef<string | null>(null)
   const coachFirst = index === 1
+  const pickLetters = ['A', 'B', 'C', 'D', 'E'] as const
+  const pickReady =
+    !!picked && normalizeEnglishAnswer(picked) === normalizeEnglishAnswer(term.english)
+
+  function dealPickBank() {
+    const bank = buildVocabPickBank(term, choicePool, VV_PICK_BANK_SIZE)
+    const next = shuffleChoicesFresh(bank, prevOrderKeyRef.current)
+    prevOrderKeyRef.current = choiceOrderKey(next)
+    setOptions(next)
+    setPicked(null)
+    setPickMiss(false)
+  }
 
   useEffect(() => {
     setDraft('')
     setFeedback(null)
-  }, [term.id])
+    setPicked(null)
+    setPickMiss(false)
+    prevOrderKeyRef.current = null
+    if (heardEnglish && !typedEnglish) {
+      const bank = buildVocabPickBank(term, choicePool, VV_PICK_BANK_SIZE)
+      const next = shuffleChoicesFresh(bank, null)
+      prevOrderKeyRef.current = choiceOrderKey(next)
+      setOptions(next)
+    } else {
+      setOptions([])
+    }
+    /* choicePool is the worksheet page — rebuild only when the card / hear-type gate changes. */
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- avoid reshuffling on parent re-renders
+  }, [term.id, heardEnglish, typedEnglish])
 
   useEffect(() => {
     if (!typingPhase) return
@@ -138,11 +182,36 @@ export function VocabSheetCard({
     term.imageKey.startsWith('com-') ||
     term.imageKey.startsWith('con-')
 
+  function onPickOption(opt: string) {
+    if (!typingPhase || typedEnglish) return
+    if (normalizeEnglishAnswer(opt) === normalizeEnglishAnswer(term.english)) {
+      setPicked(opt)
+      setPickMiss(false)
+      if (feedback === 'need-pick') setFeedback(null)
+      if (coachFirst) advanceStationCoach('workplace-words')
+      return
+    }
+    /* Wrong pick: soft miss + reshuffle so position tapping cannot clear. */
+    playFoley('wrong')
+    setPicked(null)
+    setPickMiss(true)
+    setFeedback(null)
+    setDraft('')
+    dealPickBank()
+  }
+
   function checkType(e: FormEvent) {
     e.preventDefault()
+    if (!pickReady) {
+      playFoley('wrong')
+      setFeedback('need-pick')
+      setPickMiss(true)
+      return
+    }
     const ok = normalizeEnglishAnswer(draft) === normalizeEnglishAnswer(term.english)
     if (ok) {
       setFeedback('ok')
+      setPickMiss(false)
       const leftAfter = total - index
       firePlayClear({
         label: 'Word clear',
@@ -161,22 +230,26 @@ export function VocabSheetCard({
 
   const progressLine = (() => {
     if (ready) return ' · Done ✓'
-    if (typingPhase) return ' · Now type the English word'
+    if (typingPhase) {
+      return pickReady
+        ? ' · Now type the English word'
+        : ' · Pick the match, then type it'
+    }
     if (listeningPhase) {
       return speaking
-        ? ' · Listening — then type the English word'
-        : ' · Hear English, then type it'
+        ? ' · Listening — then pick and type the English word'
+        : ' · Hear English, then pick and type it'
     }
-    if (alreadyKnown) return ' · Already known — hear English, then type it'
+    if (alreadyKnown) return ' · Already known — hear English, then pick and type it'
     return ' · Press the language you understand'
   })()
 
   const caption = (() => {
     if (typedEnglish) return `Yes — ${term.english}.`
-    if (typingPhase) return 'Look. Hear your language. Hear English. Type what you heard.'
-    if (listeningPhase) return 'Listening… Then type the English word so it sticks.'
-    if (studioPhoto) return 'Look at the object. Press your language. Hear English. Type it.'
-    return 'Look at the picture. Press your language. Hear English. Type it.'
+    if (typingPhase) return 'Look. Hear your language. Hear English. Pick the match. Type it.'
+    if (listeningPhase) return 'Listening… Then pick the match and type the English word so it sticks.'
+    if (studioPhoto) return 'Look at the object. Press your language. Hear English. Pick and type it.'
+    return 'Look at the picture. Press your language. Hear English. Pick and type it.'
   })()
 
   const langsToShow =
@@ -189,11 +262,13 @@ export function VocabSheetCard({
   const typeForm = typingPhase ? (
     <form className="vocab-sheet-type" data-coach="vv-type" onSubmit={checkType}>
       <p className="play-nearby-objective" aria-live="polite">
-        Clear this word · type what you heard
+        Clear this word · pick the match, then type it
       </p>
       <p className="vocab-sheet-type-prompt">
         <span className="vocab-sheet-type-kicker">Your turn</span>
-        Type the English word you just heard.
+        {pickReady
+          ? 'Type the English word you picked and heard.'
+          : 'Pick the matching English word below, then type it.'}
       </p>
       <div className="vocab-sheet-type-row">
         <label className="sr-only" htmlFor={inputId}>
@@ -206,17 +281,21 @@ export function VocabSheetCard({
           value={draft}
           onChange={(e) => {
             setDraft(e.target.value)
-            if (feedback === 'retry') setFeedback(null)
+            if (feedback === 'retry' || feedback === 'need-pick') setFeedback(null)
           }}
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}
           enterKeyHint="done"
           placeholder="Type here…"
-          aria-invalid={feedback === 'retry'}
+          aria-invalid={feedback === 'retry' || feedback === 'need-pick'}
           aria-describedby={feedback ? `${inputId}-fb` : undefined}
         />
-        <button type="submit" className="btn btn-primary vocab-sheet-type-check" disabled={!draft.trim()}>
+        <button
+          type="submit"
+          className="btn btn-primary vocab-sheet-type-check"
+          disabled={!draft.trim()}
+        >
           Go
         </button>
       </div>
@@ -231,9 +310,50 @@ export function VocabSheetCard({
           Hear English again
         </button>
       </div>
+      {options.length > 0 && (
+        <div
+          className="train-choice-grid vocab-sheet-pick-bank"
+          role="group"
+          data-coach="vv-pick"
+          aria-label="English word choices — pick the match, then type it"
+        >
+          {options.map((opt, i) => {
+            const letter = pickLetters[i] ?? String(i + 1)
+            const selected =
+              !!picked && normalizeEnglishAnswer(picked) === normalizeEnglishAnswer(opt)
+            const isAnswer =
+              normalizeEnglishAnswer(opt) === normalizeEnglishAnswer(term.english)
+            return (
+              <button
+                key={`${opt}-${i}`}
+                type="button"
+                className={`vocab-sheet-pick-chip${selected && isAnswer ? ' is-picked' : ''}${
+                  pickReady && !isAnswer ? ' is-dim' : ''
+                }`}
+                aria-pressed={selected}
+                disabled={pickReady && !isAnswer}
+                onClick={() => onPickOption(opt)}
+              >
+                <span className="vocab-sheet-pick-letter">{letter}.</span>{' '}
+                <span>{opt}</span>
+              </button>
+            )
+          })}
+        </div>
+      )}
+      {feedback === 'need-pick' && (
+        <p id={`${inputId}-fb`} className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
+          {softMissLine('pick the matching word below, then type it. No rush.')}
+        </p>
+      )}
       {feedback === 'retry' && (
         <p id={`${inputId}-fb`} className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
           Not yet — hear it again, then type what you heard. No rush.
+        </p>
+      )}
+      {pickMiss && feedback !== 'need-pick' && feedback !== 'retry' && (
+        <p className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
+          {softMissLine('not that one. Choices switched — pick again. No rush.')}
         </p>
       )}
     </form>
@@ -242,12 +362,12 @@ export function VocabSheetCard({
   const listenStatus = listeningPhase ? (
     <div className="vocab-sheet-listen" role="status" aria-live="polite">
       <p className="play-nearby-objective">
-        Clear this word · listen, then type
+        Clear this word · listen, then pick and type
       </p>
       <p className="vocab-sheet-listen-prompt">
         {speaking
           ? 'Hear your language, then English…'
-          : 'Press Hear English if you need it again — then type the word.'}
+          : 'Press Hear English if you need it again — then pick and type the word.'}
       </p>
       {!speaking && (
         <button
@@ -279,13 +399,13 @@ export function VocabSheetCard({
             className="vocab-sheet-en is-hidden-for-type"
             aria-label={
               typingPhase
-                ? 'Type the English word you heard'
+                ? 'Pick the matching English word, then type it'
                 : listeningPhase
-                  ? 'Listen, then type the English word'
-                  : 'English word hidden until you type it'
+                  ? 'Listen, then pick and type the English word'
+                  : 'English word hidden until you pick and type it'
             }
           >
-            {typingPhase ? 'Type it' : listeningPhase ? 'Listen…' : '???'}
+            {typingPhase ? (pickReady ? 'Type it' : 'Pick · type') : listeningPhase ? 'Listen…' : '???'}
           </strong>
         )}
         <button
@@ -321,7 +441,7 @@ export function VocabSheetCard({
 
       {!productionPhase && !typedEnglish && (
         <p className="play-nearby-objective vocab-sheet-nearby-pre" aria-live="polite">
-          Clear this word · press your language, then type
+          Clear this word · press your language, then pick and type
         </p>
       )}
 
@@ -374,7 +494,7 @@ export function VocabSheetCard({
                         onConnectLang(lang)
                       }}
                       aria-pressed={selected}
-                      aria-label={`Hear ${term.gloss[lang]} in ${lang}, then hear and type English`}
+                      aria-label={`Hear ${term.gloss[lang]} in ${lang}, then hear, pick, and type English`}
                     >
                       <span className="vocab-sheet-flag" aria-hidden>
                         {FLAG[lang]}
@@ -385,7 +505,7 @@ export function VocabSheetCard({
                       </span>
                       {selected && (
                         <span className="vocab-sheet-lang-link">
-                          {typedEnglish ? `→ ${term.english}` : speaking ? '→ …' : '→ type next'}
+                          {typedEnglish ? `→ ${term.english}` : speaking ? '→ …' : '→ pick · type'}
                         </span>
                       )}
                     </button>
@@ -431,13 +551,13 @@ export function VocabSheetCard({
       )}
       {alreadyKnown && !typedEnglish && (
         <p className="vocab-known-note">
-          Marked known — hear English once, then type it so it sticks.
+          Marked known — hear English once, then pick and type it so it sticks.
         </p>
       )}
       {coachFirst ? (
         <StationCoach
           stationId="workplace-words"
-          layoutKey={`${bridged}-${heardEnglish}-${typingPhase}-${typedEnglish}`}
+          layoutKey={`${bridged}-${heardEnglish}-${typingPhase}-${pickReady}-${typedEnglish}`}
         />
       ) : null}
     </article>
@@ -476,7 +596,7 @@ type DeckProps = {
   journeyGateIds?: string[]
   /**
    * After the station was finished once: retake framing + skip-known control.
-   * First go stays hear → hear → type with no skip shortcut.
+   * First go stays hear → hear → pick → type with no skip shortcut.
    */
   allowSkipKnown?: boolean
 }
@@ -497,7 +617,7 @@ export function termLinked(
 
 /**
  * One-by-one vocabulary deck (worksheet mold).
- * Pattern: see picture → hear your language → hear English → type English → next.
+ * Pattern: see picture → hear your language → hear English → pick match + type → next.
  * Large tables page in worksheet banks of 20.
  */
 export function VocabSheet({
@@ -535,9 +655,14 @@ export function VocabSheet({
   const page = paged ? Math.floor(idx / VOCAB_PAGE_SIZE) : 0
   const pageStart = page * VOCAB_PAGE_SIZE
   const pageEnd = Math.min(terms.length, pageStart + VOCAB_PAGE_SIZE)
-  const pageLinked = terms
-    .slice(pageStart, pageEnd)
-    .filter((t) => termLinked(t, heard, connected, typed, knownSet)).length
+  /** Same worksheet page = same language level for VV pick distractors. */
+  const choicePool = useMemo(
+    () => terms.slice(pageStart, pageEnd),
+    [terms, pageStart, pageEnd],
+  )
+  const pageLinked = choicePool.filter((t) =>
+    termLinked(t, heard, connected, typed, knownSet),
+  ).length
   const pageTotal = pageEnd - pageStart
 
   const gateIdSet =
@@ -575,14 +700,14 @@ export function VocabSheet({
         <div className="vocab-retake" role="status">
           <p className="vocab-retake-kicker">Another round</p>
           <p className="vocab-retake-lede">
-            Same words, same loop — hear, hear, type. This time you can mark ones you already know;
-            you still hear English once and type it so it sticks.
+            Same words, same loop — hear, hear, pick, type. This time you can mark ones you already know;
+            you still hear English once, pick the match, and type it so it sticks.
           </p>
         </div>
       ) : (
         <p className="vocab-sheet-lede">
-          One word at a time. Hear it in your language. Hear it in English. Type it.
-          Repeat until it feels easy — like practice on the job.
+          One word at a time. Hear it in your language. Hear it in English. Pick the match. Type it.
+          Choices switch when you miss — so the word sticks, not the button.
           {paged
             ? ` This set has ${terms.length} words in pages of ${VOCAB_PAGE_SIZE}.`
             : ''}
@@ -628,6 +753,7 @@ export function VocabSheet({
         index={idx + 1}
         total={terms.length}
         term={term}
+        choicePool={choicePool}
         speaking={speakingId === term.id}
         heardEnglish={heardEnglish}
         typedEnglish={typedEnglish}
@@ -655,7 +781,7 @@ export function VocabSheet({
             : !heardEnglish
               ? 'Hear English next'
               : !typedEnglish
-                ? 'Type it next'
+                ? 'Pick · type next'
                 : atEnd
                   ? allLinked
                     ? 'All words done ✓'

@@ -7883,6 +7883,55 @@ table.data th {
   color: var(--brand-deep, #041526);
 }
 
+/* VV pick bank — five shuffled choices under Type/Go; pick required, then type. */
+.vocab-sheet-pick-bank {
+  margin-top: 0.15rem;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+}
+
+.vocab-sheet-pick-chip {
+  appearance: none;
+  border: 2px solid color-mix(in srgb, var(--brand, #0b2f5c) 22%, var(--line, #c5d0dc));
+  background: #ffffff;
+  color: var(--brand-deep, #041526);
+  font: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
+}
+
+.vocab-sheet-pick-chip:hover:not(:disabled) {
+  border-color: var(--accent, #e8a317);
+  transform: translateY(-1px);
+}
+
+.vocab-sheet-pick-chip:focus-visible {
+  outline: 2px solid var(--accent, #e8a317);
+  outline-offset: 2px;
+}
+
+.vocab-sheet-pick-chip.is-picked {
+  border-color: #2a7a4b;
+  background: color-mix(in srgb, #2a7a4b 12%, #fff);
+}
+
+.vocab-sheet-pick-chip.is-dim {
+  opacity: 0.45;
+}
+
+.vocab-sheet-pick-chip:disabled {
+  cursor: default;
+}
+
+.vocab-sheet-pick-letter {
+  font-weight: 800;
+  color: var(--brand, #0b2f5c);
+}
+
 .is-phone-app .vocab-sheet-type {
   margin-top: 0.65rem;
   padding: 0.75rem 0.8rem;
@@ -7994,6 +8043,33 @@ table.data th {
 
 .course-stage .vocab-sheet-type-fb.is-retry {
   color: #f5f8fc;
+}
+
+.course-stage .vocab-sheet-pick-chip {
+  background: color-mix(in srgb, #041526 55%, transparent);
+  border-color: color-mix(in srgb, #e8a317 38%, transparent);
+  color: #f5f8fc;
+}
+
+.course-stage .vocab-sheet-pick-chip:hover:not(:disabled) {
+  border-color: #e8a317;
+  background: color-mix(in srgb, #e8a317 14%, transparent);
+}
+
+.course-stage .vocab-sheet-pick-chip.is-picked {
+  border-color: #5dce8a;
+  background: color-mix(in srgb, #2a7a4b 28%, transparent);
+  color: #f5f8fc;
+}
+
+.course-stage .vocab-sheet-pick-letter {
+  color: #e8a317;
+}
+
+.is-phone-app .train-choice-grid.vocab-sheet-pick-bank,
+.is-phone-app .vocab-sheet-pick-bank {
+  /* Beat phone’s global 1-col !important on .train-choice-grid so ~5 choices stay near Type/Go. */
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 }
 
 .is-phone-app .vocab-sheet-body-focus.is-production,

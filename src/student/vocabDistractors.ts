@@ -104,3 +104,53 @@ export function matchPracticeDeck(
 export function shuffleChoices<T>(items: readonly T[]): T[] {
   return shuffleInPlace([...items])
 }
+
+/** Stable key for “never the same choice order twice in a row.” */
+export function choiceOrderKey(items: readonly string[]): string {
+  return items.join('\0')
+}
+
+/**
+ * Shuffle until the order differs from `prevKey` (when more than one item).
+ * Used by VV pick bank so position memory cannot clear a word.
+ */
+export function shuffleChoicesFresh(
+  items: readonly string[],
+  prevKey: string | null,
+  attempts = 8,
+): string[] {
+  if (items.length <= 1) return [...items]
+  let next = shuffleChoices(items)
+  let key = choiceOrderKey(next)
+  let tries = 0
+  while (prevKey && key === prevKey && tries < attempts) {
+    next = shuffleChoices(items)
+    key = choiceOrderKey(next)
+    tries += 1
+  }
+  return next
+}
+
+/**
+ * Build a ~5-word VV pick bank: correct English + distractors from the same
+ * worksheet page / station pool (same language level). Dedupes by normalized
+ * English so twin spellings never appear as fake choices.
+ */
+export function buildVocabPickBank(
+  correct: VocabTerm,
+  pool: readonly VocabTerm[],
+  size = 5,
+): string[] {
+  const need = Math.max(0, size - 1)
+  const correctNorm = correct.english.trim().toLowerCase()
+  const seen = new Set<string>([correctNorm])
+  const distractors: string[] = []
+  for (const term of shuffleChoices(pool.filter((t) => t.id !== correct.id))) {
+    const norm = term.english.trim().toLowerCase()
+    if (!norm || seen.has(norm)) continue
+    seen.add(norm)
+    distractors.push(term.english)
+    if (distractors.length >= need) break
+  }
+  return [correct.english, ...distractors]
+}

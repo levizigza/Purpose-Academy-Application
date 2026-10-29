@@ -1723,7 +1723,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 6: Visual Vocabulary — hear → hear → type (reps that stick) */
+  /* Step 6: Visual Vocabulary — hear → hear → pick → type (reps that stick) */
   if (step === 6) {
     const knownSet = new Set(vocabKnownIds)
     const wordDone = (t: (typeof VOCAB_UNIT)[number]) =>
@@ -1823,7 +1823,7 @@ export function StudentSequencePage() {
         <p className="train-vocab-counter">
           {ready
             ? `Words practised: ${linkedCount}. Next: Language Organize — match each word to its picture.`
-            : `Words practised: ${linkedCount}. Keep going — hear, hear, type.`}
+            : `Words practised: ${linkedCount}. Keep going — hear, hear, pick, type.`}
         </p>
       </Shell>
     )
