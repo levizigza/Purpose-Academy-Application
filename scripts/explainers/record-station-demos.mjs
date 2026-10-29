@@ -154,8 +154,25 @@ const STATIONS = {
         },
       },
       {
+        id: 'pick',
+        text: 'Pick the matching English word. Soft try again if not yet — choices switch.',
+        async act(page) {
+          await page.waitForSelector('[data-coach="vv-pick"] .vocab-sheet-pick-chip, .vocab-sheet-pick-chip', {
+            timeout: 35000,
+          })
+          const bank = page.locator('[data-coach="vv-pick"], .vocab-sheet-pick-bank').first()
+          await bank.scrollIntoViewIfNeeded()
+          await moveTo(page, bank, { steps: 18, settle: 400 })
+          /* Prefer the word that matches the typed demo (“Hi”); fall back to first chip. */
+          const chips = page.locator('.vocab-sheet-pick-chip')
+          const hi = chips.filter({ hasText: /\bHi\b/i }).first()
+          const pick = (await hi.isVisible().catch(() => false)) ? hi : chips.first()
+          await clickAt(page, pick, { steps: 20, settle: 300, after: 700 })
+        },
+      },
+      {
         id: 'type',
-        text: 'Type what you heard. Soft try again if not yet. That is the whole loop.',
+        text: 'Type what you picked and heard. Soft try again if not yet. That is the whole loop.',
         async act(page) {
           await page.waitForSelector('[data-coach="vv-type"] input, .vocab-sheet-type-input', {
             timeout: 35000,

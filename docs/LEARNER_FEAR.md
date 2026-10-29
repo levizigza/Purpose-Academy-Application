@@ -43,7 +43,7 @@ Prefer **action reps** over **intellectual explanation**.
 | **Retry soft** | Miss without shame | “Not yet — try again. No rush.” |
 | **Clear** | Station done | “Station clear. Next door can open.” |
 
-Vocabulary non-negotiable: **hear → hear → type** on Visual Vocabulary (see Craft §6.3c).
+Vocabulary non-negotiable: **hear → hear → pick match → type** on Visual Vocabulary (see Craft §6.3c). Wrong pick soft-misses and reshuffles the bank — never exam theatre; typing stays the production clear.
 
 Do **not** ask them to:
 
@@ -98,7 +98,7 @@ Run this on every station before merge:
 | 3 | Your Language | “Questions,” not assessment |
 | 4 | Work Style | No wrong answers; short picks |
 | 5 | Career Profile | Path recommendation without % fit theatre |
-| 6 | Visual Vocabulary | Hear → hear → type; one calm counter |
+| 6 | Visual Vocabulary | Hear → hear → pick match → type; shuffled bank; one calm counter |
 | 7 | Language Organize | Match pictures — never “quiz” |
 | 8 | English Eye Spy | Clear the board; no prove / 100% / exam |
 | 9 | Sentences / Word→Action | Four choices visible; type the matching word; soft retry — not tap-to-answer |
@@ -148,6 +148,11 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 ---
 
 ## 8. Changelog
+
+### 2026-10-29 — VV pick + type + shuffle
+
+- Customer ask: ~5 choices under Workplace Words; pick the match **and** type it; shuffle so tapping until right cannot cheat.
+- Soft miss + reshuffle on wrong pick; type still clears. No exam lexicon. See Craft §6.3c.
 
 ### 2026-10-27 — Sentence Structure type-the-blank
 

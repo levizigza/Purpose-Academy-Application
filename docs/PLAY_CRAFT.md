@@ -185,6 +185,10 @@ Closed:
 - Lexicon: Computer TeachNote “Misses teach”; Eye Spy final “Try N of M”; Equipment keep-watching soft tip.  
 - Authority unchanged — pulses never write evidence.
 
+### 2026-10-29 — VV pick + type + shuffle
+
+- VocabSheet typing beat adds a ~5-option bank (same worksheet page). Correct pick required + Type/Go; wrong pick soft-misses and reshuffles (no same order twice). Dual-shell chips (night / phone paper). Soft teach — not tap-until-right theatre.
+
 ### 2026-10-27 — VV type-out first-viewport
 
 - VocabSheet production phase: nearby + type (or listen) beside/under photo; langs collapse; English title stays `???` / Type it until typed.  

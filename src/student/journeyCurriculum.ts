@@ -15,7 +15,7 @@ export const JOURNEY_STEPS = [
   { n: 3, title: 'Your Language', help: 'Start in English. Then choose another language if you need it for the short path questions.', purpose: 'Path and work-interest steps run in a language you understand. Job-site English comes with practice.', unit: 2 },
   { n: 4, title: 'Work Style', help: 'Ten short questions. Pick what sounds most like you — there is no wrong answer.', purpose: 'A few short questions open Construction, Logistics, or Community Support.', unit: 2 },
   { n: 5, title: 'Your Career Profile', help: 'See the path that fits how you like to work.', purpose: 'Work style → recommended pathway. Later practice, then a deeper “what kind of work feels right?” step.', unit: 2 },
-  { n: 6, title: 'Workplace Words', help: 'See the picture. Hear your language. Hear English. Type the word. One word at a time.', purpose: 'Reps that stick: hear → hear → type — job practice.', unit: 3 },
+  { n: 6, title: 'Workplace Words', help: 'See the picture. Hear your language. Hear English. Pick the match. Type the word. One word at a time.', purpose: 'Reps that stick: hear → hear → pick → type — job practice.', unit: 3 },
   { n: 7, title: 'Language Organize', help: 'Five rounds. Hear a language if you want, then drop the picture into the empty box.', purpose: 'Match the picture to the word you already practised.', unit: 3 },
   { n: 8, title: 'English Eye Spy', help: 'Tap a picture and its English name. Correct pairs disappear until the board is clear.', purpose: 'See the same words again in a busy scene before sentences.', unit: 3 },
   { n: 9, title: 'Sentence Structure → Word → Action', help: 'Type the word that fits the blank. Then connect each tool to its action.', purpose: 'After pictures are solid, build the sentence and link words to real movement.', unit: 4 },
@@ -78,7 +78,7 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   3: {
-    goal: 'Today: workplace words — hear, hear, type — then find every picture again.',
+    goal: 'Today: workplace words — hear, hear, pick, type — then find every picture again.',
     outcomes: [
       'Hear each word in your language and in English, then type it',
       'Match each word card to its picture',
