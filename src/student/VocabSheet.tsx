@@ -12,12 +12,14 @@ import {
   choiceOrderKey,
   shuffleChoicesFresh,
 } from './vocabDistractors'
+import type { HearLanguage } from './hearLanguages'
+import type { UniversalBridge, UniversalHearStatus } from './universalHear'
+import { UniversalHearControl } from './UniversalHear'
 
 /**
- * Official Purpose Academy visual-vocabulary language order
+ * Official Purpose Academy visual-vocabulary mother-tongue order
  * (Logistics Visual Vocabulary worksheet — No French).
- * All five languages are always shown; the learner presses the one they understand
- * and connects it to the English word.
+ * Used by Language Organize and as the non-English hear chips.
  */
 export const VOCAB_SHEET_LANGS: HomeLang[] = [
   'Amharic',
@@ -26,6 +28,18 @@ export const VOCAB_SHEET_LANGS: HomeLang[] = [
   'Spanish',
   'Hindi',
 ]
+
+/**
+ * Workplace Words hear row — English first so EN-only learners can bridge,
+ * then the five mother tongues. Press plays that tongue (or English once),
+ * then pick + type. English pick skips a redundant second Hear English.
+ */
+export const VOCAB_HEAR_LANGS: SupportLang[] = ['English', ...VOCAB_SHEET_LANGS]
+
+/** Gloss or English title for a hear-row language chip. */
+export function vocabHearWord(term: VocabTerm, lang: SupportLang): string {
+  return lang === 'English' ? term.english : term.gloss[lang]
+}
 
 /** Worksheet page size used by Purpose Academy visual vocabulary PDFs. */
 export const VOCAB_PAGE_SIZE = 20
@@ -80,8 +94,12 @@ type CardProps = {
   speaking: boolean
   heardEnglish: boolean
   typedEnglish: boolean
-  /** Language the learner pressed to bridge meaning → English */
-  connectedLang: HomeLang | null
+  /** Language the learner pressed to bridge meaning → English (may be English itself) */
+  connectedLang: SupportLang | null
+  /** Universal translator bridge (any searchable language). */
+  universalBridge: UniversalBridge | null
+  universalBusy: boolean
+  universalStatus: UniversalHearStatus
   alreadyKnown: boolean
   /**
    * Retake only: show “I already know this word”.
@@ -89,7 +107,9 @@ type CardProps = {
    */
   allowSkipKnown: boolean
   onPlayEnglish: () => void
-  onConnectLang: (lang: HomeLang) => void
+  onConnectLang: (lang: SupportLang) => void
+  onUniversalHear: (lang: HearLanguage) => void
+  onClearUniversalStatus: () => void
   onMarkKnown: () => void
   onTypedCorrect: () => void
 }
@@ -109,15 +129,20 @@ export function VocabSheetCard({
   heardEnglish,
   typedEnglish,
   connectedLang,
+  universalBridge,
+  universalBusy,
+  universalStatus,
   alreadyKnown,
   allowSkipKnown,
   onPlayEnglish,
   onConnectLang,
+  onUniversalHear,
+  onClearUniversalStatus,
   onMarkKnown,
   onTypedCorrect,
 }: CardProps) {
   const img = pathwayImage(term.imageKey)
-  const bridged = !!connectedLang || alreadyKnown
+  const bridged = !!connectedLang || !!universalBridge || alreadyKnown
   const ready = bridged && heardEnglish && typedEnglish
   /** After bridge: listen → pick + type. Typing unlocks once English was offered (heard). */
   const listeningPhase = bridged && !heardEnglish && !typedEnglish
@@ -241,15 +266,25 @@ export function VocabSheetCard({
         : ' · Hear English, then pick and type it'
     }
     if (alreadyKnown) return ' · Already known — hear English, then pick and type it'
-    return ' · Press the language you understand'
+    return ' · Press a language you understand — or More languages'
   })()
 
   const caption = (() => {
     if (typedEnglish) return `Yes — ${term.english}.`
-    if (typingPhase) return 'Look. Hear your language. Hear English. Pick the match. Type it.'
-    if (listeningPhase) return 'Listening… Then pick the match and type the English word so it sticks.'
-    if (studioPhoto) return 'Look at the object. Press your language. Hear English. Pick and type it.'
-    return 'Look at the picture. Press your language. Hear English. Pick and type it.'
+    if (typingPhase) return 'Look. Hear. Pick the match. Type it.'
+    if (listeningPhase) {
+      if (connectedLang === 'English' && !universalBridge) {
+        return 'Listening to English… Then pick the match and type it.'
+      }
+      if (universalBridge) {
+        return `Heard in ${universalBridge.name}. Listening… Then pick and type the English word.`
+      }
+      return 'Listening… Then pick the match and type the English word so it sticks.'
+    }
+    if (studioPhoto) {
+      return 'Look at the object. Press a language you know — or More languages. Pick and type the English word.'
+    }
+    return 'Look at the picture. Press a language you know — English included, or More languages. Pick and type it.'
   })()
 
   const langsToShow =
@@ -257,7 +292,7 @@ export function VocabSheetCard({
       ? [connectedLang]
       : productionPhase
         ? []
-        : VOCAB_SHEET_LANGS
+        : VOCAB_HEAR_LANGS
 
   const typeForm = typingPhase ? (
     <form className="vocab-sheet-type" data-coach="vv-type" onSubmit={checkType}>
@@ -366,7 +401,9 @@ export function VocabSheetCard({
       </p>
       <p className="vocab-sheet-listen-prompt">
         {speaking
-          ? 'Hear your language, then English…'
+          ? connectedLang === 'English'
+            ? 'Hear English…'
+            : 'Hear your language, then English…'
           : 'Press Hear English if you need it again — then pick and type the word.'}
       </p>
       {!speaking && (
@@ -441,7 +478,7 @@ export function VocabSheetCard({
 
       {!productionPhase && !typedEnglish && (
         <p className="play-nearby-objective vocab-sheet-nearby-pre" aria-live="polite">
-          Clear this word · press your language, then pick and type
+          Clear this word · press a language you know (or More languages), then pick and type
         </p>
       )}
 
@@ -478,15 +515,17 @@ export function VocabSheetCard({
             <ul
               className={`vocab-sheet-langs${productionPhase ? ' is-collapsed' : ''}`}
               data-coach="vv-lang"
-              aria-label="Press the language you understand"
+              aria-label="Press a language you understand — English included"
             >
               {langsToShow.map((lang) => {
                 const selected = connectedLang === lang
+                const hearWord = vocabHearWord(term, lang)
+                const enBridge = lang === 'English'
                 return (
                   <li key={lang} className={selected ? 'is-connected-lang' : ''}>
                     <button
                       type="button"
-                      className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}`}
+                      className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}${enBridge ? ' is-en-hear' : ''}`}
                       disabled={speaking || alreadyKnown || productionPhase}
                       onClick={() => {
                         markNavCueSeen(NAV_CUE.vocabLang)
@@ -494,14 +533,18 @@ export function VocabSheetCard({
                         onConnectLang(lang)
                       }}
                       aria-pressed={selected}
-                      aria-label={`Hear ${term.gloss[lang]} in ${lang}, then hear, pick, and type English`}
+                      aria-label={
+                        enBridge
+                          ? `Hear ${hearWord} in English, then pick and type it`
+                          : `Hear ${hearWord} in ${lang}, then hear, pick, and type English`
+                      }
                     >
                       <span className="vocab-sheet-flag" aria-hidden>
                         {FLAG[lang]}
                       </span>
                       <span className="vocab-sheet-lang-meta">
                         <span className="vocab-sheet-lang-name">{lang}</span>
-                        <span className="vocab-sheet-lang-word">{term.gloss[lang]}</span>
+                        <span className="vocab-sheet-lang-word">{hearWord}</span>
                       </span>
                       {selected && (
                         <span className="vocab-sheet-lang-link">
@@ -514,19 +557,44 @@ export function VocabSheetCard({
               })}
             </ul>
           )
-          /* Nav cue: once-then-quiet arrow/glow at mother-tongue chips (same grammar as Mode/Hub). */
-          if (!showLangCue) return langList
-          return (
-            <NavCueTarget
-              cueId={NAV_CUE.vocabLang}
-              arrowLabel="Your languages"
-              arrowSide="above"
-              className="vocab-lang-cue"
-            >
-              <NavGlowRegion cueId={NAV_CUE.vocabLang} dismissOnClick={false}>
+          const universal = !typedEnglish ? (
+            <UniversalHearControl
+              english={term.english}
+              disabled={alreadyKnown || (productionPhase && !universalBridge)}
+              bridge={universalBridge}
+              busy={universalBusy || speaking}
+              status={universalStatus}
+              onPick={(lang) => {
+                markNavCueSeen(NAV_CUE.vocabLang)
+                if (coachFirst) advanceStationCoach('workplace-words')
+                onUniversalHear(lang)
+              }}
+              onCloseStatus={onClearUniversalStatus}
+            />
+          ) : null
+          /* Nav cue: once-then-quiet arrow/glow at hear chips (same grammar as Mode/Hub). */
+          if (!showLangCue) {
+            return (
+              <>
                 {langList}
-              </NavGlowRegion>
-            </NavCueTarget>
+                {universal}
+              </>
+            )
+          }
+          return (
+            <>
+              <NavCueTarget
+                cueId={NAV_CUE.vocabLang}
+                arrowLabel="Languages here"
+                arrowSide="above"
+                className="vocab-lang-cue"
+              >
+                <NavGlowRegion cueId={NAV_CUE.vocabLang} dismissOnClick={false}>
+                  {langList}
+                </NavGlowRegion>
+              </NavCueTarget>
+              {universal}
+            </>
           )
         })()}
       </div>
@@ -570,15 +638,21 @@ type DeckProps = {
   speakingId: string | null
   /** English audio completed for each term id */
   heard: Record<string, boolean>
-  /** Home language pressed for each term id (bridge to English) */
-  connected: Record<string, HomeLang>
+  /** Language pressed for each term id (mother tongue or English bridge) */
+  connected: Record<string, SupportLang>
+  /** Universal translator bridges per term id */
+  universal: Record<string, UniversalBridge>
+  universalBusyId: string | null
+  universalStatus: UniversalHearStatus
   /** English spelling typed correctly for each term id */
   typed: Record<string, boolean>
   /** Adaptive: term ids the learner already knows */
   knownIds: string[]
   onIndexChange: (index: number) => void
   onPlayEnglish: (term: VocabTerm) => void
-  onConnectLang: (term: VocabTerm, lang: HomeLang) => void
+  onConnectLang: (term: VocabTerm, lang: SupportLang) => void
+  onUniversalHear: (term: VocabTerm, lang: HearLanguage) => void
+  onClearUniversalStatus: () => void
   onMarkKnown: (term: VocabTerm) => void
   onTypedCorrect: (term: VocabTerm) => void
   /**
@@ -604,20 +678,21 @@ type DeckProps = {
 export function termLinked(
   term: VocabTerm,
   heard: Record<string, boolean>,
-  connected: Record<string, HomeLang>,
+  connected: Record<string, SupportLang>,
   typed: Record<string, boolean>,
   knownSet: Set<string>,
+  universal?: Record<string, UniversalBridge>,
 ) {
   return (
     !!heard[term.id] &&
     !!typed[term.id] &&
-    (!!connected[term.id] || knownSet.has(term.id))
+    (!!connected[term.id] || !!universal?.[term.id] || knownSet.has(term.id))
   )
 }
 
 /**
  * One-by-one vocabulary deck (worksheet mold).
- * Pattern: see picture → hear your language → hear English → pick match + type → next.
+ * Pattern: see picture → hear a language (incl. English / More languages) → pick + type.
  * Large tables page in worksheet banks of 20.
  */
 export function VocabSheet({
@@ -626,11 +701,16 @@ export function VocabSheet({
   speakingId,
   heard,
   connected,
+  universal,
+  universalBusyId,
+  universalStatus,
   typed,
   knownIds,
   onIndexChange,
   onPlayEnglish,
   onConnectLang,
+  onUniversalHear,
+  onClearUniversalStatus,
   onMarkKnown,
   onTypedCorrect,
   journeyGateCount,
@@ -644,9 +724,12 @@ export function VocabSheet({
   const heardEnglish = !!heard[term.id]
   const typedEnglish = !!typed[term.id]
   const connectedLang = connected[term.id] ?? null
+  const universalBridge = universal[term.id] ?? null
   const alreadyKnown = knownSet.has(term.id)
-  const bridged = !!connectedLang || alreadyKnown
-  const linkedCount = terms.filter((t) => termLinked(t, heard, connected, typed, knownSet)).length
+  const bridged = !!connectedLang || !!universalBridge || alreadyKnown
+  const linkedCount = terms.filter((t) =>
+    termLinked(t, heard, connected, typed, knownSet, universal),
+  ).length
   const allLinked = linkedCount >= terms.length
   const wordReady = bridged && heardEnglish && typedEnglish
 
@@ -661,7 +744,7 @@ export function VocabSheet({
     [terms, pageStart, pageEnd],
   )
   const pageLinked = choicePool.filter((t) =>
-    termLinked(t, heard, connected, typed, knownSet),
+    termLinked(t, heard, connected, typed, knownSet, universal),
   ).length
   const pageTotal = pageEnd - pageStart
 
@@ -671,7 +754,9 @@ export function VocabSheet({
     ? terms.filter((t) => gateIdSet.has(t.id))
     : terms.slice(0, Math.min(journeyGateCount ?? terms.length, terms.length))
   const gate = gateTerms.length
-  const gateLinked = gateTerms.filter((t) => termLinked(t, heard, connected, typed, knownSet)).length
+  const gateLinked = gateTerms.filter((t) =>
+    termLinked(t, heard, connected, typed, knownSet, universal),
+  ).length
   const gateReady = gate > 0 && gateLinked >= gate
   const gateLabel = gateIdSet
     ? `Finish the first greetings and workplace words (${gateLinked} of ${gate})`
@@ -706,7 +791,7 @@ export function VocabSheet({
         </div>
       ) : (
         <p className="vocab-sheet-lede">
-          One word at a time. Hear it in your language. Hear it in English. Pick the match. Type it.
+          One word at a time. Press a language you understand (English is included), or More languages to hear a translation. Pick the match. Type it.
           Choices switch when you miss — so the word sticks, not the button.
           {paged
             ? ` This set has ${terms.length} words in pages of ${VOCAB_PAGE_SIZE}.`
@@ -758,10 +843,15 @@ export function VocabSheet({
         heardEnglish={heardEnglish}
         typedEnglish={typedEnglish}
         connectedLang={connectedLang}
+        universalBridge={universalBridge}
+        universalBusy={universalBusyId === term.id}
+        universalStatus={universalStatus}
         alreadyKnown={alreadyKnown}
         allowSkipKnown={allowSkipKnown}
         onPlayEnglish={() => onPlayEnglish(term)}
         onConnectLang={(lang) => onConnectLang(term, lang)}
+        onUniversalHear={(lang) => onUniversalHear(term, lang)}
+        onClearUniversalStatus={onClearUniversalStatus}
         onMarkKnown={() => onMarkKnown(term)}
         onTypedCorrect={() => onTypedCorrect(term)}
       />
@@ -777,7 +867,7 @@ export function VocabSheet({
           onClick={goNext}
         >
           {!bridged
-            ? 'Press your language first'
+            ? 'Press a language first'
             : !heardEnglish
               ? 'Hear English next'
               : !typedEnglish

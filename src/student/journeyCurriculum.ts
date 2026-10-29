@@ -158,7 +158,11 @@ export const SUPPORT_LANGUAGES: { id: SupportLang; flag: string }[] = [
   { id: 'Tigrinya', flag: 'TI' },
 ]
 
-/** Home languages shown on vocabulary cards (English is the word title itself). */
+/**
+ * Mother-tongue gloss keys on vocabulary cards.
+ * English is offered on the Workplace Words hear row (see VOCAB_HEAR_LANGS) but
+ * is not a gloss key — the English title is `term.english`.
+ */
 export type HomeLang = Exclude<SupportLang, 'English'>
 
 export const HOME_LANGUAGES: HomeLang[] = ['Spanish', 'Arabic', 'Hindi', 'Amharic', 'Tigrinya']

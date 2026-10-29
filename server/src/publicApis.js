@@ -13,13 +13,34 @@ const LANG_MAP = {
   Arabic: 'ar',
   Hindi: 'hi',
   Tagalog: 'tl',
+  Filipino: 'tl',
   French: 'fr',
+  Portuguese: 'pt',
+  German: 'de',
+  Chinese: 'zh-CN',
+  Japanese: 'ja',
+  Korean: 'ko',
+  Vietnamese: 'vi',
+  Somali: 'so',
+  Persian: 'fa',
+  Farsi: 'fa',
+  Urdu: 'ur',
+  Russian: 'ru',
+  Ukrainian: 'uk',
+  Polish: 'pl',
+  Turkish: 'tr',
   'English only': 'en',
   English: 'en',
 }
 
 export function langCode(name) {
-  return LANG_MAP[name] || 'es'
+  const raw = String(name || '').trim()
+  if (!raw) return 'es'
+  /* Already an ISO / BCP-47-ish code (fr, zh-CN, pt-BR). */
+  if (/^[a-z]{2,3}(-[A-Za-z0-9]+)?$/i.test(raw) && !LANG_MAP[raw]) {
+    return raw
+  }
+  return LANG_MAP[raw] || raw.toLowerCase().slice(0, 8) || 'es'
 }
 
 /** Free Dictionary API — https://dictionaryapi.dev/ */
@@ -83,17 +104,30 @@ export async function dictionaryLookup(word) {
 export async function translateText(text, sourceLang, targetLang) {
   const sl = sourceLang || 'en'
   const tl = targetLang || 'es'
-  if (tl === 'en' || tl === sl) {
-    return { translated: text, source: 'passthrough', from: sl, to: tl }
+  const clean = String(text || '').trim()
+  if (!clean) throw new Error('Text is required')
+  if (tl === 'en' || tl === sl || String(tl).toLowerCase().startsWith('en')) {
+    return { translated: clean, source: 'passthrough', from: sl, to: tl }
   }
   const url = new URL('https://api.mymemory.translated.net/get')
-  url.searchParams.set('q', text)
+  url.searchParams.set('q', clean.slice(0, 480))
   url.searchParams.set('langpair', `${sl}|${tl}`)
   const res = await fetch(url)
   if (!res.ok) throw new Error('Translation service unavailable')
   const data = await res.json()
+  const translated = String(data?.responseData?.translatedText || '').trim()
+  const status = Number(data?.responseStatus)
+  if (!translated || /INVALID/i.test(translated) || (status && status !== 200)) {
+    const err = new Error(
+      translated && /INVALID/i.test(translated)
+        ? translated
+        : data?.responseDetails || 'Language pair not supported for translation',
+    )
+    err.code = 'UNSUPPORTED_LANG'
+    throw err
+  }
   return {
-    translated: data?.responseData?.translatedText || text,
+    translated,
     source: 'MyMemory Translation API',
     from: sl,
     to: tl,
@@ -253,6 +287,77 @@ const EDGE_VOICE = {
   hi: 'hi-IN-SwaraNeural',
   am: 'am-ET-MekdesNeural',
   ti: 'am-ET-MekdesNeural', // no Edge ti voice yet — closest Ge'ez-script neural
+  /* Universal hear — common Edge neural voices (skip to Google TTS when missing). */
+  fr: 'fr-FR-DeniseNeural',
+  de: 'de-DE-KatjaNeural',
+  pt: 'pt-BR-FranciscaNeural',
+  'pt-br': 'pt-BR-FranciscaNeural',
+  'pt-pt': 'pt-PT-RaquelNeural',
+  it: 'it-IT-ElsaNeural',
+  nl: 'nl-NL-ColetteNeural',
+  pl: 'pl-PL-ZofiaNeural',
+  ru: 'ru-RU-SvetlanaNeural',
+  uk: 'uk-UA-PolinaNeural',
+  tr: 'tr-TR-EmelNeural',
+  ja: 'ja-JP-NanamiNeural',
+  ko: 'ko-KR-SunHiNeural',
+  zh: 'zh-CN-XiaoxiaoNeural',
+  'zh-cn': 'zh-CN-XiaoxiaoNeural',
+  'zh-tw': 'zh-TW-HsiaoChenNeural',
+  vi: 'vi-VN-HoaiMyNeural',
+  th: 'th-TH-PremwadeeNeural',
+  id: 'id-ID-GadisNeural',
+  ms: 'ms-MY-YasminNeural',
+  tl: 'fil-PH-BlessicaNeural',
+  fil: 'fil-PH-BlessicaNeural',
+  fa: 'fa-IR-DilaraNeural',
+  ur: 'ur-PK-UzmaNeural',
+  bn: 'bn-IN-TanishaaNeural',
+  ta: 'ta-IN-PallaviNeural',
+  te: 'te-IN-ShrutiNeural',
+  mr: 'mr-IN-AarohiNeural',
+  gu: 'gu-IN-DhwaniNeural',
+  kn: 'kn-IN-SapnaNeural',
+  ml: 'ml-IN-SobhanaNeural',
+  pa: 'pa-IN-VaaniNeural',
+  he: 'he-IL-HilaNeural',
+  el: 'el-GR-AthinaNeural',
+  ro: 'ro-RO-AlinaNeural',
+  hu: 'hu-HU-NoemiNeural',
+  cs: 'cs-CZ-VlastaNeural',
+  sk: 'sk-SK-ViktoriaNeural',
+  bg: 'bg-BG-KalinaNeural',
+  hr: 'hr-HR-GabrijelaNeural',
+  sr: 'sr-RS-SophieNeural',
+  sv: 'sv-SE-SofieNeural',
+  da: 'da-DK-ChristelNeural',
+  nb: 'nb-NO-PernilleNeural',
+  no: 'nb-NO-PernilleNeural',
+  fi: 'fi-FI-NooraNeural',
+  et: 'et-EE-AnuNeural',
+  lv: 'lv-LV-EveritaNeural',
+  lt: 'lt-LT-OnaNeural',
+  ca: 'ca-ES-JoanaNeural',
+  sw: 'sw-KE-ZuriNeural',
+  so: 'so-SO-UbaxNeural',
+  af: 'af-ZA-AdriNeural',
+  zu: 'zu-ZA-ThandoNeural',
+  is: 'is-IS-GudrunNeural',
+  ga: 'ga-IE-OrlaNeural',
+  cy: 'cy-GB-NiaNeural',
+  sq: 'sq-AL-AnilaNeural',
+  mk: 'mk-MK-MarijaNeural',
+  az: 'az-AZ-BanuNeural',
+  kk: 'kk-KZ-AigulNeural',
+  uz: 'uz-UZ-MadinaNeural',
+  hy: 'hy-AM-AnahitNeural',
+  ka: 'ka-GE-EkaNeural',
+  ne: 'ne-NP-HemkalaNeural',
+  si: 'si-LK-ThiliniNeural',
+  my: 'my-MM-NilarNeural',
+  km: 'km-KH-SreymomNeural',
+  lo: 'lo-LA-KeomanyNeural',
+  mn: 'mn-MN-YesuiNeural',
 }
 
 /** Learner-friendly speaking rate (slightly slower than default for clarity). */
@@ -316,10 +421,19 @@ function rememberTts(key, buffer, contentType, voice, source) {
   TTS_CACHE.set(key, { buffer, contentType, voice, source, at: Date.now() })
 }
 
+function resolveEdgeVoice(lang) {
+  const raw = String(lang || 'en').toLowerCase()
+  if (EDGE_VOICE[raw]) return EDGE_VOICE[raw]
+  const short = raw.split('-')[0]
+  return EDGE_VOICE[short] || null
+}
+
 async function edgeNeuralSpeech(text, lang) {
-  const voice = EDGE_VOICE[lang] || EDGE_VOICE.en
-  const rate = EDGE_RATE[lang] ?? 0.92
-  const speak = escapeXml(spokenText(text, lang))
+  const voice = resolveEdgeVoice(lang)
+  if (!voice) throw new Error(`No Edge neural voice for ${lang}`)
+  const short = String(lang || 'en').toLowerCase().split('-')[0]
+  const rate = EDGE_RATE[short] ?? EDGE_RATE[lang] ?? 0.92
+  const speak = escapeXml(spokenText(text, short))
   const tts = new MsEdgeTTS()
   // Higher bitrate + slightly slower rate → clearer workplace vocabulary audio
   await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3)
@@ -333,7 +447,8 @@ async function edgeNeuralSpeech(text, lang) {
 
 /** Google Translate TTS — listed widely as a free anonymous TTS endpoint. */
 async function googleTranslateSpeech(text, lang) {
-  const tl = lang === 'ti' ? 'am' : lang
+  const raw = String(lang || 'en').toLowerCase()
+  const tl = raw === 'ti' ? 'am' : raw
   const url = new URL('https://translate.google.com/translate_tts')
   url.searchParams.set('ie', 'UTF-8')
   url.searchParams.set('client', 'tw-ob')
@@ -356,13 +471,13 @@ async function googleTranslateSpeech(text, lang) {
 /**
  * Synthesize short speech for vocab / instruction audio.
  * @param {string} text
- * @param {string} lang BCP-47-ish short code: en|es|ar|hi|am|ti
+ * @param {string} lang BCP-47-ish code: en|es|ar|hi|am|ti|fr|zh-CN|…
  */
 export async function synthesizeSpeech(text, lang = 'en') {
   const clean = String(text || '').trim().replace(/\s+/g, ' ')
   if (!clean) throw new Error('Text is required')
   if (clean.length > 280) throw new Error('Text too long for speech (max 280 characters)')
-  const code = String(lang || 'en').toLowerCase().split('-')[0]
+  const code = String(lang || 'en').toLowerCase()
   const key = ttsCacheKey(clean, code)
   const hit = TTS_CACHE.get(key)
   if (hit) return { ...hit, cached: true }
@@ -371,7 +486,13 @@ export async function synthesizeSpeech(text, lang = 'en') {
   try {
     result = await edgeNeuralSpeech(clean, code)
   } catch {
-    result = await googleTranslateSpeech(clean, code)
+    try {
+      result = await googleTranslateSpeech(clean, code)
+    } catch {
+      const short = code.split('-')[0]
+      if (short !== code) result = await googleTranslateSpeech(clean, short)
+      else throw new Error(`Speech unavailable for language ${code}`)
+    }
   }
   rememberTts(key, result.buffer, result.contentType, result.voice, result.source)
   return { ...result, cached: false }
