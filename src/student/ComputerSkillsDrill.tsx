@@ -12,6 +12,14 @@ import { SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayC
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { InstructionHearChip } from '../practice/InstructionNarration'
+
+/** Level-4 simple English instruction chrome — translated for L1 narration. */
+const COMP_INSTR = {
+  watch: 'Watch this short lesson. Then try the task.',
+  try: 'Try the task on the practice screen. Then check your answer.',
+  check: 'Answer this practice question in English.',
+} as const
 
 const WATCHED_KEY = 'pa-basic-computer-skills-watched-v1'
 const DONE_KEY = 'pa-basic-computer-skills-done-v1'
@@ -225,6 +233,18 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
             ? `Try this step · ${lessons.length - idx} left`
             : `Watch, then try · ${lessons.length - idx} left`}
       </p>
+      <InstructionHearChip
+        english={
+          phase === 'check'
+            ? COMP_INSTR.check
+            : phase === 'try'
+              ? COMP_INSTR.try
+              : COMP_INSTR.watch
+        }
+        auto
+        autoKey={`${lesson.id}-${phase}`}
+        className="comp-skills-instr-hear"
+      />
       <p className="train-vocab-counter">
         Lesson {lesson.n} of {lessons.length}
         {' · '}

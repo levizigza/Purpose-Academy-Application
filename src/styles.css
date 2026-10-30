@@ -16614,6 +16614,19 @@ html.pa-phone-shell .station-coach-kicker,
   line-height: 1.3;
 }
 
+.station-coach-l1 {
+  margin: 0.28rem 0 0;
+  font-family: var(--body, 'Source Sans 3', system-ui, sans-serif);
+  font-size: 0.92rem;
+  font-weight: 550;
+  line-height: 1.35;
+  opacity: 0.92;
+}
+
+.station-coach-hear {
+  margin-top: 0.4rem;
+}
+
 .station-coach-skip {
   pointer-events: auto;
   display: inline-block;
@@ -16675,4 +16688,112 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
   .station-coach-bubble {
     animation: none !important;
   }
+}
+
+/* —— Instruction narrations (L1 hear · coach / explainer / video chrome) —— */
+.instr-narration {
+  margin: 0.45rem 0 0.15rem;
+}
+
+.instr-narration-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.65rem;
+  align-items: center;
+}
+
+.instr-narration-hear,
+.instr-narration-en {
+  appearance: none;
+  border: 1px solid color-mix(in srgb, #e8a317 45%, transparent);
+  background: color-mix(in srgb, #0b2f5c 72%, #041526);
+  color: #f5f8fc;
+  font-family: var(--body, 'Source Sans 3', system-ui, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+  line-height: 1.25;
+}
+
+.instr-narration-en {
+  border-color: color-mix(in srgb, #f5f8fc 28%, transparent);
+  background: transparent;
+  color: color-mix(in srgb, #f5f8fc 88%, #e8a317);
+  font-weight: 600;
+}
+
+.instr-narration-hear:hover,
+.instr-narration-hear:focus-visible {
+  border-color: #e8a317;
+  color: #fff;
+}
+
+.instr-narration-en:hover,
+.instr-narration-en:focus-visible {
+  color: #e8a317;
+}
+
+.instr-narration-hear:disabled,
+.instr-narration-en:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.instr-narration-status {
+  margin: 0.28rem 0 0;
+  font-family: var(--body, 'Source Sans 3', system-ui, sans-serif);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: color-mix(in srgb, #f5f8fc 78%, transparent);
+}
+
+.instr-narration-status.is-soft-miss {
+  color: color-mix(in srgb, #f0c674 85%, #f5f8fc);
+}
+
+.instr-narration-status.is-loading {
+  opacity: 0.8;
+}
+
+html.pa-phone-shell .instr-narration-hear,
+.is-phone-app .instr-narration-hear {
+  border-color: color-mix(in srgb, var(--brand, #0b2f5c) 28%, var(--line, #c5d0de));
+  background: #fff;
+  color: var(--brand, #0b2f5c);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--brand, #0b2f5c) 8%, transparent);
+}
+
+html.pa-phone-shell .instr-narration-en,
+.is-phone-app .instr-narration-en {
+  border-color: color-mix(in srgb, var(--brand, #0b2f5c) 18%, var(--line, #c5d0de));
+  background: transparent;
+  color: color-mix(in srgb, var(--brand, #0b2f5c) 72%, #6b7c90);
+}
+
+html.pa-phone-shell .instr-narration-status,
+.is-phone-app .instr-narration-status {
+  color: color-mix(in srgb, var(--brand, #0b2f5c) 65%, #6b7c90);
+}
+
+html.pa-phone-shell .instr-narration-status.is-soft-miss,
+.is-phone-app .instr-narration-status.is-soft-miss {
+  color: color-mix(in srgb, #9a5b12 70%, var(--brand, #0b2f5c));
+}
+
+.station-explainer-hear,
+.comp-skills-instr-hear,
+.equip-video-instr-hear {
+  margin: 0.35rem 0 0.5rem;
+}
+
+html.pa-course-shell .comp-skills-instr-hear .instr-narration-hear,
+html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
+.course-stage .comp-skills-instr-hear .instr-narration-hear,
+.course-stage .equip-video-instr-hear .instr-narration-hear {
+  border-color: rgba(232, 163, 23, 0.45);
+  background: color-mix(in srgb, #071828 70%, #0b2f5c);
+  color: #f5f8fc;
 }

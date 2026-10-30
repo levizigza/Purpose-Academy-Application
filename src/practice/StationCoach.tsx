@@ -9,6 +9,7 @@ import {
   stationCoachSeen,
   type CoachStep,
 } from './stationCoach'
+import { InstructionHearChip, useAutoInstructionNarration } from './InstructionNarration'
 
 type Rect = { top: number; left: number; width: number; height: number }
 
@@ -135,6 +136,17 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
   stepIdxRef.current = stepIdx
 
   const step: CoachStep | undefined = active ? steps[stepIdx] : undefined
+  const coachNarrateKey = active && step ? `${stationId}:${stepIdx}:${step.say}` : null
+  const narrateStatus = useAutoInstructionNarration(
+    step?.say ?? '',
+    coachNarrateKey,
+    Boolean(active && step),
+  )
+  const showL1Line =
+    narrateStatus.kind === 'ready' &&
+    !narrateStatus.englishOnly &&
+    narrateStatus.spoken &&
+    narrateStatus.spoken !== narrateStatus.english
 
   const refresh = useCallback(() => {
     if (!step) {
@@ -255,6 +267,16 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
           First example · {stepIdx + 1} of {steps.length}
         </p>
         <p className="station-coach-say">{step.say}</p>
+        {showL1Line ? (
+          <p className="station-coach-l1" lang={narrateStatus.lang.bcp47}>
+            {narrateStatus.spoken}
+          </p>
+        ) : null}
+        <InstructionHearChip
+          english={step.say}
+          auto={false}
+          className="station-coach-hear"
+        />
         <button
           type="button"
           className="station-coach-skip"

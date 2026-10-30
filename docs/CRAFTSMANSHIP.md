@@ -435,6 +435,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-30 — Multi-language instruction narrations (L2 / L3 / LEARNER_FEAR)
+
+- **Layers:** L2 (mother-tongue → English practice spine for *instructions*, not only vocab) + L3 (task chrome readable/hearable in 3s) + soft fear (translate/TTS soft-fail; English always available).
+- **Customer ask:** Station coach / explainer ledes / computer & equipment video “watch this · answer this” chrome should speak in the learner’s preferred language — not English-only — building on VV universal hear (`31908107` era: MyMemory + PA translate + `speakLangCode` / `speechSynthesis`).
+- **Fix:** `learnerLang` persists support lang Desktop↔Phone (`pa-support-lang-v1`). `instructionNarration` Level-4 simple English → `translateVocabWord` (session cache) → speak; soft status. Wired: StationCoach (auto L1 + Hear chip + L1 subtitle), StationExplainerGate lede Hear, Computer Skills / Equipment Video phase instruction Hear. EN chip / More languages on Workplace Words untouched.
+- **Critic:** Do not invent a second dialect — reuse universalHear. Do not auto-speak when preferred is English (text is already on screen); Hear English stays one tap. Do not bake permanent L1 UI that steals the English practice job.
+- **Assumption to challenge next:** whether MyMemory quality on short instructional sentences is good enough for Amharic/Tigrinya, or whether curated gloss packs are needed for the six chips.
+
 ### 2026-10-28 — Construction equipment video parity polish (L2 / L3 / L6)
 
 - **Layers:** L2 journey honesty + L3 dual-shell continuity + L6 Practice reset spine.

@@ -118,6 +118,11 @@ import {
   shouldAskPracticeFeedback,
 } from '../practice/PracticeMode'
 import { learnerGet, learnerSet } from '../practice/learnerStore'
+import {
+  getLearnerSupportLang,
+  isSupportLang,
+  setLearnerSupportLang,
+} from '../practice/learnerLang'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 import { NavCueTarget, NavGlowRegion, NavGlowWrap } from '../practice/NavCue'
@@ -801,9 +806,11 @@ export function StudentSequencePage() {
     }
   }, [])
 
-  const [supportLang, setSupportLang] = useState<SupportLang>(
-    (student?.preferred_language as SupportLang) || 'English',
-  )
+  const [supportLang, setSupportLang] = useState<SupportLang>(() => {
+    const fromStudent = student?.preferred_language
+    if (fromStudent && isSupportLang(fromStudent)) return fromStudent
+    return getLearnerSupportLang()
+  })
   const [interest, setInterest] = useState<PathwayId | null>(null)
   const [careerInterestDone, setCareerInterestDone] = useState(false)
   const [careerInterestAnswers, setCareerInterestAnswers] = useState<Record<string, LikertValue>>({})
@@ -940,7 +947,14 @@ export function StudentSequencePage() {
   }, [step, pathwayId])
 
   useEffect(() => { saveStep(step) }, [step])
-  useEffect(() => { if (student?.preferred_language) setSupportLang(student.preferred_language as SupportLang) }, [student?.preferred_language])
+  useEffect(() => {
+    if (student?.preferred_language && isSupportLang(student.preferred_language)) {
+      setSupportLang(student.preferred_language)
+    }
+  }, [student?.preferred_language])
+  useEffect(() => {
+    setLearnerSupportLang(supportLang)
+  }, [supportLang])
   useEffect(() => { primeSpeech() }, [])
   useEffect(() => () => { stopSpeech() }, [])
   useEffect(() => {
