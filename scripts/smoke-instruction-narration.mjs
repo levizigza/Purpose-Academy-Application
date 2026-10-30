@@ -1,7 +1,7 @@
 import { chromium } from 'playwright'
 import { mkdirSync, copyFileSync, existsSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
-const BASE = process.env.PA_BASE || 'http://127.0.0.1:4173'
+const BASE = process.env.PA_BASE || 'http://127.0.0.1:4173/Purpose-Academy-Application'
 const OUT = '/tmp/instruction-narration-smoke/out'
 const ART = '/opt/cursor/artifacts'
 mkdirSync(OUT, { recursive: true }); mkdirSync(ART, { recursive: true })
