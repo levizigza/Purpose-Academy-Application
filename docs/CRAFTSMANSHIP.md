@@ -213,14 +213,14 @@ These are load-bearing across all layers.
 
 ### 6.3a Sentence Structure (Construction) — worksheet cloze (not VocabSheet)
 
-- After Visual Vocabulary, Construction opens **Sentence Structure** (cloze bank from Construction Questions 1–560) before Word → Action.
+- After Visual Vocabulary, Construction opens **Sentence Structure** (cloze bank from Construction Questions 1–560) before Word → Action. Same spine on Logistics / Community.
 - **Ladder gate (required):** Daily Conversation Level-1 **and** specialty Construction Visual Vocabulary Level-1 (first workplace picture page) before Sentence Structure unlocks. Greetings alone must not open specialty sentences.
 - Cloze bank prefers / keeps rows whose answers exist in pictured specialty VV (orphan PPTX rows stay out of the graded bank).
-- **Docs mold (Construction Questions PPTX):** each item pairs the **PPTX illustration** with the cloze stem (`______`) and four A–D choices. Images live in `public/sentence-cloze/cs-{n}.*`. Not a VocabSheet photo card; not a SITEWISE crew stage.
-- **One attempt per item** — no answer shopping.
-- Correct: word **slides into the blank**; short success line; TTS reads the full sentence.
-- Wrong: reveal the right word in the blank, brief teach line, then move on (Duolingo one-try).
-- Level-1 sentence gate = first PPTX page (items 1–10) with ≥8 first-try correct (+ repair for misses). More pages stay open to practise. Bank stays in Construction Questions order.
+- **Docs mold (Construction Questions PPTX):** each item pairs the **PPTX illustration** with the cloze stem (`______`) and four A–D option words. Images live in `public/sentence-cloze/cs-{n}.*`. Not a VocabSheet photo card; not a SITEWISE crew stage.
+- **Play loop (required):** incomplete stem stays visible → **~4 shuffled full-sentence options** (stem filled with each A–D word) → **pick** the correct sentence → **hear** it (TTS) → **type** the full sentence → clear. Soft miss + reshuffle on wrong pick (same anti-cheat as VV). Soft miss on type — never Incorrect / Expected.
+- **Audio sync (required):** after a typed clear, **keep the completed sentence on screen** while success TTS plays; advance only when audio ends (plus a short settle). Never advance into the next stem while the previous sentence is still speaking. Dual-shell: Desktop night + Phone paper.
+- Correct: word **slides into the blank** on pick; success clear + TTS on typed clear; hold until audio ends.
+- Level-1 sentence gate = first PPTX page (items 1–10) with ≥8 clears (+ repair for any scored misses). More pages stay open to practise. Bank stays in Construction Questions order.
 - Clear page-pass badge when the worksheet page is cleared.
 - Language ladder: gloss → picture → **sentence** → action → instruction → phrase.
 
@@ -245,7 +245,7 @@ These are load-bearing across all layers.
 - Hear row offers **English + five mother tongues**; **More languages** translates the English word (PA API / optional LibreTranslate / MyMemory) and speaks it (neural TTS → browser) before the same English bridge. Session-cache translations; soft loading / unsupported copy — never silent fail.
 - **Then pick + type (every VV card):** English spelling stays hidden from first paint until typed; listen/type panel sits with the photo (langs collapse to the bridge). Under Type/Go: a **~5-option shuffled bank** from the same worksheet page (same language level). Learner must **pick the correct English word** (wrong pick soft-misses and **reshuffles** — never the same order twice in a row) **and type it** (existing Type/Go). Soft retry (“Not yet…”) — never Incorrect / Expected. Nearby: “Clear this word · pick the match, then type it”; `firePlayClear` on correct type after a correct pick. TTS failure still unlocks the pick+type beat (Hear again remains). Gate = heard + typed + (bridged or known).
 - **Anti-cheat / real learning:** Choices switch after a wrong pick and when the card advances so position-tapping cannot clear a word. Typing remains the production clear — pick alone never finishes.
-- **Sentence Structure differs:** cloze keeps four **reference** chips (type-only clear). VV pick chips are **required presses** plus type.
+- **Sentence Structure (aligned, not identical):** pick **full-sentence** options (not single words) → hear the sentence → type the **full sentence**. Shuffle after miss like VV. Typing remains the production clear — pick alone never finishes.
 - **First go vs retake:** “I already know this word” is hidden on day-one intake. Skip-known unlocks only after the station was cleared once for that pathway (`pa-vocab-station-cleared-v1`). Retake still requires hear English + pick + type.
 
 ### 6.4 Sound (foley)
@@ -435,6 +435,31 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-30 — Multi-language instruction narrations (L2 / L3 / LEARNER_FEAR)
+
+- **Layers:** L2 (mother-tongue → English practice spine for *instructions*, not only vocab) + L3 (task chrome readable/hearable in 3s) + soft fear (translate/TTS soft-fail; English always available).
+- **Customer ask:** Station coach / explainer ledes / computer & equipment video “watch this · answer this” chrome should speak in the learner’s preferred language — not English-only — building on VV universal hear (`31908107` era: MyMemory + PA translate + `speakLangCode` / `speechSynthesis`).
+- **Fix:** `learnerLang` persists support lang Desktop↔Phone (`pa-support-lang-v1`). `instructionNarration` Level-4 simple English → `translateVocabWord` (session cache) → speak; soft status. Wired: StationCoach (auto L1 + Hear chip + L1 subtitle), StationExplainerGate lede Hear, Computer Skills / Equipment Video phase instruction Hear. EN chip / More languages on Workplace Words untouched.
+- **Critic:** Do not invent a second dialect — reuse universalHear. Do not auto-speak when preferred is English (text is already on screen); Hear English stays one tap. Do not bake permanent L1 UI that steals the English practice job.
+- **Assumption to challenge next:** whether MyMemory quality on short instructional sentences is good enough for Amharic/Tigrinya, or whether curated gloss packs are needed for the six chips.
+
+### 2026-10-30 — Level-4 English VO + computer A/V beat-lock (L2 / L3)
+
+- **Layers:** L2 (first-computer / CEFR A2 wording) + L3 (spoken action matches on-screen action).
+- **Customer:** Heard “loops” in the first Workplace Words explainer — too technical for Level-4 English.
+- **Language:** Replaced learner-facing *loop / chips / exam theatre / Soft try / subfolder / Ctrl* with plain words across station demo scripts, Ken-Burns fallback, explainer ledes, coach, Workplace Words retake, Community sentence help, and Basic Computer Skills UI + Piper VO.
+- **Sync:** Re-recorded all 14 beat-locked station mouse demos (`record-station-demos.mjs`). Rebuilt 12 BCS lessons with VO `line_groups` sizing each visual part; demos re-recorded; missing hardware clips fall back to cleaned shipped beds (no caption ghosting).
+- **Drive Finals (construction/logistics equipment):** Stream A/V durations align on samples; content sync not re-authored (prefer scripted demos first).
+- **Critic:** Prefer “Wrong? Try again.” over soft-jargon. Do not teach programming *loop* unless it is a vocab word. Keep beat-locked holds on the relevant control — never stretch last-frame pads. Site reflection = GitHub Pages only (not purposeacademy.ca).
+
+### 2026-10-30 — Supported Practice familiar sentence games (L2/L3/L4)
+
+- **Layers:** L2 content loop · L3 info display · L4 finite boards · L6 Practice spine.
+- **Supported Practice** replaces worksheet MC matching with four familiar games: memory match (picture↔word), order-the-words, listen-and-choose, soft fill-blank race (tap; meter encourages, never fails).
+- **Preceding pages before Sentence Structure:** Language Organize (round beads, Drop CTA, shorter help) and Eye Spy (auto-pair clear, scene beads, shorter instruction).
+- Dual-shell night / phone paper. Soft miss + `firePlayClear`. Skill id stays `matching`.
+- Critic: help is strength; Level-4 English one-line instructions; no Match-button exam chrome on Eye Spy.
+
 ### 2026-10-28 — Construction equipment video parity polish (L2 / L3 / L6)
 
 - **Layers:** L2 journey honesty + L3 dual-shell continuity + L6 Practice reset spine.
@@ -491,11 +516,19 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Critic:** Universal is a bridge helper, not a second dialect — same continue grammar as chips. Do not invent a card-stack language picker in the first viewport; keep search behind one More languages control.
 
 
+### 2026-10-30 — Sentence Structure pick · hear · type + audio sync (L2 / L3 / LEARNER_FEAR)
+
+- **Layers:** L2 (sentence production reps) + L3 (incomplete stem / full-sentence bank / hear / type / clear unmistakable) + learner-fear soft miss.
+- **Customer defect:** Vocab-style word pick+type broke the sentence feel; after a clear the UI advanced while TTS still played on the next stem.
+- **Fix:** `SentenceClozeDrill` — incomplete stem stays; ~4 shuffled **full-sentence** options; pick → auto-hear → type the full sentence → `firePlayClear`. On clear, **await success TTS + short settle before advance** (token-guarded). Wrong pick soft-misses and reshuffles. Dual-shell night + paper.
+- **Critic:** Word chips made this a second VV; full sentences restore the Questions mold. Blind timers race TTS — advance must wait on audio end.
+- **Law restated (§6.3a):** pick sentence → hear → type sentence; hold clear until audio ends.
+
 ### 2026-10-29 — VV pick + type + shuffle (L2 / L3 / LEARNER_FEAR)
 
 - **Layers:** L2 (honest production reps) + L3 (task / media / pick bank / type result in one beat) + learner-fear (soft miss, no exam chrome).
 - **Customer ask:** Workplace Words must show ~5 shuffled choices; learner picks the correct one **and** types it. Choices switch so tapping until right cannot cheat.
-- **Fix:** `VocabSheet` typing phase adds a same-page 5-option bank under Type/Go. Wrong pick → soft miss + reshuffle (order never repeats twice in a row). Go without a correct pick soft-coaches “pick the matching word…”. Clear still requires typed English (`firePlayClear`). Sentence Structure stays reference-chips + type-only.
+- **Fix:** `VocabSheet` typing phase adds a same-page 5-option bank under Type/Go. Wrong pick → soft miss + reshuffle (order never repeats twice in a row). Go without a correct pick soft-coaches “pick the matching word…”. Clear still requires typed English (`firePlayClear`). Sentence Structure later moved to full-sentence pick · hear · type (see 2026-10-30).
 - **Critic:** Pick alone would be shopping; type alone invited guess-from-audio without looking. Dual lock forces looking + producing. Reshuffle is teach, not fear — “choices switched — pick again.”
 - **Law restated (§6.3c):** hear → hear → **pick + type**; shuffle after miss and on card advance.
 
@@ -555,7 +588,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - Interactive coach on first item only: Workplace Words, Organize, Eye Spy, Sentence, Word→Action, Supported Practice, Computer Skills, Site Language, Safety, Tools, Systems, Equipment Video.
 - Dual-shell CSS: desktop night amber ring + cool dim; phone paper navy veil + brand ring. Clicks pass through the spotlight.
 - Seen map `pa-station-coach-seen-v1` cleared on Practice Start over.
-- **Critic (same day):** Phone emulator `transform: scale` skewed fixed hole coords — coach now portals to `document.body` and styles off `html.pa-*-shell`. VV Hear / Site Language “Hear again” must not consume the type/choice step. Sentence coach is type-only (chips are reference, not buttons). Start over must re-activate the coach, not only clear storage.
+- **Critic (same day):** Phone emulator `transform: scale` skewed fixed hole coords — coach now portals to `document.body` and styles off `html.pa-*-shell`. VV Hear / Site Language “Hear again” must not consume the type/choice step. Sentence coach later became pick → hear → type (2026-10-30). Start over must re-activate the coach, not only clear storage.
 - **Critic (100% pass):** Infinite hole soft-pulse read as L4 tension — replaced with a one-shot settle. Escape / Skip marks the station seen so it stays quiet. Focus moves to the highlighted control when a step starts. Equipment Video joins the coach map.
 - **Assumption to challenge next:** whether multi-step coaches (VV / Eye Spy) still feel game-like on the smallest phone fold without stealing the task.
 
@@ -583,12 +616,9 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Task-first chrome fold under `.course-stage` for VV / Organize / Eye Spy / Sentence / Computer / Equipment / choice stations (stats strip, jump fold, unit pill, why, progress, intro cards). VV type panel remapped to night ink (not phone cream). Type/Go scrolls into view on desktop. Organize keeps four boards (desktop density); phone keeps one-word focus.
 - **Critic:** Unifying skins would erase the night-vs-paper contrast the customer wants. Fold density, keep amber-on-navy.
 
-### 2026-10-27 — Sentence Structure: options visible, type to clear (L2 / L3)
+### 2026-10-27 — Sentence Structure: options visible, type to clear (L2 / L3) — superseded
 
-- **Layers:** L2 (sentence production reps) + L3 (four choices + Type / Go unmistakable).
-- **Customer overturn:** Pure type-out hid the familiar A–D board. Wanted the **old four options at the bottom**, but **typing** the correct word — not tap-to-answer.
-- **Fix:** Choices always visible as reference chips (not clickable answers). Type / Go is the only clear; soft miss stays on the item; matching chip lights on clear. Nearby: “type the matching word.”
-- **Critic:** Tap chips would recreate mindless shopping; hide-until-hint chips fought the worksheet mold. Reference board + type keeps both enjoyment and production.
+- Earlier: reference word chips + type the blank word. Overturned 2026-10-30 by full-sentence pick · hear · type + audio-gated advance.
 
 ### 2026-10-27 — Sentence Structure type-the-blank (L2 / L3) — superseded
 

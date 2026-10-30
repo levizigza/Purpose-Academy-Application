@@ -32,6 +32,13 @@ import { SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayC
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { InstructionHearChip } from '../practice/InstructionNarration'
+
+/** Level-4 simple English instruction chrome — translated for L1 narration. */
+const EQUIP_INSTR = {
+  watch: 'Watch this equipment video. Then answer the practice questions.',
+  answer: 'Answer the practice questions about the video. English choices.',
+} as const
 
 export type EquipmentVideoPack = 'warehouse' | 'construction'
 
@@ -377,6 +384,14 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
             ? `Cleared · ${lesson.title}`
             : `Practice questions · ${Math.max(questions.length - qIdx, 1)} left on this machine`}
       </p>
+      {phase === 'watch' || (phase === 'answer' && !setJustCleared) ? (
+        <InstructionHearChip
+          english={phase === 'watch' ? EQUIP_INSTR.watch : EQUIP_INSTR.answer}
+          auto
+          autoKey={`${pack}-${lesson.id}-${phase}`}
+          className="equip-video-instr-hear"
+        />
+      ) : null}
       <p className="train-vocab-counter">
         Lesson {lesson.n} of {lessons.length}
         {' · '}

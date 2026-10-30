@@ -39,7 +39,7 @@ STATIONS: list[dict] = [
             (None, "Your Language. We start in English."),
             (
                 "assess-english-lang",
-                "A mark points at the language chips once. Stay in English, or press the language you understand best.",
+                "See the arrow. It points at the language buttons one time. Stay in English, or press the language you know best.",
             ),
             (
                 "career-after-lang",
@@ -54,9 +54,9 @@ STATIONS: list[dict] = [
         "title": "Workplace Words",
         "beats": [
             (None, "Workplace Words. One picture. One word. No rush."),
-            ("grant_visual_vocab", "Your language starts in English. You can choose another tongue any time."),
+            ("grant_visual_vocab", "Your language starts in English. You can choose another language any time."),
             ("grant_visual_vocab", "Press the language you understand. Hear it. Then hear the English workplace word."),
-            ("grant_visual_vocab", "Type what you heard. Soft try again if not yet. That is the whole loop."),
+            ("grant_visual_vocab", "Type what you heard. Wrong? Try again. That is all — hear, pick, and type."),
         ],
     },
     {
@@ -65,7 +65,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Language Organize. Match pictures to their words."),
             ("grant_practice_hub", "Pick a picture. Place it on the empty box for that word."),
-            ("grant_practice_hub", "Wrong place? Soft shake — try again. Clear the round, then the next."),
+            ("grant_practice_hub", "Wrong place? It shakes — try again. Finish this set, then the next."),
         ],
     },
     {
@@ -74,7 +74,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "English Eye Spy. Clear the board."),
             ("grant_eye_spy", "Tap a picture on the job site. Then tap its English name."),
-            ("grant_eye_spy", "A correct pair disappears. Soft try again if not yet. Clear every pair to continue."),
+            ("grant_eye_spy", "A correct pair disappears. Wrong? Try again. Clear every pair to continue."),
         ],
     },
     {
@@ -83,7 +83,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Sentence Structure. Four words. Type the match."),
             ("grant_visual_vocab", "Read the sentence. Look at the four choices at the bottom."),
-            ("grant_visual_vocab", "Type the word that fits the blank. Soft try again if not yet."),
+            ("grant_visual_vocab", "Type the word that fits the blank. Wrong? Try again."),
         ],
     },
     {
@@ -92,7 +92,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Word to Action. Connect the tool to the job."),
             ("grant_toolbox", "See the action. Choose which tool it uses."),
-            ("grant_toolbox", "One clear pick. Soft try again. Then continue."),
+            ("grant_toolbox", "Pick one answer. Wrong? Try again. Then continue."),
         ],
     },
     {
@@ -101,7 +101,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Supported Practice. Match with help."),
             ("grant_practice_hub", "Match words to pictures. Help is there if you need it."),
-            ("grant_practice_hub", "Mistakes teach. Soft try again. No exam theatre."),
+            ("grant_practice_hub", "Mistakes help you learn. Wrong? Try again. This is practice — not a test."),
         ],
     },
     {
@@ -111,7 +111,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Workplace Instructions. Hear a direction. Show you understood."),
             ("grant_practice_hub", "Press Hear English at least once."),
-            ("grant_practice_hub", "Then choose what you should do. Soft try again if not yet."),
+            ("grant_practice_hub", "Then choose what you should do. Wrong? Try again."),
         ],
     },
     {
@@ -119,9 +119,9 @@ STATIONS: list[dict] = [
         "title": "Basic Computer Skills",
         "beats": [
             (None, "Basic Computer Skills. Watch, then try."),
-            ("grant_toolbox", "Watch a short captioned lesson."),
-            ("grant_toolbox", "Then try a simple task — mouse, folders, save, Word, or email."),
-            ("grant_toolbox", "One check at the end. First-computer friendly."),
+            ("grant_toolbox", "Watch a short lesson with words on the screen."),
+            ("grant_toolbox", "Then try a simple task — mouse, folders, save, writing, or email."),
+            ("grant_toolbox", "One check at the end. Made for beginners."),
         ],
     },
     {
@@ -130,7 +130,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Site Language. Phrases you will hear on site."),
             ("grant_practice_hub", "Hear a job-site phrase. Choose what it means."),
-            ("grant_practice_hub", "Soft try again. Then move on."),
+            ("grant_practice_hub", "Wrong? Try again. Then move on."),
         ],
     },
     {
@@ -139,7 +139,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Safety Training. Words that keep crews safe."),
             ("grant_practice_hub", "Look at the picture. Choose the safety word."),
-            ("grant_practice_hub", "Soft try again. Safety first — no rush."),
+            ("grant_practice_hub", "Wrong? Try again. Safety first — no rush."),
         ],
     },
     {
@@ -148,7 +148,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Tools and Equipment. Name it before you use it."),
             ("grant_toolbox", "Learn each tool group. Answer one check."),
-            ("grant_toolbox", "Soft try again. Then continue."),
+            ("grant_toolbox", "Wrong? Try again. Then continue."),
         ],
     },
     {
@@ -157,16 +157,16 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Workplace Systems. How the whole job fits together."),
             ("grant_practice_hub", "Learn each system. Answer one check."),
-            ("grant_practice_hub", "Soft try again. Your task feeds the whole site."),
+            ("grant_practice_hub", "Wrong? Try again. Your job helps the whole work site."),
         ],
     },
     {
         "id": "equipment-video",
         "title": "Equipment Videos",
         "beats": [
-            (None, "Equipment Videos. Watch before you touch."),
-            ("grant_toolbox", "Watch each equipment lesson. Know it. Inspect it."),
-            ("grant_toolbox", "When the lesson is clear, continue to hands-on with an instructor."),
+            (None, "Equipment Videos. Watch each equipment lesson, then continue."),
+            ("grant_toolbox", "Press play on the equipment video."),
+            ("grant_toolbox", "Continue when the video is clear."),
         ],
     },
 ]

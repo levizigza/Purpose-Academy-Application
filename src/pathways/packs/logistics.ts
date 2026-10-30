@@ -94,8 +94,8 @@ export const logisticsPack: PathwayPack = {
     },
     9: {
       title: 'Sentence Structure',
-      help: 'Four word choices stay visible. Type the matching word into the blank — soft try again if not yet. Correct words slide in.',
-      purpose: 'Logistics Questions mold — type the specialty word (play craft), then Word → Action.',
+      help: 'Incomplete sentence above. Pick the full sentence that fits, hear it, then type it — soft try again if not yet.',
+      purpose: 'Logistics Questions mold — pick · hear · type the full sentence (play craft), then Word → Action.',
     },
     12: {
       title: 'Basic Computer Skills',

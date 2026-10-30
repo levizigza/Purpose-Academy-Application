@@ -8,6 +8,7 @@ import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
 import { recordSkillAttempt } from './learningMastery'
 import { normalizeEnglishAnswer } from './VocabSheet'
+import { choiceOrderKey, shuffleChoicesFresh } from './vocabDistractors'
 
 /** Worksheet tile from public/sentence-cloze/ when extracted from the PPTX. */
 function sentenceImageUrl(file?: string) {
@@ -27,6 +28,9 @@ export const SENTENCE_PAGE_SIZE = 10
 /** Pass a page with honest effort — 8 of 10 first-try (same 80% bar as the old 16/20). */
 const PASS_SCORE = 8
 
+/** Brief hold after success TTS so the filled sentence stays readable before advance. */
+const SUCCESS_SETTLE_MS = 320
+
 function shuffle<T>(items: T[]): T[] {
   const next = [...items]
   for (let i = next.length - 1; i > 0; i--) {
@@ -40,7 +44,27 @@ function fillBlank(prompt: string, word: string) {
   return prompt.replace('______', word)
 }
 
+/** Full-sentence choice bank from the cloze stem + A–D option words. */
+function buildSentenceOptions(item: SentenceClozeItem): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const word of item.options) {
+    const sentence = fillBlank(item.prompt, word)
+    const key = normalizeEnglishAnswer(sentence)
+    if (!key || seen.has(key)) continue
+    seen.add(key)
+    out.push(sentence)
+  }
+  const correct = fillBlank(item.prompt, item.answer)
+  const correctKey = normalizeEnglishAnswer(correct)
+  if (correctKey && !seen.has(correctKey)) out.unshift(correct)
+  return out
+}
+
 type Phase = 'drill' | 'result' | 'repair' | 'passed'
+
+/** Per-item beat: pick full sentence → hear → type → hold while success audio ends. */
+type Beat = 'pick' | 'hear' | 'type' | 'clearing'
 
 function normWord(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
@@ -75,6 +99,28 @@ function orderForLadder(
   return hit.length >= SENTENCE_PAGE_SIZE ? [...hit, ...miss] : items
 }
 
+function SpeakerIconSmall() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M4 10v4h3l5 4V6L7 10H4zm11.5 2a3.5 3.5 0 0 0-1.8-3.1v6.2A3.5 3.5 0 0 0 15.5 12z"
+      />
+      <path
+        fill="currentColor"
+        d="M15.5 12a5.5 5.5 0 0 0-2.8-4.8v1.7a3.8 3.8 0 0 1 0 6.2v1.7A5.5 5.5 0 0 0 15.5 12z"
+        opacity="0.85"
+      />
+    </svg>
+  )
+}
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => {
+    window.setTimeout(resolve, ms)
+  })
+}
+
 type Props = {
   items: SentenceClozeItem[]
   /**
@@ -100,9 +146,9 @@ type Props = {
 /**
  * Sentence Structure — Purpose Academy Questions mold (Construction / Logistics / Community).
  *
- * Play craft: picture + cloze + **four word choices always visible** → type the matching
- * word (Type / Go) → soft miss with rapid retry → firePlayClear joy.
- * Choices are a reference board — not tap-to-answer (typing is the clear).
+ * Play craft: picture + incomplete stem → **~4 shuffled full-sentence options** → pick →
+ * hear the sentence → type the full sentence → hold the clear while success TTS ends → advance.
+ * Soft miss + reshuffle on wrong pick (VV anti-cheat). Soft miss on type. Dual-shell night + paper.
  */
 export function SentenceClozeDrill({
   items,
@@ -127,6 +173,7 @@ export function SentenceClozeDrill({
   const [page, setPage] = useState(0)
   const [phase, setPhase] = useState<Phase>('drill')
   const [idx, setIdx] = useState(0)
+  const [beat, setBeat] = useState<Beat>('pick')
   const [resolved, setResolved] = useState(false)
   const [correct, setCorrect] = useState(false)
   const [filled, setFilled] = useState(false)
@@ -135,12 +182,19 @@ export function SentenceClozeDrill({
   const [missed, setMissed] = useState<SentenceClozeItem[]>([])
   const [repairDeck, setRepairDeck] = useState<SentenceClozeItem[]>([])
   const [options, setOptions] = useState<string[]>([])
+  const [picked, setPicked] = useState<string | null>(null)
+  const [pickMiss, setPickMiss] = useState(false)
+  const [heard, setHeard] = useState(false)
+  const [speaking, setSpeaking] = useState(false)
   const [level1Unlocked, setLevel1Unlocked] = useState(false)
   const [draft, setDraft] = useState('')
-  const [typeFeedback, setTypeFeedback] = useState<'retry' | null>(null)
+  const [typeFeedback, setTypeFeedback] = useState<'retry' | 'need-pick' | 'need-hear' | null>(null)
   const practice = isPracticeMode()
   const inputId = useId()
   const inputRef = useRef<HTMLInputElement>(null)
+  const prevOrderKeyRef = useRef<string | null>(null)
+  const itemTokenRef = useRef(0)
+  const mountedRef = useRef(true)
 
   const pageItems = useMemo(() => {
     const start = page * SENTENCE_PAGE_SIZE
@@ -150,23 +204,50 @@ export function SentenceClozeDrill({
   const deck = phase === 'repair' ? repairDeck : pageItems
   const item = deck[Math.min(idx, Math.max(0, deck.length - 1))]
   const isLast = idx >= deck.length - 1
+  const correctSentence = item ? fillBlank(item.prompt, item.answer) : ''
+  const pickReady =
+    !!picked && normalizeEnglishAnswer(picked) === normalizeEnglishAnswer(correctSentence)
+
+  useEffect(() => {
+    mountedRef.current = true
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
+
+  function dealSentenceBank(nextItem: SentenceClozeItem, prevKey: string | null) {
+    const bankOpts = buildSentenceOptions(nextItem)
+    const next = shuffleChoicesFresh(bankOpts, prevKey)
+    prevOrderKeyRef.current = choiceOrderKey(next)
+    setOptions(next)
+  }
 
   useEffect(() => {
     if (!item || phase === 'passed' || phase === 'result') return
-    setOptions([...item.options])
+    itemTokenRef.current += 1
+    setBeat('pick')
     setResolved(false)
     setCorrect(false)
     setFilled(false)
     setFlying(false)
     setDraft('')
     setTypeFeedback(null)
+    setPicked(null)
+    setPickMiss(false)
+    setHeard(false)
+    setSpeaking(false)
+    prevOrderKeyRef.current = null
+    dealSentenceBank(item, null)
   }, [item?.id, phase, page])
 
   useEffect(() => {
-    if (!item || resolved || phase === 'passed' || phase === 'result') return
-    const t = window.setTimeout(() => inputRef.current?.focus(), 160)
+    if (!item || beat !== 'type' || resolved || phase === 'passed' || phase === 'result') return
+    const t = window.setTimeout(() => {
+      inputRef.current?.focus()
+      inputRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    }, 160)
     return () => window.clearTimeout(t)
-  }, [item?.id, resolved, phase, page])
+  }, [item?.id, beat, resolved, phase, page])
 
   function finishPagePass(finalScore: number) {
     setPhase('passed')
@@ -183,85 +264,124 @@ export function SentenceClozeDrill({
   }
 
   function resetItemChrome() {
+    setBeat('pick')
     setResolved(false)
     setCorrect(false)
     setFilled(false)
     setFlying(false)
     setDraft('')
     setTypeFeedback(null)
+    setPicked(null)
+    setPickMiss(false)
+    setHeard(false)
+    setSpeaking(false)
   }
 
-  function advanceAfterResolve(wasCorrect: boolean, newScore: number, nextMissed: SentenceClozeItem[]) {
-    window.setTimeout(() => {
-      if (!isLast) {
-        setIdx((i) => i + 1)
-        resetItemChrome()
-        return
-      }
+  function advanceAfterClear(newScore: number, nextMissed: SentenceClozeItem[]) {
+    if (!isLast) {
+      setIdx((i) => i + 1)
+      resetItemChrome()
+      return
+    }
 
-      if (phase === 'repair') {
-        if (nextMissed.length) {
-          setRepairDeck(shuffle(nextMissed))
-          setMissed([])
-          setIdx(0)
-          resetItemChrome()
-          playFoley('whoosh')
-          return
-        }
-        finishPagePass(newScore)
-        return
-      }
-
-      const passed = newScore >= PASS_SCORE
-      if (!passed) {
-        setPhase('result')
-        playFoley('wrong')
-        return
-      }
-      if (nextMissed.length > 0) {
+    if (phase === 'repair') {
+      if (nextMissed.length) {
         setRepairDeck(shuffle(nextMissed))
         setMissed([])
         setIdx(0)
-        setPhase('repair')
         resetItemChrome()
         playFoley('whoosh')
         return
       }
       finishPagePass(newScore)
-    }, wasCorrect ? 900 : 1200)
-  }
-
-  /** Lock the item after a correct typed clear. */
-  function resolveItem(ok: boolean) {
-    if (!item || resolved) return
-    setResolved(true)
-    setCorrect(ok)
-    setFlying(true)
-    setTypeFeedback(null)
-    recordSkillAttempt('sentence-cloze', ok, ok ? 12 : 0)
-    if (ok) {
-      const leftAfter = deck.length - (idx + 1)
-      firePlayClear({
-        label: 'Sentence clear',
-        remnant: leftAfter > 0 ? `${leftAfter} left on this page` : 'Page almost clear',
-        kind: 'micro',
-      })
-    } else {
-      playFoley('wrong')
+      return
     }
 
-    const newScore = scoreCorrect + (ok ? 1 : 0)
-    const nextMissed = ok ? missed : [...missed, item]
-    setScoreCorrect(newScore)
-    setMissed(nextMissed)
+    const passed = newScore >= PASS_SCORE
+    if (!passed) {
+      setPhase('result')
+      playFoley('wrong')
+      return
+    }
+    if (nextMissed.length > 0) {
+      setRepairDeck(shuffle(nextMissed))
+      setMissed([])
+      setIdx(0)
+      setPhase('repair')
+      resetItemChrome()
+      playFoley('whoosh')
+      return
+    }
+    finishPagePass(newScore)
+  }
 
-    window.setTimeout(() => {
+  async function playSentenceAudio(sentence: string, token: number) {
+    if (!mountedRef.current || token !== itemTokenRef.current) return false
+    setSpeaking(true)
+    const ok = await speakEnglish(sentence)
+    if (!mountedRef.current || token !== itemTokenRef.current) return false
+    setSpeaking(false)
+    return ok
+  }
+
+  async function onPickOption(sentence: string) {
+    if (!item || beat !== 'pick' || resolved) return
+    if (normalizeEnglishAnswer(sentence) === normalizeEnglishAnswer(correctSentence)) {
+      setPicked(sentence)
+      setPickMiss(false)
       setFilled(true)
-      setFlying(false)
-      void speakEnglish(fillBlank(item.prompt, item.answer))
-    }, 280)
+      setFlying(true)
+      setTypeFeedback(null)
+      if (coachFirst) advanceStationCoach('sentence-structure')
+      setBeat('hear')
+      const token = itemTokenRef.current
+      window.setTimeout(() => setFlying(false), 420)
+      await playSentenceAudio(correctSentence, token)
+      if (!mountedRef.current || token !== itemTokenRef.current) return
+      setHeard(true)
+      setBeat('type')
+      if (coachFirst) advanceStationCoach('sentence-structure')
+      return
+    }
+    /* Wrong pick: soft miss + reshuffle so position tapping cannot clear. */
+    playFoley('wrong')
+    setPicked(null)
+    setPickMiss(true)
+    setTypeFeedback(null)
+    setDraft('')
+    dealSentenceBank(item, prevOrderKeyRef.current)
+  }
 
-    advanceAfterResolve(ok, newScore, nextMissed)
+  /** Lock the item after a correct typed clear — hold UI until success TTS ends. */
+  async function clearItem() {
+    if (!item || resolved) return
+    const token = itemTokenRef.current
+    setResolved(true)
+    setCorrect(true)
+    setFilled(true)
+    setFlying(true)
+    setBeat('clearing')
+    setTypeFeedback(null)
+    recordSkillAttempt('sentence-cloze', true, 12)
+
+    const leftAfter = deck.length - (idx + 1)
+    firePlayClear({
+      label: 'Sentence clear',
+      remnant: leftAfter > 0 ? `${leftAfter} left on this page` : 'Page almost clear',
+      kind: 'micro',
+    })
+
+    const newScore = scoreCorrect + 1
+    const nextMissed = missed
+    setScoreCorrect(newScore)
+
+    /* Keep the completed sentence on screen while success audio plays — then advance. */
+    await playSentenceAudio(correctSentence, token)
+    if (!mountedRef.current || token !== itemTokenRef.current) return
+    await sleep(SUCCESS_SETTLE_MS)
+    if (!mountedRef.current || token !== itemTokenRef.current) return
+    setFlying(false)
+    advanceAfterClear(newScore, nextMissed)
   }
 
   const coachFirst = phase === 'drill' && page === 0 && idx === 0
@@ -269,16 +389,37 @@ export function SentenceClozeDrill({
   function checkType(e: FormEvent) {
     e.preventDefault()
     if (!item || resolved) return
-    const ok = normalizeEnglishAnswer(draft) === normalizeEnglishAnswer(item.answer)
+    if (!pickReady) {
+      playFoley('wrong')
+      setTypeFeedback('need-pick')
+      setPickMiss(true)
+      return
+    }
+    if (!heard) {
+      playFoley('wrong')
+      setTypeFeedback('need-hear')
+      return
+    }
+    const ok = normalizeEnglishAnswer(draft) === normalizeEnglishAnswer(correctSentence)
     if (ok) {
       if (coachFirst) advanceStationCoach('sentence-structure')
-      resolveItem(true)
+      void clearItem()
       return
     }
     playFoley('wrong')
     setTypeFeedback('retry')
     setDraft('')
     inputRef.current?.focus()
+  }
+
+  async function replayHear() {
+    if (!item || resolved || speaking) return
+    const token = itemTokenRef.current
+    await playSentenceAudio(correctSentence, token)
+    if (!mountedRef.current || token !== itemTokenRef.current) return
+    setHeard(true)
+    if (beat === 'hear') setBeat('type')
+    if (typeFeedback === 'need-hear') setTypeFeedback(null)
   }
 
   function retryPage() {
@@ -348,7 +489,7 @@ export function SentenceClozeDrill({
         </div>
         <h2>Page complete</h2>
         <p className="lede">
-          Sentences {from}–{to} clear. {scoreCorrect} of {pageItems.length} landed in the blank — keep the words
+          Sentences {from}–{to} clear. {scoreCorrect} of {pageItems.length} landed — keep the words
           working for you on site.
         </p>
         <div className="hero-actions">
@@ -373,7 +514,7 @@ export function SentenceClozeDrill({
         <h2>Keep learning this page</h2>
         <p className="lede">
           {scoreCorrect} of {pageItems.length} clear so far. Clear {PASS_SCORE} on this page to keep moving.
-          Read the four words, then type the one that fits — soft try again when it is not yet. No rush.
+          Pick the full sentence, hear it, then type it — soft try again when it is not yet. No rush.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>
           Not yet · practice this page again
@@ -392,20 +533,33 @@ export function SentenceClozeDrill({
     return <div className="alert warn">Loading sentences…</div>
   }
 
-  const showWord = Boolean(filled || (resolved && correct))
+  const showWord = Boolean(filled || (resolved && correct) || pickReady)
   const displayWord = showWord ? item.answer : null
   const before = item.prompt.split('______')[0] ?? ''
   const after = item.prompt.split('______')[1] ?? ''
   const imageSrc = resolveClozeImage(item)
   const choiceLetters = ['A', 'B', 'C', 'D'] as const
-  const typingOpen = !resolved
+  const typingOpen = beat === 'type' && !resolved
+  const pickOpen = beat === 'pick' && !resolved
+  const nearbyLine =
+    beat === 'clearing'
+      ? 'Sentence clear — listen, then next'
+      : beat === 'hear'
+        ? 'Listen to the sentence'
+        : beat === 'type'
+          ? pickReady
+            ? 'Type the full sentence you heard'
+            : 'Pick the match, hear it, then type it'
+          : phase === 'repair'
+            ? `Repair · ${deck.length - idx} left · pick · hear · type`
+            : `Clear this page · ${deck.length - idx} left · pick · hear · type`
 
   return (
     <article className="sentence-cloze-card">
       <div className="sentence-cloze-head-row">
         <div>
           <p className="section-kicker">Sentence Structure</p>
-          <p className="sentence-cloze-doc-kicker">{englishBrand} · Type the matching word</p>
+          <p className="sentence-cloze-doc-kicker">{englishBrand} · Pick · hear · type</p>
         </div>
         {practice && onSkipToActions ? (
           <button
@@ -418,9 +572,7 @@ export function SentenceClozeDrill({
         ) : null}
       </div>
       <p className="play-nearby-objective" aria-live="polite">
-        {phase === 'repair'
-          ? `Repair · ${deck.length - idx} left · type the matching word`
-          : `Clear this page · ${deck.length - idx} left · type the matching word`}
+        {nearbyLine}
       </p>
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
@@ -430,7 +582,8 @@ export function SentenceClozeDrill({
       </p>
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
-        Four words below. Type the one that fits the blank — soft try again if not yet. No exam, no rush.
+        Incomplete sentence above. Pick the full sentence that fits, hear it, then type it — soft try
+        again if not yet. No exam, no rush.
       </p>
 
       <div
@@ -465,15 +618,32 @@ export function SentenceClozeDrill({
         </div>
       </div>
 
+      {beat === 'hear' ? (
+        <div className="sentence-cloze-hear" data-coach="sent-hear" role="status" aria-live="polite">
+          <p className="sentence-cloze-hear-line">
+            {speaking ? 'Listening…' : 'Hear the sentence, then type it.'}
+          </p>
+          <button
+            type="button"
+            className="btn btn-ghost sentence-cloze-hear-btn"
+            disabled={speaking}
+            onClick={() => void replayHear()}
+          >
+            <SpeakerIconSmall />
+            {speaking ? 'Playing…' : 'Hear again'}
+          </button>
+        </div>
+      ) : null}
+
       {typingOpen ? (
         <form className="sentence-cloze-type" data-coach="sent-type" onSubmit={checkType}>
           <p className="sentence-cloze-type-prompt">
             <span className="sentence-cloze-type-kicker">Your turn</span>
-            Type the matching word from the four choices.
+            Type the full sentence you picked and heard.
           </p>
           <div className="sentence-cloze-type-row">
             <label className="sr-only" htmlFor={inputId}>
-              Missing word
+              Full sentence
             </label>
             <input
               ref={inputRef}
@@ -482,59 +652,95 @@ export function SentenceClozeDrill({
               value={draft}
               onChange={(e) => {
                 setDraft(e.target.value)
-                if (typeFeedback === 'retry') setTypeFeedback(null)
+                if (typeFeedback) setTypeFeedback(null)
               }}
               autoComplete="off"
               autoCorrect="off"
               spellCheck={false}
               enterKeyHint="done"
-              placeholder="Type here…"
-              aria-invalid={typeFeedback === 'retry'}
+              placeholder="Type the full sentence…"
+              aria-invalid={typeFeedback === 'retry' || typeFeedback === 'need-pick' || typeFeedback === 'need-hear'}
               aria-describedby={typeFeedback ? `${inputId}-fb` : undefined}
             />
             <button type="submit" className="btn btn-primary sentence-cloze-type-go" disabled={!draft.trim()}>
               Go
             </button>
           </div>
+          <div className="sentence-cloze-type-tools">
+            <button
+              type="button"
+              className="btn btn-ghost sentence-cloze-hear-btn"
+              disabled={speaking}
+              onClick={() => void replayHear()}
+            >
+              <SpeakerIconSmall />
+              {speaking ? 'Playing…' : 'Hear again'}
+            </button>
+          </div>
+          {typeFeedback === 'need-pick' ? (
+            <p id={`${inputId}-fb`} className="play-soft-miss" role="status">
+              {softMissLine('pick the matching sentence below, then type it. No rush.')}
+            </p>
+          ) : null}
+          {typeFeedback === 'need-hear' ? (
+            <p id={`${inputId}-fb`} className="play-soft-miss" role="status">
+              {softMissLine('hear the sentence first, then type it. No rush.')}
+            </p>
+          ) : null}
           {typeFeedback === 'retry' ? (
             <p id={`${inputId}-fb`} className="play-soft-miss" role="status">
-              {softMissLine('try again. Look at the four words.')}
+              {softMissLine('try again. Hear it, then type the full sentence.')}
             </p>
           ) : null}
         </form>
       ) : null}
 
-      <div
-        className="train-choice-grid sentence-cloze-choices"
-        role="list"
-        data-coach="sent-choices"
-        aria-label="Word choices — type the correct one"
-      >
-        {options.map((opt, i) => {
-          const letter = choiceLetters[i] ?? String(i + 1)
-          const showAnswer = resolved && opt === item.answer
-          return (
-            <div
-              key={opt}
-              role="listitem"
-              className={`sentence-cloze-chip state-${showAnswer ? 'correct' : 'idle'}${
-                showAnswer && flying ? ' is-flying' : ''
-              }${resolved && !showAnswer ? ' is-dim' : ''} is-reference`}
-            >
-              <span className="sentence-cloze-chip-letter">{letter}.</span>{' '}
-              <span>{opt}</span>
-            </div>
-          )
-        })}
-      </div>
+      {(pickOpen || pickReady) && !resolved ? (
+        <div
+          className="train-choice-grid sentence-cloze-choices sentence-cloze-sentence-bank"
+          role="group"
+          data-coach="sent-pick"
+          aria-label="Full sentence choices — pick the match, then hear and type it"
+        >
+          {options.map((opt, i) => {
+            const letter = choiceLetters[i] ?? String(i + 1)
+            const selected =
+              !!picked && normalizeEnglishAnswer(picked) === normalizeEnglishAnswer(opt)
+            const isAnswer =
+              normalizeEnglishAnswer(opt) === normalizeEnglishAnswer(correctSentence)
+            const locked = pickReady && !isAnswer
+            return (
+              <button
+                key={`${opt}-${i}`}
+                type="button"
+                className={`sentence-cloze-chip sentence-cloze-sentence-chip${
+                  selected && isAnswer ? ' is-picked state-correct' : ' state-idle'
+                }${pickReady && !isAnswer ? ' is-dim' : ''}`}
+                aria-pressed={selected}
+                disabled={!pickOpen || locked}
+                onClick={() => void onPickOption(opt)}
+              >
+                <span className="sentence-cloze-chip-letter">{letter}.</span>{' '}
+                <span className="sentence-cloze-sentence-text">{opt}</span>
+              </button>
+            )
+          })}
+        </div>
+      ) : null}
+
+      {pickMiss && beat === 'pick' && !typeFeedback ? (
+        <p className="play-soft-miss" role="status">
+          {softMissLine('not that one. Choices switched — pick again. No rush.')}
+        </p>
+      ) : null}
 
       {resolved && correct ? (
-        <div className="alert ok">Yes — the word completes the sentence.</div>
+        <div className="alert ok">Yes — that sentence is clear.</div>
       ) : null}
       {coachFirst ? (
         <StationCoach
           stationId="sentence-structure"
-          layoutKey={`${item.id}-${resolved}-${typingOpen}`}
+          layoutKey={`${item.id}-${beat}-${resolved}-${typingOpen}-${pickOpen}`}
         />
       ) : null}
     </article>

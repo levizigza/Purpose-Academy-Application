@@ -79,18 +79,18 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
   ],
   'eye-spy': [
     { target: '[data-coach="spy-pic"]', say: 'Press a picture on the board' },
-    { target: '[data-coach="spy-word"]', say: 'Press the matching English word' },
-    { target: '[data-coach="spy-match"]', say: 'Press Match' },
+    { target: '[data-coach="spy-word"]', say: 'Press the matching English word — they clear together' },
   ],
   'sentence-structure': [
-    /* Choices are reference chips, not buttons — coach the type beat only. */
-    { target: '[data-coach="sent-type"]', say: 'Type the matching word from the four choices · then Go' },
+    { target: '[data-coach="sent-pick"]', say: 'Pick the full sentence that fits' },
+    { target: '[data-coach="sent-hear"]', say: 'Hear the sentence' },
+    { target: '[data-coach="sent-type"]', say: 'Type the full sentence · then Go' },
   ],
   'word-action': [
     { target: '[data-coach="choice-opt"]', say: 'Press the answer that fits' },
   ],
   'supported-practice': [
-    { target: '[data-coach="choice-opt"]', say: 'Press the matching word' },
+    { target: '[data-coach="sp-play"]', say: 'Follow the short game line · one clear action' },
   ],
   'workplace-instructions': [
     { target: '[data-coach="instr-hear"]', say: 'Press Hear English' },
@@ -98,7 +98,7 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
   ],
   'computer-skills': [
     { target: '[data-coach="comp-watch"]', say: 'Press play on the lesson video' },
-    { target: '[data-coach="comp-try"]', say: 'Try the task · then check' },
+    { target: '[data-coach="comp-try"]', say: 'Try the task. Then check your answer' },
   ],
   'site-language': [
     { target: '[data-coach="phrase-hear"]', say: 'Press Hear English' },

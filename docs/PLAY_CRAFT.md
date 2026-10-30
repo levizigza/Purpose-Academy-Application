@@ -118,7 +118,7 @@ stays real workplace English.
 | Language Organize | Clear this round/word · N left | Picture / round / station | Not yet — wrong box · try again |
 | Sentence Structure | Clear this page · N left · type the matching word | Sentence / page clear | Four reference choices + Type / Go · soft type retry |
 | Word → Action | Clear this action · N left | Action clear | Not yet · try again |
-| Supported Practice | Clear this match · N left | Match / round clear | Not yet · try again |
+| Supported Practice | Clear this board/sentence/blank · N left | Memory / order / listen / fill clear | Not yet · try again |
 | Workplace Instructions | Clear this instruction · N left | Instruction clear | Not yet · try again |
 | QuizRunner (Safety / Final written) | Clear this item · N left | Item / set clear | Soft retry · gated sets |
 | Site Language | Clear this phrase · N left | Phrase clear | Not yet · try again |
@@ -139,6 +139,12 @@ stays real workplace English.
 ---
 
 ## 3. Changelog
+
+### 2026-10-30 — Supported Practice familiar games + stronger Organize / Eye Spy
+
+- Supported Practice leaves MC matching: **memory match**, **order the words**, **listen and choose**, **soft fill-blank race** (tap, not type). Finite boards · soft miss · dual-shell.
+- Preceding pages before Sentence Structure: Organize gets round beads + Drop CTA + shorter help; Eye Spy auto-clears pairs (no Match button) + scene beads.
+- Authority unchanged — clears stay presentation; skill id remains `matching`.
 
 ### 2026-10-26 — Play craft established + marble plan + moment-loop slice
 

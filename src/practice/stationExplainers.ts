@@ -25,7 +25,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'your-language',
     steps: [3],
     title: 'Your Language',
-    lede: 'We start in English. A mark points at the language chips once — stay in English, or pick the tongue you understand best.',
+    lede: 'We start in English. An arrow points at the language buttons one time — stay in English, or press the language you know best.',
     video: 'explainers/your-language.mp4',
   },
   {
@@ -39,21 +39,21 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'language-organize',
     steps: [7],
     title: 'Language Organize',
-    lede: 'Match each picture to its word board. Soft try again if not yet.',
+    lede: 'Match each picture to its word. Wrong? Try again.',
     video: 'explainers/language-organize.mp4',
   },
   {
     id: 'eye-spy',
     steps: [8],
     title: 'English Eye Spy',
-    lede: 'Tap a picture, then its English name. Clear the board.',
+    lede: 'Tap a picture, then its English name. Pairs clear. Empty the board.',
     video: 'explainers/eye-spy.mp4',
   },
   {
     id: 'sentence-structure',
     steps: [9],
     title: 'Sentence Structure',
-    lede: 'Four word choices stay visible. Type the matching word.',
+    lede: 'Pick the full sentence. Hear it. Type it.',
     video: 'explainers/sentence-structure.mp4',
   },
   {
@@ -68,7 +68,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'supported-practice',
     steps: [10],
     title: 'Supported Practice',
-    lede: 'Match words to pictures with help. Mistakes teach.',
+    lede: 'Four short games with help: memory, order, listen, soft fill. Mistakes teach.',
     video: 'explainers/supported-practice.mp4',
   },
   {

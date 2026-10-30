@@ -8,6 +8,7 @@ import {
 } from './stationExplainers'
 import { markNavCueSeen, NAV_CUE, navCueActive } from './navCues'
 import { NavGlowButton } from './NavCue'
+import { InstructionHearChip } from './InstructionNarration'
 
 type Props = {
   step: number
@@ -86,6 +87,12 @@ function ExplainerCard({
       <p className="section-kicker">How this station works</p>
       <h2 id={`explainer-${explainer.id}-title`}>{explainer.title}</h2>
       <p className="lede station-explainer-lede">{explainer.lede}</p>
+      <InstructionHearChip
+        english={explainer.lede}
+        auto
+        autoKey={explainer.id}
+        className="station-explainer-hear"
+      />
       <p className="play-nearby-objective" aria-live="polite">
         Watch once · then the station opens
       </p>
