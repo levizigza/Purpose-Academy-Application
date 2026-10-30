@@ -83,8 +83,9 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
     { target: '[data-coach="spy-match"]', say: 'Press Match' },
   ],
   'sentence-structure': [
-    /* Choices are reference chips, not buttons — coach the type beat only. */
-    { target: '[data-coach="sent-type"]', say: 'Type the matching word from the four choices · then Go' },
+    { target: '[data-coach="sent-pick"]', say: 'Pick the full sentence that fits' },
+    { target: '[data-coach="sent-hear"]', say: 'Hear the sentence' },
+    { target: '[data-coach="sent-type"]', say: 'Type the full sentence · then Go' },
   ],
   'word-action': [
     { target: '[data-coach="choice-opt"]', say: 'Press the answer that fits' },

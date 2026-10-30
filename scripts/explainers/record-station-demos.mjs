@@ -66,7 +66,7 @@ const STATIONS = {
       },
       {
         id: 'mark',
-        text: 'A mark points at the language chips once. Stay in English, or press the language you understand best.',
+        text: 'See the arrow. It points at the language buttons one time. Stay in English, or press the language you know best.',
         async act(page) {
           const spanish = page.locator('.train-lang').filter({ hasText: /Spanish|Español|ES/i }).first()
           await spanish.scrollIntoViewIfNeeded()
@@ -155,7 +155,7 @@ const STATIONS = {
       },
       {
         id: 'pick',
-        text: 'Pick the matching English word. Soft try again if not yet — choices switch.',
+        text: 'Pick the matching English word. Wrong? Try again. The choices move.',
         async act(page) {
           await page.waitForSelector('[data-coach="vv-pick"] .vocab-sheet-pick-chip, .vocab-sheet-pick-chip', {
             timeout: 35000,
@@ -172,7 +172,7 @@ const STATIONS = {
       },
       {
         id: 'type',
-        text: 'Type what you picked and heard. Soft try again if not yet. That is the whole loop.',
+        text: 'Type what you picked and heard. Wrong? Try again. That is all — hear, pick, and type.',
         async act(page) {
           await page.waitForSelector('[data-coach="vv-type"] input, .vocab-sheet-type-input', {
             timeout: 35000,
@@ -223,7 +223,7 @@ const STATIONS = {
       },
       {
         id: 'retry',
-        text: 'Wrong place? Soft shake — try again. Clear the round, then the next.',
+        text: 'Wrong place? It shakes — try again. Finish this set, then the next.',
         async act(page) {
           const pic2 = page.locator('.vocab-organize-piece.is-image').first()
           if (await pic2.isVisible().catch(() => false)) {
@@ -291,7 +291,7 @@ const STATIONS = {
       },
       {
         id: 'match',
-        text: 'A correct pair disappears. Soft try again if not yet. Clear every pair to continue.',
+        text: 'A correct pair disappears. Wrong? Try again. Clear every pair to continue.',
         async act(page) {
           const matchBtn = page.locator('[data-coach="spy-match"], button:has-text("Match")').first()
           if (await matchBtn.isVisible().catch(() => false)) {
@@ -343,7 +343,7 @@ const STATIONS = {
       },
       {
         id: 'type',
-        text: 'Type the word that fits the blank. Soft try again if not yet.',
+        text: 'Type the word that fits the blank. Wrong? Try again.',
         async act(page) {
           const input = page.locator('[data-coach="sent-type"] input, .sentence-cloze-type-input').first()
           await input.waitFor({ state: 'visible', timeout: 10000 })
@@ -412,7 +412,7 @@ const STATIONS = {
       },
       {
         id: 'pick',
-        text: 'One clear pick. Soft try again. Then continue.',
+        text: 'Pick one answer. Wrong? Try again. Then continue.',
         async act(page) {
           const hammer = page
             .locator('[data-coach="choice-opt"] button')
@@ -465,7 +465,7 @@ const STATIONS = {
       },
       {
         id: 'retry',
-        text: 'Mistakes teach. Soft try again. No exam theatre.',
+        text: 'Mistakes help you learn. Wrong? Try again. This is practice — not a test.',
         async act(page) {
           const hammer = page
             .locator('[data-coach="choice-opt"] button, .train-choice-grid button')
@@ -509,7 +509,7 @@ const STATIONS = {
       },
       {
         id: 'pick',
-        text: 'Then choose what you should do. Soft try again if not yet.',
+        text: 'Then choose what you should do. Wrong? Try again.',
         async act(page) {
           const correct = page.locator('.train-choice-grid button').filter({ hasText: /tape measure/i })
           const btn = (await correct.first().isVisible().catch(() => false))
@@ -555,7 +555,7 @@ const STATIONS = {
       },
       {
         id: 'try',
-        text: 'Then try a simple task — mouse, folders, save, Word, or email.',
+        text: 'Then try a simple task — mouse, folders, save, writing, or email.',
         async act(page) {
           const tryBtn = page
             .locator('button:has-text("Try it now"), button:has-text("Keep watching")')
@@ -612,7 +612,7 @@ const STATIONS = {
       },
       {
         id: 'pick',
-        text: 'Soft try again. Then move on.',
+        text: 'Wrong? Try again. Then move on.',
         async act(page) {
           const correct = page
             .locator('[data-coach="choice-opt"] button, .train-choice-grid button')
@@ -661,7 +661,7 @@ const STATIONS = {
       },
       {
         id: 'retry',
-        text: 'Soft try again. Safety first — no rush.',
+        text: 'Wrong? Try again. Safety first — no rush.',
         async act(page) {
           const correct = page.locator('button').filter({ hasText: /Safety gear \(PPE\)/i })
           const btn = (await correct.first().isVisible().catch(() => false))
@@ -704,7 +704,7 @@ const STATIONS = {
       },
       {
         id: 'retry',
-        text: 'Soft try again. Then continue.',
+        text: 'Wrong? Try again. Then continue.',
         async act(page) {
           const correct = page.locator('button').filter({ hasText: /^Hand tools$/i })
           const btn = (await correct.first().isVisible().catch(() => false))
@@ -747,7 +747,7 @@ const STATIONS = {
       },
       {
         id: 'retry',
-        text: 'Soft try again. Your task feeds the whole site.',
+        text: 'Wrong? Try again. Your job helps the whole work site.',
         async act(page) {
           const correct = page.locator('button').filter({ hasText: /^Framing$/i })
           const btn = (await correct.first().isVisible().catch(() => false))
