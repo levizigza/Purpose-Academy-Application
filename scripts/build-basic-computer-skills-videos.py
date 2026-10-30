@@ -165,7 +165,7 @@ LESSONS: list[dict] = [
             (4, 10, "Lesson five. Make a folder inside a folder."),
             (10, 18, "A folder inside a folder helps you stay organized."),
             (18, 26, "Open your main folder — for example, School Work."),
-            (26, 34, "Right-click inside it. Click New. Then click Folder."),
+            (26, 34, "Press the right mouse button. Click New, then Folder."),
             (34, 42, "Name it something clear, like Week One."),
             (42, 50, "Now Week One sits safely inside School Work."),
             (50, 58, "You did it. Open the folder. New. Folder. Name it."),
