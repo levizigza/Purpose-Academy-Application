@@ -16676,3 +16676,267 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
     animation: none !important;
   }
 }
+
+
+/* ---- Supported Practice games (memory / order / listen / soft fill) ---- */
+.supported-games {
+  display: grid;
+  gap: 0.85rem;
+}
+.supported-games-head {
+  display: grid;
+  gap: 0.4rem;
+}
+.supported-games-title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--train-text, #f4f7fb);
+}
+.supported-games-help {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--train-text-muted, #b7c4d4);
+}
+.supported-games-beads,
+.eye-spy-beads,
+.vocab-organize-beads {
+  display: flex;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0.15rem 0 0.35rem;
+  padding: 0;
+}
+.supported-games-bead,
+.eye-spy-bead,
+.vocab-organize-bead {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, #8aa0b8 45%, transparent);
+  border: 1px solid color-mix(in srgb, #8aa0b8 55%, transparent);
+}
+.supported-games-bead.is-now,
+.eye-spy-bead.is-now,
+.vocab-organize-bead.is-now {
+  background: #f5c542;
+  border-color: #f5c542;
+  transform: scale(1.15);
+}
+.supported-games-bead.is-done,
+.eye-spy-bead.is-done,
+.vocab-organize-bead.is-done {
+  background: color-mix(in srgb, #9ccc65 80%, #0b2f5c);
+  border-color: #9ccc65;
+}
+.supported-memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+@media (max-width: 720px) {
+  .supported-memory-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.supported-memory-card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, #f5c542 28%, transparent);
+  background: color-mix(in srgb, #041526 70%, #0b2f5c);
+  color: #f8f4ea;
+  overflow: hidden;
+  cursor: pointer;
+  perspective: 600px;
+}
+.supported-memory-card:disabled { cursor: default; opacity: 0.95; }
+.supported-memory-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0.4rem;
+  backface-visibility: hidden;
+  transition: transform 0.35s ease;
+}
+.supported-memory-face.is-back {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #f5c542;
+  background: linear-gradient(160deg, #0b2f5c, #041526);
+}
+.supported-memory-face.is-front {
+  transform: rotateY(180deg);
+  background: color-mix(in srgb, #0b2f5c 35%, #041526);
+}
+.supported-memory-card.is-open .supported-memory-face.is-back,
+.supported-memory-card.is-matched .supported-memory-face.is-back {
+  transform: rotateY(180deg);
+}
+.supported-memory-card.is-open .supported-memory-face.is-front,
+.supported-memory-card.is-matched .supported-memory-face.is-front {
+  transform: rotateY(0deg);
+}
+.supported-memory-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.supported-memory-word {
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-align: center;
+  line-height: 1.25;
+}
+.supported-memory-card.is-matched {
+  border-color: #9ccc65;
+  box-shadow: 0 0 0 1px color-mix(in srgb, #9ccc65 50%, transparent);
+}
+.supported-game-photo {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, #041526 55%, transparent);
+  border: 1px solid color-mix(in srgb, #8aa0b8 28%, transparent);
+  min-height: 160px;
+  display: grid;
+  place-items: center;
+}
+.supported-game-photo img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+}
+.supported-game-fallback {
+  padding: 1rem;
+  font-weight: 800;
+  color: #f5c542;
+}
+.supported-order-built {
+  margin: 0;
+  min-height: 2.6rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  border: 1px dashed color-mix(in srgb, #f5c542 40%, transparent);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--train-text, #f4f7fb);
+}
+.supported-order-placeholder {
+  color: var(--train-text-muted, #8aa0b8);
+  font-weight: 650;
+}
+.supported-order-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.supported-order-chip {
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #f5c542 35%, transparent);
+  background: color-mix(in srgb, #0b2f5c 55%, transparent);
+  color: #f8f4ea;
+  font-weight: 750;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+}
+.supported-order-chip:hover:not(:disabled) {
+  border-color: #f5c542;
+}
+.supported-listen-prompt {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--train-text, #f4f7fb);
+}
+.supported-race-meter {
+  position: relative;
+  height: 1.7rem;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, #f5c542 30%, transparent);
+  background: color-mix(in srgb, #041526 55%, transparent);
+}
+.supported-race-bar {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, color-mix(in srgb, #f5c542 55%, transparent), #f5c542);
+  transition: width 0.2s linear;
+}
+.supported-race-label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #041526;
+  mix-blend-mode: difference;
+}
+.supported-games-advance {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: start;
+}
+.vocab-organize-drop-cta {
+  display: grid;
+  margin: 0.35rem 0 0.15rem;
+}
+.vocab-organize-drop-cta .btn {
+  width: 100%;
+}
+
+/* Phone paper dual-shell */
+.is-phone-app .supported-games-title,
+.is-phone-app .supported-order-built,
+.is-phone-app .supported-listen-prompt,
+.is-phone-app .supported-memory-word {
+  color: #041526;
+}
+.is-phone-app .supported-games-help,
+.is-phone-app .supported-order-placeholder {
+  color: #3d526a;
+}
+.is-phone-app .supported-memory-card,
+.is-phone-app .supported-order-chip {
+  background: #fff8e8;
+  color: #041526;
+  border-color: color-mix(in srgb, #0b2f5c 22%, #c5d0dc);
+}
+.is-phone-app .supported-memory-face.is-back {
+  background: linear-gradient(160deg, #e8eef6, #fff8e8);
+  color: #0b2f5c;
+}
+.is-phone-app .supported-memory-face.is-front {
+  background: #fff;
+}
+.is-phone-app .supported-game-photo {
+  background: #fff;
+  border-color: color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
+}
+.is-phone-app .supported-race-meter {
+  background: #fff;
+  border-color: color-mix(in srgb, #0b2f5c 20%, #c5d0dc);
+}
+.is-phone-app .supported-race-label {
+  color: #0b2f5c;
+  mix-blend-mode: normal;
+}
+.is-phone-app .supported-games-bead.is-now,
+.is-phone-app .eye-spy-bead.is-now,
+.is-phone-app .vocab-organize-bead.is-now {
+  background: #0b2f5c;
+  border-color: #0b2f5c;
+}
+.course-stage .supported-games-title {
+  color: #f4f7fb;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .supported-memory-face { transition: none; }
+  .supported-race-bar { transition: none; }
+}

@@ -22,12 +22,10 @@ import {
 import {
   SUPPORT_LANGUAGES,
   LEARNING_UNITS,
-  MATCH_PRACTICE_ROUNDS,
   JOURNEY_STEP_COUNT,
   unitForStep,
   isUnitEntryStep,
   type SupportLang,
-  type HomeLang,
   type QuizItem,
   type VocabTerm,
 } from './journeyCurriculum'
@@ -36,7 +34,6 @@ import {
   LEVEL1_PAGE_SIZE,
   pickSpecialtyDistractors,
   sentenceLadderGateTerms,
-  matchPracticeDeck,
   shuffleChoices,
 } from './vocabDistractors'
 import {
@@ -77,6 +74,7 @@ import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
 import { PlayClearPulse, SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
+import { SupportedPracticeGames } from './SupportedPracticeGames'
 import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
 import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
@@ -833,7 +831,6 @@ export function StudentSequencePage() {
     consumeForcePracticeLesson()
   }, [])
   const [checkpointUnit, setCheckpointUnit] = useState<number | null>(null)
-  const [matchRound, setMatchRound] = useState(1)
   const [empDone, setEmpDone] = useState(() => {
     try { return !!learnerGet(EMP_KEY) } catch { return false }
   })
@@ -863,16 +860,6 @@ export function StudentSequencePage() {
   const [vocabSpeakingId, setVocabSpeakingId] = useState<string | null>(null)
   const [vocabIdx, setVocabIdx] = useState(0)
   const [speaking, setSpeaking] = useState<'en' | 'support' | 'both' | null>(null)
-
-  /* Step 9 supported matching */
-  const [matchIdx, setMatchIdx] = useState(0)
-  const [matchAnswer, setMatchAnswer] = useState<string | null>(null)
-  const [matchCorrect, setMatchCorrect] = useState(false)
-  const [matchOptions, setMatchOptions] = useState<VocabTerm[]>(() => {
-    const term = VOCAB_UNIT[0]
-    if (!term) return []
-    return shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)])
-  })
 
   /* Step 11 workplace instructions */
   const [instrIdx, setInstrIdx] = useState(0)
@@ -949,20 +936,8 @@ export function StudentSequencePage() {
     if (skill) markSkillOpened(skill)
   }, [step, practiceView])
 
-  /* Seed matching options from the worksheet-sized deck when entering step 9. */
-  useEffect(() => {
-    if (step !== 9) return
-    const deck = matchPracticeDeck(VOCAB_UNIT, getKnownVocabIds(pathwayId))
-    const term = deck[0]
-    if (!term) return
-    setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
-  }, [step, pathwayId])
-
   useEffect(() => {
     /* When pathway changes, reset lesson-local drills so content matches the pack. */
-    const term = VOCAB_UNIT[0]
-    if (!term) return
-    setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
     setVocabIdx(0)
     setVocabHeard({})
     setVocabConnected({})
@@ -974,10 +949,6 @@ export function StudentSequencePage() {
     setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
     setOrganizeTerms([])
     setSentenceLevel1(false)
-    setMatchIdx(0)
-    setMatchAnswer(null)
-    setMatchCorrect(false)
-    setMatchRound(1)
     setInstrIdx(0)
     setInstrHeard(false)
     setInstrAnswer(null)
@@ -1021,10 +992,6 @@ export function StudentSequencePage() {
     setActionIdx(0)
     setActionAnswer(null)
     setActionCorrect(false)
-    setMatchIdx(0)
-    setMatchRound(1)
-    setMatchAnswer(null)
-    setMatchCorrect(false)
     setInstrIdx(0)
     setInstrHeard(false)
     setInstrAnswer(null)
@@ -1539,18 +1506,6 @@ export function StudentSequencePage() {
     /* Success Foley owned by VocabSheet → firePlayClear — do not double-latch. */
   }
 
-  function resetMatch() {
-    setMatchIdx(0)
-    setMatchRound(1)
-    setMatchAnswer(null)
-    setMatchCorrect(false)
-    const term = VOCAB_UNIT[0]
-    if (!term) {
-      setMatchOptions([])
-      return
-    }
-    setMatchOptions(shuffleChoices([term, ...pickSpecialtyDistractors(VOCAB_UNIT, term.id, 3)]))
-  }
   function resetInstr() { setInstrIdx(0); setInstrHeard(false); setInstrAnswer(null); setInstrCorrect(false) }
 
   async function ensureDemoStudent() {
@@ -1963,8 +1918,8 @@ export function StudentSequencePage() {
               : 'The same tool has one English name and many home-language names. Hear a language, then drop the picture on that word.'}
           </WhyWork>
           <TeachNote>
-            Five rounds. Each card already lists the word in every language. Move the matching picture into the
-            empty box. Hear any language if you want help.
+            Five short boards. Tap a picture, then Drop on the matching word. Clear every picture to finish the
+            round. Hear any language if you want help.
           </TeachNote>
         </StationContext>
       </Shell>
@@ -2002,8 +1957,8 @@ export function StudentSequencePage() {
               : 'On a real site every tool sits among other objects. Name each one until the board is clear.'}
           </WhyWork>
           <TeachNote>
-            Exercise mode: unlimited tries. Tap a picture and its English name. A correct pair disappears. Clear
-            the whole board, then the next scene. Clear every picture. If you miss one, try the board again.
+            Tap a picture, then its English name — the pair clears by itself. Empty the board, then the next
+            scene. Soft try again if a pair misses. No rush.
           </TeachNote>
         </StationContext>
       </Shell>
@@ -2186,161 +2141,32 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 9: Supported matching — worksheet page, not the full vocab dump */
+  /* Step 10: Supported Practice — familiar sentence games (memory / order / listen / soft fill) */
   if (step === 10) {
-    const knownSet = new Set(vocabKnownIds)
-    const unknownTerms = VOCAB_UNIT.filter((t) => !knownSet.has(t.id))
-    const matchDeck = matchPracticeDeck(VOCAB_UNIT, vocabKnownIds)
-    const safeIdx = Math.min(matchIdx, Math.max(0, matchDeck.length - 1))
-    const term = matchDeck[safeIdx]
-    if (!term) {
-      return (
-        <Shell step={10} onBack={() => go(9)} onNext={() => go(11, 'Opening workplace instructions…')}>
-          <div className="alert ok">Matching page ready — continue to workplace instructions.</div>
-        </Shell>
-      )
-    }
-    const alreadyKnown = knownSet.has(term.id)
-    const isLast = safeIdx >= matchDeck.length - 1
-    const roundsNeeded =
-      isPracticeMode() && matchDeck.length <= 3 ? 1 : isPracticeMode() ? MATCH_PRACTICE_ROUNDS : 1
-
-    const coachFirst = matchRound === 1 && safeIdx === 0 && !matchAnswer
-
-    function pickMatch(opt: string) {
-      if (matchAnswer) return
-      const ok = opt === term.english
-      setMatchAnswer(opt)
-      setMatchCorrect(ok)
-      if (coachFirst) advanceStationCoach('supported-practice')
-      recordSkillAttempt('matching', ok)
-      if (ok) {
-        const left = matchDeck.length - (safeIdx + 1)
-        const lastRound = matchRound >= roundsNeeded
-        firePlayClear({
-          label: 'Match clear',
-          remnant:
-            left > 0
-              ? `${left} left this round`
-              : lastRound
-                ? 'Round clear — continue when ready'
-                : 'Round clear — next round next',
-          kind: left === 0 ? 'board' : 'micro',
-        })
-      } else {
-        playFoley('wrong')
-      }
-    }
-
-    function nextMatch() {
-      if (!matchCorrect) {
-        setMatchAnswer(null)
-        setMatchCorrect(false)
-        return
-      }
-      if (isLast) {
-        if (matchRound < roundsNeeded) {
-          setMatchRound((r) => r + 1)
-          setMatchIdx(0)
-          setMatchAnswer(null)
-          setMatchCorrect(false)
-          const first = matchDeck[0]
-          setMatchOptions(shuffleChoices([first, ...pickSpecialtyDistractors(VOCAB_UNIT, first.id, 3)]))
-          playFoley('whoosh')
-          return
-        }
-        requestPracticeAdvance(() => {
-          resetMatch()
-          go(11, 'Opening workplace instructions…')
-        })
-        return
-      }
-      const next = safeIdx + 1
-      setMatchIdx(next)
-      setMatchAnswer(null)
-      setMatchCorrect(false)
-      const nextTerm = matchDeck[next]
-      setMatchOptions(shuffleChoices([nextTerm, ...pickSpecialtyDistractors(VOCAB_UNIT, nextTerm.id, 3)]))
-    }
-
     return (
       <Shell step={10} onBack={() => go(9)}>
-        <p className="play-nearby-objective" aria-live="polite">
-          Clear this match · {matchDeck.length - safeIdx} left · round {matchRound} of {roundsNeeded}
-        </p>
-        <p className="train-vocab-counter">
-          Round {matchRound} of {roundsNeeded} · Match {safeIdx + 1} of {matchDeck.length}
-          {' · '}
-          Worksheet page (not the full {VOCAB_UNIT.length}-word table)
-          {unknownTerms.length
-            ? ` · ${Math.min(unknownTerms.length, matchDeck.length)} to practise again`
-            : ''}
-        </p>
-        <PictureCard
-          image={pathwayImage(term.imageKey)}
-          fit="contain"
-          label="Match the English word to the picture"
-          caption="One worksheet page at a time. Press any language for help, then choose the English word."
+        <SupportedPracticeGames
+          vocab={VOCAB_UNIT}
+          knownIds={vocabKnownIds}
+          cloze={SENTENCE_CLOZE}
+          onComplete={() =>
+            requestPracticeAdvance(() => go(11, 'Opening workplace instructions…'))
+          }
         />
-        {alreadyKnown && (
-          <p className="vocab-known-note">Already known — quick confirm, then continue.</p>
-        )}
-        <ul className="vocab-sheet-langs vocab-match-langs" aria-label="All language meanings">
-          {(['Amharic', 'Tigrinya', 'Arabic', 'Spanish', 'Hindi'] as HomeLang[]).map((lang) => (
-            <li key={lang}>
-              <button
-                type="button"
-                className="vocab-sheet-lang-btn"
-                disabled={speaking !== null}
-                onClick={() => void playSupport(term.gloss[lang], lang)}
-                aria-label={`Hear ${term.gloss[lang]} in ${lang}`}
-              >
-                <span className="vocab-sheet-lang-name">{lang}</span>
-                <span className="vocab-sheet-lang-word">{term.gloss[lang]}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-        <div className="train-audio-row">
-          <button type="button" className="btn btn-secondary on-light" disabled={speaking !== null} onClick={() => void playEnglish(term.english)}>Hear English</button>
-        </div>
-        <div className="train-choice-grid" data-coach="choice-opt">
-          {matchOptions.map((opt) => (
-            <ChoiceButton
-              key={opt.id}
-              state={matchAnswer === opt.english ? (matchCorrect ? 'correct' : 'wrong') : matchAnswer ? (opt.english === term.english ? 'correct' : 'idle') : 'idle'}
-              disabled={!!matchAnswer && opt.english !== matchAnswer && opt.english !== term.english}
-              onClick={() => pickMatch(opt.english)}
-            >
-              {opt.english}
-            </ChoiceButton>
-          ))}
-        </div>
-        {matchAnswer && (
-          <>
-            {matchCorrect ? (
-              <div className="alert ok">Yes. Picture and word match.</div>
-            ) : (
-              <p className="play-soft-miss" role="status">
-                {softMissLine(`The word is ${term.english}.`)}
-              </p>
-            )}
-            <AdvanceGateNote />
-            <button type="button" className="btn btn-primary" onClick={nextMatch}>
-              {matchCorrect
-                ? (isLast && matchRound >= roundsNeeded ? 'Continue to workplace instructions' : isLast ? 'Next round' : 'Next match')
-                : SOFT_RETRY_LABEL}
-            </button>
-          </>
-        )}
-        {coachFirst ? (
-          <StationCoach stationId="supported-practice" layoutKey={`${term.id}-${matchRound}`} />
-        ) : null}
+        <StationContext>
+          <WhyWork>
+            Help is strength. These short games practise the same workplace sentences again — no exam.
+          </WhyWork>
+          <TeachNote>
+            Four familiar games: memory match, order the words, listen and choose, then soft fill-blank.
+            Clear each board. Soft try again. Then workplace instructions.
+          </TeachNote>
+        </StationContext>
       </Shell>
     )
   }
 
-  /* Step 10: Workplace instructions — English only */
+  /* Step 11: Workplace instructions — English only */
   if (step === 11) {
     const instr = WORKPLACE_INSTRUCTIONS[instrIdx]
     const isLast = instrIdx >= WORKPLACE_INSTRUCTIONS.length - 1
@@ -2382,7 +2208,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={11} onBack={() => { resetMatch(); go(10) }}>
+      <Shell step={11} onBack={() => go(10)}>
         <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
         <p className="play-nearby-objective" aria-live="polite">
           Clear this instruction · {WORKPLACE_INSTRUCTIONS.length - instrIdx} left

@@ -99,10 +99,10 @@ Run this on every station before merge:
 | 4 | Work Style | No wrong answers; short picks |
 | 5 | Career Profile | Path recommendation without % fit theatre |
 | 6 | Visual Vocabulary | Hear → hear → pick match → type; shuffled bank; one calm counter |
-| 7 | Language Organize | Match pictures — never “quiz” |
-| 8 | English Eye Spy | Clear the board; no prove / 100% / exam |
+| 7 | Language Organize | Tap picture · Drop on word — never “quiz” |
+| 8 | English Eye Spy | Tap picture + name; pairs clear; no prove / 100% / exam |
 | 9 | Sentences / Word→Action | Four choices visible; type the matching word; soft retry — not tap-to-answer |
-| 10 | Supported Practice | Help is strength, not remediation shame |
+| 10 | Supported Practice | Familiar sentence games with help — not remediation shame |
 | 11 | Workplace Instructions | Hear + choose what to do |
 | 12 | Computer Skills | Watch → try; first-computer friendly |
 | 13 | Site Language | Continue to work-interest questions |
@@ -148,6 +148,11 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 ---
 
 ## 8. Changelog
+
+### 2026-10-30 — Supported Practice games + Organize / Eye Spy strength
+
+- Supported Practice: memory / order-the-words / listen-and-choose / soft fill-blank. Simple Level-4 instructions. Soft miss. No exam lexicon.
+- Language Organize + Eye Spy (before Sentence Structure): clearer first viewport, beads, auto-pair clear on Eye Spy.
 
 ### 2026-10-29 — VV pick + type + shuffle
 

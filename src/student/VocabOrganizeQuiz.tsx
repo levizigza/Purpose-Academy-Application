@@ -3,7 +3,7 @@ import type { HomeLang, SupportLang, VocabTerm } from './journeyCurriculum'
 import { pathwayImage } from '../pathways'
 import { VOCAB_SHEET_LANGS } from './VocabSheet'
 import { playFoley } from '../audio/foley'
-import { firePlayClear } from '../practice/PlayClear'
+import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
@@ -283,9 +283,19 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
         <p className="play-nearby-objective" aria-live="polite">
           {leftOverObjective(matchedCount, page.length, phone)}
         </p>
+        <ol className="vocab-organize-beads" aria-label="Rounds">
+          {rounds.map((_, i) => (
+            <li
+              key={i}
+              className={`vocab-organize-bead${i < round ? ' is-done' : ''}${i === round ? ' is-now' : ''}`}
+            >
+              <span className="sr-only">Round {i + 1}{i === round ? ' now' : ''}</span>
+            </li>
+          ))}
+        </ol>
         {shakeId ? (
           <p className="play-soft-miss" role="status">
-            Not yet — that picture belongs on a different word. Try again.
+            {softMissLine('That picture belongs on a different word.')}
           </p>
         ) : null}
         <p className="train-vocab-counter">
@@ -296,8 +306,8 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
         </p>
         <p className="lede vocab-organize-help">
           {phone
-            ? 'One word at a time. Hear a language if you want help, then place the matching picture.'
-            : 'Each card is the English word plus the same word in five languages. Hear a language if you want help. Then move the matching picture into the empty box on that card.'}
+            ? 'Tap a picture · then Drop on this word.'
+            : 'Tap or drag a picture onto the matching word box. Hear a language if you want help.'}
         </p>
       </header>
 
@@ -393,7 +403,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   )
                 ) : (
                   <span className="vocab-organize-slot-hint">
-                    {picked ? 'Tap to drop picture here' : 'Drop picture here'}
+                    {picked ? 'Drop here' : 'Empty — needs picture'}
                   </span>
                 )}
               </button>
@@ -427,6 +437,19 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
           )
         })}
       </div>
+
+      {phone && picked && focusTerm && !matched[focusTerm.id] ? (
+        <div className="vocab-organize-drop-cta">
+          <button
+            type="button"
+            className="btn btn-primary"
+            data-coach="org-drop"
+            onClick={() => tapBox(focusTerm.id)}
+          >
+            Drop on {focusTerm.english}
+          </button>
+        </div>
+      ) : null}
 
       {phone && unmatched.length > 1 ? (
         <div className="vocab-organize-focus-nav" role="navigation" aria-label="Word to match">

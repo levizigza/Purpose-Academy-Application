@@ -435,6 +435,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-30 — Supported Practice familiar sentence games (L2/L3/L4)
+
+- **Layers:** L2 content loop · L3 info display · L4 finite boards · L6 Practice spine.
+- **Supported Practice** replaces worksheet MC matching with four familiar games: memory match (picture↔word), order-the-words, listen-and-choose, soft fill-blank race (tap; meter encourages, never fails).
+- **Preceding pages before Sentence Structure:** Language Organize (round beads, Drop CTA, shorter help) and Eye Spy (auto-pair clear, scene beads, shorter instruction).
+- Dual-shell night / phone paper. Soft miss + `firePlayClear`. Skill id stays `matching`.
+- Critic: help is strength; Level-4 English one-line instructions; no Match-button exam chrome on Eye Spy.
+
 ### 2026-10-28 — Construction equipment video parity polish (L2 / L3 / L6)
 
 - **Layers:** L2 journey honesty + L3 dual-shell continuity + L6 Practice reset spine.

@@ -79,8 +79,7 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
   ],
   'eye-spy': [
     { target: '[data-coach="spy-pic"]', say: 'Press a picture on the board' },
-    { target: '[data-coach="spy-word"]', say: 'Press the matching English word' },
-    { target: '[data-coach="spy-match"]', say: 'Press Match' },
+    { target: '[data-coach="spy-word"]', say: 'Press the matching English word — they clear together' },
   ],
   'sentence-structure': [
     /* Choices are reference chips, not buttons — coach the type beat only. */
@@ -90,7 +89,7 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
     { target: '[data-coach="choice-opt"]', say: 'Press the answer that fits' },
   ],
   'supported-practice': [
-    { target: '[data-coach="choice-opt"]', say: 'Press the matching word' },
+    { target: '[data-coach="sp-play"]', say: 'Follow the short game line · one clear action' },
   ],
   'workplace-instructions': [
     { target: '[data-coach="instr-hear"]', say: 'Press Hear English' },

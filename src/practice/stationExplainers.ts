@@ -46,7 +46,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'eye-spy',
     steps: [8],
     title: 'English Eye Spy',
-    lede: 'Tap a picture, then its English name. Clear the board.',
+    lede: 'Tap a picture, then its English name. Pairs clear. Empty the board.',
     video: 'explainers/eye-spy.mp4',
   },
   {
@@ -68,7 +68,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'supported-practice',
     steps: [10],
     title: 'Supported Practice',
-    lede: 'Match words to pictures with help. Mistakes teach.',
+    lede: 'Four short games with help: memory, order, listen, soft fill. Mistakes teach.',
     video: 'explainers/supported-practice.mp4',
   },
   {
