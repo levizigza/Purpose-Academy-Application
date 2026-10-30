@@ -20,3 +20,9 @@ Purpose Academy Construction Equipment Video Collection — Full HD Final MP4s (
 Journey placement: **after Construction Systems (17), before Instructor Observation (19)** — the bridge into hands-on site training.
 
 All 14 Finals are real HD (1920×1080) lesson videos with English narration and burned-in captions. Paired with `constructionEquipmentVideoQuizzes` (10 practice questions + answer-key teach per machine). Soft video gates stay off for showcase (`VIDEO_SEGMENT_GATES_ENABLED = false`).
+
+## Drive Finals A/V policy (do not re-encode lightly)
+
+- **Stream check (2026-10-30):** sampled Finals show matched A/V durations (e.g. Excavator v≈a≈73.79s). Container sync is fine.
+- **Content sync:** picture ↔ spoken lesson lines are **not** re-authored here. Prefer scripted station/BCS demos for beat-lock work; huge Final re-encodes only when a real caption/chrome defect is confirmed.
+- **Quick chrome OK:** UI labels, quiz teach notes, soft-gate flags — edit TypeScript/docs without touching the MP4s.

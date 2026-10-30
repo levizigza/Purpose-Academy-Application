@@ -17129,8 +17129,27 @@ html.pa-phone-shell .instr-narration-status.is-soft-miss,
 
 .station-explainer-hear,
 .comp-skills-instr-hear,
-.equip-video-instr-hear {
+.equip-video-instr-hear,
+.ph-instr-hear,
+.train-shell-instr-hear,
+.vocab-sheet-instr-hear {
   margin: 0.35rem 0 0.5rem;
+}
+
+.ph-instr-hear .instr-narration-hear,
+.train-shell-instr-hear .instr-narration-hear,
+.vocab-sheet-instr-hear .instr-narration-hear {
+  font-size: 0.78rem;
+  padding: 0.22rem 0.62rem;
+}
+
+.is-phone-app .ph-instr-hear,
+.is-phone-app .train-shell-instr-hear,
+.is-phone-app .vocab-sheet-instr-hear,
+html.pa-phone-shell .ph-instr-hear,
+html.pa-phone-shell .train-shell-instr-hear,
+html.pa-phone-shell .vocab-sheet-instr-hear {
+  margin-top: 0.25rem;
 }
 
 html.pa-course-shell .comp-skills-instr-hear .instr-narration-hear,

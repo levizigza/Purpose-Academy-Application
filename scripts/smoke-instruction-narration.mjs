@@ -48,13 +48,46 @@ async function runShell(browser, shell){
   await page3.waitForSelector('.station-coach-bubble, [data-coach="vv-lang"]',{timeout:25000}); await page3.waitForTimeout(600)
   const coachOk = await page3.locator('.station-coach-hear .instr-narration-hear').first().isVisible().catch(()=>false)
   const langRowOk = await page3.locator('[data-coach="vv-lang"]').first().isVisible().catch(()=>false)
-  console.log(`[${shell}] coach Hear:`, coachOk?'visible':'MISSING', 'VV row:', langRowOk?'visible':'MISSING'); await shot(page3, `${shell}-coach-hear.png`); await shot(page3, `${shell}-vv-en-more.png`)
-  await page.close(); await page2.close(); await page3.close()
-  return {explainerOk, compOk, enOk, coachOk, langRowOk}
+  const shellHelpOk = await page3.locator('.train-shell-instr-hear .instr-narration-hear').first().isVisible().catch(()=>false)
+  const vvInstrOk = await page3.locator('.vocab-sheet-instr-hear .instr-narration-hear').first().isVisible().catch(()=>false)
+  const enChipOk = await page3.locator('[data-coach="vv-lang"] button, .vocab-sheet-langs button').filter({hasText:/English/i}).first().isVisible().catch(()=>false)
+  const moreOk = await page3.locator('button:has-text("More languages")').first().isVisible().catch(()=>false)
+  console.log(`[${shell}] coach Hear:`, coachOk?'visible':'MISSING', 'VV row:', langRowOk?'visible':'MISSING', 'shell help:', shellHelpOk?'visible':'MISSING', 'VV instr:', vvInstrOk?'visible':'MISSING', 'EN:', enChipOk?'visible':'MISSING', 'More:', moreOk?'visible':'MISSING')
+  await shot(page3, `${shell}-coach-hear.png`); await shot(page3, `${shell}-vv-en-more.png`)
+
+  const page4 = await browser.newPage({viewport:vp})
+  await prep(page4,{shell, step:6, coachSeen:true, explainerSeen:true})
+  await page4.addInitScript(() => {
+    localStorage.setItem('pa-student-journey-step-v1', '6')
+  })
+  await page4.goto(`${BASE}/journey`,{waitUntil:'domcontentloaded', timeout:90000}); await page4.waitForTimeout(700)
+  // Open Practice hub if available
+  const hubBtn = page4.locator('button:has-text("Practice home"), button:has-text("Path home"), a:has-text("Practice home")')
+  if (await hubBtn.first().isVisible().catch(()=>false)) {
+    await hubBtn.first().click(); await page4.waitForTimeout(700)
+  } else {
+    await page4.goto(`${BASE}/`,{waitUntil:'domcontentloaded', timeout:90000}).catch(()=>{})
+    await page4.waitForTimeout(400)
+  }
+  // Force hub via practice entry when journey stays on station
+  await page4.evaluate(() => {
+    try {
+      localStorage.setItem('pa-practice-mode-v1', '1')
+      window.dispatchEvent(new Event('pa-practice-hub-open'))
+    } catch {}
+  })
+  await page4.waitForTimeout(500)
+  const hubHear = await page4.locator('.ph-instr-hear .instr-narration-hear').first().isVisible().catch(()=>false)
+  console.log(`[${shell}] hub Hear:`, hubHear?'visible':'optional-miss')
+  await shot(page4, `${shell}-hub-instr-hear.png`)
+
+  await page.close(); await page2.close(); await page3.close(); await page4.close()
+  return {explainerOk, compOk, enOk, coachOk, langRowOk, shellHelpOk, vvInstrOk, enChipOk, moreOk, hubHear}
 }
 const browser = await chromium.launch({headless:true})
 const desktop = await runShell(browser,'desktop'); const phone = await runShell(browser,'phone'); await browser.close()
 for (const f of readdirSync(OUT)) { const src=join(OUT,f); if(existsSync(src)) copyFileSync(src, join(ART,f)) }
-const fail = !desktop.explainerOk||!desktop.compOk||!desktop.enOk||!desktop.coachOk||!desktop.langRowOk||!phone.explainerOk||!phone.compOk||!phone.enOk||!phone.coachOk||!phone.langRowOk
+const hard = (r) => !r.explainerOk||!r.compOk||!r.enOk||!r.coachOk||!r.langRowOk||!r.shellHelpOk||!r.vvInstrOk||!r.enChipOk||!r.moreOk
+const fail = hard(desktop)||hard(phone)
 if(fail){ console.error('FAIL'); process.exit(1) }
-console.log('OK instruction-narration smoke (desktop + phone)')
+console.log('OK instruction-narration smoke (desktop + phone) · hub Hear optional')

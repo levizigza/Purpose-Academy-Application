@@ -432,55 +432,66 @@
         await sleep(2400)
       }
 
+      /**
+       * Beat-locked holds ≈ Piper VO windows so normalize_demo never mid-lesson
+       * stretches (~2×) a short take against a longer narration track.
+       */
       async function demoFolder() {
-        banner.textContent = 'A folder holds your files in one place'
+        banner.textContent = 'Lesson four. Make a folder.'
         const icons = document.getElementById('icons')
         const menu = document.getElementById('context-menu')
-        await sleep(1400)
-        banner.textContent = 'Right-click on an empty place on the desktop'
+        await sleep(2600)
+        banner.textContent = 'A folder keeps your files together in one place'
+        await sleep(3200)
+        banner.textContent = 'Press the right mouse button on an empty spot'
         cursor.style.left = '420px'
         cursor.style.top = '240px'
-        await sleep(900)
+        await sleep(1600)
         menu.style.left = '420px'
         menu.style.top = '240px'
         menu.innerHTML = '<button id="m-new">New</button><button id="m-folder">Folder</button>'
         menu.classList.add('open')
-        await sleep(600)
-        banner.textContent = 'Click New, then click Folder'
+        await sleep(1800)
+        banner.textContent = 'Click New. Then click Folder.'
         await clickEl(document.getElementById('m-new'))
-        await sleep(500)
+        await sleep(900)
         await clickEl(document.getElementById('m-folder'))
         menu.classList.remove('open')
         const icon = document.createElement('div')
         icon.className = 'icon'
         icon.innerHTML = '<div class="glyph"></div><div id="folder-name">New folder</div>'
         icons.appendChild(icon)
-        await sleep(700)
-        banner.textContent = 'Type a clear name. Example: School Work'
+        await sleep(1400)
+        banner.textContent = 'Type a clear name — like School Work'
         const name = document.getElementById('folder-name')
         name.textContent = ''
-        await typeInto(name, 'School Work', 90)
-        banner.textContent = 'Press Enter to keep the name — folder ready'
-        await sleep(2200)
+        await typeInto(name, 'School Work', 110)
+        await sleep(1200)
+        banner.textContent = 'Press Enter to keep that name'
+        await sleep(2800)
+        banner.textContent = 'Nice work. New. Folder. Then a clear name.'
+        await sleep(3200)
       }
 
       async function demoSubfolder() {
-        banner.textContent = 'A subfolder is a folder inside another folder'
+        banner.textContent = 'Lesson five. Make a folder inside a folder.'
         const icons = document.getElementById('icons')
         const parent = document.createElement('div')
         parent.className = 'icon'
         parent.innerHTML = '<div class="glyph"></div><div>School Work</div>'
         icons.appendChild(parent)
-        await sleep(1400)
-        banner.textContent = 'Open your main folder — School Work'
+        await sleep(2800)
+        banner.textContent = 'A folder inside a folder helps you stay organized'
+        await sleep(3000)
+        banner.textContent = 'Open your main folder — for example, School Work'
         await clickEl(parent)
         const explorer = document.getElementById('explorer')
         explorer.classList.add('open')
         document.getElementById('explorer-title').textContent = 'School Work'
         const body = document.getElementById('explorer-body')
         body.innerHTML = ''
-        await sleep(900)
-        banner.textContent = 'Right-click inside. Click New, then Folder'
+        await sleep(2800)
+        banner.textContent = 'Press the right mouse button. Click New, then Folder.'
         const menu = document.getElementById('context-menu')
         menu.style.left = '480px'
         menu.style.top = '260px'
@@ -488,22 +499,25 @@
         menu.classList.add('open')
         cursor.style.left = '500px'
         cursor.style.top = '280px'
-        await sleep(700)
+        await sleep(1800)
         await clickEl(document.getElementById('m-new'))
-        await sleep(400)
+        await sleep(700)
         await clickEl(document.getElementById('m-folder'))
         menu.classList.remove('open')
         const card = document.createElement('div')
         card.className = 'folder-card selected'
         card.innerHTML = '<div class="glyph"></div><div id="sub-name">New folder</div>'
         body.appendChild(card)
-        await sleep(500)
-        banner.textContent = 'Name it Week 1'
+        await sleep(900)
+        banner.textContent = 'Name it something clear, like Week One'
         const name = document.getElementById('sub-name')
         name.textContent = ''
-        await typeInto(name, 'Week 1', 90)
-        banner.textContent = 'Week 1 now lives inside School Work'
-        await sleep(2200)
+        await typeInto(name, 'Week One', 110)
+        await sleep(1400)
+        banner.textContent = 'Now Week One sits safely inside School Work'
+        await sleep(2800)
+        banner.textContent = 'You did it. Open the folder. New. Folder. Name it.'
+        await sleep(3000)
       }
 
       async function demoSaveName() {
