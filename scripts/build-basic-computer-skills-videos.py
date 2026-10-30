@@ -80,41 +80,43 @@ def resolve_demo(name: str) -> Path:
 
 
 # lines: (start_hint_unused, end_hint_unused, caption/narration text)
-# Visual plan drives what the learner sees; TTS + captions use `lines`.
+# Level-4 English (CEFR ~A2). `line_groups` beat-locks VO to each visual part.
 LESSONS: list[dict] = [
     {
         "file": "01_Turn_computer_on_off.mp4",
         "title": "Turn the computer on and off",
         # Power-button close-up, then Start → Shut down screen demo
         "parts": [
-            {"kind": "clip", "src": "pexels-power.mp4", "seconds": 28},
+            {"kind": "clip", "src": "pexels-power.mp4", "seconds": 28, "bed_from": (0.0, 0.48)},
             {"kind": "demo", "name": "power", "seconds": 32},
         ],
+        "line_groups": [[0, 1, 2, 3, 4], [5, 6, 7, 8]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson one — turning the computer on and off."),
-            (10, 18, "First, find the power button on your computer or laptop."),
-            (18, 26, "Press it once. That turns the computer on."),
-            (26, 34, "Give it a moment — the screen will light up."),
-            (34, 42, "When you are ready to turn it off, click Start,"),
-            (42, 50, "then Power, then Shut down."),
-            (50, 58, "Please do not pull the plug while it is still working."),
-            (58, 66, "You have got this: on with the button, off with Shut down."),
+            (4, 10, "Lesson one. Turn the computer on and off."),
+            (10, 18, "First, find the power button on your computer."),
+            (18, 26, "Press it one time. That turns the computer on."),
+            (26, 34, "Wait. The screen will light up."),
+            (34, 42, "To turn it off, click Start."),
+            (42, 50, "Then click Power. Then click Shut down."),
+            (50, 58, "Do not pull the plug while it is still on."),
+            (58, 66, "You can do this. On with the button. Off with Shut down."),
         ],
     },
     {
         "file": "02_Use_the_mouse.mp4",
         "title": "Use the mouse",
-        "parts": [{"kind": "clip", "src": "mouse-17669.mp4", "seconds": 58}],
+        "parts": [{"kind": "clip", "src": "mouse-17669.mp4", "seconds": 58, "bed_from": (0.0, 1.0)}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson two — using the mouse."),
-            (10, 18, "Move the mouse, and the arrow on the screen moves with you."),
-            (18, 26, "One click selects. Press the left button one time."),
-            (26, 34, "Double-click opens. Two quick clicks."),
-            (34, 42, "Right-click shows more choices. Use the right button."),
-            (42, 50, "To scroll the page, gently roll the wheel."),
-            (50, 58, "Take your time: point, click, open, and scroll."),
+            (4, 10, "Lesson two. Use the mouse."),
+            (10, 18, "Move the mouse. The arrow on the screen moves with you."),
+            (18, 26, "One click means press the left button one time."),
+            (26, 34, "Two quick clicks open something."),
+            (34, 42, "Press the right button to see more choices."),
+            (42, 50, "To move the page, gently roll the wheel."),
+            (50, 58, "Take your time. Point. Click. Open. Move the page."),
         ],
     },
     {
@@ -122,91 +124,97 @@ LESSONS: list[dict] = [
         "title": "Use the keyboard",
         # Hands on keys, then on-screen typing that shows Space / Enter / Backspace / Shift
         "parts": [
-            {"kind": "clip", "src": "keyboard-only.mp4", "seconds": 18},
+            {"kind": "clip", "src": "keyboard-only.mp4", "seconds": 18, "bed_from": (0.0, 0.32)},
             {"kind": "demo", "name": "keyboard", "seconds": 40},
         ],
+        "line_groups": [[0, 1, 2], [3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson three — using the keyboard."),
+            (4, 10, "Lesson three. Use the keyboard."),
             (10, 18, "Letters and numbers put your words on the screen."),
-            (18, 26, "The space bar makes a space between words."),
-            (26, 34, "Enter starts a new line, or says O K."),
-            (34, 42, "Backspace erases the letter behind the cursor."),
-            (42, 50, "Hold Shift and a letter to make a capital."),
-            (50, 58, "You can do this: type, space, Enter, and Backspace."),
+            (18, 26, "The long space bar makes a space between words."),
+            (26, 34, "Enter starts a new line, or says OK."),
+            (34, 42, "Backspace erases the letter behind the blinking line."),
+            (42, 50, "Hold Shift and a letter to make a big letter."),
+            (50, 58, "You can do this. Type. Space. Enter. Backspace."),
         ],
     },
     {
         "file": "04_Create_a_folder.mp4",
         "title": "Create a folder",
         "parts": [{"kind": "demo", "name": "folder", "seconds": 58}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson four — creating a folder."),
+            (4, 10, "Lesson four. Make a folder."),
             (10, 18, "A folder keeps your files together in one place."),
-            (18, 26, "Right-click on an empty spot on the desktop."),
-            (26, 34, "Click New, then Folder."),
-            (34, 42, "Type a clear name — something like School Work."),
+            (18, 26, "Press the right mouse button on an empty spot."),
+            (26, 34, "Click New. Then click Folder."),
+            (34, 42, "Type a clear name — like School Work."),
             (42, 50, "Press Enter to keep that name."),
-            (50, 58, "Nice work: New, Folder, then a clear name."),
+            (50, 58, "Nice work. New. Folder. Then a clear name."),
         ],
     },
     {
         "file": "05_Create_a_subfolder.mp4",
-        "title": "Create a subfolder",
+        "title": "Create a folder inside a folder",
         "parts": [{"kind": "demo", "name": "subfolder", "seconds": 58}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson five — creating a subfolder."),
-            (10, 18, "A subfolder is simply a folder inside another folder."),
+            (4, 10, "Lesson five. Make a folder inside a folder."),
+            (10, 18, "A folder inside a folder helps you stay organized."),
             (18, 26, "Open your main folder — for example, School Work."),
-            (26, 34, "Right-click inside it. Click New, then Folder."),
+            (26, 34, "Right-click inside it. Click New. Then click Folder."),
             (34, 42, "Name it something clear, like Week One."),
-            (42, 50, "Now Week One lives safely inside School Work."),
-            (50, 58, "You did it: open the folder, New, Folder, name it."),
+            (42, 50, "Now Week One sits safely inside School Work."),
+            (50, 58, "You did it. Open the folder. New. Folder. Name it."),
         ],
     },
     {
         "file": "06_Save_file_with_name.mp4",
         "title": "Save a file with a name",
         "parts": [{"kind": "demo", "name": "save-name", "seconds": 58}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson six — saving a file with a name."),
+            (4, 10, "Lesson six. Save a file with a name."),
             (10, 18, "Saving keeps your work so you can find it later."),
-            (18, 26, "Click File, then click Save As."),
-            (26, 34, "Choose a folder you know — School Work works well."),
+            (18, 26, "Click File. Then click Save As."),
+            (26, 34, "Choose a folder you know — School Work is good."),
             (34, 42, "Type a clear name, like Safety Notes."),
             (42, 50, "Then click Save."),
-            (50, 58, "Remember the rhythm: Save As, folder, clear name, Save."),
+            (50, 58, "Remember: Save As, folder, clear name, Save."),
         ],
     },
     {
         "file": "07_Write_short_paragraph.mp4",
         "title": "Write a short paragraph",
         "parts": [{"kind": "demo", "name": "paragraph", "seconds": 58}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson seven — writing a short paragraph."),
-            (10, 18, "Open a document program — Word or Docs is fine."),
-            (18, 26, "Click in the white page, then type at your own pace."),
+            (4, 10, "Lesson seven. Write a short paragraph."),
+            (10, 18, "Open a writing program — Word or Docs is fine."),
+            (18, 26, "Click in the white page. Then type at your own speed."),
             (26, 34, "Write two or three short sentences."),
             (34, 42, "Press Enter when you want a new line."),
             (42, 50, "Check your spelling. Fix mistakes with Backspace."),
-            (50, 58, "You are writing: open, type short sentences, then check."),
+            (50, 58, "You are writing. Open. Type short sentences. Then check."),
         ],
     },
     {
         "file": "08_Save_your_document.mp4",
         "title": "Save your document",
         "parts": [{"kind": "demo", "name": "save-doc", "seconds": 58}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson eight — saving your document."),
+            (4, 10, "Lesson eight. Save your document."),
             (10, 18, "Save often so you do not lose your hard work."),
-            (18, 26, "Click File, then Save — or press Control and S."),
+            (18, 26, "Click File, then Save. Or hold Control and press S."),
             (26, 34, "If it asks for a name, type one and click Save."),
-            (34, 42, "Glance at the top of the window — you should see the name."),
+            (34, 42, "Look at the top of the window. You should see the name."),
             (42, 50, "Save again after you add more words."),
             (50, 58, "A good habit: save often. Control and S is quick."),
         ],
@@ -215,10 +223,11 @@ LESSONS: list[dict] = [
         "file": "09_Write_and_send_email.mp4",
         "title": "Write and send an email",
         "parts": [{"kind": "demo", "name": "email-send", "seconds": 58}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson nine — writing and sending an email."),
-            (10, 18, "Open your email, then click Compose or New."),
+            (4, 10, "Lesson nine. Write and send an email."),
+            (10, 18, "Open your email. Then click Compose or New."),
             (18, 26, "In To, type the other person's email address."),
             (26, 34, "In Subject, write a short title — like Homework."),
             (34, 42, "Type your message in clear, short sentences."),
@@ -230,46 +239,49 @@ LESSONS: list[dict] = [
         "file": "10_Reply_to_email.mp4",
         "title": "Reply to an email",
         "parts": [{"kind": "demo", "name": "email-reply", "seconds": 58}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson ten — replying to an email."),
+            (4, 10, "Lesson ten. Reply to an email."),
             (10, 18, "Open the email you want to answer."),
-            (18, 26, "Click Reply — no need to start a brand new email."),
+            (18, 26, "Click Reply. You do not need a brand new email."),
             (26, 34, "Type your answer under their message."),
             (34, 42, "Quick check: the To box still has the right person."),
             (42, 50, "Then click Send."),
-            (50, 58, "You are set: open, Reply, type, and Send."),
+            (50, 58, "You are set. Open. Reply. Type. Send."),
         ],
     },
     {
         "file": "11_Attach_and_save_files.mp4",
         "title": "Attach a file and save an attachment",
         "parts": [{"kind": "demo", "name": "attach-save", "seconds": 66}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7, 8]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson eleven — attaching and saving files."),
+            (4, 10, "Lesson eleven. Attach a file and save a file."),
             (10, 18, "To send a file, click Attach or the paperclip."),
-            (18, 26, "Choose your file, then wait until you see its name."),
+            (18, 26, "Choose your file. Wait until you see its name."),
             (26, 34, "After that, click Send."),
             (34, 42, "To keep a file someone sent you, open the email."),
-            (42, 50, "Click the file, then Download or Save."),
-            (50, 58, "Choose your folder, then click Save."),
-            (58, 66, "Keep it simple: attach before Send, and save attachments to a folder."),
+            (42, 50, "Click the file. Then click Download or Save."),
+            (50, 58, "Choose your folder. Then click Save."),
+            (58, 66, "Keep it simple. Attach before Send. Save files to a folder."),
         ],
     },
     {
         "file": "12_Stay_safe_online.mp4",
         "title": "Stay safe online",
         "parts": [{"kind": "demo", "name": "safe", "seconds": 58}],
+        "line_groups": [[0, 1, 2, 3, 4, 5, 6, 7]],
         "lines": [
             (0, 4, "Welcome to Basic Computer Skills."),
-            (4, 10, "Lesson twelve — staying safe online."),
-            (10, 18, "Keep your password private. Please do not share it."),
+            (4, 10, "Lesson twelve. Stay safe online."),
+            (10, 18, "Keep your password private. Do not share it."),
             (18, 26, "Do not click strange links in email."),
-            (26, 34, "If you are not sure, ask your instructor — that is wise."),
+            (26, 34, "If you are not sure, ask your instructor."),
             (34, 42, "Log out when you finish on a shared computer."),
             (42, 50, "Only upload your school work — never passwords."),
-            (50, 58, "Stay safe: private password, careful clicks, and ask for help."),
+            (50, 58, "Stay safe. Private password. Careful clicks. Ask for help."),
         ],
     },
 ]
@@ -580,17 +592,84 @@ def normalize_demo(src: Path, seconds: float, dest: Path) -> None:
     slowed.unlink(missing_ok=True)
 
 
-def compose_visual(work: Path, lesson: dict, total_seconds: float) -> Path:
+
+def extract_bed_slice(src: Path, start_frac: float, end_frac: float, dest: Path) -> None:
+    """Pull a clean silent visual bed from a shipped lesson (covers burned captions)."""
+    dur = max(ffprobe_duration(src), 0.2)
+    start = max(0.0, dur * start_frac)
+    end = min(dur, dur * end_frac)
+    if end - start < 0.4:
+        start = 0.0
+        end = dur
+    vf = (
+        f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,"
+        f"drawbox=x=0:y=0:w=iw:h=70:color=0x0B2F5C:t=fill,"
+        f"drawbox=x=0:y=ih-170:w=iw:h=170:color=black:t=fill,fps={FPS}"
+    )
+    run(
+        [
+            "ffmpeg", "-y", "-ss", f"{start:.3f}", "-to", f"{end:.3f}", "-i", str(src),
+            "-vf", vf, "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(dest),
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+
+def resolve_clip_or_bed(part: dict, lesson: dict, work: Path, idx: int) -> Path:
+    """Prefer raw action clip; else slice a clean bed from the shipped MP4."""
+    try:
+        return resolve_clip(part["src"])
+    except FileNotFoundError:
+        shipped = OUT / lesson["file"]
+        if not shipped.exists():
+            raise
+        bed = work / f"bed_src_{idx:02d}.mp4"
+        frac = part.get("bed_from", (0.0, 1.0))
+        extract_bed_slice(shipped, float(frac[0]), float(frac[1]), bed)
+        return bed
+
+
+def part_seconds_from_groups(
+    lesson: dict, timed: list, gap: float = 0.35
+) -> list:
+    """Beat-lock each visual part to the VO window of its line group."""
+    groups = lesson.get("line_groups") or [list(range(len(lesson["lines"])))]
     parts = lesson["parts"]
-    # Scale part lengths so sum matches narration length
-    planned = sum(p["seconds"] for p in parts)
-    scale = total_seconds / planned if planned else 1.0
-    segment_files: list[Path] = []
+    if len(groups) != len(parts):
+        planned = [float(p["seconds"]) for p in parts]
+        total = sum(planned) or 1.0
+        audio_end = timed[-1][1] + 0.8 if timed else total
+        return [audio_end * (s / total) for s in planned]
+    secs = []
+    for gi, idxs in enumerate(groups):
+        if not idxs:
+            secs.append(float(parts[gi]["seconds"]))
+            continue
+        start = timed[min(idxs)][0]
+        end = timed[max(idxs)][1]
+        end += gap if gi < len(groups) - 1 else 0.8
+        secs.append(max(end - start, 1.2))
+    return secs
+
+
+def compose_visual(work: Path, lesson: dict, total_seconds: float, timed=None) -> Path:
+    parts = lesson["parts"]
+    if timed:
+        part_secs = part_seconds_from_groups(lesson, timed)
+        scale = total_seconds / (sum(part_secs) or 1.0)
+        part_secs = [s * scale for s in part_secs]
+    else:
+        planned = sum(p["seconds"] for p in parts)
+        scale = total_seconds / planned if planned else 1.0
+        part_secs = [p["seconds"] * scale for p in parts]
+
+    segment_files = []
     for i, part in enumerate(parts):
-        sec = part["seconds"] * scale
+        sec = part_secs[i]
         seg = work / f"seg_{i:02d}.mp4"
         if part["kind"] == "clip":
-            normalize_clip(resolve_clip(part["src"]), sec, seg)
+            normalize_clip(resolve_clip_or_bed(part, lesson, work, i), sec, seg)
         elif part["kind"] == "demo":
             normalize_demo(resolve_demo(part["name"]), sec, seg)
         else:
@@ -609,17 +688,8 @@ def compose_visual(work: Path, lesson: dict, total_seconds: float) -> Path:
     visual = work / "visual.mp4"
     run(
         [
-            "ffmpeg",
-            "-y",
-            "-f",
-            "concat",
-            "-safe",
-            "0",
-            "-i",
-            str(list_file),
-            "-c",
-            "copy",
-            str(visual),
+            "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(list_file),
+            "-c", "copy", str(visual),
         ],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -681,7 +751,7 @@ def build_lesson(lesson: dict) -> Path:
 
     narr, timed = build_narration(work, lesson["lines"])
     audio_dur = ffprobe_duration(narr)
-    visual = compose_visual(work, lesson, audio_dur)
+    visual = compose_visual(work, lesson, audio_dur, timed)
     out = OUT / lesson["file"]
     mux_visual_narration(visual, narr, timed, out)
     print("  ->", out, f"({ffprobe_duration(out):.1f}s, {out.stat().st_size // 1024} KB)")
