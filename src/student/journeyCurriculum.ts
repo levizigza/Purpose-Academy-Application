@@ -102,7 +102,7 @@ export const UNIT_GOALS: Record<number, { goal: string; outcomes: string[] }> = 
     ],
   },
   6: {
-    goal: 'Basic Computer Skills — first-computer lessons on every pathway.',
+    goal: 'Basic Computer Skills — beginner computer lessons on every pathway.',
     outcomes: [
       'Open Basic Computer Skills on your pathway',
       'Watch, try, and check: power, mouse, folders, save, Word, and email',

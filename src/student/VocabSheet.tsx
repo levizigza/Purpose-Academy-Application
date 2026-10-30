@@ -785,7 +785,7 @@ export function VocabSheet({
         <div className="vocab-retake" role="status">
           <p className="vocab-retake-kicker">Another round</p>
           <p className="vocab-retake-lede">
-            Same words, same loop — hear, hear, pick, type. This time you can mark ones you already know;
+            Same words, same steps — hear, hear, pick, type. This time you can mark ones you already know;
             you still hear English once, pick the match, and type it so it sticks.
           </p>
         </div>

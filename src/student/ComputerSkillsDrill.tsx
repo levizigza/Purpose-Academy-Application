@@ -560,10 +560,10 @@ function TrySubfolder({ onDone }: { onDone: () => void }) {
           }}
         >
           <p className="comp-desktop-hint">
-            Inside Job Files — create subfolder: <strong>Week 1</strong>
+            Inside Job Files — make a folder named: <strong>Week 1</strong>
           </p>
           <div className="field">
-            <label htmlFor="comp-subfolder">Subfolder name</label>
+            <label htmlFor="comp-subfolder">Folder name</label>
             <input
               id="comp-subfolder"
               value={name}
@@ -573,7 +573,7 @@ function TrySubfolder({ onDone }: { onDone: () => void }) {
             />
           </div>
           <button type="submit" className="btn btn-primary" disabled={!name.trim()}>
-            Create subfolder
+            Make folder
           </button>
         </form>
       )}
