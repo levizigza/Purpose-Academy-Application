@@ -195,7 +195,7 @@ export function UnitIntroCard({
         ))}
       </ul>
       <p className="unit-intro-method">
-        Learn, try, soft retry if you need, then move forward. Done for now when you finish.
+        Learn, try again if you need, then move forward. Done for now when you finish.
       </p>
     </details>
   )

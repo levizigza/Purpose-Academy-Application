@@ -435,6 +435,15 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-30 — Upgrade-100 polish: BCS folder beat-lock + multilang slice 2 (L2 / L3)
+
+- **Layers:** L2 Level-4 plain English + L3 A/V beat-lock + mother-tongue instruction chrome.
+- **BCS folder residual:** `demoFolder` / `demoSubfolder` were ~10–11s takes stretched ~2× against ~22–26s Piper VO (mid-lesson slow-mo). Replaced with beat-locked holds matching VO lines; dropped banner “Right-click / subfolder” jargon; `--only` filters on record + build scripts.
+- **Jargon:** Soft try / soft fill / soft retry → “Wrong? Try again.” / “fill the blank” / “try again if needed” across Supported Practice, Eye Spy teach note, hub nearby, explainer lede.
+- **Drive Finals:** Documented only — sampled construction/logistics Finals have matched A/V stream durations; no huge re-encode. Prefer scripted demos for beat-lock.
+- **Multilang slice 2:** `InstructionHearChip` on Practice hub nearby cue, station shell help/purpose, and Workplace Words instruction chrome (pre-hear + type prompt). Soft-fail unchanged; EN chip / More languages untouched.
+- **Critic:** Lengthen the hold on the relevant control — never stretch a short mouse take to fill VO. Instruction hear is a bridge helper, not a second dialect on the VV card.
+
 ### 2026-10-30 — Multi-language instruction narrations (L2 / L3 / LEARNER_FEAR)
 
 - **Layers:** L2 (mother-tongue → English practice spine for *instructions*, not only vocab) + L3 (task chrome readable/hearable in 3s) + soft fear (translate/TTS soft-fail; English always available).

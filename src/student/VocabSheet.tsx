@@ -5,6 +5,7 @@ import { pathwayImage } from '../pathways'
 import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { playFoley } from '../audio/foley'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { InstructionHearChip } from '../practice/InstructionNarration'
 import { NavCueTarget, NavGlowRegion } from '../practice/NavCue'
 import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 import {
@@ -299,6 +300,16 @@ export function VocabSheetCard({
       <p className="play-nearby-objective" aria-live="polite">
         Clear this word · pick the match, then type it
       </p>
+      <InstructionHearChip
+        english={
+          pickReady
+            ? 'Type the English word you picked and heard.'
+            : 'Pick the matching English word below, then type it.'
+        }
+        auto={false}
+        autoKey={`vv-type-${term.id}-${pickReady ? 'type' : 'pick'}`}
+        className="vocab-sheet-instr-hear"
+      />
       <p className="vocab-sheet-type-prompt">
         <span className="vocab-sheet-type-kicker">Your turn</span>
         {pickReady
@@ -477,9 +488,17 @@ export function VocabSheetCard({
       </p>
 
       {!productionPhase && !typedEnglish && (
-        <p className="play-nearby-objective vocab-sheet-nearby-pre" aria-live="polite">
-          Clear this word · press a language you know (or More languages), then pick and type
-        </p>
+        <>
+          <p className="play-nearby-objective vocab-sheet-nearby-pre" aria-live="polite">
+            Clear this word · press a language you know (or More languages), then pick and type
+          </p>
+          <InstructionHearChip
+            english="Clear this word. Press a language you know — or More languages — then pick and type."
+            auto={false}
+            autoKey={`vv-pre-${term.id}`}
+            className="vocab-sheet-instr-hear"
+          />
+        </>
       )}
 
       <div className={`vocab-sheet-body vocab-sheet-body-focus${productionPhase ? ' is-production' : ''}`}>

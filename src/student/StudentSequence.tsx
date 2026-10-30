@@ -123,6 +123,7 @@ import {
 } from '../practice/learnerLang'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { InstructionHearChip } from '../practice/InstructionNarration'
 import { NavCueTarget, NavGlowRegion, NavGlowWrap } from '../practice/NavCue'
 import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 
@@ -454,6 +455,14 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         )}
         <h1 className="train-title">{title}</h1>
         <p className="train-simple-line">{help}</p>
+        {!motherTongue && help ? (
+          <InstructionHearChip
+            english={help}
+            auto={false}
+            autoKey={`shell-help-${step}`}
+            className="train-shell-instr-hear"
+          />
+        ) : null}
         {practice && <PracticeStatsStrip step={step} className="practice-stats-strip-desktop" />}
         {!motherTongue && (
           <p className="train-unit-pill" aria-label={`Learning unit ${unit.id}`}>
@@ -465,6 +474,15 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         <details className="train-why-details">
           <summary>{whyLabel}</summary>
           <p className="train-purpose">{purpose}</p>
+          {!motherTongue && purpose ? (
+            <InstructionHearChip
+              english={purpose}
+              auto={false}
+              autoKey={`shell-purpose-${step}`}
+              className="train-shell-instr-hear"
+              label="Hear why"
+            />
+          ) : null}
         </details>
         <div className="train-progress" aria-label={`Progress`}>
           <span style={{ width: `${pct}%` }} />
@@ -1972,7 +1990,7 @@ export function StudentSequencePage() {
           </WhyWork>
           <TeachNote>
             Tap a picture, then its English name — the pair clears by itself. Empty the board, then the next
-            scene. Soft try again if a pair misses. No rush.
+            scene. Wrong? Try again. No rush.
           </TeachNote>
         </StationContext>
       </Shell>
@@ -2155,7 +2173,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 10: Supported Practice — familiar sentence games (memory / order / listen / soft fill) */
+  /* Step 10: Supported Practice — familiar sentence games (memory / order / listen / fill the blank) */
   if (step === 10) {
     return (
       <Shell step={10} onBack={() => go(9)}>
@@ -2172,8 +2190,8 @@ export function StudentSequencePage() {
             Help is strength. These short games practise the same workplace sentences again — no exam.
           </WhyWork>
           <TeachNote>
-            Four familiar games: memory match, order the words, listen and choose, then soft fill-blank.
-            Clear each board. Soft try again. Then workplace instructions.
+            Four familiar games: memory match, order the words, listen and choose, then fill the blank.
+            Clear each board. Wrong? Try again. Then workplace instructions.
           </TeachNote>
         </StationContext>
       </Shell>

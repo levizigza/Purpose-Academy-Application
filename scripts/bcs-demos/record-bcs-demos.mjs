@@ -106,28 +106,46 @@ async function recordDemo(browser, port, demo) {
   console.log('OK', demo, mp4Path)
 }
 
+function parseOnly() {
+  const arg = process.argv.find((a) => a.startsWith('--only='))
+  if (!arg) return null
+  return new Set(
+    arg
+      .slice('--only='.length)
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean),
+  )
+}
+
 async function main() {
   if (!fs.existsSync(DEMO_HTML)) {
     throw new Error(`Missing ${DEMO_HTML}`)
   }
+  const only = parseOnly()
+  const demos = only ? DEMOS.filter((d) => only.has(d)) : DEMOS
+  if (!demos.length) {
+    throw new Error(`No demos matched --only (${[...(only || [])].join(',')})`)
+  }
   fs.mkdirSync(OUT_DIR, { recursive: true })
   for (const f of fs.readdirSync(OUT_DIR)) {
-    if (f.endsWith('.webm') || f.endsWith('.mp4')) {
-      fs.unlinkSync(path.join(OUT_DIR, f))
-    }
+    if (!f.endsWith('.webm') && !f.endsWith('.mp4')) continue
+    const stem = path.basename(f, path.extname(f))
+    if (only && !only.has(stem)) continue
+    fs.unlinkSync(path.join(OUT_DIR, f))
   }
 
   const { server, port } = await startServer()
   const browser = await chromium.launch({ headless: true })
   try {
-    for (const demo of DEMOS) {
+    for (const demo of demos) {
       await recordDemo(browser, port, demo)
     }
   } finally {
     await browser.close()
     server.close()
   }
-  console.log('Wrote demos to', OUT_DIR)
+  console.log('Wrote demos to', OUT_DIR, only ? `(only=${[...only].join(',')})` : '')
 }
 
 const isDirectRun =

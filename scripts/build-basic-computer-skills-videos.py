@@ -875,11 +875,54 @@ python3 scripts/build-basic-computer-skills-videos.py --narration-refresh
     )
 
 
+def parse_only(argv: list[str]) -> set[str] | None:
+    """Optional --only=04,05 or --only=folder,Create_a_folder filters by file stem."""
+    for arg in argv:
+        if arg.startswith("--only="):
+            raw = arg.split("=", 1)[1].strip()
+            if not raw:
+                return set()
+            return {p.strip().lower() for p in raw.split(",") if p.strip()}
+    return None
+
+
+def lesson_matches(lesson: dict, only: set[str] | None) -> bool:
+    if only is None:
+        return True
+    stem = Path(lesson["file"]).stem.lower()
+    title = str(lesson.get("title") or "").lower()
+    demo_names = {
+        str(p.get("name") or "").lower()
+        for p in lesson.get("parts") or []
+        if p.get("kind") == "demo"
+    }
+    tokens = {stem, title, *demo_names, stem.split("_", 1)[0]}
+    # Also match numeric prefixes like 04 / 05
+    num = stem.split("_", 1)[0]
+    tokens.add(num.lstrip("0") or num)
+    return any(tok in tokens or tok in stem for tok in only)
+
+
 def main() -> None:
     refresh = "--narration-refresh" in sys.argv
+    only = parse_only(sys.argv)
     ensure_piper_voice()
     built = []
+    # When filtering, keep prior manifest entries for untouched lessons
+    prior = {}
+    if only is not None and (OUT / "manifest.json").exists():
+        try:
+            prior = {
+                row["file"]: row
+                for row in json.loads((OUT / "manifest.json").read_text(encoding="utf-8"))
+            }
+        except Exception:
+            prior = {}
     for lesson in LESSONS:
+        if not lesson_matches(lesson, only):
+            if lesson["file"] in prior:
+                built.append(prior[lesson["file"]])
+            continue
         path = refresh_narration(lesson) if refresh else build_lesson(lesson)
         built.append(
             {
@@ -891,8 +934,23 @@ def main() -> None:
                 "voice": "piper:en_US-lessac-medium",
             }
         )
+    # Preserve order from LESSONS when merging prior
+    if only is not None:
+        by_file = {row["file"]: row for row in built}
+        built = []
+        for lesson in LESSONS:
+            row = by_file.get(lesson["file"]) or prior.get(lesson["file"])
+            if row:
+                built.append(row)
     write_manifest(built)
-    print("Wrote", len(built), "videos to", OUT, "(refresh)" if refresh else "(full)")
+    print(
+        "Wrote",
+        len(built),
+        "videos to",
+        OUT,
+        "(refresh)" if refresh else "(full)",
+        f"(only={','.join(sorted(only))})" if only is not None else "",
+    )
 
 
 if __name__ == "__main__":

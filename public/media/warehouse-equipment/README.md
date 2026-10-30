@@ -1,6 +1,6 @@
-# Warehouse equipment videos
+# Warehouse / Logistics equipment videos
 
-Place the Purpose Academy Warehouse Equipment Video Collection MP4s here using these exact filenames:
+Purpose Academy Warehouse Equipment Video Collection — Full HD Final MP4s (landed from Drive), mapped 1:1 to Unit 8 practice questions:
 
 1. `01_Counterbalance_forklift.mp4`
 2. `02_Reach_truck.mp4`
@@ -19,4 +19,10 @@ Place the Purpose Academy Warehouse Equipment Video Collection MP4s here using t
 
 Journey placement: **after Logistics Systems (17), before Instructor Observation (19)** — the bridge into hands-on floor training.
 
-Stub one-second placeholders may ship for layout testing; replace them with the full HD collection before production review.
+All 14 Finals are real HD lesson videos with English narration and burned-in captions. Paired with `warehouseEquipmentVideoQuizzes` (practice questions + answer-key teach per machine). Soft video gates stay off for showcase where configured.
+
+## Drive Finals A/V policy (do not re-encode lightly)
+
+- **Stream check (2026-10-30):** sampled Finals show matched A/V durations (e.g. Counterbalance forklift v≈a≈120.5s). Container sync is fine.
+- **Content sync:** picture ↔ spoken lesson lines are **not** re-authored here. Prefer scripted station/BCS demos for beat-lock work; huge Final re-encodes only when a real caption/chrome defect is confirmed.
+- **Quick chrome OK:** UI labels, quiz teach notes, soft-gate flags — edit TypeScript/docs without touching the MP4s.

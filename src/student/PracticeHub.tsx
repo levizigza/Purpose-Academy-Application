@@ -27,6 +27,7 @@ import {
 import { followUpSummary, loadFollowUp } from './employmentFollowUp'
 import { hasClearedVocabStation } from './adaptiveVocab'
 import { BoardsClearedToday } from '../practice/PlayClear'
+import { InstructionHearChip } from '../practice/InstructionNarration'
 import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
 import { NAV_CUE } from '../practice/navCues'
 
@@ -244,8 +245,17 @@ export function PracticeHub({
           <p className="play-nearby-objective ph-play-loop" aria-live="polite">
             {pathComplete
               ? 'Path clear · Path home or Done for now'
-              : 'Today’s station · one clear action · soft retry'}
+              : 'Today’s station · one clear action · try again if needed'}
           </p>
+          <InstructionHearChip
+            english={
+              pathComplete
+                ? 'Path clear. Path home or Done for now.'
+                : 'Today’s station. One clear action. Try again if needed.'
+            }
+            auto={false}
+            className="ph-instr-hear"
+          />
           <BoardsClearedToday />
           <div
             className="ph-resume-progress"
