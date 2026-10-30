@@ -543,7 +543,7 @@ const STATIONS = {
       },
       {
         id: 'watch',
-        text: 'Watch a short captioned lesson.',
+        text: 'Watch a short lesson with words on the screen.',
         async act(page) {
           const video = page.locator('video.equip-video-player, [data-coach="comp-watch"] video').first()
           if (await video.isVisible().catch(() => false)) {

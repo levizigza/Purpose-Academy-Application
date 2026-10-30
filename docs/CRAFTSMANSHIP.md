@@ -435,6 +435,15 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-10-30 — Level-4 English VO + computer A/V beat-lock (L2 / L3)
+
+- **Layers:** L2 (first-computer / CEFR A2 wording) + L3 (spoken action matches on-screen action).
+- **Customer:** Heard “loops” in the first Workplace Words explainer — too technical for Level-4 English.
+- **Language:** Replaced learner-facing *loop / chips / exam theatre / Soft try / subfolder / Ctrl* with plain words across station demo scripts, Ken-Burns fallback, explainer ledes, coach, Workplace Words retake, Community sentence help, and Basic Computer Skills UI + Piper VO.
+- **Sync:** Re-recorded all 14 beat-locked station mouse demos (`record-station-demos.mjs`). Rebuilt 12 BCS lessons with VO `line_groups` sizing each visual part; demos re-recorded; missing hardware clips fall back to cleaned shipped beds (no caption ghosting).
+- **Drive Finals (construction/logistics equipment):** Stream A/V durations align on samples; content sync not re-authored (prefer scripted demos first).
+- **Critic:** Prefer “Wrong? Try again.” over soft-jargon. Do not teach programming *loop* unless it is a vocab word. Keep beat-locked holds on the relevant control — never stretch last-frame pads. Site reflection = GitHub Pages only (not purposeacademy.ca).
+
 ### 2026-10-28 — Construction equipment video parity polish (L2 / L3 / L6)
 
 - **Layers:** L2 journey honesty + L3 dual-shell continuity + L6 Practice reset spine.
