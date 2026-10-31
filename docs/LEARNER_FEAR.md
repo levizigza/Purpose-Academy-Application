@@ -156,7 +156,7 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 ### 2026-10-30 — Supported Practice games + Organize / Eye Spy strength
 
-- Supported Practice: Picture Match + Sentence Match only (old four + Eye Spy/Organize clones rejected). Each game gets its own explainer video then play — same door as Organize / Eye Spy. Soft miss. No exam lexicon.
+- Supported Practice: Picture Match + Sentence Match only (old four + Eye Spy/Organize clones rejected). Each game gets its own explainer video then play. Two choices · two clears · royalty-free workplace photos · short Level-4 sentences. Soft miss. No exam lexicon.
 - Language Organize + Eye Spy (before Sentence Structure): clearer first viewport, beads, auto-pair clear on Eye Spy.
 
 ### 2026-10-29 — VV pick + type + shuffle

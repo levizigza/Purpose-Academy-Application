@@ -142,7 +142,7 @@ stays real workplace English.
 
 ### 2026-10-31 — Supported Practice Picture Match + Sentence Match
 
-- Replaced memory / order / listen / fill with **Picture Match** and **Sentence Match** (sentence↔photo tap). Finite boards · soft miss + reshuffle · dual-shell.
+- **Picture Match** and **Sentence Match**: two choices · two clears · short Level-4 sentences · royalty-free pathway object photos (not cloze clipart). Soft miss · dual-shell.
 - Each game has its own how-it-works video, then play (Organize / Eye Spy pattern). Eye Spy and Organize stay their own stations — Supported Practice must not clone their boards.
 
 ### 2026-10-30 — Supported Practice familiar games + stronger Organize / Eye Spy

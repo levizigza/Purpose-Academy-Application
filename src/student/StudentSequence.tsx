@@ -75,6 +75,7 @@ import { FamiliarTheater } from './FamiliarTheater'
 import { PlayClearPulse, SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
 import { SupportedPracticeGames } from './SupportedPracticeGames'
+import { supportedPracticeDeck } from '../pathways/packs/supportedPracticeDeck'
 import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
 import { LearningPathMap, UnitIntroCard } from './LearningPathMap'
@@ -2206,7 +2207,7 @@ export function StudentSequencePage() {
     return (
       <Shell step={10} onBack={() => go(9)}>
         <SupportedPracticeGames
-          cloze={SENTENCE_CLOZE}
+          items={supportedPracticeDeck(pathwayId)}
           game={spPhase}
           onPictureComplete={() => {
             setSpPhase('sentence')
@@ -2223,11 +2224,11 @@ export function StudentSequencePage() {
         />
         <StationContext>
           <WhyWork>
-            Help is strength. These short games practise the same workplace sentences again — no exam.
+            Help is strength. Short sentences with clear photos — practice, not a test.
           </WhyWork>
           <TeachNote>
-            Like Organize and Eye Spy: each game has its own short video, then you play.
-            Picture Match first. Sentence Match second. Wrong? Try again. Then workplace instructions.
+            Picture Match, then Sentence Match. Two choices. Two clears. Royalty-free workplace photos.
+            Wrong? Try again. Then workplace instructions.
           </TeachNote>
         </StationContext>
       </Shell>

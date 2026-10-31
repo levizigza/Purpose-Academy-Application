@@ -19,7 +19,7 @@ export const JOURNEY_STEPS = [
   { n: 7, title: 'Language Organize', help: 'Five short boards. Tap a picture, drop it on the matching word. Clear the round.', purpose: 'Match the picture to the word you already practised — one clear verb.', unit: 3 },
   { n: 8, title: 'English Eye Spy', help: 'Tap a picture, then its English name. Pairs clear themselves. Empty the board.', purpose: 'See the same words again in a busy scene before sentences.', unit: 3 },
   { n: 9, title: 'Sentence Structure → Word → Action', help: 'Type the word that fits the blank. Then connect each tool to its action.', purpose: 'After pictures are solid, build the sentence and link words to real movement.', unit: 4 },
-  { n: 10, title: 'Supported Practice → Picture Match → Sentence Match', help: 'Watch Picture Match, then play. Watch Sentence Match, then play. Mistakes teach.', purpose: 'Practice sentences with help. Mistakes teach. No exam.', unit: 4 },
+  { n: 10, title: 'Supported Practice → Picture Match → Sentence Match', help: 'Watch, then play. Two choices. Clear photos. Mistakes teach.', purpose: 'Practice short sentences with help. Mistakes teach. No exam.', unit: 4 },
   { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   {
     n: 12,
@@ -1524,6 +1524,9 @@ export const EMPLOYMENT_PREP = [
 
 /** How many familiar game boards learners clear in Supported Practice (Picture Match → Sentence Match). */
 export const SUPPORTED_PRACTICE_BOARDS = 2
+
+/** Clears per board in Supported Practice (kept short — supported, not a quiz). */
+export const SUPPORTED_PRACTICE_ROUNDS = 2
 
 /** @deprecated Prefer SUPPORTED_PRACTICE_BOARDS — kept for residual imports. */
 export const MATCH_PRACTICE_ROUNDS = 2
