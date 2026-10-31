@@ -65,12 +65,20 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     video: 'explainers/word-action.mp4',
   },
   {
-    /* id bump forces a re-watch after the Which picture? / Which sentence? demo replace */
-    id: 'supported-practice-2',
+    /* Step 10 game 1 — like Language Organize getting its own how-it-works video. */
+    id: 'picture-match',
     steps: [10],
-    title: 'Supported Practice',
-    lede: 'Two short games with help: Which picture? and Which sentence? Mistakes teach.',
-    video: 'explainers/supported-practice-2.mp4',
+    title: 'Picture Match',
+    lede: 'Hear the sentence. Tap the picture that matches. Wrong? Try again.',
+    video: 'explainers/picture-match.mp4',
+  },
+  {
+    /* Step 10 game 2 — gated via stationId after Picture Match clears (Eye Spy pattern). */
+    id: 'sentence-match',
+    steps: [],
+    title: 'Sentence Match',
+    lede: 'Look at the picture. Tap the sentence that matches. Wrong? Try again.',
+    video: 'explainers/sentence-match.mp4',
   },
   {
     id: 'workplace-instructions',

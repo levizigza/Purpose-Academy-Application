@@ -102,7 +102,7 @@ Run this on every station before merge:
 | 7 | Language Organize | Tap picture · Drop on word — never “quiz” |
 | 8 | English Eye Spy | Tap picture + name; pairs clear; no prove / 100% / exam |
 | 9 | Sentences / Word→Action | Pick full sentence → hear → type it; soft miss + shuffle; hold clear until audio ends |
-| 10 | Supported Practice | Which picture? / Which sentence? with help — not remediation shame |
+| 10 | Supported Practice | Picture Match → Sentence Match (video then play each) — not remediation shame |
 | 11 | Workplace Instructions | Hear + choose what to do |
 | 12 | Computer Skills | Watch → try; first-computer friendly |
 | 13 | Site Language | Continue to work-interest questions |
@@ -156,7 +156,7 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 ### 2026-10-30 — Supported Practice games + Organize / Eye Spy strength
 
-- Supported Practice: Which picture? / Which sentence? only (old four + Eye Spy/Organize clones rejected). Simple Level-4 instructions. Soft miss. No exam lexicon.
+- Supported Practice: Picture Match + Sentence Match only (old four + Eye Spy/Organize clones rejected). Each game gets its own explainer video then play — same door as Organize / Eye Spy. Soft miss. No exam lexicon.
 - Language Organize + Eye Spy (before Sentence Structure): clearer first viewport, beads, auto-pair clear on Eye Spy.
 
 ### 2026-10-29 — VV pick + type + shuffle

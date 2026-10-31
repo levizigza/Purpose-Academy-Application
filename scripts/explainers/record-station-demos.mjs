@@ -428,14 +428,16 @@ const STATIONS = {
     ],
   },
 
-  'supported-practice': {
-    title: 'Supported Practice',
+  'picture-match': {
+    title: 'Picture Match',
     step: 10,
     async setup(page) {
+      await page.addInitScript(() => {
+        localStorage.setItem('pa-sp-phase-v1', 'picture')
+      })
       await gotoStation(page, BASE, { step: 10 })
       await page.waitForSelector('[data-coach="sp-picture"], .supported-pic-grid', { timeout: 30000 })
       await page.waitForTimeout(500)
-      /* Skip coach overlay so the mouse can reach the real controls. */
       const skip = page.locator('.station-coach-skip')
       if (await skip.first().isVisible().catch(() => false)) {
         await skip.first().click()
@@ -445,83 +447,90 @@ const STATIONS = {
     beats: [
       {
         id: 'intro',
-        text: 'Supported Practice. Two short games: Which picture, and Which sentence.',
+        text: 'Picture Match. Hear the sentence. Then tap the picture that matches.',
         async act(page) {
-          const title = page.locator('.supported-games, [data-coach="sp-picture"]').first()
-          await title.scrollIntoViewIfNeeded()
-          await moveTo(page, title, { steps: 20, settle: 500 })
+          const stage = page.locator('.supported-games.is-picture, [data-coach="sp-picture"]').first()
+          await stage.scrollIntoViewIfNeeded()
+          await moveTo(page, stage, { steps: 20, settle: 500 })
           const hear = page.locator('button:has-text("Hear the sentence")').first()
           if (await hear.isVisible().catch(() => false)) {
-            await moveTo(page, hear, { steps: 18, settle: 600 })
+            await moveTo(page, hear, { steps: 18, settle: 700 })
           }
         },
       },
       {
-        id: 'which-picture',
-        text: 'Game one. Hear the sentence. Then tap the picture that matches.',
+        id: 'hear',
+        text: 'Press Hear the sentence.',
         async act(page) {
           const hear = page.locator('button:has-text("Hear the sentence")').first()
-          if (await hear.isVisible().catch(() => false)) {
-            await clickAt(page, hear, { steps: 22, settle: 400, after: 900 })
-          }
-          /* Clear three picture rounds so Which sentence? can open — keep moving, no dead hold. */
-          for (let i = 0; i < 3; i += 1) {
-            const nextEarly = page.locator('button:has-text("Next game")')
-            if (await nextEarly.first().isVisible().catch(() => false)) break
-            await page.waitForSelector('.supported-pic-btn[data-correct="1"]:not(:disabled)', {
-              timeout: 15000,
-            })
-            const wrong = page.locator('.supported-pic-btn:not([data-correct="1"]):not(:disabled)').first()
-            if (await wrong.isVisible().catch(() => false)) {
-              await moveTo(page, wrong, { steps: 14, settle: 280 })
-            }
-            const btn = page.locator('.supported-pic-btn[data-correct="1"]:not(:disabled)').first()
-            await clickAt(page, btn, { steps: 18, settle: 280, after: 900 })
-          }
-          await page.waitForSelector('button:has-text("Next game")', { timeout: 12000 })
-          const nextGame = page.locator('button:has-text("Next game")').first()
-          await nextGame.scrollIntoViewIfNeeded()
-          await clickAt(page, nextGame, { steps: 18, settle: 300, after: 700 })
+          await clickAt(page, hear, { steps: 22, settle: 400, after: 1100 })
         },
       },
       {
-        id: 'which-sentence',
-        text: 'Game two. Look at the picture. Tap the matching sentence.',
+        id: 'tap',
+        text: 'Tap the picture that matches. Wrong? Try again.',
         async act(page) {
-          const nextGame = page.locator('button:has-text("Next game")').first()
-          if (await nextGame.isVisible().catch(() => false)) {
-            await clickAt(page, nextGame, { steps: 16, settle: 250, after: 700 })
-          }
-          await page.waitForSelector('.supported-sent-btn, [data-coach="sp-sentence"]', {
-            timeout: 25000,
+          await page.waitForSelector('.supported-pic-btn[data-correct="1"]:not(:disabled)', {
+            timeout: 15000,
           })
-          const skip = page.locator('.station-coach-skip')
-          if (await skip.first().isVisible().catch(() => false)) {
-            await skip.first().click()
-            await page.waitForTimeout(300)
+          const wrong = page.locator('.supported-pic-btn:not([data-correct="1"]):not(:disabled)').first()
+          if (await wrong.isVisible().catch(() => false)) {
+            await moveTo(page, wrong, { steps: 14, settle: 350 })
           }
+          const btn = page.locator('.supported-pic-btn[data-correct="1"]:not(:disabled)').first()
+          await clickAt(page, btn, { steps: 20, settle: 300, after: 1400 })
+          await moveTo(page, btn, { steps: 10, settle: 600 })
+        },
+      },
+    ],
+  },
+
+  'sentence-match': {
+    title: 'Sentence Match',
+    step: 10,
+    async setup(page) {
+      await page.addInitScript(() => {
+        localStorage.setItem('pa-sp-phase-v1', 'sentence')
+      })
+      await gotoStation(page, BASE, { step: 10 })
+      await page.waitForSelector('[data-coach="sp-sentence"], .supported-sent-btn', { timeout: 30000 })
+      await page.waitForTimeout(500)
+      const skip = page.locator('.station-coach-skip')
+      if (await skip.first().isVisible().catch(() => false)) {
+        await skip.first().click()
+        await page.waitForTimeout(350)
+      }
+    },
+    beats: [
+      {
+        id: 'intro',
+        text: 'Sentence Match. Look at the picture. Then tap the sentence that matches.',
+        async act(page) {
           const stage = page.locator('.supported-games.is-sentence, [data-coach="sp-sentence"]').first()
           await stage.scrollIntoViewIfNeeded()
           const photo = page.locator('.supported-game-photo--hero, .supported-game-photo').first()
           if (await photo.isVisible().catch(() => false)) {
-            await moveTo(page, photo, { steps: 18, settle: 700 })
+            await moveTo(page, photo, { steps: 18, settle: 900 })
+          } else {
+            await moveTo(page, stage, { steps: 18, settle: 700 })
           }
-          /* Hover each sentence so the VO does not freeze on one frame. */
+        },
+      },
+      {
+        id: 'tap',
+        text: 'Tap the matching sentence. Wrong? Try again.',
+        async act(page) {
           const options = page.locator('.supported-sent-btn:not(:disabled)')
           const count = await options.count()
           for (let i = 0; i < Math.min(count, 4); i += 1) {
-            await moveTo(page, options.nth(i), { steps: 16, settle: 450 })
+            await moveTo(page, options.nth(i), { steps: 14, settle: 380 })
           }
           await page.waitForSelector('.supported-sent-btn[data-correct="1"]:not(:disabled)', {
             timeout: 10000,
           })
           const sent = page.locator('.supported-sent-btn[data-correct="1"]:not(:disabled)').first()
-          await clickAt(page, sent, { steps: 22, settle: 350, after: 1600 })
-          if (await photo.isVisible().catch(() => false)) {
-            await moveTo(page, photo, { steps: 12, settle: 700 })
-          } else {
-            await moveTo(page, sent, { steps: 12, settle: 700 })
-          }
+          await clickAt(page, sent, { steps: 22, settle: 350, after: 1400 })
+          await moveTo(page, sent, { steps: 10, settle: 700 })
         },
       },
     ],

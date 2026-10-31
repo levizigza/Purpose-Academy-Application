@@ -5,7 +5,7 @@ const BASE = process.env.PA_BASE || 'http://127.0.0.1:4173/Purpose-Academy-Appli
 const OUT = '/tmp/instruction-narration-smoke/out'
 const ART = '/opt/cursor/artifacts'
 mkdirSync(OUT, { recursive: true }); mkdirSync(ART, { recursive: true })
-const EXPLAINERS = ['workplace-words','language-organize','eye-spy','sentence-structure','word-action','supported-practice-2','workplace-instructions','computer-skills','site-language','safety','tools','systems','equipment-video','your-language']
+const EXPLAINERS = ['workplace-words','language-organize','eye-spy','sentence-structure','word-action','picture-match','sentence-match','workplace-instructions','computer-skills','site-language','safety','tools','systems','equipment-video','your-language']
 async function prep(page, { shell, step, coachSeen=false, explainerSeen=true }) {
   await page.addInitScript(({ shell, step, coachSeen, explainerSeen, explainers }) => {
     localStorage.setItem('pa-shell-mode-v2', shell === 'phone' ? 'phone' : 'course')

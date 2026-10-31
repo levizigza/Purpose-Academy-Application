@@ -45,59 +45,63 @@ function reshuffleChoices<T>(items: T[], previous: T[], keyOf: (t: T) => string)
 
 export type SupportedGameKind = 'picture' | 'sentence'
 
-const ROUNDS_PER_BOARD = 3
-
-const GAME_META: Record<
+/** Station titles — noun phrases like Language Organize / English Eye Spy. */
+export const SUPPORTED_GAME_META: Record<
   SupportedGameKind,
-  { title: string; help: string; nearby: (left: number) => string }
+  {
+    id: 'picture-match' | 'sentence-match'
+    title: string
+    help: string
+    nearby: (left: number) => string
+  }
 > = {
   picture: {
-    title: 'Which picture?',
+    id: 'picture-match',
+    title: 'Picture Match',
     help: 'Hear the sentence. Tap the picture.',
     nearby: (left) =>
       left <= 0 ? 'Pictures clear' : `Clear this board · ${left} picture${left === 1 ? '' : 's'} left`,
   },
   sentence: {
-    title: 'Which sentence?',
+    id: 'sentence-match',
+    title: 'Sentence Match',
     help: 'Look at the picture. Tap the sentence.',
     nearby: (left) =>
       left <= 0 ? 'Sentences clear' : `Clear this board · ${left} sentence${left === 1 ? '' : 's'} left`,
   },
 }
 
+const ROUNDS_PER_BOARD = 3
+const GAME_ORDER: SupportedGameKind[] = ['picture', 'sentence']
+
 type PictureChoice = { id: string; imageUrl: string; label: string }
 type SentenceChoice = { id: string; text: string }
 
 type Props = {
   cloze: readonly SentenceClozeItem[]
+  /** Which Supported Practice game is open (parent owns phase for explainer gating). */
+  game: SupportedGameKind
+  /** Picture Match board cleared — parent opens Sentence Match explainer, then this game. */
+  onPictureComplete: () => void
   onComplete: () => void
 }
 
 /**
- * Supported Practice — two familiar sentence↔picture games.
- * Which picture? (sentence → 4 photos) · Which sentence? (photo → 4 sentences).
- * Level-4 English · soft miss + reshuffle · finite boards · dual-shell chrome.
- * Authority: presentation clears only; skill attempts still write as `matching`.
+ * Supported Practice — two separate games (like Organize then Eye Spy):
+ * Picture Match (sentence → 4 photos) · Sentence Match (photo → 4 sentences).
+ * Parent shows a how-it-works video before each game.
  */
-export function SupportedPracticeGames({ cloze, onComplete }: Props) {
+export function SupportedPracticeGames({ cloze, game, onPictureComplete, onComplete }: Props) {
   const pictured = useMemo(() => {
     const withImg = cloze.filter((item) => Boolean(resolveClozeImage(item)))
     return withImg.length >= 4 ? withImg : [...cloze]
   }, [cloze])
 
-  const boards = useMemo(() => {
-    const list: SupportedGameKind[] = []
-    if (pictured.length >= 4) {
-      list.push('picture', 'sentence')
-    }
-    return list
-  }, [pictured.length])
+  const meta = SUPPORTED_GAME_META[game]
+  const lastGame = game === 'sentence'
+  const boardIdx = GAME_ORDER.indexOf(game)
 
-  const [boardIdx, setBoardIdx] = useState(0)
   const [boardClear, setBoardClear] = useState(false)
-  const kind = boards[Math.min(boardIdx, Math.max(0, boards.length - 1))] || 'picture'
-  const lastBoard = boardIdx >= boards.length - 1
-
   const [roundIdx, setRoundIdx] = useState(0)
   const [cleared, setCleared] = useState(0)
   const [target, setTarget] = useState<SentenceClozeItem | null>(null)
@@ -111,10 +115,10 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
 
   const left = Math.max(0, ROUNDS_PER_BOARD - cleared)
   const nearby = boardClear
-    ? lastBoard
+    ? lastGame
       ? 'Station clear — continue when ready'
-      : 'Board clear — next game next'
-    : GAME_META[kind].nearby(left)
+      : 'Board clear — Sentence Match next'
+    : meta.nearby(left)
 
   function dealRound(nextUsed: string[], previousPics: PictureChoice[], previousSents: SentenceChoice[]) {
     const pool = pictured.filter((item) => !nextUsed.includes(item.id))
@@ -161,26 +165,26 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
     setPickOk(false)
     setMiss(false)
     dealRound([], [], [])
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- reset only when board/kind changes
-  }, [boardIdx, kind, pictured])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reset only when game / bank changes
+  }, [game, pictured])
 
   function finishBoard(label: string) {
     setBoardClear(true)
     firePlayClear({
       label,
-      remnant: lastBoard ? 'Station clear — continue when ready' : 'Board clear — next game next',
+      remnant: lastGame ? 'Station clear — continue when ready' : 'Board clear — Sentence Match next',
       kind: 'board',
     })
   }
 
-  function nextBoard() {
+  function advance() {
     if (!boardClear) return
-    if (lastBoard) {
+    if (lastGame) {
       onComplete()
       return
     }
-    setBoardIdx((i) => i + 1)
     playFoley('whoosh')
+    onPictureComplete()
   }
 
   function onCorrect() {
@@ -192,11 +196,11 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
     recordSkillAttempt('matching', true, 10)
     void speakEnglish(filledSentence(target))
     if (nextCleared >= ROUNDS_PER_BOARD) {
-      finishBoard(kind === 'picture' ? 'Pictures clear' : 'Sentences clear')
+      finishBoard(game === 'picture' ? 'Pictures clear' : 'Sentences clear')
       return
     }
     firePlayClear({
-      label: kind === 'picture' ? 'Picture clear' : 'Sentence clear',
+      label: game === 'picture' ? 'Picture clear' : 'Sentence clear',
       remnant: `${ROUNDS_PER_BOARD - nextCleared} left`,
       kind: 'micro',
     })
@@ -208,7 +212,7 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
 
   function pickPicture(choice: PictureChoice) {
     if (!target || pickId || boardClear) return
-    advanceStationCoach('supported-practice')
+    advanceStationCoach('picture-match')
     const ok = choice.id === target.id
     setPickId(choice.id)
     setPickOk(ok)
@@ -222,7 +226,7 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
 
   function pickSentence(choice: SentenceChoice) {
     if (!target || pickId || boardClear) return
-    advanceStationCoach('supported-practice')
+    advanceStationCoach('sentence-match')
     const ok = choice.id === target.id
     setPickId(choice.id)
     setPickOk(ok)
@@ -239,7 +243,7 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
     setPickId(null)
     setPickOk(false)
     setMiss(false)
-    if (kind === 'picture') {
+    if (game === 'picture') {
       setPictureChoices(reshuffleChoices(pictureChoices, pictureChoices, (c) => c.id))
     } else {
       setSentenceChoices(reshuffleChoices(sentenceChoices, sentenceChoices, (c) => c.id))
@@ -250,11 +254,11 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
 
   async function hearSentence() {
     if (!target) return
-    advanceStationCoach('supported-practice')
+    advanceStationCoach('picture-match')
     await speakEnglish(filledSentence(target))
   }
 
-  if (!boards.length || !target) {
+  if (pictured.length < 4 || !target) {
     return <div className="alert warn">Supported Practice needs pictured sentences.</div>
   }
 
@@ -262,35 +266,37 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
   const targetImage = resolveClozeImage(target)
 
   return (
-    <article className={`supported-games is-${kind}${boardClear ? ' is-board-clear' : ''}`}>
+    <article className={`supported-games is-${game}${boardClear ? ' is-board-clear' : ''}`}>
       <header className="supported-games-head">
         <div className="supported-games-title-row">
-          <h2 className="supported-games-title">{GAME_META[kind].title}</h2>
-          <ol className="supported-games-beads" aria-label={`Game ${boardIdx + 1} of ${boards.length}`}>
-            {boards.map((b, i) => (
-              <li
-                key={`${b}-${i}`}
-                className={`supported-games-bead${i < boardIdx || (i === boardIdx && boardClear) ? ' is-done' : ''}${
-                  i === boardIdx ? ' is-now' : ''
-                }`}
-                title={GAME_META[b].title}
-              >
-                <span className="sr-only">
-                  {GAME_META[b].title}
-                  {i < boardIdx || (i === boardIdx && boardClear) ? ' · clear' : i === boardIdx ? ' · now' : ''}
-                </span>
-              </li>
-            ))}
+          <h2 className="supported-games-title">{meta.title}</h2>
+          <ol className="supported-games-beads" aria-label={`Game ${boardIdx + 1} of ${GAME_ORDER.length}`}>
+            {GAME_ORDER.map((b, i) => {
+              const done = i < boardIdx || (i === boardIdx && boardClear)
+              const now = i === boardIdx
+              return (
+                <li
+                  key={b}
+                  className={`supported-games-bead${done ? ' is-done' : ''}${now ? ' is-now' : ''}`}
+                  title={SUPPORTED_GAME_META[b].title}
+                >
+                  <span className="sr-only">
+                    {SUPPORTED_GAME_META[b].title}
+                    {done ? ' · clear' : now ? ' · now' : ''}
+                  </span>
+                </li>
+              )
+            })}
           </ol>
         </div>
         <p className="play-nearby-objective" aria-live="polite">
           {nearby}
         </p>
-        <p className="supported-games-help">{GAME_META[kind].help}</p>
+        <p className="supported-games-help">{meta.help}</p>
       </header>
 
-      {kind === 'picture' ? (
-        <section className="supported-picture" aria-label="Which picture" data-coach="sp-picture">
+      {game === 'picture' ? (
+        <section className="supported-picture" aria-label="Picture Match" data-coach="sp-picture">
           <div className="supported-prompt-row">
             <p className="supported-prompt-sentence" lang="en">
               {sentenceText}
@@ -341,8 +347,8 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
         </section>
       ) : null}
 
-      {kind === 'sentence' ? (
-        <section className="supported-sentence" aria-label="Which sentence" data-coach="sp-sentence">
+      {game === 'sentence' ? (
+        <section className="supported-sentence" aria-label="Sentence Match" data-coach="sp-sentence">
           <figure className="supported-game-photo supported-game-photo--hero">
             {targetImage ? (
               <img src={targetImage} alt="" />
@@ -386,18 +392,18 @@ export function SupportedPracticeGames({ cloze, onComplete }: Props) {
       {boardClear ? (
         <div className="supported-games-advance">
           <div className="alert ok">
-            {lastBoard
+            {lastGame
               ? 'Station clear. Help is strength — next door can open.'
-              : `${GAME_META[kind].title} clear. Next game ready.`}
+              : `${meta.title} clear. Sentence Match is next — watch how it works, then play.`}
           </div>
-          <button type="button" className="btn btn-primary" onClick={nextBoard}>
-            {lastBoard ? 'Continue to workplace instructions' : 'Next game'}
+          <button type="button" className="btn btn-primary" onClick={advance}>
+            {lastGame ? 'Continue to workplace instructions' : 'Continue to Sentence Match'}
           </button>
         </div>
       ) : null}
 
       {!boardClear ? (
-        <StationCoach stationId="supported-practice" layoutKey={`${kind}-${boardIdx}-${roundIdx}-${deal}`} />
+        <StationCoach stationId={meta.id} layoutKey={`${game}-${roundIdx}-${deal}`} />
       ) : null}
     </article>
   )

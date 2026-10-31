@@ -89,8 +89,10 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
   'word-action': [
     { target: '[data-coach="choice-opt"]', say: 'Press the answer that fits' },
   ],
-  'supported-practice': [
+  'picture-match': [
     { target: '[data-coach="sp-picture"]', say: 'Hear the sentence. Tap the picture.' },
+  ],
+  'sentence-match': [
     { target: '[data-coach="sp-sentence"]', say: 'Look at the picture. Tap the sentence.' },
   ],
   'workplace-instructions': [

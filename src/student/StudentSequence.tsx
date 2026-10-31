@@ -837,6 +837,14 @@ export function StudentSequencePage() {
   const [actionCorrect, setActionCorrect] = useState(false)
   /** Construction: Sentence Structure first, then Word → Action inside step 9. */
   const [step8Phase, setStep8Phase] = useState<'sentences' | 'actions'>('sentences')
+  /** Step 10: Picture Match first, then Sentence Match (each with its own explainer video). */
+  const [spPhase, setSpPhase] = useState<'picture' | 'sentence'>(() => {
+    try {
+      return localStorage.getItem('pa-sp-phase-v1') === 'sentence' ? 'sentence' : 'picture'
+    } catch {
+      return 'picture'
+    }
+  })
   const [organizeTerms, setOrganizeTerms] = useState<VocabTerm[]>([])
   const [sentenceLevel1, setSentenceLevel1] = useState(false)
   const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
@@ -1024,6 +1032,12 @@ export function StudentSequencePage() {
     setActionIdx(0)
     setActionAnswer(null)
     setActionCorrect(false)
+    setSpPhase('picture')
+    try {
+      localStorage.setItem('pa-sp-phase-v1', 'picture')
+    } catch {
+      /* ignore */
+    }
     setInstrIdx(0)
     setInstrHeard(false)
     setInstrAnswer(null)
@@ -1101,6 +1115,14 @@ export function StudentSequencePage() {
     /* Quality-review jumps land on Sentence Structure (not mid Word→Action) when opening step 9. */
     if (target === 9) {
       setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
+    }
+    if (target === 10) {
+      setSpPhase('picture')
+      try {
+        localStorage.setItem('pa-sp-phase-v1', 'picture')
+      } catch {
+        /* ignore */
+      }
     }
     if (target === 7) {
       setOrganizeTerms(pickOrganizeTerms(VOCAB_UNIT))
@@ -1217,7 +1239,13 @@ export function StudentSequencePage() {
           }
           onOpenHub={isPracticeMode() ? () => setPracticeView('hub') : undefined}
           onJumpLesson={(n) => go(n, `Opening step ${n}…`)}
-          explainerStationId={props.step === 9 && step8Phase === 'actions' ? 'word-action' : null}
+          explainerStationId={
+            props.step === 9 && step8Phase === 'actions'
+              ? 'word-action'
+              : props.step === 10 && spPhase === 'sentence'
+                ? 'sentence-match'
+                : null
+          }
         />
         {practiceAdvancePrompt && (
           <div className="practice-next-gate" role="dialog" aria-modal="true" aria-label="Feedback check">
@@ -2173,12 +2201,22 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 10: Supported Practice — Which picture? / Which sentence? */
+  /* Step 10: Supported Practice — Picture Match video→play, then Sentence Match video→play */
   if (step === 10) {
     return (
       <Shell step={10} onBack={() => go(9)}>
         <SupportedPracticeGames
           cloze={SENTENCE_CLOZE}
+          game={spPhase}
+          onPictureComplete={() => {
+            setSpPhase('sentence')
+            try {
+              localStorage.setItem('pa-sp-phase-v1', 'sentence')
+            } catch {
+              /* ignore */
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
           onComplete={() =>
             requestPracticeAdvance(() => go(11, 'Opening workplace instructions…'))
           }
@@ -2188,8 +2226,8 @@ export function StudentSequencePage() {
             Help is strength. These short games practise the same workplace sentences again — no exam.
           </WhyWork>
           <TeachNote>
-            Two familiar games: Which picture? and Which sentence?
-            Hear or look, then tap. Clear each board. Wrong? Try again. Then workplace instructions.
+            Like Organize and Eye Spy: each game has its own short video, then you play.
+            Picture Match first. Sentence Match second. Wrong? Try again. Then workplace instructions.
           </TeachNote>
         </StationContext>
       </Shell>
