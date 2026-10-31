@@ -40,7 +40,7 @@ const PROGRESS_KEYS = [
   'pa-nav-cues-seen-v1',
   'pa-station-explainers-seen-v1',
   'pa-station-coach-seen-v1',
-  'pa-sp-phase-v1',
+  'pa-sp-station-v1',
 ] as const
 
 function migrateLegacy() {

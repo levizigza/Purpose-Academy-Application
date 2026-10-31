@@ -118,7 +118,7 @@ stays real workplace English.
 | Language Organize | Clear this round/word · N left | Picture / round / station | Not yet — wrong box · try again |
 | Sentence Structure | Clear this page · N left · type the matching word | Sentence / page clear | Four reference choices + Type / Go · soft type retry |
 | Word → Action | Clear this action · N left | Action clear | Not yet · try again |
-| Supported Practice | Clear this board · N pictures/sentences left | Picture / sentence / board clear | Not yet · try again |
+| Supported Practice | Clear this board · N videos / lines left | Video Match / Copycat / board clear | Not yet · try again |
 | Workplace Instructions | Clear this instruction · N left | Instruction clear | Not yet · try again |
 | QuizRunner (Safety / Final written) | Clear this item · N left | Item / set clear | Soft retry · gated sets |
 | Site Language | Clear this phrase · N left | Phrase clear | Not yet · try again |

@@ -428,15 +428,24 @@ const STATIONS = {
     ],
   },
 
-  'picture-match': {
-    title: 'Picture Match',
+  'video-match': {
+    title: 'Video Match',
     step: 10,
     async setup(page) {
       await page.addInitScript(() => {
-        localStorage.setItem('pa-sp-phase-v1', 'picture')
+        localStorage.setItem('pa-sp-station-v1', 'video-match')
+        /* Skip Self intro so the how-it-works recording is the board itself. */
+        try {
+          const raw = localStorage.getItem('pa-station-explainers-seen-v1')
+          const seen = raw ? JSON.parse(raw) : {}
+          seen['video-match'] = true
+          localStorage.setItem('pa-station-explainers-seen-v1', JSON.stringify(seen))
+        } catch {
+          /* ignore */
+        }
       })
       await gotoStation(page, BASE, { step: 10 })
-      await page.waitForSelector('[data-coach="sp-picture"], .supported-pic-grid', { timeout: 30000 })
+      await page.waitForSelector('[data-coach="sp-video"], .supported-video-grid', { timeout: 30000 })
       await page.waitForTimeout(500)
       const skip = page.locator('.station-coach-skip')
       if (await skip.first().isVisible().catch(() => false)) {
@@ -447,9 +456,9 @@ const STATIONS = {
     beats: [
       {
         id: 'intro',
-        text: 'Picture Match. Hear the sentence. Then tap the picture that matches.',
+        text: 'Video Match. Hear the sentence. Then tap the video that matches.',
         async act(page) {
-          const stage = page.locator('.supported-games.is-picture, [data-coach="sp-picture"]').first()
+          const stage = page.locator('.supported-games.is-video-match, [data-coach="sp-video"]').first()
           await stage.scrollIntoViewIfNeeded()
           await moveTo(page, stage, { steps: 20, settle: 500 })
           const hear = page.locator('button:has-text("Hear the sentence")').first()
@@ -468,16 +477,16 @@ const STATIONS = {
       },
       {
         id: 'tap',
-        text: 'Tap the picture that matches. Wrong? Try again.',
+        text: 'Three videos. Tap the one that matches. Wrong? Try again.',
         async act(page) {
-          await page.waitForSelector('.supported-pic-btn[data-correct="1"]:not(:disabled)', {
+          await page.waitForSelector('.supported-video-btn[data-correct="1"]:not(:disabled)', {
             timeout: 15000,
           })
-          const wrong = page.locator('.supported-pic-btn:not([data-correct="1"]):not(:disabled)').first()
+          const wrong = page.locator('.supported-video-btn:not([data-correct="1"]):not(:disabled)').first()
           if (await wrong.isVisible().catch(() => false)) {
             await moveTo(page, wrong, { steps: 14, settle: 350 })
           }
-          const btn = page.locator('.supported-pic-btn[data-correct="1"]:not(:disabled)').first()
+          const btn = page.locator('.supported-video-btn[data-correct="1"]:not(:disabled)').first()
           await clickAt(page, btn, { steps: 20, settle: 300, after: 1400 })
           await moveTo(page, btn, { steps: 10, settle: 600 })
         },
@@ -485,15 +494,23 @@ const STATIONS = {
     ],
   },
 
-  'sentence-match': {
-    title: 'Sentence Match',
+  'copycat': {
+    title: 'Copycat',
     step: 10,
     async setup(page) {
       await page.addInitScript(() => {
-        localStorage.setItem('pa-sp-phase-v1', 'sentence')
+        localStorage.setItem('pa-sp-station-v1', 'copycat')
+        try {
+          const raw = localStorage.getItem('pa-station-explainers-seen-v1')
+          const seen = raw ? JSON.parse(raw) : {}
+          seen.copycat = true
+          localStorage.setItem('pa-station-explainers-seen-v1', JSON.stringify(seen))
+        } catch {
+          /* ignore */
+        }
       })
       await gotoStation(page, BASE, { step: 10 })
-      await page.waitForSelector('[data-coach="sp-sentence"], .supported-sent-btn', { timeout: 30000 })
+      await page.waitForSelector('[data-coach="sp-copycat"], .supported-chip-btn', { timeout: 30000 })
       await page.waitForTimeout(500)
       const skip = page.locator('.station-coach-skip')
       if (await skip.first().isVisible().catch(() => false)) {
@@ -504,13 +521,13 @@ const STATIONS = {
     beats: [
       {
         id: 'intro',
-        text: 'Sentence Match. Look at the picture. Then tap the sentence that matches.',
+        text: 'Copycat. Watch the video. Then tap the words in order — say it back.',
         async act(page) {
-          const stage = page.locator('.supported-games.is-sentence, [data-coach="sp-sentence"]').first()
+          const stage = page.locator('.supported-games.is-copycat, [data-coach="sp-copycat"]').first()
           await stage.scrollIntoViewIfNeeded()
-          const photo = page.locator('.supported-game-photo--hero, .supported-game-photo').first()
-          if (await photo.isVisible().catch(() => false)) {
-            await moveTo(page, photo, { steps: 18, settle: 900 })
+          const video = page.locator('.supported-copycat-video').first()
+          if (await video.isVisible().catch(() => false)) {
+            await moveTo(page, video, { steps: 18, settle: 1200 })
           } else {
             await moveTo(page, stage, { steps: 18, settle: 700 })
           }
@@ -518,19 +535,16 @@ const STATIONS = {
       },
       {
         id: 'tap',
-        text: 'Tap the matching sentence. Wrong? Try again.',
+        text: 'Tap each word in order. Wrong? Try again.',
         async act(page) {
-          const options = page.locator('.supported-sent-btn:not(:disabled)')
-          const count = await options.count()
-          for (let i = 0; i < Math.min(count, 4); i += 1) {
-            await moveTo(page, options.nth(i), { steps: 14, settle: 380 })
+          await page.waitForSelector('.supported-chip-btn:not(:disabled)', { timeout: 25000 })
+          const built = page.locator('.supported-copycat-built').first()
+          for (let guard = 0; guard < 16; guard += 1) {
+            const next = page.locator('.supported-chip-btn[data-correct="1"]:not(:disabled)').first()
+            if (!(await next.isVisible().catch(() => false))) break
+            await clickAt(page, next, { steps: 14, settle: 200, after: 380 })
           }
-          await page.waitForSelector('.supported-sent-btn[data-correct="1"]:not(:disabled)', {
-            timeout: 10000,
-          })
-          const sent = page.locator('.supported-sent-btn[data-correct="1"]:not(:disabled)').first()
-          await clickAt(page, sent, { steps: 22, settle: 350, after: 1400 })
-          await moveTo(page, sent, { steps: 10, settle: 700 })
+          await moveTo(page, built, { steps: 10, settle: 700 })
         },
       },
     ],

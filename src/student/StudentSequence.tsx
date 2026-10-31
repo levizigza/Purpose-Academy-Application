@@ -74,7 +74,7 @@ import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
 import { PlayClearPulse, SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
-import { SupportedPracticeGames } from './SupportedPracticeGames'
+import { SupportedPracticeGames, type SupportedStationId } from './SupportedPracticeGames'
 import { supportedPracticeDeck } from '../pathways/packs/supportedPracticeDeck'
 import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
@@ -838,12 +838,12 @@ export function StudentSequencePage() {
   const [actionCorrect, setActionCorrect] = useState(false)
   /** Construction: Sentence Structure first, then Word → Action inside step 9. */
   const [step8Phase, setStep8Phase] = useState<'sentences' | 'actions'>('sentences')
-  /** Step 10: Picture Match first, then Sentence Match (each with its own explainer video). */
-  const [spPhase, setSpPhase] = useState<'picture' | 'sentence'>(() => {
+  /** Step 10: switchable Video Match / Copycat stations (like Organize vs Eye Spy). */
+  const [spStation, setSpStation] = useState<SupportedStationId>(() => {
     try {
-      return localStorage.getItem('pa-sp-phase-v1') === 'sentence' ? 'sentence' : 'picture'
+      return localStorage.getItem('pa-sp-station-v1') === 'copycat' ? 'copycat' : 'video-match'
     } catch {
-      return 'picture'
+      return 'video-match'
     }
   })
   const [organizeTerms, setOrganizeTerms] = useState<VocabTerm[]>([])
@@ -1033,9 +1033,9 @@ export function StudentSequencePage() {
     setActionIdx(0)
     setActionAnswer(null)
     setActionCorrect(false)
-    setSpPhase('picture')
+    setSpStation('video-match')
     try {
-      localStorage.setItem('pa-sp-phase-v1', 'picture')
+      localStorage.setItem('pa-sp-station-v1', 'video-match')
     } catch {
       /* ignore */
     }
@@ -1118,12 +1118,7 @@ export function StudentSequencePage() {
       setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
     }
     if (target === 10) {
-      setSpPhase('picture')
-      try {
-        localStorage.setItem('pa-sp-phase-v1', 'picture')
-      } catch {
-        /* ignore */
-      }
+      /* Keep last station choice so reviewer can switch Video Match ↔ Copycat easily. */
     }
     if (target === 7) {
       setOrganizeTerms(pickOrganizeTerms(VOCAB_UNIT))
@@ -1243,9 +1238,11 @@ export function StudentSequencePage() {
           explainerStationId={
             props.step === 9 && step8Phase === 'actions'
               ? 'word-action'
-              : props.step === 10 && spPhase === 'sentence'
-                ? 'sentence-match'
-                : null
+              : props.step === 10 && spStation === 'copycat'
+                ? 'copycat'
+                : props.step === 10
+                  ? 'video-match'
+                  : null
           }
         />
         {practiceAdvancePrompt && (
@@ -2202,17 +2199,17 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 10: Supported Practice — Picture Match video→play, then Sentence Match video→play */
+  /* Step 10: Supported Practice — switchable Video Match · Copycat */
   if (step === 10) {
     return (
       <Shell step={10} onBack={() => go(9)}>
         <SupportedPracticeGames
           items={supportedPracticeDeck(pathwayId)}
-          game={spPhase}
-          onPictureComplete={() => {
-            setSpPhase('sentence')
+          station={spStation}
+          onStationChange={(next) => {
+            setSpStation(next)
             try {
-              localStorage.setItem('pa-sp-phase-v1', 'sentence')
+              localStorage.setItem('pa-sp-station-v1', next)
             } catch {
               /* ignore */
             }
@@ -2224,11 +2221,11 @@ export function StudentSequencePage() {
         />
         <StationContext>
           <WhyWork>
-            Help is strength. Short sentences with clear photos — practice, not a test.
+            Help is strength. Short workplace videos teach sentences — practice, not a test.
           </WhyWork>
           <TeachNote>
-            Picture Match, then Sentence Match. Two choices. Two clears. Royalty-free workplace photos.
-            Wrong? Try again. Then workplace instructions.
+            Switch anytime: Video Match (hear → tap the clip) or Copycat (watch → tap the words in
+            order). Royalty-free Mixkit clips, cut to the action. Wrong? Try again.
           </TeachNote>
         </StationContext>
       </Shell>

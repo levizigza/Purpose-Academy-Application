@@ -65,20 +65,20 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     video: 'explainers/word-action.mp4',
   },
   {
-    /* Step 10 game 1 — like Language Organize getting its own how-it-works video. */
-    id: 'picture-match',
+    /* Step 10 — default station. Switcher can also force via stationId. */
+    id: 'video-match',
     steps: [10],
-    title: 'Picture Match',
-    lede: 'Hear the sentence. Tap the picture that matches. Wrong? Try again.',
-    video: 'explainers/picture-match.mp4',
+    title: 'Video Match',
+    lede: 'Hear the sentence. Tap the video that matches. Three short clips. Wrong? Try again.',
+    video: 'explainers/video-match.mp4',
   },
   {
-    /* Step 10 game 2 — gated via stationId after Picture Match clears (Eye Spy pattern). */
-    id: 'sentence-match',
+    /* Step 10 alternate station — childhood copycat with workplace video. */
+    id: 'copycat',
     steps: [],
-    title: 'Sentence Match',
-    lede: 'Look at the picture. Tap the sentence that matches. Wrong? Try again.',
-    video: 'explainers/sentence-match.mp4',
+    title: 'Copycat',
+    lede: 'Watch the video. Hear the sentence. Tap the words in order — say it back.',
+    video: 'explainers/copycat.mp4',
   },
   {
     id: 'workplace-instructions',
