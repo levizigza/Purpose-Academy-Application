@@ -433,47 +433,65 @@ const STATIONS = {
     step: 10,
     async setup(page) {
       await gotoStation(page, BASE, { step: 10 })
-      await page.waitForSelector('[data-coach="choice-opt"], .train-choice-grid', { timeout: 30000 })
+      await page.waitForSelector('[data-coach="sp-picture"], .supported-pic-grid', { timeout: 30000 })
       await page.waitForTimeout(500)
+      /* Skip coach overlay so the mouse can reach the real controls. */
+      const skip = page.locator('.station-coach-skip')
+      if (await skip.first().isVisible().catch(() => false)) {
+        await skip.first().click()
+        await page.waitForTimeout(350)
+      }
     },
     beats: [
       {
         id: 'intro',
-        text: 'Supported Practice. Match with help.',
+        text: 'Supported Practice. Two short games with help.',
         async act(page) {
-          const grid = page.locator('[data-coach="choice-opt"], .train-choice-grid').first()
-          await grid.scrollIntoViewIfNeeded()
-          await moveTo(page, grid, { steps: 24, settle: 800 })
+          const stage = page.locator('.supported-games, [data-coach="sp-picture"]').first()
+          await stage.scrollIntoViewIfNeeded()
+          await moveTo(page, stage, { steps: 24, settle: 800 })
         },
       },
       {
-        id: 'match',
-        text: 'Match words to pictures. Help is there if you need it.',
+        id: 'which-picture',
+        text: 'Hear the sentence. Tap the picture that matches.',
         async act(page) {
-          const help = page.locator('button:has-text("Help"), [data-coach="help"]').first()
-          if (await help.isVisible().catch(() => false)) {
-            await moveTo(page, help, { steps: 20, settle: 700 })
+          const hear = page.locator('button:has-text("Hear the sentence")').first()
+          if (await hear.isVisible().catch(() => false)) {
+            await clickAt(page, hear, { steps: 22, settle: 350, after: 900 })
           }
-          const hammer = page
-            .locator('[data-coach="choice-opt"] button, .train-choice-grid button')
-            .filter({ hasText: /^Hammer$/i })
-          const btn = (await hammer.first().isVisible().catch(() => false))
-            ? hammer.first()
-            : page.locator('[data-coach="choice-opt"] button, .train-choice-grid button').first()
-          await moveTo(page, btn, { steps: 22, settle: 700 })
+          /* Clear three picture rounds so Which sentence? can open. */
+          for (let i = 0; i < 3; i += 1) {
+            await page.waitForSelector('.supported-pic-btn[data-correct="1"]:not(:disabled)', {
+              timeout: 15000,
+            })
+            const btn = page.locator('.supported-pic-btn[data-correct="1"]:not(:disabled)').first()
+            await clickAt(page, btn, { steps: 20, settle: 280, after: 850 })
+            const next = page.locator('button:has-text("Next game")')
+            if (await next.first().isVisible().catch(() => false)) break
+          }
+          const nextGame = page.locator('button:has-text("Next game")').first()
+          if (await nextGame.isVisible().catch(() => false)) {
+            await clickAt(page, nextGame, { steps: 20, settle: 300, after: 700 })
+          }
         },
       },
       {
-        id: 'retry',
-        text: 'Mistakes help you learn. Wrong? Try again. This is practice — not a test.',
+        id: 'which-sentence',
+        text: 'Look at the picture. Tap the sentence that matches. Wrong? Try again. This is practice — not a test.',
         async act(page) {
-          const hammer = page
-            .locator('[data-coach="choice-opt"] button, .train-choice-grid button')
-            .filter({ hasText: /^Hammer$/i })
-          const btn = (await hammer.first().isVisible().catch(() => false))
-            ? hammer.first()
-            : page.locator('[data-coach="choice-opt"] button, .train-choice-grid button').first()
-          await clickAt(page, btn, { steps: 26, settle: 400, after: 1400 })
+          await page.waitForSelector('[data-coach="sp-sentence"], .supported-sent-btn', {
+            timeout: 20000,
+          })
+          const skip = page.locator('.station-coach-skip')
+          if (await skip.first().isVisible().catch(() => false)) {
+            await skip.first().click()
+            await page.waitForTimeout(300)
+          }
+          const photo = page.locator('.supported-game-photo--hero, .supported-game-photo').first()
+          await moveTo(page, photo, { steps: 18, settle: 500 })
+          const sent = page.locator('.supported-sent-btn[data-correct="1"]:not(:disabled)').first()
+          await clickAt(page, sent, { steps: 24, settle: 350, after: 1200 })
         },
       },
     ],

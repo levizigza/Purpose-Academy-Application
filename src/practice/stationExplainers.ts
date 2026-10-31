@@ -68,7 +68,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'supported-practice',
     steps: [10],
     title: 'Supported Practice',
-    lede: 'Four short games with help: memory, order, listen, fill the blank. Mistakes teach.',
+    lede: 'Two short games with help: Which picture? and Which sentence? Mistakes teach.',
     video: 'explainers/supported-practice.mp4',
   },
   {
