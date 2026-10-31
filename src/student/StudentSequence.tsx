@@ -2173,13 +2173,11 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 10: Supported Practice — familiar sentence games (memory / order / listen / fill the blank) */
+  /* Step 10: Supported Practice — Which picture? / Which sentence? */
   if (step === 10) {
     return (
       <Shell step={10} onBack={() => go(9)}>
         <SupportedPracticeGames
-          vocab={VOCAB_UNIT}
-          knownIds={vocabKnownIds}
           cloze={SENTENCE_CLOZE}
           onComplete={() =>
             requestPracticeAdvance(() => go(11, 'Opening workplace instructions…'))
@@ -2190,8 +2188,8 @@ export function StudentSequencePage() {
             Help is strength. These short games practise the same workplace sentences again — no exam.
           </WhyWork>
           <TeachNote>
-            Four familiar games: memory match, order the words, listen and choose, then fill the blank.
-            Clear each board. Wrong? Try again. Then workplace instructions.
+            Two familiar games: Which picture? and Which sentence?
+            Hear or look, then tap. Clear each board. Wrong? Try again. Then workplace instructions.
           </TeachNote>
         </StationContext>
       </Shell>

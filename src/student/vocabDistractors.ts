@@ -77,8 +77,8 @@ export function pickSpecialtyDistractors(
 }
 
 /**
- * Supported Practice matching deck — worksheet-sized, not the full ~800-word dump.
- * Prefer unknown specialty pictures; fall back to unknown then specialty Level-1.
+ * Worksheet-sized pictured vocab deck (unknown specialty first).
+ * Kept for residual callers / future drills — Supported Practice now uses sentence cloze photos.
  */
 export function matchPracticeDeck(
   vocab: readonly VocabTerm[],

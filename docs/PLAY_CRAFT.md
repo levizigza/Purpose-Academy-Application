@@ -118,7 +118,7 @@ stays real workplace English.
 | Language Organize | Clear this round/word · N left | Picture / round / station | Not yet — wrong box · try again |
 | Sentence Structure | Clear this page · N left · type the matching word | Sentence / page clear | Four reference choices + Type / Go · soft type retry |
 | Word → Action | Clear this action · N left | Action clear | Not yet · try again |
-| Supported Practice | Clear this board/sentence/blank · N left | Memory / order / listen / fill clear | Not yet · try again |
+| Supported Practice | Clear this board · N pictures/sentences left | Picture / sentence / board clear | Not yet · try again |
 | Workplace Instructions | Clear this instruction · N left | Instruction clear | Not yet · try again |
 | QuizRunner (Safety / Final written) | Clear this item · N left | Item / set clear | Soft retry · gated sets |
 | Site Language | Clear this phrase · N left | Phrase clear | Not yet · try again |
@@ -140,9 +140,14 @@ stays real workplace English.
 
 ## 3. Changelog
 
+### 2026-10-31 — Supported Practice two sentence games only
+
+- Replaced memory / order / listen / fill with **Which picture?** and **Which sentence?** (sentence↔photo tap). Finite boards · soft miss + reshuffle · dual-shell.
+- Eye Spy and Organize stay their own stations — Supported Practice must not clone them.
+
 ### 2026-10-30 — Supported Practice familiar games + stronger Organize / Eye Spy
 
-- Supported Practice leaves MC matching: **memory match**, **order the words**, **listen and choose**, **soft fill-blank race** (tap, not type). Finite boards · soft miss · dual-shell.
+- *(Superseded 2026-10-31.)* First ship tried four familiar games; customer rejected them as unsatisfactory for sentence+visual mindless play.
 - Preceding pages before Sentence Structure: Organize gets round beads + Drop CTA + shorter help; Eye Spy auto-clears pairs (no Match button) + scene beads.
 - Authority unchanged — clears stay presentation; skill id remains `matching`.
 

@@ -90,7 +90,8 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
     { target: '[data-coach="choice-opt"]', say: 'Press the answer that fits' },
   ],
   'supported-practice': [
-    { target: '[data-coach="sp-play"]', say: 'Follow the short game line · one clear action' },
+    { target: '[data-coach="sp-picture"]', say: 'Hear the sentence. Tap the picture.' },
+    { target: '[data-coach="sp-sentence"]', say: 'Look at the picture. Tap the sentence.' },
   ],
   'workplace-instructions': [
     { target: '[data-coach="instr-hear"]', say: 'Press Hear English' },
