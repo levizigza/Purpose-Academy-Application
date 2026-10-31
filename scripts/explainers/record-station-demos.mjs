@@ -458,40 +458,52 @@ const STATIONS = {
         async act(page) {
           const hear = page.locator('button:has-text("Hear the sentence")').first()
           if (await hear.isVisible().catch(() => false)) {
-            await clickAt(page, hear, { steps: 22, settle: 350, after: 900 })
+            await clickAt(page, hear, { steps: 22, settle: 350, after: 700 })
           }
           /* Clear three picture rounds so Which sentence? can open. */
           for (let i = 0; i < 3; i += 1) {
+            const nextEarly = page.locator('button:has-text("Next game")')
+            if (await nextEarly.first().isVisible().catch(() => false)) break
             await page.waitForSelector('.supported-pic-btn[data-correct="1"]:not(:disabled)', {
               timeout: 15000,
             })
             const btn = page.locator('.supported-pic-btn[data-correct="1"]:not(:disabled)').first()
-            await clickAt(page, btn, { steps: 20, settle: 280, after: 850 })
-            const next = page.locator('button:has-text("Next game")')
-            if (await next.first().isVisible().catch(() => false)) break
+            await clickAt(page, btn, { steps: 18, settle: 250, after: 1100 })
           }
+          await page.waitForSelector('button:has-text("Next game")', { timeout: 12000 })
           const nextGame = page.locator('button:has-text("Next game")').first()
-          if (await nextGame.isVisible().catch(() => false)) {
-            await clickAt(page, nextGame, { steps: 20, settle: 300, after: 700 })
-          }
+          await nextGame.scrollIntoViewIfNeeded()
+          await clickAt(page, nextGame, { steps: 18, settle: 280, after: 900 })
         },
       },
       {
         id: 'which-sentence',
         text: 'Look at the picture. Tap the sentence that matches. Wrong? Try again. This is practice — not a test.',
         async act(page) {
-          await page.waitForSelector('[data-coach="sp-sentence"], .supported-sent-btn', {
-            timeout: 20000,
+          /* If still on picture advance, finish the handoff. */
+          const nextGame = page.locator('button:has-text("Next game")').first()
+          if (await nextGame.isVisible().catch(() => false)) {
+            await clickAt(page, nextGame, { steps: 16, settle: 250, after: 800 })
+          }
+          await page.waitForSelector('.supported-sent-btn, [data-coach="sp-sentence"]', {
+            timeout: 25000,
           })
           const skip = page.locator('.station-coach-skip')
           if (await skip.first().isVisible().catch(() => false)) {
             await skip.first().click()
             await page.waitForTimeout(300)
           }
+          const stage = page.locator('.supported-games.is-sentence, [data-coach="sp-sentence"]').first()
+          await stage.scrollIntoViewIfNeeded()
           const photo = page.locator('.supported-game-photo--hero, .supported-game-photo').first()
-          await moveTo(page, photo, { steps: 18, settle: 500 })
+          if (await photo.isVisible().catch(() => false)) {
+            await moveTo(page, photo, { steps: 16, settle: 450 })
+          }
+          await page.waitForSelector('.supported-sent-btn[data-correct="1"]:not(:disabled)', {
+            timeout: 10000,
+          })
           const sent = page.locator('.supported-sent-btn[data-correct="1"]:not(:disabled)').first()
-          await clickAt(page, sent, { steps: 24, settle: 350, after: 1200 })
+          await clickAt(page, sent, { steps: 22, settle: 300, after: 1200 })
         },
       },
     ],
