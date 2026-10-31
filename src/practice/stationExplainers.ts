@@ -65,11 +65,12 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     video: 'explainers/word-action.mp4',
   },
   {
-    id: 'supported-practice',
+    /* id bump forces a re-watch after the Which picture? / Which sentence? demo replace */
+    id: 'supported-practice-2',
     steps: [10],
     title: 'Supported Practice',
     lede: 'Two short games with help: Which picture? and Which sentence? Mistakes teach.',
-    video: 'explainers/supported-practice.mp4',
+    video: 'explainers/supported-practice-2.mp4',
   },
   {
     id: 'workplace-instructions',

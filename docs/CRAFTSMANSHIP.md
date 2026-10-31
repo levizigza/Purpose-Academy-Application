@@ -440,7 +440,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Layers:** L2 content loop · L3 information display · L4 finite boards · L6 Practice spine.
 - **Customer reject:** Memory match, order-the-words, listen/fill blanks, Eye Spy clone, and Organize clone failed the mindless sentence+visual test (fiddly, typing-adjacent, exam-adjacent, or busy-scene).
 - **Ship:** Exactly two familiar ESL kids games — **Which picture?** (hear/see one sentence → tap matching photo of four) and **Which sentence?** (one photo → tap matching sentence of four). Soft miss + reshuffle. Big taps. Photos `contain`. Level-4 help lines. `firePlayClear`. Dual-shell. Coach once-then-quiet per game (`sp-picture` → `sp-sentence`). Finite 3 clears × 2 boards.
-- **Critic:** Keep sentence and visual on the same screen with one obvious tap. Do not invent a third game to feel “complete.” Re-record `supported-practice.mp4` so the mouse shows both presses — Ken Burns cards are not enough.
+- **Critic:** Keep sentence and visual on the same screen with one obvious tap. Do not invent a third game to feel “complete.” Explainer id/file bumped to `supported-practice-2` so prior watches still see the new mouse demo (Which picture? then Which sentence?) — Ken Burns cards are not enough.
 
 ### 2026-10-30 — Upgrade-100 polish: BCS folder beat-lock + multilang slice 2 (L2 / L3)
 
