@@ -15032,7 +15032,7 @@ html.pa-phone-shell .practice-feedback-dock {
 .course-stage .train-shell.is-organize-wide .practice-section-skip-fold,
 .course-stage .train-shell.is-sentence-structure .practice-section-skip-fold,
 .course-stage .train-shell.is-eye-spy .practice-section-skip-fold,
-.course-stage .train-shell.is-play-choice .practice-section-skip-fold,
+/* Keep Jump sections visible on Video Match / Copycat / WI so reviewers can switch stations. */
 .course-stage .train-shell.is-computer-skills .train-unit-pill,
 .course-stage .train-shell.is-equipment-video .train-unit-pill,
 .course-stage .train-shell.is-visual-vocabulary .train-unit-pill,
@@ -16884,13 +16884,28 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
 }
 .supported-video-btn {
   position: relative;
-  min-height: 7.5rem;
+  min-height: 8.5rem;
   border-radius: 14px;
   border: 2px solid color-mix(in srgb, #f5c542 28%, transparent);
   background: #041526;
   overflow: hidden;
   cursor: pointer;
   padding: 0;
+}
+.supported-video-badge {
+  position: absolute;
+  left: 0.45rem;
+  bottom: 0.45rem;
+  z-index: 2;
+  border-radius: 999px;
+  background: color-mix(in srgb, #041526 78%, transparent);
+  color: #f5c542;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  pointer-events: none;
 }
 .supported-video-btn:disabled { cursor: default; }
 .supported-video-btn.is-correct {

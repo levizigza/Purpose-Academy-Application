@@ -97,32 +97,32 @@ export const logisticsPack: PathwayPack = {
       help: 'Incomplete sentence above. Pick the full sentence that fits, hear it, then type it — soft try again if not yet.',
       purpose: 'Logistics Questions mold — pick · hear · type the full sentence (play craft), then Word → Action.',
     },
-    12: {
+    13: {
       title: 'Basic Computer Skills',
-      help: 'Unit 6 · step 12 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      help: 'Unit 6 · step 13 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
       purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Simple English.',
     },
-    13: {
+    14: {
       title: 'Warehouse Language',
       help: 'Hear a warehouse phrase. Choose what it means.',
       purpose: 'Useful English you will hear in Alberta logistics workplaces.',
     },
-    16: {
+    17: {
       title: 'Equipment & Materials',
       help: 'Learn each equipment group. Answer one check.',
       purpose: 'Safe naming before safe use with an instructor.',
     },
-    17: {
+    18: {
       title: 'Logistics Systems',
       help: 'Learn each system. Answer one check.',
       purpose: 'Your task keeps goods moving safely and on time.',
     },
-    18: {
+    19: {
       title: 'Video · Warehouse Equipment',
       help: 'Unit 8 · Video section — fourteen short lessons. Watch each machine: know it, inspect it, protect the area. Powered lift trucks are stay-clear awareness only.',
       purpose: 'Dedicated Video unit after systems — before observation and floor training.',
     },
-    20: {
+    21: {
       title: 'Warehouse Floor Training',
       help: 'Make floor decisions and log the day like a real team member.',
       purpose: 'Daily judgment, notes, and supervisor feedback.',

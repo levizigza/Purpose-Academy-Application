@@ -246,7 +246,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 }) {
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
-  const motherTongue = supportLang && ((step >= 3 && step <= 5) || step === 14)
+  const motherTongue = supportLang && ((step >= 3 && step <= 5) || step === 15)
   const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 14] : null
   const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
   const help = shellCopy ? assessT(shellCopy.help, supportLang!) : base.help
@@ -331,10 +331,16 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       className={`shell-main train-shell${step === 7 ? ' is-organize-wide' : ''}${
         step === 6 ? ' is-visual-vocabulary' : ''
       }${step === 8 ? ' is-eye-spy' : ''}${step === 9 ? ' is-sentence-structure' : ''}${
-        step === 12 ? ' is-computer-skills' : ''
-      }${step === 18 ? ' is-equipment-video' : ''}${
+        step === 13 ? ' is-computer-skills' : ''
+      }${step === 19 ? ' is-equipment-video' : ''}${
         /* Choice / match play stations — same task-first fold on desktop night + phone */
-        step === 10 || step === 11 || step === 13 || step === 15 || step === 16 || step === 17
+        step === 10 ||
+        step === 11 ||
+        step === 12 ||
+        step === 14 ||
+        step === 16 ||
+        step === 17 ||
+        step === 18
           ? ' is-play-choice'
           : ''
       }`}
@@ -838,8 +844,8 @@ export function StudentSequencePage() {
   const [actionCorrect, setActionCorrect] = useState(false)
   /** Construction: Sentence Structure first, then Word → Action inside step 9. */
   const [step8Phase, setStep8Phase] = useState<'sentences' | 'actions'>('sentences')
-  /** Step 10: switchable Video Match / Copycat stations (like Organize vs Eye Spy). */
-  const [spStation, setSpStation] = useState<SupportedStationId>(() => {
+  /** Persist last Video Match / Copycat choice for review jumps. */
+  const [, setSpStation] = useState<SupportedStationId>(() => {
     try {
       return localStorage.getItem('pa-sp-station-v1') === 'copycat' ? 'copycat' : 'video-match'
     } catch {
@@ -1117,8 +1123,14 @@ export function StudentSequencePage() {
     if (target === 9) {
       setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
     }
-    if (target === 10) {
-      /* Keep last station choice so reviewer can switch Video Match ↔ Copycat easily. */
+    if (target === 10 || target === 11) {
+      const station: SupportedStationId = target === 11 ? 'copycat' : 'video-match'
+      setSpStation(station)
+      try {
+        localStorage.setItem('pa-sp-station-v1', station)
+      } catch {
+        /* ignore */
+      }
     }
     if (target === 7) {
       setOrganizeTerms(pickOrganizeTerms(VOCAB_UNIT))
@@ -1231,17 +1243,17 @@ export function StudentSequencePage() {
           transitioning={transitioning}
           transitionMsg={transitionMsg}
           supportLang={
-            (props.step >= 3 && props.step <= 5) || props.step === 14 ? supportLang : undefined
+            (props.step >= 3 && props.step <= 5) || props.step === 16 ? supportLang : undefined
           }
           onOpenHub={isPracticeMode() ? () => setPracticeView('hub') : undefined}
           onJumpLesson={(n) => go(n, `Opening step ${n}…`)}
           explainerStationId={
             props.step === 9 && step8Phase === 'actions'
               ? 'word-action'
-              : props.step === 10 && spStation === 'copycat'
-                ? 'copycat'
-                : props.step === 10
-                  ? 'video-match'
+              : props.step === 10
+                ? 'video-match'
+                : props.step === 11
+                  ? 'copycat'
                   : null
           }
         />
@@ -1374,7 +1386,7 @@ export function StudentSequencePage() {
             className="btn btn-secondary on-light"
             onClick={() => {
               setPracticeView('lesson')
-              go(22)
+              go(23)
             }}
           >
             Open employment step
@@ -2199,13 +2211,13 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 10: Supported Practice — switchable Video Match · Copycat */
+  /* Step 10: Video Match — own dropdown station */
   if (step === 10) {
     return (
       <Shell step={10} onBack={() => go(9)}>
         <SupportedPracticeGames
           items={supportedPracticeDeck(pathwayId)}
-          station={spStation}
+          station="video-match"
           onStationChange={(next) => {
             setSpStation(next)
             try {
@@ -2213,27 +2225,58 @@ export function StudentSequencePage() {
             } catch {
               /* ignore */
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' })
+            if (next === 'copycat') go(11, 'Opening Copycat…')
           }}
-          onComplete={() =>
-            requestPracticeAdvance(() => go(11, 'Opening workplace instructions…'))
-          }
+          onComplete={() => requestPracticeAdvance(() => go(11, 'Opening Copycat…'))}
         />
         <StationContext>
           <WhyWork>
-            Help is strength. Short workplace videos teach sentences — practice, not a test.
+            Help is strength. Hear a sentence. Tap the video that shows it.
           </WhyWork>
           <TeachNote>
-            Switch anytime: Video Match (hear → tap the clip) or Copycat (watch → tap the words in
-            order). Royalty-free Mixkit clips, cut to the action. Wrong? Try again.
+            Three short Mixkit clips. Hear the sentence, then tap the match. Wrong? Try again. Jump
+            sections lists Video Match and Copycat separately.
           </TeachNote>
         </StationContext>
       </Shell>
     )
   }
 
-  /* Step 11: Workplace instructions — English only */
+  /* Step 11: Copycat — own dropdown station (childhood echo) */
   if (step === 11) {
+    return (
+      <Shell step={11} onBack={() => go(10)}>
+        <SupportedPracticeGames
+          items={supportedPracticeDeck(pathwayId)}
+          station="copycat"
+          onStationChange={(next) => {
+            setSpStation(next)
+            try {
+              localStorage.setItem('pa-sp-station-v1', next)
+            } catch {
+              /* ignore */
+            }
+            if (next === 'video-match') go(10, 'Opening Video Match…')
+          }}
+          onComplete={() =>
+            requestPracticeAdvance(() => go(12, 'Opening workplace instructions…'))
+          }
+        />
+        <StationContext>
+          <WhyWork>
+            Watch the action. Say the sentence back by tapping the words in order.
+          </WhyWork>
+          <TeachNote>
+            Childhood copycat with a workplace video. Watch once, then rebuild the line. Wrong
+            order? Soft try again.
+          </TeachNote>
+        </StationContext>
+      </Shell>
+    )
+  }
+
+  /* Step 12: Workplace instructions — English only */
+  if (step === 12) {
     const instr = WORKPLACE_INSTRUCTIONS[instrIdx]
     const isLast = instrIdx >= WORKPLACE_INSTRUCTIONS.length - 1
     const coachFirst = instrIdx === 0 && !instrAnswer
@@ -2264,7 +2307,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => go(12, 'Opening Basic Computer Skills…'))
+        requestPracticeAdvance(() => go(13, 'Opening Basic Computer Skills…'))
         return
       }
       setInstrIdx((i) => i + 1)
@@ -2274,7 +2317,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={11} onBack={() => go(10)}>
+      <Shell step={12} onBack={() => go(10)}>
         <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
         <p className="play-nearby-objective" aria-live="polite">
           Clear this instruction · {WORKPLACE_INSTRUCTIONS.length - instrIdx} left
@@ -2353,9 +2396,9 @@ export function StudentSequencePage() {
   }
 
   /* Step 12: Basic Computer Skills — curriculum map position (Unit 6, all pathways) */
-  if (step === 12) {
+  if (step === 13) {
     return (
-      <Shell step={12} onBack={() => { resetInstr(); go(11) }}>
+      <Shell step={13} onBack={() => { resetInstr(); go(12) }}>
         {/* Drill first — At work / Teach note used to push Watch/Try below the phone fold */}
         <ComputerSkillsDrill
           onComplete={() =>
@@ -2386,7 +2429,7 @@ export function StudentSequencePage() {
   }
 
   /* Step 13: Site language — hear phrase, choose meaning, one by one */
-  if (step === 13) {
+  if (step === 14) {
     const phrase = SITE_PHRASES[Math.min(phraseIdx, SITE_PHRASES.length - 1)]
     const isLast = phraseIdx >= SITE_PHRASES.length - 1
 
@@ -2418,7 +2461,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => go(14, 'Opening work-interest questions…'))
+        requestPracticeAdvance(() => go(15, 'Opening work-interest questions…'))
         return
       }
       setPhraseIdx((i) => i + 1)
@@ -2428,7 +2471,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={13} onBack={() => go(12)}>
+      <Shell step={14} onBack={() => go(13)}>
         <p className="play-nearby-objective" aria-live="polite">
           Clear this phrase · {SITE_PHRASES.length - phraseIdx} left
         </p>
@@ -2492,15 +2535,15 @@ export function StudentSequencePage() {
   }
 
   /* Step 14: Interest assessment (30) after practice — specialize */
-  if (step === 14) {
+  if (step === 15) {
     if (!careerInterestDone) {
       return (
-        <Shell step={14}>
+        <Shell step={15}>
           <CareerInterestAssessment
             lang={supportLang}
             answers={careerInterestAnswers}
             onChange={(id, value) => setCareerInterestAnswers((a) => ({ ...a, [id]: value }))}
-            onBack={() => go(13)}
+            onBack={() => go(14)}
             onComplete={(finalAnswers) => {
               setCareerInterestAnswers(finalAnswers)
               const interestPct = scoreInterestAnswers(finalAnswers)
@@ -2521,7 +2564,7 @@ export function StudentSequencePage() {
       scoreStyleAnswers(careerStyleAnswers),
     )
     return (
-      <Shell step={14}>
+      <Shell step={15}>
         <CareerAssessmentResult
           lang={supportLang}
           pathway={pathway}
@@ -2570,20 +2613,20 @@ export function StudentSequencePage() {
     )
   }
 
-  if (step === 15) {
+  if (step === 16) {
     return (
-      <Shell step={15} onBack={() => { setCareerInterestDone(false); go(14) }}>
+      <Shell step={16} onBack={() => { setCareerInterestDone(false); go(15) }}>
         <QuizRunner
           items={SAFETY_QUIZ}
           coachStationId="safety"
-          onComplete={() => { setToolIdx(0); setToolAnswer(null); setToolCorrect(false); go(16) }}
+          onComplete={() => { setToolIdx(0); setToolAnswer(null); setToolCorrect(false); go(17) }}
           gated
         />
       </Shell>
     )
   }
 
-  if (step === 16) {
+  if (step === 17) {
     const cat = TOOL_CATEGORIES[Math.min(toolIdx, TOOL_CATEGORIES.length - 1)]
     const isLast = toolIdx >= TOOL_CATEGORIES.length - 1
 
@@ -2618,7 +2661,7 @@ export function StudentSequencePage() {
         setSysIdx(0)
         setSysAnswer(null)
         setSysCorrect(false)
-        go(17)
+        go(18)
         return
       }
       setToolIdx((i) => i + 1)
@@ -2627,7 +2670,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={16} onBack={() => go(15)}>
+      <Shell step={17} onBack={() => go(16)}>
         <p className="play-nearby-objective" aria-live="polite">
           Clear this tool group · {TOOL_CATEGORIES.length - toolIdx} left
         </p>
@@ -2673,7 +2716,7 @@ export function StudentSequencePage() {
     )
   }
 
-  if (step === 17) {
+  if (step === 18) {
     const topic = SYSTEM_TOPICS[Math.min(sysIdx, SYSTEM_TOPICS.length - 1)]
     const isLast = sysIdx >= SYSTEM_TOPICS.length - 1
 
@@ -2716,7 +2759,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={17} onBack={() => go(16)}>
+      <Shell step={18} onBack={() => go(17)}>
         <p className="play-nearby-objective" aria-live="polite">
           Clear this system · {SYSTEM_TOPICS.length - sysIdx} left
         </p>
@@ -2762,7 +2805,7 @@ export function StudentSequencePage() {
     )
   }
 
-  if (step === 18) {
+  if (step === 19) {
     const equipmentPack =
       pathwayId === 'logistics'
         ? ('warehouse' as const)
@@ -2770,7 +2813,7 @@ export function StudentSequencePage() {
           ? ('construction' as const)
           : null
     return (
-      <Shell step={18} onBack={() => go(17)}>
+      <Shell step={19} onBack={() => go(18)}>
         {equipmentPack === 'warehouse' ? (
           <>
             <WhyWork>
@@ -2878,7 +2921,7 @@ export function StudentSequencePage() {
     )
   }
 
-    if (step === 19) {
+    if (step === 20) {
     const scenario = OBSERVATION_SCENARIOS[obsIdx]
     const isLast = obsIdx >= OBSERVATION_SCENARIOS.length - 1
     const ordered = [...scenario.steps].sort((a, b) => a.correctOrder - b.correctOrder)
@@ -2917,7 +2960,7 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        go(20, 'Opening on-site decisions…')
+        go(21, 'Opening on-site decisions…')
         return
       }
       setObsIdx((i) => i + 1)
@@ -2927,7 +2970,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={19} onBack={() => go(18)}>
+      <Shell step={20} onBack={() => go(19)}>
         <WhyWork>Before a real instructor watches with you, practise the calm order of a skill — step by step.</WhyWork>
         <div className="train-learn-grid">
           <LearnCard mark="L" title="Learned" body="Studied in the app or class." />
@@ -2995,7 +3038,7 @@ export function StudentSequencePage() {
     )
   }
 
-  if (step === 20) {
+  if (step === 21) {
     const item = SITE_DECISIONS[siteIdx]
     const isLast = siteIdx >= SITE_DECISIONS.length - 1
 
@@ -3033,7 +3076,7 @@ export function StudentSequencePage() {
           }))
         } catch { /* */ }
         setFinalPhase('eyespy')
-        go(21, 'Opening final check…')
+        go(22, 'Opening final check…')
         return
       }
       setSiteIdx((i) => i + 1)
@@ -3042,7 +3085,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={20} onBack={() => go(19)}>
+      <Shell step={21} onBack={() => go(20)}>
         <WhyWork>On-site days need judgment and a clear log. Practice both before the final check.</WhyWork>
         <p className="play-nearby-objective" aria-live="polite">
           Clear this decision · {SITE_DECISIONS.length - siteIdx} left
@@ -3104,10 +3147,10 @@ export function StudentSequencePage() {
   }
 
   /* Step 21: Final picture practice (limited tries) + written + certificate */
-  if (step === 21) {
+  if (step === 22) {
     if (finalPhase === 'eyespy') {
       return (
-        <Shell step={21} onBack={() => go(20)}>
+        <Shell step={22} onBack={() => go(21)}>
           <PictureCard emoji="E" label="Final picture practice" caption="Clear every picture. You can try a few times. Tap each picture with its word until the board is empty." />
           <EyeSpyQuiz
             scenes={EYE_SPY_SCENES}
@@ -3120,7 +3163,7 @@ export function StudentSequencePage() {
     }
     if (finalPhase === 'written') {
       return (
-        <Shell step={21} onBack={() => setFinalPhase('eyespy')}>
+        <Shell step={22} onBack={() => setFinalPhase('eyespy')}>
           <PictureCard emoji="W" label="Written practice" caption="Safety, measurement, language, and tools. Get each one clear — you can try the set again." />
           <QuizRunner items={FINAL_QUIZ} onComplete={() => { recordSkillAttempt('final-exam', true); setFinalPhase('certificate') }} gated />
         </Shell>
@@ -3128,9 +3171,9 @@ export function StudentSequencePage() {
     }
     return (
       <Shell
-        step={21}
+        step={22}
         onBack={() => setFinalPhase('written')}
-        onNext={honestyChecked ? () => go(22, 'Opening employment…') : undefined}
+        onNext={honestyChecked ? () => go(23, 'Opening employment…') : undefined}
         nextLabel="Continue to employment"
         nextDisabled={!honestyChecked}
       >
@@ -3186,8 +3229,8 @@ export function StudentSequencePage() {
     playFoley('correct')
   }
 
-  /* Step 22: Employment connection */
-  if (step !== 22) {
+  /* Step 23: Employment connection */
+  if (step !== 23) {
     return (
       <Shell step={step} onBack={() => go(Math.max(1, step - 1))}>
         <div className="alert warn">This station is not available yet.</div>
@@ -3233,7 +3276,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={22} onBack={() => go(21)}>
+      <Shell step={23} onBack={() => go(22)}>
         <WhyWork>Employment connection starts with clear interview answers, then partner matching.</WhyWork>
         <p className="play-nearby-objective" aria-live="polite">
           Clear this interview question · {EMPLOYMENT_PREP.length - empIdx} left
@@ -3275,7 +3318,7 @@ export function StudentSequencePage() {
   }
 
   return (
-    <Shell step={22} onBack={() => { setEmpQuizDone(false); go(21) }}>
+    <Shell step={23} onBack={() => { setEmpQuizDone(false); go(22) }}>
       <PictureCard emoji="H" label="Employment Connection" caption="See hiring partners and enter work with support." />
       {!empDone ? (
         <form className="stack" onSubmit={handleComplete}>

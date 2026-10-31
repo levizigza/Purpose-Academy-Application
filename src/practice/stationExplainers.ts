@@ -65,7 +65,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     video: 'explainers/word-action.mp4',
   },
   {
-    /* Step 10 — default station. Switcher can also force via stationId. */
+    /* Step 10 — own dropdown station (like Eye Spy). */
     id: 'video-match',
     steps: [10],
     title: 'Video Match',
@@ -73,58 +73,58 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     video: 'explainers/video-match.mp4',
   },
   {
-    /* Step 10 alternate station — childhood copycat with workplace video. */
+    /* Step 11 — own dropdown station (like Language Organize). */
     id: 'copycat',
-    steps: [],
+    steps: [11],
     title: 'Copycat',
     lede: 'Watch the video. Hear the sentence. Tap the words in order — say it back.',
     video: 'explainers/copycat.mp4',
   },
   {
     id: 'workplace-instructions',
-    steps: [11],
+    steps: [12],
     title: 'Workplace Instructions',
     lede: 'Hear a short direction. Show you understood.',
     video: 'explainers/workplace-instructions.mp4',
   },
   {
     id: 'computer-skills',
-    steps: [12],
+    steps: [13],
     title: 'Basic Computer Skills',
     lede: 'Watch a short lesson, then try a simple computer task.',
     video: 'explainers/computer-skills.mp4',
   },
   {
     id: 'site-language',
-    steps: [13],
+    steps: [14],
     title: 'Site Language',
     lede: 'Hear a job-site phrase. Choose what it means.',
     video: 'explainers/site-language.mp4',
   },
   {
     id: 'safety',
-    steps: [15],
+    steps: [16],
     title: 'Safety Training',
     lede: 'Safety words with clear pictures. Needed on the job.',
     video: 'explainers/safety.mp4',
   },
   {
     id: 'tools',
-    steps: [16],
+    steps: [17],
     title: 'Tools & Equipment',
     lede: 'Learn each tool group. Answer one check.',
     video: 'explainers/tools.mp4',
   },
   {
     id: 'systems',
-    steps: [17],
+    steps: [18],
     title: 'Workplace Systems',
     lede: 'Learn each system. Answer one check.',
     video: 'explainers/systems.mp4',
   },
   {
     id: 'equipment-video',
-    steps: [18],
+    steps: [19],
     title: 'Equipment Videos',
     lede: 'Watch each warehouse machine, then answer practice questions.',
     video: 'explainers/equipment-video.mp4',

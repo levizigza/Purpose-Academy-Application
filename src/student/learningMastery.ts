@@ -87,25 +87,26 @@ export const SKILL_BY_STEP: Record<number, SkillId> = {
   /** Sentence Structure first when the pack has a cloze bank; Word → Action follows in-station. */
   9: 'sentence-cloze',
   10: 'matching',
-  11: 'instructions',
-  /** Curriculum map step 12 — Basic Computer Skills (Unit 6), all pathways. */
-  12: 'digital',
-  13: 'site-phrases',
+  11: 'matching',
+  12: 'instructions',
+  /** Curriculum map step 13 — Basic Computer Skills (Unit 6), all pathways. */
+  13: 'digital',
+  14: 'site-phrases',
   /** After practice: work-interest questions for specialization. */
-  14: 'career-assessment',
-  15: 'safety',
-  16: 'tools',
-  17: 'systems',
+  15: 'career-assessment',
+  16: 'safety',
+  17: 'tools',
+  18: 'systems',
   /** After systems: equipment videos, then instructor check. */
-  18: 'equipment-videos',
-  19: 'observation',
-  20: 'site-log',
-  21: 'final-exam',
-  22: 'employment',
+  19: 'equipment-videos',
+  20: 'observation',
+  21: 'site-log',
+  22: 'final-exam',
+  23: 'employment',
 }
 
 /** Steps that need at least "familiar" mastery before Continue unlocks (real platform gate). */
-export const GATED_SKILL_STEPS = new Set([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+export const GATED_SKILL_STEPS = new Set([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22])
 
 const LEVEL_WEIGHT: Record<MasteryLevel, number> = {
   locked: 0,

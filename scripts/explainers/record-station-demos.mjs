@@ -496,7 +496,7 @@ const STATIONS = {
 
   'copycat': {
     title: 'Copycat',
-    step: 10,
+    step: 11,
     async setup(page) {
       await page.addInitScript(() => {
         localStorage.setItem('pa-sp-station-v1', 'copycat')
@@ -509,7 +509,7 @@ const STATIONS = {
           /* ignore */
         }
       })
-      await gotoStation(page, BASE, { step: 10 })
+      await gotoStation(page, BASE, { step: 11 })
       await page.waitForSelector('[data-coach="sp-copycat"], .supported-chip-btn', { timeout: 30000 })
       await page.waitForTimeout(500)
       const skip = page.locator('.station-coach-skip')
@@ -552,9 +552,9 @@ const STATIONS = {
 
   'workplace-instructions': {
     title: 'Workplace Instructions',
-    step: 11,
+    step: 12,
     async setup(page) {
-      await gotoStation(page, BASE, { step: 11 })
+      await gotoStation(page, BASE, { step: 12 })
       await page.waitForSelector('.train-instruction, button:has-text("Hear English")', {
         timeout: 30000,
       })
@@ -594,9 +594,9 @@ const STATIONS = {
 
   'computer-skills': {
     title: 'Basic Computer Skills',
-    step: 12,
+    step: 13,
     async setup(page) {
-      await gotoStation(page, BASE, { step: 12 })
+      await gotoStation(page, BASE, { step: 13 })
       await page.waitForSelector('[data-coach="comp-watch"], .equip-video-stage, .comp-skills', {
         timeout: 30000,
       })
@@ -655,9 +655,9 @@ const STATIONS = {
 
   'site-language': {
     title: 'Site Language',
-    step: 13,
+    step: 14,
     async setup(page) {
-      await gotoStation(page, BASE, { step: 13 })
+      await gotoStation(page, BASE, { step: 14 })
       await page.waitForSelector('[data-coach="phrase-hear"], button:has-text("Hear English")', {
         timeout: 30000,
       })
@@ -699,9 +699,9 @@ const STATIONS = {
 
   safety: {
     title: 'Safety Training',
-    step: 15,
+    step: 16,
     async setup(page) {
-      await gotoStation(page, BASE, { step: 15 })
+      await gotoStation(page, BASE, { step: 16 })
       await page.waitForSelector('[data-coach="choice-opt"], .train-choice-grid', { timeout: 30000 })
       await page.waitForTimeout(500)
     },
@@ -746,9 +746,9 @@ const STATIONS = {
 
   tools: {
     title: 'Tools and Equipment',
-    step: 16,
+    step: 17,
     async setup(page) {
-      await gotoStation(page, BASE, { step: 16 })
+      await gotoStation(page, BASE, { step: 17 })
       await page.waitForSelector('[data-coach="choice-opt"], .topic-lesson-card', { timeout: 30000 })
       await page.waitForTimeout(500)
     },
@@ -789,9 +789,9 @@ const STATIONS = {
 
   systems: {
     title: 'Workplace Systems',
-    step: 17,
+    step: 18,
     async setup(page) {
-      await gotoStation(page, BASE, { step: 17 })
+      await gotoStation(page, BASE, { step: 18 })
       await page.waitForSelector('[data-coach="choice-opt"], .topic-lesson-card', { timeout: 30000 })
       await page.waitForTimeout(500)
     },
@@ -832,10 +832,10 @@ const STATIONS = {
 
   'equipment-video': {
     title: 'Equipment Videos',
-    step: 18,
+    step: 19,
     pathway: 'logistics',
     async setup(page) {
-      await gotoStation(page, BASE, { step: 18, pathway: 'logistics' })
+      await gotoStation(page, BASE, { step: 19, pathway: 'logistics' })
       await page.waitForSelector(
         '[data-coach="equip-watch"], .equip-video-stage, button:has-text("Open Video"), .topic-lesson-card',
         { timeout: 30000 },

@@ -2,8 +2,8 @@
  * Student journey — Purpose Academy sequence:
  * Login → Register → Language → Work Style (path quiz) → Profile →
  * Vocab → Language Organize → English Eye Spy → Sentences / Word→Action →
- * Supported practice → Instructions → Site language →
- * Workplace Instructions → Basic Computer Skills (step 12 / Unit 6) → Site Language →
+ * Video Match → Copycat → Instructions → Site language →
+ * Workplace Instructions → Basic Computer Skills (step 13 / Unit 6) → Site Language →
  * Interest assessment → Safety → Tools → Systems → Equipment Video (Unit 8) → Observation → Employment
  *
  * Support languages: English, Spanish, Arabic, Hindi, Amharic, Tigrinya (no French).
@@ -19,48 +19,49 @@ export const JOURNEY_STEPS = [
   { n: 7, title: 'Language Organize', help: 'Five short boards. Tap a picture, drop it on the matching word. Clear the round.', purpose: 'Match the picture to the word you already practised — one clear verb.', unit: 3 },
   { n: 8, title: 'English Eye Spy', help: 'Tap a picture, then its English name. Pairs clear themselves. Empty the board.', purpose: 'See the same words again in a busy scene before sentences.', unit: 3 },
   { n: 9, title: 'Sentence Structure → Word → Action', help: 'Type the word that fits the blank. Then connect each tool to its action.', purpose: 'After pictures are solid, build the sentence and link words to real movement.', unit: 4 },
-  { n: 10, title: 'Supported Practice → Video Match · Copycat', help: 'Switch stations anytime. Video Match or Copycat. Mistakes teach.', purpose: 'Practice short sentences with help. Mistakes teach. No exam.', unit: 4 },
-  { n: 11, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
+  { n: 10, title: 'Video Match', help: 'Hear the sentence. Tap the matching workplace video. Three choices.', purpose: 'Practice short sentences with help. Mistakes teach. No exam.', unit: 4 },
+  { n: 11, title: 'Copycat', help: 'Watch the video. Tap the words in order — say it back.', purpose: 'Childhood copycat with workplace video. Rebuild the sentence.', unit: 4 },
+  { n: 12, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   {
-    n: 12,
+    n: 13,
     title: 'Basic Computer Skills',
     help: 'Watch short videos, then try: power, mouse, folders, save, Word, and email — in simple English.',
     purpose: 'This may be someone’s first computer. Watch → Try → Remember → check.',
     unit: 6,
   },
-  { n: 13, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 5 },
-  { n: 14, title: 'Work Interests', help: 'After practice, rate simple work activities so we can specialize with you.', purpose: 'What kind of work feels right? A guide after real practice.', unit: 5 },
-  { n: 15, title: 'Safety Training', help: 'Safety words with clear pictures. Needed on the job.', purpose: 'Alberta / Canada site safety in simple English.', unit: 7 },
-  { n: 16, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 7 },
-  { n: 17, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 7 },
+  { n: 14, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 5 },
+  { n: 15, title: 'Work Interests', help: 'After practice, rate simple work activities so we can specialize with you.', purpose: 'What kind of work feels right? A guide after real practice.', unit: 5 },
+  { n: 16, title: 'Safety Training', help: 'Safety words with clear pictures. Needed on the job.', purpose: 'Alberta / Canada site safety in simple English.', unit: 7 },
+  { n: 17, title: 'Tools & Equipment', help: 'Learn each tool group. Answer one check.', purpose: 'Safe naming before safe use with an instructor.', unit: 7 },
+  { n: 18, title: 'Construction Systems', help: 'Learn each system. Answer one check.', purpose: 'Your task feeds the whole building.', unit: 7 },
   {
-    n: 18,
+    n: 19,
     title: 'Video · Equipment',
     help: 'Watch each equipment lesson. Know it, inspect it, protect the area — then continue to hands-on training.',
     purpose: 'Real equipment habits before supervised practice.',
     unit: 8,
   },
-  { n: 19, title: 'Instructor Check', help: 'Practise the calm order of a skill before a real instructor watches with you.', purpose: 'Learned → Practised → Checked with an instructor.', unit: 9 },
-  { n: 20, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Practice real site decisions and a short daily note.', unit: 9 },
-  { n: 21, title: 'Final Check & Certificate', help: 'A last picture practice and a few written questions. Then your certificate opens.', purpose: 'Clear every picture. You can try a few times. Then your certificate opens.', unit: 9 },
-  { n: 22, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 9 },
+  { n: 20, title: 'Instructor Check', help: 'Practise the calm order of a skill before a real instructor watches with you.', purpose: 'Learned → Practised → Checked with an instructor.', unit: 9 },
+  { n: 21, title: 'On-Site Training', help: 'Make site decisions and log the day like a real crew member.', purpose: 'Practice real site decisions and a short daily note.', unit: 9 },
+  { n: 22, title: 'Final Check & Certificate', help: 'A last picture practice and a few written questions. Then your certificate opens.', purpose: 'Clear every picture. You can try a few times. Then your certificate opens.', unit: 9 },
+  { n: 23, title: 'Employment Connection', help: 'Interview prep, then hiring partners and work support.', purpose: 'Start work with follow-up support.', unit: 9 },
 ] as const
 
 /** Total stations on the shared school path (Visual Vocabulary → Language Organize → Eye Spy → …). */
 export const JOURNEY_STEP_COUNT = JOURNEY_STEPS.length
 
 /** Path units — structured learning path on the existing train template. */
-/** Ordered by journey position (Unit 6 · Basic Computer Skills sits at step 12 per curriculum map). */
+/** Ordered by journey position (Unit 6 · Basic Computer Skills sits at step 13 per curriculum map). */
 export const LEARNING_UNITS = [
   { id: 1, label: 'Start', range: '1–2' },
   { id: 2, label: 'Find your path', range: '3–5' },
   { id: 3, label: 'Words → Pictures', range: '6–8' },
-  { id: 4, label: 'Sentences → Site English', range: '9–11' },
-  { id: 6, label: 'Basic Computer Skills', range: '12' },
-  { id: 5, label: 'Site language & specialize', range: '13–14' },
-  { id: 7, label: 'Site ready', range: '15–17' },
-  { id: 8, label: 'Video · Equipment', range: '18' },
-  { id: 9, label: 'Work ready', range: '19–22' },
+  { id: 4, label: 'Sentences → Site English', range: '9–12' },
+  { id: 6, label: 'Basic Computer Skills', range: '13' },
+  { id: 5, label: 'Site language & specialize', range: '14–15' },
+  { id: 7, label: 'Site ready', range: '16–18' },
+  { id: 8, label: 'Video · Equipment', range: '19' },
+  { id: 9, label: 'Work ready', range: '20–23' },
 ] as const
 
 /** Unit goals — shown at the start of each learning unit (Duolingo/Khan clarity). */

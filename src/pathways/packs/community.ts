@@ -93,32 +93,32 @@ export const communityPack: PathwayPack = {
       help: 'Community Sentence Practice — pick the full sentence, hear it, then type it. Wrong? Try again.',
       purpose: 'Move from single words into full Community Support sentences — pick · hear · type.',
     },
-    11: {
+    12: {
       title: 'Workplace Instructions',
       help: 'Hear a community-support phrase. Choose what it means.',
       purpose: 'Useful English for dignity, privacy, consent, and escalation.',
     },
-    13: {
+    14: {
       title: 'Site Language',
       help: 'Hear a community-support phrase. Choose what it means.',
       purpose: 'Useful English for dignity, privacy, consent, and escalation across community support settings.',
     },
-    16: {
+    17: {
       title: 'Support Tools & Materials',
       help: 'Learn each support tool group. Answer one check.',
       purpose: 'Safe naming before safe use with an instructor.',
     },
-    17: {
+    18: {
       title: 'Community Systems',
       help: 'Learn each system. Answer one check.',
       purpose: 'Your task helps people stay safe, informed, and supported with dignity.',
     },
-    18: {
+    19: {
       title: 'Video · Equipment',
       help: 'Unit 8 · Video section (construction or warehouse machines) lives on Construction and Logistics. Stay here for Community observation, or switch pathways to watch the videos.',
       purpose: 'Bridge from systems knowledge — Video unit is on Construction / Logistics; Community continues to observation.',
     },
-    20: {
+    21: {
       title: 'Placement Training',
       help: 'Make community-support decisions and log the day like a real team member.',
       purpose: 'Daily judgment, visit notes, and supervisor feedback.',

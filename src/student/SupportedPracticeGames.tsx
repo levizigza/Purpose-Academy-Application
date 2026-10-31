@@ -208,7 +208,14 @@ function VideoMatchBoard({
               onClick={() => pick(item)}
               aria-label={`Video for: ${item.sentence}`}
             >
-              <LoopClip src={supportedVideoSrc(item.video)} active={!boardClear} />
+              <LoopClip
+                src={supportedVideoSrc(item.video)}
+                poster={supportedVideoSrc(item.poster)}
+                active={!boardClear}
+              />
+              <span className="supported-video-badge" aria-hidden>
+                Video
+              </span>
             </button>
           )
         })}
@@ -235,7 +242,7 @@ function VideoMatchBoard({
         <div className="supported-games-advance">
           <div className="alert ok">Video Match clear. Help is strength — next door can open.</div>
           <button type="button" className="btn btn-primary" onClick={onComplete}>
-            Continue to workplace instructions
+            Continue to Copycat
           </button>
         </div>
       ) : (
@@ -361,6 +368,7 @@ function CopycatBoard({
         <HeroClip
           key={`hero-${deal}`}
           src={supportedVideoSrc(target.video)}
+          poster={supportedVideoSrc(target.poster)}
           onEnded={() => setWatched(true)}
         />
         <figcaption className="supported-copycat-caption">
@@ -408,26 +416,53 @@ function CopycatBoard({
   )
 }
 
-function LoopClip({ src, active }: { src: string; active: boolean }) {
+function LoopClip({ src, poster, active }: { src: string; poster: string; active: boolean }) {
   const ref = useRef<HTMLVideoElement>(null)
   useEffect(() => {
     const el = ref.current
     if (!el) return
     el.muted = true
+    el.defaultMuted = true
     el.playsInline = true
     el.loop = true
-    if (active) void el.play().catch(() => {})
-    else el.pause()
+    const tryPlay = () => {
+      if (active) void el.play().catch(() => {})
+      else el.pause()
+    }
+    tryPlay()
+    el.addEventListener('loadeddata', tryPlay)
+    return () => el.removeEventListener('loadeddata', tryPlay)
   }, [src, active])
-  return <video ref={ref} className="supported-video-el" src={src} muted playsInline loop preload="metadata" />
+  return (
+    <video
+      ref={ref}
+      className="supported-video-el"
+      src={src}
+      poster={poster}
+      muted
+      autoPlay
+      playsInline
+      loop
+      preload="auto"
+    />
+  )
 }
 
-function HeroClip({ src, onEnded }: { src: string; onEnded: () => void }) {
+function HeroClip({
+  src,
+  poster,
+  onEnded,
+}: {
+  src: string
+  poster: string
+  onEnded: () => void
+}) {
   const ref = useRef<HTMLVideoElement>(null)
   useEffect(() => {
     const el = ref.current
     if (!el) return
     el.muted = true
+    el.defaultMuted = true
     el.playsInline = true
     el.loop = false
     const done = () => onEnded()
@@ -440,7 +475,9 @@ function HeroClip({ src, onEnded }: { src: string; onEnded: () => void }) {
       ref={ref}
       className="supported-copycat-video"
       src={src}
+      poster={poster}
       muted
+      autoPlay
       playsInline
       controls
       preload="auto"

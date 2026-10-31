@@ -10,34 +10,46 @@ export type SupportedPracticeItem = {
   sentence: string
   /** Path under public/, e.g. media/supported-practice/hammer.mp4 */
   video: string
+  /** Still frame so the clip is visible before autoplay */
+  poster: string
+}
+
+function clip(id: string, sentence: string, file: string): SupportedPracticeItem {
+  const stem = file.replace(/\.mp4$/, '')
+  return {
+    id,
+    sentence,
+    video: `media/supported-practice/${file}`,
+    poster: `media/supported-practice/posters/${stem}.jpg`,
+  }
 }
 
 const CONSTRUCTION: SupportedPracticeItem[] = [
-  { id: 'sp-c-hammer', sentence: 'He hammers a nail into the wood.', video: 'media/supported-practice/hammer.mp4' },
-  { id: 'sp-c-drill', sentence: 'The drill makes a hole in the wood.', video: 'media/supported-practice/drill.mp4' },
-  { id: 'sp-c-hat', sentence: 'He puts on a hard hat.', video: 'media/supported-practice/hard-hat.mp4' },
-  { id: 'sp-c-measure', sentence: 'She marks the wood for cutting.', video: 'media/supported-practice/measure.mp4' },
-  { id: 'sp-c-saw', sentence: 'The saw cuts the wood.', video: 'media/supported-practice/saw.mp4' },
-  { id: 'sp-c-brick', sentence: 'Workers build a brick wall.', video: 'media/supported-practice/brick.mp4' },
-  { id: 'sp-c-concrete', sentence: 'They work with wet concrete.', video: 'media/supported-practice/concrete.mp4' },
+  clip('sp-c-hammer', 'He hammers a nail into the wood.', 'hammer.mp4'),
+  clip('sp-c-drill', 'The drill makes a hole in the wood.', 'drill.mp4'),
+  clip('sp-c-hat', 'He puts on a hard hat.', 'hard-hat.mp4'),
+  clip('sp-c-measure', 'She marks the wood for cutting.', 'measure.mp4'),
+  clip('sp-c-saw', 'The saw cuts the wood.', 'saw.mp4'),
+  clip('sp-c-brick', 'Workers build a brick wall.', 'brick.mp4'),
+  clip('sp-c-concrete', 'They work with wet concrete.', 'concrete.mp4'),
 ]
 
 const LOGISTICS: SupportedPracticeItem[] = [
-  { id: 'sp-l-forklift', sentence: 'He drives a forklift in the warehouse.', video: 'media/supported-practice/forklift.mp4' },
-  { id: 'sp-l-clipboard', sentence: 'He writes on a clipboard.', video: 'media/supported-practice/clipboard.mp4' },
-  { id: 'sp-l-truck', sentence: 'A truck arrives at the warehouse.', video: 'media/supported-practice/truck.mp4' },
-  { id: 'sp-l-warehouse', sentence: 'He moves through the warehouse.', video: 'media/supported-practice/warehouse.mp4' },
-  { id: 'sp-l-hammer', sentence: 'He hammers a nail into the wood.', video: 'media/supported-practice/hammer.mp4' },
-  { id: 'sp-l-hat', sentence: 'He puts on a hard hat.', video: 'media/supported-practice/hard-hat.mp4' },
+  clip('sp-l-forklift', 'He drives a forklift in the warehouse.', 'forklift.mp4'),
+  clip('sp-l-clipboard', 'He writes on a clipboard.', 'clipboard.mp4'),
+  clip('sp-l-truck', 'A truck arrives at the warehouse.', 'truck.mp4'),
+  clip('sp-l-warehouse', 'He moves through the warehouse.', 'warehouse.mp4'),
+  clip('sp-l-hammer', 'He hammers a nail into the wood.', 'hammer.mp4'),
+  clip('sp-l-hat', 'He puts on a hard hat.', 'hard-hat.mp4'),
 ]
 
 const COMMUNITY: SupportedPracticeItem[] = [
-  { id: 'sp-m-nurse', sentence: 'The nurse helps the woman in bed.', video: 'media/supported-practice/nurse-help.mp4' },
-  { id: 'sp-m-sofa', sentence: 'The nurse stands with the patient.', video: 'media/supported-practice/nurse-sofa.mp4' },
-  { id: 'sp-m-phone', sentence: 'He talks on the phone at his desk.', video: 'media/supported-practice/phone.mp4' },
-  { id: 'sp-m-clipboard', sentence: 'He writes on a clipboard.', video: 'media/supported-practice/clipboard.mp4' },
-  { id: 'sp-m-hat', sentence: 'He puts on a hard hat.', video: 'media/supported-practice/hard-hat.mp4' },
-  { id: 'sp-m-truck', sentence: 'A truck arrives at the warehouse.', video: 'media/supported-practice/truck.mp4' },
+  clip('sp-m-nurse', 'The nurse helps the woman in bed.', 'nurse-help.mp4'),
+  clip('sp-m-sofa', 'The nurse stands with the patient.', 'nurse-sofa.mp4'),
+  clip('sp-m-phone', 'He talks on the phone at his desk.', 'phone.mp4'),
+  clip('sp-m-clipboard', 'He writes on a clipboard.', 'clipboard.mp4'),
+  clip('sp-m-hat', 'He puts on a hard hat.', 'hard-hat.mp4'),
+  clip('sp-m-truck', 'A truck arrives at the warehouse.', 'truck.mp4'),
 ]
 
 export const SUPPORTED_PRACTICE_DECK: Record<PathwayId, readonly SupportedPracticeItem[]> = {

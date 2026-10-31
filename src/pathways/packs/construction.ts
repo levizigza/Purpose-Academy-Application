@@ -105,32 +105,32 @@ export const constructionPack: PathwayPack = {
       help: 'Incomplete sentence above. Pick the full sentence that fits, hear it, then type it — soft try again if not yet.',
       purpose: 'Construction Questions mold — pick · hear · type the full sentence (play craft), then Word → Action.',
     },
-    12: {
+    13: {
       title: 'Basic Computer Skills',
-      help: 'Unit 6 · step 12 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      help: 'Unit 6 · step 13 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
       purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Simple English.',
     },
-    13: {
+    14: {
       title: 'Site Language',
       help: 'Hear a job-site phrase. Choose what it means.',
       purpose: 'Useful English you will hear on Alberta construction sites.',
     },
-    16: {
+    17: {
       title: 'Tools & Equipment',
       help: 'Learn each tool group. Answer one check.',
       purpose: 'Safe naming before safe use with an instructor.',
     },
-    17: {
+    18: {
       title: 'Construction Systems',
       help: 'Learn each system. Answer one check.',
       purpose: 'Your task feeds the whole building.',
     },
-    18: {
+    19: {
       title: 'Video · Construction Equipment',
       help: 'Unit 8 · Video section — fourteen short lessons. Watch each machine: know it, inspect it, protect the area. Powered machines are stay-clear awareness only.',
       purpose: 'Dedicated Video unit after systems — before observation and site training.',
     },
-    20: {
+    21: {
       title: 'On-Site Training',
       help: 'Make site decisions and log the day like a real crew member.',
       purpose: 'Daily judgment, notes, and site feedback.',
