@@ -1,98 +1,71 @@
-[
-  {
-    "file": "01_Turn_computer_on_off.mp4",
-    "title": "Turn the computer on and off",
-    "bytes": 1478366,
-    "seconds": 26.1,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+{
+ "voice": "Piper en_US-lessac-medium",
+ "fps": 12,
+ "lessons": {
+  "bcs-power": {
+   "file": "01_Turn_computer_on_off.mp4",
+   "seconds": 29.1,
+   "hasAudio": true
   },
-  {
-    "file": "02_Use_the_mouse.mp4",
-    "title": "Use the mouse",
-    "bytes": 2576029,
-    "seconds": 24.2,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-mouse": {
+   "file": "02_Use_the_mouse.mp4",
+   "seconds": 29.66,
+   "hasAudio": true
   },
-  {
-    "file": "03_Use_the_keyboard.mp4",
-    "title": "Use the keyboard",
-    "bytes": 1462977,
-    "seconds": 24.5,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-keyboard": {
+   "file": "03_Use_the_keyboard.mp4",
+   "seconds": 27.53,
+   "hasAudio": true
   },
-  {
-    "file": "04_Create_a_folder.mp4",
-    "title": "Create a folder",
-    "bytes": 517388,
-    "seconds": 21.6,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-window": {
+   "file": "04_Open_and_close_a_window.mp4",
+   "seconds": 26.08,
+   "hasAudio": true
   },
-  {
-    "file": "05_Create_a_subfolder.mp4",
-    "title": "Create a folder inside a folder",
-    "bytes": 548143,
-    "seconds": 26.1,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-save": {
+   "file": "05_Save_your_work.mp4",
+   "seconds": 25.11,
+   "hasAudio": true
   },
-  {
-    "file": "06_Save_file_with_name.mp4",
-    "title": "Save a file with a name",
-    "bytes": 503578,
-    "seconds": 22.8,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-folder": {
+   "file": "06_Make_a_folder.mp4",
+   "seconds": 22.6,
+   "hasAudio": true
   },
-  {
-    "file": "07_Write_short_paragraph.mp4",
-    "title": "Write a short paragraph",
-    "bytes": 527419,
-    "seconds": 25.2,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-subfolder": {
+   "file": "07_Folder_inside_a_folder.mp4",
+   "seconds": 25.71,
+   "hasAudio": true
   },
-  {
-    "file": "08_Save_your_document.mp4",
-    "title": "Save your document",
-    "bytes": 540198,
-    "seconds": 24.9,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-paragraph": {
+   "file": "08_Write_a_short_paragraph.mp4",
+   "seconds": 23.11,
+   "hasAudio": true
   },
-  {
-    "file": "09_Write_and_send_email.mp4",
-    "title": "Write and send an email",
-    "bytes": 583140,
-    "seconds": 26.1,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-email-send": {
+   "file": "09_Write_and_send_email.mp4",
+   "seconds": 23.66,
+   "hasAudio": true
   },
-  {
-    "file": "10_Reply_to_email.mp4",
-    "title": "Reply to an email",
-    "bytes": 537794,
-    "seconds": 22.0,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-email-reply": {
+   "file": "10_Reply_to_email.mp4",
+   "seconds": 15.58,
+   "hasAudio": true
   },
-  {
-    "file": "11_Attach_and_save_files.mp4",
-    "title": "Attach a file and save an attachment",
-    "bytes": 583973,
-    "seconds": 27.9,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-attach": {
+   "file": "11_Attach_a_file.mp4",
+   "seconds": 17.79,
+   "hasAudio": true
   },
-  {
-    "file": "12_Stay_safe_online.mp4",
-    "title": "Stay safe online",
-    "bytes": 579484,
-    "seconds": 24.5,
-    "has_audio": true,
-    "voice": "piper:en_US-lessac-medium"
+  "bcs-safe": {
+   "file": "12_Stay_safe_online.mp4",
+   "seconds": 23.54,
+   "hasAudio": true
+  },
+  "bcs-search": {
+   "file": "13_Search_the_web.mp4",
+   "seconds": 19.65,
+   "hasAudio": true
   }
-]
+ }
+}

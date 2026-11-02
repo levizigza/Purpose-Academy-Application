@@ -124,7 +124,7 @@ stays real workplace English.
 | Site Language | Clear this phrase · N left | Phrase clear | Not yet · try again |
 | Tools & Equipment | Clear this tool group · N left | Tool group clear | Not yet · try again |
 | Workplace Systems | Clear this system · N left | System clear | Not yet · try again |
-| Basic Computer Skills | Watch/try/check · N left | Lesson clear on check | Wrong check · try again |
+| Basic Computer Skills | Watch → try → practice question N of 10 · Basic N of 5 | Lesson clear after question 10; Basics clear opens Extras + Continue | Not yet · teach line · watch that part again · try again |
 | Equipment videos | Clear this video · N left | Video clear | Keep watching |
 | Instructor check | Clear this order · N left | Order clear | Not yet · try again |
 | On-site decisions | Clear this decision · N left | Decision clear | Not yet · try again |

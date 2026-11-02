@@ -91,7 +91,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'computer-skills',
     steps: [13],
     title: 'Basic Computer Skills',
-    lede: 'Watch a short lesson, then try a simple computer task.',
+    lede: 'Watch a short lesson, try it, then answer 10 practice questions.',
     video: 'explainers/computer-skills.mp4',
   },
   {

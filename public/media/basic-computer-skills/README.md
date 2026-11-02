@@ -1,31 +1,22 @@
 # Basic Computer Skills videos
 
-Royalty-free teaching clips for Purpose Academy Unit 6 / journey step 12.
+Purpose Academy Unit 6 / journey step 12. 5 Basic lessons (required) + 8 Extra lessons.
 
-- Hardware lessons use Pexels / Mixkit close-up action footage.
-- Software lessons use recorded practice-desktop demos (folder, email, save, safety).
-- Each MP4 includes warm English narration via **Piper** open-source neural TTS
-  (`en_US-lessac-medium`) and burned-in Level-4 captions.
+Every MP4 is rendered frame by frame from `scripts/bcs-render/scene.html` (a simple practice
+desktop) and narrated with **Piper** open-source neural TTS (`en_US-lessac-medium`).
+Narration lines live in `scripts/bcs-render/lessons.json` (Level-4 English, one action per line).
 
-Rebuild (full — needs `/tmp` action clips + demos):
+**Beat-lock rule:** each click, key press and highlight is pinned to the word in the spoken
+line that names it (`at(line, 'word')` in `scene.html`). Captions show the line being spoken.
+Nothing is stretched or re-timed after rendering.
 
-```bash
-node scripts/bcs-demos/record-bcs-demos.mjs
-python3 scripts/build-basic-computer-skills-videos.py
-```
-
-Rebuild one software demo (folder / subfolder beat-lock):
+Rebuild:
 
 ```bash
-node scripts/bcs-demos/record-bcs-demos.mjs --only=folder,subfolder
-python3 scripts/build-basic-computer-skills-videos.py --only=04,05
+pip install --user piper-tts && npx playwright install chromium   # once
+python3 scripts/build-basic-computer-skills-videos.py              # all 13
+python3 scripts/build-basic-computer-skills-videos.py window save  # some lessons (slug or id)
 ```
 
-Refresh narration only (reuses shipped visuals):
-
-```bash
-pip install --user piper-tts
-python3 scripts/build-basic-computer-skills-videos.py --narration-refresh
-```
-
-**Beat-lock rule:** folder demos must hold on each UI beat ≈ Piper VO windows. Do not stretch a short take across a long narration track (`normalize_demo` setpts) — that is the mid-lesson stretch defect.
+The build also writes `manifest.json` and `src/pathways/packs/basicComputerSkillsTiming.ts`
+(line start/end times — the practice questions use them for "Watch that part again").

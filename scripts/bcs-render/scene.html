@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Basic Computer Skills — deterministic scene renderer</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; background: #000; font-family: 'DejaVu Sans', Arial, sans-serif; }
+  #stage { position: relative; width: 1280px; height: 720px; background: #0b2f5c; overflow: hidden; }
+  #screen { position: absolute; left: 0; top: 0; width: 1280px; height: 600px; overflow: hidden; }
+  #cap { position: absolute; left: 0; right: 0; top: 600px; height: 120px; background: #041526; color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 60px; font-size: 40px; font-weight: 700; line-height: 1.2; }
+  #cap b { color: #f5c542; }
+  #chip { position: absolute; right: 110px; bottom: 132px; z-index: 40; background: rgba(4,21,38,.86); color: #f5c542; padding: 8px 16px; border-radius: 999px; font-size: 20px; font-weight: 700; }
+  #cursor { position: absolute; z-index: 60; width: 0; height: 0; pointer-events: none; }
+  #cursor svg { position: absolute; left: -4px; top: -2px; width: 44px; height: 56px; filter: drop-shadow(2px 3px 2px rgba(0,0,0,.45)); }
+  .ripple { position: absolute; z-index: 59; border-radius: 50%; border: 6px solid #f5c542; pointer-events: none; }
+  .ripple.right { border-color: #ff7a59; }
+  #hl { position: absolute; z-index: 55; border: 6px solid #f5c542; border-radius: 14px; box-shadow: 0 0 0 6px rgba(245,197,66,.35), 0 0 40px rgba(245,197,66,.6); pointer-events: none; display: none; }
+  #xmark { position: absolute; z-index: 56; color: #e53935; font-size: 120px; font-weight: 900; display: none; text-shadow: 0 0 12px #fff; }
+
+  /* Desktop */
+  .desk { position: absolute; inset: 0; background: linear-gradient(160deg, #1d6fb8, #0d3f73 70%); }
+  .icon { position: absolute; width: 120px; text-align: center; color: #fff; font-size: 20px; font-weight: 700; text-shadow: 0 1px 3px #000; padding: 8px 4px; border-radius: 10px; }
+  .icon.sel { background: rgba(255,255,255,.28); outline: 2px solid rgba(255,255,255,.7); }
+  .glyph { width: 72px; height: 60px; margin: 0 auto 6px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff; font-weight: 800; }
+  .g-folder { background: #f2b632; border-radius: 4px 12px 10px 10px; position: relative; color: #8a5a00; }
+  .g-folder::before { content: ''; position: absolute; left: 0; top: -10px; width: 30px; height: 14px; background: #f2b632; border-radius: 6px 6px 0 0; }
+  .g-notes { background: #fff; color: #1d6fb8; border: 3px solid #d0dbe8; }
+  .g-mail { background: #2e7d32; }
+  .g-web { background: #6a1b9a; border-radius: 50%; width: 62px; }
+  .g-file { background: #fff; color: #1d6fb8; width: 52px; border-radius: 4px; border: 3px solid #c5d0de; font-size: 22px; }
+  .label-edit { background: #fff; color: #111; text-shadow: none; border: 2px solid #1d6fb8; padding: 0 4px; display: inline-block; min-width: 90px; }
+  .taskbar { position: absolute; left: 0; right: 0; bottom: 0; height: 60px; background: rgba(10,20,35,.92); display: flex; align-items: center; gap: 10px; padding: 0 10px; color: #fff; font-size: 20px; z-index: 20; }
+  .start { height: 46px; padding: 0 20px; border-radius: 8px; background: #1d6fb8; display: flex; align-items: center; font-weight: 800; }
+  .task { height: 46px; padding: 0 18px; border-radius: 8px; background: rgba(255,255,255,.14); display: flex; align-items: center; border-bottom: 4px solid #f5c542; }
+  .clock { margin-left: auto; padding-right: 12px; }
+  .menu { position: absolute; z-index: 30; background: #fff; color: #111; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.45); padding: 6px; min-width: 220px; font-size: 22px; }
+  .menu div { padding: 10px 18px; border-radius: 6px; }
+  .menu div.hov { background: #dbe8f7; }
+  .toast { position: absolute; left: 50%; bottom: 84px; transform: translateX(-50%); background: #2e7d32; color: #fff; font-size: 26px; font-weight: 800; padding: 12px 26px; border-radius: 12px; z-index: 35; }
+  .toast.warn { background: #c62828; }
+
+  /* Windows */
+  .win { position: absolute; background: #fff; border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,.45); overflow: hidden; z-index: 10; color: #111; }
+  .tbar { height: 52px; background: #e9eef5; display: flex; align-items: center; font-size: 22px; font-weight: 700; padding-left: 18px; border-bottom: 1px solid #c5d0de; }
+  .tbar .ttl { flex: 1; }
+  .wbtn { width: 64px; height: 52px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; }
+  .wbtn.x { color: #c62828; }
+  .mbar { height: 40px; display: flex; gap: 6px; padding: 0 10px; align-items: center; font-size: 20px; border-bottom: 1px solid #e0e6ee; }
+  .mbar span { padding: 4px 12px; border-radius: 6px; }
+  .mbar span.on { background: #dbe8f7; }
+  .page { padding: 22px 28px; font-size: 30px; line-height: 1.45; white-space: pre-wrap; }
+  .caret { display: inline-block; width: 3px; height: 34px; background: #111; vertical-align: -6px; }
+  .dialog { position: absolute; z-index: 25; left: 330px; top: 110px; width: 620px; background: #fff; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.55); overflow: hidden; color: #111; }
+  .dialog .body { display: flex; min-height: 200px; }
+  .side { width: 200px; background: #f2f5f9; padding: 12px; font-size: 22px; }
+  .side div { padding: 10px 12px; border-radius: 8px; }
+  .side div.on { background: #1d6fb8; color: #fff; }
+  .field { font-size: 22px; padding: 16px 18px; }
+  .input { border: 2px solid #8aa0b8; border-radius: 8px; padding: 8px 12px; min-height: 46px; font-size: 24px; background: #fff; }
+  .input.focus { border-color: #1d6fb8; box-shadow: 0 0 0 3px rgba(29,111,184,.25); }
+  .btns { display: flex; justify-content: flex-end; gap: 12px; padding: 14px 18px; }
+  .btn { padding: 10px 24px; border-radius: 8px; font-size: 22px; font-weight: 700; background: #e9eef5; }
+  .btn.pri { background: #1d6fb8; color: #fff; }
+  .btn.red { background: #c62828; color: #fff; }
+  .grid { display: flex; gap: 20px; padding: 22px; flex-wrap: wrap; }
+  .grid .icon { color: #111; text-shadow: none; position: relative; }
+  .path { display: flex; gap: 8px; align-items: center; padding: 8px 16px; font-size: 22px; border-bottom: 1px solid #e0e6ee; }
+  .crumb { padding: 4px 10px; border-radius: 6px; background: #f2f5f9; }
+  .empty { color: #5a6f86; font-size: 24px; padding: 40px; }
+  .mail { display: flex; height: calc(100% - 52px); }
+  .mnav { width: 200px; background: #f2f5f9; padding: 12px; font-size: 22px; }
+  .mnav div { padding: 10px 12px; border-radius: 8px; }
+  .mnav div.on { background: #dbe8f7; font-weight: 700; }
+  .mlist { width: 320px; border-right: 1px solid #e0e6ee; font-size: 20px; }
+  .mitem { padding: 14px; border-bottom: 1px solid #e0e6ee; }
+  .mitem.unread { font-weight: 800; border-left: 6px solid #1d6fb8; }
+  .mitem.on { background: #dbe8f7; }
+  .mread { flex: 1; padding: 18px 24px; font-size: 24px; line-height: 1.4; }
+  .mread .row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+  .mread .row b { width: 110px; font-size: 22px; }
+  .mread .row .input { flex: 1; }
+  .chipf { display: inline-block; background: #fff8e8; border: 2px solid #e8a317; border-radius: 8px; padding: 6px 14px; font-size: 22px; }
+  .link { color: #1d4ed8; text-decoration: underline; }
+  .search { margin: 40px auto 0; width: 640px; }
+  .result { padding: 14px 26px; font-size: 24px; }
+  .result .t { color: #1d4ed8; font-weight: 700; text-decoration: underline; }
+  .result .u { color: #2e7d32; font-size: 18px; }
+
+  /* Hardware */
+  .hw { position: absolute; inset: 0; background: linear-gradient(#dfe7f0, #b8c6d6); }
+  .monitor { position: absolute; left: 250px; top: 50px; width: 600px; height: 380px; background: #1b1f24; border-radius: 18px; padding: 18px; }
+  .mscreen { width: 100%; height: 100%; border-radius: 6px; background: #000; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 30px; font-weight: 700; }
+  .mscreen.on { background: linear-gradient(160deg, #1d6fb8, #0d3f73 70%); }
+  .mscreen.boot { background: #0d3f73; }
+  .stand { position: absolute; left: 500px; top: 430px; width: 100px; height: 60px; background: #2a3038; }
+  .base { position: absolute; left: 430px; top: 488px; width: 240px; height: 22px; background: #2a3038; border-radius: 10px; }
+  .tower { position: absolute; left: 920px; top: 130px; width: 170px; height: 380px; background: #2a3038; border-radius: 14px; }
+  .pbtn { position: absolute; left: 55px; top: 50px; width: 60px; height: 60px; border-radius: 50%; background: #444c56; border: 5px solid #8a96a3; display: flex; align-items: center; justify-content: center; color: #cfd8e3; font-size: 26px; font-weight: 900; }
+  .pbtn.on { border-color: #4caf50; color: #4caf50; box-shadow: 0 0 18px #4caf50; }
+  .plug { position: absolute; left: 1100px; top: 470px; width: 80px; height: 44px; background: #eceff1; border: 3px solid #607d8b; border-radius: 8px; }
+  .cable { position: absolute; left: 1000px; top: 488px; width: 104px; height: 8px; background: #263238; }
+  .kbd { position: absolute; left: 140px; top: 300px; width: 1000px; background: #2a3038; border-radius: 16px; padding: 14px; z-index: 22; }
+  .krow { display: flex; gap: 8px; margin-bottom: 8px; justify-content: center; }
+  .key { min-width: 64px; height: 56px; border-radius: 8px; background: #eceff1; color: #111; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; }
+  .key.down { background: #f5c542; transform: translateY(3px); box-shadow: 0 0 16px #f5c542; }
+  .mouse-panel { position: absolute; right: 40px; top: 60px; width: 330px; height: 470px; background: rgba(255,255,255,.96); border-radius: 18px; z-index: 22; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .mouse { position: relative; width: 190px; height: 300px; border-radius: 95px 95px 90px 90px; background: #cfd8e3; border: 5px solid #546e7a; overflow: hidden; }
+  .mbtnL, .mbtnR { position: absolute; top: 0; width: 50%; height: 42%; border-bottom: 5px solid #546e7a; }
+  .mbtnL { left: 0; border-right: 3px solid #546e7a; }
+  .mbtnR { right: 0; border-left: 3px solid #546e7a; }
+  .mbtnL.on, .mbtnR.on { background: #f5c542; }
+  .wheel { position: absolute; left: 50%; top: 14%; width: 22px; height: 54px; margin-left: -11px; background: #546e7a; border-radius: 10px; }
+  .mouse-cap { margin-top: 18px; font-size: 28px; font-weight: 800; color: #0b2f5c; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="screen"></div>
+  <div id="chip"></div>
+  <div id="hl"></div>
+  <div id="xmark">✕</div>
+  <div id="cursor"><svg viewBox="0 0 22 28"><path d="M1 1 L1 22 L6.5 17 L10.5 26 L14 24.5 L10 15.5 L17.5 15.5 Z" fill="#fff" stroke="#000" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+  <div id="cap"></div>
+</div>
+<script>
+'use strict'
+let TIMING = [], LESSON = null, ACTIONS = [], moveCache = {}
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+
+/* time helpers: beat b, optional keyword inside the spoken line */
+function at(b, kw, off = 0) {
+  const [s, d, text] = TIMING[b]
+  let f = 0
+  if (kw) { const i = text.toLowerCase().indexOf(kw.toLowerCase()); f = i < 0 ? 0 : i / text.length }
+  return s + d * f + off
+}
+function endOf(b, off = 0) { const [s, d] = TIMING[b]; return s + d + off }
+
+function base() {
+  return {
+    view: 'desk', hwScreen: 'off', pbtn: false, plugX: false,
+    icons: [
+      { id: 'notes', label: 'Notes', g: 'notes', x: 30, y: 70 },
+      { id: 'mail', label: 'Mail', g: 'mail', x: 30, y: 200 },
+      { id: 'web', label: 'Browser', g: 'web', x: 30, y: 330 },
+    ],
+    win: null, menu: null, dialog: null, start: null, toast: null, keyboard: false, key: null,
+    mousePanel: null, xmark: null, hl: null, caret: false,
+  }
+}
+function notesWin(extra) { return Object.assign({ kind: 'notes', title: 'Notes', x: 200, y: 30, w: 880, h: 470, text: '', fileMenu: false, min: false, max: false, caret: false }, extra || {}) }
+function mailWin(extra) { return Object.assign({ kind: 'mail', title: 'Mail', x: 60, y: 20, w: 1160, h: 500, folder: 'Inbox', list: [], open: null, compose: null }, extra || {}) }
+function webWin(extra) { return Object.assign({ kind: 'web', title: 'Browser', x: 120, y: 20, w: 1040, h: 500, q: '', focus: false, page: 'home' }, extra || {}) }
+function explorerWin(extra) { return Object.assign({ kind: 'explorer', title: 'Job Files', x: 220, y: 40, w: 860, h: 450, path: ['Job Files'], items: [] }, extra || {}) }
+
+/* ── Scene timelines: every action is pinned to the word that names it ── */
+const SCENES = {
+  power: () => [
+    { t: 0, set: (s) => { s.view = 'hw'; s.hl = null } },
+    { t: at(0, 'computer'), hl: '#hw-all' },
+    { t: at(1, 'power'), hl: '#pbtn' },
+    { t: at(2, 'press'), move: '#pbtn', dur: 0.7 },
+    { t: at(2, 'one time'), click: 1 },
+    { t: at(2, 'one time'), set: (s) => { s.pbtn = true; s.hwScreen = 'boot' } },
+    { t: at(2, 'one time'), hl: null },
+    { t: at(3, 'turns on'), set: (s) => { s.hwScreen = 'on' } },
+    { t: at(3, 'screen'), hl: '#mscreen' },
+    { t: at(4, 'desktop'), set: (s) => { s.view = 'desk'; s.hl = null } },
+    { t: at(4, 'desktop'), hl: null },
+    { t: at(5, 'start'), move: '#start', dur: 0.7 },
+    { t: at(5, 'start', 0.5), click: 1 },
+    { t: at(5, 'start', 0.5), set: (s) => { s.start = { power: false } } },
+    { t: at(6, 'power'), move: '#sm-power', dur: 0.5 },
+    { t: at(6, 'power', 0.4), click: 1 },
+    { t: at(6, 'power', 0.4), set: (s) => { s.start.power = true } },
+    { t: at(7, 'shut'), move: '#sm-shut', dur: 0.5 },
+    { t: at(7, 'shut', 0.45), click: 1 },
+    { t: at(7, 'shut', 0.5), set: (s) => { s.start = null; s.view = 'shutting' } },
+    { t: at(8, 'dark'), set: (s) => { s.view = 'hw'; s.hwScreen = 'off'; s.pbtn = false } },
+    { t: at(8, 'screen'), hl: '#mscreen' },
+    { t: at(9, 'plug'), hl: '#plug' },
+    { t: at(9, 'plug'), set: (s) => { s.xmark = '#plug' } },
+  ],
+  mouse: () => [
+    { t: at(0, 'mouse'), set: (s) => { s.mousePanel = 'show' } },
+    { t: at(1, 'move'), set: (s) => { s.mousePanel = 'move' } },
+    { t: at(1, 'arrow'), move: '#pt-a', dur: 0.8 },
+    { t: at(1, 'screen'), move: '#pt-b', dur: 0.8 },
+    { t: at(2, 'left'), set: (s) => { s.mousePanel = 'left' } },
+    { t: at(3, 'press'), move: '#icon-notes', dur: 0.6 },
+    { t: at(3, 'one time'), click: 1 },
+    { t: at(3, 'one time'), set: (s) => { s.icons[0].sel = true } },
+    { t: at(4, 'two times'), click: 1 },
+    { t: at(4, 'two times', 0.22), click: 1 },
+    { t: at(4, 'two times', 0.3), set: (s) => { s.win = notesWin({ x: 200, w: 640 }) } },
+    { t: at(5, 'opens'), hl: '#win' },
+    { t: at(6, 'right'), set: (s) => { s.mousePanel = 'right'; s.win = null; s.icons[0].sel = false } },
+    { t: at(6, 'right'), hl: null },
+    { t: at(7, 'right'), move: '#pt-c', dur: 0.6 },
+    { t: at(7, 'opens'), click: 2 },
+    { t: at(7, 'opens'), set: (s) => { s.menu = { x: 470, y: 230, items: ['View', 'New  ›', 'Refresh'] } } },
+    { t: at(8, 'empty'), move: '#pt-d', dur: 0.6 },
+    { t: at(8, 'close'), click: 1 },
+    { t: at(8, 'close'), set: (s) => { s.menu = null } },
+  ],
+  keyboard: () => {
+    const a = [
+      { t: 0, set: (s) => { s.win = notesWin({ y: 16, h: 270, x: 200 }); s.keyboard = true } },
+      { t: at(0, 'keyboard'), hl: '#kbd' },
+      { t: at(1, 'click'), hl: null },
+      { t: at(1, 'click'), move: '#page', dur: 0.6 },
+      { t: at(1, 'page'), click: 1 },
+      { t: at(1, 'page'), set: (s) => { s.win.caret = true } },
+      { t: at(2, 'letter'), type: 'hi', dur: 0.6 },
+      { t: at(3, 'backspace'), key: 'Backspace', dur: 0.25, del: 1 },
+      { t: at(3, 'delete'), key: 'Backspace', dur: 0.25, del: 1 },
+      { t: at(4, 'hold'), key: 'Shift', dur: 1.3 },
+      { t: at(4, 'big'), type: 'H', dur: 0.2 },
+      { t: endOf(4, 0.1), type: 'i', dur: 0.2 },
+      { t: at(5, 'space bar'), type: ' ', dur: 0.2 },
+      { t: at(6, 'I am'), type: 'I am Sam.', dur: 1.2 },
+      { t: at(7, 'enter'), key: 'Enter', dur: 0.3, text: '\n' },
+      { t: at(8, 'type'), hl: '#page' },
+    ]
+    return a
+  },
+  window: () => [
+    { t: at(0, 'window'), set: (s) => { s.win = notesWin({ title: 'Notes', text: 'Shopping list' }) } },
+    { t: at(0, 'window'), hl: '#win' },
+    { t: at(1, 'double'), set: (s) => { s.win = null } },
+    { t: at(1, 'double'), hl: null },
+    { t: at(1, 'double'), move: '#icon-notes', dur: 0.6 },
+    { t: at(1, 'notes'), click: 1 },
+    { t: at(1, 'notes', 0.22), click: 1 },
+    { t: at(1, 'notes', 0.3), set: (s) => { s.win = notesWin({ text: 'Shopping list' }) } },
+    { t: at(2, 'top right'), hl: '#wbtns' },
+    { t: at(3, 'line'), hl: '#w-min' },
+    { t: at(3, 'line'), move: '#w-min', dur: 0.5 },
+    { t: at(3, 'hide'), click: 1 },
+    { t: at(3, 'hide'), set: (s) => { s.win.min = true } },
+    { t: at(3, 'hide'), hl: '#task-notes' },
+    { t: at(4, 'notes'), move: '#task-notes', dur: 0.6 },
+    { t: at(4, 'bring'), click: 1 },
+    { t: at(4, 'bring'), set: (s) => { s.win.min = false } },
+    { t: at(4, 'bring'), hl: null },
+    { t: at(5, 'box'), hl: '#w-max' },
+    { t: at(5, 'box'), move: '#w-max', dur: 0.5 },
+    { t: at(5, 'big'), click: 1 },
+    { t: at(5, 'big'), set: (s) => { s.win.max = true } },
+    { t: at(6, 'X'), hl: '#w-x' },
+    { t: at(6, 'X'), move: '#w-x', dur: 0.4 },
+    { t: at(6, 'close'), click: 1 },
+    { t: at(6, 'close'), set: (s) => { s.win = null } },
+    { t: at(6, 'close'), hl: null },
+  ],
+  save: () => [
+    { t: 0, set: (s) => { s.win = notesWin({ title: 'Untitled — Notes', text: 'Work plan:\nMonday 8 to 4' }) } },
+    { t: at(0, 'save'), hl: '#win' },
+    { t: at(1, 'file'), hl: null },
+    { t: at(1, 'file'), move: '#m-file', dur: 0.6 },
+    { t: at(1, 'top'), click: 1 },
+    { t: at(1, 'top'), set: (s) => { s.win.fileMenu = true } },
+    { t: at(2, 'save'), move: '#fm-save', dur: 0.4 },
+    { t: at(2, 'save', 0.35), click: 1 },
+    { t: at(2, 'save', 0.35), set: (s) => { s.win.fileMenu = false; s.dialog = { name: '', place: 'Desktop', focus: true } } },
+    { t: at(3, 'type'), hl: '#d-name' },
+    { t: at(3, 'work plan'), dtype: 'Work plan', dur: 0.9 },
+    { t: at(4, 'documents'), hl: null },
+    { t: at(4, 'pick'), move: '#d-docs', dur: 0.6 },
+    { t: at(4, 'documents'), click: 1 },
+    { t: at(4, 'documents'), set: (s) => { s.dialog.place = 'Documents' } },
+    { t: at(5, 'save button'), move: '#d-save', dur: 0.6 },
+    { t: at(5, 'button'), click: 1 },
+    { t: at(5, 'button'), set: (s) => { s.dialog = null; s.win.title = 'Work plan — Notes' } },
+    { t: at(6, 'top'), hl: '#w-title' },
+    { t: at(7, 'control'), set: (s) => { s.keyboard = true; s.win.y = 16; s.win.h = 270 } },
+    { t: at(7, 'control'), hl: null },
+    { t: at(7, 'control'), key: 'Ctrl', dur: 1.4 },
+    { t: at(7, 'S'), key: 'S', dur: 0.6, also: 'Ctrl' },
+    { t: at(7, 'save again'), set: (s) => { s.toast = 'Saved' } },
+  ],
+  folder: () => [
+    { t: at(0, 'folder'), set: (s) => { s.icons.push({ id: 'demo', label: 'Photos', g: 'folder', x: 30, y: 450 }) } },
+    { t: at(0, 'folder'), hl: '#icon-demo' },
+    { t: at(1, 'right'), hl: null },
+    { t: at(1, 'right'), move: '#pt-c', dur: 0.6 },
+    { t: at(1, 'empty'), click: 2 },
+    { t: at(1, 'empty'), set: (s) => { s.menu = { x: 470, y: 230, items: ['View', 'New  ›', 'Refresh'] } } },
+    { t: at(2, 'new'), move: '#mi-1', dur: 0.4 },
+    { t: at(2, 'new', 0.3), set: (s) => { s.menu.hov = 1; s.menu.sub = ['Folder', 'Text file'] } },
+    { t: at(3, 'folder'), move: '#sub-0', dur: 0.4 },
+    { t: at(3, 'folder', 0.3), click: 1 },
+    { t: at(3, 'folder', 0.35), set: (s) => { s.menu = null; s.icons.push({ id: 'new', label: 'New folder', g: 'folder', x: 300, y: 120, edit: true, sel: true }) } },
+    { t: at(4, 'type'), hl: '#icon-new' },
+    { t: at(4, 'job'), itype: ['new', 'Job Files'], dur: 0.9 },
+    { t: at(5, 'enter'), key: 'Enter', dur: 0.3, quick: true },
+    { t: at(5, 'enter'), set: (s) => { const i = s.icons.find((x) => x.id === 'new'); i.edit = false; i.sel = false } },
+    { t: at(5, 'enter'), hl: null },
+    { t: at(6, 'double'), move: '#icon-new', dur: 0.6 },
+    { t: at(6, 'folder'), click: 1 },
+    { t: at(6, 'folder', 0.22), click: 1 },
+    { t: at(6, 'folder', 0.3), set: (s) => { s.win = explorerWin() } },
+    { t: at(7, 'empty'), hl: '#ex-grid' },
+  ],
+  subfolder: () => [
+    { t: 0, set: (s) => { s.icons.push({ id: 'job', label: 'Job Files', g: 'folder', x: 30, y: 450 }) } },
+    { t: at(1, 'double'), move: '#icon-job', dur: 0.6 },
+    { t: at(1, 'job'), click: 1 },
+    { t: at(1, 'job', 0.22), click: 1 },
+    { t: at(1, 'job', 0.3), set: (s) => { s.win = explorerWin() } },
+    { t: at(2, 'new folder'), move: '#ex-new', dur: 0.6 },
+    { t: at(2, 'top'), click: 1 },
+    { t: at(2, 'top'), set: (s) => { s.win.items.push({ id: 'wk', label: 'New folder', edit: true, sel: true }) } },
+    { t: at(3, 'type'), hl: '#item-wk' },
+    { t: at(3, 'week'), wtype: ['wk', 'Week 1'], dur: 0.7 },
+    { t: at(4, 'enter'), key: 'Enter', dur: 0.3, quick: true },
+    { t: at(4, 'enter'), set: (s) => { s.win.items[0].edit = false; s.win.items[0].sel = false } },
+    { t: at(4, 'enter'), hl: null },
+    { t: at(5, 'double'), move: '#item-wk', dur: 0.6 },
+    { t: at(5, 'week'), click: 1 },
+    { t: at(5, 'week', 0.22), click: 1 },
+    { t: at(5, 'week', 0.3), set: (s) => { s.win.path = ['Job Files', 'Week 1']; s.win.title = 'Week 1'; s.win.saved = s.win.items; s.win.items = [] } },
+    { t: at(6, 'top'), hl: '#ex-path' },
+    { t: at(7, 'job'), hl: null },
+    { t: at(7, 'click'), move: '#crumb-0', dur: 0.6 },
+    { t: at(7, 'back'), click: 1 },
+    { t: at(7, 'back'), set: (s) => { s.win.path = ['Job Files']; s.win.title = 'Job Files'; s.win.items = s.win.saved } },
+  ],
+  paragraph: () => [
+    { t: at(0, 'double'), move: '#icon-notes', dur: 0.6 },
+    { t: at(0, 'notes'), click: 1 },
+    { t: at(0, 'notes', 0.22), click: 1 },
+    { t: at(0, 'notes', 0.3), set: (s) => { s.win = notesWin({ caret: true }) } },
+    { t: at(1, 'type'), type: 'I can work on time', dur: 1.3 },
+    { t: at(2, 'period'), set: (s) => { s.keyboard = true; s.win.y = 16; s.win.h = 270 } },
+    { t: at(2, 'end'), type: '.', dur: 0.2 },
+    { t: at(3, 'space'), type: ' ', dur: 0.2 },
+    { t: at(3, 'next'), type: 'I like to help my teem', dur: 1.6 },
+    { t: at(4, 'paragraph'), hl: '#page' },
+    { t: at(5, 'mistake'), hl: null },
+    { t: at(5, 'backspace'), key: 'Backspace', dur: 0.25, del: 1 },
+    { t: at(5, 'backspace', 0.3), key: 'Backspace', dur: 0.25, del: 1 },
+    { t: at(5, 'fix'), type: 'am.', dur: 0.5 },
+    { t: at(6, 'read'), hl: '#page' },
+    { t: at(6, 'save'), set: (s) => { s.toast = 'Saved' } },
+  ],
+  'email-send': () => [
+    { t: at(0, 'double'), move: '#icon-mail', dur: 0.6 },
+    { t: at(0, 'mail'), click: 1 },
+    { t: at(0, 'mail', 0.22), click: 1 },
+    { t: at(0, 'mail', 0.3), set: (s) => { s.win = mailWin({ list: [{ from: 'Ana', sub: 'Welcome' }] }) } },
+    { t: at(1, 'new'), move: '#m-new', dur: 0.6 },
+    { t: at(1, 'email'), click: 1 },
+    { t: at(1, 'email'), set: (s) => { s.win.compose = { to: '', sub: '', body: '', focus: 'to' } } },
+    { t: at(2, 'to'), hl: '#c-to' },
+    { t: at(2, 'type'), ctype: ['to', 'ana@work.com'], dur: 1.0 },
+    { t: at(3, 'subject'), move: '#c-sub', dur: 0.5 },
+    { t: at(3, 'subject', 0.45), click: 1 },
+    { t: at(3, 'subject', 0.45), set: (s) => { s.win.compose.focus = 'sub' } },
+    { t: at(3, 'subject', 0.45), hl: '#c-sub' },
+    { t: at(3, 'type'), ctype: ['sub', 'Work today'], dur: 0.8 },
+    { t: at(4, 'message'), move: '#c-body', dur: 0.5 },
+    { t: at(4, 'message', 0.45), click: 1 },
+    { t: at(4, 'message', 0.45), set: (s) => { s.win.compose.focus = 'body' } },
+    { t: at(4, 'message', 0.45), hl: '#c-body' },
+    { t: at(4, 'big'), ctype: ['body', 'Hi Ana, I can work today. Sam'], dur: 1.6 },
+    { t: at(5, 'address'), hl: '#c-to' },
+    { t: at(6, 'send'), hl: null },
+    { t: at(6, 'click'), move: '#c-send', dur: 0.5 },
+    { t: at(6, 'send'), click: 1 },
+    { t: at(6, 'send'), set: (s) => { s.win.compose = null; s.toast = 'Sent' } },
+    { t: at(7, 'sent'), set: (s) => { s.toast = null; s.win.folder = 'Sent'; s.win.list = [{ from: 'To: Ana', sub: 'Work today' }] } },
+    { t: at(7, 'sent'), hl: '#nav-sent' },
+  ],
+  'email-reply': () => [
+    { t: 0, set: (s) => { s.win = mailWin({ list: [{ from: 'Ana (boss)', sub: 'Can you work Monday?', unread: true }, { from: 'Bus Office', sub: 'New bus pass' }] }) } },
+    { t: at(0, 'new'), hl: '#mi-0' },
+    { t: at(1, 'click'), hl: null },
+    { t: at(1, 'click'), move: '#mi-0', dur: 0.6 },
+    { t: at(1, 'read'), click: 1 },
+    { t: at(1, 'read'), set: (s) => { s.win.list[0].unread = false; s.win.list[0].on = true; s.win.open = { from: 'ana@work.com', sub: 'Can you work Monday?', body: 'Hi Sam, can you work on Monday from 8 to 4? Ana' } } },
+    { t: at(2, 'reply'), move: '#r-reply', dur: 0.6 },
+    { t: at(2, 'reply', 0.45), click: 1 },
+    { t: at(2, 'reply', 0.45), set: (s) => { s.win.open = null; s.win.compose = { to: 'ana@work.com', sub: 'Re: Can you work Monday?', body: '', focus: 'body' } } },
+    { t: at(3, 'address'), hl: '#c-to' },
+    { t: at(4, 'type'), hl: '#c-body' },
+    { t: at(4, 'answer'), ctype: ['body', 'Yes, I can work Monday. Sam'], dur: 1.4 },
+    { t: at(5, 'send'), hl: null },
+    { t: at(5, 'click'), move: '#c-send', dur: 0.5 },
+    { t: at(5, 'send'), click: 1 },
+    { t: at(5, 'send'), set: (s) => { s.win.compose = null; s.toast = 'Sent' } },
+  ],
+  attach: () => [
+    { t: 0, set: (s) => { s.win = mailWin({ compose: { to: 'ana@work.com', sub: 'My work plan', body: 'Hi Ana, here is my plan. Sam', focus: '' } }) } },
+    { t: at(0, 'file'), hl: '#c-body' },
+    { t: at(1, 'attach'), hl: null },
+    { t: at(1, 'click'), move: '#c-attach', dur: 0.6 },
+    { t: at(1, 'attach', 0.3), click: 1 },
+    { t: at(1, 'means'), set: (s) => { s.dialog = { kind: 'open', pick: null } } },
+    { t: at(2, 'work plan'), move: '#f-work', dur: 0.6 },
+    { t: at(2, 'plan'), click: 1 },
+    { t: at(2, 'plan'), set: (s) => { s.dialog.pick = 'work' } },
+    { t: at(3, 'open'), move: '#d-open', dur: 0.5 },
+    { t: at(3, 'open', 0.3), click: 1 },
+    { t: at(3, 'open', 0.3), set: (s) => { s.dialog = null; s.win.compose.file = 'Work plan' } },
+    { t: at(4, 'file'), hl: '#c-file' },
+    { t: at(5, 'send'), hl: null },
+    { t: at(5, 'click'), move: '#c-send', dur: 0.5 },
+    { t: at(5, 'send'), click: 1 },
+    { t: at(5, 'send'), set: (s) => { s.win.compose = null; s.toast = 'Sent' } },
+  ],
+  safe: () => [
+    { t: 0, set: (s) => { s.win = webWin({ page: 'signin' }) } },
+    { t: at(0, 'password'), hl: '#pw' },
+    { t: at(1, 'not'), set: (s) => { s.toast = 'Never share your password'; s.toastWarn = true } },
+    { t: at(2, 'email'), set: (s) => { s.toast = null; s.win = mailWin({ list: [{ from: 'Prize Team', sub: 'You won! Send your password', on: true }], open: { from: 'prize@win-now.biz', sub: 'You won!', body: 'You won a prize! Type your password here:', link: 'claim-prize-now.biz', del: true } }) } },
+    { t: at(2, 'password'), hl: '#r-body' },
+    { t: at(3, 'link'), hl: '#r-link' },
+    { t: at(3, 'not safe'), set: (s) => { s.xmark = '#r-link' } },
+    { t: at(4, 'click'), set: (s) => { s.xmark = null } },
+    { t: at(4, 'click'), hl: null },
+    { t: at(4, 'click'), move: '#r-del', dur: 0.6 },
+    { t: at(4, 'delete'), click: 1 },
+    { t: at(4, 'delete'), set: (s) => { s.win.open = null; s.win.list = []; s.toast = 'Deleted'; s.toastWarn = false } },
+    { t: at(5, 'sign out'), set: (s) => { s.toast = null } },
+    { t: at(5, 'click'), move: '#m-signout', dur: 0.6 },
+    { t: at(5, 'sign out'), click: 1 },
+    { t: at(5, 'sign out', 0.1), set: (s) => { s.win = null; s.toast = 'Signed out' } },
+    { t: at(6, 'ask'), set: (s) => { s.toast = 'Ask staff when you are not sure' } },
+  ],
+  search: () => [
+    { t: at(0, 'double'), move: '#icon-web', dur: 0.6 },
+    { t: at(0, 'browser'), click: 1 },
+    { t: at(0, 'browser', 0.22), click: 1 },
+    { t: at(0, 'browser', 0.3), set: (s) => { s.win = webWin() } },
+    { t: at(1, 'click'), move: '#q', dur: 0.6 },
+    { t: at(1, 'search'), click: 1 },
+    { t: at(1, 'search'), set: (s) => { s.win.focus = true } },
+    { t: at(1, 'search'), hl: '#q' },
+    { t: at(2, 'bus'), qtype: 'bus times', dur: 0.8 },
+    { t: at(3, 'enter'), key: 'Enter', dur: 0.3, quick: true },
+    { t: at(3, 'enter'), set: (s) => { s.win.page = 'results'; s.win.focus = false } },
+    { t: at(3, 'enter'), hl: null },
+    { t: at(4, 'results'), hl: '#results' },
+    { t: at(5, 'click'), hl: null },
+    { t: at(5, 'click'), move: '#res-0', dur: 0.6 },
+    { t: at(5, 'open'), click: 1 },
+    { t: at(5, 'open'), set: (s) => { s.win.page = 'bus' } },
+    { t: at(6, 'back'), hl: '#back' },
+    { t: at(6, 'click'), move: '#back', dur: 0.6 },
+    { t: at(6, 'go back'), click: 1 },
+    { t: at(6, 'go back'), set: (s) => { s.win.page = 'results' } },
+    { t: at(6, 'go back', 0.3), hl: null },
+  ],
+}
+
+/* ── render ── */
+function icon(i) {
+  const g = { notes: 'N', mail: '✉', web: 'W', folder: '', file: '≡' }[i.g] || ''
+  const label = i.edit ? `<span class="label-edit">${esc(i.label)}<span class="caret" style="height:20px"></span></span>` : esc(i.label)
+  return `<div class="icon${i.sel ? ' sel' : ''}" id="icon-${i.id}" style="left:${i.x}px;top:${i.y}px"><div class="glyph g-${i.g}">${g}</div>${label}</div>`
+}
+function winChrome(w, inner) {
+  if (w.min) return ''
+  const box = w.max ? 'left:0;top:0;width:1280px;height:540px' : `left:${w.x}px;top:${w.y}px;width:${w.w}px;height:${w.h}px`
+  return `<div class="win" id="win" style="${box}"><div class="tbar"><span class="ttl" id="w-title">${esc(w.title)}</span><span id="wbtns" style="display:flex"><span class="wbtn" id="w-min">–</span><span class="wbtn" id="w-max">□</span><span class="wbtn x" id="w-x">✕</span></span></div>${inner}</div>`
+}
+function renderNotes(s, w) {
+  const caret = w.caret ? '<span class="caret"></span>' : ''
+  const fm = w.fileMenu ? `<div class="menu" style="left:10px;top:92px"><div id="fm-save" class="hov">Save</div><div>Save as…</div><div>Print</div></div>` : ''
+  return winChrome(w, `<div class="mbar"><span id="m-file" class="${w.fileMenu ? 'on' : ''}">File</span><span>Edit</span><span>View</span></div><div class="page" id="page" style="height:${(w.max ? 540 : w.h) - 92}px">${esc(w.text)}${caret}</div>${fm}`)
+}
+function renderExplorer(s, w) {
+  const crumbs = w.path.map((p, i) => `<span class="crumb" id="crumb-${i}">${esc(p)}</span>`).join('<span>›</span>')
+  const items = w.items.map((i) => `<div class="icon${i.sel ? ' sel' : ''}" id="item-${i.id}"><div class="glyph g-folder"></div>${i.edit ? `<span class="label-edit">${esc(i.label)}<span class="caret" style="height:20px"></span></span>` : esc(i.label)}</div>`).join('')
+  return winChrome(w, `<div class="mbar"><span id="ex-new" style="background:#e9eef5;font-weight:700">+ New folder</span></div><div class="path" id="ex-path">${crumbs}</div><div class="grid" id="ex-grid" style="min-height:250px">${items || '<div class="empty">This folder is empty.</div>'}</div>`)
+}
+function renderMail(s, w) {
+  const list = w.list.map((m, i) => `<div class="mitem${m.unread ? ' unread' : ''}${m.on ? ' on' : ''}" id="mi-${i}">${esc(m.from)}<br><span style="font-weight:400">${esc(m.sub)}</span></div>`).join('') || '<div class="empty" style="padding:20px">No email</div>'
+  let right = ''
+  if (w.compose) {
+    const c = w.compose
+    const f = (k) => (c.focus === k ? ' focus' : '')
+    right = `<div class="mread"><div class="row"><b>To</b><div class="input${f('to')}" id="c-to">${esc(c.to)}</div></div><div class="row"><b>Subject</b><div class="input${f('sub')}" id="c-sub">${esc(c.sub)}</div></div><div class="input${f('body')}" id="c-body" style="height:160px">${esc(c.body)}</div>${c.file ? `<div style="margin-top:10px"><span class="chipf" id="c-file">▤ ${esc(c.file)}</span></div>` : ''}<div class="btns" style="padding:12px 0"><span class="btn" id="c-attach">Attach</span><span class="btn pri" id="c-send">Send</span></div></div>`
+  } else if (w.open) {
+    const o = w.open
+    right = `<div class="mread"><div style="display:flex;gap:10px;margin-bottom:12px">${o.del ? '<span class="btn red" id="r-del">Delete</span>' : '<span class="btn pri" id="r-reply">Reply</span>'}</div><div><b>From:</b> ${esc(o.from)}</div><div style="margin-bottom:14px"><b>Subject:</b> ${esc(o.sub)}</div><div id="r-body">${esc(o.body)} ${o.link ? `<br><span class="link" id="r-link">${esc(o.link)}</span>` : ''}</div></div>`
+  } else {
+    right = '<div class="mread" style="color:#5a6f86">Pick an email to read it.</div>'
+  }
+  return winChrome(w, `<div class="mail"><div class="mnav"><div class="btn pri" id="m-new" style="margin-bottom:14px;text-align:center">New email</div><div class="${w.folder === 'Inbox' ? 'on' : ''}">Inbox</div><div class="${w.folder === 'Sent' ? 'on' : ''}" id="nav-sent">Sent</div><div style="margin-top:150px" id="m-signout" class="btn">Sign out</div></div><div class="mlist">${list}</div>${right}</div>`)
+}
+function renderWeb(s, w) {
+  const bar = `<div class="path"><span class="crumb" id="back" style="font-size:26px">←</span><div class="input${w.focus ? ' focus' : ''}" id="q" style="flex:1">${esc(w.q) || '<span style="color:#8aa0b8">Search or type a web address</span>'}</div></div>`
+  let body = ''
+  if (w.page === 'home') body = `<div style="text-align:center;font-size:44px;font-weight:800;color:#6a1b9a;margin-top:80px">Search</div>`
+  if (w.page === 'results') body = `<div id="results"><div class="result" id="res-0"><div class="t">City Bus — Bus times</div><div class="u">citybus.ca/times</div></div><div class="result"><div class="t">Bus map and routes</div><div class="u">citybus.ca/map</div></div><div class="result"><div class="t">Buy a bus pass</div><div class="u">citybus.ca/pass</div></div></div>`
+  if (w.page === 'bus') body = `<div style="padding:24px 30px;font-size:28px"><b style="font-size:36px">Bus times</b><br>Route 5: 7:10 · 7:40 · 8:10<br>Route 9: 7:25 · 7:55 · 8:25</div>`
+  if (w.page === 'signin') body = `<div style="width:520px;margin:30px auto;font-size:24px"><b style="font-size:32px">Sign in</b><div style="margin-top:16px">Email</div><div class="input">sam@mail.com</div><div style="margin-top:12px">Password</div><div class="input" id="pw" style="letter-spacing:6px">••••••••</div></div>`
+  return winChrome(w, bar + body)
+}
+function renderDialog(s) {
+  const d = s.dialog
+  if (!d) return ''
+  if (d.kind === 'open') {
+    return `<div class="dialog"><div class="tbar"><span class="ttl">Pick a file</span></div><div class="body"><div class="side"><div class="on">Documents</div><div>Desktop</div></div><div style="flex:1;padding:14px;font-size:24px"><div id="f-work" style="padding:10px;border-radius:8px;${d.pick === 'work' ? 'background:#dbe8f7' : ''}">▤ Work plan</div><div style="padding:10px">▤ Shopping list</div></div></div><div class="btns"><span class="btn">Cancel</span><span class="btn pri" id="d-open">Open</span></div></div>`
+  }
+  return `<div class="dialog"><div class="tbar"><span class="ttl">Save as</span></div><div class="body"><div class="side"><div id="d-desk" class="${d.place === 'Desktop' ? 'on' : ''}">Desktop</div><div id="d-docs" class="${d.place === 'Documents' ? 'on' : ''}">Documents</div></div><div class="field" style="flex:1">File name<div class="input${d.focus ? ' focus' : ''}" id="d-name">${esc(d.name)}${d.focus ? '<span class="caret" style="height:26px"></span>' : ''}</div><div style="margin-top:14px;color:#5a6f86">Save in: <b>${esc(d.place)}</b></div></div></div><div class="btns"><span class="btn">Cancel</span><span class="btn pri" id="d-save">Save</span></div></div>`
+}
+const KROWS = [['Q','W','E','R','T','Y','U','I','O','P','Backspace'],['A','S','D','F','G','H','J','K','L','.','Enter'],['Shift','Z','X','C','V','B','N','M',',','?'],['Ctrl','Space']]
+function renderKeyboard(s) {
+  if (!s.keyboard) return ''
+  const down = new Set([].concat(s.key || []))
+  return `<div class="kbd" id="kbd">${KROWS.map((r) => `<div class="krow">${r.map((k) => `<div class="key${down.has(k) ? ' down' : ''}" style="${k === 'Space' ? 'min-width:420px' : k.length > 1 ? 'min-width:130px' : ''}">${k === 'Space' ? 'space bar' : k}</div>`).join('')}</div>`).join('')}</div>`
+}
+function renderMousePanel(s) {
+  if (!s.mousePanel) return ''
+  const m = s.mousePanel
+  const cap = { show: 'Mouse', move: 'Move it', left: 'Left button', right: 'Right button' }[m]
+  return `<div class="mouse-panel" id="mousep"><div class="mouse"><div class="mbtnL${m === 'left' ? ' on' : ''}"></div><div class="mbtnR${m === 'right' ? ' on' : ''}"></div><div class="wheel"></div></div><div class="mouse-cap">${cap}</div></div>`
+}
+function renderHW(s) {
+  const scr = s.hwScreen === 'on' ? '<div class="mscreen on" id="mscreen"></div>' : s.hwScreen === 'boot' ? '<div class="mscreen boot" id="mscreen">Starting…</div>' : '<div class="mscreen" id="mscreen"></div>'
+  return `<div class="hw"><div id="hw-all" style="position:absolute;left:240px;top:40px;width:870px;height:480px"></div><div class="monitor">${scr}</div><div class="stand"></div><div class="base"></div><div class="tower"><div class="pbtn${s.pbtn ? ' on' : ''}" id="pbtn">⏻</div></div><div class="cable"></div><div class="plug" id="plug"></div></div>`
+}
+function render(s) {
+  let html = ''
+  if (s.view === 'hw') html = renderHW(s)
+  else if (s.view === 'shutting') html = `<div class="desk" style="background:#0d1b2a;display:flex;align-items:center;justify-content:center;color:#fff;font-size:40px;font-weight:700">Shutting down…</div>`
+  else {
+    html = `<div class="desk">${s.icons.map(icon).join('')}`
+    const w = s.win
+    if (w) html += w.kind === 'notes' ? renderNotes(s, w) : w.kind === 'mail' ? renderMail(s, w) : w.kind === 'web' ? renderWeb(s, w) : renderExplorer(s, w)
+    if (s.menu) {
+      const m = s.menu
+      html += `<div class="menu" style="left:${m.x}px;top:${m.y}px">${m.items.map((it, i) => `<div id="mi-${i}" class="${m.hov === i ? 'hov' : ''}">${esc(it)}</div>`).join('')}</div>`
+      if (m.sub) html += `<div class="menu" style="left:${m.x + 226}px;top:${m.y + 50}px">${m.sub.map((it, i) => `<div id="sub-${i}">${esc(it)}</div>`).join('')}</div>`
+    }
+    if (s.start) {
+      html += `<div class="menu" style="left:10px;bottom:70px;top:auto;width:320px"><div>Notes</div><div>Mail</div><div>Browser</div><div id="sm-power" class="${s.start.power ? 'hov' : ''}" style="border-top:1px solid #e0e6ee">⏻ Power</div></div>`
+      if (s.start.power) html += `<div class="menu" style="left:336px;bottom:70px;top:auto"><div>Sleep</div><div>Restart</div><div id="sm-shut">Shut down</div></div>`
+    }
+    html += renderDialog(s)
+    const task = w && w.kind ? `<span class="task" id="task-notes">${esc(w.kind === 'notes' ? 'Notes' : w.title)}</span>` : ''
+    html += `<div class="taskbar"><span class="start" id="start">Start</span>${task}<span class="clock">9:41</span></div>`
+    html += `<div id="pt-a" style="position:absolute;left:640px;top:140px;width:2px;height:2px"></div><div id="pt-b" style="position:absolute;left:420px;top:420px;width:2px;height:2px"></div><div id="pt-c" style="position:absolute;left:470px;top:230px;width:2px;height:2px"></div><div id="pt-d" style="position:absolute;left:760px;top:470px;width:2px;height:2px"></div>`
+    html += '</div>'
+  }
+  html += renderKeyboard(s) + renderMousePanel(s)
+  if (s.toast) html += `<div class="toast${s.toastWarn ? ' warn' : ''}"${s.keyboard ? ' style="bottom:auto;top:230px"' : ''}>${esc(s.toast)}</div>`
+  document.getElementById('screen').innerHTML = html
+}
+
+function rectOf(sel) {
+  const el = document.querySelector(sel)
+  if (!el) return null
+  const r = el.getBoundingClientRect()
+  return { x: r.left, y: r.top, w: r.width, h: r.height }
+}
+function ease(p) { return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2 }
+
+function charFor(c) { return c === ' ' ? 'Space' : c === '\n' ? 'Enter' : c.toUpperCase() }
+
+window.setup = function (lesson, timing) {
+  LESSON = lesson; TIMING = timing; moveCache = {}
+  ACTIONS = SCENES[lesson.slug]().map((a, i) => Object.assign({ i }, a)).sort((a, b) => a.t - b.t || a.i - b.i)
+  document.getElementById('chip').textContent = `${lesson.core ? 'Basic' : 'Extra'} · Lesson ${lesson.n} · ${lesson.title}`
+}
+
+window.renderAt = function (now) {
+  const s = base()
+  let key = null
+  for (const a of ACTIONS) {
+    if (a.t > now) break
+    if (a.set) a.set(s)
+    if ('hl' in a) s.hl = a.hl
+    const p = a.dur ? Math.min(1, (now - a.t) / a.dur) : 1
+    const typed = (txt) => txt.slice(0, Math.round(txt.length * p))
+    const activeKey = (txt) => { if (p < 1 && txt.length) { const c = txt[Math.min(txt.length - 1, Math.floor(txt.length * p))]; key = c === c.toUpperCase() && /[A-Z]/.test(c) ? ['Shift', charFor(c)] : charFor(c) } }
+    if (a.type != null && s.win) { s.win.text += typed(a.type); activeKey(a.type) }
+    if (a.qtype != null && s.win) { s.win.q += typed(a.qtype); activeKey(a.qtype) }
+    if (a.dtype != null && s.dialog) { s.dialog.name += typed(a.dtype); activeKey(a.dtype) }
+    if (a.ctype && s.win && s.win.compose) { s.win.compose[a.ctype[0]] += typed(a.ctype[1]); activeKey(a.ctype[1]) }
+    if (a.itype) { const ic = s.icons.find((x) => x.id === a.itype[0]); if (ic) { if (!ic.typed) { ic.label = ''; ic.typed = true } ic.label += typed(a.itype[1]) } activeKey(a.itype[1]) }
+    if (a.wtype && s.win) { const it = s.win.items.find((x) => x.id === a.wtype[0]); if (it) { if (!it.typed) { it.label = ''; it.typed = true } it.label += typed(a.wtype[1]) } activeKey(a.wtype[1]) }
+    if (a.key) {
+      if (a.del && s.win) s.win.text = s.win.text.slice(0, -a.del)
+      if (a.text && s.win) s.win.text += a.text
+      if (p < 1) key = a.also ? [a.also, a.key] : a.key
+    }
+  }
+  if (s.keyboard && key) s.key = key
+  render(s)
+
+  /* cursor */
+  let pos = { x: 700, y: 330 }, prevEnd = { x: 700, y: 330 }
+  for (const a of ACTIONS) {
+    if (!a.move) continue
+    if (a.t > now) break
+    if (!moveCache[a.i]) {
+      const r = rectOf(a.move)
+      moveCache[a.i] = r ? { x: r.x + r.w / 2, y: r.y + Math.min(r.h / 2, 40) } : prevEnd
+    }
+    const end = moveCache[a.i]
+    const p = ease(Math.min(1, (now - a.t) / (a.dur || 0.5)))
+    pos = { x: prevEnd.x + (end.x - prevEnd.x) * p, y: prevEnd.y + (end.y - prevEnd.y) * p }
+    prevEnd = p >= 1 ? end : pos
+    if (p < 1) break
+  }
+  const cur = document.getElementById('cursor')
+  cur.style.left = pos.x + 'px'; cur.style.top = pos.y + 'px'
+  cur.style.display = s.view === 'hw' && !ACTIONS.some((a) => a.move && a.t <= now) ? 'none' : 'block'
+
+  /* click ripples */
+  document.querySelectorAll('.ripple').forEach((r) => r.remove())
+  for (const a of ACTIONS) {
+    if (!a.click || now < a.t || now > a.t + 0.45) continue
+    const k = (now - a.t) / 0.45
+    const d = 20 + 70 * k
+    const el = document.createElement('div')
+    el.className = 'ripple' + (a.click === 2 ? ' right' : '')
+    Object.assign(el.style, { left: pos.x - d / 2 + 'px', top: pos.y - d / 2 + 'px', width: d + 'px', height: d + 'px', opacity: String(1 - k) })
+    document.getElementById('stage').appendChild(el)
+  }
+
+  /* highlight ring */
+  const hl = document.getElementById('hl')
+  const hr = s.hl ? rectOf(s.hl) : null
+  if (hr) {
+    const pad = 8
+    Object.assign(hl.style, { display: 'block', left: hr.x - pad + 'px', top: hr.y - pad + 'px', width: hr.w + pad * 2 + 'px', height: hr.h + pad * 2 + 'px' })
+  } else hl.style.display = 'none'
+  const xm = document.getElementById('xmark')
+  const xr = s.xmark ? rectOf(s.xmark) : null
+  if (xr) Object.assign(xm.style, { display: 'block', left: xr.x + xr.w / 2 - 45 + 'px', top: xr.y + xr.h / 2 - 80 + 'px' })
+  else xm.style.display = 'none'
+
+  /* caption = the line being spoken (stays until the next line starts) */
+  let line = ''
+  for (const [st, , text] of TIMING) if (st <= now + 0.05) line = text
+  document.getElementById('cap').textContent = line
+}
+</script>
+</body>
+</html>

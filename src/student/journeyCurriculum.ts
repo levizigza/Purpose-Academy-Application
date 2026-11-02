@@ -25,8 +25,8 @@ export const JOURNEY_STEPS = [
   {
     n: 13,
     title: 'Basic Computer Skills',
-    help: 'Watch short videos, then try: power, mouse, folders, save, Word, and email — in simple English.',
-    purpose: 'This may be someone’s first computer. Watch → Try → Remember → check.',
+    help: '5 basic lessons: power, mouse, keyboard, windows, save. 8 extra lessons if you want more.',
+    purpose: 'This may be someone’s first computer. Watch → Try → 10 practice questions.',
     unit: 6,
   },
   { n: 14, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 5 },
