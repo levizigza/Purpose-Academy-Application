@@ -128,7 +128,8 @@ export function stopSpeech() {
   }
   const settle = settleCurrentAudio
   settleCurrentAudio = null
-  settle?.(false)
+  /* Interrupted by newer speech: not a failure — and must not fall through to another engine. */
+  settle?.(true)
 }
 
 export function primeSpeech() {
@@ -272,7 +273,7 @@ function speakBrowser(text: string, lang: string): Promise<boolean> {
         resolve(ok)
       }
       u.onend = () => done(true)
-      u.onerror = () => done(false)
+      u.onerror = (e) => done(e.error === 'interrupted' || e.error === 'canceled')
       /* Some browsers fire neither end nor error after cancel races — time out as success if speaking. */
       window.setTimeout(() => {
         if (!settled && window.speechSynthesis.speaking) done(true)
