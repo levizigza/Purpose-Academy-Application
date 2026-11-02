@@ -1,6 +1,6 @@
 /**
  * Shared Basic Computer Skills — Purpose Academy video + try-it + practice questions.
- * Placed at journey step 12 / Unit 6 (all pathways), after Workplace Instructions.
+ * Placed at journey step 13 / Unit 6 (all pathways), after Workplace Instructions.
  *
  * Audience: Level-4 English; may be a learner’s first computer.
  * 5 Basic lessons (required) + 8 Extra lessons (optional, for more practice).
