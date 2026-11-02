@@ -6608,6 +6608,7 @@ table.data th {
 
 .train-hub-btn {
   margin-right: 0.35rem;
+  background: transparent;
   color: var(--train-text) !important;
   border-color: color-mix(in srgb, var(--train-text) 28%, transparent) !important;
 }
