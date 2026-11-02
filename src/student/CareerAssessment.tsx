@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { ExtraLangLine } from './ExtraLangLine'
 import type { SupportLang } from './journeyCurriculum'
 import {
   ASSESSMENT_COPY,
@@ -70,6 +71,7 @@ export function CareerInterestAssessment({ lang, onComplete, onBack }: InterestP
 
       <article className="career-assess-card" key={item.id}>
         <p className="career-assess-prompt">{item.text[lang]}</p>
+        {lang === 'English' && <ExtraLangLine english={item.text.English} />}
         <div className="career-likert" role="radiogroup" aria-label={item.text[lang]}>
           {LIKERT_OPTIONS.map((opt) => (
             <button
@@ -158,6 +160,7 @@ export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) 
 
       <article className="career-assess-card" key={item.id}>
         <p className="career-assess-prompt">{item.prompt[lang]}</p>
+        {lang === 'English' && <ExtraLangLine english={item.prompt.English} />}
         <div className="career-choice-stack">
           {item.options.map((opt) => (
             <button
@@ -255,6 +258,9 @@ export function CareerAssessmentResult({
       ) : null}
 
       <p className="career-result-summary">{t(result.summary, lang)}</p>
+      {lang === 'English' && (
+        <ExtraLangLine english={`${t(result.title, lang)}. ${t(result.summary, lang)}`} />
+      )}
 
       <div className="career-result-badge">{t(ASSESSMENT_COPY.openNow, lang)}</div>
 

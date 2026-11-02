@@ -90,10 +90,10 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
     { target: '[data-coach="choice-opt"]', say: 'Press the answer that fits' },
   ],
   'video-match': [
-    { target: '[data-coach="sp-video"]', say: 'Hear the sentence. Tap the matching video.' },
+    { target: '[data-coach="sp-video"]', say: 'Hear the sentence. Tap the matching picture.' },
   ],
   copycat: [
-    { target: '[data-coach="sp-copycat"]', say: 'Watch the video. Then tap the words in order.' },
+    { target: '[data-coach="sp-copycat"]', say: 'Look and listen. Then tap the words in order.' },
   ],
   'workplace-instructions': [
     { target: '[data-coach="instr-hear"]', say: 'Press Hear English' },

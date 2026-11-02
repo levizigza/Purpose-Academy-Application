@@ -429,7 +429,7 @@ const STATIONS = {
   },
 
   'video-match': {
-    title: 'Video Match',
+    title: 'Picture Match',
     step: 10,
     async setup(page) {
       await page.addInitScript(() => {
@@ -456,7 +456,7 @@ const STATIONS = {
     beats: [
       {
         id: 'intro',
-        text: 'Video Match. Hear the sentence. Then tap the video that matches.',
+        text: 'Picture Match. Hear the sentence. Then tap the picture that matches.',
         async act(page) {
           const stage = page.locator('.supported-games.is-video-match, [data-coach="sp-video"]').first()
           await stage.scrollIntoViewIfNeeded()
@@ -477,7 +477,7 @@ const STATIONS = {
       },
       {
         id: 'tap',
-        text: 'Three videos. Tap the one that matches. Wrong? Try again.',
+        text: 'Three pictures. Tap the one that matches. Wrong? Try again.',
         async act(page) {
           await page.waitForSelector('.supported-video-btn[data-correct="1"]:not(:disabled)', {
             timeout: 15000,
@@ -521,11 +521,11 @@ const STATIONS = {
     beats: [
       {
         id: 'intro',
-        text: 'Copycat. Watch the video. Then tap the words in order — say it back.',
+        text: 'Copycat. Look at the picture. Hear the sentence. Then tap the words in order.',
         async act(page) {
           const stage = page.locator('.supported-games.is-copycat, [data-coach="sp-copycat"]').first()
           await stage.scrollIntoViewIfNeeded()
-          const video = page.locator('.supported-copycat-video').first()
+          const video = page.locator('.supported-copycat-photo').first()
           if (await video.isVisible().catch(() => false)) {
             await moveTo(page, video, { steps: 18, settle: 1200 })
           } else {

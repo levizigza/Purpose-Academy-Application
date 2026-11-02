@@ -66,10 +66,39 @@ export function hearLanguageFromPreferred(preferred: string): HearLanguage {
 
 /** Current learner hear language for instruction narrations. */
 export function resolveLearnerHearLanguage(): HearLanguage {
-  return hearLanguageFromPreferred(getLearnerSupportLang())
+  return getLearnerExtraLang() ?? hearLanguageFromPreferred(getLearnerSupportLang())
 }
 
 export function learnerWantsL1Narration(lang?: HearLanguage): boolean {
   const hear = lang ?? resolveLearnerHearLanguage()
   return hear.code !== 'en' && !hear.bcp47.toLowerCase().startsWith('en')
+}
+
+const EXTRA_KEY = 'pa-extra-lang-v1'
+export const EXTRA_LANG_EVENT = 'pa-extra-lang-changed'
+
+/**
+ * Optional "More languages" pick from Your Language (step 3) — any HearLanguage
+ * beyond the six built-in support languages. Copy stays English; a translated
+ * line + hear button rides alongside (universal translator).
+ */
+export function getLearnerExtraLang(): HearLanguage | null {
+  try {
+    const raw = learnerGet(EXTRA_KEY)
+    if (!raw) return null
+    const lang = findHearLanguage(raw)
+    if (!lang || lang.code === 'en') return null
+    return lang
+  } catch {
+    return null
+  }
+}
+
+export function setLearnerExtraLang(lang: HearLanguage | null) {
+  try {
+    learnerSet(EXTRA_KEY, lang && lang.code !== 'en' ? lang.code : '')
+    window.dispatchEvent(new CustomEvent(EXTRA_LANG_EVENT, { detail: { lang } }))
+  } catch {
+    /* ignore */
+  }
 }
