@@ -49,7 +49,7 @@ export const communityPack: PathwayPack = {
       ],
     },
     6: {
-      goal: 'Unit 6 · Basic Computer Skills (step 12) — same station on Construction, Logistics, and Community.',
+      goal: 'Unit 6 · Basic Computer Skills (step 13) — same station on Construction, Logistics, and Community.',
       outcomes: [
         'Turn a computer on and off safely',
         'Use mouse, keyboard, folders, and save with a clear name',

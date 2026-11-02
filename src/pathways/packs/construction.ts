@@ -62,9 +62,9 @@ export const constructionPack: PathwayPack = {
       ],
     },
     6: {
-      goal: 'Unit 6 · Basic Computer Skills (step 12) — same station on Construction, Logistics, and Community.',
+      goal: 'Unit 6 · Basic Computer Skills (step 13) — same station on Construction, Logistics, and Community.',
       outcomes: [
-        'Open Basic Computer Skills at step 12 on this pathway',
+        'Open Basic Computer Skills at step 13 on this pathway',
         'Watch, try, and check: power, mouse, folders, save, Word, and email',
         'Use simple English — Watch → Try → Remember → one check',
       ],

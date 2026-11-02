@@ -2412,7 +2412,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 12: Basic Computer Skills — curriculum map position (Unit 6, all pathways) */
+  /* Step 13: Basic Computer Skills — curriculum map position (Unit 6, all pathways) */
   if (step === 13) {
     return (
       <Shell step={13} onBack={() => { resetInstr(); go(12) }}>
