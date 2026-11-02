@@ -107,7 +107,7 @@ export const constructionPack: PathwayPack = {
     },
     13: {
       title: 'Basic Computer Skills',
-      help: 'Unit 6 · step 13 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      help: 'Unit 6 · step 13 on every pathway — 5 basic lessons (power, mouse, keyboard, windows, save) + 8 extra. Watch, try, then 10 practice questions.',
       purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Simple English.',
     },
     14: {

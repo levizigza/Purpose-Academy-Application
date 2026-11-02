@@ -13714,6 +13714,15 @@ video {
   font-size: 0.8rem !important;
 }
 
+.is-phone-app .equip-video-kip {
+  grid-template-columns: 1fr !important;
+}
+
+.is-phone-app .equip-video-kip-item {
+  background: #ffffff;
+  border-color: color-mix(in srgb, var(--brand) 16%, var(--line));
+}
+
 .is-phone-app .train-header,
 .is-phone-app .train-panel,
 .is-phone-app .practice-section-skip {
