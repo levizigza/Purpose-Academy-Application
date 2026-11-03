@@ -6,6 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   learnerWantsL1Narration,
+  EXTRA_LANG_EVENT,
   resolveLearnerHearLanguage,
 } from './learnerLang'
 import {
@@ -62,7 +63,11 @@ export function InstructionHearChip({
   useEffect(() => {
     const sync = () => setLang(resolveLearnerHearLanguage())
     window.addEventListener('pa-support-lang-changed', sync)
-    return () => window.removeEventListener('pa-support-lang-changed', sync)
+    window.addEventListener(EXTRA_LANG_EVENT, sync)
+    return () => {
+      window.removeEventListener('pa-support-lang-changed', sync)
+      window.removeEventListener(EXTRA_LANG_EVENT, sync)
+    }
   }, [])
 
   const playL1 = useCallback(async () => {

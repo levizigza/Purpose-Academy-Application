@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { filterHearLanguages, type HearLanguage } from './hearLanguages'
 import type { UniversalBridge, UniversalHearStatus } from './universalHear'
+import { useLearnerExtraLang } from './ExtraLangLine'
 
 type Props = {
   english: string
@@ -32,6 +33,8 @@ export function UniversalHearControl({
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const rootRef = useRef<HTMLDivElement>(null)
+  /* Language picked under "More languages" on Your Language — one tap here. */
+  const quickLang = useLearnerExtraLang()
 
   const matches = useMemo(() => filterHearLanguages(query).slice(0, 40), [query])
 
@@ -107,6 +110,20 @@ export function UniversalHearControl({
             {busy ? 'Working…' : bridge ? 'Change' : 'Translate & hear'}
           </span>
         </button>
+        {quickLang && bridge?.code !== quickLang.code && (
+          <button
+            type="button"
+            className="vocab-universal-toggle vocab-universal-quick"
+            disabled={disabled || busy}
+            onClick={() => onPick(quickLang)}
+          >
+            <span className="vocab-universal-glyph" aria-hidden>
+              ▶
+            </span>
+            <span className="vocab-universal-label">Hear in {quickLang.name}</span>
+            <span className="vocab-universal-hint">Your language</span>
+          </button>
+        )}
       </div>
 
       {open && (

@@ -2,7 +2,7 @@
  * Student journey — Purpose Academy sequence:
  * Login → Register → Language → Work Style (path quiz) → Profile →
  * Vocab → Language Organize → English Eye Spy → Sentences / Word→Action →
- * Video Match → Copycat → Instructions → Site language →
+ * Picture Match → Copycat → Instructions → Site language →
  * Workplace Instructions → Basic Computer Skills (step 13 / Unit 6) → Site Language →
  * Interest assessment → Safety → Tools → Systems → Equipment Video (Unit 8) → Observation → Employment
  *
@@ -19,14 +19,14 @@ export const JOURNEY_STEPS = [
   { n: 7, title: 'Language Organize', help: 'Five short boards. Tap a picture, drop it on the matching word. Clear the round.', purpose: 'Match the picture to the word you already practised — one clear verb.', unit: 3 },
   { n: 8, title: 'English Eye Spy', help: 'Tap a picture, then its English name. Pairs clear themselves. Empty the board.', purpose: 'See the same words again in a busy scene before sentences.', unit: 3 },
   { n: 9, title: 'Sentence Structure → Word → Action', help: 'Type the word that fits the blank. Then connect each tool to its action.', purpose: 'After pictures are solid, build the sentence and link words to real movement.', unit: 4 },
-  { n: 10, title: 'Video Match', help: 'Hear the sentence. Tap the matching workplace video. Three choices.', purpose: 'Practice short sentences with help. Mistakes teach. No exam.', unit: 4 },
-  { n: 11, title: 'Copycat', help: 'Watch the video. Tap the words in order — say it back.', purpose: 'Childhood copycat with workplace video. Rebuild the sentence.', unit: 4 },
+  { n: 10, title: 'Picture Match', help: 'Hear the sentence. Tap the matching workplace picture. Three choices.', purpose: 'Practice short sentences with help. Mistakes teach. No exam.', unit: 4 },
+  { n: 11, title: 'Copycat', help: 'Look at the picture. Hear the sentence. Tap the words in order — say it back.', purpose: 'Childhood copycat with a workplace photo. Rebuild the sentence.', unit: 4 },
   { n: 12, title: 'Workplace Instructions', help: 'Hear a direction. Show you understood.', purpose: 'Short English instructions keep crews safe.', unit: 4 },
   {
     n: 13,
     title: 'Basic Computer Skills',
-    help: 'Watch short videos, then try: power, mouse, folders, save, Word, and email — in simple English.',
-    purpose: 'This may be someone’s first computer. Watch → Try → Remember → check.',
+    help: '5 basic lessons: power, mouse, keyboard, windows, save. 8 extra lessons if you want more.',
+    purpose: 'This may be someone’s first computer. Watch → Try → 10 practice questions.',
     unit: 6,
   },
   { n: 14, title: 'Site Language', help: 'Hear a job-site phrase. Choose what it means.', purpose: 'Useful English you will hear on Alberta sites.', unit: 5 },

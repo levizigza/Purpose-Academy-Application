@@ -62,9 +62,9 @@ export const constructionPack: PathwayPack = {
       ],
     },
     6: {
-      goal: 'Unit 6 · Basic Computer Skills (step 12) — same station on Construction, Logistics, and Community.',
+      goal: 'Unit 6 · Basic Computer Skills (step 13) — same station on Construction, Logistics, and Community.',
       outcomes: [
-        'Open Basic Computer Skills at step 12 on this pathway',
+        'Open Basic Computer Skills at step 13 on this pathway',
         'Watch, try, and check: power, mouse, folders, save, Word, and email',
         'Use simple English — Watch → Try → Remember → one check',
       ],
@@ -107,7 +107,7 @@ export const constructionPack: PathwayPack = {
     },
     13: {
       title: 'Basic Computer Skills',
-      help: 'Unit 6 · step 13 on every pathway — twelve short lessons: turn on/off, mouse, folders, save, Word, and email. Watch, then try.',
+      help: 'Unit 6 · step 13 on every pathway — 5 basic lessons (power, mouse, keyboard, windows, save) + 8 extra. Watch, try, then 10 practice questions.',
       purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Simple English.',
     },
     14: {

@@ -1,4 +1,6 @@
 import { FormEvent, useEffect, useRef, useState, type ReactNode } from 'react'
+import { MoreLanguagesPick } from './MoreLanguagesPick'
+import { ExtraLangLine, useLearnerExtraLang } from './ExtraLangLine'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSession } from '../auth/Session'
 import { BRAND_ASSETS } from '../brand/assets'
@@ -120,6 +122,7 @@ import { learnerGet, learnerSet } from '../practice/learnerStore'
 import {
   getLearnerSupportLang,
   isSupportLang,
+  setLearnerExtraLang,
   setLearnerSupportLang,
 } from '../practice/learnerLang'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
@@ -834,6 +837,7 @@ export function StudentSequencePage() {
     if (fromStudent && isSupportLang(fromStudent)) return fromStudent
     return getLearnerSupportLang()
   })
+  const extraLang = useLearnerExtraLang()
   const [interest, setInterest] = useState<PathwayId | null>(null)
   const [careerInterestDone, setCareerInterestDone] = useState(false)
   const [careerInterestAnswers, setCareerInterestAnswers] = useState<Record<string, LikertValue>>({})
@@ -844,7 +848,7 @@ export function StudentSequencePage() {
   const [actionCorrect, setActionCorrect] = useState(false)
   /** Construction: Sentence Structure first, then Word → Action inside step 9. */
   const [step8Phase, setStep8Phase] = useState<'sentences' | 'actions'>('sentences')
-  /** Persist last Video Match / Copycat choice for review jumps. */
+  /** Persist last Picture Match / Copycat choice for review jumps. */
   const [, setSpStation] = useState<SupportedStationId>(() => {
     try {
       return localStorage.getItem('pa-sp-station-v1') === 'copycat' ? 'copycat' : 'video-match'
@@ -1742,7 +1746,7 @@ export function StudentSequencePage() {
         onBack={() => (isPracticeMode() ? navigate('/') : go(2))}
         onNext={() => {
           markNavCueSeen(NAV_CUE.langPick)
-          setRegForm((f) => ({ ...f, preferred_language: supportLang }))
+          setRegForm((f) => ({ ...f, preferred_language: extraLang ? extraLang.name : supportLang }))
           go(4)
         }}
         nextLabel={assessT(ASSESSMENT_COPY.next, supportLang)}
@@ -1764,9 +1768,10 @@ export function StudentSequencePage() {
                 <button
                   key={l.id}
                   type="button"
-                  className={`train-lang${supportLang === l.id ? ' is-selected' : ''}`}
+                  className={`train-lang${supportLang === l.id && !extraLang ? ' is-selected' : ''}`}
                   onClick={() => {
                     markNavCueSeen(NAV_CUE.langPick)
+                    setLearnerExtraLang(null)
                     setSupportLang(l.id)
                   }}
                   lang={
@@ -1789,9 +1794,19 @@ export function StudentSequencePage() {
               ))}
             </NavGlowRegion>
           </NavCueTarget>
+          <MoreLanguagesPick
+            selected={extraLang}
+            onPick={(lang) => {
+              markNavCueSeen(NAV_CUE.langPick)
+              setSupportLang('English')
+              setLearnerExtraLang(lang)
+            }}
+            onClear={() => setLearnerExtraLang(null)}
+          />
           <div className="train-bridge">
             <p><strong>{assessT(ASSESSMENT_COPY.introTitle, supportLang)}</strong></p>
             <p>{assessT(ASSESSMENT_COPY.introBody, supportLang)}</p>
+            <ExtraLangLine english={`${ASSESSMENT_COPY.introTitle.English}. ${ASSESSMENT_COPY.introBody.English}`} />
           </div>
           <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickHint, supportLang)}</p>
         </div>
@@ -2050,6 +2065,7 @@ export function StudentSequencePage() {
                   : 'Construction Questions'
             }
             picturedAnswers={VOCAB_UNIT.filter((t) => t.imageKey).map((t) => t.english)}
+            answerPhotoKeys={pathwayId === 'community' ? undefined : VOCAB_UNIT}
             onLevel1Passed={() => {
               setSentenceLevel1(true)
               recordSkillAttempt('sentence-cloze', true, 20)
@@ -2211,7 +2227,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 10: Video Match — own dropdown station */
+  /* Step 10: Picture Match — own dropdown station */
   if (step === 10) {
     return (
       <Shell step={10} onBack={() => go(9)}>
@@ -2231,11 +2247,11 @@ export function StudentSequencePage() {
         />
         <StationContext>
           <WhyWork>
-            Help is strength. Hear a sentence. Tap the video that shows it.
+            Help is strength. Hear a sentence. Tap the picture that shows it.
           </WhyWork>
           <TeachNote>
-            Three short Mixkit clips. Hear the sentence, then tap the match. Wrong? Try again. Jump
-            sections lists Video Match and Copycat separately.
+            Three royalty-free workplace photos. Hear the sentence, then tap the match. Wrong? Try
+            again. Jump sections lists Picture Match and Copycat separately.
           </TeachNote>
         </StationContext>
       </Shell>
@@ -2256,7 +2272,7 @@ export function StudentSequencePage() {
             } catch {
               /* ignore */
             }
-            if (next === 'video-match') go(10, 'Opening Video Match…')
+            if (next === 'video-match') go(10, 'Opening Picture Match…')
           }}
           onComplete={() =>
             requestPracticeAdvance(() => go(12, 'Opening workplace instructions…'))
@@ -2264,10 +2280,10 @@ export function StudentSequencePage() {
         />
         <StationContext>
           <WhyWork>
-            Watch the action. Say the sentence back by tapping the words in order.
+            Look at the picture. Say the sentence back by tapping the words in order.
           </WhyWork>
           <TeachNote>
-            Childhood copycat with a workplace video. Watch once, then rebuild the line. Wrong
+            Childhood copycat with a workplace photo. Listen once, then rebuild the line. Wrong
             order? Soft try again.
           </TeachNote>
         </StationContext>
@@ -2357,6 +2373,7 @@ export function StudentSequencePage() {
               </button>
             )}
           </div>
+          <ExtraLangLine english={instr.text} compact />
           {!instrHeard && <p className="muted">Hear the English instruction at least once before you answer.</p>}
           <p><strong>What should you do?</strong></p>
           <div className="train-choice-grid" data-coach="instr-choice">
@@ -2395,7 +2412,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 12: Basic Computer Skills — curriculum map position (Unit 6, all pathways) */
+  /* Step 13: Basic Computer Skills — curriculum map position (Unit 6, all pathways) */
   if (step === 13) {
     return (
       <Shell step={13} onBack={() => { resetInstr(); go(12) }}>

@@ -6608,6 +6608,7 @@ table.data th {
 
 .train-hub-btn {
   margin-right: 0.35rem;
+  background: transparent;
   color: var(--train-text) !important;
   border-color: color-mix(in srgb, var(--train-text) 28%, transparent) !important;
 }
@@ -12463,6 +12464,11 @@ video {
   color: var(--train-text, #f4f7fb);
 }
 
+.equip-video-check .lede {
+  margin: 0;
+  color: #dce6f2;
+}
+
 .equip-video-check .train-check-prompt {
   margin: 0;
   color: #dce6f2;
@@ -13711,6 +13717,15 @@ video {
 .is-phone-app .equip-video-kip-label {
   color: var(--brand) !important;
   font-size: 0.8rem !important;
+}
+
+.is-phone-app .equip-video-kip {
+  grid-template-columns: 1fr !important;
+}
+
+.is-phone-app .equip-video-kip-item {
+  background: #ffffff;
+  border-color: color-mix(in srgb, var(--brand) 16%, var(--line));
 }
 
 .is-phone-app .train-header,
@@ -17263,4 +17278,187 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
   border-color: rgba(232, 163, 23, 0.45);
   background: color-mix(in srgb, #071828 70%, #0b2f5c);
   color: #f5f8fc;
+}
+
+/* Your Language — "More languages" (universal translator) + translated line (L3, dual-shell). */
+.train-lang-more {
+  margin-top: 0.75rem;
+}
+
+.vocab-universal-option.is-selected {
+  background: #fff8e8;
+  border-color: #e8a317;
+}
+
+.extra-lang-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  margin: 0.45rem 0 0;
+  padding: 0.5rem 0.7rem;
+  border-left: 3px solid #e8a317;
+  border-radius: 8px;
+  background: #fff8e8;
+  color: var(--brand-deep, #0b2f5c);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.extra-lang-line.is-compact {
+  font-size: 0.9rem;
+  padding: 0.35rem 0.55rem;
+}
+
+.extra-lang-line.is-soft-miss {
+  background: #f7f9fc;
+  border-left-color: #9fb0c4;
+}
+
+.extra-lang-tag {
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #a16207;
+}
+
+.extra-lang-text {
+  flex: 1 1 12rem;
+  font-weight: 600;
+}
+
+.extra-lang-text.is-loading {
+  font-weight: 500;
+  color: #5a6f86;
+}
+
+.extra-lang-hear {
+  border: 1px solid #e8a317;
+  border-radius: 999px;
+  background: #fff;
+  color: #7a4b00;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+}
+
+.extra-lang-hear:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.vocab-universal-bar:has(.vocab-universal-quick) {
+  gap: 0.4rem;
+}
+
+/* Supported Practice — royalty-free photos (Picture Match + Copycat). Whole object visible. */
+.supported-photo-el {
+  width: 100%;
+  height: 9.5rem;
+  object-fit: contain;
+  display: block;
+  background: #fff;
+  pointer-events: none;
+}
+.supported-photo-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.35rem 0.55rem;
+  background: color-mix(in srgb, #041526 82%, transparent);
+  color: #f4f7fb;
+  font-size: 0.85rem;
+  font-weight: 750;
+  text-align: left;
+}
+.supported-copycat-photo {
+  width: 100%;
+  height: 230px;
+  object-fit: contain;
+  display: block;
+  background: #fff;
+}
+.supported-copycat-caption .supported-hear-again {
+  margin-left: 0.6rem;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.82rem;
+}
+.is-phone-app .supported-photo-el {
+  height: 8rem;
+}
+.is-phone-app .supported-copycat-photo {
+  height: 190px;
+}
+
+/* Basic Computer Skills — locked Extra lessons + window / attach try boards */
+.equip-video-rail-btn.is-locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.comp-win-try {
+  min-height: 11rem;
+  position: relative;
+}
+.comp-win {
+  width: min(22rem, 100%);
+  border: 2px solid #c5d0de;
+  border-radius: 10px;
+  background: #fff;
+  color: #111;
+  overflow: hidden;
+}
+.comp-win.is-big {
+  width: 100%;
+  min-height: 9rem;
+}
+.comp-win p {
+  padding: 0.75rem 1rem;
+  margin: 0;
+}
+.comp-win-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e9eef5;
+  padding-left: 0.75rem;
+  font-weight: 750;
+}
+.comp-win-bar button {
+  width: 3rem;
+  height: 2.6rem;
+  border: 0;
+  background: transparent;
+  font-size: 1.3rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.comp-win-bar button:hover,
+.comp-win-bar button:focus-visible {
+  background: #dbe8f7;
+}
+.comp-win-bar button.is-x {
+  color: #c62828;
+}
+.comp-win-taskbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.4rem;
+  background: rgba(10, 20, 35, 0.92);
+  border-radius: 0 0 10px 10px;
+}
+.comp-attach-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border: 2px solid #e8a317;
+  border-radius: 8px;
+  background: #fff8e8;
+  color: #111;
+  font-weight: 700;
 }

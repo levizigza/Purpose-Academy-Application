@@ -68,8 +68,8 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     /* Step 10 — own dropdown station (like Eye Spy). */
     id: 'video-match',
     steps: [10],
-    title: 'Video Match',
-    lede: 'Hear the sentence. Tap the video that matches. Three short clips. Wrong? Try again.',
+    title: 'Picture Match',
+    lede: 'Hear the sentence. Tap the picture that matches. Three photos. Wrong? Try again.',
     video: 'explainers/video-match.mp4',
   },
   {
@@ -77,7 +77,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'copycat',
     steps: [11],
     title: 'Copycat',
-    lede: 'Watch the video. Hear the sentence. Tap the words in order — say it back.',
+    lede: 'Look at the picture. Hear the sentence. Tap the words in order — say it back.',
     video: 'explainers/copycat.mp4',
   },
   {
@@ -91,7 +91,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'computer-skills',
     steps: [13],
     title: 'Basic Computer Skills',
-    lede: 'Watch a short lesson, then try a simple computer task.',
+    lede: 'Watch a short lesson, try it, then answer 10 practice questions.',
     video: 'explainers/computer-skills.mp4',
   },
   {

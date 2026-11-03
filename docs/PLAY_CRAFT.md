@@ -118,13 +118,13 @@ stays real workplace English.
 | Language Organize | Clear this round/word · N left | Picture / round / station | Not yet — wrong box · try again |
 | Sentence Structure | Clear this page · N left · type the matching word | Sentence / page clear | Four reference choices + Type / Go · soft type retry |
 | Word → Action | Clear this action · N left | Action clear | Not yet · try again |
-| Supported Practice | Clear this board · N videos / lines left | Video Match / Copycat / board clear | Not yet · try again |
+| Supported Practice | Clear this board · N pictures / lines left | Picture Match / Copycat / board clear | Not yet · try again |
 | Workplace Instructions | Clear this instruction · N left | Instruction clear | Not yet · try again |
 | QuizRunner (Safety / Final written) | Clear this item · N left | Item / set clear | Soft retry · gated sets |
 | Site Language | Clear this phrase · N left | Phrase clear | Not yet · try again |
 | Tools & Equipment | Clear this tool group · N left | Tool group clear | Not yet · try again |
 | Workplace Systems | Clear this system · N left | System clear | Not yet · try again |
-| Basic Computer Skills | Watch/try/check · N left | Lesson clear on check | Wrong check · try again |
+| Basic Computer Skills | Watch → try → practice question N of 10 · Basic N of 5 | Lesson clear after question 10; Basics clear opens Extras + Continue | Not yet · teach line · watch that part again · try again |
 | Equipment videos | Clear this video · N left | Video clear | Keep watching |
 | Instructor check | Clear this order · N left | Order clear | Not yet · try again |
 | On-site decisions | Clear this decision · N left | Decision clear | Not yet · try again |

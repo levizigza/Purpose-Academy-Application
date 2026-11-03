@@ -104,7 +104,7 @@ Run this on every station before merge:
 | 9 | Sentences / Word→Action | Pick full sentence → hear → type it; soft miss + shuffle; hold clear until audio ends |
 | 10 | Supported Practice | Picture Match → Sentence Match (video then play each) — not remediation shame |
 | 11 | Workplace Instructions | Hear + choose what to do |
-| 12 | Computer Skills | Watch → try; first-computer friendly |
+| 12 | Computer Skills | 5 Basic + 8 Extra · watch → try → 10 practice questions (miss → watch that part again); first-computer friendly |
 | 13 | Site Language | Continue to work-interest questions |
 | 14 | Work Interests | No Holland/RIASEC in any language |
 | 15–17 | Safety / Tools / Systems | Practice checks, not perfect-score exams |
@@ -236,3 +236,11 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 - Visual Vocab / mother-tongue greetings: English spelling hidden until typed; type panel first-viewport with photo; langs collapse after bridge.
 - Soft miss + nearby “Clear this word · type what you heard”; TTS fail still opens type (Hear again).
+
+### 2026-11-02 — Language picker, photo Supported Practice, Computer course rebuild
+
+- Your Language (step 3): searchable **More languages** (universal translator, ~90 languages). Screens stay simple English; each work question gets a translated line + ▶ Hear; Workplace Words gets a one-tap “Hear in <language>”.
+- Supported Practice (steps 10–11): videos → royalty-free **photos**. Picture Match = hear the sentence, tap the photo. Copycat = look at the photo, hear the sentence, tap the words in order.
+- Sentence Structure: no score gate — missed sentences come back in a short repair round. Picture prefers the learner’s own Workplace Words photo for the answer word.
+- Basic Computer Skills: 5 Basic lessons (required, in order) + 8 Extra lessons (open after the Basics; “Done for now” exit). Each: watch → try → 10 practice questions; a miss shows the teach line and **Watch that part again** replays the exact narrated line. Videos are rendered frame by frame so each click/key lands on the spoken word (`scripts/bcs-render/`).
+

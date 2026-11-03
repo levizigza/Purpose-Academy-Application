@@ -331,13 +331,13 @@ export function PracticeHub({
           <p className="ph-video-section-kicker">Shared unit · all pathways</p>
           <h2>Basic Computer Skills</h2>
           <p>
-            Short computer lessons on every pathway — turn on/off, mouse, folders, save, Word, and email.
-            Watch, then try. First-computer friendly.
+            5 basic lessons on every pathway — power, mouse, keyboard, windows, save — plus 8 extra.
+            Watch, try, then 10 practice questions. First-computer friendly.
           </p>
           <button
             type="button"
             className="btn btn-primary ph-video-section-btn"
-            onClick={() => onOpenLesson(12)}
+            onClick={() => onOpenLesson(13)}
           >
             Open Basic Computer Skills
           </button>

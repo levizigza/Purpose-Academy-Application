@@ -17,16 +17,18 @@ function sentenceImageUrl(file?: string) {
   return `${base}sentence-cloze/${file}`
 }
 
-/** Prefer PPTX tile; fall back to Visual Vocabulary photo (pathway imageKey). */
-function resolveClozeImage(item: SentenceClozeItem) {
-  return sentenceImageUrl(item.imageFile) || pathwayImage(item.imageKey)
+/**
+ * Prefer the real Workplace Words photo for the answer word (royalty-free, same
+ * picture the learner already met), then the item's own photo key, then the PPTX tile.
+ */
+function resolveClozeImage(item: SentenceClozeItem, answerPhotos?: Map<string, string>) {
+  const n = normWord(item.answer)
+  const vvKey = answerPhotos?.get(n) || (n.endsWith('s') ? answerPhotos?.get(n.slice(0, -1)) : undefined)
+  return pathwayImage(vvKey) || pathwayImage(item.imageKey) || sentenceImageUrl(item.imageFile)
 }
 
 /** Construction Questions PPTX: 10 items per worksheet page (1–10, 11–20, …). */
 export const SENTENCE_PAGE_SIZE = 10
-
-/** Pass a page with honest effort — 8 of 10 first-try (same 80% bar as the old 16/20). */
-const PASS_SCORE = 8
 
 /** Brief hold after success TTS so the filled sentence stays readable before advance. */
 const SUCCESS_SETTLE_MS = 320
@@ -130,6 +132,8 @@ type Props = {
   picturedAnswers?: string[]
   /** Drop cloze rows whose answers are not in pictured Visual Vocabulary. */
   picturedOnlyBank?: boolean
+  /** Workplace Words photos: English word → pathway image key (photo beats clipart). */
+  answerPhotoKeys?: { english: string; imageKey?: string }[]
   /**
    * Document brand shown in kickers / help copy
    * (e.g. "Construction Questions" or "Logistics Questions").
@@ -154,6 +158,7 @@ export function SentenceClozeDrill({
   items,
   picturedAnswers,
   picturedOnlyBank,
+  answerPhotoKeys,
   documentLabel = 'Construction Questions',
   onLevel1Passed,
   onContinueToActions,
@@ -169,6 +174,15 @@ export function SentenceClozeDrill({
         : items,
     [items, picturedAnswers, picturedOnlyBank],
   )
+  const answerPhotos = useMemo(() => {
+    const m = new Map<string, string>()
+    for (const t of answerPhotoKeys || []) {
+      if (t.imageKey && !t.imageKey.startsWith('dc-') && !m.has(normWord(t.english))) {
+        m.set(normWord(t.english), t.imageKey)
+      }
+    }
+    return m
+  }, [answerPhotoKeys])
   const pageCount = Math.max(1, Math.ceil(bank.length / SENTENCE_PAGE_SIZE))
   const [page, setPage] = useState(0)
   const [phase, setPhase] = useState<Phase>('drill')
@@ -297,12 +311,7 @@ export function SentenceClozeDrill({
       return
     }
 
-    const passed = newScore >= PASS_SCORE
-    if (!passed) {
-      setPhase('result')
-      playFoley('wrong')
-      return
-    }
+    /* No score gate: anything not yet clear comes back once in a short repair round. */
     if (nextMissed.length > 0) {
       setRepairDeck(shuffle(nextMissed))
       setMissed([])
@@ -489,8 +498,7 @@ export function SentenceClozeDrill({
         </div>
         <h2>Page complete</h2>
         <p className="lede">
-          Sentences {from}–{to} clear. {scoreCorrect} of {pageItems.length} landed — keep the words
-          working for you on site.
+          Sentences {from}–{to} clear. Keep the words working for you on site.
         </p>
         <div className="hero-actions">
           <button type="button" className="btn btn-primary" onClick={onContinueToActions}>
@@ -513,7 +521,6 @@ export function SentenceClozeDrill({
         <p className="section-kicker">Sentence Structure</p>
         <h2>Keep learning this page</h2>
         <p className="lede">
-          {scoreCorrect} of {pageItems.length} clear so far. Clear {PASS_SCORE} on this page to keep moving.
           Pick the full sentence, hear it, then type it — soft try again when it is not yet. No rush.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>
@@ -537,7 +544,7 @@ export function SentenceClozeDrill({
   const displayWord = showWord ? item.answer : null
   const before = item.prompt.split('______')[0] ?? ''
   const after = item.prompt.split('______')[1] ?? ''
-  const imageSrc = resolveClozeImage(item)
+  const imageSrc = resolveClozeImage(item, answerPhotos)
   const choiceLetters = ['A', 'B', 'C', 'D'] as const
   const typingOpen = beat === 'type' && !resolved
   const pickOpen = beat === 'pick' && !resolved
@@ -577,7 +584,6 @@ export function SentenceClozeDrill({
       <p className="train-vocab-counter">
         {phase === 'repair' ? 'Repair round · ' : ''}
         All {bank.length} {documentLabel} · Item {idx + 1} of {deck.length}
-        {phase === 'drill' ? ` · ${scoreCorrect} clear so far` : ''}
         {level1Unlocked ? ' · First page done' : ''}
       </p>
       <WorksheetPageJump id="sentence-page-jump-drill" />

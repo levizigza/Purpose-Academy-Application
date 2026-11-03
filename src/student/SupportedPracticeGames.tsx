@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   sentenceChips,
-  supportedVideoSrc,
+  supportedPhotoSrc,
   type SupportedPracticeItem,
 } from '../pathways/packs/supportedPracticeDeck'
 import { playFoley } from '../audio/foley'
@@ -26,21 +26,21 @@ export const SUPPORTED_STATIONS: Record<
   { title: string; help: string; nearby: (left: number) => string; childhood: string }
 > = {
   'video-match': {
-    title: 'Video Match',
-    help: 'Hear the sentence. Tap the video that matches.',
-    nearby: (left) => (left <= 0 ? 'Videos clear' : `${left} left`),
-    childhood: 'Like matching cards — but with short workplace videos.',
+    title: 'Picture Match',
+    help: 'Hear the sentence. Tap the picture that matches.',
+    nearby: (left) => (left <= 0 ? 'Pictures clear' : `${left} left`),
+    childhood: 'Like matching cards — a sentence and a workplace photo.',
   },
   copycat: {
     title: 'Copycat',
-    help: 'Watch the video. Tap the words in order — say it back.',
+    help: 'Look at the picture. Hear the sentence. Tap the words in order.',
     nearby: (left) => (left <= 0 ? 'Copycat clear' : `${left} left`),
-    childhood: 'Like childhood copycat — watch, then say it back with taps.',
+    childhood: 'Like childhood copycat — hear it, then say it back with taps.',
   },
 }
 
 const ROUNDS = 3
-const VIDEO_CHOICES = 3
+const PHOTO_CHOICES = 3
 
 type Props = {
   items: readonly SupportedPracticeItem[]
@@ -51,10 +51,10 @@ type Props = {
 
 /**
  * Supported Practice — two switchable stations (Organize / Eye Spy pattern):
- * Video Match · Copycat. Royalty-free Mixkit clips · Level-4 English.
+ * Picture Match · Copycat. Royalty-free photos · Level-4 English.
  */
 export function SupportedPracticeGames({ items, station, onStationChange, onComplete }: Props) {
-  const deck = useMemo(() => (items.length >= VIDEO_CHOICES ? [...items] : [...items]), [items])
+  const deck = useMemo(() => (items.length >= PHOTO_CHOICES ? [...items] : [...items]), [items])
   const meta = SUPPORTED_STATIONS[station]
 
   return (
@@ -87,7 +87,7 @@ export function SupportedPracticeGames({ items, station, onStationChange, onComp
   )
 }
 
-/* ─── Video Match: hear sentence → tap matching video (3 options) ─── */
+/* ─── Picture Match: hear sentence → tap matching photo (3 options) ─── */
 
 function VideoMatchBoard({
   deck,
@@ -113,7 +113,7 @@ function VideoMatchBoard({
     const source = pool.length ? pool : deck
     const pick = source[Math.floor(Math.random() * source.length)]
     if (!pick) return
-    const distractors = shuffle(deck.filter((item) => item.id !== pick.id)).slice(0, VIDEO_CHOICES - 1)
+    const distractors = shuffle(deck.filter((item) => item.id !== pick.id)).slice(0, PHOTO_CHOICES - 1)
     setTarget(pick)
     setChoices(shuffle([pick, ...distractors]))
     setPickId(null)
@@ -157,15 +157,15 @@ function VideoMatchBoard({
     void speakEnglish(target.sentence)
     if (nextCleared >= ROUNDS) {
       setBoardClear(true)
-      firePlayClear({ label: 'Videos clear', remnant: 'Station clear — continue when ready', kind: 'board' })
+      firePlayClear({ label: 'Pictures clear', remnant: 'Station clear — continue when ready', kind: 'board' })
       return
     }
-    firePlayClear({ label: 'Video clear', remnant: `${ROUNDS - nextCleared} left`, kind: 'micro' })
+    firePlayClear({ label: 'Picture clear', remnant: `${ROUNDS - nextCleared} left`, kind: 'micro' })
     window.setTimeout(() => dealRound(nextUsed), 700)
   }
 
   if (!target || choices.length < 2) {
-    return <div className="alert warn">Video Match needs workplace videos.</div>
+    return <div className="alert warn">Picture Match needs workplace photos.</div>
   }
 
   return (
@@ -189,7 +189,7 @@ function VideoMatchBoard({
 
       {miss ? (
         <p className="play-soft-miss" role="status">
-          {softMissLine('Wrong video — try again.')}
+          {softMissLine('Not that picture — try again.')}
         </p>
       ) : null}
 
@@ -206,16 +206,14 @@ function VideoMatchBoard({
               data-correct={item.id === target.id ? '1' : undefined}
               disabled={!!pickId || boardClear}
               onClick={() => pick(item)}
-              aria-label={`Video for: ${item.sentence}`}
+              aria-label={`Picture for: ${item.sentence}`}
             >
-              <LoopClip
-                src={supportedVideoSrc(item.video)}
-                poster={supportedVideoSrc(item.poster)}
-                active={!boardClear}
-              />
-              <span className="supported-video-badge" aria-hidden>
-                Video
-              </span>
+              <img className="supported-photo-el" src={supportedPhotoSrc(item)} alt="" loading="eager" />
+              {selected && pickOk ? (
+                <span className="supported-photo-caption" lang="en">
+                  {item.sentence}
+                </span>
+              ) : null}
             </button>
           )
         })}
@@ -240,7 +238,7 @@ function VideoMatchBoard({
 
       {boardClear ? (
         <div className="supported-games-advance">
-          <div className="alert ok">Video Match clear. Help is strength — next door can open.</div>
+          <div className="alert ok">Picture Match clear. Help is strength — next door can open.</div>
           <button type="button" className="btn btn-primary" onClick={onComplete}>
             Continue to Copycat
           </button>
@@ -252,7 +250,7 @@ function VideoMatchBoard({
   )
 }
 
-/* ─── Copycat: watch video → rebuild sentence with word chips ─── */
+/* ─── Copycat: look at photo + hear sentence → rebuild it with word chips ─── */
 
 function CopycatBoard({
   deck,
@@ -299,9 +297,9 @@ function CopycatBoard({
 
   useEffect(() => {
     if (!target || watched) return
-    /* Model once: play clip VO after a short beat so the eye lands on the video. */
+    /* Model once after a short beat so the eye lands on the photo, then unlock chips. */
     const t = window.setTimeout(() => {
-      void speakEnglish(target.sentence)
+      void speakEnglish(target.sentence).finally(() => setWatched(true))
     }, 500)
     return () => window.clearTimeout(t)
   }, [target, watched, deal])
@@ -344,7 +342,7 @@ function CopycatBoard({
   }
 
   if (!target) {
-    return <div className="alert warn">Copycat needs workplace videos.</div>
+    return <div className="alert warn">Copycat needs workplace photos.</div>
   }
 
   const nextWord = expected[built.length] || ''
@@ -365,14 +363,24 @@ function CopycatBoard({
       </header>
 
       <figure className="supported-copycat-stage">
-        <HeroClip
-          key={`hero-${deal}`}
-          src={supportedVideoSrc(target.video)}
-          poster={supportedVideoSrc(target.poster)}
-          onEnded={() => setWatched(true)}
+        <img
+          key={`photo-${deal}`}
+          className="supported-copycat-photo"
+          src={supportedPhotoSrc(target)}
+          alt=""
         />
         <figcaption className="supported-copycat-caption">
-          {watched ? 'Now tap the words in order.' : 'Watch once · then copy the sentence.'}
+          {watched ? 'Now tap the words in order.' : 'Listen once · then copy the sentence.'}
+          <button
+            type="button"
+            className="btn btn-ghost supported-hear-again"
+            disabled={boardClear}
+            onClick={() => {
+              void speakEnglish(target.sentence).finally(() => setWatched(true))
+            }}
+          >
+            Hear it again
+          </button>
         </figcaption>
       </figure>
 
@@ -382,7 +390,7 @@ function CopycatBoard({
 
       {miss ? (
         <p className="play-soft-miss" role="status">
-          {softMissLine('Wrong order — watch the line and try again.')}
+          {softMissLine('Not that order — hear it again and try.')}
         </p>
       ) : null}
 
@@ -413,74 +421,5 @@ function CopycatBoard({
         <StationCoach stationId="copycat" layoutKey={`cc-${deal}-${cleared}`} />
       )}
     </section>
-  )
-}
-
-function LoopClip({ src, poster, active }: { src: string; poster: string; active: boolean }) {
-  const ref = useRef<HTMLVideoElement>(null)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    el.muted = true
-    el.defaultMuted = true
-    el.playsInline = true
-    el.loop = true
-    const tryPlay = () => {
-      if (active) void el.play().catch(() => {})
-      else el.pause()
-    }
-    tryPlay()
-    el.addEventListener('loadeddata', tryPlay)
-    return () => el.removeEventListener('loadeddata', tryPlay)
-  }, [src, active])
-  return (
-    <video
-      ref={ref}
-      className="supported-video-el"
-      src={src}
-      poster={poster}
-      muted
-      autoPlay
-      playsInline
-      loop
-      preload="auto"
-    />
-  )
-}
-
-function HeroClip({
-  src,
-  poster,
-  onEnded,
-}: {
-  src: string
-  poster: string
-  onEnded: () => void
-}) {
-  const ref = useRef<HTMLVideoElement>(null)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    el.muted = true
-    el.defaultMuted = true
-    el.playsInline = true
-    el.loop = false
-    const done = () => onEnded()
-    el.addEventListener('ended', done)
-    void el.play().catch(() => onEnded())
-    return () => el.removeEventListener('ended', done)
-  }, [src, onEnded])
-  return (
-    <video
-      ref={ref}
-      className="supported-copycat-video"
-      src={src}
-      poster={poster}
-      muted
-      autoPlay
-      playsInline
-      controls
-      preload="auto"
-    />
   )
 }

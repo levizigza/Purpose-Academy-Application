@@ -41,6 +41,8 @@ const FALLBACK_LANG: Partial<Record<SupportLang, string>> = {
 
 let voicesReady: Promise<SpeechSynthesisVoice[]> | null = null
 let currentAudio: HTMLAudioElement | null = null
+/** Settles the promise of the clip in `currentAudio` — pause() never fires ended/error. */
+let settleCurrentAudio: ((ok: boolean) => void) | null = null
 const audioUrlCache = new Map<string, string>()
 let bakedManifest: Record<string, string> | null | undefined
 
@@ -124,6 +126,10 @@ export function stopSpeech() {
     }
     currentAudio = null
   }
+  const settle = settleCurrentAudio
+  settleCurrentAudio = null
+  /* Interrupted by newer speech: not a failure — and must not fall through to another engine. */
+  settle?.(true)
 }
 
 export function primeSpeech() {
@@ -138,19 +144,29 @@ function playAudioUrl(url: string): Promise<boolean> {
     }
     stopSpeech()
     const audio = new Audio(url)
+    let settled = false
+    let guard = 0
+    const done = (ok: boolean) => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(guard)
+      if (currentAudio === audio) currentAudio = null
+      if (settleCurrentAudio === done) settleCurrentAudio = null
+      resolve(ok)
+    }
+    const arm = (ms: number) => {
+      window.clearTimeout(guard)
+      guard = window.setTimeout(() => done(!audio.paused || audio.ended), ms)
+    }
     currentAudio = audio
-    audio.onended = () => {
-      if (currentAudio === audio) currentAudio = null
-      resolve(true)
+    settleCurrentAudio = done
+    arm(20000)
+    audio.onloadedmetadata = () => {
+      if (Number.isFinite(audio.duration)) arm(audio.duration * 1000 + 4000)
     }
-    audio.onerror = () => {
-      if (currentAudio === audio) currentAudio = null
-      resolve(false)
-    }
-    void audio.play().catch(() => {
-      if (currentAudio === audio) currentAudio = null
-      resolve(false)
-    })
+    audio.onended = () => done(true)
+    audio.onerror = () => done(false)
+    void audio.play().catch(() => done(false))
   })
 }
 
@@ -257,7 +273,7 @@ function speakBrowser(text: string, lang: string): Promise<boolean> {
         resolve(ok)
       }
       u.onend = () => done(true)
-      u.onerror = () => done(false)
+      u.onerror = (e) => done(e.error === 'interrupted' || e.error === 'canceled')
       /* Some browsers fire neither end nor error after cancel races — time out as success if speaking. */
       window.setTimeout(() => {
         if (!settled && window.speechSynthesis.speaking) done(true)

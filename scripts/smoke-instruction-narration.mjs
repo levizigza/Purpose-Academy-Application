@@ -30,13 +30,13 @@ async function dismiss(page){ const c=page.locator('.station-explainer-continue,
 async function runShell(browser, shell){
   const vp = shell==='phone'?{width:430,height:900}:{width:1280,height:820}
   const page = await browser.newPage({viewport:vp})
-  await prep(page,{shell, step:12, coachSeen:true, explainerSeen:false})
+  await prep(page,{shell, step:13, coachSeen:true, explainerSeen:false})
   await page.goto(`${BASE}/journey`,{waitUntil:'domcontentloaded', timeout:90000}); await page.waitForTimeout(900)
   await page.waitForSelector('.station-explainer, .instr-narration-hear',{timeout:25000})
   const explainerOk = await page.locator('.station-explainer .instr-narration-hear').first().isVisible().catch(()=>false)
   console.log(`[${shell}] explainer Hear:`, explainerOk?'visible':'MISSING'); await shot(page, `${shell}-explainer-hear.png`)
   const page2 = await browser.newPage({viewport:vp})
-  await prep(page2,{shell, step:12, coachSeen:true, explainerSeen:true})
+  await prep(page2,{shell, step:13, coachSeen:true, explainerSeen:true})
   await page2.goto(`${BASE}/journey`,{waitUntil:'domcontentloaded', timeout:90000}); await page2.waitForTimeout(900); await dismiss(page2)
   await page2.waitForSelector('.comp-skills-card, .equip-video-card',{timeout:25000})
   const compOk = await page2.locator('.comp-skills-instr-hear .instr-narration-hear').first().isVisible().catch(()=>false)

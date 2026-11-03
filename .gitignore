@@ -20,3 +20,4 @@ coverage/
 !.dev.vars.example
 # Piper OSS TTS models (downloaded on demand by BCS video builder)
 tools/piper-voices/
+*.tsbuildinfo
