@@ -530,6 +530,21 @@ export function VocabSheetCard({
 
         {(() => {
           const showLangCue = !productionPhase && langsToShow.length > 0
+          const universal = !typedEnglish ? (
+            <UniversalHearControl
+              english={term.english}
+              disabled={alreadyKnown || (productionPhase && !universalBridge)}
+              bridge={universalBridge}
+              busy={universalBusy || speaking}
+              status={universalStatus}
+              onPick={(lang) => {
+                markNavCueSeen(NAV_CUE.vocabLang)
+                if (coachFirst) advanceStationCoach('workplace-words')
+                onUniversalHear(lang)
+              }}
+              onCloseStatus={onClearUniversalStatus}
+            />
+          ) : null
           const langList = (
             <ul
               className={`vocab-sheet-langs${productionPhase ? ' is-collapsed' : ''}`}
@@ -574,29 +589,14 @@ export function VocabSheetCard({
                   </li>
                 )
               })}
+              {universal && <li className="vocab-sheet-lang-more">{universal}</li>}
             </ul>
           )
-          const universal = !typedEnglish ? (
-            <UniversalHearControl
-              english={term.english}
-              disabled={alreadyKnown || (productionPhase && !universalBridge)}
-              bridge={universalBridge}
-              busy={universalBusy || speaking}
-              status={universalStatus}
-              onPick={(lang) => {
-                markNavCueSeen(NAV_CUE.vocabLang)
-                if (coachFirst) advanceStationCoach('workplace-words')
-                onUniversalHear(lang)
-              }}
-              onCloseStatus={onClearUniversalStatus}
-            />
-          ) : null
           /* Nav cue: once-then-quiet arrow/glow at hear chips (same grammar as Mode/Hub). */
           if (!showLangCue) {
             return (
               <>
                 {langList}
-                {universal}
               </>
             )
           }
@@ -612,7 +612,6 @@ export function VocabSheetCard({
                   {langList}
                 </NavGlowRegion>
               </NavCueTarget>
-              {universal}
             </>
           )
         })()}

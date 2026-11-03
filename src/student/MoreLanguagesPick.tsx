@@ -30,31 +30,19 @@ export function MoreLanguagesPick({ selected, onPick, onClear }: Props) {
   }, [open])
 
   return (
-    <div className="vocab-universal train-lang-more">
-      <div className="vocab-universal-bar">
-        <button
-          type="button"
-          className={`vocab-universal-toggle${open ? ' is-open' : ''}${selected ? ' is-bridged' : ''}`}
-          aria-expanded={open}
-          aria-controls={panelId}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="vocab-universal-glyph" aria-hidden>
-            ◈
-          </span>
-          <span className="vocab-universal-label">
-            {selected ? (
-              <>
-                {selected.name}
-                {selected.native ? ` · ${selected.native}` : ''}
-              </>
-            ) : (
-              'More languages'
-            )}
-          </span>
-          <span className="vocab-universal-hint">{selected ? 'Change' : 'Search 90+'}</span>
-        </button>
-      </div>
+    /* Tile sits inside .train-lang-grid (display: contents) — same box as the six chips. */
+    <div className="train-lang-more">
+      <button
+        type="button"
+        className={`train-lang train-lang-more-btn${selected ? ' is-selected' : ''}${open ? ' is-open' : ''}`}
+        aria-expanded={open}
+        aria-controls={panelId}
+        aria-label={selected ? `${selected.name} — change language` : 'More languages — search 90+'}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span aria-hidden>{selected ? selected.code.toUpperCase() : '+90'}</span>
+        <strong>{selected ? selected.native || selected.name : 'More languages'}</strong>
+      </button>
 
       {open && (
         <div className="vocab-universal-panel" id={panelId} role="dialog" aria-label="Pick your language">

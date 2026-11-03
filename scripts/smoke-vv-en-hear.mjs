@@ -71,7 +71,7 @@ function chipWord(label) {
 }
 
 async function langNames(page) {
-  return page.locator('.vocab-sheet-lang-name').evaluateAll((els) =>
+  return page.locator('.vocab-sheet-langs > li:not(.vocab-sheet-lang-more) .vocab-sheet-lang-name').evaluateAll((els) =>
     els.map((el) => el.textContent.replace(/\s+/g, ' ').trim()),
   )
 }
