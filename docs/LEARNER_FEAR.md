@@ -240,6 +240,7 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 ### 2026-11-02 — Language picker, photo Supported Practice, Computer course rebuild
 
 - Your Language (step 3): searchable **More languages** (universal translator, ~90 languages). Screens stay simple English; each work question gets a translated line + ▶ Hear; Workplace Words gets a one-tap “Hear in <language>”.
+- **More languages** is a tile in the same language grid (same box, same selected state as the six chips) on Your Language and Workplace Words, not a separate bar. On phone it takes a full row.
 - Supported Practice (steps 10–11): videos → royalty-free **photos**. Picture Match = hear the sentence, tap the photo. Copycat = look at the photo, hear the sentence, tap the words in order.
 - Sentence Structure: no score gate — missed sentences come back in a short repair round. Picture prefers the learner’s own Workplace Words photo for the answer word.
 - Basic Computer Skills: 5 Basic lessons (required, in order) + 8 Extra lessons (open after the Basics; “Done for now” exit). Each: watch → try → 10 practice questions; a miss shows the teach line and **Watch that part again** replays the exact narrated line. Videos are rendered frame by frame so each click/key lands on the spoken word (`scripts/bcs-render/`).

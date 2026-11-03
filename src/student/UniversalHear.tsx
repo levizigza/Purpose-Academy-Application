@@ -90,38 +90,43 @@ export function UniversalHearControl({
   })()
 
   return (
+    /* Lives in the last <li> of .vocab-sheet-langs; wrappers are display: contents so these are chips in the grid. */
     <div className="vocab-universal" ref={rootRef}>
       <div className="vocab-universal-bar">
         <button
           type="button"
-          className={`vocab-universal-toggle${open ? ' is-open' : ''}${bridge ? ' is-bridged' : ''}`}
+          className={`vocab-sheet-lang-btn vocab-universal-toggle${open || bridge ? ' is-selected' : ''}`}
           disabled={disabled || busy}
           aria-expanded={open}
           aria-controls={panelId}
+          aria-label={bridge ? `Heard in ${bridge.name} — change language` : 'More languages — translate and hear'}
           onClick={() => setOpen((v) => !v)}
         >
-          <span className="vocab-universal-glyph" aria-hidden>
-            ◈
+          <span className="vocab-sheet-flag" aria-hidden>
+            {bridge ? bridge.code.toUpperCase() : '+90'}
           </span>
-          <span className="vocab-universal-label">
-            {bridge ? `Heard in ${bridge.name}` : 'More languages'}
-          </span>
-          <span className="vocab-universal-hint">
-            {busy ? 'Working…' : bridge ? 'Change' : 'Translate & hear'}
+          <span className="vocab-sheet-lang-meta">
+            <span className="vocab-sheet-lang-name">{bridge ? bridge.name : 'More languages'}</span>
+            <span className="vocab-sheet-lang-word">
+              {busy ? 'Working…' : bridge ? bridge.translated : 'Translate & hear'}
+            </span>
           </span>
         </button>
         {quickLang && bridge?.code !== quickLang.code && (
           <button
             type="button"
-            className="vocab-universal-toggle vocab-universal-quick"
+            className="vocab-sheet-lang-btn vocab-universal-quick"
             disabled={disabled || busy}
+            aria-label={`Hear this word in ${quickLang.name}`}
             onClick={() => onPick(quickLang)}
           >
-            <span className="vocab-universal-glyph" aria-hidden>
-              ▶
+            <span className="vocab-sheet-flag" aria-hidden>
+              {quickLang.code.toUpperCase()}
             </span>
-            <span className="vocab-universal-label">Hear in {quickLang.name}</span>
-            <span className="vocab-universal-hint">Your language</span>
+            <span className="vocab-sheet-lang-meta">
+              <span className="vocab-sheet-lang-name">{quickLang.name}</span>
+              <span className="vocab-sheet-lang-word">▶ Hear</span>
+            </span>
           </button>
         )}
       </div>

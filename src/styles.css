@@ -8407,57 +8407,22 @@ html.pa-phone-shell .vocab-sheet-body-focus.is-production {
   display: grid;
 }
 
-.vocab-universal-toggle {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 0.45rem 0.65rem;
-  align-items: center;
-  width: 100%;
-  padding: 0.65rem 0.8rem;
-  border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--line, #c5d0de));
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--brand-soft, #e8eef7) 70%, #fff);
-  color: var(--brand-deep, #0b2f5c);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.vocab-universal-toggle:hover,
-.vocab-universal-toggle:focus-visible {
-  border-color: color-mix(in srgb, var(--brand) 55%, #e8a317);
-  outline: none;
-}
-
-.vocab-universal-toggle.is-open,
-.vocab-universal-toggle.is-bridged {
-  background: #fff8e8;
-  border-color: #e8a317;
-}
-
-.vocab-universal-toggle:disabled {
+/* Toggle + quick chip reuse .vocab-sheet-lang-btn — same box as the six hear chips. */
+.vocab-universal-toggle:disabled,
+.vocab-universal-quick:disabled {
   opacity: 0.65;
   cursor: not-allowed;
 }
 
-.vocab-universal-glyph {
-  font-size: 0.95rem;
-  color: #a16207;
-  line-height: 1;
+.vocab-sheet-lang-more,
+.vocab-sheet-lang-more .vocab-universal,
+.vocab-sheet-lang-more .vocab-universal-bar {
+  display: contents;
 }
 
-.vocab-universal-label {
-  font-weight: 750;
-  font-size: 0.95rem;
-  color: var(--brand-deep, #0b2f5c);
-}
-
-.vocab-universal-hint {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #5a6f86;
+.vocab-sheet-lang-more .vocab-universal-panel,
+.vocab-sheet-lang-more .vocab-universal-status {
+  grid-column: 1 / -1;
 }
 
 .vocab-universal-panel {
@@ -8596,13 +8561,6 @@ html.pa-phone-shell .vocab-sheet-body-focus.is-production {
   font-size: 0.78rem;
   font-weight: 750;
   cursor: pointer;
-}
-
-.is-phone-app .vocab-universal-toggle {
-  background: #ffffff !important;
-  border-color: color-mix(in srgb, var(--brand) 22%, var(--line)) !important;
-  color: var(--brand-deep) !important;
-  min-height: 3rem;
 }
 
 .is-phone-app .vocab-universal-panel {
@@ -17282,7 +17240,25 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
 
 /* Your Language — "More languages" (universal translator) + translated line (L3, dual-shell). */
 .train-lang-more {
-  margin-top: 0.75rem;
+  display: contents;
+}
+
+.train-lang-more .vocab-universal-panel {
+  grid-column: 1 / -1;
+}
+
+.train-lang.is-open {
+  border-color: var(--train-amber);
+}
+
+.is-phone-app .train-lang.is-open {
+  border-color: var(--accent) !important;
+}
+
+/* Phone: More languages tiles take a full row so the label never wraps. */
+.is-phone-app .train-lang-more-btn,
+.is-phone-app .vocab-sheet-lang-more .vocab-sheet-lang-btn {
+  grid-column: 1 / -1;
 }
 
 .vocab-universal-option.is-selected {
@@ -17348,10 +17324,6 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
 .extra-lang-hear:disabled {
   opacity: 0.6;
   cursor: wait;
-}
-
-.vocab-universal-bar:has(.vocab-universal-quick) {
-  gap: 0.4rem;
 }
 
 /* Supported Practice — royalty-free photos (Picture Match + Copycat). Whole object visible. */

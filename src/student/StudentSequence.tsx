@@ -1792,17 +1792,17 @@ export function StudentSequencePage() {
                   <strong>{assessT(LANG_NATIVE, l.id)}</strong>
                 </button>
               ))}
+              <MoreLanguagesPick
+                selected={extraLang}
+                onPick={(lang) => {
+                  markNavCueSeen(NAV_CUE.langPick)
+                  setSupportLang('English')
+                  setLearnerExtraLang(lang)
+                }}
+                onClear={() => setLearnerExtraLang(null)}
+              />
             </NavGlowRegion>
           </NavCueTarget>
-          <MoreLanguagesPick
-            selected={extraLang}
-            onPick={(lang) => {
-              markNavCueSeen(NAV_CUE.langPick)
-              setSupportLang('English')
-              setLearnerExtraLang(lang)
-            }}
-            onClear={() => setLearnerExtraLang(null)}
-          />
           <div className="train-bridge">
             <p><strong>{assessT(ASSESSMENT_COPY.introTitle, supportLang)}</strong></p>
             <p>{assessT(ASSESSMENT_COPY.introBody, supportLang)}</p>
