@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Purpose Academy">
+  <rect width="128" height="128" rx="28" fill="#143d2e"/>
+  <path d="M28 92V40h18c14 0 22 7 22 18s-8 18-22 18H46v16H28zm18-30h4c5 0 8-2.5 8-6.5S55 49 50 49h-4v13z" fill="#e8f2ed"/>
+  <path d="M72 92l20-52h16l20 52h-17l-3.5-10H92.5L89 92H72zm23.5-24h13L102 48h-1L95.5 68z" fill="#9ec9b4"/>
+  <circle cx="100" cy="30" r="6" fill="#c4a574"/>
+</svg>

@@ -1,0 +1,71 @@
+{
+ "voice": "Piper en_US-lessac-medium",
+ "fps": 12,
+ "lessons": {
+  "bcs-power": {
+   "file": "01_Turn_computer_on_off.mp4",
+   "seconds": 29.1,
+   "hasAudio": true
+  },
+  "bcs-mouse": {
+   "file": "02_Use_the_mouse.mp4",
+   "seconds": 29.66,
+   "hasAudio": true
+  },
+  "bcs-keyboard": {
+   "file": "03_Use_the_keyboard.mp4",
+   "seconds": 27.53,
+   "hasAudio": true
+  },
+  "bcs-window": {
+   "file": "04_Open_and_close_a_window.mp4",
+   "seconds": 26.08,
+   "hasAudio": true
+  },
+  "bcs-save": {
+   "file": "05_Save_your_work.mp4",
+   "seconds": 25.11,
+   "hasAudio": true
+  },
+  "bcs-folder": {
+   "file": "06_Make_a_folder.mp4",
+   "seconds": 22.6,
+   "hasAudio": true
+  },
+  "bcs-subfolder": {
+   "file": "07_Folder_inside_a_folder.mp4",
+   "seconds": 25.71,
+   "hasAudio": true
+  },
+  "bcs-paragraph": {
+   "file": "08_Write_a_short_paragraph.mp4",
+   "seconds": 23.11,
+   "hasAudio": true
+  },
+  "bcs-email-send": {
+   "file": "09_Write_and_send_email.mp4",
+   "seconds": 23.66,
+   "hasAudio": true
+  },
+  "bcs-email-reply": {
+   "file": "10_Reply_to_email.mp4",
+   "seconds": 15.58,
+   "hasAudio": true
+  },
+  "bcs-attach": {
+   "file": "11_Attach_a_file.mp4",
+   "seconds": 17.79,
+   "hasAudio": true
+  },
+  "bcs-safe": {
+   "file": "12_Stay_safe_online.mp4",
+   "seconds": 23.54,
+   "hasAudio": true
+  },
+  "bcs-search": {
+   "file": "13_Search_the_web.mp4",
+   "seconds": 19.65,
+   "hasAudio": true
+  }
+ }
+}
