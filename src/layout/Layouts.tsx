@@ -163,13 +163,17 @@ export function PublicLayout() {
   }
 
   /* Enter gates + legal/support — lean chrome */
-  const isTrain = pathname === '/enter/student' || (pathname === '/journey' && !shellMode)
+  const isTrain =
+    pathname === '/enter/student' ||
+    pathname.startsWith('/teacher-practice') ||
+    (pathname === '/journey' && !shellMode)
 
   if (
     pathname.startsWith('/enter/') ||
     pathname === '/contact' ||
     pathname === '/privacy' ||
-    pathname === '/journey'
+    pathname === '/journey' ||
+    pathname.startsWith('/teacher-practice')
   ) {
     return (
       <div className={`shell${isTrain ? ' is-train' : ''} is-support`}>

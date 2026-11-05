@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { workbookByNumber, workbookImage, workbookSetLabel } from './communityWorkbooks'
+import { useTeacherPracticeBase } from './teacherPracticePaths'
 
 type Session = {
   n: number
@@ -71,12 +72,14 @@ const sessions: Session[] = [
 
 /** Three teaching sessions adapted from the draft Community Support instructor binder. */
 export function TeacherPracticePage() {
+  const base = useTeacherPracticeBase()
+
   return (
     <div className="stack tp-page">
       <header className="tp-head">
         <div>
           <p className="section-kicker">Instructor · Community Support</p>
-          <h1>Teacher Practice</h1>
+          <h1>Instructor Practice</h1>
           <p className="lede">
             Three starting sessions from the draft Community Support binder. Each one moves from
             preparation to modelling, guided practice and observation — then hands the learner to the
@@ -87,7 +90,7 @@ export function TeacherPracticePage() {
           </p>
         </div>
         <div className="tp-actions">
-          <Link className="btn btn-primary" to="/app/instructor/practice/workbooks">
+          <Link className="btn btn-primary" to={`${base}/workbooks`}>
             Open 25 workbooks
           </Link>
           <Link className="btn btn-ghost" to="/journey">
@@ -195,7 +198,7 @@ export function TeacherPracticePage() {
                       <Link
                         className="tp-workbook-link"
                         key={n}
-                        to={`/app/instructor/practice/workbooks/${n}`}
+                        to={`${base}/workbooks/${n}`}
                         title={set.title}
                       >
                         <img src={workbookImage(n, 'thumb')} alt="" loading="lazy" />
@@ -222,7 +225,7 @@ export function TeacherPracticePage() {
           <Link className="btn btn-ghost" to="/app/instructor/observe">
             Record an observation
           </Link>
-          <Link className="btn btn-ghost" to="/app/instructor/practice/workbooks">
+          <Link className="btn btn-ghost" to={`${base}/workbooks`}>
             Browse all workbooks
           </Link>
         </div>

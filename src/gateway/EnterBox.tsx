@@ -38,6 +38,14 @@ const ENTRIES: Entry[] = [
     practice: true,
   },
   {
+    to: '/teacher-practice',
+    label: 'Instructor Practice',
+    help: 'Teacher sessions and Community Support workbooks — demo the instructor side.',
+    tone: 'instructor',
+    tool: 'level',
+    completeIds: ['instructor'],
+  },
+  {
     to: '/enter/student',
     label: 'Student',
     help: 'Start learning',
@@ -48,9 +56,9 @@ const ENTRIES: Entry[] = [
   {
     to: '/enter/instructor',
     label: 'Instructor',
-    help: 'Teach and check skills',
+    help: 'Sign in with your ID',
     tone: 'instructor',
-    tool: 'level',
+    tool: 'latch',
     completeIds: ['instructor'],
   },
   {

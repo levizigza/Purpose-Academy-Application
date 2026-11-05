@@ -9,6 +9,7 @@ import {
   workbookSetLabel,
   type WorkbookCategory,
 } from './communityWorkbooks'
+import { useTeacherPracticeBase } from './teacherPracticePaths'
 
 type Filter = 'all' | WorkbookCategory
 
@@ -19,6 +20,7 @@ type Filter = 'all' | WorkbookCategory
 export function CommunityWorkbooksPage() {
   const { setNumber } = useParams<{ setNumber?: string }>()
   const navigate = useNavigate()
+  const base = useTeacherPracticeBase()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const panelId = useId()
   const [query, setQuery] = useState('')
@@ -86,8 +88,8 @@ export function CommunityWorkbooksPage() {
           </p>
         </div>
         <div className="wb-page-actions">
-          <Link className="btn btn-ghost" to="/app/instructor/practice">
-            Teacher Practice
+          <Link className="btn btn-ghost" to={base}>
+            Instructor Practice
           </Link>
           <Link className="btn btn-primary" to="/journey">
             Student Practice
@@ -128,7 +130,7 @@ export function CommunityWorkbooksPage() {
             <button
               type="button"
               className="wb-viewer-close"
-              onClick={() => navigate('/app/instructor/practice/workbooks')}
+              onClick={() => navigate(`${base}/workbooks`)}
             >
               All workbooks
             </button>
@@ -208,14 +210,14 @@ export function CommunityWorkbooksPage() {
 
           <nav className="wb-pager" aria-label="Workbook sets">
             {previous ? (
-              <Link className="btn btn-ghost" to={`/app/instructor/practice/workbooks/${previous.n}`}>
+              <Link className="btn btn-ghost" to={`${base}/workbooks/${previous.n}`}>
                 Previous set · {workbookSetLabel(previous.n)}
               </Link>
             ) : (
               <span />
             )}
             {next ? (
-              <Link className="btn btn-ghost" to={`/app/instructor/practice/workbooks/${next.n}`}>
+              <Link className="btn btn-ghost" to={`${base}/workbooks/${next.n}`}>
                 Next set · {workbookSetLabel(next.n)}
               </Link>
             ) : (
@@ -290,7 +292,7 @@ export function CommunityWorkbooksPage() {
                 <Link
                   key={set.n}
                   className="wb-card"
-                  to={`/app/instructor/practice/workbooks/${set.n}`}
+                  to={`${base}/workbooks/${set.n}`}
                   aria-label={`Open ${workbookSetLabel(set.n)}: ${set.title}`}
                 >
                   <span className="wb-card-media">
@@ -339,8 +341,8 @@ export function CommunityWorkbooksPage() {
             supervision.
           </p>
           <p>
-            <Link className="inline-link" to="/app/instructor/practice">
-              See how these sets connect to Teacher Practice
+            <Link className="inline-link" to={base}>
+              See how these sets connect to Instructor Practice
             </Link>
             .
           </p>

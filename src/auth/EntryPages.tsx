@@ -8,7 +8,7 @@ import { playFoley, unlockFoley } from '../audio/foley'
 import { clearShellMode, setDesktopPhase } from '../shell/shellMode'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v47'
+const ENTERED_KEY = 'pa-crossed-threshold-v48'
 
 export function hasEnteredSite() {
   try {
@@ -326,6 +326,7 @@ export function SplashPage({
     <div
       className={[
         'threshold',
+        'is-lockup',
         `threshold-stage-${stage}`,
         embedded ? 'is-embedded' : '',
         showName ? 'is-named' : '',
@@ -336,7 +337,7 @@ export function SplashPage({
       ]
         .filter(Boolean)
         .join(' ')}
-      data-splash-version="v47"
+      data-splash-version="v48"
       role="dialog"
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}

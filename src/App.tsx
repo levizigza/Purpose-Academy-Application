@@ -78,6 +78,7 @@ const SPLASH_BYPASS = new Set([
   '/enter/admin/guest',
   '/enter/instructor',
   '/journey',
+  '/teacher-practice',
 ])
 
 function useLiveShellMode(): ShellMode | null {
@@ -102,7 +103,9 @@ function AppRoutes() {
   const desktopPhase = useLiveDesktopPhase()
   const [entered, setEntered] = useState(() => hasEnteredSite())
   const bypassSplash =
-    SPLASH_BYPASS.has(location.pathname) || location.pathname.startsWith('/enter/')
+    SPLASH_BYPASS.has(location.pathname) ||
+    location.pathname.startsWith('/enter/') ||
+    location.pathname.startsWith('/teacher-practice')
 
   useEffect(() => {
     if (bypassSplash && !hasEnteredSite()) {
@@ -206,6 +209,9 @@ function AppRoutes() {
         <Route path="/enter/admin/guest" element={<AdminGuestSequencePage />} />
         <Route path="/enter/instructor" element={<InstructorEnterPage />} />
         <Route path="/journey" element={<StudentSequencePage />} />
+        <Route path="/teacher-practice" element={<TeacherPracticePage />} />
+        <Route path="/teacher-practice/workbooks" element={<CommunityWorkbooksPage />} />
+        <Route path="/teacher-practice/workbooks/:setNumber" element={<CommunityWorkbooksPage />} />
       </Route>
 
       <Route path="/app" element={<AppHomeRedirect />} />

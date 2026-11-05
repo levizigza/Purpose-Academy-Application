@@ -58,7 +58,7 @@ export function ModeChooser() {
               </span>
               <span className="mode-door-copy">
                 <strong>Desktop mode</strong>
-                <span>Full web course — Student Practice, Student, Instructor, Admin.</span>
+                <span>Toolbox with Student Practice, Instructor Practice, Student, Instructor, Admin.</span>
               </span>
               <span className="mode-door-cta">Enter desktop</span>
             </button>

@@ -1654,11 +1654,11 @@ table.data th {
 }
 
 .threshold-brand-zoom.is-closed {
-  transform: scale(2.85);
+  transform: scale(1.65);
 }
 
 .threshold-brand-zoom.is-opening {
-  transform: scale(2.55);
+  transform: scale(1.25);
 }
 
 .threshold-brand-zoom.is-open,
@@ -1679,12 +1679,48 @@ table.data th {
   z-index: 1;
 }
 
-.threshold-brand-frame.is-opening .threshold-lockup {
-  opacity: 0.4;
-}
-
 .threshold-lockup.is-visible {
   opacity: 1;
+}
+
+/* Lockup opening: logo centered with room under it for the Enter hammer */
+.threshold.is-lockup .threshold-glass {
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vh, 2rem) 1rem clamp(7.5rem, 18vh, 10rem);
+}
+
+.threshold.is-lockup .threshold-brand-frame {
+  width: min(86vw, 440px);
+}
+
+.threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue {
+  left: 50%;
+  right: auto;
+  top: auto;
+  bottom: max(1.1rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+}
+
+.threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue.is-visible {
+  animation: hammer-lockup-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
+}
+
+.threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue:hover:not(:disabled) {
+  transform: translateX(-50%) translateY(-4px) rotate(-4deg);
+}
+
+.threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue:active:not(:disabled) {
+  transform: translateX(-50%) translateY(1px) scale(0.97);
+}
+
+.threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue .threshold-hammer-icon {
+  width: clamp(3.6rem, 8vw, 5rem);
+}
+
+.threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue .threshold-hammer-hint {
+  color: #0b2f5c;
+  text-shadow: none;
 }
 
 /* Slot sized so SVG glyph lands on logo-full P ink */
@@ -2829,6 +2865,18 @@ table.data th {
   100% {
     opacity: 1;
     transform: translateX(0) translateY(0) rotate(6deg);
+  }
+}
+
+/* Below the lockup — keep Enter clear of the logo */
+@keyframes hammer-lockup-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 }
 
