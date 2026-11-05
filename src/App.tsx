@@ -14,6 +14,8 @@ import {
 } from './shell/shellMode'
 import { AdminCoursesPage, AdminDashboardPage, AdminPrivacyPage, AdminReportsPage, AdminSchedulesPage, AdminStudentsPage } from './admin/AdminPages'
 import { AdminPracticeFeedbackPage } from './admin/AdminPracticeFeedbackPage'
+import { TeacherPracticePage } from './instructor/TeacherPracticePage'
+import { CommunityWorkbooksPage } from './instructor/CommunityWorkbooksPage'
 import {
   InstructorAssignmentsPage,
   InstructorDashboardPage,
@@ -313,6 +315,9 @@ function AppRoutes() {
 
       <Route path="/app/instructor" element={<AppLayout role="instructor" />}>
         <Route index element={<InstructorDashboardPage />} />
+        <Route path="practice" element={<TeacherPracticePage />} />
+        <Route path="practice/workbooks" element={<CommunityWorkbooksPage />} />
+        <Route path="practice/workbooks/:setNumber" element={<CommunityWorkbooksPage />} />
         <Route path="assignments" element={<InstructorAssignmentsPage />} />
         <Route path="observe" element={<InstructorObservePage />} />
         <Route path="safety" element={<InstructorSafetyPage />} />

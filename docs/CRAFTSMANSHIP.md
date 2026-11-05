@@ -435,6 +435,15 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-11-05 — Teacher Practice + Yonas Community Support workbooks (L2 / L3 / L6)
+
+- **Layers:** L2 source-led content · L3 information display and print/phone reading · L6 instructor-to-student spine.
+- **Customer ask:** a real Teacher Practice surface built from the Community Support curriculum, three sessions aligned to Student Practice, and the Yonas workbooks available as instructor material.
+- **Ship:** `/app/instructor/practice` with three Month 1 sessions (roles and greetings; needs and accessibility; community places and services), each with prepare → model → practise → observe, Student Practice station chips, and workbook companions. `/app/instructor/practice/workbooks` with 25 searchable CSW/CSWE sets, workbook and picture-check tabs, full-image and print actions, and previous/next navigation.
+- **Honesty:** framed as draft material for instructor and program review; no accreditation, certification or eight-month replacement claim. Instructor roles named on About and the workbook surfaces: ChuChu Asemelash (Construction), Kinfe Desta (Logistics), Yonas Tesfagabr (Community Support).
+- **Translator:** removed hidden language-list truncation so the “Your Language” picker lists all 83 languages; corrected the footnote to describe translation availability honestly.
+- **Critic:** a teacher page that repeats the student path or invents curriculum is worse than no page. Keep instructor activity separate from learner activity and sign-off; keep the workbook library focused on one set at a time; hide the 25-card grid once a set is open.
+
 ### 2026-10-31 — Supported Practice → Picture Match + Sentence Match (L2 / L3 / L4)
 
 - **Layers:** L2 content loop · L3 information display · L4 finite boards · L6 Practice spine.

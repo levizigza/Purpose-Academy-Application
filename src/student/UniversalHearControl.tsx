@@ -36,7 +36,7 @@ export function UniversalHearControl({
   /* Language picked under "More languages" on Your Language — one tap here. */
   const quickLang = useLearnerExtraLang()
 
-  const matches = useMemo(() => filterHearLanguages(query).slice(0, 40), [query])
+  const matches = useMemo(() => filterHearLanguages(query), [query])
 
   useEffect(() => {
     if (!open) return

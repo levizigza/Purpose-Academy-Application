@@ -19,7 +19,7 @@ export function MoreLanguagesPick({ selected, onPick, onClear }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const matches = useMemo(
-    () => filterHearLanguages(query).filter((l) => l.code !== 'en').slice(0, 60),
+    () => filterHearLanguages(query).filter((l) => l.code !== 'en'),
     [query],
   )
 
@@ -89,8 +89,8 @@ export function MoreLanguagesPick({ selected, onPick, onClear }: Props) {
             )}
           </ul>
           <p className="vocab-universal-footnote">
-            Screens stay in simple English. Each question also shows in your language with a
-            ▶ Hear button. Workplace Words can say every word in your language too.
+            Screens stay in simple English. Translations and audio are available for some
+            questions and Workplace Words when the language service supports them.
           </p>
           {selected && (
             <button

@@ -197,8 +197,8 @@ export function AboutPage() {
         <p className="section-kicker">People</p>
         <h2>Founding builders</h2>
         <p className="lede path-lede">
-          The people building Purpose Academy. We name them now with honesty: full roles, bios, and portraits will be
-          published as the school grows — we will not invent titles to fill a page.
+          The people building Purpose Academy. Instructor roles are confirmed; bios and portraits will be published
+          as the school grows. We will not invent titles to fill a page.
         </p>
         <div className="team-stack" role="list">
           {SCHOOL_TEAM.map((person) => {

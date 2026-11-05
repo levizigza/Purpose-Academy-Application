@@ -265,6 +265,7 @@ function DesktopNav({ role }: { role: Role }) {
           Today
         </NavLink>
         <NavLink to="/app/instructor/assignments">Grade work</NavLink>
+        <NavLink to="/app/instructor/practice">Teacher Practice</NavLink>
         <NavLink to="/app/instructor/observe">Observe skills</NavLink>
         <NavLink to="/app/instructor/safety">Safety gates</NavLink>
         <NavLink to="/app/instructor/students">Learners</NavLink>
@@ -307,6 +308,7 @@ function MobileNav({ role }: { role: Role }) {
           Today
         </NavLink>
         <NavLink to="/app/instructor/assignments">Grade</NavLink>
+        <NavLink to="/app/instructor/practice">Practice</NavLink>
         <NavLink to="/app/instructor/observe">Observe</NavLink>
         <NavLink to="/app/instructor/students">People</NavLink>
       </>

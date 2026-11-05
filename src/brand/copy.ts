@@ -21,31 +21,32 @@ export const BRAND = {
   tagline: 'Foundations. Practice. Work.',
 } as const
 
-/** About page — founding builders (roles and bios forthcoming). */
+/** About page — founding builders. Instructor roles are confirmed; bios and portraits are still to come. */
 export const SCHOOL_TEAM = [
   {
     name: 'Saba Teklu',
     role: 'Founding builder',
-    focus: 'Role, portrait, and bio will be published as the school grows.',
+    focus: 'Portrait and bio will be published as the school grows.',
   },
   {
     name: 'Kinfe Desta',
-    role: 'Founding builder',
-    focus: 'Role, portrait, and bio will be published as the school grows.',
+    role: 'Logistics instructor',
+    focus: 'Guides the Logistics pathway. Portrait and bio will be published as the school grows.',
   },
   {
     name: 'ChuChu Asemelash',
-    role: 'Founding builder',
-    focus: 'Role, portrait, and bio will be published as the school grows.',
+    role: 'Construction instructor',
+    focus: 'Guides the Construction pathway. Portrait and bio will be published as the school grows.',
   },
   {
     name: 'Yonas Tesfagabr',
-    role: 'Founding builder',
-    focus: 'Role, portrait, and bio will be published as the school grows.',
+    role: 'Community Support instructor',
+    focus:
+      'Guides the Community Support pathway and prepared the visual vocabulary workbooks. Portrait and bio will be published as the school grows.',
   },
   {
     name: 'Levi Zigza',
     role: 'Founding builder',
-    focus: 'Role, portrait, and bio will be published as the school grows.',
+    focus: 'Portrait and bio will be published as the school grows.',
   },
 ] as const

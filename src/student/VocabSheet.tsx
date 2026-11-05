@@ -4,7 +4,7 @@ import { SUPPORT_LANGUAGES } from './journeyCurriculum'
 import { pathwayImage } from '../pathways'
 import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { playFoley } from '../audio/foley'
-import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { InstructionHearChip } from '../practice/InstructionNarration'
 import { NavCueTarget, NavGlowRegion } from '../practice/NavCue'
 import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
@@ -15,7 +15,7 @@ import {
 } from './vocabDistractors'
 import type { HearLanguage } from './hearLanguages'
 import type { UniversalBridge, UniversalHearStatus } from './universalHear'
-import { UniversalHearControl } from './UniversalHear'
+import { UniversalHearControl } from './UniversalHearControl'
 
 /**
  * Official Purpose Academy visual-vocabulary mother-tongue order

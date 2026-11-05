@@ -42,7 +42,7 @@ import {
   CareerAssessmentResult,
   CareerInterestAssessment,
   CareerStyleAssessment,
-} from './CareerAssessment'
+} from './CareerAssessmentView'
 import {
   combinePathwayScores,
   pathwayFromRiasec,
@@ -126,7 +126,7 @@ import {
   setLearnerSupportLang,
 } from '../practice/learnerLang'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
-import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { InstructionHearChip } from '../practice/InstructionNarration'
 import { NavCueTarget, NavGlowRegion, NavGlowWrap } from '../practice/NavCue'
 import { markNavCueSeen, NAV_CUE } from '../practice/navCues'

@@ -31,7 +31,7 @@ import { playFoley } from '../audio/foley'
 import { SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
-import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { InstructionHearChip } from '../practice/InstructionNarration'
 
 /** Level-4 simple English instruction chrome — translated for L1 narration. */

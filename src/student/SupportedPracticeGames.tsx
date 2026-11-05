@@ -6,7 +6,7 @@ import {
 } from '../pathways/packs/supportedPracticeDeck'
 import { playFoley } from '../audio/foley'
 import { firePlayClear, softMissLine, SOFT_RETRY_LABEL } from '../practice/PlayClear'
-import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { recordSkillAttempt } from './learningMastery'
 import { speakEnglish, stopSpeech } from './speech'
 

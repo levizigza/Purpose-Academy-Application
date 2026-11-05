@@ -13,7 +13,7 @@ import {
   practiceFeedbackKey,
 } from '../practice/PracticeMode'
 import { SOFT_RETRY_LABEL, firePlayClear } from '../practice/PlayClear'
-import { StationCoach, advanceStationCoach } from '../practice/StationCoach'
+import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 
 type Mode = 'exercise' | 'exam'
 
