@@ -5,10 +5,10 @@ import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
-import { clearShellMode, setDesktopPhase } from '../shell/shellMode'
+import { setDesktopPhase } from '../shell/shellMode'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v48'
+const ENTERED_KEY = 'pa-crossed-threshold-v49'
 
 export function hasEnteredSite() {
   try {
@@ -242,12 +242,12 @@ export function SplashPage({
   const finishEnter = useCallback(() => {
     markEnteredSite()
     /*
-     * Full-screen opening is first; next screen is Desktop | Phone.
-     * Embedded phone splash still advances the device phase via onEnter.
+     * Desktop opening finished → stay in course shell and show the toolbox.
+     * Do not clearShellMode — that would bounce back to ModeChooser.
+     * Embedded phone splash advances the device phase via onEnter.
      */
     if (!embedded) {
-      setDesktopPhase(null)
-      clearShellMode()
+      setDesktopPhase('ready')
     }
     if (onEnter) onEnter()
     else navigate('/', { replace: true })

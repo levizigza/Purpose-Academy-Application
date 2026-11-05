@@ -2,18 +2,20 @@
  * Presentation shell for demos.
  *
  * Flow:
- * 1. Brand opening (door → logo → Enter) — first screen
- * 2. Mode chooser (Desktop | Phone)
- * 3a. Desktop → toolbox → Student Practice / Student / …
- * 3b. Phone → home with PA icon → toolbox → Student Practice / …
+ * 1. Mode chooser (Desktop | Phone) — first screen
+ * 2a. Desktop → opening animation → toolbox → Student Practice / Instructor Practice / …
+ * 2b. Phone → home with PA icon → opening on device → toolbox → …
  *
  * Shell choice is presentation-only. Learner progress lives in learnerStore
  * (localStorage) and is shared across Desktop and Phone.
+ *
+ * Desktop phase mirrors Phone so the opening never plays before a ModeChooser
+ * Desktop press, and never gets skipped by a stale entered flag.
  */
 
 export type ShellMode = 'phone' | 'course'
 export type PhonePhase = 'home' | 'splash' | 'toolbox' | 'app'
-/** Desktop: opening = legacy (pre splash-first); ready = toolbox / course. */
+/** Desktop: opening = threshold splash after ModeChooser; ready = toolbox / course. */
 export type DesktopPhase = 'opening' | 'ready'
 
 const MODE_KEY = 'pa-shell-mode-v2'
@@ -164,21 +166,18 @@ export function setDesktopPhase(phase: DesktopPhase | null) {
 }
 
 /**
- * Cold-load hygiene for Desktop:
+ * Cold-load hygiene for Desktop (modes-first):
  * - course + ready → toolbox
- * - course + opening (legacy) → ready if entered, else clear for splash-first
- * - course with no phase → ready if entered, else clear so ModeChooser can show after splash
+ * - course + opening + entered → ready (opening already finished)
+ * - course + opening + not entered → keep opening so splash can play
+ * - course with no phase → ready if entered, else clear so ModeChooser shows first
  */
 export function reconcileDesktopShellOnBoot(hasCrossedThreshold: boolean) {
   if (getShellMode() !== 'course') return
   const phase = getDesktopPhase()
   if (phase === 'ready') return
   if (phase === 'opening') {
-    if (hasCrossedThreshold) {
-      setDesktopPhase('ready')
-      return
-    }
-    clearShellMode()
+    if (hasCrossedThreshold) setDesktopPhase('ready')
     return
   }
   if (hasCrossedThreshold) {

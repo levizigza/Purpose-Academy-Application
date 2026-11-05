@@ -435,6 +435,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-11-05 — Restore modes-first entry (L3 / L4 / L6)
+
+- **Layers:** L3 information display · L4 door architecture · L6 systems (gateway → modes → opening → toolbox).
+- **Critic overturn:** mid-thread “opening on the first screen” was misread as splash-before-modes. Customer ask was **Desktop | Phone first**, then opening after Desktop (and after the phone PA icon).
+- **Ship:** ModeChooser is the public first screen again. Desktop arms `desktopPhase: opening` (clears entered flag) so the threshold plays, then Enter sets `ready` without clearing shell — toolbox stays. Phone home icon returns to in-device splash. Enter key bumped to v49. Lockup zoom calmed; hammer stays under the logo.
+- **Toolbox:** Instructor Practice tray → `/teacher-practice` kept; signed-in `/app/instructor/practice` unchanged.
+- **Assumption to challenge next:** whether a returning visitor who already crossed the threshold should skip Desktop opening on the same session when they re-pick Desktop after Modes.
+
 ### 2026-11-05 — Teacher Practice + Yonas Community Support workbooks (L2 / L3 / L6)
 
 - **Layers:** L2 source-led content · L3 information display and print/phone reading · L6 instructor-to-student spine.

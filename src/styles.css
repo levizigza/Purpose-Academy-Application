@@ -1694,12 +1694,22 @@ table.data th {
   width: min(86vw, 440px);
 }
 
+/* Milder approach so the lockup reads as brand, not a tunnel into the P. */
+.threshold.is-lockup .threshold-brand-zoom.is-closed {
+  transform: scale(1.28);
+}
+
+.threshold.is-lockup .threshold-brand-zoom.is-opening {
+  transform: scale(1.1);
+}
+
 .threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue {
   left: 50%;
   right: auto;
   top: auto;
   bottom: max(1.1rem, env(safe-area-inset-bottom));
   transform: translateX(-50%);
+  z-index: 6;
 }
 
 .threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue.is-visible {
