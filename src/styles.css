@@ -18381,3 +18381,109 @@ html.pa-course-shell .instruction-l1-text.is-loading,
     object-fit: contain;
   }
 }
+
+/* ============================================================================
+   PAGE SWITCHER — final override (wins over earlier topbar / toolbox rules)
+   Dark professional rail so the page menu cannot look like plain text links.
+   ============================================================================ */
+
+header.topbar,
+header.toolbox-layout-bar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 80 !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-height: 72px !important;
+  margin: 0 !important;
+  padding: 0.55rem clamp(0.85rem, 2.5vw, 1.75rem) !important;
+  background: #071422 !important;
+  background-image: linear-gradient(180deg, #0d2744 0%, #071422 100%) !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(245, 197, 66, 0.45) !important;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: none !important;
+}
+
+header.topbar::before,
+header.toolbox-layout-bar::before {
+  display: none !important;
+}
+
+header.topbar::after,
+header.toolbox-layout-bar::after {
+  content: none !important;
+  display: none !important;
+}
+
+header.topbar .topbar-inner {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+header.topbar .nav-cluster,
+header.toolbox-layout-bar .toolbox-layout-nav {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 0.35rem !important;
+  margin: 0 !important;
+  padding: 0.28rem !important;
+  overflow: visible !important;
+  mask-image: none !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 999px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+header.topbar .nav-cluster a,
+header.topbar .nav-cluster button,
+header.toolbox-layout-bar .toolbox-layout-nav a,
+header.toolbox-layout-bar .toolbox-layout-nav button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+  padding: 0.45rem 0.95rem !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  color: #f4f7fb !important;
+  font-family: Montserrat, "Segoe UI", sans-serif !important;
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  white-space: nowrap !important;
+}
+
+header.topbar .nav-cluster a::after,
+header.toolbox-layout-bar .toolbox-layout-nav a::after {
+  display: none !important;
+  content: none !important;
+}
+
+header.topbar .nav-cluster a:hover,
+header.topbar .nav-cluster button:hover,
+header.toolbox-layout-bar .toolbox-layout-nav a:hover,
+header.toolbox-layout-bar .toolbox-layout-nav button:hover,
+header.topbar .nav-cluster a.active,
+header.toolbox-layout-bar .toolbox-layout-nav .toolbox-layout-practice {
+  background: #f5c542 !important;
+  color: #071422 !important;
+}
+
+header.topbar .brand-lockup-full .brand-logo,
+header.toolbox-layout-bar .brand-lockup-full .brand-logo {
+  background: #fff !important;
+  border-radius: 10px !important;
+  padding: 0.15rem 0.35rem !important;
+}
