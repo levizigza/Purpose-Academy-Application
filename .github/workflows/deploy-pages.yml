@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,8 +34,6 @@ jobs:
         run: npm ci --prefix server
 
       - name: Bake Edge neural TTS for Practice Mode (static Pages audio)
-        # Skip force re-bake of Logistics clips on every deploy — use cached public/tts.
-        # Set BAKE_FORCE_LOGISTICS=1 manually when intentionally refreshing worksheet audio.
         env:
           BAKE_FORCE_LOGISTICS: '0'
         run: npm run bake:tts
@@ -44,31 +42,21 @@ jobs:
       - name: Build site
         env:
           GITHUB_PAGES: 'true'
-          # Project Pages URL: https://levizigza.github.io/Purpose-Academy-Application/
           PAGES_BASE: '/Purpose-Academy-Application/'
-          # Live Render API; override with repo variable VITE_API_URL if needed.
-          # Pages also ships baked /tts clips for instant vocab audio on cold starts.
           VITE_API_URL: ${{ vars.VITE_API_URL || 'https://purpose-academy-api.onrender.com' }}
         run: npm run build
 
       - name: Add SPA fallback for GitHub Pages
         run: |
           cp dist/index.html dist/404.html
-          # Project Pages host — no custom-domain CNAME (that broke asset paths).
           rm -f dist/CNAME
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      # Branch publish — avoids actions/deploy-pages hanging on "updating_pages"
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
