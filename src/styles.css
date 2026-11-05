@@ -1580,16 +1580,9 @@ table.data th {
     max(0.75rem, env(safe-area-inset-right))
     max(0.55rem, env(safe-area-inset-bottom))
     max(0.75rem, env(safe-area-inset-left));
-  /*
-    Critic v41: cool light floor hid the doorway glow. Dusk shop stage —
-    deep slate/navy so daylight from the P reads as real light escaping.
-    (Not purple, not cream. Gold stays inside the cavity only.)
-  */
-  background:
-    radial-gradient(ellipse 48% 42% at 42% 48%, rgba(255, 252, 240, 0.16) 0%, transparent 58%),
-    radial-gradient(ellipse 95% 70% at 50% 115%, rgba(0, 0, 0, 0.55), transparent 52%),
-    linear-gradient(165deg, #1a3348 0%, #102638 38%, #0a1a2c 100%);
-  color: #e8eef5;
+  /* Same white field as logo-full so the door and lockup share one space */
+  background: #ffffff;
+  color: #0b2f5c;
 }
 
 .threshold::before {
@@ -1597,7 +1590,8 @@ table.data th {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.07;
+  display: none;
+  opacity: 0;
   background-image:
     repeating-linear-gradient(
       -18deg,
@@ -1683,6 +1677,10 @@ table.data th {
   transition: opacity 1.5s cubic-bezier(0.22, 1, 0.36, 1);
   filter: drop-shadow(0 12px 28px rgba(11, 47, 92, 0.1));
   z-index: 1;
+}
+
+.threshold-brand-frame.is-opening .threshold-lockup {
+  opacity: 0.4;
 }
 
 .threshold-lockup.is-visible {
@@ -2106,6 +2104,7 @@ table.data th {
 }
 
 .threshold-atmosphere {
+  display: none;
   position: absolute;
   inset: 0;
   z-index: 0;
