@@ -8,7 +8,7 @@ import { playFoley, unlockFoley } from '../audio/foley'
 import { clearShellMode, setDesktopPhase } from '../shell/shellMode'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v45'
+const ENTERED_KEY = 'pa-crossed-threshold-v46'
 
 export function hasEnteredSite() {
   try {
@@ -373,7 +373,7 @@ export function SplashPage({
       ]
         .filter(Boolean)
         .join(' ')}
-      data-splash-version="v45"
+      data-splash-version="v46"
       role="dialog"
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}

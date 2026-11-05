@@ -130,7 +130,8 @@ function AppRoutes() {
 
   /*
    * First screen: brand opening (door → logo → Enter).
-   * Second: Desktop | Phone. Toolbox / phone only after a mode is chosen.
+   * Second: Desktop | Phone (only after Enter — never block /enter/* routes).
+   * Toolbox / phone only after a mode is chosen.
    */
   if (onPublicGate && !entered && !bypassSplash) {
     return <SplashPage onEnter={() => setEntered(true)} />
@@ -138,6 +139,8 @@ function AppRoutes() {
 
   if (
     onPublicGate &&
+    !bypassSplash &&
+    entered &&
     (!shellMode || (shellMode === 'course' && desktopPhase == null))
   ) {
     return <ModeChooser />

@@ -29,12 +29,13 @@ type Entry = {
 
 const ENTRIES: Entry[] = [
   {
-    to: '/contact',
-    label: 'Contact Us',
-    help: 'Ask a question',
-    tone: 'contact',
-    tool: 'screwdriver',
-    completeIds: ['contact'],
+    to: '/journey',
+    label: 'Student Practice',
+    help: PRACTICE_TRAY_HELP,
+    tone: 'journey',
+    tool: 'wrench',
+    completeIds: ['student'],
+    practice: true,
   },
   {
     to: '/enter/student',
@@ -45,13 +46,12 @@ const ENTRIES: Entry[] = [
     completeIds: ['student'],
   },
   {
-    to: '/journey',
-    label: 'Student Practice',
-    help: PRACTICE_TRAY_HELP,
-    tone: 'journey',
-    tool: 'wrench',
-    completeIds: ['student'],
-    practice: true,
+    to: '/enter/instructor',
+    label: 'Instructor',
+    help: 'Teach and check skills',
+    tone: 'instructor',
+    tool: 'level',
+    completeIds: ['instructor'],
   },
   {
     to: '/enter/admin',
@@ -62,12 +62,12 @@ const ENTRIES: Entry[] = [
     completeIds: ['admin-contact', 'admin-guest'],
   },
   {
-    to: '/enter/instructor',
-    label: 'Instructor',
-    help: 'Teach and check skills',
-    tone: 'instructor',
-    tool: 'level',
-    completeIds: ['instructor'],
+    to: '/contact',
+    label: 'Contact Us',
+    help: 'Ask a question',
+    tone: 'contact',
+    tool: 'screwdriver',
+    completeIds: ['contact'],
   },
 ]
 
