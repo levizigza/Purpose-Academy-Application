@@ -98,7 +98,7 @@ Run this on every station before merge:
 | 3 | Your Language | “Questions,” not assessment |
 | 4 | Work Style | No wrong answers; short picks |
 | 5 | Career Profile | Path recommendation without % fit theatre |
-| 6 | Visual Vocabulary | Hear → hear → pick match → type; shuffled bank; one calm counter |
+| 6 | Visual Vocabulary | Hear → hear → pick match → type; shuffled bank; one calm counter; instruction chrome in support lang (e.g. Amharic explains the text box) |
 | 7 | Language Organize | Tap picture · Drop on word — never “quiz” |
 | 8 | English Eye Spy | Tap picture + name; pairs clear; no prove / 100% / exam |
 | 9 | Sentences / Word→Action | Pick full sentence → hear → type it; soft miss + shuffle; hold clear until audio ends |

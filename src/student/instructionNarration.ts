@@ -12,6 +12,7 @@
 import type { HearLanguage } from './hearLanguages'
 import { speakLangCode } from './speech'
 import { translateVocabWord } from './universalHear'
+import { lookupInstructionGloss } from '../practice/instructionGloss'
 import {
   learnerWantsL1Narration,
   resolveLearnerHearLanguage,
@@ -41,6 +42,8 @@ export type NarrateOptions = {
    * English text is already on screen. Pass false to force English TTS.
    */
   skipEnglishPreferred?: boolean
+  /** When false, only translate — leave TTS for an explicit Hear press. Default true. */
+  speak?: boolean
 }
 
 /**
@@ -70,6 +73,7 @@ export async function narrateInstruction(
 
   const lang = opts.lang ?? resolveLearnerHearLanguage()
   const skipEn = opts.skipEnglishPreferred !== false
+  const shouldSpeak = opts.speak !== false
 
   if (skipEn && !learnerWantsL1Narration(lang)) {
     return {
@@ -84,8 +88,13 @@ export async function narrateInstruction(
   }
 
   try {
-    const { translated, source } = await translateVocabWord(english, lang)
-    const played = await speakLangCode(translated, lang.code, lang.bcp47)
+    const gloss = lookupInstructionGloss(english, lang)
+    const { translated, source } = gloss
+      ? { translated: gloss, source: 'Purpose Academy instruction gloss' }
+      : await translateVocabWord(english, lang)
+    const played = shouldSpeak
+      ? await speakLangCode(translated, lang.code, lang.bcp47)
+      : false
     return {
       kind: 'ready',
       english,
