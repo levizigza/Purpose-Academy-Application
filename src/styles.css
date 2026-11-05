@@ -3930,6 +3930,44 @@ table.data th {
   border-color: rgba(232, 163, 23, 0.35);
 }
 
+/* Instructor Practice sits under Instructor — indented child tray, not a peer. */
+.toolbox-slot.is-nested {
+  width: calc(100% - 1.15rem);
+  margin-left: 1.15rem;
+  padding: 0.45rem 0.55rem;
+  border-style: dashed;
+  border-color: rgba(232, 163, 23, 0.28);
+  background: linear-gradient(180deg, #323b48 0%, #1d2430 100%);
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.toolbox-slot.is-nested:hover {
+  transform: translateX(4px);
+}
+
+.toolbox-slot.is-nested.is-open {
+  transform: translateX(12px) scale(1.01);
+}
+
+.toolbox-slot.is-nested .toolbox-etch {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.toolbox-slot.is-nested .toolbox-text strong {
+  font-size: 0.95rem;
+}
+
+.toolbox-nested-kicker {
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(232, 163, 23, 0.85);
+}
+
 .toolbox-etch {
   position: relative;
   width: 2.6rem;
@@ -17661,6 +17699,121 @@ html.pa-course-shell .instruction-l1-text.is-loading,
 
 .tp-session {
   border-top: 4px solid var(--path-community);
+}
+
+.tp-session-card {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.tp-session-card.is-clear {
+  border-top-color: #3da86c;
+  background: color-mix(in srgb, #e8f7ee 55%, #fff);
+}
+
+.tp-workbench {
+  gap: 1rem;
+  max-width: 52rem;
+}
+
+.tp-workbench-head {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tp-workbench-head h1 {
+  margin: 0.1rem 0 0.2rem;
+}
+
+.tp-phase-rail {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+}
+
+.tp-phase-rail button {
+  width: 100%;
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.55rem 0.45rem;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  background: #fff;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tp-phase-rail button span {
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--brand);
+}
+
+.tp-phase-rail li.is-current button {
+  border-color: var(--brand);
+  background: color-mix(in srgb, var(--brand-soft) 70%, #fff);
+  color: var(--brand-deep);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand) 25%, transparent);
+}
+
+.tp-phase-rail li.is-done button {
+  border-color: color-mix(in srgb, #3da86c 45%, var(--line));
+  color: var(--ink);
+}
+
+.tp-phase-rail button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.tp-phase-card {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.tp-phase-card h2 {
+  margin: 0;
+}
+
+.tp-phase-body {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
+.tp-feedback-prompt {
+  position: sticky;
+  bottom: 1rem;
+  z-index: 4;
+  display: grid;
+  gap: 0.65rem;
+  border: 2px solid var(--brand);
+  box-shadow: 0 12px 36px rgba(11, 47, 92, 0.18);
+}
+
+.tp-feedback-prompt h3 {
+  margin: 0;
+}
+
+.tp-workbench-exit {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 0.35rem;
+}
+
+@media (max-width: 720px) {
+  .tp-phase-rail {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .tp-session-head {

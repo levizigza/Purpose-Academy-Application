@@ -11,6 +11,16 @@ import {
   setPracticeName,
   shouldHidePracticeFeedback,
 } from './PracticeMode'
+import {
+  getInstructorPracticeName,
+  getInstructorPracticeSession,
+  INSTRUCTOR_PRACTICE_REVIEWERS,
+  instructorPracticeFeedbackKey,
+  isInstructorPracticeMode,
+  markInstructorPracticeFeedbackAck,
+  resumeOrEnterInstructorPractice,
+  restartInstructorPracticeFromTop,
+} from './InstructorPracticeMode'
 import { setActivePreview, statusLabel } from './changeLoop'
 import {
   describeChangeTicket,
@@ -30,8 +40,19 @@ function pageTitleFromPath(pathname: string) {
     }
     return 'Student Practice'
   }
+  if (pathname.startsWith('/teacher-practice') || pathname.startsWith('/app/instructor/practice')) {
+    if (pathname.includes('/workbooks')) return 'Instructor Practice · workbooks'
+    if (isInstructorPracticeMode()) {
+      return `Instructor Practice · session ${getInstructorPracticeSession()}`
+    }
+    return 'Instructor Practice'
+  }
   const bit = pathname.split('/').filter(Boolean).pop() || pathname
   return bit.replace(/-/g, ' ')
+}
+
+function onInstructorPracticePath(pathname: string) {
+  return pathname.startsWith('/teacher-practice') || pathname.startsWith('/app/instructor/practice')
 }
 
 function currentJourneyStep() {
@@ -63,8 +84,12 @@ type Props = {
 
 export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }: Props) {
   const { pathname, search } = useLocation()
+  const instructorPath = onInstructorPracticePath(pathname)
+  const instructorMode = isInstructorPracticeMode()
   const [open, setOpen] = useState(false)
-  const [name, setName] = useState(() => getPracticeName())
+  const [name, setName] = useState(() =>
+    instructorPath || instructorMode ? getInstructorPracticeName() : getPracticeName(),
+  )
   const [draftName, setDraftName] = useState('')
   const [body, setBody] = useState('')
   const [busy, setBusy] = useState(false)
@@ -76,17 +101,27 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
   const [journeyTick, setJourneyTick] = useState(0)
 
   const liveJourneyStep = pathname === '/journey' ? currentJourneyStep() : 0
-  const liveFeedbackKey = practiceFeedbackKey(pathname, liveJourneyStep || undefined)
+  const liveFeedbackKey =
+    instructorPath || instructorMode
+      ? instructorPracticeFeedbackKey(getInstructorPracticeSession())
+      : practiceFeedbackKey(pathname, liveJourneyStep || undefined)
   const journeyStep = liveJourneyStep
   const hide = !forceShow && shouldHidePracticeFeedback(pathname, journeyStep || undefined)
-  const active = !hide && (forceShow || isPracticeMode() || Boolean(name))
+  const active =
+    !hide &&
+    (forceShow ||
+      isPracticeMode() ||
+      instructorMode ||
+      Boolean(name) ||
+      (instructorPath && instructorMode))
   const quiz = isQuizContext(pathname, search) || quizActive
   const needName = !name
   const blockForQuiz = quiz && !quizDone && !needName
   const feedbackKey = liveFeedbackKey
+  const practiceLabel = instructorPath || instructorMode ? 'Instructor Practice' : 'Student Practice'
 
   useEffect(() => {
-    setName(getPracticeName())
+    setName(instructorPath || isInstructorPracticeMode() ? getInstructorPracticeName() : getPracticeName())
     setBody('')
     setQuizDone(quizComplete)
     setQuizActive(false)
@@ -94,10 +129,12 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       {
         id: 'sys-1',
         role: 'bot',
-        text: `You’re in Student Practice on ${pageTitleFromPath(pathname)}. Tell me what to fix or improve — it becomes a change request. You’ll preview the fix here, then Approve or ask for another pass before it goes live.`,
+        text: `You’re in ${
+          instructorPath || isInstructorPracticeMode() ? 'Instructor Practice' : 'Student Practice'
+        } on ${pageTitleFromPath(pathname)}. Tell me what to fix or improve — it becomes a change request. You’ll preview the fix here, then Approve or ask for another pass before it goes live.`,
       },
     ])
-  }, [pathname, quizComplete, journeyTick])
+  }, [pathname, quizComplete, journeyTick, instructorPath])
 
   useEffect(() => {
     if (!name) {
@@ -135,7 +172,11 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
     const onOpen = () => setOpen(true)
     const onStep = () => setJourneyTick((n) => n + 1)
     const onStarted = () => {
-      setName(getPracticeName())
+      setName(
+        onInstructorPracticePath(window.location.pathname) || isInstructorPracticeMode()
+          ? getInstructorPracticeName()
+          : getPracticeName(),
+      )
       setJourneyTick((n) => n + 1)
     }
     window.addEventListener('pa-quiz-complete', onQuiz)
@@ -144,6 +185,8 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
     window.addEventListener('pa-practice-open-chat', onOpen)
     window.addEventListener('pa-journey-step', onStep)
     window.addEventListener('pa-practice-started', onStarted)
+    window.addEventListener('pa-instructor-practice-started', onStarted)
+    window.addEventListener('pa-instructor-practice-changed', onStep)
     return () => {
       window.removeEventListener('pa-quiz-complete', onQuiz)
       window.removeEventListener('pa-quiz-start', onQuizStart)
@@ -151,6 +194,8 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       window.removeEventListener('pa-practice-open-chat', onOpen)
       window.removeEventListener('pa-journey-step', onStep)
       window.removeEventListener('pa-practice-started', onStarted)
+      window.removeEventListener('pa-instructor-practice-started', onStarted)
+      window.removeEventListener('pa-instructor-practice-changed', onStep)
     }
   }, [])
 
@@ -164,7 +209,11 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
     e.preventDefault()
     const chosen = draftName.trim()
     if (!chosen) return
-    setPracticeName(chosen)
+    if (instructorPath || instructorMode) {
+      resumeOrEnterInstructorPractice(chosen)
+    } else {
+      setPracticeName(chosen)
+    }
     setName(chosen)
     push('user', chosen)
     push('bot', `Thanks, ${chosen}. Leave notes anytime. Then Continue will ask if you sent feedback.`)
@@ -183,7 +232,11 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
         body: note,
         kind: quiz ? 'quiz' : 'page',
       })
-      markPracticeFeedbackAck(feedbackKey)
+      if (instructorPath || instructorMode) {
+        markInstructorPracticeFeedbackAck(feedbackKey)
+      } else {
+        markPracticeFeedbackAck(feedbackKey)
+      }
       push('user', note)
       push(
         'bot',
@@ -221,7 +274,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
           className="practice-chat-tab"
           onClick={() => setOpen(true)}
           aria-expanded={false}
-          aria-label="Open Student Practice feedback chat"
+          aria-label={`Open ${practiceLabel} feedback chat`}
         >
           <span className="practice-chat-tab-dot" aria-hidden />
           Feedback
@@ -229,11 +282,13 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
       )}
 
       {open && (
-        <aside className="practice-chat-panel" role="dialog" aria-label="Student Practice feedback chat">
+        <aside className="practice-chat-panel" role="dialog" aria-label={`${practiceLabel} feedback chat`}>
           <header className="practice-chat-head">
             <div>
               <strong>Feedback chat</strong>
-              <p>Student Practice · {pageTitleFromPath(pathname)}</p>
+              <p>
+                {practiceLabel} · {pageTitleFromPath(pathname)}
+              </p>
             </div>
             <button type="button" className="linkish" onClick={() => setOpen(false)}>
               Close
@@ -273,7 +328,10 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
               <form className="stack" onSubmit={onName}>
                 <p className="practice-dock-prompt">Who is practising?</p>
                 <div className="practice-name-grid">
-                  {PRACTICE_REVIEWERS.map((r) => (
+                  {(instructorPath || instructorMode
+                    ? INSTRUCTOR_PRACTICE_REVIEWERS
+                    : PRACTICE_REVIEWERS
+                  ).map((r) => (
                     <button
                       key={r}
                       type="button"
@@ -328,14 +386,20 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
 export function PracticeModeBanner() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const [name, setName] = useState(() => getPracticeName())
-  const [active, setActive] = useState(() => isPracticeMode())
+  const instructor = onInstructorPracticePath(pathname) || isInstructorPracticeMode()
+  const [name, setName] = useState(() =>
+    instructor ? getInstructorPracticeName() : getPracticeName(),
+  )
+  const [studentActive, setStudentActive] = useState(() => isPracticeMode())
+  const [instructorActive, setInstructorActive] = useState(() => isInstructorPracticeMode())
   const [inCourseShell, setInCourseShell] = useState(false)
 
   useEffect(() => {
     const sync = () => {
-      setName(getPracticeName())
-      setActive(isPracticeMode())
+      const instr = onInstructorPracticePath(pathname) || isInstructorPracticeMode()
+      setName(instr ? getInstructorPracticeName() : getPracticeName())
+      setStudentActive(isPracticeMode())
+      setInstructorActive(isInstructorPracticeMode())
       setInCourseShell(document.documentElement.classList.contains('pa-course-shell'))
     }
     sync()
@@ -343,35 +407,53 @@ export function PracticeModeBanner() {
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
     window.addEventListener('pa-practice-started', sync)
     window.addEventListener('pa-practice-restarted', sync)
+    window.addEventListener('pa-instructor-practice-started', sync)
+    window.addEventListener('pa-instructor-practice-restarted', sync)
     return () => {
       mo.disconnect()
       window.removeEventListener('pa-practice-started', sync)
       window.removeEventListener('pa-practice-restarted', sync)
+      window.removeEventListener('pa-instructor-practice-started', sync)
+      window.removeEventListener('pa-instructor-practice-restarted', sync)
     }
   }, [pathname])
 
-  if (!active) return null
+  const showInstructor = instructorActive && (instructor || onInstructorPracticePath(pathname))
+  const showStudent = studentActive && !showInstructor
+  if (!showInstructor && !showStudent) return null
   const onJourney = pathname === '/journey'
+  const onInstructor = onInstructorPracticePath(pathname)
 
   function startOver() {
-    restartPracticeFromTop()
-    navigate('/journey')
+    if (showInstructor) {
+      restartInstructorPracticeFromTop()
+      navigate('/teacher-practice')
+    } else {
+      restartPracticeFromTop()
+      navigate('/journey')
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
     <div className={`practice-banner${inCourseShell ? ' is-status-only' : ''}`} role="status">
       <span>
-        Student Practice{name ? ` · ${name}` : ''}. One station at a time — take your time.
+        {showInstructor ? 'Instructor Practice' : 'Student Practice'}
+        {name ? ` · ${name}` : ''}. One station at a time — take your time.
       </span>
       {!inCourseShell && (
         <span className="practice-banner-actions">
           <Link className="practice-banner-cta" to="/">
             Toolbox
           </Link>
-          {!onJourney && (
+          {showStudent && !onJourney && (
             <Link className="practice-banner-cta" to="/journey">
               Student Practice path
+            </Link>
+          )}
+          {showInstructor && !onInstructor && (
+            <Link className="practice-banner-cta" to="/teacher-practice">
+              Instructor Practice path
             </Link>
           )}
           <button type="button" className="practice-banner-cta" onClick={startOver}>

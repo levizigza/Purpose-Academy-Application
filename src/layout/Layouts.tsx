@@ -7,6 +7,10 @@ import { AmbientField, PageMotion } from '../components/Motion'
 import { LoadingScreen, SkipLink } from '../components/Ui'
 import { PracticeFeedbackDock, PracticeModeBanner } from '../practice/PracticeFeedbackDock'
 import { clearPracticeMode, isPracticeMode } from '../practice/PracticeMode'
+import {
+  clearInstructorPracticeMode,
+  isInstructorPracticeMode,
+} from '../practice/InstructorPracticeMode'
 import type { Role } from '../data/types'
 import { DesktopCourseShell } from '../shell/DesktopCourse'
 import { PhoneEmulatorShell } from '../shell/PhoneEmulator'
@@ -34,15 +38,23 @@ function useLiveShellMode(): ShellMode | null {
 function ToolboxLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
   const [practice, setPractice] = useState(() => isPracticeMode())
+  const [instructorPractice, setInstructorPractice] = useState(() => isInstructorPracticeMode())
 
   useEffect(() => {
-    const sync = () => setPractice(isPracticeMode())
+    const sync = () => {
+      setPractice(isPracticeMode())
+      setInstructorPractice(isInstructorPracticeMode())
+    }
     sync()
     window.addEventListener('pa-practice-started', sync)
     window.addEventListener('pa-practice-restarted', sync)
+    window.addEventListener('pa-instructor-practice-started', sync)
+    window.addEventListener('pa-instructor-practice-restarted', sync)
     return () => {
       window.removeEventListener('pa-practice-started', sync)
       window.removeEventListener('pa-practice-restarted', sync)
+      window.removeEventListener('pa-instructor-practice-started', sync)
+      window.removeEventListener('pa-instructor-practice-restarted', sync)
     }
   }, [])
 
@@ -57,6 +69,11 @@ function ToolboxLayout({ children }: { children: React.ReactNode }) {
               Continue Student Practice
             </Link>
           )}
+          {instructorPractice && (
+            <Link className="toolbox-layout-practice" to="/teacher-practice">
+              Continue Instructor Practice
+            </Link>
+          )}
           <Link to="/splash">Replay opening</Link>
           <Link to="/privacy">Privacy</Link>
           <button
@@ -64,6 +81,7 @@ function ToolboxLayout({ children }: { children: React.ReactNode }) {
             className="linkish"
             onClick={() => {
               clearPracticeMode()
+              clearInstructorPracticeMode()
               clearShellMode()
               navigate('/', { replace: true })
             }}
@@ -121,13 +139,21 @@ export function PublicLayout() {
   const { user, student, logout, loading } = useSession()
   const { pathname } = useLocation()
   const [practice, setPractice] = useState(() => isPracticeMode())
+  const [instructorPractice, setInstructorPractice] = useState(() => isInstructorPracticeMode())
   const shellMode = useLiveShellMode()
 
   useEffect(() => {
-    const sync = () => setPractice(isPracticeMode())
+    const sync = () => {
+      setPractice(isPracticeMode())
+      setInstructorPractice(isInstructorPracticeMode())
+    }
     sync()
     window.addEventListener('pa-practice-started', sync)
-    return () => window.removeEventListener('pa-practice-started', sync)
+    window.addEventListener('pa-instructor-practice-started', sync)
+    return () => {
+      window.removeEventListener('pa-practice-started', sync)
+      window.removeEventListener('pa-instructor-practice-started', sync)
+    }
   }, [pathname])
 
   if (loading) return <LoadingScreen label={`Opening ${BRAND.name}…`} />
@@ -185,7 +211,8 @@ export function PublicLayout() {
             <div className="topbar-nav">
               <nav className="nav-cluster" aria-label="Workshop">
                 <NavLink to="/">Toolbox</NavLink>
-                {practice && <NavLink to="/journey">Training</NavLink>}
+                {practice && <NavLink to="/journey">Student Practice</NavLink>}
+                {instructorPractice && <NavLink to="/teacher-practice">Instructor Practice</NavLink>}
                 <NavLink to="/contact">Help</NavLink>
                 {user && (
                   <NavLink to={homeForRole(user.role, student?.registration_status)}>Portal</NavLink>
@@ -196,9 +223,13 @@ export function PublicLayout() {
                   <button type="button" className="linkish nav-signout" onClick={logout}>
                     Sign out
                   </button>
+                ) : instructorPractice && !pathname.startsWith('/teacher-practice') ? (
+                  <NavLink className="btn btn-primary nav-cta" to="/teacher-practice">
+                    Continue Instructor Practice
+                  </NavLink>
                 ) : practice && pathname !== '/journey' ? (
                   <NavLink className="btn btn-primary nav-cta" to="/journey">
-                    Continue training
+                    Continue Student Practice
                   </NavLink>
                 ) : (
                   <NavLink className="btn btn-secondary nav-cta" to="/">
