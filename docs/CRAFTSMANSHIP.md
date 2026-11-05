@@ -435,6 +435,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-11-05 — Instructor Practice under Instructor + practice-mode parity (L3 / L4 / L6)
+
+- **Layers:** L3 toolbox information hierarchy · L4 nested door · L6 Student↔Instructor Practice systems.
+- **Customer ask:** Instructor Practice must sit **below Instructor**, not as a peer tray beside Student Practice; build it the same way as Student Practice for demos, kinks, and feedback — more sophisticated than a flat binder page.
+- **Ship:** Toolbox nests Instructor Practice under Instructor (`is-nested`). `InstructorPracticeMode` mirrors Student Practice (name gate, resume, start over, feedback acks). Public `/teacher-practice` opens a sessions hub → phase workbench (Prepare → Model → Practise → Observe) with session-clear + feedback prompt + Feedback chat. Portal `/app/instructor/practice` keeps the full static brief. Banner / Continue links aware of both practice modes.
+- **Critic:** Do not put Instructor Practice back in the top tray row — nesting under Instructor is the product truth. Do not invent a second feedback dialect; reuse the practice chat with Instructor Practice labeling.
+
 ### 2026-11-05 — Practice instruction L1 lines (English / Amharic…) (L2 / L3 / LEARNER_FEAR)
 
 - **Layers:** L2 mother-tongue bridge for *task instructions* · L3 three-second “what do I do?” · learner fear (English production stays English).

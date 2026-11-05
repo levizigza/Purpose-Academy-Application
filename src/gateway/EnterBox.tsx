@@ -13,6 +13,13 @@ import {
   PRACTICE_TRAY_HELP,
   resumeOrEnterPractice,
 } from '../practice/PracticeMode'
+import {
+  getInstructorPracticeName,
+  INSTRUCTOR_PRACTICE_REVIEWERS,
+  INSTRUCTOR_PRACTICE_TRAY_HELP,
+  isInstructorPracticeMode,
+  resumeOrEnterInstructorPractice,
+} from '../practice/InstructorPracticeMode'
 import { getShellMode, setPhonePhase } from '../shell/shellMode'
 import { markNavCueSeen, NAV_CUE, navCueActive } from '../practice/navCues'
 
@@ -24,9 +31,16 @@ type Entry = {
   tone: string
   tool: ToolKind
   completeIds: SequenceId[]
-  practice?: boolean
+  practice?: 'student' | 'instructor'
+  /** Nest visually under the previous primary tray (Instructor Practice under Instructor). */
+  nestedUnder?: string
 } & ({ to: string; placeholder?: false } | { to?: undefined; placeholder: true })
 
+/**
+ * Toolbox order: Student Practice first (demo path), then role doors.
+ * Instructor Practice sits *under* Instructor — same craft as Student Practice,
+ * not a peer tray in the main column.
+ */
 const ENTRIES: Entry[] = [
   {
     to: '/journey',
@@ -35,15 +49,7 @@ const ENTRIES: Entry[] = [
     tone: 'journey',
     tool: 'wrench',
     completeIds: ['student'],
-    practice: true,
-  },
-  {
-    to: '/teacher-practice',
-    label: 'Instructor Practice',
-    help: 'Teacher sessions and Community Support workbooks — demo the instructor side.',
-    tone: 'instructor',
-    tool: 'level',
-    completeIds: ['instructor'],
+    practice: 'student',
   },
   {
     to: '/enter/student',
@@ -60,6 +66,16 @@ const ENTRIES: Entry[] = [
     tone: 'instructor',
     tool: 'latch',
     completeIds: ['instructor'],
+  },
+  {
+    to: '/teacher-practice',
+    label: 'Instructor Practice',
+    help: INSTRUCTOR_PRACTICE_TRAY_HELP,
+    tone: 'instructor',
+    tool: 'level',
+    completeIds: ['instructor'],
+    practice: 'instructor',
+    nestedUnder: 'Instructor',
   },
   {
     to: '/enter/admin',
@@ -158,24 +174,38 @@ function ignoreEmptyLink(e: MouseEvent<HTMLAnchorElement>) {
 }
 
 function PracticeNameGate({
+  kind,
   onCancel,
   onReady,
 }: {
+  kind: 'student' | 'instructor'
   onCancel: () => void
   onReady: (name: string) => void
 }) {
-  const [name, setName] = useState(() => getPracticeName() || 'Showcase')
+  const isInstructor = kind === 'instructor'
+  const reviewers = isInstructor
+    ? ['Showcase', ...INSTRUCTOR_PRACTICE_REVIEWERS]
+    : ['Showcase', ...PRACTICE_REVIEWERS]
+  const [name, setName] = useState(
+    () => (isInstructor ? getInstructorPracticeName() : getPracticeName()) || 'Showcase',
+  )
   return (
-    <div className="practice-gate" role="dialog" aria-modal="true" aria-label="Student Practice name">
+    <div
+      className="practice-gate"
+      role="dialog"
+      aria-modal="true"
+      aria-label={isInstructor ? 'Instructor Practice name' : 'Student Practice name'}
+    >
       <div className="practice-gate-card site-crate">
-        <p className="section-kicker">Student Practice</p>
+        <p className="section-kicker">{isInstructor ? 'Instructor Practice' : 'Student Practice'}</p>
         <h2>Who is exploring?</h2>
         <p className="lede">
-          Walk the learner path without registration — good for demos and walkthroughs. Pick a name so
-          feedback stays attached to you.
+          {isInstructor
+            ? 'Walk teaching sessions without signing in — good for demos, kinks, and feedback. Pick a name so notes stay attached to you.'
+            : 'Walk the learner path without registration — good for demos and walkthroughs. Pick a name so feedback stays attached to you.'}
         </p>
         <div className="practice-name-grid">
-          {['Showcase', ...PRACTICE_REVIEWERS].map((r) => (
+          {reviewers.map((r) => (
             <button
               key={r}
               type="button"
@@ -203,7 +233,7 @@ function PracticeNameGate({
             disabled={!name.trim()}
             onClick={() => onReady(name.trim())}
           >
-            Enter Student Practice
+            {isInstructor ? 'Enter Instructor Practice' : 'Enter Student Practice'}
           </button>
           <button type="button" className="btn btn-ghost" onClick={onCancel}>
             Cancel
@@ -214,7 +244,7 @@ function PracticeNameGate({
   )
 }
 
-/** Metal toolbox entry panel — Student, Student Practice, Admin, Instructor. */
+/** Metal toolbox entry panel — Student Practice, roles, Instructor Practice nested under Instructor. */
 export function EnterBox() {
   const navigate = useNavigate()
   const boxRef = useRef<HTMLElement>(null)
@@ -222,18 +252,21 @@ export function EnterBox() {
   const [openTray, setOpenTray] = useState<string | null>(null)
   const [flying, setFlying] = useState(false)
   const [flyLabel, setFlyLabel] = useState('')
-  const [practiceGate, setPracticeGate] = useState(false)
+  const [practiceGate, setPracticeGate] = useState<'student' | 'instructor' | null>(null)
 
   useEffect(() => subscribeSequenceProgress(() => setTick((t) => t + 1)), [])
 
-  /* Re-show Student Practice tray glow/arrow after Start over clears pa-nav-cues-seen-v1. */
   useEffect(() => {
     const sync = () => setTick((t) => t + 1)
     window.addEventListener('pa-nav-cues-changed', sync)
     window.addEventListener('pa-practice-restarted', sync)
+    window.addEventListener('pa-instructor-practice-restarted', sync)
+    window.addEventListener('pa-instructor-practice-started', sync)
     return () => {
       window.removeEventListener('pa-nav-cues-changed', sync)
       window.removeEventListener('pa-practice-restarted', sync)
+      window.removeEventListener('pa-instructor-practice-restarted', sync)
+      window.removeEventListener('pa-instructor-practice-started', sync)
     }
   }, [])
 
@@ -264,16 +297,26 @@ export function EnterBox() {
     }, delay)
   }
 
-  function beginPractice(name: string) {
-    /* Resume shared Desktop↔Phone history — Start over / Restart path still wipe. */
+  function beginStudentPractice(name: string) {
     resumeOrEnterPractice(name)
-    setPracticeGate(false)
+    setPracticeGate(null)
     setOpenTray('Student Practice')
     void unlockFoley().then(() => {
       playFoley('latch')
       playFoley('metal')
     })
     window.setTimeout(() => launchTo('/journey', 'Student Practice'), 380)
+  }
+
+  function beginInstructorPractice(name: string) {
+    resumeOrEnterInstructorPractice(name)
+    setPracticeGate(null)
+    setOpenTray('Instructor Practice')
+    void unlockFoley().then(() => {
+      playFoley('latch')
+      playFoley('metal')
+    })
+    window.setTimeout(() => launchTo('/teacher-practice', 'Instructor Practice'), 380)
   }
 
   return (
@@ -311,9 +354,11 @@ export function EnterBox() {
           </div>
           <nav className="toolbox-tray" aria-label="Workshop entry">
             {ENTRIES.map((item, i) => {
-              /* Always keep Student Practice visible — hiding it when the flag is set
-               * made "← Toolbox" / Exit-to-modes → re-enter look like the tray vanished. */
-              const practiceActive = Boolean(item.practice && isPracticeMode())
+              const studentPracticeActive = Boolean(item.practice === 'student' && isPracticeMode())
+              const instructorPracticeActive = Boolean(
+                item.practice === 'instructor' && isInstructorPracticeMode(),
+              )
+              const practiceActive = studentPracticeActive || instructorPracticeActive
               const done =
                 item.completeIds.length > 0 &&
                 item.completeIds.every((id) => isSequenceComplete(id))
@@ -321,14 +366,15 @@ export function EnterBox() {
                 !done && item.completeIds.some((id) => isSequenceComplete(id))
               const isOpen = openTray === item.label
               const practiceCueActive = Boolean(
-                item.practice && navCueActive(NAV_CUE.toolboxPractice),
+                item.practice === 'student' && navCueActive(NAV_CUE.toolboxPractice),
               )
               const practiceCue = practiceCueActive ? ' nav-glow-cta' : ''
+              const nested = Boolean(item.nestedUnder)
               const className = `toolbox-slot toolbox-slot-${item.tone}${
                 done ? ' is-complete' : partial ? ' is-partial' : ''
               }${item.placeholder ? ' is-placeholder' : ''}${isOpen ? ' is-open' : ''}${
                 item.practice ? ' is-practice' : ''
-              }${practiceActive ? ' is-practice-active' : ''}${practiceCue}`
+              }${practiceActive ? ' is-practice-active' : ''}${nested ? ' is-nested' : ''}${practiceCue}`
               const style = { animationDelay: `${0.14 + i * 0.07}s` }
               const help = item.placeholder
                 ? item.help
@@ -341,7 +387,6 @@ export function EnterBox() {
                       : item.help
               const inner: ReactNode = (
                 <>
-                  {/* Once-then-quiet finger at Student Practice — same grammar as Mode/Hub arrows. */}
                   {practiceCueActive && (
                     <span className="practice-point" aria-hidden>
                       <span className="practice-point-arrow">➜</span>
@@ -355,6 +400,7 @@ export function EnterBox() {
                     {done && <span className="toolbox-check">✓</span>}
                   </span>
                   <span className="toolbox-text">
+                    {nested && <span className="toolbox-nested-kicker">Under Instructor</span>}
                     <strong>{item.label}</strong>
                     <span>{help}</span>
                   </span>
@@ -387,7 +433,7 @@ export function EnterBox() {
                   className={className}
                   style={style}
                   onClick={() => {
-                    if (item.practice) {
+                    if (item.practice === 'student') {
                       markNavCueSeen(NAV_CUE.toolboxPractice)
                       void unlockFoley().then(() => playFoley('metal'))
                       if (isPracticeMode()) {
@@ -395,7 +441,20 @@ export function EnterBox() {
                         window.setTimeout(() => launchTo('/journey', 'Student Practice'), 280)
                         return
                       }
-                      setPracticeGate(true)
+                      setPracticeGate('student')
+                      return
+                    }
+                    if (item.practice === 'instructor') {
+                      void unlockFoley().then(() => playFoley('metal'))
+                      if (isInstructorPracticeMode()) {
+                        setOpenTray(item.label)
+                        window.setTimeout(
+                          () => launchTo('/teacher-practice', 'Instructor Practice'),
+                          280,
+                        )
+                        return
+                      }
+                      setPracticeGate('instructor')
                       return
                     }
                     setOpenTray(item.label)
@@ -422,7 +481,11 @@ export function EnterBox() {
       </aside>
 
       {practiceGate && (
-        <PracticeNameGate onCancel={() => setPracticeGate(false)} onReady={beginPractice} />
+        <PracticeNameGate
+          kind={practiceGate}
+          onCancel={() => setPracticeGate(null)}
+          onReady={practiceGate === 'instructor' ? beginInstructorPractice : beginStudentPractice}
+        />
       )}
 
       {flying && (

@@ -28,8 +28,8 @@ export function ToolboxStation() {
           <h1 className="toolbox-station-title">Open the toolbox</h1>
           <p className="toolbox-station-lede">
             {inPhone
-              ? 'Pull a tray on the phone — Student Practice, Instructor Practice, Student, Instructor, or Admin.'
-              : 'Pull a tray — Student Practice, Instructor Practice, Student, Instructor, or Admin — and step onto the path.'}
+              ? 'Pull a tray on the phone — Student Practice, Student, Instructor (Instructor Practice sits under it), or Admin.'
+              : 'Pull a tray — Student Practice, Student, Instructor (Instructor Practice under it), or Admin — and step onto the path.'}
           </p>
         </header>
 
