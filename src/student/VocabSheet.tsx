@@ -6,6 +6,7 @@ import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { playFoley } from '../audio/foley'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { InstructionHearChip } from '../practice/InstructionNarration'
+import { InstructionL1Line } from '../practice/InstructionL1Line'
 import { NavCueTarget, NavGlowRegion } from '../practice/NavCue'
 import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 import {
@@ -316,6 +317,14 @@ export function VocabSheetCard({
           ? 'Type the English word you picked and heard.'
           : 'Pick the matching English word below, then type it.'}
       </p>
+      <InstructionL1Line
+        english={
+          pickReady
+            ? 'Type the English word you picked and heard.'
+            : 'Pick the matching English word below, then type it.'
+        }
+        compact
+      />
       <div className="vocab-sheet-type-row">
         <label className="sr-only" htmlFor={inputId}>
           English word
@@ -808,13 +817,16 @@ export function VocabSheet({
           </p>
         </div>
       ) : (
-        <p className="vocab-sheet-lede">
-          One word at a time. Press a language you understand (English is included), or More languages to hear a translation. Pick the match. Type it.
-          Choices switch when you miss — so the word sticks, not the button.
-          {paged
-            ? ` This set has ${terms.length} words in pages of ${VOCAB_PAGE_SIZE}.`
-            : ''}
-        </p>
+        <>
+          <p className="vocab-sheet-lede">
+            One word at a time. Press a language you understand (English is included), or More languages to hear a translation. Pick the match. Type it.
+            Choices switch when you miss — so the word sticks, not the button.
+            {paged
+              ? ` This set has ${terms.length} words in pages of ${VOCAB_PAGE_SIZE}.`
+              : ''}
+          </p>
+          <InstructionL1Line english="One word at a time. Press a language you understand (English is included), or More languages to hear a translation. Pick the match. Type it." />
+        </>
       )}
 
       {paged && (

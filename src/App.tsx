@@ -132,21 +132,21 @@ function AppRoutes() {
     !isAuthPath && location.pathname !== '/privacy' && location.pathname !== '/contact'
 
   /*
-   * First screen: brand opening (door → logo → Enter).
-   * Second: Desktop | Phone (only after Enter — never block /enter/* routes).
-   * Toolbox / phone only after a mode is chosen.
+   * First screen: Desktop | Phone.
+   * Desktop then plays the opening when phase is `opening`.
+   * Phone plays opening inside the device after the PA icon.
    */
-  if (onPublicGate && !entered && !bypassSplash) {
-    return <SplashPage onEnter={() => setEntered(true)} />
-  }
-
-  if (
+  const showModeChooser =
     onPublicGate &&
     !bypassSplash &&
-    entered &&
-    (!shellMode || (shellMode === 'course' && desktopPhase == null))
-  ) {
+    (!shellMode || (shellMode === 'course' && desktopPhase == null && !entered))
+
+  if (showModeChooser) {
     return <ModeChooser />
+  }
+
+  if (shellMode === 'course' && desktopPhase === 'opening' && !bypassSplash) {
+    return <SplashPage onEnter={() => setEntered(true)} />
   }
 
   return (

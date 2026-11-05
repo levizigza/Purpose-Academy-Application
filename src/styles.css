@@ -1694,12 +1694,22 @@ table.data th {
   width: min(86vw, 440px);
 }
 
+/* Milder approach so the lockup reads as brand, not a tunnel into the P. */
+.threshold.is-lockup .threshold-brand-zoom.is-closed {
+  transform: scale(1.28);
+}
+
+.threshold.is-lockup .threshold-brand-zoom.is-opening {
+  transform: scale(1.1);
+}
+
 .threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue {
   left: 50%;
   right: auto;
   top: auto;
   bottom: max(1.1rem, env(safe-area-inset-bottom));
   transform: translateX(-50%);
+  z-index: 6;
 }
 
 .threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue.is-visible {
@@ -17312,6 +17322,68 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
 .vocab-universal-option.is-selected {
   background: #fff8e8;
   border-color: #e8a317;
+}
+
+/* Mother-tongue instruction line — task help only; English production stays English. */
+.instruction-l1-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.55rem;
+  margin: 0.35rem 0 0.55rem;
+  padding: 0.4rem 0.65rem;
+  border-left: 3px solid #2f6fad;
+  border-radius: 8px;
+  background: #f3f8fd;
+  color: var(--brand-deep, #0b2f5c);
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+
+.instruction-l1-line.is-compact {
+  font-size: 0.9rem;
+  padding: 0.3rem 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.instruction-l1-line.is-soft-miss {
+  background: #f7f9fc;
+  border-left-color: #9fb0c4;
+}
+
+.instruction-l1-tag {
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #1d4f7c;
+}
+
+.instruction-l1-text {
+  flex: 1 1 12rem;
+  font-weight: 600;
+}
+
+.instruction-l1-text.is-loading {
+  font-weight: 500;
+  color: #5a6f86;
+}
+
+html.pa-course-shell .instruction-l1-line,
+.course-stage .instruction-l1-line {
+  background: rgba(15, 40, 70, 0.55);
+  border-left-color: #7eb6e8;
+  color: #e8f2fb;
+}
+
+html.pa-course-shell .instruction-l1-tag,
+.course-stage .instruction-l1-tag {
+  color: #9ec9ef;
+}
+
+html.pa-course-shell .instruction-l1-text.is-loading,
+.course-stage .instruction-l1-text.is-loading {
+  color: #9fb0c4;
 }
 
 .extra-lang-line {

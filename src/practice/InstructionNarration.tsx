@@ -28,7 +28,10 @@ type ChipProps = {
   label?: string
 }
 
-function statusLine(status: InstructionNarrationStatus): string | null {
+function statusLine(
+  status: InstructionNarrationStatus,
+  opts: { hearAttempted?: boolean } = {},
+): string | null {
   if (status.kind === 'loading') {
     return status.phase === 'translate' ? 'Finding your language…' : 'Playing…'
   }
@@ -39,7 +42,8 @@ function statusLine(status: InstructionNarrationStatus): string | null {
     return status.detail || 'Audio resting — try again, or use English.'
   }
   if (status.kind === 'ready' && !status.englishOnly) {
-    if (!status.played) {
+    /* Written L1 is the default; audio warning only after an explicit Hear press. */
+    if (opts.hearAttempted && !status.played) {
       return `${status.lang.name}: ${status.spoken} · Audio didn’t play — check sound.`
     }
     return `${status.lang.name}: ${status.spoken}`
@@ -57,6 +61,7 @@ export function InstructionHearChip({
   const [lang, setLang] = useState<HearLanguage>(() => resolveLearnerHearLanguage())
   const [status, setStatus] = useState<InstructionNarrationStatus>({ kind: 'idle' })
   const [busy, setBusy] = useState(false)
+  const [hearAttempted, setHearAttempted] = useState(false)
   const autoDone = useRef<string | null>(null)
   const wantsL1 = learnerWantsL1Narration(lang)
 
@@ -73,6 +78,7 @@ export function InstructionHearChip({
   const playL1 = useCallback(async () => {
     if (!english.trim() || busy) return
     setBusy(true)
+    setHearAttempted(true)
     setStatus({ kind: 'loading', phase: 'translate' })
     try {
       setStatus({ kind: 'loading', phase: 'speak' })
@@ -89,6 +95,7 @@ export function InstructionHearChip({
   const playEn = useCallback(async () => {
     if (!english.trim() || busy) return
     setBusy(true)
+    setHearAttempted(true)
     try {
       const ok = await narrateInstructionEnglish(english)
       setStatus(
@@ -109,6 +116,28 @@ export function InstructionHearChip({
     }
   }, [english, busy])
 
+  /* Written L1 under the English instruction — no need to press Hear first. */
+  useEffect(() => {
+    setHearAttempted(false)
+    if (!wantsL1 || !english.trim()) {
+      if (!auto) setStatus({ kind: 'idle' })
+      return
+    }
+    let cancelled = false
+    setStatus({ kind: 'loading', phase: 'translate' })
+    void narrateInstruction(english, {
+      lang,
+      skipEnglishPreferred: false,
+      speak: false,
+    }).then((next) => {
+      if (cancelled) return
+      setStatus(next)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [english, lang, wantsL1, auto])
+
   useEffect(() => {
     if (!auto || !wantsL1 || !english.trim()) return
     const key = `${autoKey ?? english}::${lang.code}`
@@ -119,7 +148,7 @@ export function InstructionHearChip({
 
   if (!english.trim()) return null
 
-  const line = statusLine(status)
+  const line = statusLine(status, { hearAttempted })
   const primaryLabel =
     label ||
     (wantsL1 ? `Hear ${lang.name}` : 'Hear English')

@@ -6,6 +6,7 @@ import { speakEnglish } from './speech'
 import { playFoley } from '../audio/foley'
 import { firePlayClear, softMissLine } from '../practice/PlayClear'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
+import { InstructionL1Line } from '../practice/InstructionL1Line'
 import { recordSkillAttempt } from './learningMastery'
 import { normalizeEnglishAnswer } from './VocabSheet'
 import { choiceOrderKey, shuffleChoicesFresh } from './vocabDistractors'
@@ -647,6 +648,7 @@ export function SentenceClozeDrill({
             <span className="sentence-cloze-type-kicker">Your turn</span>
             Type the full sentence you picked and heard.
           </p>
+          <InstructionL1Line english="Type the full sentence you picked and heard." compact />
           <div className="sentence-cloze-type-row">
             <label className="sr-only" htmlFor={inputId}>
               Full sentence
