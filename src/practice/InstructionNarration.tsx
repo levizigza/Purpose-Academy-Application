@@ -14,6 +14,7 @@ import {
   narrateInstructionEnglish,
   type InstructionNarrationStatus,
 } from '../student/instructionNarration'
+import { stopSpeech } from '../student/speech'
 import type { HearLanguage } from '../student/hearLanguages'
 
 type ChipProps = {
@@ -77,6 +78,8 @@ export function InstructionHearChip({
 
   const playL1 = useCallback(async () => {
     if (!english.trim() || busy) return
+    window.speechSynthesis?.cancel()
+    stopSpeech()
     setBusy(true)
     setHearAttempted(true)
     setStatus({ kind: 'loading', phase: 'translate' })
@@ -94,6 +97,8 @@ export function InstructionHearChip({
 
   const playEn = useCallback(async () => {
     if (!english.trim() || busy) return
+    window.speechSynthesis?.cancel()
+    stopSpeech()
     setBusy(true)
     setHearAttempted(true)
     try {

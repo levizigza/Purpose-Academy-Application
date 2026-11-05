@@ -384,11 +384,11 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
             ? `Cleared · ${lesson.title}`
             : `Practice questions · ${Math.max(questions.length - qIdx, 1)} left on this machine`}
       </p>
-      {phase === 'watch' || (phase === 'answer' && !setJustCleared) ? (
+      {phase === 'answer' && !setJustCleared ? (
         <InstructionHearChip
-          english={phase === 'watch' ? EQUIP_INSTR.watch : EQUIP_INSTR.answer}
-          auto
-          autoKey={`${pack}-${lesson.id}-${phase}`}
+          english={EQUIP_INSTR.answer}
+          auto={false}
+          autoKey={`${pack}-${lesson.id}-answer`}
           className="equip-video-instr-hear"
         />
       ) : null}
