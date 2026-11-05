@@ -125,36 +125,22 @@ function AppRoutes() {
     location.pathname.startsWith('/forgot-password') ||
     location.pathname.startsWith('/app')
 
-  /*
-   * First screen: Desktop | Phone split.
-   * Also treat legacy course-without-phase (no Desktop press) as chooser.
-   */
-  const showModeChooser =
-    !shellMode ||
-    (shellMode === 'course' && desktopPhase == null && !entered && !bypassSplash)
+  const onPublicGate =
+    !isAuthPath && location.pathname !== '/privacy' && location.pathname !== '/contact'
 
-  if (
-    showModeChooser &&
-    !isAuthPath &&
-    location.pathname !== '/privacy' &&
-    location.pathname !== '/contact'
-  ) {
-    return <ModeChooser />
+  /*
+   * First screen: brand opening (door → logo → Enter).
+   * Second: Desktop | Phone. Toolbox / phone only after a mode is chosen.
+   */
+  if (onPublicGate && !entered && !bypassSplash) {
+    return <SplashPage onEnter={() => setEntered(true)} />
   }
 
-  /*
-   * Desktop mode: opening only when ModeChooser armed phase `opening`
-   * (not bare !entered — that raced Exit→Desktop into the toolbox).
-   * Phone mode: splash runs inside the device after the PA icon — skip here.
-   */
-  if (shellMode === 'course' && desktopPhase === 'opening' && !bypassSplash) {
-    return (
-      <SplashPage
-        onEnter={() => {
-          setEntered(true)
-        }}
-      />
-    )
+  if (
+    onPublicGate &&
+    (!shellMode || (shellMode === 'course' && desktopPhase == null))
+  ) {
+    return <ModeChooser />
   }
 
   return (

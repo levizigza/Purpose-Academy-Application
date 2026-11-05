@@ -10,7 +10,6 @@ import { clearPracticeMode, isPracticeMode } from '../practice/PracticeMode'
 import type { Role } from '../data/types'
 import { DesktopCourseShell } from '../shell/DesktopCourse'
 import { PhoneEmulatorShell } from '../shell/PhoneEmulator'
-import { clearEnteredSite } from '../auth/EntryPages'
 import { clearShellMode, getShellMode, subscribeShellMode, type ShellMode } from '../shell/shellMode'
 
 function BrandLockup({ to, compact = false, dark = false }: { to: string; compact?: boolean; dark?: boolean }) {
@@ -65,7 +64,6 @@ function ToolboxLayout({ children }: { children: React.ReactNode }) {
             className="linkish"
             onClick={() => {
               clearPracticeMode()
-              clearEnteredSite()
               clearShellMode()
               navigate('/', { replace: true })
             }}

@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
-import { clearEnteredSite } from '../auth/EntryPages'
 import { playFoley, unlockFoley } from '../audio/foley'
 import { PaAppIcon } from './PaAppIcon'
 import { setDesktopPhase, setPhonePhase, setShellMode, type ShellMode } from './shellMode'
@@ -9,11 +8,8 @@ import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
 import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 
 /**
- * First screen after load — split Desktop | Phone.
- * Craft L3/L4: one composition, two doors, brand hero-level.
- *
- * Desktop door arms phase `opening` so App plays the threshold sequence
- * only after this press — never from a bare shell-mode restore.
+ * Second screen — after the brand opening.
+ * Desktop → toolbox. Phone → home icon (opening already played on the first screen).
  */
 export function ModeChooser() {
   const navigate = useNavigate()
@@ -27,15 +23,12 @@ export function ModeChooser() {
     })
     navigate('/', { replace: true })
     if (mode === 'phone') {
-      clearEnteredSite()
       setDesktopPhase(null)
       setPhonePhase('home')
       setShellMode('phone')
       return
     }
-    /* Arm opening before shell mode so the first course render shows splash. */
-    clearEnteredSite()
-    setDesktopPhase('opening')
+    setDesktopPhase('ready')
     setShellMode('course')
   }
 
@@ -65,7 +58,7 @@ export function ModeChooser() {
               </span>
               <span className="mode-door-copy">
                 <strong>Desktop mode</strong>
-                <span>Opening animation, then the toolbox — Student Practice, Student, Instructor, Admin.</span>
+                <span>Full web course — Student Practice, Student, Instructor, Admin.</span>
               </span>
               <span className="mode-door-cta">Enter desktop</span>
             </button>
@@ -84,7 +77,7 @@ export function ModeChooser() {
               </span>
               <span className="mode-door-copy">
                 <strong>Phone mode</strong>
-                <span>Tap the Purpose Academy icon, watch the opening, then open the toolbox on the phone.</span>
+                <span>Live app demo inside a real device frame — same progress as desktop.</span>
               </span>
               <span className="mode-door-cta">Enter phone</span>
             </button>

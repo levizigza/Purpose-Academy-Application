@@ -8,7 +8,7 @@ import { playFoley, unlockFoley } from '../audio/foley'
 import { clearShellMode, setDesktopPhase } from '../shell/shellMode'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v44'
+const ENTERED_KEY = 'pa-crossed-threshold-v45'
 
 export function hasEnteredSite() {
   try {
@@ -272,8 +272,14 @@ export function SplashPage({
 
   const finishEnter = useCallback(() => {
     markEnteredSite()
-    /* Desktop shell only — phone embedded splash advances via PhoneEmulator phase. */
-    if (!embedded) setDesktopPhase('ready')
+    /*
+     * Full-screen opening is first; next screen is Desktop | Phone.
+     * Embedded phone splash still advances the device phase via onEnter.
+     */
+    if (!embedded) {
+      setDesktopPhase(null)
+      clearShellMode()
+    }
     if (onEnter) onEnter()
     else navigate('/', { replace: true })
   }, [navigate, onEnter, embedded])
@@ -367,7 +373,7 @@ export function SplashPage({
       ]
         .filter(Boolean)
         .join(' ')}
-      data-splash-version="v44"
+      data-splash-version="v45"
       role="dialog"
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}
@@ -406,20 +412,6 @@ export function SplashPage({
         </div>
       )}
 
-      {/* Desktop splash only: escape back to Desktop | Phone so "THREE DOORS" never looks like modes vanished. */}
-      {!embedded && showEnter && !exiting && (
-        <button
-          type="button"
-          className="threshold-modes-escape"
-          onClick={() => {
-            clearEnteredSite()
-            clearShellMode()
-            navigate('/', { replace: true })
-          }}
-        >
-          Desktop / Phone
-        </button>
-      )}
     </div>
   )
 }
