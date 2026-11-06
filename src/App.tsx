@@ -7,6 +7,7 @@ import { ModeChooser } from './shell/ModeChooser'
 import {
   getDesktopPhase,
   getShellMode,
+  hasChosenEntryThisSession,
   reconcileDesktopShellOnBoot,
   subscribeShellMode,
   type DesktopPhase,
@@ -132,14 +133,11 @@ function AppRoutes() {
     !isAuthPath && location.pathname !== '/privacy' && location.pathname !== '/contact'
 
   /*
-   * First screen: Desktop | Phone.
-   * Desktop then plays the opening when phase is `opening`.
-   * Phone plays opening inside the device after the PA icon.
+   * First screen of a visit: Desktop | Phone.
+   * A saved toolbox or Instructor Practice must not skip this.
+   * After a pick, this tab can stay in the workshop until they choose Desktop / Phone again.
    */
-  const showModeChooser =
-    onPublicGate &&
-    !bypassSplash &&
-    (!shellMode || (shellMode === 'course' && desktopPhase == null && !entered))
+  const showModeChooser = onPublicGate && !hasChosenEntryThisSession()
 
   if (showModeChooser) {
     return <ModeChooser />

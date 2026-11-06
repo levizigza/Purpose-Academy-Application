@@ -21,6 +21,8 @@ export type DesktopPhase = 'opening' | 'ready'
 const MODE_KEY = 'pa-shell-mode-v2'
 const PHASE_KEY = 'pa-phone-phase-v1'
 const DESKTOP_PHASE_KEY = 'pa-desktop-phase-v1'
+/** This browser tab has already picked Desktop or Phone. A new visit starts at the chooser. */
+const ENTRY_SESSION_KEY = 'pa-entry-chosen-v1'
 const EVENT = 'pa-shell-mode'
 const PHASE_EVENT = 'pa-phone-phase'
 const DESKTOP_PHASE_EVENT = 'pa-desktop-phase'
@@ -94,7 +96,32 @@ export function setShellMode(mode: ShellMode | null) {
   window.dispatchEvent(new CustomEvent(EVENT, { detail: { mode } }))
 }
 
+export function hasChosenEntryThisSession(): boolean {
+  try {
+    return sessionStorage.getItem(ENTRY_SESSION_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+export function markEntryChosenThisSession() {
+  try {
+    sessionStorage.setItem(ENTRY_SESSION_KEY, '1')
+  } catch {
+    /* ignore */
+  }
+}
+
+export function clearEntryChosenThisSession() {
+  try {
+    sessionStorage.removeItem(ENTRY_SESSION_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
 export function clearShellMode() {
+  clearEntryChosenThisSession()
   setShellMode(null)
 }
 
