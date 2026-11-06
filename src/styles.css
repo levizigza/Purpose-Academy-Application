@@ -17308,9 +17308,14 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
 .instr-narration-status {
   margin: 0.28rem 0 0;
   font-family: var(--body, 'Source Sans 3', system-ui, sans-serif);
-  font-size: 0.82rem;
-  line-height: 1.35;
-  color: color-mix(in srgb, #f5f8fc 78%, transparent);
+  font-size: 0.92rem;
+  line-height: 1.4;
+  font-weight: 650;
+  color: #eef4fb;
+}
+
+.instr-narration-status.is-ok {
+  color: #f5f9fd;
 }
 
 .instr-narration-status.is-soft-miss {
@@ -17338,7 +17343,8 @@ html.pa-phone-shell .instr-narration-en,
 
 html.pa-phone-shell .instr-narration-status,
 .is-phone-app .instr-narration-status {
-  color: color-mix(in srgb, var(--brand, #0b2f5c) 65%, #6b7c90);
+  color: #0a2748;
+  font-weight: 700;
 }
 
 html.pa-phone-shell .instr-narration-status.is-soft-miss,
