@@ -249,7 +249,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 }) {
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
-  const motherTongue = supportLang && ((step >= 3 && step <= 5) || step === 15)
+  /* Step 3 is the language picker — stay in English, no Hear buttons yet. */
+  const motherTongue = supportLang && ((step >= 4 && step <= 5) || step === 15)
   const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 14] : null
   const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
   const help = shellCopy ? assessT(shellCopy.help, supportLang!) : base.help
@@ -465,9 +466,9 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         )}
         <h1 className="train-title">{title}</h1>
         <p className="train-simple-line">{help}</p>
-        {!motherTongue && help ? (
+        {step !== 3 && base.help ? (
           <InstructionHearChip
-            english={help}
+            english={base.help}
             auto={false}
             autoKey={`shell-help-${step}`}
             className="train-shell-instr-hear"
@@ -484,9 +485,9 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         <details className="train-why-details">
           <summary>{whyLabel}</summary>
           <p className="train-purpose">{purpose}</p>
-          {!motherTongue && purpose ? (
+          {step !== 3 && base.purpose ? (
             <InstructionHearChip
-              english={purpose}
+              english={base.purpose}
               auto={false}
               autoKey={`shell-purpose-${step}`}
               className="train-shell-instr-hear"
@@ -1749,14 +1750,14 @@ export function StudentSequencePage() {
           setRegForm((f) => ({ ...f, preferred_language: extraLang ? extraLang.name : supportLang }))
           go(4)
         }}
-        nextLabel={assessT(ASSESSMENT_COPY.next, supportLang)}
+        nextLabel={assessT(ASSESSMENT_COPY.next, 'English')}
       >
         <div className="train-lang-pick">
           <p className="play-nearby-objective" aria-live="polite">
-            {assessT(ASSESSMENT_COPY.nearbyLangPick, supportLang)}
+            {assessT(ASSESSMENT_COPY.nearbyLangPick, 'English')}
           </p>
-          <h2 className="career-assess-title">{assessT(ASSESSMENT_COPY.langPickTitle, supportLang)}</h2>
-          <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickBody, supportLang)}</p>
+          <h2 className="career-assess-title">{assessT(ASSESSMENT_COPY.langPickTitle, 'English')}</h2>
+          <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickBody, 'English')}</p>
           <NavCueTarget
             cueId={NAV_CUE.langPick}
             arrowLabel="Languages here"
@@ -1804,11 +1805,10 @@ export function StudentSequencePage() {
             </NavGlowRegion>
           </NavCueTarget>
           <div className="train-bridge">
-            <p><strong>{assessT(ASSESSMENT_COPY.introTitle, supportLang)}</strong></p>
-            <p>{assessT(ASSESSMENT_COPY.introBody, supportLang)}</p>
-            <ExtraLangLine english={`${ASSESSMENT_COPY.introTitle.English}. ${ASSESSMENT_COPY.introBody.English}`} />
+            <p><strong>{assessT(ASSESSMENT_COPY.introTitle, 'English')}</strong></p>
+            <p>{assessT(ASSESSMENT_COPY.introBody, 'English')}</p>
           </div>
-          <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickHint, supportLang)}</p>
+          <p className="career-assess-lede">{assessT(ASSESSMENT_COPY.langPickHint, 'English')}</p>
         </div>
       </Shell>
     )

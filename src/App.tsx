@@ -7,6 +7,7 @@ import { ModeChooser } from './shell/ModeChooser'
 import {
   getDesktopPhase,
   getShellMode,
+  hasChosenEntryThisSession,
   reconcileDesktopShellOnBoot,
   subscribeShellMode,
   type DesktopPhase,
@@ -101,7 +102,6 @@ function AppRoutes() {
   const location = useLocation()
   const shellMode = useLiveShellMode()
   const desktopPhase = useLiveDesktopPhase()
-  const [entered, setEntered] = useState(() => hasEnteredSite())
   const bypassSplash =
     SPLASH_BYPASS.has(location.pathname) ||
     location.pathname.startsWith('/enter/') ||
@@ -125,27 +125,17 @@ function AppRoutes() {
   useEffect(() => {
     if ((isAuthPath || isLegalPath) && !hasEnteredSite()) {
       markEnteredSite()
-      setEntered(true)
     }
   }, [isAuthPath, isLegalPath])
-
-  /* Re-read splash flag when Desktop/Phone mode or desktop phase changes. */
-  useEffect(() => {
-    setEntered(hasEnteredSite())
-  }, [shellMode, desktopPhase])
 
   const onPublicGate = !isAuthPath && !isLegalPath
 
   /*
-   * First screen: Desktop | Phone.
-   * Desktop then plays the opening when phase is `opening`.
-   * Phone plays opening inside the device after the PA icon.
-   * Never block /app or auth behind the threshold splash.
+   * First screen of a visit: Desktop | Phone (session-scoped).
+   * A saved toolbox must not skip this. Never block /app or auth behind splash.
+   * After a pick, this tab can stay in the workshop until they choose again.
    */
-  const showModeChooser =
-    onPublicGate &&
-    !bypassSplash &&
-    (!shellMode || (shellMode === 'course' && desktopPhase == null && !entered))
+  const showModeChooser = onPublicGate && !hasChosenEntryThisSession()
 
   if (showModeChooser) {
     return <ModeChooser />
@@ -158,12 +148,12 @@ function AppRoutes() {
     desktopPhase === 'opening' &&
     !bypassSplash
   ) {
-    return <SplashPage onEnter={() => setEntered(true)} />
+    return <SplashPage />
   }
 
   return (
     <Routes>
-      <Route path="/splash" element={<SplashPage onEnter={() => setEntered(true)} />} />
+      <Route path="/splash" element={<SplashPage />} />
       <Route
         path="/welcome"
         element={

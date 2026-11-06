@@ -298,7 +298,7 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
         english={
           phase === 'questions' ? COMP_INSTR.check : phase === 'try' ? COMP_INSTR.try : COMP_INSTR.watch
         }
-        auto
+        auto={!showVideo}
         autoKey={`${lesson.id}-${phase}`}
         className="comp-skills-instr-hear"
       />

@@ -4,7 +4,13 @@ import { BRAND } from '../brand/copy'
 import { clearEnteredSite } from '../auth/EntryPages'
 import { playFoley, unlockFoley } from '../audio/foley'
 import { PaAppIcon } from './PaAppIcon'
-import { setDesktopPhase, setPhonePhase, setShellMode, type ShellMode } from './shellMode'
+import {
+  markEntryChosenThisSession,
+  setDesktopPhase,
+  setPhonePhase,
+  setShellMode,
+  type ShellMode,
+} from './shellMode'
 import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
 import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 
@@ -17,6 +23,7 @@ export function ModeChooser() {
   const navigate = useNavigate()
 
   function pick(mode: ShellMode) {
+    markEntryChosenThisSession()
     markNavCueSeen(mode === 'phone' ? NAV_CUE.modePhone : NAV_CUE.modeDesktop)
     markNavCueSeen(mode === 'phone' ? NAV_CUE.modeDesktop : NAV_CUE.modePhone)
     void unlockFoley().then(() => {

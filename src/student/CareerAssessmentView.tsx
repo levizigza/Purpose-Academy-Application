@@ -1,5 +1,7 @@
-import { useRef, useState } from 'react'
-import { ExtraLangLine } from './ExtraLangLine'
+import { useEffect, useRef, useState } from 'react'
+import { ExtraLangLine, useLearnerExtraLang } from './ExtraLangLine'
+import type { HearLanguage } from './hearLanguages'
+import { translateVocabWord } from './universalHear'
 import type { SupportLang } from './journeyCurriculum'
 import {
   ASSESSMENT_COPY,
@@ -16,6 +18,65 @@ import {
   type PathwayScores,
   t,
 } from './careerAssessment'
+
+/**
+ * Universal-translator answers. Built-in languages keep their written labels.
+ * Any other chosen language gets the same question language on every choice.
+ */
+function useChoiceTranslations(englishLines: string[]) {
+  const extra = useLearnerExtraLang()
+  const key = englishLines.join('\u0001')
+  const [map, setMap] = useState<Record<string, string> | null>(null)
+
+  useEffect(() => {
+    if (!extra) {
+      setMap(null)
+      return
+    }
+    const lines = key ? key.split('\u0001') : []
+    let alive = true
+    setMap(null)
+    void Promise.all(
+      lines.map(async (line) => {
+        let translated = line
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            const result = await translateVocabWord(line, extra)
+            translated = result.translated || line
+            if (translated.trim().toLowerCase() !== line.trim().toLowerCase()) break
+          } catch {
+            translated = line
+          }
+          if (attempt < 2) {
+            await new Promise((resolve) => window.setTimeout(resolve, 350 * (attempt + 1)))
+          }
+        }
+        return [line, translated] as const
+      }),
+    ).then((pairs) => {
+      if (!alive) return
+      const next: Record<string, string> = {}
+      for (const [en, translated] of pairs) next[en] = translated
+      setMap(next)
+    })
+    return () => {
+      alive = false
+    }
+  }, [extra, key])
+
+  return { extra, map }
+}
+
+function inChosenLanguage(
+  english: string,
+  curated: string,
+  extra: HearLanguage | null,
+  map: Record<string, string> | null,
+) {
+  if (!extra) return curated
+  if (!map) return '…'
+  return map[english] || curated
+}
 
 type InterestProps = {
   lang: SupportLang
@@ -51,6 +112,10 @@ export function CareerInterestAssessment({ lang, onComplete, onBack }: InterestP
   }
 
   const left = items.length - idx
+  const chosen = useChoiceTranslations([
+    item.text.English,
+    ...LIKERT_OPTIONS.map((opt) => opt.label.English),
+  ])
 
   return (
     <div className="career-assess" data-assess-idx={idx}>
@@ -70,8 +135,10 @@ export function CareerInterestAssessment({ lang, onComplete, onBack }: InterestP
       </header>
 
       <article className="career-assess-card" key={item.id}>
-        <p className="career-assess-prompt">{item.text[lang]}</p>
-        {lang === 'English' && <ExtraLangLine english={item.text.English} />}
+        <p className="career-assess-prompt" lang={chosen.extra?.bcp47} dir="auto">
+          {inChosenLanguage(item.text.English, item.text[lang], chosen.extra, chosen.map)}
+        </p>
+        {chosen.extra ? <p className="muted">{item.text.English}</p> : null}
         <div className="career-likert" role="radiogroup" aria-label={item.text[lang]}>
           {LIKERT_OPTIONS.map((opt) => (
             <button
@@ -83,7 +150,9 @@ export function CareerInterestAssessment({ lang, onComplete, onBack }: InterestP
               onClick={() => select(opt.value)}
             >
               <span className="career-likert-num">{opt.value}</span>
-              <span className="career-likert-label">{opt.label[lang]}</span>
+              <span className="career-likert-label" lang={chosen.extra?.bcp47} dir="auto">
+                {inChosenLanguage(opt.label.English, opt.label[lang], chosen.extra, chosen.map)}
+              </span>
             </button>
           ))}
         </div>
@@ -139,6 +208,10 @@ export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) 
   }
 
   const left = items.length - idx
+  const chosen = useChoiceTranslations([
+    item.prompt.English,
+    ...item.options.map((opt) => opt.label.English),
+  ])
 
   return (
     <div className="career-assess" data-assess-idx={idx}>
@@ -159,8 +232,10 @@ export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) 
       </header>
 
       <article className="career-assess-card" key={item.id}>
-        <p className="career-assess-prompt">{item.prompt[lang]}</p>
-        {lang === 'English' && <ExtraLangLine english={item.prompt.English} />}
+        <p className="career-assess-prompt" lang={chosen.extra?.bcp47} dir="auto">
+          {inChosenLanguage(item.prompt.English, item.prompt[lang], chosen.extra, chosen.map)}
+        </p>
+        {chosen.extra ? <p className="muted">{item.prompt.English}</p> : null}
         <div className="career-choice-stack">
           {item.options.map((opt) => (
             <button
@@ -169,7 +244,9 @@ export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) 
               className={`career-choice${current === opt.id ? ' is-selected' : ''}`}
               onClick={() => pick(opt.id)}
             >
-              {opt.label[lang]}
+              <span lang={chosen.extra?.bcp47} dir="auto">
+                {inChosenLanguage(opt.label.English, opt.label[lang], chosen.extra, chosen.map)}
+              </span>
             </button>
           ))}
         </div>
