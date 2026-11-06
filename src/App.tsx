@@ -102,23 +102,10 @@ function AppRoutes() {
   const location = useLocation()
   const shellMode = useLiveShellMode()
   const desktopPhase = useLiveDesktopPhase()
-  const [entered, setEntered] = useState(() => hasEnteredSite())
   const bypassSplash =
     SPLASH_BYPASS.has(location.pathname) ||
     location.pathname.startsWith('/enter/') ||
     location.pathname.startsWith('/teacher-practice')
-
-  useEffect(() => {
-    if (bypassSplash && !hasEnteredSite()) {
-      markEnteredSite()
-      setEntered(true)
-    }
-  }, [bypassSplash])
-
-  /* Re-read splash flag when Desktop/Phone mode or desktop phase changes. */
-  useEffect(() => {
-    setEntered(hasEnteredSite())
-  }, [shellMode, desktopPhase])
 
   /* Auth / legal paths skip the mode chooser and splash. */
   const isAuthPath =
@@ -129,13 +116,24 @@ function AppRoutes() {
     location.pathname.startsWith('/forgot-password') ||
     location.pathname.startsWith('/app')
 
-  const onPublicGate =
-    !isAuthPath && location.pathname !== '/privacy' && location.pathname !== '/contact'
+  const isLegalPath = location.pathname === '/privacy' || location.pathname === '/contact'
 
   /*
-   * First screen of a visit: Desktop | Phone.
-   * A saved toolbox or Instructor Practice must not skip this.
-   * After a pick, this tab can stay in the workshop until they choose Desktop / Phone again.
+   * Only force “entered” for auth/legal doors — not for /journey or /teacher-practice,
+   * so a deep-link demo still lets Desktop arm a fresh opening after Modes.
+   */
+  useEffect(() => {
+    if ((isAuthPath || isLegalPath) && !hasEnteredSite()) {
+      markEnteredSite()
+    }
+  }, [isAuthPath, isLegalPath])
+
+  const onPublicGate = !isAuthPath && !isLegalPath
+
+  /*
+   * First screen of a visit: Desktop | Phone (session-scoped).
+   * A saved toolbox must not skip this. Never block /app or auth behind splash.
+   * After a pick, this tab can stay in the workshop until they choose again.
    */
   const showModeChooser = onPublicGate && !hasChosenEntryThisSession()
 
@@ -143,13 +141,19 @@ function AppRoutes() {
     return <ModeChooser />
   }
 
-  if (shellMode === 'course' && desktopPhase === 'opening' && !bypassSplash) {
-    return <SplashPage onEnter={() => setEntered(true)} />
+  if (
+    !isAuthPath &&
+    !isLegalPath &&
+    shellMode === 'course' &&
+    desktopPhase === 'opening' &&
+    !bypassSplash
+  ) {
+    return <SplashPage />
   }
 
   return (
     <Routes>
-      <Route path="/splash" element={<SplashPage onEnter={() => setEntered(true)} />} />
+      <Route path="/splash" element={<SplashPage />} />
       <Route
         path="/welcome"
         element={

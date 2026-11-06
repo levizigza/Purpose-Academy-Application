@@ -1687,7 +1687,17 @@ table.data th {
 .threshold.is-lockup .threshold-glass {
   display: grid;
   place-items: center;
-  padding: clamp(1rem, 4vh, 2rem) 1rem clamp(7.5rem, 18vh, 10rem);
+  padding: clamp(1rem, 4vh, 2rem) 1rem clamp(8rem, 20vh, 11rem);
+}
+
+@media (max-height: 720px) {
+  .threshold.is-lockup .threshold-glass {
+    padding-bottom: clamp(6.5rem, 22vh, 9rem);
+  }
+
+  .threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue .threshold-hammer-icon {
+    width: clamp(3rem, 7vw, 4.2rem);
+  }
 }
 
 .threshold.is-lockup .threshold-brand-frame {
@@ -3949,6 +3959,20 @@ table.data th {
 
 .toolbox-slot.is-nested.is-open {
   transform: translateX(12px) scale(1.01);
+}
+
+/* Phone frame: keep nested tray inside the glass — smaller indent, no slide-off. */
+.is-phone-app .toolbox-slot.is-nested,
+.iphone-scroll .toolbox-slot.is-nested {
+  width: calc(100% - 0.7rem);
+  margin-left: 0.7rem;
+}
+
+.is-phone-app .toolbox-slot.is-nested:hover,
+.is-phone-app .toolbox-slot.is-nested.is-open,
+.iphone-scroll .toolbox-slot.is-nested:hover,
+.iphone-scroll .toolbox-slot.is-nested.is-open {
+  transform: none;
 }
 
 .toolbox-slot.is-nested .toolbox-etch {
@@ -14504,12 +14528,34 @@ video {
   height: auto;
 }
 
+/* Compact status banner inside the phone glass — same grammar as desktop, quieter. */
 .is-phone-app .practice-banner {
-  display: none !important;
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  margin: 0.35rem 0.5rem 0.55rem;
+  padding: 0.4rem 0.55rem;
+  font-size: 0.78rem;
+  border-radius: 8px;
 }
 
-html.pa-phone-shell .practice-feedback-dock {
-  display: none !important;
+.is-phone-app .practice-banner-actions {
+  gap: 0.35rem;
+}
+
+.is-phone-app .practice-banner-cta {
+  font-size: 0.72rem;
+}
+
+/* Phone shell mounts .practice-chat inside the device — keep it reachable, compact. */
+html.pa-phone-shell .practice-chat-tab {
+  font-size: 0.72rem;
+  padding: 0.45rem 0.35rem;
+}
+
+html.pa-phone-shell .practice-chat.is-open .practice-chat-panel {
+  max-width: min(100%, 22rem);
+  max-height: min(70vh, 28rem);
 }
 
 /* —— Practice hub: single column, resume first —— */
@@ -17262,9 +17308,14 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
 .instr-narration-status {
   margin: 0.28rem 0 0;
   font-family: var(--body, 'Source Sans 3', system-ui, sans-serif);
-  font-size: 0.82rem;
-  line-height: 1.35;
-  color: color-mix(in srgb, #f5f8fc 78%, transparent);
+  font-size: 0.92rem;
+  line-height: 1.4;
+  font-weight: 650;
+  color: #eef4fb;
+}
+
+.instr-narration-status.is-ok {
+  color: #f5f9fd;
 }
 
 .instr-narration-status.is-soft-miss {
@@ -17292,7 +17343,8 @@ html.pa-phone-shell .instr-narration-en,
 
 html.pa-phone-shell .instr-narration-status,
 .is-phone-app .instr-narration-status {
-  color: color-mix(in srgb, var(--brand, #0b2f5c) 65%, #6b7c90);
+  color: #0a2748;
+  font-weight: 700;
 }
 
 html.pa-phone-shell .instr-narration-status.is-soft-miss,
@@ -17369,18 +17421,18 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
   align-items: baseline;
   gap: 0.35rem 0.55rem;
   margin: 0.35rem 0 0.55rem;
-  padding: 0.4rem 0.65rem;
-  border-left: 3px solid #2f6fad;
+  padding: 0.45rem 0.7rem;
+  border-left: 3px solid #1d4f7c;
   border-radius: 8px;
-  background: #f3f8fd;
-  color: var(--brand-deep, #0b2f5c);
-  font-size: 0.98rem;
-  line-height: 1.4;
+  background: #eaf3fb;
+  color: #0a2748;
+  font-size: 1.02rem;
+  line-height: 1.45;
 }
 
 .instruction-l1-line.is-compact {
-  font-size: 0.9rem;
-  padding: 0.3rem 0.5rem;
+  font-size: 0.95rem;
+  padding: 0.38rem 0.58rem;
   margin-top: 0.25rem;
 }
 
@@ -17399,7 +17451,8 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
 
 .instruction-l1-text {
   flex: 1 1 12rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: inherit;
 }
 
 .instruction-l1-text.is-loading {
@@ -17409,14 +17462,14 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
 
 html.pa-course-shell .instruction-l1-line,
 .course-stage .instruction-l1-line {
-  background: rgba(15, 40, 70, 0.55);
-  border-left-color: #7eb6e8;
-  color: #e8f2fb;
+  background: rgba(12, 36, 64, 0.78);
+  border-left-color: #9ec9ef;
+  color: #f2f7fc;
 }
 
 html.pa-course-shell .instruction-l1-tag,
 .course-stage .instruction-l1-tag {
-  color: #9ec9ef;
+  color: #c5dff5;
 }
 
 html.pa-course-shell .instruction-l1-text.is-loading,

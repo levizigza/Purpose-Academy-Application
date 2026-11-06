@@ -194,15 +194,22 @@ export function setDesktopPhase(phase: DesktopPhase | null) {
 
 /**
  * Cold-load hygiene for Desktop (modes-first):
- * - course + ready → toolbox
+ * - course + ready + entered (this session) → toolbox
+ * - course + ready without this session’s door → clear so ModeChooser is first again
  * - course + opening + entered → ready (opening already finished)
  * - course + opening + not entered → keep opening so splash can play
  * - course with no phase → ready if entered, else clear so ModeChooser shows first
+ *
+ * Shell lives in localStorage; the door flag is sessionStorage — without this
+ * reconcile, a fresh tab skips Modes and lands on a stale toolbox.
  */
 export function reconcileDesktopShellOnBoot(hasCrossedThreshold: boolean) {
   if (getShellMode() !== 'course') return
   const phase = getDesktopPhase()
-  if (phase === 'ready') return
+  if (phase === 'ready') {
+    if (!hasCrossedThreshold) clearShellMode()
+    return
+  }
   if (phase === 'opening') {
     if (hasCrossedThreshold) setDesktopPhase('ready')
     return
