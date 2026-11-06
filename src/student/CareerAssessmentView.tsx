@@ -38,12 +38,20 @@ function useChoiceTranslations(englishLines: string[]) {
     setMap(null)
     void Promise.all(
       lines.map(async (line) => {
-        try {
-          const result = await translateVocabWord(line, extra)
-          return [line, result.translated] as const
-        } catch {
-          return [line, line] as const
+        let translated = line
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            const result = await translateVocabWord(line, extra)
+            translated = result.translated || line
+            if (translated.trim().toLowerCase() !== line.trim().toLowerCase()) break
+          } catch {
+            translated = line
+          }
+          if (attempt < 2) {
+            await new Promise((resolve) => window.setTimeout(resolve, 350 * (attempt + 1)))
+          }
         }
+        return [line, translated] as const
       }),
     ).then((pairs) => {
       if (!alive) return
