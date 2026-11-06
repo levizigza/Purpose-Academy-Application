@@ -23,6 +23,9 @@ const SESSION_KEY = 'pa-instructor-practice-session-v1'
 const PHASE_KEY = 'pa-instructor-practice-phase-v1'
 const CLEARED_KEY = 'pa-instructor-practice-cleared-v1'
 const VIEW_KEY = 'pa-instructor-practice-view-v1'
+const PATHWAY_KEY = 'pa-instructor-practice-pathway-v1'
+
+export type InstructorStreamId = 'construction' | 'logistics' | 'community'
 
 export type InstructorPracticePhase = 'prepare' | 'model' | 'practise' | 'observe'
 export type InstructorPracticeView = 'hub' | 'session' | 'workbooks'
@@ -35,7 +38,7 @@ export const INSTRUCTOR_PRACTICE_PHASES: InstructorPracticePhase[] = [
 ]
 
 export const INSTRUCTOR_PRACTICE_TRAY_HELP =
-  'Walk three teaching sessions the way an instructor would — prepare, model, practise, observe. Leave a note if something is unclear.'
+  'Three pathways — Construction, Logistics, and Community Support — each with its own 32-week curriculum.'
 
 export function isInstructorPracticeMode(): boolean {
   try {
@@ -72,17 +75,38 @@ export function setInstructorPracticeView(view: InstructorPracticeView) {
   }
 }
 
+export function getInstructorPracticePathway(): InstructorStreamId | null {
+  try {
+    const raw = learnerGet(PATHWAY_KEY)
+    if (raw === 'construction' || raw === 'logistics' || raw === 'community') return raw
+  } catch {
+    /* ignore */
+  }
+  return null
+}
+
+export function setInstructorPracticePathway(id: InstructorStreamId | null) {
+  try {
+    if (id) learnerSet(PATHWAY_KEY, id)
+    else learnerRemove(PATHWAY_KEY)
+    learnerSet(VIEW_KEY, 'hub')
+    window.dispatchEvent(new CustomEvent('pa-instructor-practice-changed', { detail: { pathway: id } }))
+  } catch {
+    /* ignore */
+  }
+}
+
 export function getInstructorPracticeSession(): number {
   try {
     const n = Number(learnerGet(SESSION_KEY) || '1')
-    return Number.isFinite(n) && n >= 1 ? Math.min(3, Math.floor(n)) : 1
+    return Number.isFinite(n) && n >= 1 ? Math.min(32, Math.floor(n)) : 1
   } catch {
     return 1
   }
 }
 
 export function setInstructorPracticeSession(n: number) {
-  const target = Math.min(3, Math.max(1, Math.floor(n)))
+  const target = Math.min(32, Math.max(1, Math.floor(n)))
   try {
     learnerSet(SESSION_KEY, String(target))
     window.dispatchEvent(
@@ -93,64 +117,114 @@ export function setInstructorPracticeSession(n: number) {
   }
 }
 
-export function getInstructorPracticePhase(): InstructorPracticePhase {
+export function getInstructorPracticeStep(maxSteps = 8): number {
   try {
-    const raw = learnerGet(PHASE_KEY)
-    if (raw === 'prepare' || raw === 'model' || raw === 'practise' || raw === 'observe') return raw
+    const raw = learnerGet(PHASE_KEY) || ''
+    if (raw === 'prepare') return 0
+    if (raw === 'model') return 1
+    if (raw === 'practise') return 2
+    if (raw === 'observe') return 3
+    const n = Number(raw)
+    if (Number.isFinite(n) && n >= 0) return Math.min(Math.floor(n), Math.max(0, maxSteps - 1))
   } catch {
     /* ignore */
   }
-  return 'prepare'
+  return 0
+}
+
+export function setInstructorPracticeStep(step: number) {
+  const target = Math.max(0, Math.floor(step))
+  try {
+    learnerSet(PHASE_KEY, String(target))
+    window.dispatchEvent(new CustomEvent('pa-instructor-practice-changed', { detail: { step: target } }))
+  } catch {
+    /* ignore */
+  }
+}
+
+export function getInstructorPracticePhase(): InstructorPracticePhase {
+  return INSTRUCTOR_PRACTICE_PHASES[Math.min(3, getInstructorPracticeStep())]
 }
 
 export function setInstructorPracticePhase(phase: InstructorPracticePhase) {
-  try {
-    learnerSet(PHASE_KEY, phase)
-    window.dispatchEvent(new CustomEvent('pa-instructor-practice-changed', { detail: { phase } }))
-  } catch {
-    /* ignore */
-  }
+  setInstructorPracticeStep(INSTRUCTOR_PRACTICE_PHASES.indexOf(phase))
 }
 
-function readCleared(): number[] {
+type ClearedMap = Record<string, number[]>
+
+function readClearedMap(): ClearedMap {
   try {
     const raw = learnerGet(CLEARED_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw) as number[]
-    return Array.isArray(parsed) ? parsed.filter((n) => Number.isFinite(n)) : []
+    if (!raw) return {}
+    const parsed = JSON.parse(raw) as number[] | ClearedMap
+    if (Array.isArray(parsed)) {
+      return { community: parsed.filter((n) => Number.isFinite(n)) }
+    }
+    if (parsed && typeof parsed === 'object') {
+      const out: ClearedMap = {}
+      for (const [key, value] of Object.entries(parsed)) {
+        if (Array.isArray(value)) out[key] = value.filter((n) => Number.isFinite(n))
+      }
+      return out
+    }
   } catch {
-    return []
+    /* ignore */
   }
+  return {}
 }
 
-function writeCleared(ids: number[]) {
+function writeClearedMap(map: ClearedMap) {
   try {
-    learnerSet(CLEARED_KEY, JSON.stringify([...new Set(ids)].sort((a, b) => a - b)))
+    learnerSet(CLEARED_KEY, JSON.stringify(map))
   } catch {
     /* ignore */
   }
 }
 
-export function isInstructorSessionCleared(n: number): boolean {
-  return readCleared().includes(n)
+function clearedFor(pathway: string): number[] {
+  return readClearedMap()[pathway] || []
 }
 
-export function markInstructorSessionCleared(n: number) {
-  const next = readCleared()
+export function isInstructorSessionCleared(pathway: string, n: number): boolean {
+  return clearedFor(pathway).includes(n)
+}
+
+export function markInstructorSessionCleared(pathway: string, n: number) {
+  const map = readClearedMap()
+  const next = map[pathway] ? [...map[pathway]] : []
   if (!next.includes(n)) next.push(n)
-  writeCleared(next)
-  window.dispatchEvent(new CustomEvent('pa-instructor-practice-changed', { detail: { cleared: n } }))
+  map[pathway] = [...new Set(next)].sort((a, b) => a - b)
+  writeClearedMap(map)
+  window.dispatchEvent(
+    new CustomEvent('pa-instructor-practice-changed', { detail: { pathway, cleared: n } }),
+  )
 }
 
-export function instructorSessionsClearedCount(): number {
-  return readCleared().length
+export function instructorSessionsClearedCount(pathway: string): number {
+  return clearedFor(pathway).length
+}
+
+export function restartInstructorPathway(pathway: string) {
+  const map = readClearedMap()
+  delete map[pathway]
+  writeClearedMap(map)
+  try {
+    learnerSet(SESSION_KEY, '1')
+    learnerSet(PHASE_KEY, '0')
+    learnerSet(VIEW_KEY, 'hub')
+    window.dispatchEvent(new CustomEvent('pa-instructor-practice-changed', { detail: { pathway } }))
+    window.dispatchEvent(new Event('pa-instructor-practice-restarted'))
+  } catch {
+    /* ignore */
+  }
 }
 
 function resetProgress() {
   learnerRemove(ACK_KEY)
   learnerRemove(CLEARED_KEY)
+  learnerRemove(PATHWAY_KEY)
   learnerSet(SESSION_KEY, '1')
-  learnerSet(PHASE_KEY, 'prepare')
+  learnerSet(PHASE_KEY, '0')
   learnerSet(VIEW_KEY, 'hub')
 }
 
@@ -225,8 +299,8 @@ function writeAcks(map: Record<string, boolean>) {
   }
 }
 
-export function instructorPracticeFeedbackKey(session?: number) {
-  if (session && session > 0) return `instructor-session:${session}`
+export function instructorPracticeFeedbackKey(session?: number, pathway?: string | null) {
+  if (session && session > 0) return `instructor-session:${pathway || 'stream'}:${session}`
   return 'instructor:hub'
 }
 
@@ -247,5 +321,5 @@ export function openInstructorPracticeChat() {
 }
 
 export function shouldAskInstructorPracticeFeedback(session: number) {
-  return session >= 1 && session <= 3
+  return session > 0 && session % 4 === 0
 }
