@@ -107,18 +107,6 @@ function AppRoutes() {
     location.pathname.startsWith('/enter/') ||
     location.pathname.startsWith('/teacher-practice')
 
-  useEffect(() => {
-    if (bypassSplash && !hasEnteredSite()) {
-      markEnteredSite()
-      setEntered(true)
-    }
-  }, [bypassSplash])
-
-  /* Re-read splash flag when Desktop/Phone mode or desktop phase changes. */
-  useEffect(() => {
-    setEntered(hasEnteredSite())
-  }, [shellMode, desktopPhase])
-
   /* Auth / legal paths skip the mode chooser and splash. */
   const isAuthPath =
     location.pathname.startsWith('/login') ||
@@ -128,13 +116,31 @@ function AppRoutes() {
     location.pathname.startsWith('/forgot-password') ||
     location.pathname.startsWith('/app')
 
-  const onPublicGate =
-    !isAuthPath && location.pathname !== '/privacy' && location.pathname !== '/contact'
+  const isLegalPath = location.pathname === '/privacy' || location.pathname === '/contact'
+
+  /*
+   * Only force “entered” for auth/legal doors — not for /journey or /teacher-practice,
+   * so a deep-link demo still lets Desktop arm a fresh opening after Modes.
+   */
+  useEffect(() => {
+    if ((isAuthPath || isLegalPath) && !hasEnteredSite()) {
+      markEnteredSite()
+      setEntered(true)
+    }
+  }, [isAuthPath, isLegalPath])
+
+  /* Re-read splash flag when Desktop/Phone mode or desktop phase changes. */
+  useEffect(() => {
+    setEntered(hasEnteredSite())
+  }, [shellMode, desktopPhase])
+
+  const onPublicGate = !isAuthPath && !isLegalPath
 
   /*
    * First screen: Desktop | Phone.
    * Desktop then plays the opening when phase is `opening`.
    * Phone plays opening inside the device after the PA icon.
+   * Never block /app or auth behind the threshold splash.
    */
   const showModeChooser =
     onPublicGate &&
@@ -145,7 +151,13 @@ function AppRoutes() {
     return <ModeChooser />
   }
 
-  if (shellMode === 'course' && desktopPhase === 'opening' && !bypassSplash) {
+  if (
+    !isAuthPath &&
+    !isLegalPath &&
+    shellMode === 'course' &&
+    desktopPhase === 'opening' &&
+    !bypassSplash
+  ) {
     return <SplashPage onEnter={() => setEntered(true)} />
   }
 

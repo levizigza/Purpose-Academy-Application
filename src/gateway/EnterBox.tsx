@@ -48,7 +48,8 @@ const ENTRIES: Entry[] = [
     help: PRACTICE_TRAY_HELP,
     tone: 'journey',
     tool: 'wrench',
-    completeIds: ['student'],
+    /* Practice trays do not share sign-in sequence checkmarks. */
+    completeIds: [],
     practice: 'student',
   },
   {
@@ -73,7 +74,7 @@ const ENTRIES: Entry[] = [
     help: INSTRUCTOR_PRACTICE_TRAY_HELP,
     tone: 'instructor',
     tool: 'level',
-    completeIds: ['instructor'],
+    completeIds: [],
     practice: 'instructor',
     nestedUnder: 'Instructor',
   },

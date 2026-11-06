@@ -1,8 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { FoleyToggle } from '../components/CrewLoading'
 import { clearEnteredSite, SplashPage } from '../auth/EntryPages'
 import { restartPracticeFromTop } from '../practice/PracticeMode'
+import {
+  isInstructorPracticeMode,
+  restartInstructorPracticeFromTop,
+} from '../practice/InstructorPracticeMode'
+import { PracticeFeedbackDock, PracticeModeBanner } from '../practice/PracticeFeedbackDock'
 import {
   getSavedPhoneDeviceId,
   PHONE_DEVICES,
@@ -61,6 +66,7 @@ function useLivePhonePhase(): PhonePhase {
  */
 export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const scrollRef = useRef<HTMLDivElement>(null)
   const [deviceId, setDeviceId] = useState(() => getSavedPhoneDeviceId())
   const device = useMemo(() => resolvePhoneDevice(deviceId), [deviceId])
@@ -150,7 +156,13 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
               type="button"
               className="phone-stage-link"
               onClick={() => {
-                restartPracticeFromTop()
+                if (isInstructorPracticeMode() || location.pathname.startsWith('/teacher-practice')) {
+                  restartInstructorPracticeFromTop()
+                  navigate('/teacher-practice', { replace: true })
+                } else {
+                  restartPracticeFromTop()
+                  navigate('/journey', { replace: true })
+                }
                 scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
               }}
             >
@@ -233,7 +245,13 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
                     }}
                   />
                 )}
-                {(phase === 'toolbox' || phase === 'app') && children}
+                {(phase === 'toolbox' || phase === 'app') && (
+                  <>
+                    {phase === 'app' && <PracticeModeBanner />}
+                    {children}
+                    {phase === 'app' && <PracticeFeedbackDock />}
+                  </>
+                )}
               </div>
 
               <div className="iphone-home-bar" aria-hidden>
@@ -250,8 +268,8 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
           : phase === 'splash'
             ? 'Watch the opening on the phone, then strike Enter to open the toolbox.'
             : phase === 'toolbox'
-              ? 'Open a tray — Student Practice, Student, Instructor, or Admin — inside the device.'
-              : 'Live learner path inside the device. Pick a phone size above, then scroll and tap.'}
+              ? 'Open a tray — Student Practice, Student, Instructor (Instructor Practice nested under it), Admin, or Contact — inside the device.'
+              : 'Live practice path inside the device. Pick a phone size above, then scroll and tap.'}
       </p>
     </div>
   )

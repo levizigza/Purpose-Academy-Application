@@ -590,7 +590,7 @@ export function SentenceClozeDrill({
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
         Incomplete sentence above. Pick the full sentence that fits, hear it, then type it — soft try
-        again if not yet. No exam, no rush.
+        again if not yet. Take your time — no rush.
       </p>
 
       <div

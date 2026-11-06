@@ -65,7 +65,7 @@ export function ModeChooser() {
                 <strong>Desktop mode</strong>
                 <span>
                   Opening animation, then the toolbox — Student Practice, Student, Instructor (with
-                  Instructor Practice under it), Admin.
+                  Instructor Practice under it), Admin, Contact.
                 </span>
               </span>
               <span className="mode-door-cta">Enter desktop</span>

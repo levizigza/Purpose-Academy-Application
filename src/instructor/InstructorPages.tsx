@@ -50,10 +50,10 @@ export function InstructorDashboardPage() {
         </div>
       </div>
       <div className="panel stack">
-        <h2>Teacher Practice</h2>
+        <h2>Instructor Practice</h2>
         <p>Prepare a Community Support session and connect it to the student path.</p>
         <p>
-          <Link className="btn btn-ghost" to="/app/instructor/practice">Open Teacher Practice</Link>
+          <Link className="btn btn-ghost" to="/app/instructor/practice">Open Instructor Practice</Link>
           {' '}
           <Link className="inline-link" to="/app/instructor/practice/workbooks">25 workbooks</Link>
         </p>

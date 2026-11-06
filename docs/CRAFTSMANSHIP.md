@@ -435,6 +435,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-11-05 — Site-wide craft pass (modes · phone · Pages integrity) (L3 / L4 / L6)
+
+- **Layers:** L3 information display · L4 attention (modes-first integrity) · L6 systems across Desktop/Phone/Instructor Practice.
+- **Customer trust:** every fix must land on the GitHub Pages site link; stale shell + session door flags were skipping Modes; phone Practice had no feedback dock; “exam” leaked into Sentence / Picture Match purpose copy; Instructor Practice naming drifted (“Teacher Practice”).
+- **Ship:** Boot reconcile clears stale `course+ready` without this session’s door. Auth/legal never blocked by splash; deep-link practice paths no longer force entered. Splash exit timers cleaned; key → v50. Phone mounts Practice banner + Feedback dock; Restart branches Instructor vs Student. Nested tray phone-safe. Practice trays lose false sequence checkmarks. L1 instruction contrast raised. SPA `404.html` baked into `npm run build`. Portal nav = Instructor Practice.
+- **Critic:** Do not treat Actions “success” as enough if a fresh private window still skips Modes — session vs localStorage is the real integrity test. Do not hide Feedback on phone while asking reviewers to leave notes.
+
 ### 2026-11-05 — Instructor Practice under Instructor + practice-mode parity (L3 / L4 / L6)
 
 - **Layers:** L3 toolbox information hierarchy · L4 nested door · L6 Student↔Instructor Practice systems.

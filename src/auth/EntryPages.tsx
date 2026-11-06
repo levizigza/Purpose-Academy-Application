@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BRAND_ASSETS } from '../brand/assets'
 import { BRAND } from '../brand/copy'
@@ -8,7 +8,7 @@ import { playFoley, unlockFoley } from '../audio/foley'
 import { setDesktopPhase } from '../shell/shellMode'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v49'
+const ENTERED_KEY = 'pa-crossed-threshold-v50'
 
 export function hasEnteredSite() {
   try {
@@ -253,6 +253,15 @@ export function SplashPage({
     else navigate('/', { replace: true })
   }, [navigate, onEnter, embedded])
 
+  const exitTimers = useRef<number[]>([])
+
+  const clearExitTimers = useCallback(() => {
+    exitTimers.current.forEach((id) => window.clearTimeout(id))
+    exitTimers.current = []
+  }, [])
+
+  useEffect(() => () => clearExitTimers(), [clearExitTimers])
+
   const enter = useCallback(() => {
     if (EXIT_STAGES.has(stage)) return
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -268,10 +277,11 @@ export function SplashPage({
     }
     /* Strike middle of door → cracks → shatter → cross into the site */
     setStage('smashing')
+    clearExitTimers()
     /* Shatter after hammer contact + crack bloom (~0.42s + bloom) */
-    window.setTimeout(() => setStage('shattering'), 560)
-    window.setTimeout(finishEnter, 2200)
-  }, [stage, finishEnter])
+    exitTimers.current.push(window.setTimeout(() => setStage('shattering'), 560))
+    exitTimers.current.push(window.setTimeout(finishEnter, 2200))
+  }, [stage, finishEnter, clearExitTimers])
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -337,7 +347,7 @@ export function SplashPage({
       ]
         .filter(Boolean)
         .join(' ')}
-      data-splash-version="v48"
+      data-splash-version="v50"
       role="dialog"
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}
