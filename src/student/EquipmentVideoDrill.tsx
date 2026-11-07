@@ -405,7 +405,7 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
           <>
             {' · '}
             <button type="button" className="linkish comp-skills-skip" onClick={onSkip}>
-              Skip to observation
+              Skip to instructor check
             </button>
           </>
         ) : null}

@@ -85,7 +85,7 @@ export const communityPack: PathwayPack = {
     },
     8: {
       title: 'English Eye Spy',
-      help: 'Clear every board. Tap the picture that matches the English word.',
+      help: 'Tap a picture, then its English name. The pair clears. Empty the board.',
       purpose: 'Find Community Support words in busy scenes.',
     },
     9: {
@@ -95,7 +95,7 @@ export const communityPack: PathwayPack = {
     },
     12: {
       title: 'Workplace Instructions',
-      help: 'Hear a community-support phrase. Choose what it means.',
+      help: 'Hear the direction in English. Choose what you should do.',
       purpose: 'Useful English for dignity, privacy, consent, and escalation.',
     },
     14: {

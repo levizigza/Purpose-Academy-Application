@@ -127,7 +127,7 @@ export const constructionPack: PathwayPack = {
     },
     19: {
       title: 'Video · Construction Equipment',
-      help: 'Unit 8 · Video section — fourteen short lessons. Watch each machine: know it, inspect it, protect the area. Powered machines are stay-clear awareness only.',
+      help: 'Watch each machine in English. Then answer the practice questions. Powered machines are stay-clear awareness only — not a licence to operate.',
       purpose: 'Dedicated Video unit after systems — before observation and site training.',
     },
     21: {

@@ -101,8 +101,10 @@ import {
   advanceBlockedReason,
   canAdvanceFromStep,
   creditKnownVocabMastery,
+  ensureStepFamiliar,
   markLessonCompleted,
   markSkillOpened,
+  getMasteryLevel,
   recordSkillAttempt,
   SKILL_BY_STEP,
 } from './learningMastery'
@@ -1197,8 +1199,19 @@ export function StudentSequencePage() {
 
   /** Student Practice Mode: ask for feedback at unit boundaries before leaving via in-panel Continues. */
   function requestPracticeAdvance(advance: () => void) {
-    if (isPracticeMode() && !canAdvanceFromStep(step)) {
-      const reason = advanceBlockedReason(step) || 'Keep practising until this station feels comfortable.'
+    const sentencesWaiting = step === 9 && step8Phase === 'actions' && SENTENCE_CLOZE.length > 0
+    const wordActionOnly = step === 9 && step8Phase === 'actions' && SENTENCE_CLOZE.length === 0
+    if (!sentencesWaiting) ensureStepFamiliar(step)
+    const wordActionReady =
+      wordActionOnly &&
+      (getMasteryLevel('word-action') === 'familiar' ||
+        getMasteryLevel('word-action') === 'proficient' ||
+        getMasteryLevel('word-action') === 'mastered')
+    if (isPracticeMode() && !wordActionReady && !canAdvanceFromStep(step)) {
+      const reason =
+        step === 9 && step8Phase === 'actions'
+          ? 'Go back to the sentences. Pick the full sentence, hear it, and type it. A few clears open the next door.'
+          : advanceBlockedReason(step) || 'Keep practising until this station feels comfortable.'
       setAdvanceGateMsg(reason)
       playFoley('wrong')
       window.setTimeout(() => {
@@ -1226,7 +1239,7 @@ export function StudentSequencePage() {
     if (!advanceGateMsg) return null
     return (
       <p className="train-advance-gate alert warn" role="status">
-        {advanceGateMsg} Keep practising until this station feels comfortable.
+        {advanceGateMsg}
       </p>
     )
   }
@@ -1422,7 +1435,36 @@ export function StudentSequencePage() {
   }
 
   if (isPracticeMode() && checkpointUnit && UNIT_CHECKPOINTS[checkpointUnit]) {
-    const items = UNIT_CHECKPOINTS[checkpointUnit]
+    const stopWork = Object.values(UNIT_CHECKPOINTS)
+      .flat()
+      .find((q) => /stop-work/i.test(q.prompt))
+    const toolCheck = pack.toolCategories[Math.min(1, Math.max(0, pack.toolCategories.length - 1))]
+    const systemCheck = pack.systemTopics[0]
+    const siteReady: QuizItem[] = []
+    if (stopWork) siteReady.push(stopWork)
+    if (toolCheck) {
+      siteReady.push({
+        id: 'uc7-tool',
+        prompt: toolCheck.prompt,
+        emoji: toolCheck.mark || 'T',
+        options: [...toolCheck.options],
+        answer: toolCheck.answer,
+        teachCorrect: toolCheck.why,
+        teachWrong: `It's ${toolCheck.answer}.`,
+      })
+    }
+    if (systemCheck) {
+      siteReady.push({
+        id: 'uc7-system',
+        prompt: systemCheck.prompt,
+        emoji: systemCheck.mark || 'S',
+        options: [...systemCheck.options],
+        answer: systemCheck.answer,
+        teachCorrect: systemCheck.why,
+        teachWrong: `It's ${systemCheck.answer}.`,
+      })
+    }
+    const items = checkpointUnit === 7 && siteReady.length >= 2 ? siteReady : UNIT_CHECKPOINTS[checkpointUnit]
     const unit = LEARNING_UNITS.find((u) => u.id === checkpointUnit) || LEARNING_UNITS[0]
     const nextStep = Math.min(JOURNEY_STEP_COUNT, (JOURNEY_STEPS.filter((s) => s.unit === checkpointUnit).map((s) => s.n).pop() || checkpointUnit) + 1)
     return (
@@ -1437,7 +1479,7 @@ export function StudentSequencePage() {
           <h2>
             Unit {unit.id}: {unit.label} practice
           </h2>
-          <p className="lede">A few pictures to clear this unit. Finish them, then the next unit can open.</p>
+          <p className="lede">A few checks from the unit you just finished. Clear them, then the next unit opens.</p>
           <QuizRunner
             items={items}
             gated
@@ -2347,7 +2389,9 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => go(13, 'Opening Basic Computer Skills…'))
+        requestPracticeAdvance(() =>
+          advanceWithOptionalCheckpoint(12, 13, 'Opening Basic Computer Skills…'),
+        )
         return
       }
       setInstrIdx((i) => i + 1)
@@ -2357,7 +2401,7 @@ export function StudentSequencePage() {
     }
 
     return (
-      <Shell step={12} onBack={() => go(10)}>
+        <Shell step={12} onBack={() => go(11)}>
         <WhyWork>Supervisors give short directions. Hearing and acting keeps the team safe.</WhyWork>
         <p className="play-nearby-objective" aria-live="polite">
           Clear this instruction · {WORKPLACE_INSTRUCTIONS.length - instrIdx} left
@@ -2405,7 +2449,7 @@ export function StudentSequencePage() {
         {instrAnswer && (
           <>
             {instrCorrect ? (
-              <div className="alert ok">Yes. You heard the tool name and the action.</div>
+              <div className="alert ok">Yes. That is what you should do.</div>
             ) : (
               <p className="play-soft-miss" role="status">
                 {softMissLine(`The action was: "${instr.correct}".`)}
@@ -2433,15 +2477,15 @@ export function StudentSequencePage() {
         <ComputerSkillsDrill
           onComplete={() =>
             requestPracticeAdvance(() =>
-              advanceWithOptionalCheckpoint(12, 13, 'Opening site language…'),
+              advanceWithOptionalCheckpoint(13, 14, 'Opening site language…'),
             )
           }
           onSkip={
             isPracticeMode()
-              ? () =>
-                  requestPracticeAdvance(() =>
-                    advanceWithOptionalCheckpoint(12, 13, 'Opening site language…'),
-                  )
+              ? () => {
+                  markLessonCompleted(13)
+                  go(14, 'Opening site language…')
+                }
               : undefined
           }
         />
@@ -2451,7 +2495,7 @@ export function StudentSequencePage() {
             This may be your first computer. Short videos. Simple English. Then you try each step yourself.
           </WhyWork>
           <TeachNote>
-            Pattern for every lesson: Watch → Try → Remember → one check. Misses teach — try again, no rush.
+            Pattern for every lesson: Watch → Try → 10 practice questions. Misses teach — try again, no rush.
           </TeachNote>
         </details>
       </Shell>
@@ -2634,7 +2678,7 @@ export function StudentSequencePage() {
               }
               setBusy(false)
               requestPracticeAdvance(() =>
-                advanceWithOptionalCheckpoint(14, 15, 'Opening safety…'),
+                advanceWithOptionalCheckpoint(15, 16, 'Opening safety…'),
               )
             })()
           }}
@@ -2801,9 +2845,9 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(
-              17,
-              18, 'Opening equipment videos…'))
+        requestPracticeAdvance(() =>
+          advanceWithOptionalCheckpoint(18, 19, 'Opening equipment videos…'),
+        )
         return
       }
       setSysIdx((i) => i + 1)
@@ -2845,7 +2889,7 @@ export function StudentSequencePage() {
               )}
               <button type="button" className="btn btn-primary" onClick={nextSys}>
                 {sysCorrect
-                  ? (isLast ? 'Continue to instructor check' : 'Next system')
+                  ? (isLast ? 'Continue to equipment videos' : 'Next system')
                   : SOFT_RETRY_LABEL}
               </button>
             </>
@@ -2882,14 +2926,14 @@ export function StudentSequencePage() {
               pack="warehouse"
               onComplete={() =>
                 requestPracticeAdvance(() =>
-                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                  advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                 )
               }
               onSkip={
                 isPracticeMode()
                   ? () =>
                       requestPracticeAdvance(() =>
-                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                        advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                       )
                   : undefined
               }
@@ -2910,14 +2954,14 @@ export function StudentSequencePage() {
               pack="construction"
               onComplete={() =>
                 requestPracticeAdvance(() =>
-                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                  advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                 )
               }
               onSkip={
                 isPracticeMode()
                   ? () =>
                       requestPracticeAdvance(() =>
-                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                        advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                       )
                   : undefined
               }
@@ -2961,7 +3005,7 @@ export function StudentSequencePage() {
                 onClick={() => {
                   recordSkillAttempt('equipment-videos', true, 15)
                   requestPracticeAdvance(() =>
-                    advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                    advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                   )
                 }}
               >

@@ -377,7 +377,7 @@ const STATIONS = {
       /* Skip control lives in a collapsed fold — click via DOM so prep stays silent */
       await page.evaluate(() => {
         const b = [...document.querySelectorAll('button, a')].find((x) =>
-          /Skip to Word/i.test(x.textContent || ''),
+          /Skip sentences|Skip to Word/i.test(x.textContent || ''),
         )
         if (b) b.click()
       })

@@ -68,6 +68,7 @@ function ExplainerCard({
   const videoRef = useRef<HTMLVideoElement>(null)
   const [ended, setEnded] = useState(false)
   const [failed, setFailed] = useState(false)
+  const [playing, setPlaying] = useState(false)
   const cueId = NAV_CUE.explainerWatch(explainer.id)
   const glowContinue = navCueActive(cueId) || ended || failed
 
@@ -79,12 +80,25 @@ function ExplainerCard({
     if (!el) return
     el.muted = false
     const tryPlay = () => {
-      void el.play().catch(() => {
-        /* user gesture may be required — controls stay visible */
-      })
+      void el.play().then(
+        () => setPlaying(true),
+        () => setPlaying(false),
+      )
     }
     tryPlay()
   }, [explainer.id])
+
+  function playFromButton() {
+    const el = videoRef.current
+    if (!el) return
+    stopSpeech()
+    window.speechSynthesis?.cancel()
+    el.muted = false
+    void el.play().then(
+      () => setPlaying(true),
+      () => setPlaying(false),
+    )
+  }
 
   return (
     <article className="station-explainer" aria-labelledby={`explainer-${explainer.id}-title`}>
@@ -108,8 +122,17 @@ function ExplainerCard({
             onPlay={() => {
               stopSpeech()
               window.speechSynthesis?.cancel()
+              setPlaying(true)
             }}
-            onEnded={() => setEnded(true)}
+            onPause={() => {
+              const el = videoRef.current
+              if (!el || el.ended) return
+              setPlaying(false)
+            }}
+            onEnded={() => {
+              setPlaying(false)
+              setEnded(true)
+            }}
             onError={() => setFailed(true)}
           />
         ) : (
@@ -125,11 +148,14 @@ function ExplainerCard({
       <div className="station-explainer-actions">
         <NavGlowButton
           cueId={cueId}
-          className={`btn btn-primary station-explainer-continue${glowContinue ? '' : ' is-wait'}`}
-          disabled={!ended && !failed}
-          onClick={onDone}
+          className={`btn btn-primary station-explainer-continue${glowContinue || !playing ? '' : ' is-wait'}`}
+          disabled={playing && !ended && !failed}
+          onClick={() => {
+            if (ended || failed) onDone()
+            else playFromButton()
+          }}
         >
-          {ended || failed ? 'Continue to station' : 'Watch to unlock'}
+          {ended || failed ? 'Continue to station' : playing ? 'Watching…' : 'Play the video'}
         </NavGlowButton>
         {failed ? (
           <button type="button" className="btn btn-ghost" onClick={onDone}>

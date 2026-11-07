@@ -17,6 +17,13 @@ import {
 import { stopSpeech } from '../student/speech'
 import type { HearLanguage } from '../student/hearLanguages'
 
+/** A Hear press must not talk over a lesson or explainer that is already playing. */
+function pausePlayingVideos() {
+  document.querySelectorAll('video').forEach((node) => {
+    if (node instanceof HTMLVideoElement && !node.paused) node.pause()
+  })
+}
+
 type ChipProps = {
   /** Level-4 simple English source (translated for L1). */
   english: string
@@ -86,6 +93,7 @@ export function InstructionHearChip({
     if (!english.trim() || busy) return
     window.speechSynthesis?.cancel()
     stopSpeech()
+    pausePlayingVideos()
     setBusy(true)
     setHearAttempted(true)
     setStatus({ kind: 'loading', phase: 'translate' })
@@ -105,6 +113,7 @@ export function InstructionHearChip({
     if (!english.trim() || busy) return
     window.speechSynthesis?.cancel()
     stopSpeech()
+    pausePlayingVideos()
     setBusy(true)
     setHearAttempted(true)
     try {

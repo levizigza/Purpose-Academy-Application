@@ -529,7 +529,7 @@ export function SentenceClozeDrill({
         </button>
         {practice && onSkipToActions ? (
           <button type="button" className="btn btn-secondary on-light" onClick={onSkipToActions}>
-            Skip to Word → Action
+            Skip sentences for now
           </button>
         ) : null}
         <WorksheetPageJump id="sentence-page-jump-result" />
@@ -575,7 +575,7 @@ export function SentenceClozeDrill({
             className="btn btn-ghost sentence-cloze-skip"
             onClick={onSkipToActions}
           >
-            Skip to Word → Action
+            Skip sentences for now
           </button>
         ) : null}
       </div>

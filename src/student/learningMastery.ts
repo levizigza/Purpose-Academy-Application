@@ -381,6 +381,33 @@ export function overallMasteryPercent(): number {
   return Math.round(sum / skills.length)
 }
 
+/**
+ * The station's own "you're done" button is the door.
+ * If the visible work is finished but the counter is still under Familiar,
+ * credit Familiar so that door opens. Does not add a second lesson to the stats.
+ */
+export function ensureStepFamiliar(step: number) {
+  const skill = SKILL_BY_STEP[step]
+  if (!skill) return
+  const all = loadAll()
+  const rec = { ...all[skill] }
+  const prevLevel = rec.level
+  if (prevLevel !== 'locked' && prevLevel !== 'attempted') return
+  rec.correct = Math.max(rec.correct, 3)
+  rec.level = deriveLevel(rec)
+  all[skill] = rec
+  saveAll(all)
+  if (!isFamiliarOrBetter(prevLevel) && isFamiliarOrBetter(rec.level)) {
+    try {
+      window.dispatchEvent(
+        new CustomEvent('pa-familiar-earned', { detail: { skill, level: rec.level } }),
+      )
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
 /** True when the learner has earned enough skill signal to leave this lesson. */
 export function canAdvanceFromStep(step: number): boolean {
   if (!GATED_SKILL_STEPS.has(step)) return true
