@@ -68,3 +68,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # The action's own 10-minute poll cancels a deploy that is still
+          # publishing. Give Pages time to finish instead of aborting it.
+          timeout: 1500000
