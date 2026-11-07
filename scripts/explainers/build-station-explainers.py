@@ -120,8 +120,8 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Basic Computer Skills. Watch, then try."),
             ("grant_toolbox", "Watch a short lesson with words on the screen."),
-            ("grant_toolbox", "Then try a simple task — mouse, folders, save, writing, or email."),
-            ("grant_toolbox", "One check at the end. Made for beginners."),
+            ("grant_toolbox", "Then try that same action."),
+            ("grant_toolbox", "After you try it, answer the practice questions. The lesson stays in English."),
         ],
     },
     {
@@ -164,9 +164,9 @@ STATIONS: list[dict] = [
         "id": "equipment-video",
         "title": "Equipment Videos",
         "beats": [
-            (None, "Equipment Videos. Watch each equipment lesson, then continue."),
-            ("grant_toolbox", "Press play on the equipment video."),
-            ("grant_toolbox", "Continue when the video is clear."),
+            (None, "Equipment Videos. Watch each machine in English, then answer the practice questions."),
+            ("grant_toolbox", "Press play on the equipment video. The voice is English."),
+            ("grant_toolbox", "When the video ends, answer the practice questions."),
         ],
     },
 ]

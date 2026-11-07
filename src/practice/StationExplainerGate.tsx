@@ -8,22 +8,7 @@ import {
 } from './stationExplainers'
 import { markNavCueSeen, NAV_CUE, navCueActive } from './navCues'
 import { NavGlowButton } from './NavCue'
-import { learnerWantsL1Narration } from './learnerLang'
-import { InstructionHearChip } from './InstructionNarration'
 import { stopSpeech } from '../student/speech'
-
-/**
- * These station videos speak in the language the learner picked.
- * Sentence Structure is the last one. Later videos stay in English
- * so the two languages never play at the same time.
- */
-const CHOSEN_LANGUAGE_VIDEOS = new Set([
-  'workplace-words',
-  'language-organize',
-  'eye-spy',
-  'sentence-structure',
-  'word-action',
-])
 
 type Props = {
   step: number
@@ -85,37 +70,27 @@ function ExplainerCard({
   const [failed, setFailed] = useState(false)
   const cueId = NAV_CUE.explainerWatch(explainer.id)
   const glowContinue = navCueActive(cueId) || ended || failed
-  /* Your Language stays English — they have not confirmed a language yet. */
-  const voiceInChosenLanguage =
-    explainer.id !== 'your-language' &&
-    CHOSEN_LANGUAGE_VIDEOS.has(explainer.id) &&
-    learnerWantsL1Narration()
 
   useEffect(() => {
-    if (!voiceInChosenLanguage) stopSpeech()
+    /* English soundtrack only. Stop any earlier language so the two never overlap. */
+    stopSpeech()
+    window.speechSynthesis?.cancel()
     const el = videoRef.current
     if (!el) return
+    el.muted = false
     const tryPlay = () => {
       void el.play().catch(() => {
         /* user gesture may be required — controls stay visible */
       })
     }
     tryPlay()
-  }, [explainer.id, voiceInChosenLanguage])
+  }, [explainer.id])
 
   return (
     <article className="station-explainer" aria-labelledby={`explainer-${explainer.id}-title`}>
       <p className="section-kicker">How this station works</p>
       <h2 id={`explainer-${explainer.id}-title`}>{explainer.title}</h2>
       <p className="lede station-explainer-lede">{explainer.lede}</p>
-      {voiceInChosenLanguage ? (
-        <InstructionHearChip
-          english={explainer.lede}
-          auto
-          autoKey={explainer.id}
-          className="station-explainer-hear"
-        />
-      ) : null}
       <p className="play-nearby-objective" aria-live="polite">
         Watch once · then the station opens
       </p>
@@ -129,7 +104,11 @@ function ExplainerCard({
             controls
             playsInline
             preload="auto"
-            muted={voiceInChosenLanguage}
+            muted={false}
+            onPlay={() => {
+              stopSpeech()
+              window.speechSynthesis?.cancel()
+            }}
             onEnded={() => setEnded(true)}
             onError={() => setFailed(true)}
           />

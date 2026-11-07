@@ -27,6 +27,11 @@ type ChipProps = {
   className?: string
   /** Compact label override. */
   label?: string
+  /**
+   * Chosen language beside English. False keeps this instruction in English
+   * even when a home language is selected.
+   */
+  bilingual?: boolean
 }
 
 function statusLine(
@@ -58,13 +63,14 @@ export function InstructionHearChip({
   autoKey,
   className = '',
   label,
+  bilingual = true,
 }: ChipProps) {
   const [lang, setLang] = useState<HearLanguage>(() => resolveLearnerHearLanguage())
   const [status, setStatus] = useState<InstructionNarrationStatus>({ kind: 'idle' })
   const [busy, setBusy] = useState(false)
   const [hearAttempted, setHearAttempted] = useState(false)
   const autoDone = useRef<string | null>(null)
-  const wantsL1 = learnerWantsL1Narration(lang)
+  const wantsL1 = bilingual && learnerWantsL1Narration(lang)
 
   useEffect(() => {
     const sync = () => setLang(resolveLearnerHearLanguage())

@@ -33,6 +33,7 @@ import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { InstructionHearChip } from '../practice/InstructionNarration'
+import { stopSpeech } from './speech'
 
 /** Level-4 simple English instruction chrome — translated for L1 narration. */
 const EQUIP_INSTR = {
@@ -387,6 +388,7 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
       {phase === 'answer' && !setJustCleared ? (
         <InstructionHearChip
           english={EQUIP_INSTR.answer}
+          bilingual={false}
           auto={false}
           autoKey={`${pack}-${lesson.id}-answer`}
           className="equip-video-instr-hear"
@@ -474,7 +476,11 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
               preload="metadata"
               poster={poster}
               src={src}
-              onPlay={() => coachWatchDone()}
+              onPlay={() => {
+                stopSpeech()
+                window.speechSynthesis?.cancel()
+                coachWatchDone()
+              }}
               onTimeUpdate={onTimeUpdate}
               onEnded={onEnded}
             >

@@ -626,7 +626,7 @@ const STATIONS = {
       },
       {
         id: 'try',
-        text: 'Then try a simple task — mouse, folders, save, writing, or email.',
+        text: 'Then try that same action. After you try it, answer the practice questions. The lesson stays in English.',
         async act(page) {
           const tryBtn = page
             .locator('button:has-text("Try it now"), button:has-text("Keep watching")')
@@ -845,7 +845,7 @@ const STATIONS = {
     beats: [
       {
         id: 'intro',
-        text: 'Equipment Videos. Watch each equipment lesson, then continue.',
+        text: 'Equipment Videos. Watch each machine in English, then answer the practice questions.',
         async act(page) {
           const stage = page
             .locator('[data-coach="equip-watch"], .equip-video-stage, .topic-lesson-card')
@@ -856,7 +856,7 @@ const STATIONS = {
       },
       {
         id: 'play',
-        text: 'Press play on the equipment video.',
+        text: 'Press play. The video voice is English only.',
         async act(page) {
           const openLog = page.locator('button:has-text("Open Video section")').first()
           if (await openLog.isVisible().catch(() => false)) {
@@ -872,7 +872,7 @@ const STATIONS = {
       },
       {
         id: 'next',
-        text: 'Continue when the video is clear.',
+        text: 'When the video ends, answer the practice questions. The choices are in English.',
         async act(page) {
           const next = page
             .locator('[data-coach="equip-next"], button:has-text("Continue"), button:has-text("Next")')

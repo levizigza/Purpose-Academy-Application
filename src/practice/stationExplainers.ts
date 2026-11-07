@@ -32,7 +32,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'workplace-words',
     steps: [6],
     title: 'Workplace Words',
-    lede: 'See the picture. Press a language you know — English is on the row. Pick and type the word.',
+    lede: 'See the picture. Press a language you know and hear it. Then hear the English word, pick it, and type it.',
     video: 'explainers/workplace-words.mp4',
   },
   {
@@ -53,7 +53,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'sentence-structure',
     steps: [9],
     title: 'Sentence Structure',
-    lede: 'Pick the full sentence. Hear it. Type it.',
+    lede: 'Read the sentence. Look at the four choices. Type the word that fits the blank.',
     video: 'explainers/sentence-structure.mp4',
   },
   {
@@ -91,7 +91,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'computer-skills',
     steps: [13],
     title: 'Basic Computer Skills',
-    lede: 'Watch a short lesson, try it, then answer 10 practice questions.',
+    lede: 'Watch the lesson in English. Try that same action. Then answer the practice questions.',
     video: 'explainers/computer-skills.mp4',
   },
   {
@@ -126,7 +126,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'equipment-video',
     steps: [19],
     title: 'Equipment Videos',
-    lede: 'Watch each warehouse machine, then answer practice questions.',
+    lede: 'Watch each machine video in English. Then answer the practice questions about that machine.',
     video: 'explainers/equipment-video.mp4',
   },
 ]

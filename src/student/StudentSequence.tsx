@@ -126,6 +126,10 @@ import {
   setLearnerSupportLang,
 } from '../practice/learnerLang'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
+import {
+  markSupplementaryRound,
+  supplementaryLanguageOn,
+} from '../practice/supplementaryLanguage'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { InstructionHearChip } from '../practice/InstructionNarration'
 import { NavCueTarget, NavGlowRegion, NavGlowWrap } from '../practice/NavCue'
@@ -239,9 +243,11 @@ function LearnCard({ title, body, mark }: { title: string; body: string; mark?: 
 
 /* ─── Step shell — SiteWise-inspired training chrome ─── */
 
-function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, onOpenHub, onJumpLesson, explainerStationId = null }: {
+function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, bilingual = false, onOpenHub, onJumpLesson, explainerStationId = null }: {
   step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
   transitioning?: boolean; transitionMsg?: string; supportLang?: SupportLang
+  /** Chosen language beside English for this step. Later steps stay English. */
+  bilingual?: boolean
   onOpenHub?: () => void
   onJumpLesson?: (n: number) => void
   /** When step 9 is in Word→Action phase, force that explainer. */
@@ -250,7 +256,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
   /* Step 3 is the language picker — stay in English, no Hear buttons yet. */
-  const motherTongue = supportLang && ((step >= 4 && step <= 5) || step === 15)
+  const motherTongue = Boolean(bilingual && supportLang && step >= 4 && step <= 5)
   const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 14] : null
   const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
   const help = shellCopy ? assessT(shellCopy.help, supportLang!) : base.help
@@ -470,6 +476,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
           <InstructionHearChip
             english={base.help}
             auto={false}
+            bilingual={bilingual}
             autoKey={`shell-help-${step}`}
             className="train-shell-instr-hear"
           />
@@ -489,9 +496,10 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             <InstructionHearChip
               english={base.purpose}
               auto={false}
+              bilingual={bilingual}
               autoKey={`shell-purpose-${step}`}
               className="train-shell-instr-hear"
-              label="Hear why"
+              label={bilingual ? 'Hear why' : 'Hear why in English'}
             />
           ) : null}
         </details>
@@ -1241,15 +1249,27 @@ export function StudentSequencePage() {
   function Shell(props: {
     step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
   }) {
+    const bilingual =
+      props.step === 4 || props.step === 5
+        ? supplementaryLanguageOn('opening')
+        : props.step === 6
+          ? supplementaryLanguageOn('vocab', { retake: vocabRetake })
+          : props.step === 7
+            ? supplementaryLanguageOn('organize')
+            : props.step === 17
+              ? supplementaryLanguageOn('tools', {
+                  toolIndex: toolIdx,
+                  toolCount: TOOL_CATEGORIES.length,
+                })
+              : false
     return (
       <>
         <StepShell
           {...props}
+          bilingual={bilingual}
           transitioning={transitioning}
           transitionMsg={transitionMsg}
-          supportLang={
-            (props.step >= 3 && props.step <= 5) || props.step === 16 ? supportLang : undefined
-          }
+          supportLang={props.step === 3 || bilingual ? supportLang : undefined}
           onOpenHub={isPracticeMode() ? () => setPracticeView('hub') : undefined}
           onJumpLesson={(n) => go(n, `Opening step ${n}…`)}
           explainerStationId={
@@ -1819,7 +1839,7 @@ export function StudentSequencePage() {
     return (
       <Shell step={4}>
         <CareerStyleAssessment
-          lang={supportLang}
+          lang={supplementaryLanguageOn('opening') ? supportLang : 'English'}
           answers={careerStyleAnswers}
           onChange={(id, optionId) => setCareerStyleAnswers((a) => ({ ...a, [id]: optionId }))}
           onBack={() => go(3)}
@@ -1843,7 +1863,7 @@ export function StudentSequencePage() {
     return (
       <Shell step={5}>
         <CareerAssessmentResult
-          lang={supportLang}
+          lang={supplementaryLanguageOn('opening') ? supportLang : 'English'}
           pathway={pathway}
           riasec={riasecScores}
           pathwayScores={pathwayScores}
@@ -1854,6 +1874,7 @@ export function StudentSequencePage() {
           error={error}
           onBack={() => go(4)}
           onContinue={() => {
+            markSupplementaryRound('opening')
             void (async () => {
               setBusy(true)
               await finishPathway()
@@ -1993,7 +2014,10 @@ export function StudentSequencePage() {
       <Shell step={7} onBack={() => go(6)}>
         <VocabOrganizeQuiz
           terms={organizeTerms}
-          onPassed={() => go(8, 'Opening English Eye Spy…')}
+          onPassed={() => {
+            markSupplementaryRound('organize')
+            go(8, 'Opening English Eye Spy…')
+          }}
           onSkip={isPracticeMode() ? () => go(8, 'Opening English Eye Spy…') : undefined}
         />
         <StationContext>
@@ -2557,7 +2581,7 @@ export function StudentSequencePage() {
       return (
         <Shell step={15}>
           <CareerInterestAssessment
-            lang={supportLang}
+            lang="English"
             answers={careerInterestAnswers}
             onChange={(id, value) => setCareerInterestAnswers((a) => ({ ...a, [id]: value }))}
             onBack={() => go(14)}
@@ -2583,7 +2607,7 @@ export function StudentSequencePage() {
     return (
       <Shell step={15}>
         <CareerAssessmentResult
-          lang={supportLang}
+          lang="English"
           pathway={pathway}
           riasec={riasecScores}
           pathwayScores={pathwayScores}
@@ -2675,13 +2699,16 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
+        markSupplementaryRound('tools')
         setSysIdx(0)
         setSysAnswer(null)
         setSysCorrect(false)
         go(18)
         return
       }
-      setToolIdx((i) => i + 1)
+      const next = toolIdx + 1
+      if (next >= Math.ceil(TOOL_CATEGORIES.length / 2)) markSupplementaryRound('tools')
+      setToolIdx(next)
       setToolAnswer(null)
       setToolCorrect(false)
     }
@@ -2697,6 +2724,26 @@ export function StudentSequencePage() {
           <h3>{cat.title}</h3>
           <p>{cat.why}</p>
           <p className="train-check-prompt">{cat.prompt}</p>
+          {supplementaryLanguageOn('tools', {
+            toolIndex: toolIdx,
+            toolCount: TOOL_CATEGORIES.length,
+          }) ? (
+            <InstructionHearChip
+              english={cat.prompt}
+              bilingual
+              auto={false}
+              autoKey={`tool-${toolIdx}`}
+              className="train-shell-instr-hear"
+            />
+          ) : (
+            <InstructionHearChip
+              english={cat.prompt}
+              bilingual={false}
+              auto={false}
+              autoKey={`tool-en-${toolIdx}`}
+              className="train-shell-instr-hear"
+            />
+          )}
           <div className="train-choice-grid" data-coach="choice-opt">
             {cat.options.map((opt) => (
               <ChoiceButton

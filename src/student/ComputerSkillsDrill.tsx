@@ -15,6 +15,7 @@ import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { InstructionHearChip } from '../practice/InstructionNarration'
+import { stopSpeech } from './speech'
 
 /** Level-4 simple English instruction chrome — translated for L1 narration. */
 const COMP_INSTR = {
@@ -298,7 +299,8 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
         english={
           phase === 'questions' ? COMP_INSTR.check : phase === 'try' ? COMP_INSTR.try : COMP_INSTR.watch
         }
-        auto={!showVideo}
+        bilingual={false}
+        auto={false}
         autoKey={`${lesson.id}-${phase}`}
         className="comp-skills-instr-hear"
       />
@@ -367,7 +369,11 @@ export function ComputerSkillsDrill({ onComplete, onSkip }: Props) {
                 playsInline
                 preload="metadata"
                 src={src}
-                onPlay={() => coachWatchDone()}
+                onPlay={() => {
+                  stopSpeech()
+                  window.speechSynthesis?.cancel()
+                  coachWatchDone()
+                }}
                 onTimeUpdate={onTimeUpdate}
                 onEnded={onEnded}
               >
