@@ -36,7 +36,11 @@ const ONLY = (process.env.PA_ONLY || '')
 
 mkdirSync(WORK_ROOT, { recursive: true })
 mkdirSync(join(ROOT, 'public/explainers'), { recursive: true })
-mkdirSync('/opt/cursor/artifacts', { recursive: true })
+try {
+  mkdirSync(process.env.PA_DEMO_ART || '/opt/cursor/artifacts', { recursive: true })
+} catch {
+  /* Optional artifact dir — recordings still land in public/explainers. */
+}
 
 /**
  * @typedef {{ id: string, text: string, act: (page: import('playwright').Page) => Promise<void> }} Beat
@@ -309,65 +313,52 @@ const STATIONS = {
     step: 9,
     async setup(page) {
       await gotoStation(page, BASE, { step: 9 })
-      await page.waitForSelector(
-        '[data-coach="sent-type"], .sentence-cloze-type, [data-coach="sent-choices"]',
-        { timeout: 30000 },
-      )
-      await page.waitForTimeout(500)
+      await page.waitForSelector('text=/supports the entire building/i', { timeout: 30000 })
+      await page.waitForTimeout(400)
     },
     beats: [
       {
         id: 'intro',
-        text: 'Sentence Structure. Four words. Type the match.',
+        text: 'Sentence Structure. A sentence with a blank, and four full sentences.',
         async act(page) {
-          const stage = page
-            .locator('[data-coach="sent-type"], .sentence-cloze-type, .train-panel')
-            .first()
-          await stage.scrollIntoViewIfNeeded()
-          await moveTo(page, stage, { steps: 22, settle: 800 })
+          const blank = page.getByText(/supports the entire building/i).first()
+          await blank.scrollIntoViewIfNeeded()
+          await moveTo(page, blank, { steps: 22, settle: 800 })
         },
       },
       {
         id: 'read',
-        text: 'Read the sentence. Look at the four choices at the bottom.',
+        text: 'Pick the full sentence that fits the blank.',
         async act(page) {
-          const choices = page
-            .locator('[data-coach="sent-choices"], .sentence-cloze-choices')
+          const choice = page
+            .locator('button')
+            .filter({ hasText: /The Foundation supports the entire building/i })
             .first()
-          if (await choices.isVisible().catch(() => false)) {
-            await moveTo(page, choices, { steps: 22, settle: 900 })
-          } else {
-            await page.waitForTimeout(900)
-          }
+          await choice.scrollIntoViewIfNeeded()
+          await clickAt(page, choice, { steps: 24, settle: 300, after: 800 })
         },
       },
       {
         id: 'type',
-        text: 'Type the word that fits the blank. Wrong? Try again.',
+        text: 'Hear that sentence, then type it. Wrong? Try again.',
         async act(page) {
-          const input = page.locator('[data-coach="sent-type"] input, .sentence-cloze-type-input').first()
-          await input.waitFor({ state: 'visible', timeout: 10000 })
-          const chipTexts = await page.locator('.sentence-cloze-chip').allTextContents()
-          const cleaned = chipTexts
-            .map((t) => t.replace(/^[A-D]\.\s*/i, '').trim())
-            .filter((t) => t && !/^[A-D]\.?$/i.test(t))
-          /* Prefer workplace/structure words; Construction Q1 answer is Foundation */
-          let answer =
-            cleaned.find((t) => /foundation|hammer|drill|saw|level|tape|hard|ppe|safety|scaffold/i.test(t)) ||
-            cleaned[1] ||
-            cleaned[0] ||
-            'Foundation'
-          await typeInto(page, input, answer, { delay: 110 })
-          /* Hold on filled blank so mid-beat still shows typing, not the next item */
-          await moveTo(page, input, { steps: 10, settle: 1100 })
-          const go = page.locator('.sentence-cloze-type-go, button:has-text("Go")').first()
-          await clickAt(page, go, { steps: 18, settle: 280, after: 700 })
-          const retry = page.locator('.play-soft-miss').first()
-          if (await retry.isVisible().catch(() => false)) {
-            const alt = cleaned.find((t) => t.toLowerCase() !== answer.toLowerCase()) || 'Foundation'
-            await input.fill('')
-            await typeInto(page, input, alt, { delay: 100 })
-            await clickAt(page, go, { steps: 16, settle: 250, after: 700 })
+          const hear = page.locator('button').filter({ hasText: /^Hear/i }).first()
+          if (await hear.isVisible().catch(() => false)) {
+            await clickAt(page, hear, { steps: 18, settle: 200, after: 500 })
+          }
+          const input = page.locator('input[type="text"], textarea').last()
+          if (await input.isVisible().catch(() => false)) {
+            await input.scrollIntoViewIfNeeded()
+            await typeInto(page, input, 'The Foundation supports the entire building.', { delay: 45 })
+            await moveTo(page, input, { steps: 10, settle: 400 })
+          } else {
+            const picked = page
+              .locator('button')
+              .filter({ hasText: /The Foundation supports the entire building/i })
+              .first()
+            if (await picked.isVisible().catch(() => false)) {
+              await moveTo(page, picked, { steps: 12, settle: 600 })
+            }
           }
         },
       },
@@ -379,11 +370,13 @@ const STATIONS = {
     step: 9,
     async setup(page) {
       await gotoStation(page, BASE, { step: 9 })
-      await page.waitForSelector('[data-coach="sent-type"], .sentence-cloze-type', { timeout: 30000 })
+      await page.waitForSelector('text=/supports the entire building|Which tool or material/i', {
+        timeout: 30000,
+      })
       await page.waitForTimeout(400)
       /* Skip control lives in a collapsed fold — click via DOM so prep stays silent */
       await page.evaluate(() => {
-        const b = [...document.querySelectorAll('button')].find((x) =>
+        const b = [...document.querySelectorAll('button, a')].find((x) =>
           /Skip to Word/i.test(x.textContent || ''),
         )
         if (b) b.click()
@@ -394,7 +387,7 @@ const STATIONS = {
     beats: [
       {
         id: 'intro',
-        text: 'Word to Action. Connect the tool to the job.',
+        text: 'Word to Action. Connect the item to the job.',
         async act(page) {
           const card = page.locator('[data-coach="choice-opt"], .train-panel').first()
           await card.scrollIntoViewIfNeeded()
@@ -403,7 +396,7 @@ const STATIONS = {
       },
       {
         id: 'see',
-        text: 'See the action. Choose which tool it uses.',
+        text: 'See the action. Choose which item it uses.',
         async act(page) {
           const opts = page.locator('[data-coach="choice-opt"]').first()
           await opts.scrollIntoViewIfNeeded()
@@ -614,13 +607,18 @@ const STATIONS = {
       },
       {
         id: 'watch',
-        text: 'Watch a short lesson with words on the screen.',
+        text: 'Watch a short lesson with words on the screen. The lesson voice is English.',
         async act(page) {
+          await page.evaluate(() => {
+            document.querySelectorAll('video').forEach((v) => {
+              v.muted = true
+            })
+          })
           const video = page.locator('video.equip-video-player, [data-coach="comp-watch"] video').first()
           if (await video.isVisible().catch(() => false)) {
-            await clickAt(page, video, { steps: 18, settle: 300, after: 1600 })
+            await clickAt(page, video, { steps: 18, settle: 300, after: 1200 })
           } else {
-            await page.waitForTimeout(1600)
+            await page.waitForTimeout(1200)
           }
         },
       },
@@ -628,25 +626,35 @@ const STATIONS = {
         id: 'try',
         text: 'Then try that same action. After you try it, answer the practice questions. The lesson stays in English.',
         async act(page) {
-          const tryBtn = page
-            .locator('button:has-text("Try it now"), button:has-text("Keep watching")')
-            .first()
-          if (await tryBtn.isVisible().catch(() => false)) {
-            await page.evaluate(() => {
-              const b = document.querySelector('button.btn-primary')
-              if (b) b.removeAttribute('disabled')
+          await page.evaluate(() => {
+            const b = [...document.querySelectorAll('button')].find((x) =>
+              /try it now|keep watching, then try/i.test(x.textContent || ''),
+            )
+            if (!b) return
+            b.removeAttribute('disabled')
+            b.click()
+          })
+          await page.waitForSelector('[data-coach="comp-try"], .comp-try', { timeout: 8000 }).catch(() => {})
+          for (let n = 0; n < 8; n++) {
+            const questions = page.getByText('Practice questions', { exact: true }).first()
+            if (await questions.isVisible().catch(() => false)) break
+            const clicked = await page.evaluate(() => {
+              const panel = document.querySelector('[data-coach="comp-try"], .comp-try')
+              if (!panel) return false
+              const b = [...panel.querySelectorAll('button')].find((x) => !x.hasAttribute('disabled'))
+              if (!b) return false
+              b.click()
+              return true
             })
-            await clickAt(page, tryBtn, { steps: 22, settle: 300, after: 1000 })
+            if (!clicked) break
+            await page.waitForTimeout(280)
           }
-          const tryPanel = page.locator('[data-coach="comp-try"]').first()
-          if (await tryPanel.isVisible().catch(() => false)) {
-            await moveTo(page, tryPanel, { steps: 20, settle: 500 })
-            const action = tryPanel.locator('button').first()
-            if (await action.isVisible().catch(() => false)) {
-              await clickAt(page, action, { steps: 18, settle: 300, after: 1000 })
-            }
+          const questions = page.locator('.comp-skills-q, .equip-video-check').first()
+          if (await questions.isVisible().catch(() => false)) {
+            await questions.evaluate((el) => el.scrollIntoView({ block: 'center' }))
+            await moveTo(page, questions, { steps: 18, settle: 700 })
           } else {
-            await page.waitForTimeout(1000)
+            await page.waitForTimeout(600)
           }
         },
       },
@@ -858,15 +866,20 @@ const STATIONS = {
         id: 'play',
         text: 'Press play. The video voice is English only.',
         async act(page) {
+          await page.evaluate(() => {
+            document.querySelectorAll('video').forEach((v) => {
+              v.muted = true
+            })
+          })
           const openLog = page.locator('button:has-text("Open Video section")').first()
           if (await openLog.isVisible().catch(() => false)) {
             await clickAt(page, openLog, { steps: 24, settle: 350, after: 1000 })
           }
           const stage = page.locator('[data-coach="equip-watch"], .equip-video-player, video').first()
           if (await stage.isVisible().catch(() => false)) {
-            await clickAt(page, stage, { steps: 24, settle: 400, after: 1600 })
+            await clickAt(page, stage, { steps: 24, settle: 400, after: 900 })
           } else {
-            await page.waitForTimeout(1600)
+            await page.waitForTimeout(900)
           }
         },
       },
@@ -874,16 +887,21 @@ const STATIONS = {
         id: 'next',
         text: 'When the video ends, answer the practice questions. The choices are in English.',
         async act(page) {
-          const next = page
-            .locator('[data-coach="equip-next"], button:has-text("Continue"), button:has-text("Next")')
-            .first()
-          if (await next.isVisible().catch(() => false)) {
-            await page.evaluate(() => {
-              document.querySelectorAll('button[disabled]').forEach((b) => b.removeAttribute('disabled'))
-            })
-            await moveTo(page, next, { steps: 22, settle: 900 })
+          await page.evaluate(() => {
+            const b = [...document.querySelectorAll('button')].find((x) =>
+              /answer practice questions|keep watching, then continue/i.test(x.textContent || ''),
+            )
+            if (!b) return
+            b.removeAttribute('disabled')
+            b.click()
+          })
+          const questions = page.locator('.equip-video-check').first()
+          await questions.waitFor({ state: 'visible', timeout: 8000 }).catch(() => {})
+          if (await questions.isVisible().catch(() => false)) {
+            await questions.evaluate((el) => el.scrollIntoView({ block: 'center' }))
+            await moveTo(page, questions, { steps: 18, settle: 800 })
           } else {
-            await page.waitForTimeout(900)
+            await page.waitForTimeout(700)
           }
         },
       },

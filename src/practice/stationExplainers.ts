@@ -53,7 +53,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'sentence-structure',
     steps: [9],
     title: 'Sentence Structure',
-    lede: 'Read the sentence. Look at the four choices. Type the word that fits the blank.',
+    lede: 'Read the sentence with the blank. Pick the full sentence that fits. Hear it. Then type it.',
     video: 'explainers/sentence-structure.mp4',
   },
   {
@@ -61,7 +61,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'word-action',
     steps: [],
     title: 'Word → Action',
-    lede: 'See the action. Pick which tool it uses.',
+    lede: 'See the action. Choose which item it uses.',
     video: 'explainers/word-action.mp4',
   },
   {

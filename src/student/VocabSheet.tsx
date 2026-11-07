@@ -289,8 +289,9 @@ export function VocabSheetCard({
     return 'Look at the picture. Press a language you know — English included, or More languages. Pick and type it.'
   })()
 
-  const langsToShow =
-    productionPhase && connectedLang
+  const langsToShow = allowSkipKnown
+    ? (['English'] as SupportLang[])
+    : productionPhase && connectedLang
       ? [connectedLang]
       : productionPhase
         ? []
@@ -308,6 +309,7 @@ export function VocabSheetCard({
             : 'Pick the matching English word below, then type it.'
         }
         auto={false}
+        bilingual={!allowSkipKnown}
         autoKey={`vv-type-${term.id}-${pickReady ? 'type' : 'pick'}`}
         className="vocab-sheet-instr-hear"
       />
@@ -502,8 +504,13 @@ export function VocabSheetCard({
             Clear this word · press a language you know (or More languages), then pick and type
           </p>
           <InstructionHearChip
-            english="Clear this word. Press a language you know — or More languages — then pick and type."
+            english={
+              allowSkipKnown
+                ? 'Clear this word. Hear English, then pick and type.'
+                : 'Clear this word. Press a language you know — or More languages — then pick and type.'
+            }
             auto={false}
+            bilingual={!allowSkipKnown}
             autoKey={`vv-pre-${term.id}`}
             className="vocab-sheet-instr-hear"
           />
@@ -539,7 +546,7 @@ export function VocabSheetCard({
 
         {(() => {
           const showLangCue = !productionPhase && langsToShow.length > 0
-          const universal = !typedEnglish ? (
+          const universal = !typedEnglish && !allowSkipKnown ? (
             <UniversalHearControl
               english={term.english}
               disabled={alreadyKnown || (productionPhase && !universalBridge)}

@@ -81,17 +81,17 @@ STATIONS: list[dict] = [
         "id": "sentence-structure",
         "title": "Sentence Structure",
         "beats": [
-            (None, "Sentence Structure. Four words. Type the match."),
-            ("grant_visual_vocab", "Read the sentence. Look at the four choices at the bottom."),
-            ("grant_visual_vocab", "Type the word that fits the blank. Wrong? Try again."),
+            (None, "Sentence Structure. A sentence with a blank, and four full sentences."),
+            ("grant_visual_vocab", "Pick the full sentence that fits the blank."),
+            ("grant_visual_vocab", "Hear that sentence, then type it. Wrong? Try again."),
         ],
     },
     {
         "id": "word-action",
         "title": "Word to Action",
         "beats": [
-            (None, "Word to Action. Connect the tool to the job."),
-            ("grant_toolbox", "See the action. Choose which tool it uses."),
+            (None, "Word to Action. Connect the item to the job."),
+            ("grant_toolbox", "See the action. Choose which item it uses."),
             ("grant_toolbox", "Pick one answer. Wrong? Try again. Then continue."),
         ],
     },

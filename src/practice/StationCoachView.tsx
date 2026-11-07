@@ -10,6 +10,7 @@ import {
   type CoachStep,
 } from './stationCoach'
 import { InstructionHearChip, useAutoInstructionNarration } from './InstructionNarration'
+import { coachSpeaksChosenLanguage } from './supplementaryLanguage'
 
 type Rect = { top: number; left: number; width: number; height: number }
 
@@ -136,11 +137,12 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
   stepIdxRef.current = stepIdx
 
   const step: CoachStep | undefined = active ? steps[stepIdx] : undefined
+  const coachBilingual = coachSpeaksChosenLanguage(stationId)
   const coachNarrateKey = active && step ? `${stationId}:${stepIdx}:${step.say}` : null
   const narrateStatus = useAutoInstructionNarration(
     step?.say ?? '',
     coachNarrateKey,
-    Boolean(active && step),
+    Boolean(active && step && coachBilingual),
   )
   const showL1Line =
     narrateStatus.kind === 'ready' &&
@@ -275,6 +277,7 @@ export function StationCoach({ stationId, layoutKey, steps: stepsProp }: Props) 
         <InstructionHearChip
           english={step.say}
           auto={false}
+          bilingual={coachBilingual}
           className="station-coach-hear"
         />
         <button

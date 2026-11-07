@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef, useState, type ReactNode } from 'react'
 import { MoreLanguagesPick } from './MoreLanguagesPick'
-import { ExtraLangLine, useLearnerExtraLang } from './ExtraLangLine'
+import { useLearnerExtraLang } from './ExtraLangLine'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSession } from '../auth/Session'
 import { BRAND_ASSETS } from '../brand/assets'
@@ -1460,14 +1460,6 @@ export function StudentSequencePage() {
     setSpeaking(null)
   }
 
-  async function playSupport(text: string, lang: SupportLang = supportLang) {
-    setSpeaking('support')
-    stopSpeech()
-    if (lang === 'English') await speakEnglish(text)
-    else await speakSupport(text, lang)
-    setSpeaking(null)
-  }
-
   async function playVocabEnglish(term: (typeof VOCAB_UNIT)[number]) {
     setVocabSpeakingId(term.id)
     stopSpeech()
@@ -1925,6 +1917,7 @@ export function StudentSequencePage() {
             ? () => {
                 /* First-set clear → later visits unlock skip-known (retake), not day-one. */
                 if (ready) markVocabStationCleared(pathwayId)
+                markSupplementaryRound('vocab')
                 go(7, 'Opening language organize…')
               }
             : undefined
@@ -2018,7 +2011,14 @@ export function StudentSequencePage() {
             markSupplementaryRound('organize')
             go(8, 'Opening English Eye Spy…')
           }}
-          onSkip={isPracticeMode() ? () => go(8, 'Opening English Eye Spy…') : undefined}
+          onSkip={
+            isPracticeMode()
+              ? () => {
+                  markSupplementaryRound('organize')
+                  go(8, 'Opening English Eye Spy…')
+                }
+              : undefined
+          }
         />
         <StationContext>
           <WhyWork>
@@ -2368,7 +2368,7 @@ export function StudentSequencePage() {
             image={pathwayImage(instr.imageKey)}
             fit="contain"
             label="A worker gives a direction"
-            caption="Listen in English (required). Mother-tongue help is optional only."
+            caption="Listen in English, then choose what you should do."
           />
           <blockquote>&ldquo;{instr.text}&rdquo;</blockquote>
           <div className="train-audio-row" data-coach="instr-hear">
@@ -2386,18 +2386,7 @@ export function StudentSequencePage() {
             >
               {speaking === 'en' ? 'Playing…' : 'Hear English'}
             </button>
-            {supportLang !== 'English' && (
-              <button
-                type="button"
-                className="btn btn-ghost"
-                disabled={speaking !== null}
-                onClick={() => void playSupport(instr.supportHint[supportLang])}
-              >
-                Optional {supportLang} hint
-              </button>
-            )}
           </div>
-          <ExtraLangLine english={instr.text} compact />
           {!instrHeard && <p className="muted">Hear the English instruction at least once before you answer.</p>}
           <p><strong>What should you do?</strong></p>
           <div className="train-choice-grid" data-coach="instr-choice">

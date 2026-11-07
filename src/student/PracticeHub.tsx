@@ -28,6 +28,7 @@ import { followUpSummary, loadFollowUp } from './employmentFollowUp'
 import { hasClearedVocabStation } from './adaptiveVocab'
 import { BoardsClearedToday } from '../practice/PlayClear'
 import { InstructionHearChip } from '../practice/InstructionNarration'
+import { hubSpeaksChosenLanguage } from '../practice/supplementaryLanguage'
 import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
 import { NAV_CUE } from '../practice/navCues'
 
@@ -254,6 +255,7 @@ export function PracticeHub({
                 : 'Today’s station. One clear action. Try again if needed.'
             }
             auto={false}
+            bilingual={!pathComplete && hubSpeaksChosenLanguage(resumeStep)}
             className="ph-instr-hear"
           />
           <BoardsClearedToday />

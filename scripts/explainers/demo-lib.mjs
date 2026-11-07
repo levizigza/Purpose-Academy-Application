@@ -51,7 +51,8 @@ export function run(cmd, args, opts = {}) {
 
 export function synth(text, outMp3) {
   /* python -m: edge-tts console script is often missing from PATH in cloud agents */
-  run('python3', [
+  const python = process.env.PA_PYTHON || (process.platform === 'win32' ? 'python' : 'python3')
+  run(python, [
     '-m',
     'edge_tts',
     `--voice=${VOICE}`,
@@ -175,6 +176,9 @@ export async function gotoStation(
         localStorage.setItem('pa-desktop-phase-v1', 'ready')
         sessionStorage.setItem('pa-desktop-phase-v1', 'ready')
       }
+      sessionStorage.setItem('pa-entry-chosen-v1', '1')
+      /* v50 is the live splash flag. Ready + this flag keeps Desktop from being cleared back to the chooser. */
+      sessionStorage.setItem('pa-crossed-threshold-v50', '1')
       sessionStorage.setItem('pa-crossed-threshold-v44', '1')
       localStorage.setItem('pa-practice-mode-v1', '1')
       localStorage.setItem('pa-practice-name-v1', 'DemoLearner')
@@ -357,7 +361,9 @@ export function muxSynced(work, videoWebm, voMp3, outPath, previewName) {
   if (existsSync(outPath)) unlinkSync(outPath)
   renameSync(final, outPath)
 
-  const art = '/opt/cursor/artifacts'
+  const art =
+    process.env.PA_DEMO_ART ||
+    (process.platform === 'win32' ? join(work, 'artifacts') : '/opt/cursor/artifacts')
   mkdirSync(art, { recursive: true })
   const preview = join(art, previewName)
   run('ffmpeg', ['-y', '-i', outPath, '-c', 'copy', preview])

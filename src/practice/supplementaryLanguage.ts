@@ -49,3 +49,22 @@ export function supplementaryLanguageOn(
   }
   return true
 }
+
+/** Hub card beside today's station. Bilingual only while that early station is still in its one round. */
+export function hubSpeaksChosenLanguage(step: number): boolean {
+  if (step >= 4 && step <= 5) return supplementaryLanguageOn('opening')
+  if (step === 6) return supplementaryLanguageOn('vocab')
+  if (step === 7) return supplementaryLanguageOn('organize')
+  return false
+}
+
+/**
+ * First-example coach. Chosen language only on Workplace Words, Language Organize,
+ * and the first tool group. Every later station is English.
+ */
+export function coachSpeaksChosenLanguage(stationId: string): boolean {
+  if (stationId === 'workplace-words') return supplementaryLanguageOn('vocab')
+  if (stationId === 'language-organize') return supplementaryLanguageOn('organize')
+  if (stationId === 'tools') return supplementaryLanguageOn('tools', { toolIndex: 0, toolCount: 2 })
+  return false
+}
