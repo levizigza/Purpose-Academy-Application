@@ -1,6 +1,59 @@
-.tp-page {
+.tp-page,
+.tp-workbench {
   container-type: inline-size;
   container-name: instructor;
+}
+
+.tp-cycle {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tp-cycle li {
+  margin: 0;
+  padding: 0.65rem 0.75rem 0.75rem;
+  background: #fff;
+  border-top: 3px solid #10233f;
+  border-radius: 0 0 12px 12px;
+}
+
+.tp-cycle strong,
+.tp-cycle span {
+  display: block;
+}
+
+.tp-cycle span {
+  margin-top: 0.2rem;
+}
+
+.tp-cycle-papers {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.tp-criteria {
+  margin: 0.35rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.tp-moves {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.tp-move {
+  margin: 0;
+  padding-left: 0.75rem;
+  border-left: 3px solid #10233f;
+}
+
+.tp-phase-card .btn {
+  margin-top: 0.9rem;
 }
 
 .tp-tree {
@@ -243,7 +296,9 @@
     align-items: stretch;
   }
 
-  .tp-shelves {
+  .tp-shelves,
+  .tp-cycle,
+  .tp-cycle-papers {
     grid-template-columns: 1fr;
   }
 
@@ -270,7 +325,9 @@
     align-items: stretch;
   }
 
-  .tp-shelves {
+  .tp-shelves,
+  .tp-cycle,
+  .tp-cycle-papers {
     grid-template-columns: 1fr;
   }
 

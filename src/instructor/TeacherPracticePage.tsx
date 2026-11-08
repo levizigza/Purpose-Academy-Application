@@ -10,6 +10,7 @@ import {
   type StreamWeek,
 } from './instructorCurricula'
 import { papersForWeek } from './weekPapers'
+import { papersByRole, splitDayMove, successCriteria } from './lessonCycle'
 import {
   getInstructorPracticeName,
   getInstructorPracticePathway,
@@ -100,6 +101,29 @@ function DocShelf({
   )
 }
 
+function TeachingCycle() {
+  return (
+    <ol className="tp-cycle" aria-label="How a week is taught">
+      <li>
+        <strong>Aim</strong>
+        <span>Say what they will be able to do.</span>
+      </li>
+      <li>
+        <strong>Model</strong>
+        <span>Show the task before they try it.</span>
+      </li>
+      <li>
+        <strong>Practise</strong>
+        <span>Do it together, then they do it.</span>
+      </li>
+      <li>
+        <strong>Evidence</strong>
+        <span>Keep work that matches the aim.</span>
+      </li>
+    </ol>
+  )
+}
+
 function RootTree({
   name,
   openId,
@@ -117,8 +141,8 @@ function RootTree({
           <h1>Three streams</h1>
           <p className="lede">
             {name ? `${name} · ` : ''}
-            Construction, Logistics, and Community Support grow from this point. Open one stream. Its
-            months, weeks, documents, and reviews branch from there.
+            Construction, Logistics, and Community Support grow from this point. Open one stream. Teach
+            each week the same way: say the aim, model the task, practise it together, then keep the evidence.
           </p>
         </div>
       </header>
@@ -213,8 +237,8 @@ function StreamHub({
           <h1>{stream.program}</h1>
           <p className="lede">
             {name ? `${name} · ` : ''}
-            {stream.weeks.length} weeks from the {stream.source}. One block at a time. Progress stays
-            inside this pathway.
+            {stream.weeks.length} weeks from the {stream.source}. Each week states an aim, a model, practice
+            with the group, and the evidence you keep.
           </p>
           {stream.credit ? (
             <p className="tp-credit">
@@ -246,6 +270,8 @@ function StreamHub({
           </button>
         </div>
       </header>
+
+      <TeachingCycle />
 
       <div className="tp-shelves">
         <DocShelf
@@ -326,6 +352,23 @@ function StreamHub({
   )
 }
 
+function CyclePapers({ docs }: { docs: StreamDoc[] }) {
+  const grouped = papersByRole(docs)
+  const groups = [
+    { kicker: 'Before you teach', title: 'Plan', docs: grouped.plan, empty: 'No plan is filed for this part.' },
+    { kicker: 'During the block', title: 'Teach from', docs: grouped.teach, empty: 'No teaching paper is filed for this part.' },
+    { kicker: 'While they work', title: 'Evidence', docs: grouped.evidence, empty: 'No checklist or marking guide is filed for this part.' },
+    { kicker: 'At the end of the week', title: 'Examination', docs: grouped.exam, empty: 'No examination is filed for this part.' },
+  ]
+  return (
+    <div className="tp-cycle-papers">
+      {groups.map((group) => (
+        <DocShelf key={group.title} kicker={group.kicker} title={group.title} docs={group.docs} empty={group.empty} />
+      ))}
+    </div>
+  )
+}
+
 function WeekWorkbench({
   stream,
   week,
@@ -340,10 +383,11 @@ function WeekWorkbench({
   const stepCount = Math.max(1, week.steps.length)
   const stepIdx = getInstructorPracticeStep(stepCount)
   const step = week.steps[stepIdx] || week.steps[0]
+  const moves = step ? splitDayMove(step.text) : null
   const cleared = isInstructorSessionCleared(stream.id, week.n)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
   const shelves = splitDocs(stream.docs)
-  const weekShelves = splitDocs(papersForWeek(stream.id, week.n))
+  const specificPapers = papersForWeek(stream.id, week.n)
 
   function goHub() {
     setInstructorPracticeView('hub')
@@ -400,53 +444,41 @@ function WeekWorkbench({
         </div>
       </header>
 
-      {week.outcomes.length > 0 ? (
-        <div className="tp-goal">
-          <strong>Outcomes this week</strong>
-          <ul>
-            {week.outcomes.map((outcome) => (
-              <li key={outcome}>{outcome}</li>
-            ))}
-          </ul>
-        </div>
-      ) : month ? (
-        <p className="tp-goal">
-          <strong>Month goal</strong> {month.objective}
-        </p>
-      ) : null}
+      <TeachingCycle />
 
-      {weekShelves.teach.length + weekShelves.review.length > 0 ? (
-        <div className="tp-shelves tp-week-papers">
-          <DocShelf
-            kicker="This week"
-            title="Documents"
-            docs={weekShelves.teach}
-            empty="No teaching paper is filed for this week."
-          />
-          <DocShelf
-            kicker="This week"
-            title="Reviews"
-            docs={weekShelves.review}
-            empty="No review paper is filed for this week."
-          />
-        </div>
-      ) : (
-        <div className="tp-shelves tp-week-papers">
-          <DocShelf
-            kicker="This week"
-            title="Documents"
-            docs={shelves.teach}
-            empty="No teaching papers are linked for this stream."
-          />
-          <DocShelf
-            kicker="This week"
-            title="Reviews"
-            docs={shelves.review}
-            empty="No marking papers are linked for this stream."
-          />
-        </div>
-      )}
-      {weekShelves.teach.length + weekShelves.review.length > 0 ? (
+      <div className="tp-shelves">
+        <section className="panel tp-shelf">
+          <p className="section-kicker">Aim</p>
+          <h2>What they will be able to do</h2>
+          {week.outcomes.length > 0 ? (
+            <ul className="tp-criteria">
+              {week.outcomes.map((outcome) => (
+                <li key={outcome}>{outcome}</li>
+              ))}
+            </ul>
+          ) : month ? (
+            <p>{month.objective}</p>
+          ) : null}
+          {stream.dayNote && stream.id === 'community' ? <p className="tp-brief-note">{stream.dayNote}</p> : null}
+        </section>
+        <section className="panel tp-shelf">
+          <p className="section-kicker">Success</p>
+          <h2>You will know it landed when</h2>
+          {month ? (
+            <ul className="tp-criteria">
+              {successCriteria(month.assessment).map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="tp-brief-note">Use the week’s evidence before you clear it.</p>
+          )}
+          {month?.scope ? <p className="tp-brief-note">{month.scope}</p> : null}
+        </section>
+      </div>
+
+      <CyclePapers docs={specificPapers.length > 0 ? specificPapers : stream.docs} />
+      {specificPapers.length > 0 ? (
         <details className="tp-all-papers">
           <summary>All documents and reviews for {stream.title}</summary>
           <div className="tp-shelves">
@@ -485,15 +517,36 @@ function WeekWorkbench({
         <article className="panel tp-phase-card" aria-live="polite">
           <p className="section-kicker">This block</p>
           <h2>{step.label}</h2>
-          <p className="tp-phase-body">{step.text}</p>
+          {moves ? (
+            <div className="tp-moves">
+              <div className="tp-move">
+                <p className="section-kicker">Model</p>
+                <p>{moves.model}</p>
+              </div>
+              <div className="tp-move">
+                <p className="section-kicker">Practise together</p>
+                <p>{moves.practise}</p>
+              </div>
+              {moves.evidence ? (
+                <div className="tp-move">
+                  <p className="section-kicker">Keep this evidence</p>
+                  <p>{moves.evidence}</p>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <>
+              <p className="tp-phase-body">{step.text}</p>
+              <p className="tp-brief-note">
+                Model it first. Practise it with the group. Keep one piece of work before you leave this block.
+              </p>
+            </>
+          )}
           <button type="button" className="btn btn-primary" onClick={advance}>
             {stepIdx < week.steps.length - 1 ? `Continue to ${week.steps[stepIdx + 1].label}` : 'Clear this week'}
           </button>
         </article>
       ) : null}
-
-      {month?.scope ? <p className="tp-brief-note">{month.scope}</p> : null}
-      {stream.dayNote && stream.id === 'community' ? <p className="tp-brief-note">{stream.dayNote}</p> : null}
 
       <footer className="tp-session-foot">
         <div>
