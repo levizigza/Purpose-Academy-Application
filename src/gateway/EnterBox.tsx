@@ -48,8 +48,7 @@ const ENTRIES: Entry[] = [
     help: PRACTICE_TRAY_HELP,
     tone: 'journey',
     tool: 'wrench',
-    /* Practice trays do not share sign-in sequence checkmarks. */
-    completeIds: [],
+    completeIds: ['student'],
     practice: 'student',
   },
   {
@@ -74,7 +73,7 @@ const ENTRIES: Entry[] = [
     help: INSTRUCTOR_PRACTICE_TRAY_HELP,
     tone: 'instructor',
     tool: 'level',
-    completeIds: [],
+    completeIds: ['instructor'],
     practice: 'instructor',
     nestedUnder: 'Instructor',
   },
@@ -202,7 +201,7 @@ function PracticeNameGate({
         <h2>Who is exploring?</h2>
         <p className="lede">
           {isInstructor
-            ? 'Walk teaching sessions without signing in — good for demos, kinks, and feedback. Pick a name so notes stay attached to you.'
+            ? 'Three streams start from here: Construction, Logistics, and Community Support. Pick a name so reviews stay attached to you.'
             : 'Walk the learner path without registration — good for demos and walkthroughs. Pick a name so feedback stays attached to you.'}
         </p>
         <div className="practice-name-grid">

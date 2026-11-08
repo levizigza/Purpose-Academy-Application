@@ -963,6 +963,16 @@ export const INSTRUCTOR_STREAMS: Record<InstructorStreamId, InstructorStream> = 
         "title": "Weekly student examinations",
         "href": "https://drive.google.com/file/d/1Z2ZxfWvxk_8CltFHbcNDPc-LYArD0Voi/view",
         "note": "Weekly student examinations."
+      },
+      {
+        "title": "Logistics language folder",
+        "href": "https://drive.google.com/drive/folders/12YiV51BeOgfD9tf8iaNMnBzXRVHTQglH",
+        "note": "English vocabulary, vocabulary with translation, and logistics English sentences."
+      },
+      {
+        "title": "Warehouse equipment videos",
+        "href": "https://drive.google.com/drive/folders/1O6JYePrAdIKLUfH8HCGYCuCSdPp1CY8b",
+        "note": "Fourteen warehouse machines, the student quiz, and the instructor answer key. Awareness only. This is not an operator certificate."
       }
     ],
     "months": [
@@ -2136,6 +2146,16 @@ export const INSTRUCTOR_STREAMS: Record<InstructorStreamId, InstructorStream> = 
         "title": "Weekly student examinations",
         "href": "https://drive.google.com/file/d/1_uHc8xRBzd61wurQtBbHGQxVbwx6BmOf/view",
         "note": "Weekly student examinations for 32 weeks."
+      },
+      {
+        "title": "Community language folder",
+        "href": "https://drive.google.com/drive/folders/1nncvZxtSEcwjQ3hEnp4IZ-nQyIuae3zT",
+        "note": "Visual vocabulary in English, visual vocabulary with translation, and the question-and-answer deck."
+      },
+      {
+        "title": "25 picture workbooks",
+        "href": "https://drive.google.com/drive/folders/1nIu2hLJbRsQLTSuZQoWkk9QD7lTu6wiP",
+        "note": "Yonas Tesfagabr picture sets, CSW 1–25, with the English name cards."
       }
     ],
     "months": [

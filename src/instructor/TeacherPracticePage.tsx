@@ -6,6 +6,7 @@ import {
   INSTRUCTOR_STREAM_ORDER,
   instructorStream,
   type InstructorStream,
+  type StreamDoc,
   type StreamWeek,
 } from './instructorCurricula'
 import {
@@ -55,53 +56,126 @@ function useInstructorPracticeLive() {
   }
 }
 
-function PathwayPicker({ name }: { name: string }) {
+function isReviewDoc(doc: StreamDoc): boolean {
+  const title = doc.title.toLowerCase()
+  if (title.includes('video')) return false
+  return /marking|checklist|examination|exam|answer key/.test(title)
+}
+
+function splitDocs(docs: StreamDoc[]) {
+  return {
+    teach: docs.filter((doc) => !isReviewDoc(doc)),
+    review: docs.filter((doc) => isReviewDoc(doc)),
+  }
+}
+
+function DocShelf({
+  title,
+  kicker,
+  docs,
+  empty,
+}: {
+  title: string
+  kicker: string
+  docs: StreamDoc[]
+  empty: string
+}) {
+  return (
+    <section className="panel tp-shelf">
+      <p className="section-kicker">{kicker}</p>
+      <h2>{title}</h2>
+      {docs.length === 0 ? <p className="tp-brief-note">{empty}</p> : null}
+      <ul className="tp-doc-list">
+        {docs.map((item) => (
+          <li key={item.href}>
+            <a href={item.href} target="_blank" rel="noreferrer">
+              {item.title}
+            </a>
+            <span>{item.note}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+function RootTree({
+  name,
+  openId,
+  sessionN,
+}: {
+  name: string
+  openId: string | null
+  sessionN: number
+}) {
   return (
     <div className="stack tp-page">
       <header className="tp-head">
         <div>
           <p className="section-kicker">Instructor Practice</p>
-          <h1>Three curriculum pathways</h1>
+          <h1>Three streams</h1>
           <p className="lede">
             {name ? `${name} · ` : ''}
-            Construction, Logistics, and Community Support each keep their own folder. Open a pathway to
-            teach its weeks from that curriculum.
+            Construction, Logistics, and Community Support grow from this point. Open one stream. Its
+            months, weeks, documents, and reviews branch from there.
           </p>
         </div>
       </header>
-      <div className="tp-path-grid">
-        {INSTRUCTOR_STREAM_ORDER.map((id) => {
-          const stream = instructorStream(id)
-          if (!stream) return null
-          const cleared = instructorSessionsClearedCount(id)
-          return (
-            <article className="panel tp-path-card" key={id}>
-              <p className="section-kicker">{stream.program}</p>
-              <h2>{stream.title}</h2>
-              <p>{stream.summary}</p>
-              <p className="tp-source-title">Source: {stream.source}</p>
-              {stream.credit ? (
-                <p className="tp-credit">
-                  Instructor: <strong>{stream.credit}</strong>
-                </p>
-              ) : null}
-              <p className="tp-brief-note">
-                {cleared} of {stream.weeks.length} weeks clear
-              </p>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => {
-                  void unlockFoley().then(() => playFoley('latch'))
-                  setInstructorPracticePathway(id)
-                  window.scrollTo({ top: 0, behavior: 'smooth' })
-                }}
-              >
-                Open {stream.title}
-              </button>
-            </article>
-          )
-        })}
+
+      <div className="tp-tree" aria-label="Three curriculum streams">
+        <div className="tp-trunk">
+          <p className="section-kicker">Root</p>
+          <strong>Instructor Practice</strong>
+          <span>One faculty at a time</span>
+        </div>
+        <div className="tp-trunk-stem" aria-hidden />
+        <div className="tp-root-rail" aria-hidden />
+        <div className="tp-root-grid">
+          {INSTRUCTOR_STREAM_ORDER.map((id) => {
+            const stream = instructorStream(id)
+            if (!stream) return null
+            const cleared = instructorSessionsClearedCount(id)
+            const open = openId === id
+            return (
+              <article className={`tp-root${open ? ' is-open' : ''}`} key={id}>
+                <span className="tp-root-stem" aria-hidden />
+                <div className="panel tp-root-card">
+                  <p className="section-kicker">{stream.program}</p>
+                  <h2>{stream.title}</h2>
+                  <p>{stream.summary}</p>
+                  {stream.credit ? (
+                    <p className="tp-credit">
+                      Instructor: <strong>{stream.credit}</strong>
+                    </p>
+                  ) : null}
+                  <p className="tp-brief-note">
+                    {cleared} of {stream.weeks.length} weeks clear
+                    {open ? ` · Week ${sessionN} is the one last opened` : ''}
+                  </p>
+                  <ol className="tp-twigs">
+                    {stream.months.map((month) => (
+                      <li key={month.n}>
+                        <span>Month {month.n}</span>
+                        {month.title}
+                      </li>
+                    ))}
+                  </ol>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      void unlockFoley().then(() => playFoley('latch'))
+                      setInstructorPracticePathway(id)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
+                  >
+                    Open {stream.title}
+                  </button>
+                </div>
+              </article>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
@@ -120,6 +194,7 @@ function StreamHub({
 }) {
   const navigate = useNavigate()
   const clearedCount = instructorSessionsClearedCount(stream.id)
+  const shelves = splitDocs(stream.docs)
 
   function openWeek(week: StreamWeek) {
     void unlockFoley().then(() => playFoley('latch'))
@@ -147,8 +222,8 @@ function StreamHub({
           ) : null}
         </div>
         <div className="tp-actions">
-          <button type="button" className="btn btn-ghost" onClick={() => setInstructorPracticePathway(null)}>
-            All pathways
+          <button type="button" className="btn btn-ghost" onClick={() => setInstructorPracticeView('roots')}>
+            Three streams
           </button>
           {stream.id === 'community' ? (
             <Link className="btn btn-primary" to={`${base}/workbooks`}>
@@ -171,26 +246,31 @@ function StreamHub({
         </div>
       </header>
 
-      <section className="panel tp-brief" aria-labelledby="tp-docs-title">
-        <div className="tp-brief-head">
-          <div>
-            <p className="section-kicker">This folder</p>
-            <h2 id="tp-docs-title">Curriculum documents</h2>
-          </div>
-        </div>
-        <ul className="tp-doc-list">
-          {stream.docs.map((item) => (
-            <li key={item.href}>
-              <a href={item.href} target="_blank" rel="noreferrer">
-                {item.title}
-              </a>
-              <span>{item.note}</span>
-            </li>
-          ))}
-        </ul>
-        {stream.dayNote ? <p className="tp-brief-note">{stream.dayNote}</p> : null}
-        <p className="tp-brief-note">{stream.studentPath}</p>
-      </section>
+      <div className="tp-shelves">
+        <DocShelf
+          kicker="Find the papers"
+          title="Documents"
+          docs={shelves.teach}
+          empty="No teaching papers are linked for this stream."
+        />
+        <DocShelf
+          kicker="Mark the week"
+          title="Reviews"
+          docs={shelves.review}
+          empty="No marking papers are linked for this stream."
+        />
+      </div>
+      <div className="tp-review-bar">
+        <p>
+          {stream.dayNote ? `${stream.dayNote} ` : ''}
+          {stream.studentPath}
+        </p>
+        {practice ? (
+          <button type="button" className="btn btn-secondary on-light" onClick={() => openInstructorPracticeChat()}>
+            Leave a review of this stream
+          </button>
+        ) : null}
+      </div>
 
       <section className="panel tp-brief" aria-labelledby="tp-hub-progress">
         <div className="tp-brief-head">
@@ -201,7 +281,7 @@ function StreamHub({
             </h2>
           </div>
           <p className="tp-brief-note" style={{ margin: 0 }}>
-            Walk every block in the week, then clear it. {practice ? 'A note is offered at the end of each month.' : 'These weeks support teaching. They are not a certificate.'}
+            Walk every block in the week, then clear it. Documents and reviews sit above the months, and again inside each week.
           </p>
         </div>
       </section>
@@ -209,7 +289,7 @@ function StreamHub({
       {stream.months.map((month) => {
         const weeks = stream.weeks.filter((week) => week.month === month.n)
         return (
-          <section className="panel tp-month" key={month.n} aria-labelledby={`tp-month-${month.n}`}>
+          <section className="panel tp-month tp-branch" key={month.n} aria-labelledby={`tp-month-${month.n}`}>
             <p className="section-kicker">Month {month.n} · 120 hours</p>
             <h2 id={`tp-month-${month.n}`}>{month.title}</h2>
             <p>{month.objective}</p>
@@ -261,6 +341,7 @@ function WeekWorkbench({
   const step = week.steps[stepIdx] || week.steps[0]
   const cleared = isInstructorSessionCleared(stream.id, week.n)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
+  const shelves = splitDocs(stream.docs)
 
   function goHub() {
     setInstructorPracticeView('hub')
@@ -332,6 +413,29 @@ function WeekWorkbench({
         </p>
       ) : null}
 
+      <div className="tp-shelves tp-week-papers">
+        <DocShelf
+          kicker="This week"
+          title="Documents"
+          docs={shelves.teach}
+          empty="No teaching papers are linked for this stream."
+        />
+        <DocShelf
+          kicker="This week"
+          title="Reviews"
+          docs={shelves.review}
+          empty="No marking papers are linked for this stream."
+        />
+      </div>
+      {practice ? (
+        <div className="tp-review-bar">
+          <p>A review stays with your name. Use it when a block is unclear, missing, or hard to teach.</p>
+          <button type="button" className="btn btn-secondary on-light" onClick={() => openInstructorPracticeChat()}>
+            Leave a review of this week
+          </button>
+        </div>
+      ) : null}
+
       <ol className="tp-phase-rail" aria-label="Week blocks">
         {week.steps.map((item, i) => (
           <li key={`${item.label}-${i}`} className={i === stepIdx ? 'is-current' : i < stepIdx ? 'is-done' : ''}>
@@ -375,10 +479,10 @@ function WeekWorkbench({
 
       {feedbackPrompt && (
         <div className="tp-feedback-prompt panel" role="dialog" aria-modal="true">
-          <h3>Did you leave feedback on this month?</h3>
+          <h3>This month is finished</h3>
           <p>
-            Use the Feedback chat if a week was unclear, missing, or hard to teach. Confirm when you are
-            ready to return to this pathway.
+            Open the feedback chat if a week in this month needs a review. Or return to the month branches
+            without a note.
           </p>
           <div className="hero-actions">
             <button type="button" className="btn btn-primary" onClick={() => ackFeedback(true)}>
@@ -406,7 +510,9 @@ export function TeacherPracticePage() {
   const stream = instructorStream(live.pathwayId)
   const practice = live.active && !base.startsWith('/app/')
 
-  if (!stream) return <PathwayPicker name={live.name} />
+  if (live.view === 'roots' || !stream) {
+    return <RootTree name={live.name} openId={live.pathwayId} sessionN={live.sessionN} />
+  }
 
   if (live.view === 'session') {
     const week = stream.weeks.find((item) => item.n === live.sessionN) || stream.weeks[0]

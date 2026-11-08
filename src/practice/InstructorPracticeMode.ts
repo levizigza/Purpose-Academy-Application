@@ -28,7 +28,7 @@ const PATHWAY_KEY = 'pa-instructor-practice-pathway-v1'
 export type InstructorStreamId = 'construction' | 'logistics' | 'community'
 
 export type InstructorPracticePhase = 'prepare' | 'model' | 'practise' | 'observe'
-export type InstructorPracticeView = 'hub' | 'session' | 'workbooks'
+export type InstructorPracticeView = 'roots' | 'hub' | 'session' | 'workbooks'
 
 export const INSTRUCTOR_PRACTICE_PHASES: InstructorPracticePhase[] = [
   'prepare',
@@ -38,7 +38,7 @@ export const INSTRUCTOR_PRACTICE_PHASES: InstructorPracticePhase[] = [
 ]
 
 export const INSTRUCTOR_PRACTICE_TRAY_HELP =
-  'Three pathways — Construction, Logistics, and Community Support — each with its own 32-week curriculum.'
+  'Three streams — Construction, Logistics, and Community Support. Each one branches into its own months, weeks, documents, and reviews.'
 
 export function isInstructorPracticeMode(): boolean {
   try {
@@ -59,7 +59,7 @@ export function getInstructorPracticeName(): string {
 export function getInstructorPracticeView(): InstructorPracticeView {
   try {
     const raw = learnerGet(VIEW_KEY)
-    if (raw === 'session' || raw === 'workbooks' || raw === 'hub') return raw
+    if (raw === 'roots' || raw === 'session' || raw === 'workbooks' || raw === 'hub') return raw
   } catch {
     /* ignore */
   }
@@ -248,7 +248,8 @@ export function resumeOrEnterInstructorPractice(fullName: string) {
     if (name) learnerSet(NAME_KEY, name)
     if (!learnerGet(SESSION_KEY)) learnerSet(SESSION_KEY, '1')
     if (!learnerGet(PHASE_KEY)) learnerSet(PHASE_KEY, 'prepare')
-    if (!learnerGet(VIEW_KEY)) learnerSet(VIEW_KEY, 'hub')
+    /* Every entry starts at the three streams. A saved pathway stays marked on that root. */
+    learnerSet(VIEW_KEY, 'roots')
     window.dispatchEvent(new CustomEvent('pa-instructor-practice-started', { detail: { name } }))
     window.dispatchEvent(new CustomEvent('pa-instructor-practice-changed'))
   } catch {
