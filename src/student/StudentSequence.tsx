@@ -267,7 +267,10 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const pct = Math.round((step / JOURNEY_STEP_COUNT) * 100)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
   const practice = isPracticeMode()
-  const masteryBlocked = practice ? advanceBlockedReason(step) : null
+  const stepSkill = SKILL_BY_STEP[step]
+  const stepLevel = stepSkill ? getMasteryLevel(stepSkill) : null
+  /* A station that has not been tried yet should not say "take another try." */
+  const masteryBlocked = practice && stepLevel === 'attempted' ? advanceBlockedReason(step) : null
   const stepKicker = motherTongue
     ? `${assessT(ASSESSMENT_COPY.stepOf, supportLang!)} ${step} ${assessT(ASSESSMENT_COPY.ofTotal, supportLang!)} ${JOURNEY_STEP_COUNT}`
     : `Unit ${unit.id}: ${unit.label}`
@@ -569,7 +572,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
       />
       {masteryBlocked && (
         <p className="train-mastery-gate" role="status">
-          {masteryBlocked} Keep practising until this station feels comfortable.
+          {masteryBlocked}
         </p>
       )}
 
