@@ -89,6 +89,36 @@ export const INSTRUCTOR_STREAMS: Record<InstructorStreamId, InstructorStream> = 
         "title": "Construction equipment videos and answer keys",
         "href": "https://drive.google.com/drive/folders/1fVjlA_gc4X6pTCM77eK3xZfO1jv_wN47",
         "note": "Question-and-answer videos for the machines in the Construction Videos folder."
+      },
+      {
+        "title": "Weekly instructor plans",
+        "href": "https://drive.google.com/drive/folders/1gju031xFnFBVyL5hlTIjK9VIuTIbG8C6",
+        "note": "One instructor plan for each of the 32 weeks."
+      },
+      {
+        "title": "Weekly answer keys",
+        "href": "https://drive.google.com/drive/folders/1PtxlmNMrMIxcKnaVPrEkQ8hUuohBAHi3",
+        "note": "One answer key for each of the 32 weeks."
+      },
+      {
+        "title": "Weekly practical checklists",
+        "href": "https://drive.google.com/drive/folders/1hwU33BhCS-q1eUAo9IMfcHhoiTN9HcSJ",
+        "note": "One practical checklist for each of the 32 weeks."
+      },
+      {
+        "title": "Weekly student workbooks",
+        "href": "https://drive.google.com/drive/folders/1RTwclZJehKqrwUsZRnsNnpsg9bnhiQ21",
+        "note": "One student workbook for each of the 32 weeks."
+      },
+      {
+        "title": "Textbooks by month",
+        "href": "https://drive.google.com/drive/folders/1oeC6yEGiRZfl5T6hTehoEywXrIgDwt31",
+        "note": "One textbook for each of the eight months."
+      },
+      {
+        "title": "Weekly examinations",
+        "href": "https://drive.google.com/drive/folders/1z3qudJN662HhLj-XF2WYs7AM4QS5SwzE",
+        "note": "One student examination for each of the 32 weeks."
       }
     ],
     "months": [
@@ -2156,6 +2186,31 @@ export const INSTRUCTOR_STREAMS: Record<InstructorStreamId, InstructorStream> = 
         "title": "25 picture workbooks",
         "href": "https://drive.google.com/drive/folders/1nIu2hLJbRsQLTSuZQoWkk9QD7lTu6wiP",
         "note": "Yonas Tesfagabr picture sets, CSW 1–25, with the English name cards."
+      },
+      {
+        "title": "Weekly marking guides",
+        "href": "https://drive.google.com/drive/folders/1YOgctzE07I84M2XOViiVR1d4j1Rcp0bW",
+        "note": "One marking guide for each of the 32 weeks."
+      },
+      {
+        "title": "Weekly practical checklists",
+        "href": "https://drive.google.com/drive/folders/1JPEnNrrbHPPxEGv6s0JpiIubCTMk_A7i",
+        "note": "One practical checklist for each of the 32 weeks."
+      },
+      {
+        "title": "Weekly examinations",
+        "href": "https://drive.google.com/drive/folders/1uHJjjh9vGhoHQMHgpSwcWVQML2JfF9hN",
+        "note": "One student examination for each of the 32 weeks."
+      },
+      {
+        "title": "Weekly student workbooks",
+        "href": "https://drive.google.com/drive/folders/1qShQPl1PEKhFYxnYJNZL40rbkFawAjkX",
+        "note": "Weekly workbooks for months 2 through 8. Month 1 is in the complete workbook."
+      },
+      {
+        "title": "Weekly textbooks",
+        "href": "https://drive.google.com/drive/folders/1dsKGDriwEwlFfc9Wx0h1LUQBV47bVEJJ",
+        "note": "One textbook file for each of the 32 weeks."
       }
     ],
     "months": [

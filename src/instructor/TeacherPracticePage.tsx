@@ -9,6 +9,7 @@ import {
   type StreamDoc,
   type StreamWeek,
 } from './instructorCurricula'
+import { papersForWeek } from './weekPapers'
 import {
   getInstructorPracticeName,
   getInstructorPracticePathway,
@@ -342,6 +343,7 @@ function WeekWorkbench({
   const cleared = isInstructorSessionCleared(stream.id, week.n)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
   const shelves = splitDocs(stream.docs)
+  const weekShelves = splitDocs(papersForWeek(stream.id, week.n))
 
   function goHub() {
     setInstructorPracticeView('hub')
@@ -413,20 +415,46 @@ function WeekWorkbench({
         </p>
       ) : null}
 
-      <div className="tp-shelves tp-week-papers">
-        <DocShelf
-          kicker="This week"
-          title="Documents"
-          docs={shelves.teach}
-          empty="No teaching papers are linked for this stream."
-        />
-        <DocShelf
-          kicker="This week"
-          title="Reviews"
-          docs={shelves.review}
-          empty="No marking papers are linked for this stream."
-        />
-      </div>
+      {weekShelves.teach.length + weekShelves.review.length > 0 ? (
+        <div className="tp-shelves tp-week-papers">
+          <DocShelf
+            kicker="This week"
+            title="Documents"
+            docs={weekShelves.teach}
+            empty="No teaching paper is filed for this week."
+          />
+          <DocShelf
+            kicker="This week"
+            title="Reviews"
+            docs={weekShelves.review}
+            empty="No review paper is filed for this week."
+          />
+        </div>
+      ) : (
+        <div className="tp-shelves tp-week-papers">
+          <DocShelf
+            kicker="This week"
+            title="Documents"
+            docs={shelves.teach}
+            empty="No teaching papers are linked for this stream."
+          />
+          <DocShelf
+            kicker="This week"
+            title="Reviews"
+            docs={shelves.review}
+            empty="No marking papers are linked for this stream."
+          />
+        </div>
+      )}
+      {weekShelves.teach.length + weekShelves.review.length > 0 ? (
+        <details className="tp-all-papers">
+          <summary>All documents and reviews for {stream.title}</summary>
+          <div className="tp-shelves">
+            <DocShelf kicker="Whole stream" title="Documents" docs={shelves.teach} empty="" />
+            <DocShelf kicker="Whole stream" title="Reviews" docs={shelves.review} empty="" />
+          </div>
+        </details>
+      ) : null}
       {practice ? (
         <div className="tp-review-bar">
           <p>A review stays with your name. Use it when a block is unclear, missing, or hard to teach.</p>
