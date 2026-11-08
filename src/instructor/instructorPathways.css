@@ -1,3 +1,8 @@
+.tp-page {
+  container-type: inline-size;
+  container-name: instructor;
+}
+
 .tp-tree {
   display: grid;
   justify-items: center;
@@ -205,12 +210,10 @@
   text-align: left;
 }
 
-@media (max-width: 800px) {
-  .tp-root-rail {
-    display: none;
-  }
-
-  .tp-trunk-stem {
+@container instructor (max-width: 680px) {
+  .tp-root-rail,
+  .tp-trunk-stem,
+  .tp-root-stem {
     display: none;
   }
 
@@ -224,8 +227,31 @@
     align-items: stretch;
   }
 
+  .tp-shelves {
+    grid-template-columns: 1fr;
+  }
+
+  .tp-week {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .tp-root-rail,
+  .tp-trunk-stem,
   .tp-root-stem {
     display: none;
+  }
+
+  .tp-root-grid {
+    grid-template-columns: 1fr;
+    border-left: 3px solid #10233f;
+    padding-left: 0.75rem;
+  }
+
+  .tp-root {
+    align-items: stretch;
   }
 
   .tp-shelves {
