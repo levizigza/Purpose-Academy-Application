@@ -5,10 +5,10 @@ import { BRAND } from '../brand/copy'
 import { OpeningDoorMark } from '../components/OpeningDoor'
 import { FoleyToggle } from '../components/CrewLoading'
 import { playFoley, unlockFoley } from '../audio/foley'
-import { setDesktopPhase } from '../shell/shellMode'
+import { clearShellMode, setDesktopPhase } from '../shell/shellMode'
 
 /** Bump when splash craft changes so returning visitors see the new opening. */
-const ENTERED_KEY = 'pa-crossed-threshold-v50'
+const ENTERED_KEY = 'pa-crossed-threshold-v51'
 
 export function hasEnteredSite() {
   try {
@@ -150,40 +150,68 @@ function EnterHammer({ className = '' }: { className?: string }) {
   )
 }
 
+function PathwayStage({ active }: { active: boolean }) {
+  return (
+    <div className={`threshold-pathways${active ? ' is-live' : ''}`} aria-hidden={!active}>
+      <p className="threshold-path-lede">Three doors into work</p>
+      <div className="threshold-path-row">
+        <article className="threshold-path path-construction">
+          <div className="threshold-path-art">
+            <img src={BRAND_ASSETS.iconConstruction} alt="" className="path-icon-settle" />
+          </div>
+          <strong>Construction</strong>
+        </article>
+        <article className="threshold-path path-logistics">
+          <div className="threshold-path-art">
+            <img src={BRAND_ASSETS.iconLogistics} alt="" className="path-icon-settle" />
+          </div>
+          <strong>Logistics</strong>
+        </article>
+        <article className="threshold-path path-community">
+          <div className="threshold-path-art">
+            <img src={BRAND_ASSETS.iconCommunity} alt="" className="path-icon-settle" />
+          </div>
+          <strong>Community</strong>
+        </article>
+      </div>
+    </div>
+  )
+}
+
 function doorStageFor(stage: SplashStage): 'closed' | 'opening' | 'open' {
   if (stage === 'breath' || stage === 'closed') return 'closed'
   if (stage === 'opening') return 'opening'
   return 'open'
 }
 
-function OpeningComposition({ stage }: { stage: SplashStage }) {
+function OpeningComposition({
+  stage,
+  showPathways,
+  showName,
+}: {
+  stage: SplashStage
+  showPathways: boolean
+  showName: boolean
+}) {
   const zoomStage =
     stage === 'breath' || stage === 'closed'
       ? 'closed'
       : stage === 'opening'
         ? 'opening'
         : 'ready'
-  const logoVisible =
-    stage === 'named' ||
-    stage === 'pathways' ||
-    stage === 'ready' ||
-    stage === 'smashing' ||
-    stage === 'shattering'
-  const doorVisible = stage === 'breath' || stage === 'closed' || stage === 'opening'
 
   return (
-    <div className={`threshold-brand-frame is-${zoomStage}`} data-stage={stage}>
-      <div className={`threshold-brand-zoom is-${zoomStage}`}>
-        <img
-          className={`threshold-lockup${logoVisible ? ' is-visible' : ''}`}
-          src={BRAND_ASSETS.logoFull}
-          alt={BRAND.name}
-          draggable={false}
-        />
-        <div className={`threshold-door-slot${doorVisible ? ' is-active' : ' is-done'}`}>
-          <OpeningDoorMark stage={doorStageFor(stage)} />
+    <div className="threshold-compose" data-stage={stage}>
+      <div className={`threshold-door-stage is-${stage}`} aria-hidden>
+        <div className={`threshold-door-zoom is-${zoomStage}`}>
+          <div className="threshold-door-slot is-active">
+            <OpeningDoorMark stage={doorStageFor(stage)} />
+          </div>
         </div>
+        <div className="threshold-door-ground" />
       </div>
+      <p className={`threshold-school-name${showName ? ' is-live' : ''}`}>{BRAND.name}</p>
+      <PathwayStage active={showPathways} />
     </div>
   )
 }
@@ -330,13 +358,18 @@ export function SplashPage({
   const glassLive = !isShattering
   const exiting = EXIT_STAGES.has(stage)
 
-  const glassScene = <OpeningComposition stage={isShattering ? 'ready' : stage} />
+  const glassScene = (
+    <OpeningComposition
+      stage={isShattering ? 'ready' : stage}
+      showPathways={showPathways && !isShattering}
+      showName={showName && !isShattering}
+    />
+  )
 
   return (
     <div
       className={[
         'threshold',
-        'is-lockup',
         `threshold-stage-${stage}`,
         embedded ? 'is-embedded' : '',
         showName ? 'is-named' : '',
@@ -347,7 +380,7 @@ export function SplashPage({
       ]
         .filter(Boolean)
         .join(' ')}
-      data-splash-version="v50"
+      data-splash-version="v51"
       role="dialog"
       aria-modal="true"
       aria-label={`${BRAND.name} opening`}
@@ -357,7 +390,7 @@ export function SplashPage({
 
       {isSmashing && (
         <MirrorBreak active={isShattering}>
-          <OpeningComposition stage="ready" />
+          <OpeningComposition stage="ready" showPathways showName />
         </MirrorBreak>
       )}
 
@@ -386,6 +419,19 @@ export function SplashPage({
         </div>
       )}
 
+      {!embedded && showEnter && !exiting && (
+        <button
+          type="button"
+          className="threshold-modes-escape"
+          onClick={() => {
+            clearEnteredSite()
+            clearShellMode()
+            navigate('/', { replace: true })
+          }}
+        >
+          Desktop / Phone
+        </button>
+      )}
     </div>
   )
 }

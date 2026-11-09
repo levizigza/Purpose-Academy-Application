@@ -178,7 +178,7 @@ export async function gotoStation(
       }
       sessionStorage.setItem('pa-entry-chosen-v1', '1')
       /* v50 is the live splash flag. Ready + this flag keeps Desktop from being cleared back to the chooser. */
-      sessionStorage.setItem('pa-crossed-threshold-v50', '1')
+      sessionStorage.setItem('pa-crossed-threshold-v51', '1')
       sessionStorage.setItem('pa-crossed-threshold-v44', '1')
       localStorage.setItem('pa-practice-mode-v1', '1')
       localStorage.setItem('pa-practice-name-v1', 'DemoLearner')
