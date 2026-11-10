@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import './instructorPathways.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTeacherPracticeBase } from './teacherPracticePaths'
@@ -35,7 +35,7 @@ import {
 } from '../practice/InstructorPracticeMode'
 import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
 import { NAV_CUE } from '../practice/navCues'
-import { pathwayIcon } from '../pathways/meta'
+import { pathwayIcon, pathwayMeta, pathwayPhoto } from '../pathways/meta'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 function useInstructorPracticeLive() {
@@ -92,6 +92,15 @@ function splitDocs(docs: StreamDoc[]) {
 
 function nextOpenWeek(stream: InstructorStream): StreamWeek | undefined {
   return stream.weeks.find((week) => !isInstructorSessionCleared(stream.id, week.n))
+}
+
+/** Hour labels repeat. The lesson sentence is the name a person can follow. */
+function blockName(step: { label: string; text: string }, steps: { label: string }[]) {
+  const vague = /^\d+\s*hours?$/i.test(step.label.trim())
+  const duplicated = steps.filter((item) => item.label === step.label).length > 1
+  const sentence = step.text.replace(/\s+/g, ' ').trim()
+  if ((vague || duplicated) && sentence) return sentence
+  return step.label
 }
 
 function cueStreamId(openId: string | null): InstructorStreamId {
@@ -280,12 +289,16 @@ function RootTree({
         {INSTRUCTOR_STREAM_ORDER.map((id) => {
           const stream = instructorStream(id)
           if (!stream) return null
+          const tone = pathwayMeta(id)
           const cleared = instructorSessionsClearedCount(id)
           const open = openId === id
           const pointedHere = pointed === id
           return (
             <article className={`tp-root${open ? ' is-open' : ''}`} key={id}>
-              <div className="panel tp-card tp-root-card">
+              <div className="panel tp-card tp-root-card" style={{ '--tp-accent': tone.accent } as CSSProperties}>
+                <div className="tp-banner">
+                  <img src={pathwayPhoto(id)} alt="" />
+                </div>
                 <img className="tp-stream-icon" src={pathwayIcon(id)} alt="" />
                 <p className="tp-kicker">{stream.program}</p>
                 <h2>{stream.title}</h2>
@@ -366,6 +379,7 @@ function StreamHub({
   const clearedCount = instructorSessionsClearedCount(stream.id)
   const shelves = splitDocs(stream.docs)
   const upcoming = nextOpenWeek(stream)
+  const [openMonth, setOpenMonth] = useState(upcoming?.month ?? stream.months[0]?.n ?? 1)
 
   function openWeek(week: StreamWeek) {
     void unlockFoley().then(() => playFoley('latch'))
@@ -474,37 +488,48 @@ function StreamHub({
           {stream.months.map((month) => {
             const weeks = stream.weeks.filter((week) => week.month === month.n)
             const doneCount = weeks.filter((week) => isInstructorSessionCleared(stream.id, week.n)).length
+            const open = openMonth === month.n
             return (
-              <section className="panel tp-card tp-month" key={month.n} aria-labelledby={`tp-month-${month.n}`}>
-                <div className="tp-month-head">
+              <section className={`panel tp-card tp-month${open ? ' is-open' : ''}`} key={month.n}>
+                <button
+                  type="button"
+                  className="tp-month-toggle"
+                  aria-expanded={open}
+                  onClick={() => setOpenMonth(open ? 0 : month.n)}
+                >
                   <span className="tp-month-n">{month.n}</span>
-                  <div>
-                    <p className="tp-kicker">Month {month.n} · 120 hours</p>
-                    <h2 id={`tp-month-${month.n}`}>{month.title}</h2>
-                  </div>
-                </div>
-                <p>{month.objective}</p>
-                <p className="tp-note">Assessment: {month.assessment}</p>
-                {month.scope ? <p className="tp-note">{month.scope}</p> : null}
-                <Meter value={doneCount} max={weeks.length} label={`${doneCount} of ${weeks.length} weeks clear this month`} />
-                <div className="tp-week-list">
-                  {weeks.map((week) => {
-                    const done = isInstructorSessionCleared(stream.id, week.n)
-                    const isNext = upcoming?.n === week.n
-                    return (
-                      <button
-                        type="button"
-                        className={`tp-week${done ? ' is-clear' : ''}${isNext ? ' is-next' : ''}`}
-                        key={week.n}
-                        onClick={() => openWeek(week)}
-                      >
-                        <span className="tp-week-n">{week.n}</span>
-                        <strong>{week.title}</strong>
-                        <em>{done ? 'Clear · open again' : isNext ? 'Next · opens the week' : 'Opens the week'}</em>
-                      </button>
-                    )
-                  })}
-                </div>
+                  <span>
+                    <span className="tp-kicker">Month {month.n} · {doneCount} of {weeks.length} weeks clear</span>
+                    <strong className="tp-month-title">{month.title}</strong>
+                  </span>
+                  <em>{open ? 'Hide weeks' : 'Show weeks'}</em>
+                </button>
+                {open ? (
+                  <>
+                    <p>{month.objective}</p>
+                    <p className="tp-note">Assessment: {month.assessment}</p>
+                    {month.scope ? <p className="tp-note">{month.scope}</p> : null}
+                    <Meter value={doneCount} max={weeks.length} label={`${doneCount} of ${weeks.length} weeks clear this month`} />
+                    <div className="tp-week-list">
+                      {weeks.map((week) => {
+                        const done = isInstructorSessionCleared(stream.id, week.n)
+                        const isNext = upcoming?.n === week.n
+                        return (
+                          <button
+                            type="button"
+                            className={`tp-week${done ? ' is-clear' : ''}${isNext ? ' is-next' : ''}`}
+                            key={week.n}
+                            onClick={() => openWeek(week)}
+                          >
+                            <span className="tp-week-n">{week.n}</span>
+                            <strong>{week.title}</strong>
+                            <em>{done ? 'Clear · open again' : isNext ? 'Next · opens the week' : 'Opens the week'}</em>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </>
+                ) : null}
               </section>
             )
           })}
@@ -603,8 +628,10 @@ function WeekWorkbench({
     goHub()
   }
 
-  const continueLabel =
-    stepIdx < week.steps.length - 1 ? `Continue to ${week.steps[stepIdx + 1].label}` : 'Clear this week'
+  const nextStep = week.steps[stepIdx + 1]
+  const hereName = step ? blockName(step, week.steps) : 'this block'
+  const nextName = nextStep ? blockName(nextStep, week.steps) : ''
+  const continueLabel = nextStep ? `Continue to ${nextName}` : 'Clear this week'
 
   return (
     <div className="tp-workbench stack">
@@ -621,11 +648,11 @@ function WeekWorkbench({
       </header>
 
       <Follow
-        step={stepIdx < week.steps.length - 1 ? 3 : 4}
-        title={stepIdx < week.steps.length - 1 ? `Teach ${step?.label || 'this block'}` : 'Clear this week'}
+        step={nextStep ? 3 : 4}
+        title={nextStep ? hereName : 'Clear this week'}
         detail={
-          stepIdx < week.steps.length - 1
-            ? `Do the block marked You are here. The button moves you to ${week.steps[stepIdx + 1].label}. Stay in this order.`
+          nextStep
+            ? `This is the block marked You are here. The button moves you to ${nextName}.`
             : 'This is the last block. The button marks the week clear and returns you to the months.'
         }
       />
@@ -646,7 +673,6 @@ function WeekWorkbench({
 
       <div className="tp-week-layout">
         <div className="tp-week-main">
-          <TeachingCycle />
           <div className="tp-shelves">
             <section className="panel tp-card tp-shelf">
               <p className="tp-kicker">Aim</p>
@@ -689,8 +715,11 @@ function WeekWorkbench({
                   }}
                 >
                   <span aria-hidden>{i + 1}</span>
-                  <strong>{item.label}</strong>
-                  <em>{i === stepIdx ? 'You are here' : i < stepIdx ? 'Done' : 'Later'}</em>
+                  <strong>{blockName(item, week.steps)}</strong>
+                  <em>
+                    {item.label !== blockName(item, week.steps) ? `${item.label} · ` : ''}
+                    {i === stepIdx ? 'You are here' : i < stepIdx ? 'Done' : 'Later'}
+                  </em>
                 </button>
               </li>
             ))}
@@ -698,8 +727,8 @@ function WeekWorkbench({
 
           {step ? (
             <article className="panel tp-card tp-phase-card" aria-live="polite">
-              <p className="tp-kicker">This block</p>
-              <h2>{step.label}</h2>
+              <p className="tp-kicker">This block{step.label !== hereName ? ` · ${step.label}` : ''}</p>
+              <h2>{hereName}</h2>
               {moves ? (
                 <div className="tp-moves">
                   <div className="tp-move">
