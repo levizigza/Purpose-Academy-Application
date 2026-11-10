@@ -95,7 +95,8 @@ function nextOpenWeek(stream: InstructorStream): StreamWeek | undefined {
 }
 
 function cueStreamId(openId: string | null): InstructorStreamId {
-  if (openId && instructorStream(openId)) return openId
+  const known = INSTRUCTOR_STREAM_ORDER.find((id) => id === openId)
+  if (known) return known
   for (const id of INSTRUCTOR_STREAM_ORDER) {
     const stream = instructorStream(id)
     if (stream && nextOpenWeek(stream)) return id
