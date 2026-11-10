@@ -37,6 +37,7 @@ import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
 import { NAV_CUE } from '../practice/navCues'
 import { pathwayIcon, pathwayMeta, pathwayPhoto } from '../pathways/meta'
 import { playFoley, unlockFoley } from '../audio/foley'
+import { InstructorFilmGate } from './InstructorFilm'
 
 function useInstructorPracticeLive() {
   const [, bump] = useState(0)
@@ -850,13 +851,27 @@ export function TeacherPracticePage() {
   const practice = live.active && !base.startsWith('/app/')
 
   if (live.view === 'roots' || !stream) {
-    return <RootTree name={live.name} openId={live.pathwayId} sessionN={live.sessionN} />
+    return (
+      <InstructorFilmGate clip="streams">
+        <RootTree name={live.name} openId={live.pathwayId} sessionN={live.sessionN} />
+      </InstructorFilmGate>
+    )
   }
 
   if (live.view === 'session') {
     const week = stream.weeks.find((item) => item.n === live.sessionN) || stream.weeks[0]
-    if (week) return <WeekWorkbench stream={stream} week={week} practice={practice} />
+    if (week) {
+      return (
+        <InstructorFilmGate clip="block">
+          <WeekWorkbench stream={stream} week={week} practice={practice} />
+        </InstructorFilmGate>
+      )
+    }
   }
 
-  return <StreamHub stream={stream} base={base} name={live.name} practice={practice} />
+  return (
+    <InstructorFilmGate clip="weeks">
+      <StreamHub stream={stream} base={base} name={live.name} practice={practice} />
+    </InstructorFilmGate>
+  )
 }

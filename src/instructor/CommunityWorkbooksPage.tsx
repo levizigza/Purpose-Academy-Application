@@ -10,6 +10,8 @@ import {
   type WorkbookCategory,
 } from './communityWorkbooks'
 import { useTeacherPracticeBase } from './teacherPracticePaths'
+import { InstructorFilmGate } from './InstructorFilm'
+import './instructorPathways.css'
 
 type Filter = 'all' | WorkbookCategory
 
@@ -76,6 +78,7 @@ export function CommunityWorkbooksPage() {
   }
 
   return (
+    <InstructorFilmGate clip="workbooks">
     <div className="stack wb-page">
       <header className="wb-page-head">
         <div>
@@ -349,5 +352,6 @@ export function CommunityWorkbooksPage() {
         </div>
       </details>
     </div>
+    </InstructorFilmGate>
   )
 }

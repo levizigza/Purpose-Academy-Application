@@ -6,6 +6,8 @@
 
 import { learnerGet, learnerRemove, learnerSet } from './learnerStore'
 
+export const INSTRUCTOR_FILM_SEEN_KEY = 'pa-instructor-film-seen-v1'
+
 export const INSTRUCTOR_PRACTICE_REVIEWERS = [
   'Yonas',
   'ChuChu',
@@ -223,6 +225,7 @@ function resetProgress() {
   learnerRemove(ACK_KEY)
   learnerRemove(CLEARED_KEY)
   learnerRemove(PATHWAY_KEY)
+  learnerRemove(INSTRUCTOR_FILM_SEEN_KEY)
   learnerSet(SESSION_KEY, '1')
   learnerSet(PHASE_KEY, '0')
   learnerSet(VIEW_KEY, 'roots')

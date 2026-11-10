@@ -834,3 +834,68 @@
 .is-phone-app .tp-kicker.on-dark::after {
   background: #7a4e0d;
 }
+
+.tp-film {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.1rem 1.15rem;
+  background: #fff;
+  color: #10233f;
+  border-radius: 16px;
+  border-top: 4px solid #e8a317;
+  box-shadow: 0 10px 28px rgba(7, 20, 34, 0.16);
+}
+
+.tp-film h2,
+.tp-film strong,
+.tp-film p {
+  color: #10233f;
+}
+
+.tp-film h2,
+.tp-film strong {
+  display: block;
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.tp-film p {
+  margin: 0 0 0.75rem;
+  max-width: 42rem;
+  line-height: 1.45;
+}
+
+.tp-film video {
+  display: block;
+  width: 100%;
+  max-height: min(68vh, 520px);
+  background: #071422;
+  border-radius: 12px;
+}
+
+.tp-film-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
+}
+
+.tp-reminder video {
+  max-height: 240px;
+}
+
+.shell.is-train.is-phone-app .tp-film,
+.is-phone-app .tp-film {
+  color: #10233f;
+}
+
+.is-phone-app .tp-film video,
+.is-phone-app .tp-reminder video {
+  max-height: 200px;
+}
+
+@container instructor (max-width: 680px) {
+  .tp-reminder video {
+    max-height: 200px;
+  }
+}
