@@ -65,4 +65,8 @@ export const NAV_CUE = {
   vocabLang: 'vocab-lang',
   stationContinue: (step: number) => `station-continue-${step}`,
   explainerWatch: (stationId: string) => `explainer-${stationId}`,
+  /** Instructor Practice — one arrow on the stream to open, then the week, then the next block. */
+  instructorStream: (id: string) => `instructor-stream-${id}`,
+  instructorWeek: (id: string, week: number) => `instructor-week-${id}-${week}`,
+  instructorBlock: (id: string, week: number) => `instructor-block-${id}-${week}`,
 } as const

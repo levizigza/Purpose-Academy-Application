@@ -6,11 +6,12 @@ import {
   INSTRUCTOR_STREAM_ORDER,
   instructorStream,
   type InstructorStream,
+  type InstructorStreamId,
   type StreamDoc,
   type StreamWeek,
 } from './instructorCurricula'
 import { papersForWeek } from './weekPapers'
-import { papersByRole, splitDayMove, successCriteria } from './lessonCycle'
+import { paperRole, papersByRole, splitDayMove, successCriteria, type PaperRole } from './lessonCycle'
 import {
   getInstructorPracticeName,
   getInstructorPracticePathway,
@@ -32,6 +33,9 @@ import {
   setInstructorPracticeView,
   shouldAskInstructorPracticeFeedback,
 } from '../practice/InstructorPracticeMode'
+import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
+import { NAV_CUE } from '../practice/navCues'
+import { pathwayIcon } from '../pathways/meta'
 import { playFoley, unlockFoley } from '../audio/foley'
 
 function useInstructorPracticeLive() {
@@ -58,6 +62,21 @@ function useInstructorPracticeLive() {
   }
 }
 
+type DocKind = PaperRole | 'video'
+
+function docKind(doc: StreamDoc): DocKind {
+  if (doc.title.toLowerCase().includes('video')) return 'video'
+  return paperRole(doc)
+}
+
+const DOC_KIND_LABEL: Record<DocKind, string> = {
+  plan: 'Plan',
+  teach: 'Teach',
+  evidence: 'Check',
+  exam: 'Exam',
+  video: 'Video',
+}
+
 function isReviewDoc(doc: StreamDoc): boolean {
   const title = doc.title.toLowerCase()
   if (title.includes('video')) return false
@@ -69,6 +88,116 @@ function splitDocs(docs: StreamDoc[]) {
     teach: docs.filter((doc) => !isReviewDoc(doc)),
     review: docs.filter((doc) => isReviewDoc(doc)),
   }
+}
+
+function nextOpenWeek(stream: InstructorStream): StreamWeek | undefined {
+  return stream.weeks.find((week) => !isInstructorSessionCleared(stream.id, week.n))
+}
+
+function cueStreamId(openId: string | null): InstructorStreamId {
+  if (openId && instructorStream(openId)) return openId
+  for (const id of INSTRUCTOR_STREAM_ORDER) {
+    const stream = instructorStream(id)
+    if (stream && nextOpenWeek(stream)) return id
+  }
+  return 'construction'
+}
+
+function Meter({ value, max, label }: { value: number; max: number; label: string }) {
+  const pct = max > 0 ? Math.round((value / max) * 100) : 0
+  return (
+    <div className="tp-meter" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={max} aria-label={label}>
+      <span style={{ width: `${pct}%` }} />
+    </div>
+  )
+}
+
+function Trail({ crumbs }: { crumbs: { label: string; onClick?: () => void }[] }) {
+  return (
+    <nav className="tp-trail" aria-label="Where you are">
+      {crumbs.map((crumb, index) => (
+        <span key={`${crumb.label}-${index}`} className="tp-trail-item">
+          {index > 0 ? <span className="tp-trail-sep" aria-hidden>/</span> : null}
+          {crumb.onClick ? (
+            <button type="button" onClick={crumb.onClick}>
+              {crumb.label}
+            </button>
+          ) : (
+            <strong>{crumb.label}</strong>
+          )}
+        </span>
+      ))}
+    </nav>
+  )
+}
+
+const PATH_STEPS = [
+  { id: 'stream', label: 'Stream', hint: 'Choose a faculty' },
+  { id: 'week', label: 'Week', hint: 'Open the next week' },
+  { id: 'block', label: 'Block', hint: 'Teach this block' },
+  { id: 'clear', label: 'Clear', hint: 'Mark the week done' },
+] as const
+
+function PathMap({
+  current,
+  onJump,
+}: {
+  current: (typeof PATH_STEPS)[number]['id']
+  onJump?: Partial<Record<(typeof PATH_STEPS)[number]['id'], () => void>>
+}) {
+  const at = PATH_STEPS.findIndex((step) => step.id === current)
+  return (
+    <ol className="tp-pathmap" aria-label="The four rooms, in order">
+      {PATH_STEPS.map((step, index) => {
+        const jump = index < at ? onJump?.[step.id] : undefined
+        return (
+          <li key={step.id} className={index === at ? 'is-here' : index < at ? 'is-done' : ''}>
+            {jump ? (
+              <button type="button" onClick={jump}>
+                <span>{index + 1}</span>
+                <strong>{step.label}</strong>
+                <em>Back to this room</em>
+              </button>
+            ) : (
+              <>
+                <span>{index + 1}</span>
+                <strong>{step.label}</strong>
+                <em>{index === at ? 'You are here' : step.hint}</em>
+              </>
+            )}
+          </li>
+        )
+      })}
+    </ol>
+  )
+}
+
+function Follow({ step, title, detail }: { step: number; title: string; detail: string }) {
+  return (
+    <section className="tp-follow" aria-label="What to do now">
+      <span>Step {step} of 4</span>
+      <div>
+        <strong>{title}</strong>
+        <p>{detail}</p>
+      </div>
+    </section>
+  )
+}
+
+function DocRow({ doc }: { doc: StreamDoc }) {
+  const kind = docKind(doc)
+  return (
+    <li>
+      <a className="tp-doc" href={doc.href} target="_blank" rel="noreferrer">
+        <span className={`tp-doc-mark is-${kind}`}>{DOC_KIND_LABEL[kind]}</span>
+        <span className="tp-doc-copy">
+          <strong>{doc.title}</strong>
+          <span>{doc.note}</span>
+        </span>
+        <span className="tp-doc-go">Open</span>
+      </a>
+    </li>
+  )
 }
 
 function DocShelf({
@@ -83,18 +212,13 @@ function DocShelf({
   empty: string
 }) {
   return (
-    <section className="panel tp-shelf">
-      <p className="section-kicker">{kicker}</p>
+    <section className="panel tp-card tp-shelf">
+      <p className="tp-kicker">{kicker}</p>
       <h2>{title}</h2>
-      {docs.length === 0 ? <p className="tp-brief-note">{empty}</p> : null}
+      {docs.length === 0 ? <p className="tp-note">{empty}</p> : null}
       <ul className="tp-doc-list">
         {docs.map((item) => (
-          <li key={item.href}>
-            <a href={item.href} target="_blank" rel="noreferrer">
-              {item.title}
-            </a>
-            <span>{item.note}</span>
-          </li>
+          <DocRow key={item.href + item.title} doc={item} />
         ))}
       </ul>
     </section>
@@ -102,24 +226,21 @@ function DocShelf({
 }
 
 function TeachingCycle() {
+  const steps = [
+    ['1', 'Aim', 'Say what they will be able to do.'],
+    ['2', 'Model', 'Show the task before they try it.'],
+    ['3', 'Practise', 'Do it together, then they do it.'],
+    ['4', 'Evidence', 'Keep work that matches the aim.'],
+  ]
   return (
     <ol className="tp-cycle" aria-label="How a week is taught">
-      <li>
-        <strong>Aim</strong>
-        <span>Say what they will be able to do.</span>
-      </li>
-      <li>
-        <strong>Model</strong>
-        <span>Show the task before they try it.</span>
-      </li>
-      <li>
-        <strong>Practise</strong>
-        <span>Do it together, then they do it.</span>
-      </li>
-      <li>
-        <strong>Evidence</strong>
-        <span>Keep work that matches the aim.</span>
-      </li>
+      {steps.map(([n, title, text]) => (
+        <li key={title}>
+          <span>{n}</span>
+          <strong>{title}</strong>
+          <em>{text}</em>
+        </li>
+      ))}
     </ol>
   )
 }
@@ -133,58 +254,81 @@ function RootTree({
   openId: string | null
   sessionN: number
 }) {
+  const pointed = cueStreamId(openId)
   return (
     <div className="stack tp-page">
       <header className="tp-head">
         <div>
-          <p className="section-kicker">Instructor Practice</p>
-          <h1>Three streams</h1>
+          <p className="tp-kicker on-dark">Instructor Practice</p>
+          <h1>Choose a stream</h1>
           <p className="lede">
-            {name ? `${name} · ` : ''}
-            Construction, Logistics, and Community Support grow from this point. Open one stream. Teach
-            each week the same way: say the aim, model the task, practise it together, then keep the evidence.
+            {name ? `${name}. ` : ''}
+            The same four rooms every time: stream, then months, then one week, then the block you teach.
           </p>
         </div>
       </header>
+      <Follow
+        step={1}
+        title="Choose one stream"
+        detail="Open the marked card. You land on Month 1 through Month 8, in order. Each month holds its own weeks."
+      />
+      <Trail crumbs={[{ label: 'Streams' }]} />
+      <PathMap current="stream" />
 
-      <div className="tp-tree" aria-label="Three curriculum streams">
-        <div className="tp-trunk">
-          <p className="section-kicker">Root</p>
-          <strong>Instructor Practice</strong>
-          <span>One faculty at a time</span>
-        </div>
-        <div className="tp-trunk-stem" aria-hidden />
-        <div className="tp-root-rail" aria-hidden />
-        <div className="tp-root-grid">
-          {INSTRUCTOR_STREAM_ORDER.map((id) => {
-            const stream = instructorStream(id)
-            if (!stream) return null
-            const cleared = instructorSessionsClearedCount(id)
-            const open = openId === id
-            return (
-              <article className={`tp-root${open ? ' is-open' : ''}`} key={id}>
-                <span className="tp-root-stem" aria-hidden />
-                <div className="panel tp-root-card">
-                  <p className="section-kicker">{stream.program}</p>
-                  <h2>{stream.title}</h2>
-                  <p>{stream.summary}</p>
-                  {stream.credit ? (
-                    <p className="tp-credit">
-                      Instructor: <strong>{stream.credit}</strong>
-                    </p>
-                  ) : null}
-                  <p className="tp-brief-note">
-                    {cleared} of {stream.weeks.length} weeks clear
-                    {open ? ` · Week ${sessionN} is the one last opened` : ''}
+      <div className="tp-root-grid">
+        {INSTRUCTOR_STREAM_ORDER.map((id) => {
+          const stream = instructorStream(id)
+          if (!stream) return null
+          const cleared = instructorSessionsClearedCount(id)
+          const open = openId === id
+          const pointedHere = pointed === id
+          return (
+            <article className={`tp-root${open ? ' is-open' : ''}`} key={id}>
+              <div className="panel tp-card tp-root-card">
+                <img className="tp-stream-icon" src={pathwayIcon(id)} alt="" />
+                <p className="tp-kicker">{stream.program}</p>
+                <h2>{stream.title}</h2>
+                <p className="tp-summary">{stream.summary}</p>
+                {stream.credit ? (
+                  <p className="tp-credit">
+                    Instructor: <strong>{stream.credit}</strong>
                   </p>
-                  <ol className="tp-twigs">
-                    {stream.months.map((month) => (
-                      <li key={month.n}>
-                        <span>Month {month.n}</span>
-                        {month.title}
+                ) : null}
+                <Meter value={cleared} max={stream.weeks.length} label={`${cleared} of ${stream.weeks.length} weeks clear`} />
+                <p className="tp-note">
+                  {cleared} of {stream.weeks.length} weeks clear
+                  {open ? ` · Week ${sessionN} was the last one opened` : ''}
+                </p>
+                <ol className="tp-pips" aria-label="Months in this stream">
+                  {stream.months.map((month) => {
+                    const weeks = stream.weeks.filter((week) => week.month === month.n)
+                    const done = weeks.filter((week) => isInstructorSessionCleared(id, week.n)).length
+                    const state = weeks.length > 0 && done === weeks.length ? 'is-full' : done > 0 ? 'is-some' : ''
+                    return (
+                      <li key={month.n} className={state} title={month.title}>
+                        <span>{month.n}</span>
                       </li>
-                    ))}
-                  </ol>
+                    )
+                  })}
+                </ol>
+                <p className="tp-leads">Opens the eight months</p>
+                {pointedHere ? (
+                  <NavCueTarget cueId={NAV_CUE.instructorStream(id)} arrowLabel="Open this stream" arrowSide="above">
+                    <NavGlowWrap cueId={NAV_CUE.instructorStream(id)}>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => {
+                          void unlockFoley().then(() => playFoley('latch'))
+                          setInstructorPracticePathway(id)
+                          window.scrollTo({ top: 0, behavior: 'smooth' })
+                        }}
+                      >
+                        Open {stream.title}
+                      </button>
+                    </NavGlowWrap>
+                  </NavCueTarget>
+                ) : (
                   <button
                     type="button"
                     className="btn btn-primary"
@@ -196,11 +340,11 @@ function RootTree({
                   >
                     Open {stream.title}
                   </button>
-                </div>
-              </article>
-            )
-          })}
-        </div>
+                )}
+              </div>
+            </article>
+          )
+        })}
       </div>
     </div>
   )
@@ -220,6 +364,7 @@ function StreamHub({
   const navigate = useNavigate()
   const clearedCount = instructorSessionsClearedCount(stream.id)
   const shelves = splitDocs(stream.docs)
+  const upcoming = nextOpenWeek(stream)
 
   function openWeek(week: StreamWeek) {
     void unlockFoley().then(() => playFoley('latch'))
@@ -233,22 +378,21 @@ function StreamHub({
     <div className="stack tp-page tp-hub">
       <header className="tp-head">
         <div>
-          <p className="section-kicker">Instructor · {stream.title}</p>
+          <p className="tp-kicker on-dark">Instructor · {stream.title}</p>
           <h1>{stream.program}</h1>
           <p className="lede">
-            {name ? `${name} · ` : ''}
-            {stream.weeks.length} weeks from the {stream.source}. Each week states an aim, a model, practice
-            with the group, and the evidence you keep.
+            {name ? `${name}. ` : ''}
+            Months run in order. Inside a month, teach the week marked Next before the later ones.
           </p>
           {stream.credit ? (
-            <p className="tp-credit">
-              Community Support instructor: <strong>{stream.credit}</strong>
+            <p className="tp-credit on-dark">
+              Instructor: <strong>{stream.credit}</strong>
             </p>
           ) : null}
         </div>
         <div className="tp-actions">
           <button type="button" className="btn btn-ghost" onClick={() => setInstructorPracticeView('roots')}>
-            Three streams
+            All streams
           </button>
           {stream.id === 'community' ? (
             <Link className="btn btn-primary" to={`${base}/workbooks`}>
@@ -271,77 +415,113 @@ function StreamHub({
         </div>
       </header>
 
+      <Follow
+        step={2}
+        title={upcoming ? `Open week ${upcoming.n}` : 'Every week is clear'}
+        detail={
+          upcoming
+            ? `${upcoming.title}. This opens the aim, then the days in order, then only this week’s papers.`
+            : 'Open any week below if you want to teach it again. The papers stay with that week.'
+        }
+      />
+      <Trail
+        crumbs={[
+          { label: 'Streams', onClick: () => setInstructorPracticeView('roots') },
+          { label: stream.title },
+        ]}
+      />
+      <PathMap current="week" onJump={{ stream: () => setInstructorPracticeView('roots') }} />
       <TeachingCycle />
 
-      <div className="tp-shelves">
-        <DocShelf
-          kicker="Find the papers"
-          title="Documents"
-          docs={shelves.teach}
-          empty="No teaching papers are linked for this stream."
-        />
-        <DocShelf
-          kicker="Mark the week"
-          title="Reviews"
-          docs={shelves.review}
-          empty="No marking papers are linked for this stream."
-        />
-      </div>
-      <div className="tp-review-bar">
-        <p>
-          {stream.dayNote ? `${stream.dayNote} ` : ''}
-          {stream.studentPath}
-        </p>
-        {practice ? (
-          <button type="button" className="btn btn-secondary on-light" onClick={() => openInstructorPracticeChat()}>
-            Leave a review of this stream
-          </button>
-        ) : null}
-      </div>
+      {upcoming ? (
+        <NavCueTarget cueId={NAV_CUE.instructorWeek(stream.id, upcoming.n)} arrowLabel="Teach this week" arrowSide="above">
+          <section className="panel tp-card tp-next">
+            <p className="tp-kicker">Do this now</p>
+            <h2>
+              Week {upcoming.n} · {upcoming.title}
+            </h2>
+            <p>Month {upcoming.month}. The gold week in the list below is this same week.</p>
+            <NavGlowWrap cueId={NAV_CUE.instructorWeek(stream.id, upcoming.n)}>
+              <button type="button" className="btn btn-primary" onClick={() => openWeek(upcoming)}>
+                Open week {upcoming.n}
+              </button>
+            </NavGlowWrap>
+          </section>
+        </NavCueTarget>
+      ) : (
+        <section className="panel tp-card tp-next">
+          <p className="tp-kicker">Progress</p>
+          <h2>All {stream.weeks.length} weeks are clear</h2>
+          <p>Open any week below to teach it again. The papers stay with that week.</p>
+        </section>
+      )}
 
-      <section className="panel tp-brief" aria-labelledby="tp-hub-progress">
-        <div className="tp-brief-head">
-          <div>
-            <p className="section-kicker">Progress</p>
-            <h2 id="tp-hub-progress">
+      <div className="tp-hub-layout">
+        <div className="tp-months">
+          <section className="panel tp-card tp-progress-card">
+            <p className="tp-kicker">Progress</p>
+            <h2>
               {clearedCount} of {stream.weeks.length} weeks clear
             </h2>
-          </div>
-          <p className="tp-brief-note" style={{ margin: 0 }}>
-            Walk every block in the week, then clear it. Documents and reviews sit above the months, and again inside each week.
-          </p>
-        </div>
-      </section>
-
-      {stream.months.map((month) => {
-        const weeks = stream.weeks.filter((week) => week.month === month.n)
-        return (
-          <section className="panel tp-month tp-branch" key={month.n} aria-labelledby={`tp-month-${month.n}`}>
-            <p className="section-kicker">Month {month.n} · 120 hours</p>
-            <h2 id={`tp-month-${month.n}`}>{month.title}</h2>
-            <p>{month.objective}</p>
-            <p className="tp-source-title">Assessment: {month.assessment}</p>
-            {month.scope ? <p className="tp-brief-note">{month.scope}</p> : null}
-            <div className="tp-week-list">
-              {weeks.map((week) => {
-                const done = isInstructorSessionCleared(stream.id, week.n)
-                return (
-                  <button
-                    type="button"
-                    className={`tp-week${done ? ' is-clear' : ''}`}
-                    key={week.n}
-                    onClick={() => openWeek(week)}
-                  >
-                    <span>Week {week.n}</span>
-                    <strong>{week.title}</strong>
-                    {done ? <em>Clear</em> : <em>30 hours</em>}
-                  </button>
-                )
-              })}
-            </div>
+            <Meter
+              value={clearedCount}
+              max={stream.weeks.length}
+              label={`${clearedCount} of ${stream.weeks.length} weeks clear`}
+            />
           </section>
-        )
-      })}
+
+          {stream.months.map((month) => {
+            const weeks = stream.weeks.filter((week) => week.month === month.n)
+            const doneCount = weeks.filter((week) => isInstructorSessionCleared(stream.id, week.n)).length
+            return (
+              <section className="panel tp-card tp-month" key={month.n} aria-labelledby={`tp-month-${month.n}`}>
+                <div className="tp-month-head">
+                  <span className="tp-month-n">{month.n}</span>
+                  <div>
+                    <p className="tp-kicker">Month {month.n} · 120 hours</p>
+                    <h2 id={`tp-month-${month.n}`}>{month.title}</h2>
+                  </div>
+                </div>
+                <p>{month.objective}</p>
+                <p className="tp-note">Assessment: {month.assessment}</p>
+                {month.scope ? <p className="tp-note">{month.scope}</p> : null}
+                <Meter value={doneCount} max={weeks.length} label={`${doneCount} of ${weeks.length} weeks clear this month`} />
+                <div className="tp-week-list">
+                  {weeks.map((week) => {
+                    const done = isInstructorSessionCleared(stream.id, week.n)
+                    const isNext = upcoming?.n === week.n
+                    return (
+                      <button
+                        type="button"
+                        className={`tp-week${done ? ' is-clear' : ''}${isNext ? ' is-next' : ''}`}
+                        key={week.n}
+                        onClick={() => openWeek(week)}
+                      >
+                        <span className="tp-week-n">{week.n}</span>
+                        <strong>{week.title}</strong>
+                        <em>{done ? 'Clear · open again' : isNext ? 'Next · opens the week' : 'Opens the week'}</em>
+                      </button>
+                    )
+                  })}
+                </div>
+              </section>
+            )
+          })}
+        </div>
+
+        <aside className="tp-side" aria-label="Faculty papers">
+          <p className="tp-side-lead">These papers cover the whole stream. Open a week when you need that week’s own plan and examination.</p>
+          <DocShelf kicker="Find the papers" title="Documents" docs={shelves.teach} empty="No teaching papers are linked for this stream." />
+          <DocShelf kicker="Mark the week" title="Reviews" docs={shelves.review} empty="No marking papers are linked for this stream." />
+          {stream.dayNote ? <p className="tp-side-lead">{stream.dayNote}</p> : null}
+          <p className="tp-side-lead">{stream.studentPath}</p>
+          {practice ? (
+            <button type="button" className="btn btn-secondary on-light" onClick={() => openInstructorPracticeChat()}>
+              Leave a review of this stream
+            </button>
+          ) : null}
+        </aside>
+      </div>
 
       <div className="tp-workbench-exit">
         <button type="button" className="btn btn-ghost" onClick={() => navigate('/')}>
@@ -361,7 +541,7 @@ function CyclePapers({ docs }: { docs: StreamDoc[] }) {
     { kicker: 'At the end of the week', title: 'Examination', docs: grouped.exam, empty: 'No examination is filed for this part.' },
   ]
   return (
-    <div className="tp-cycle-papers">
+    <div className="tp-paper-stack">
       {groups.map((group) => (
         <DocShelf key={group.title} kicker={group.kicker} title={group.title} docs={group.docs} empty={group.empty} />
       ))}
@@ -388,6 +568,7 @@ function WeekWorkbench({
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
   const shelves = splitDocs(stream.docs)
   const specificPapers = papersForWeek(stream.id, week.n)
+  const cueId = NAV_CUE.instructorBlock(stream.id, week.n)
 
   function goHub() {
     setInstructorPracticeView('hub')
@@ -421,150 +602,167 @@ function WeekWorkbench({
     goHub()
   }
 
+  const continueLabel =
+    stepIdx < week.steps.length - 1 ? `Continue to ${week.steps[stepIdx + 1].label}` : 'Clear this week'
+
   return (
     <div className="tp-workbench stack">
-      <p className="play-nearby-objective" aria-live="polite">
-        {stream.title} · Week {week.n} · {step?.label || 'Week'} · {stepIdx + 1} of {stepCount}
-        {cleared ? ' · Week clear' : ''}
-      </p>
-
-      <header className="tp-workbench-head">
-        <button type="button" className="btn btn-ghost" onClick={goHub}>
-          ← {stream.title} weeks
-        </button>
-        <div>
-          <p className="section-kicker">
-            Month {week.month} · Week {week.n} · 30 hours
-          </p>
-          <h1>{week.title}</h1>
-          <p className="tp-source-title">
-            {stream.source}
-            {month ? ` · ${month.title}` : ''}
-          </p>
-        </div>
+      <header className="tp-head">
+        <p className="tp-kicker on-dark">
+          Month {week.month}
+          {month ? ` · ${month.title}` : ''} · 30 hours
+        </p>
+        <h1>{week.title}</h1>
+        <p className="lede">
+          {stream.title} · Week {week.n} · block {stepIdx + 1} of {stepCount}
+          {cleared ? ' · This week is already clear' : ''}
+        </p>
       </header>
 
-      <TeachingCycle />
+      <Follow
+        step={stepIdx < week.steps.length - 1 ? 3 : 4}
+        title={stepIdx < week.steps.length - 1 ? `Teach ${step?.label || 'this block'}` : 'Clear this week'}
+        detail={
+          stepIdx < week.steps.length - 1
+            ? `Do the block marked You are here. The button moves you to ${week.steps[stepIdx + 1].label}. Stay in this order.`
+            : 'This is the last block. The button marks the week clear and returns you to the months.'
+        }
+      />
+      <Trail
+        crumbs={[
+          { label: 'Streams', onClick: () => setInstructorPracticeView('roots') },
+          { label: stream.title, onClick: goHub },
+          { label: `Week ${week.n}` },
+        ]}
+      />
+      <PathMap
+        current={stepIdx < week.steps.length - 1 ? 'block' : 'clear'}
+        onJump={{
+          stream: () => setInstructorPracticeView('roots'),
+          week: goHub,
+        }}
+      />
 
-      <div className="tp-shelves">
-        <section className="panel tp-shelf">
-          <p className="section-kicker">Aim</p>
-          <h2>What they will be able to do</h2>
-          {week.outcomes.length > 0 ? (
-            <ul className="tp-criteria">
-              {week.outcomes.map((outcome) => (
-                <li key={outcome}>{outcome}</li>
-              ))}
-            </ul>
-          ) : month ? (
-            <p>{month.objective}</p>
-          ) : null}
-          {stream.dayNote && stream.id === 'community' ? <p className="tp-brief-note">{stream.dayNote}</p> : null}
-        </section>
-        <section className="panel tp-shelf">
-          <p className="section-kicker">Success</p>
-          <h2>You will know it landed when</h2>
-          {month ? (
-            <ul className="tp-criteria">
-              {successCriteria(month.assessment).map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="tp-brief-note">Use the week’s evidence before you clear it.</p>
-          )}
-          {month?.scope ? <p className="tp-brief-note">{month.scope}</p> : null}
-        </section>
-      </div>
-
-      <CyclePapers docs={specificPapers.length > 0 ? specificPapers : stream.docs} />
-      {specificPapers.length > 0 ? (
-        <details className="tp-all-papers">
-          <summary>All documents and reviews for {stream.title}</summary>
+      <div className="tp-week-layout">
+        <div className="tp-week-main">
+          <TeachingCycle />
           <div className="tp-shelves">
-            <DocShelf kicker="Whole stream" title="Documents" docs={shelves.teach} empty="" />
-            <DocShelf kicker="Whole stream" title="Reviews" docs={shelves.review} empty="" />
-          </div>
-        </details>
-      ) : null}
-      {practice ? (
-        <div className="tp-review-bar">
-          <p>A review stays with your name. Use it when a block is unclear, missing, or hard to teach.</p>
-          <button type="button" className="btn btn-secondary on-light" onClick={() => openInstructorPracticeChat()}>
-            Leave a review of this week
-          </button>
-        </div>
-      ) : null}
-
-      <ol className="tp-phase-rail" aria-label="Week blocks">
-        {week.steps.map((item, i) => (
-          <li key={`${item.label}-${i}`} className={i === stepIdx ? 'is-current' : i < stepIdx ? 'is-done' : ''}>
-            <button
-              type="button"
-              disabled={i > stepIdx && !cleared}
-              onClick={() => {
-                if (i <= stepIdx || cleared) setInstructorPracticeStep(i)
-              }}
-            >
-              <span aria-hidden>{String(i + 1).padStart(2, '0')}</span>
-              {item.label}
-            </button>
-          </li>
-        ))}
-      </ol>
-
-      {step ? (
-        <article className="panel tp-phase-card" aria-live="polite">
-          <p className="section-kicker">This block</p>
-          <h2>{step.label}</h2>
-          {moves ? (
-            <div className="tp-moves">
-              <div className="tp-move">
-                <p className="section-kicker">Model</p>
-                <p>{moves.model}</p>
-              </div>
-              <div className="tp-move">
-                <p className="section-kicker">Practise together</p>
-                <p>{moves.practise}</p>
-              </div>
-              {moves.evidence ? (
-                <div className="tp-move">
-                  <p className="section-kicker">Keep this evidence</p>
-                  <p>{moves.evidence}</p>
-                </div>
+            <section className="panel tp-card tp-shelf">
+              <p className="tp-kicker">Aim</p>
+              <h2>What they will be able to do</h2>
+              {week.outcomes.length > 0 ? (
+                <ul className="tp-criteria">
+                  {week.outcomes.map((outcome) => (
+                    <li key={outcome}>{outcome}</li>
+                  ))}
+                </ul>
+              ) : month ? (
+                <p>{month.objective}</p>
               ) : null}
-            </div>
-          ) : (
-            <>
-              <p className="tp-phase-body">{step.text}</p>
-              <p className="tp-brief-note">
-                Model it first. Practise it with the group. Keep one piece of work before you leave this block.
-              </p>
-            </>
-          )}
-          <button type="button" className="btn btn-primary" onClick={advance}>
-            {stepIdx < week.steps.length - 1 ? `Continue to ${week.steps[stepIdx + 1].label}` : 'Clear this week'}
-          </button>
-        </article>
-      ) : null}
+              {stream.dayNote && stream.id === 'community' ? <p className="tp-note">{stream.dayNote}</p> : null}
+            </section>
+            <section className="panel tp-card tp-shelf">
+              <p className="tp-kicker">Success</p>
+              <h2>You will know it landed when</h2>
+              {month ? (
+                <ul className="tp-criteria">
+                  {successCriteria(month.assessment).map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="tp-note">Use the week’s evidence before you clear it.</p>
+              )}
+              {month?.scope ? <p className="tp-note">{month.scope}</p> : null}
+            </section>
+          </div>
 
-      <footer className="tp-session-foot">
-        <div>
-          <p className="tp-foot-label">With learners</p>
-          <p className="tp-foot-note">{stream.studentPath}</p>
+          <ol className="tp-phase-rail" aria-label="Week blocks">
+            {week.steps.map((item, i) => (
+              <li key={`${item.label}-${i}`} className={i === stepIdx ? 'is-current' : i < stepIdx ? 'is-done' : ''}>
+                <button
+                  type="button"
+                  disabled={i > stepIdx && !cleared}
+                  onClick={() => {
+                    if (i <= stepIdx || cleared) setInstructorPracticeStep(i)
+                  }}
+                >
+                  <span aria-hidden>{i + 1}</span>
+                  <strong>{item.label}</strong>
+                  <em>{i === stepIdx ? 'You are here' : i < stepIdx ? 'Done' : 'Later'}</em>
+                </button>
+              </li>
+            ))}
+          </ol>
+
+          {step ? (
+            <article className="panel tp-card tp-phase-card" aria-live="polite">
+              <p className="tp-kicker">This block</p>
+              <h2>{step.label}</h2>
+              {moves ? (
+                <div className="tp-moves">
+                  <div className="tp-move">
+                    <p className="tp-kicker">Model</p>
+                    <p>{moves.model}</p>
+                  </div>
+                  <div className="tp-move">
+                    <p className="tp-kicker">Practise together</p>
+                    <p>{moves.practise}</p>
+                  </div>
+                  {moves.evidence ? (
+                    <div className="tp-move">
+                      <p className="tp-kicker">Keep this evidence</p>
+                      <p>{moves.evidence}</p>
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
+                <>
+                  <p>{step.text}</p>
+                  <p className="tp-note">
+                    Model it first. Practise it with the group. Keep one piece of work before you leave this block.
+                  </p>
+                </>
+              )}
+              <NavCueTarget cueId={cueId} arrowLabel={stepIdx < week.steps.length - 1 ? 'Next block' : 'Clear this week'} arrowSide="above">
+                <NavGlowWrap cueId={cueId}>
+                  <button type="button" className="btn btn-primary" onClick={advance}>
+                    {continueLabel}
+                  </button>
+                </NavGlowWrap>
+              </NavCueTarget>
+            </article>
+          ) : null}
+        </div>
+
+        <aside className="tp-side" aria-label="This week's papers">
+          <p className="tp-side-lead">This week’s papers. Plan, then teach, then the checklist, then the examination.</p>
+          <CyclePapers docs={specificPapers.length > 0 ? specificPapers : stream.docs} />
+          {specificPapers.length > 0 ? (
+            <details className="tp-all-papers">
+              <summary>All documents and reviews for {stream.title}</summary>
+              <div className="tp-paper-stack">
+                <DocShelf kicker="Whole stream" title="Documents" docs={shelves.teach} empty="" />
+                <DocShelf kicker="Whole stream" title="Reviews" docs={shelves.review} empty="" />
+              </div>
+            </details>
+          ) : null}
+          {practice ? (
+            <button type="button" className="btn btn-secondary on-light" onClick={() => openInstructorPracticeChat()}>
+              Leave a review of this week
+            </button>
+          ) : null}
+          <p className="tp-side-lead">{stream.studentPath}</p>
           <Link className="btn btn-ghost" to="/journey">
             Open Student Practice
           </Link>
-        </div>
-      </footer>
+        </aside>
+      </div>
 
       {feedbackPrompt && (
-        <div className="tp-feedback-prompt panel" role="dialog" aria-modal="true">
+        <div className="tp-feedback-prompt panel tp-card" role="dialog" aria-modal="true">
           <h3>This month is finished</h3>
-          <p>
-            Open the feedback chat if a week in this month needs a review. Or return to the month branches
-            without a note.
-          </p>
+          <p>Open the feedback chat if a week in this month needs a review. Or return to the months without a note.</p>
           <div className="hero-actions">
             <button type="button" className="btn btn-primary" onClick={() => ackFeedback(true)}>
               Open feedback chat
@@ -577,6 +775,9 @@ function WeekWorkbench({
       )}
 
       <div className="tp-workbench-exit">
+        <button type="button" className="btn btn-ghost" onClick={goHub}>
+          ← {stream.title} weeks
+        </button>
         <button type="button" className="btn btn-ghost" onClick={() => navigate('/')}>
           Done for now · Toolbox
         </button>
