@@ -3,33 +3,28 @@ import { INSTRUCTOR_FILM_SEEN_KEY } from '../practice/InstructorPracticeMode'
 import { videoSrc } from '../practice/stationExplainers'
 import { stopSpeech } from '../student/speech'
 
-const FULL = 'explainers/instructor-practice.mp4'
+const FULL = 'explainers/instructor-walkthrough.mp4'
 
 export type InstructorFilmClip = 'streams' | 'weeks' | 'block' | 'workbooks'
 
-/** Seconds into the full film. Each reminder is that stretch, not a second recording. */
-const REMINDERS: Record<InstructorFilmClip, { start: number; end: number; title: string; note: string }> = {
+const REMINDERS: Record<InstructorFilmClip, { file: string; title: string; note: string }> = {
   streams: {
-    start: 1,
-    end: 84,
+    file: 'explainers/instructor-walkthrough-streams.mp4',
     title: 'How to choose a stream',
     note: 'Three cards. The gold button opens the months.',
   },
   weeks: {
-    start: 80,
-    end: 134,
+    file: 'explainers/instructor-walkthrough-weeks.mp4',
     title: 'How to open the next week',
     note: 'Only the current month is open. The gold card is the week to teach.',
   },
   block: {
-    start: 133,
-    end: 348,
+    file: 'explainers/instructor-walkthrough-block.mp4',
     title: 'How to teach the block',
     note: 'Stay on the block marked You are here. The gold button is the only next step.',
   },
   workbooks: {
-    start: 344,
-    end: 472,
+    file: 'explainers/instructor-walkthrough-workbooks.mp4',
     title: 'How to use the picture workbooks',
     note: 'Preview the words, then hide the translations and ask for the English word.',
   },
@@ -180,35 +175,17 @@ function OpeningFilm({ onDone }: { onDone: () => void }) {
 
 function Reminder({ clip, onReplay }: { clip: InstructorFilmClip; onReplay?: () => void }) {
   const reminder = REMINDERS[clip]
-
-  function parkAtStart(el: HTMLVideoElement) {
-    if (Math.abs(el.currentTime - reminder.start) > 0.4) el.currentTime = reminder.start
-  }
-
   return (
     <figure className="tp-film tp-reminder">
       <p className="tp-kicker">Reminder</p>
       <strong>{reminder.title}</strong>
       <p>{reminder.note}</p>
       <video
-        src={`${videoSrc(FULL)}#t=${reminder.start},${reminder.end}`}
+        src={videoSrc(reminder.file)}
         controls
         playsInline
         preload="metadata"
-        onLoadedMetadata={(event) => parkAtStart(event.currentTarget)}
-        onPlay={(event) => {
-          quiet()
-          const el = event.currentTarget
-          if (el.currentTime < reminder.start || el.currentTime >= reminder.end - 0.25) {
-            el.currentTime = reminder.start
-          }
-        }}
-        onTimeUpdate={(event) => {
-          const el = event.currentTarget
-          if (el.currentTime >= reminder.end) {
-            el.pause()
-          }
-        }}
+        onPlay={quiet}
       />
       {onReplay ? (
         <div className="tp-film-actions">

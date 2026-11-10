@@ -6,7 +6,7 @@
 
 import { learnerGet, learnerRemove, learnerSet } from './learnerStore'
 
-export const INSTRUCTOR_FILM_SEEN_KEY = 'pa-instructor-film-seen-v1'
+export const INSTRUCTOR_FILM_SEEN_KEY = 'pa-instructor-film-seen-v2'
 
 export const INSTRUCTOR_PRACTICE_REVIEWERS = [
   'Yonas',
