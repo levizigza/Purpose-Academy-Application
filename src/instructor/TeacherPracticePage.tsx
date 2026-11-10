@@ -674,9 +674,7 @@ function WeekWorkbench({
         title={nextStep ? 'Teach this block' : 'Clear this week'}
         detail={
           nextStep
-            ? nextIsShort
-              ? `${hereName}. The button moves you to ${nextName}.`
-              : `${hereName}. The button moves you to the next block.`
+            ? `${hereName.replace(/[.!?]+$/, '')}. The button moves you to ${nextIsShort ? nextName : 'the next block'}.`
             : 'This is the last block. The button marks the week clear and returns you to the months.'
         }
       />

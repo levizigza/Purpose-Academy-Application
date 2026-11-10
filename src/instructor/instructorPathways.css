@@ -812,10 +812,10 @@
 }
 
 /* The phone frame is paper. Night type from the desktop workshop would vanish on it. */
+.shell.is-train.is-phone-app .tp-page,
+.shell.is-train.is-phone-app .tp-workbench,
 .is-phone-app .tp-page,
-.is-phone-app .tp-workbench,
-.is-phone-app .shell.is-train .tp-page,
-.is-phone-app .shell.is-train .tp-workbench {
+.is-phone-app .tp-workbench {
   color: #10233f;
 }
 

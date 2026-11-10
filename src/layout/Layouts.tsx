@@ -223,7 +223,11 @@ export function PublicLayout() {
                   <button type="button" className="linkish nav-signout" onClick={logout}>
                     Sign out
                   </button>
-                ) : instructorPractice && !pathname.startsWith('/teacher-practice') ? (
+                ) : pathname.startsWith('/teacher-practice') || pathname.startsWith('/app/instructor/practice') ? (
+                  <NavLink className="btn btn-secondary nav-cta" to="/">
+                    Toolbox
+                  </NavLink>
+                ) : instructorPractice ? (
                   <NavLink className="btn btn-primary nav-cta" to="/teacher-practice">
                     Continue Instructor Practice
                   </NavLink>
