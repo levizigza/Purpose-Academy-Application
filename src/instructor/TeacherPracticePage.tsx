@@ -194,6 +194,18 @@ function Follow({ step, title, detail }: { step: number; title: string; detail: 
   )
 }
 
+function docNote(doc: StreamDoc): string {
+  if (!/file for this week from the faculty folder/i.test(doc.note)) return doc.note
+  const title = doc.title.toLowerCase()
+  if (title.includes('plan')) return 'Open this before you teach the week.'
+  if (title.includes('workbook')) return 'The pages the learners complete.'
+  if (title.includes('textbook')) return 'The reading for this month.'
+  if (title.includes('answer')) return 'Use this while you mark the work.'
+  if (title.includes('checklist')) return 'Watch these points while they practise.'
+  if (/exam/.test(title)) return 'Use this at the end of the week.'
+  return 'Opens the file for this part of the course.'
+}
+
 function DocRow({ doc }: { doc: StreamDoc }) {
   const kind = docKind(doc)
   return (
@@ -202,7 +214,7 @@ function DocRow({ doc }: { doc: StreamDoc }) {
         <span className={`tp-doc-mark is-${kind}`}>{DOC_KIND_LABEL[kind]}</span>
         <span className="tp-doc-copy">
           <strong>{doc.title}</strong>
-          <span>{doc.note}</span>
+          <span>{docNote(doc)}</span>
         </span>
         <span className="tp-doc-go">Open</span>
       </a>
@@ -673,37 +685,6 @@ function WeekWorkbench({
 
       <div className="tp-week-layout">
         <div className="tp-week-main">
-          <div className="tp-shelves">
-            <section className="panel tp-card tp-shelf">
-              <p className="tp-kicker">Aim</p>
-              <h2>What they will be able to do</h2>
-              {week.outcomes.length > 0 ? (
-                <ul className="tp-criteria">
-                  {week.outcomes.map((outcome) => (
-                    <li key={outcome}>{outcome}</li>
-                  ))}
-                </ul>
-              ) : month ? (
-                <p>{month.objective}</p>
-              ) : null}
-              {stream.dayNote && stream.id === 'community' ? <p className="tp-note">{stream.dayNote}</p> : null}
-            </section>
-            <section className="panel tp-card tp-shelf">
-              <p className="tp-kicker">Success</p>
-              <h2>You will know it landed when</h2>
-              {month ? (
-                <ul className="tp-criteria">
-                  {successCriteria(month.assessment).map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="tp-note">Use the week’s evidence before you clear it.</p>
-              )}
-              {month?.scope ? <p className="tp-note">{month.scope}</p> : null}
-            </section>
-          </div>
-
           <ol className="tp-phase-rail" aria-label="Week blocks">
             {week.steps.map((item, i) => (
               <li key={`${item.label}-${i}`} className={i === stepIdx ? 'is-current' : i < stepIdx ? 'is-done' : ''}>
@@ -747,12 +728,9 @@ function WeekWorkbench({
                   ) : null}
                 </div>
               ) : (
-                <>
-                  <p>{step.text}</p>
-                  <p className="tp-note">
-                    Model it first. Practise it with the group. Keep one piece of work before you leave this block.
-                  </p>
-                </>
+                <p className="tp-note">
+                  Model it first. Practise it with the group. Keep one piece of work before you leave this block.
+                </p>
               )}
               <NavCueTarget cueId={cueId} arrowLabel={stepIdx < week.steps.length - 1 ? 'Next block' : 'Clear this week'} arrowSide="above">
                 <NavGlowWrap cueId={cueId}>
@@ -763,6 +741,37 @@ function WeekWorkbench({
               </NavCueTarget>
             </article>
           ) : null}
+
+          <div className="tp-shelves">
+            <section className="panel tp-card tp-shelf">
+              <p className="tp-kicker">Aim for the week</p>
+              <h2>What they will be able to do</h2>
+              {week.outcomes.length > 0 ? (
+                <ul className="tp-criteria">
+                  {week.outcomes.map((outcome) => (
+                    <li key={outcome}>{outcome}</li>
+                  ))}
+                </ul>
+              ) : month ? (
+                <p>{month.objective}</p>
+              ) : null}
+              {stream.dayNote && stream.id === 'community' ? <p className="tp-note">{stream.dayNote}</p> : null}
+            </section>
+            <section className="panel tp-card tp-shelf">
+              <p className="tp-kicker">Success for the week</p>
+              <h2>You will know it landed when</h2>
+              {month ? (
+                <ul className="tp-criteria">
+                  {successCriteria(month.assessment).map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="tp-note">Use the week’s evidence before you clear it.</p>
+              )}
+              {month?.scope ? <p className="tp-note">{month.scope}</p> : null}
+            </section>
+          </div>
         </div>
 
         <aside className="tp-side" aria-label="This week's papers">

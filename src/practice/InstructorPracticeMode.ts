@@ -225,7 +225,7 @@ function resetProgress() {
   learnerRemove(PATHWAY_KEY)
   learnerSet(SESSION_KEY, '1')
   learnerSet(PHASE_KEY, '0')
-  learnerSet(VIEW_KEY, 'hub')
+  learnerSet(VIEW_KEY, 'roots')
 }
 
 export function startInstructorPracticeMode(fullName: string) {

@@ -747,6 +747,14 @@
     grid-template-columns: 1fr;
     gap: 0.25rem;
   }
+
+  .tp-month-toggle {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .tp-month-toggle em {
+    grid-column: 2;
+  }
 }
 
 @media (max-width: 800px) {
@@ -774,5 +782,13 @@
   .tp-follow {
     grid-template-columns: 1fr;
     gap: 0.25rem;
+  }
+
+  .tp-month-toggle {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .tp-month-toggle em {
+    grid-column: 2;
   }
 }

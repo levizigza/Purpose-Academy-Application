@@ -166,7 +166,9 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
                 scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
               }}
             >
-              Restart path
+              {isInstructorPracticeMode() || location.pathname.startsWith('/teacher-practice')
+                ? 'Restart instructor path'
+                : 'Restart path'}
             </button>
           )}
           <button type="button" className="phone-stage-link" onClick={exitToModes}>

@@ -439,7 +439,10 @@ export function PracticeModeBanner() {
     <div className={`practice-banner${inCourseShell ? ' is-status-only' : ''}`} role="status">
       <span>
         {showInstructor ? 'Instructor Practice' : 'Student Practice'}
-        {name ? ` · ${name}` : ''}. One station at a time — take your time.
+        {name ? ` · ${name}` : ''}.{' '}
+        {showInstructor
+          ? 'One week at a time. Teach the block in front of you.'
+          : 'One station at a time — take your time.'}
       </span>
       {!inCourseShell && (
         <span className="practice-banner-actions">
