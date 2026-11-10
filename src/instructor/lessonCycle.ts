@@ -1,4 +1,23 @@
-import type { StreamDoc } from './instructorCurricula'
+import type { StreamDoc, StreamStep } from './instructorCurricula'
+
+const TRADE_CHOICES = ['Interior Finishing', 'Exterior Finishing', 'Framing and Cabinetry']
+
+/** A hours split is a note for the week, not a block the instructor has to teach. */
+export function hoursAside(steps: StreamStep[]): StreamStep | null {
+  return steps.find((step) => step.label.trim().toLowerCase() === 'suggested hours') || null
+}
+
+export function teachBlocks(steps: StreamStep[]): StreamStep[] {
+  return steps.filter((step) => step.label.trim().toLowerCase() !== 'suggested hours')
+}
+
+/** Month 6 and 7 offer three trades. The group stays in one of them. */
+export function isTradeChoice(steps: StreamStep[]): boolean {
+  const blocks = teachBlocks(steps)
+  if (blocks.length !== TRADE_CHOICES.length) return false
+  const labels = blocks.map((step) => step.label.trim())
+  return TRADE_CHOICES.every((name) => labels.includes(name))
+}
 
 export type PaperRole = 'plan' | 'teach' | 'evidence' | 'exam'
 

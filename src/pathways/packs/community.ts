@@ -115,7 +115,7 @@ export const communityPack: PathwayPack = {
     },
     19: {
       title: 'Video · Equipment',
-      help: 'Unit 8 · Video section (construction or warehouse machines) lives on Construction and Logistics. Stay here for Community observation, or switch pathways to watch the videos.',
+      help: 'Community Support has no machine videos. The picture workbooks stay with the instructor. You can look at Construction or Logistics equipment without leaving this pathway.',
       purpose: 'Bridge from systems knowledge — Video unit is on Construction / Logistics; Community continues to observation.',
     },
     21: {

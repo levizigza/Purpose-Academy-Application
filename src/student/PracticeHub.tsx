@@ -31,6 +31,7 @@ import { InstructionHearChip } from '../practice/InstructionNarration'
 import { hubSpeaksChosenLanguage } from '../practice/supplementaryLanguage'
 import { NavCueTarget, NavGlowWrap } from '../practice/NavCue'
 import { NAV_CUE } from '../practice/navCues'
+import { rememberEquipmentLook } from './equipmentLook'
 
 type Props = {
   currentStep: number
@@ -361,13 +362,13 @@ export function PracticeHub({
               ? 'Fourteen construction machines — watch each video, then answer the practice questions before hands-on training.'
               : pathwayId === 'logistics'
                 ? 'Fourteen warehouse machines — watch each video, then answer the practice questions before hands-on training.'
-                : 'Construction and Logistics each have fourteen machine lessons with practice questions.'}
+                : 'Your pathway stays Community Support. Construction and Logistics each have fourteen machine lessons. Looking at them does not change your pathway. The 25 picture workbooks stay with the instructor.'}
           </p>
           {pathwayId === 'construction' || pathwayId === 'logistics' ? (
             <button
               type="button"
               className="btn btn-primary ph-video-section-btn"
-              onClick={() => onOpenLesson(18)}
+              onClick={() => onOpenLesson(19)}
             >
               {pathwayId === 'construction'
                 ? 'Open Construction Equipment videos'
@@ -379,21 +380,21 @@ export function PracticeHub({
                 type="button"
                 className="btn btn-primary ph-video-section-btn"
                 onClick={() => {
-                  setActivePathway('construction')
-                  onOpenLesson(18)
+                  rememberEquipmentLook('construction')
+                  onOpenLesson(19)
                 }}
               >
-                Construction Equipment
+                Look at Construction equipment
               </button>
               <button
                 type="button"
                 className="btn btn-secondary on-light ph-video-section-btn"
                 onClick={() => {
-                  setActivePathway('logistics')
-                  onOpenLesson(18)
+                  rememberEquipmentLook('logistics')
+                  onOpenLesson(19)
                 }}
               >
-                Warehouse Equipment
+                Look at warehouse equipment
               </button>
             </div>
           )}

@@ -72,6 +72,7 @@ import {
 } from './universalHear'
 import { ComputerSkillsDrill } from './ComputerSkillsDrill'
 import { EquipmentVideoDrill } from './EquipmentVideoDrill'
+import { clearEquipmentLook, readEquipmentLook, rememberEquipmentLook, type EquipmentLook } from './equipmentLook'
 import { EyeSpyQuiz } from './EyeSpyQuiz'
 import { FamiliarTheater } from './FamiliarTheater'
 import { PlayClearPulse, SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
@@ -813,6 +814,7 @@ export function StudentSequencePage() {
   const { user, student, login, register, refresh } = useSession()
   const [step, setStep] = useState(loadStep)
   const [pathwayId, setPathwayId] = useState<StreamPathwayId>(() => getActivePathway())
+  const [equipmentLook, setEquipmentLook] = useState<EquipmentLook | null>(() => readEquipmentLook())
   const [previewTick, setPreviewTick] = useState(0)
   const pack = getPathwayPack(pathwayId)
   const meta = pathwayMeta(pathwayId)
@@ -1141,6 +1143,7 @@ export function StudentSequencePage() {
     if (target === 9) {
       setStep8Phase(getPathwayPack(pathwayId).sentenceCloze?.length ? 'sentences' : 'actions')
     }
+    if (target === 19) setEquipmentLook(readEquipmentLook())
     if (target === 10 || target === 11) {
       const station: SupportedStationId = target === 11 ? 'copycat' : 'video-match'
       setSpStation(station)
@@ -2911,7 +2914,19 @@ export function StudentSequencePage() {
         ? ('warehouse' as const)
         : pathwayId === 'construction'
           ? ('construction' as const)
-          : null
+          : equipmentLook === 'logistics'
+            ? ('warehouse' as const)
+            : equipmentLook === 'construction'
+              ? ('construction' as const)
+              : null
+    function lookAt(pack: EquipmentLook) {
+      rememberEquipmentLook(pack)
+      setEquipmentLook(pack)
+    }
+    function backToCommunity() {
+      clearEquipmentLook()
+      setEquipmentLook(null)
+    }
     return (
       <Shell step={19} onBack={() => go(18)}>
         {equipmentPack === 'warehouse' ? (
@@ -2925,6 +2940,11 @@ export function StudentSequencePage() {
               Powered lift trucks are stay-clear awareness only — not operator certification. Soft-gates stay off for
               showcase — every video is open.
             </TeachNote>
+            {pathwayId === 'community' ? (
+              <button type="button" className="btn btn-ghost" onClick={backToCommunity}>
+                Back to Community Support
+              </button>
+            ) : null}
             <EquipmentVideoDrill
               pack="warehouse"
               onComplete={() =>
@@ -2953,6 +2973,11 @@ export function StudentSequencePage() {
               Powered machines are stay-clear awareness only — not operator certification. Soft-gates stay off for
               showcase — every video is open.
             </TeachNote>
+            {pathwayId === 'community' ? (
+              <button type="button" className="btn btn-ghost" onClick={backToCommunity}>
+                Back to Community Support
+              </button>
+            ) : null}
             <EquipmentVideoDrill
               pack="construction"
               onComplete={() =>
@@ -2975,36 +3000,14 @@ export function StudentSequencePage() {
             <p className="section-kicker">Equipment videos</p>
             <h2>Video section · Equipment</h2>
             <p className="lede">
-              Construction and Logistics each have fourteen machine lessons with practice questions —{' '}
-              <strong>Unit 8 · Video</strong>. Switch pathways to watch them, or continue this pathway to instructor
-              observation.
+              Community Support does not have machine videos. The 25 picture workbooks stay with the instructor.
+              Construction and Logistics each have fourteen machine lessons. Looking at them keeps you on Community
+              Support.
             </p>
             <div className="hero-actions">
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => {
-                  setActivePathway('construction')
-                  setPathwayId('construction')
-                  playFoley('whoosh')
-                }}
-              >
-                Open Video section · Construction
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary on-light"
-                onClick={() => {
-                  setActivePathway('logistics')
-                  setPathwayId('logistics')
-                  playFoley('whoosh')
-                }}
-              >
-                Open Video section · Logistics
-              </button>
-              <button
-                type="button"
-                className="btn btn-ghost"
                 onClick={() => {
                   recordSkillAttempt('equipment-videos', true, 15)
                   requestPracticeAdvance(() =>
@@ -3012,7 +3015,27 @@ export function StudentSequencePage() {
                   )
                 }}
               >
-                Stay on this pathway · Continue
+                Continue on Community Support
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary on-light"
+                onClick={() => {
+                  lookAt('construction')
+                  playFoley('whoosh')
+                }}
+              >
+                Look at Construction equipment
+              </button>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => {
+                  lookAt('logistics')
+                  playFoley('whoosh')
+                }}
+              >
+                Look at warehouse equipment
               </button>
             </div>
           </article>

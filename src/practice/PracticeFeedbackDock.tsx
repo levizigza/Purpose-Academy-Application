@@ -88,7 +88,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
   const instructorMode = isInstructorPracticeMode()
   const [open, setOpen] = useState(false)
   const [name, setName] = useState(() =>
-    instructorPath || instructorMode ? getInstructorPracticeName() : getPracticeName(),
+    instructorPath ? getInstructorPracticeName() : getPracticeName(),
   )
   const [draftName, setDraftName] = useState('')
   const [body, setBody] = useState('')
@@ -102,7 +102,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
 
   const liveJourneyStep = pathname === '/journey' ? currentJourneyStep() : 0
   const liveFeedbackKey =
-    instructorPath || instructorMode
+    instructorPath
       ? instructorPracticeFeedbackKey(getInstructorPracticeSession())
       : practiceFeedbackKey(pathname, liveJourneyStep || undefined)
   const journeyStep = liveJourneyStep
@@ -118,10 +118,10 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
   const needName = !name
   const blockForQuiz = quiz && !quizDone && !needName
   const feedbackKey = liveFeedbackKey
-  const practiceLabel = instructorPath || instructorMode ? 'Instructor Practice' : 'Student Practice'
+  const practiceLabel = instructorPath ? 'Instructor Practice' : 'Student Practice'
 
   useEffect(() => {
-    setName(instructorPath || isInstructorPracticeMode() ? getInstructorPracticeName() : getPracticeName())
+    setName(instructorPath ? getInstructorPracticeName() : getPracticeName())
     setBody('')
     setQuizDone(quizComplete)
     setQuizActive(false)
@@ -130,7 +130,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
         id: 'sys-1',
         role: 'bot',
         text: `You’re in ${
-          instructorPath || isInstructorPracticeMode() ? 'Instructor Practice' : 'Student Practice'
+          instructorPath ? 'Instructor Practice' : 'Student Practice'
         } on ${pageTitleFromPath(pathname)}. Tell me what to fix or improve — it becomes a change request. You’ll preview the fix here, then Approve or ask for another pass before it goes live.`,
       },
     ])
@@ -173,7 +173,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
     const onStep = () => setJourneyTick((n) => n + 1)
     const onStarted = () => {
       setName(
-        onInstructorPracticePath(window.location.pathname) || isInstructorPracticeMode()
+        onInstructorPracticePath(window.location.pathname)
           ? getInstructorPracticeName()
           : getPracticeName(),
       )
@@ -209,7 +209,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
     e.preventDefault()
     const chosen = draftName.trim()
     if (!chosen) return
-    if (instructorPath || instructorMode) {
+    if (instructorPath) {
       resumeOrEnterInstructorPractice(chosen)
     } else {
       setPracticeName(chosen)
@@ -232,7 +232,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
         body: note,
         kind: quiz ? 'quiz' : 'page',
       })
-      if (instructorPath || instructorMode) {
+      if (instructorPath) {
         markInstructorPracticeFeedbackAck(feedbackKey)
       } else {
         markPracticeFeedbackAck(feedbackKey)
@@ -328,7 +328,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
               <form className="stack" onSubmit={onName}>
                 <p className="practice-dock-prompt">Who is practising?</p>
                 <div className="practice-name-grid">
-                  {(instructorPath || instructorMode
+                  {(instructorPath
                     ? INSTRUCTOR_PRACTICE_REVIEWERS
                     : PRACTICE_REVIEWERS
                   ).map((r) => (
@@ -386,7 +386,7 @@ export function PracticeFeedbackDock({ quizComplete = false, forceShow = false }
 export function PracticeModeBanner() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const instructor = onInstructorPracticePath(pathname) || isInstructorPracticeMode()
+  const instructor = onInstructorPracticePath(pathname)
   const [name, setName] = useState(() =>
     instructor ? getInstructorPracticeName() : getPracticeName(),
   )
@@ -396,7 +396,7 @@ export function PracticeModeBanner() {
 
   useEffect(() => {
     const sync = () => {
-      const instr = onInstructorPracticePath(pathname) || isInstructorPracticeMode()
+      const instr = onInstructorPracticePath(pathname)
       setName(instr ? getInstructorPracticeName() : getPracticeName())
       setStudentActive(isPracticeMode())
       setInstructorActive(isInstructorPracticeMode())

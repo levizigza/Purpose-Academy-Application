@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import './instructorPathways.css'
 import { Link, useNavigate } from 'react-router-dom'
-import { useTeacherPracticeBase } from './teacherPracticePaths'
+import { StudentPathButton, useTeacherPracticeBase } from './teacherPracticePaths'
 import {
   INSTRUCTOR_STREAM_ORDER,
   instructorStream,
@@ -11,7 +11,16 @@ import {
   type StreamWeek,
 } from './instructorCurricula'
 import { papersForWeek } from './weekPapers'
-import { paperRole, papersByRole, splitDayMove, successCriteria, type PaperRole } from './lessonCycle'
+import {
+  hoursAside,
+  isTradeChoice,
+  paperRole,
+  papersByRole,
+  splitDayMove,
+  successCriteria,
+  teachBlocks,
+  type PaperRole,
+} from './lessonCycle'
 import {
   getInstructorPracticeName,
   getInstructorPracticePathway,
@@ -97,10 +106,13 @@ function nextOpenWeek(stream: InstructorStream): StreamWeek | undefined {
 
 /** Hour labels repeat. The lesson sentence is the name a person can follow. */
 function blockName(step: { label: string; text: string }, steps: { label: string }[]) {
-  const vague = /^\d+\s*hours?$/i.test(step.label.trim())
+  const label = step.label.trim()
+  const vague = /^\d+\s*hours?$/i.test(label)
+  const day = /^day\s+\d+$/i.test(label)
+  const stub = /^this week$/i.test(label)
   const duplicated = steps.filter((item) => item.label === step.label).length > 1
   const sentence = step.text.replace(/\s+/g, ' ').trim()
-  if ((vague || duplicated) && sentence) return sentence
+  if ((vague || day || stub || duplicated) && sentence) return sentence
   return step.label
 }
 
@@ -201,7 +213,7 @@ function docNote(doc: StreamDoc): string {
   if (title.includes('plan')) return 'Open this before you teach the week.'
   if (title.includes('workbook')) return 'The pages the learners complete.'
   if (title.includes('textbook')) return 'The reading for this month.'
-  if (title.includes('answer')) return 'Use this while you mark the work.'
+  if (title.includes('answer') || title.includes('marking')) return 'Use this while you mark the work.'
   if (title.includes('checklist')) return 'Watch these points while they practise.'
   if (/exam/.test(title)) return 'Use this at the end of the week.'
   return 'Opens the file for this part of the course.'
@@ -566,9 +578,7 @@ function StreamHub({
         <button type="button" className="btn btn-ghost" onClick={() => navigate('/')}>
           Done for now · Toolbox
         </button>
-        <Link className="btn btn-ghost" to="/journey">
-          See the student path
-        </Link>
+        <StudentPathButton pathway={stream.id} />
       </div>
     </div>
   )
@@ -604,9 +614,14 @@ function WeekWorkbench({
 }) {
   const navigate = useNavigate()
   const month = stream.months.find((item) => item.n === week.month)
-  const stepCount = Math.max(1, week.steps.length)
-  const stepIdx = getInstructorPracticeStep(stepCount)
-  const step = week.steps[stepIdx] || week.steps[0]
+  const blocks = teachBlocks(week.steps)
+  const hoursNote = hoursAside(week.steps)
+  const tradeChoice = isTradeChoice(week.steps)
+  const stepCount = Math.max(1, blocks.length)
+  const stepIdx = Math.min(getInstructorPracticeStep(stepCount), stepCount - 1)
+  const step = blocks[stepIdx] || blocks[0]
+  const aimOutcomes = week.outcomes.filter((outcome) => !/^Teach one selected pathway/i.test(outcome))
+  const pathwayCue = week.outcomes.find((outcome) => /^Teach one selected pathway/i.test(outcome))
   const moves = step ? splitDayMove(step.text) : null
   const cleared = isInstructorSessionCleared(stream.id, week.n)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
@@ -635,7 +650,7 @@ function WeekWorkbench({
 
   function advance() {
     void unlockFoley().then(() => playFoley('latch'))
-    if (stepIdx < week.steps.length - 1) {
+    if (!tradeChoice && stepIdx < blocks.length - 1) {
       setInstructorPracticeStep(stepIdx + 1)
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
@@ -650,9 +665,9 @@ function WeekWorkbench({
     goHub()
   }
 
-  const nextStep = week.steps[stepIdx + 1]
-  const hereName = step ? blockName(step, week.steps) : 'this block'
-  const nextName = nextStep ? blockName(nextStep, week.steps) : ''
+  const nextStep = tradeChoice ? undefined : blocks[stepIdx + 1]
+  const hereName = step ? blockName(step, blocks) : 'this block'
+  const nextName = nextStep ? blockName(nextStep, blocks) : ''
   const nextIsShort = nextName.length > 0 && nextName.length <= 28
   const continueLabel = nextStep ? (nextIsShort ? `Continue to ${nextName}` : 'Next block') : 'Clear this week'
 
@@ -671,12 +686,14 @@ function WeekWorkbench({
       </header>
 
       <Follow
-        step={nextStep ? 3 : 4}
-        title={nextStep ? 'Teach this block' : 'Clear this week'}
+        step={tradeChoice || nextStep ? 3 : 4}
+        title={tradeChoice ? 'Teach this trade' : nextStep ? 'Teach this block' : 'Clear this week'}
         detail={
-          nextStep
-            ? `${hereName.replace(/[.!?]+$/, '')}. The button moves you to ${nextIsShort ? nextName : 'the next block'}.`
-            : 'This is the last block. The button marks the week clear and returns you to the months.'
+          tradeChoice
+            ? `${hereName.replace(/[.!?]+$/, '')}. This group stays in one trade. The other two are here to read.`
+            : nextStep
+              ? `${hereName.replace(/[.!?]+$/, '')}. The button moves you to ${nextIsShort ? nextName : 'the next block'}.`
+              : 'This is the last block. The button marks the week clear and returns you to the months.'
         }
       />
       <Trail
@@ -687,7 +704,7 @@ function WeekWorkbench({
         ]}
       />
       <PathMap
-        current={stepIdx < week.steps.length - 1 ? 'block' : 'clear'}
+        current={tradeChoice || nextStep ? 'block' : 'clear'}
         onJump={{
           stream: () => setInstructorPracticeView('roots'),
           week: goHub,
@@ -697,21 +714,29 @@ function WeekWorkbench({
       <div className="tp-week-layout">
         <div className="tp-week-main">
           <ol className="tp-phase-rail" aria-label="Week blocks">
-            {week.steps.map((item, i) => (
-              <li key={`${item.label}-${i}`} className={i === stepIdx ? 'is-current' : i < stepIdx ? 'is-done' : ''}>
+            {blocks.map((item, i) => (
+              <li key={`${item.label}-${i}`} className={i === stepIdx ? 'is-current' : i < stepIdx && !tradeChoice ? 'is-done' : ''}>
                 <button
                   type="button"
-                  title={blockName(item, week.steps)}
-                  disabled={i > stepIdx && !cleared}
+                  title={blockName(item, blocks)}
+                  disabled={!tradeChoice && i > stepIdx && !cleared}
                   onClick={() => {
-                    if (i <= stepIdx || cleared) setInstructorPracticeStep(i)
+                    if (tradeChoice || i <= stepIdx || cleared) setInstructorPracticeStep(i)
                   }}
                 >
                   <span aria-hidden>{i + 1}</span>
-                  <strong>{blockName(item, week.steps)}</strong>
+                  <strong>{blockName(item, blocks)}</strong>
                   <em>
-                    {item.label !== blockName(item, week.steps) ? `${item.label} · ` : ''}
-                    {i === stepIdx ? 'You are here' : i < stepIdx ? 'Done' : 'Later'}
+                    {item.label !== blockName(item, blocks) ? `${item.label} · ` : ''}
+                    {tradeChoice
+                      ? i === stepIdx
+                        ? 'This trade'
+                        : 'Read this trade'
+                      : i === stepIdx
+                        ? 'You are here'
+                        : i < stepIdx
+                          ? 'Done'
+                          : 'Later'}
                   </em>
                 </button>
               </li>
@@ -740,11 +765,15 @@ function WeekWorkbench({
                   ) : null}
                 </div>
               ) : (
-                <p className="tp-note">
-                  Model it first. Practise it with the group. Keep one piece of work before you leave this block.
-                </p>
+                <>
+                  {step.text.replace(/\s+/g, ' ').trim() !== hereName ? <p>{step.text}</p> : null}
+                  <p className="tp-note">
+                    Model it first. Practise it with the group. Keep one piece of work before you leave this block.
+                  </p>
+                </>
               )}
-              <NavCueTarget cueId={cueId} arrowLabel={stepIdx < week.steps.length - 1 ? 'Next block' : 'Clear this week'} arrowSide="above">
+              {hoursNote ? <p className="tp-note">Suggested hours: {hoursNote.text}</p> : null}
+              <NavCueTarget cueId={cueId} arrowLabel={nextStep ? 'Next block' : 'Clear this week'} arrowSide="above">
                 <NavGlowWrap cueId={cueId}>
                   <button type="button" className="btn btn-primary" onClick={advance}>
                     {continueLabel}
@@ -758,9 +787,10 @@ function WeekWorkbench({
             <section className="panel tp-card tp-shelf">
               <p className="tp-kicker">Aim for the week</p>
               <h2>What they will be able to do</h2>
-              {week.outcomes.length > 0 ? (
+              {pathwayCue ? <p className="tp-note">{pathwayCue}</p> : null}
+              {aimOutcomes.length > 0 ? (
                 <ul className="tp-criteria">
-                  {week.outcomes.map((outcome) => (
+                  {aimOutcomes.map((outcome) => (
                     <li key={outcome}>{outcome}</li>
                   ))}
                 </ul>
@@ -836,9 +866,7 @@ function WeekWorkbench({
         <button type="button" className="btn btn-ghost" onClick={() => navigate('/')}>
           Done for now · Toolbox
         </button>
-        <Link className="btn btn-ghost" to="/journey">
-          See the student path
-        </Link>
+        <StudentPathButton pathway={stream.id} />
       </div>
     </div>
   )

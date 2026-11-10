@@ -9,7 +9,7 @@ import {
   workbookSetLabel,
   type WorkbookCategory,
 } from './communityWorkbooks'
-import { useTeacherPracticeBase } from './teacherPracticePaths'
+import { StudentPathButton, useTeacherPracticeBase } from './teacherPracticePaths'
 import { InstructorFilmGate } from './InstructorFilm'
 import './instructorPathways.css'
 
@@ -94,9 +94,7 @@ export function CommunityWorkbooksPage() {
           <Link className="btn btn-primary" to={base}>
             Back to Instructor Practice
           </Link>
-          <Link className="btn btn-ghost" to="/journey">
-            See the student path
-          </Link>
+          <StudentPathButton pathway="community" />
         </div>
       </header>
 
