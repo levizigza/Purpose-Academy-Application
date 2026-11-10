@@ -125,6 +125,9 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
     '--phone-screen-radius': `${Math.max(28, device.radius - device.inset)}px`,
   } as CSSProperties
 
+  const onInstructor =
+    isInstructorPracticeMode() || location.pathname.startsWith('/teacher-practice')
+
   const backLabel =
     phase === 'app' ? '← Toolbox' : phase === 'home' ? '← Modes' : phase === 'splash' ? '← Home' : '← Opening'
 
@@ -135,7 +138,9 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
         ? 'Opening animation'
         : phase === 'toolbox'
           ? 'Toolbox'
-          : 'Learner app'
+          : onInstructor
+            ? 'Instructor practice'
+            : 'Learner app'
 
   return (
     <div className="phone-stage">
@@ -156,7 +161,7 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
               type="button"
               className="phone-stage-link"
               onClick={() => {
-                if (isInstructorPracticeMode() || location.pathname.startsWith('/teacher-practice')) {
+                if (onInstructor) {
                   restartInstructorPracticeFromTop()
                   navigate('/teacher-practice', { replace: true })
                 } else {
@@ -166,9 +171,7 @@ export function PhoneEmulatorShell({ children }: { children: ReactNode }) {
                 scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
               }}
             >
-              {isInstructorPracticeMode() || location.pathname.startsWith('/teacher-practice')
-                ? 'Restart instructor path'
-                : 'Restart path'}
+              {onInstructor ? 'Restart instructor path' : 'Restart path'}
             </button>
           )}
           <button type="button" className="phone-stage-link" onClick={exitToModes}>

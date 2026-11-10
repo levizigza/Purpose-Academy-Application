@@ -18626,3 +18626,57 @@ header.toolbox-layout-bar .brand-lockup-full .brand-logo {
   border-radius: 10px !important;
   padding: 0.15rem 0.35rem !important;
 }
+
+/* Workbook library sits on the night workshop on desktop and on paper inside the phone. */
+.wb-page {
+  container-type: inline-size;
+  container-name: workbooks;
+}
+
+.shell.is-train:not(.is-phone-app) .wb-page-head .lede,
+.shell.is-train:not(.is-phone-app) .wb-draft-note,
+.shell.is-train:not(.is-phone-app) .wb-search {
+  color: #e7eef6;
+}
+
+.shell.is-train .wb-use-row,
+.shell.is-train .wb-viewer,
+.shell.is-train .wb-source,
+.shell.is-train .wb-empty {
+  color: #10233f;
+}
+
+.shell.is-train .wb-viewer h2,
+.shell.is-train .wb-viewer .section-kicker,
+.shell.is-train .wb-source p,
+.shell.is-train .wb-empty h3,
+.shell.is-train .wb-empty p,
+.shell.is-train .wb-use-row p,
+.shell.is-train .wb-use-row strong {
+  color: #10233f;
+}
+
+.shell.is-train .wb-viewer .section-kicker {
+  color: #7a4e0d;
+}
+
+@container workbooks (max-width: 680px) {
+  .wb-page-head,
+  .wb-library-head,
+  .wb-viewer-head,
+  .wb-viewer-tools,
+  .wb-pager {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wb-use-row,
+  .wb-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wb-pager .btn,
+  .wb-viewer-actions .btn {
+    width: 100%;
+  }
+}

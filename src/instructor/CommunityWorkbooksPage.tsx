@@ -88,11 +88,11 @@ export function CommunityWorkbooksPage() {
           </p>
         </div>
         <div className="wb-page-actions">
-          <Link className="btn btn-ghost" to={base}>
-            Instructor Practice
+          <Link className="btn btn-primary" to={base}>
+            Back to Instructor Practice
           </Link>
-          <Link className="btn btn-primary" to="/journey">
-            Student Practice
+          <Link className="btn btn-ghost" to="/journey">
+            See the student path
           </Link>
         </div>
       </header>

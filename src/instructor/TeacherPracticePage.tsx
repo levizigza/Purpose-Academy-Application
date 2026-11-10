@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import './instructorPathways.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTeacherPracticeBase } from './teacherPracticePaths'
@@ -422,13 +422,10 @@ function StreamHub({
             All streams
           </button>
           {stream.id === 'community' ? (
-            <Link className="btn btn-primary" to={`${base}/workbooks`}>
-              Open 25 picture workbooks
+            <Link className="btn btn-secondary" to={`${base}/workbooks`}>
+              Picture workbooks
             </Link>
           ) : null}
-          <Link className="btn btn-ghost" to="/journey">
-            Student Practice
-          </Link>
           <button
             type="button"
             className="btn btn-ghost"
@@ -447,7 +444,7 @@ function StreamHub({
         title={upcoming ? `Open week ${upcoming.n}` : 'Every week is clear'}
         detail={
           upcoming
-            ? `${upcoming.title}. This opens the aim, then the days in order, then only this week’s papers.`
+            ? `${upcoming.title}. This opens the block you teach, then the aim, then this week’s papers.`
             : 'Open any week below if you want to teach it again. The papers stay with that week.'
         }
       />
@@ -458,7 +455,6 @@ function StreamHub({
         ]}
       />
       <PathMap current="week" onJump={{ stream: () => setInstructorPracticeView('roots') }} />
-      <TeachingCycle />
 
       {upcoming ? (
         <NavCueTarget cueId={NAV_CUE.instructorWeek(stream.id, upcoming.n)} arrowLabel="Teach this week" arrowSide="above">
@@ -548,6 +544,10 @@ function StreamHub({
         </div>
 
         <aside className="tp-side" aria-label="Faculty papers">
+          <p className="tp-side-lead">
+            How you teach a week, once it is open. The rooms above are how you move. This list is how you teach.
+          </p>
+          <TeachingCycle />
           <p className="tp-side-lead">These papers cover the whole stream. Open a week when you need that week’s own plan and examination.</p>
           <DocShelf kicker="Find the papers" title="Documents" docs={shelves.teach} empty="No teaching papers are linked for this stream." />
           <DocShelf kicker="Mark the week" title="Reviews" docs={shelves.review} empty="No marking papers are linked for this stream." />
@@ -565,6 +565,9 @@ function StreamHub({
         <button type="button" className="btn btn-ghost" onClick={() => navigate('/')}>
           Done for now · Toolbox
         </button>
+        <Link className="btn btn-ghost" to="/journey">
+          See the student path
+        </Link>
       </div>
     </div>
   )
@@ -578,9 +581,11 @@ function CyclePapers({ docs }: { docs: StreamDoc[] }) {
     { kicker: 'While they work', title: 'Evidence', docs: grouped.evidence, empty: 'No checklist or marking guide is filed for this part.' },
     { kicker: 'At the end of the week', title: 'Examination', docs: grouped.exam, empty: 'No examination is filed for this part.' },
   ]
+  const filled = groups.filter((group) => group.docs.length > 0)
+  if (filled.length === 0) return null
   return (
     <div className="tp-paper-stack">
-      {groups.map((group) => (
+      {filled.map((group) => (
         <DocShelf key={group.title} kicker={group.kicker} title={group.title} docs={group.docs} empty={group.empty} />
       ))}
     </div>
@@ -604,6 +609,7 @@ function WeekWorkbench({
   const moves = step ? splitDayMove(step.text) : null
   const cleared = isInstructorSessionCleared(stream.id, week.n)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
+  const feedbackRef = useRef<HTMLDivElement>(null)
   const shelves = splitDocs(stream.docs)
   const specificPapers = papersForWeek(stream.id, week.n)
   const cueId = NAV_CUE.instructorBlock(stream.id, week.n)
@@ -618,6 +624,9 @@ function WeekWorkbench({
     const key = instructorPracticeFeedbackKey(week.n, stream.id)
     if (practice && shouldAskInstructorPracticeFeedback(week.n) && !hasInstructorPracticeFeedbackAck(key)) {
       setFeedbackPrompt(true)
+      window.setTimeout(() => {
+        feedbackRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 40)
       return
     }
     goHub()
@@ -643,7 +652,8 @@ function WeekWorkbench({
   const nextStep = week.steps[stepIdx + 1]
   const hereName = step ? blockName(step, week.steps) : 'this block'
   const nextName = nextStep ? blockName(nextStep, week.steps) : ''
-  const continueLabel = nextStep ? `Continue to ${nextName}` : 'Clear this week'
+  const nextIsShort = nextName.length > 0 && nextName.length <= 28
+  const continueLabel = nextStep ? (nextIsShort ? `Continue to ${nextName}` : 'Next block') : 'Clear this week'
 
   return (
     <div className="tp-workbench stack">
@@ -661,10 +671,12 @@ function WeekWorkbench({
 
       <Follow
         step={nextStep ? 3 : 4}
-        title={nextStep ? hereName : 'Clear this week'}
+        title={nextStep ? 'Teach this block' : 'Clear this week'}
         detail={
           nextStep
-            ? `This is the block marked You are here. The button moves you to ${nextName}.`
+            ? nextIsShort
+              ? `${hereName}. The button moves you to ${nextName}.`
+              : `${hereName}. The button moves you to the next block.`
             : 'This is the last block. The button marks the week clear and returns you to the months.'
         }
       />
@@ -690,6 +702,7 @@ function WeekWorkbench({
               <li key={`${item.label}-${i}`} className={i === stepIdx ? 'is-current' : i < stepIdx ? 'is-done' : ''}>
                 <button
                   type="button"
+                  title={blockName(item, week.steps)}
                   disabled={i > stepIdx && !cleared}
                   onClick={() => {
                     if (i <= stepIdx || cleared) setInstructorPracticeStep(i)
@@ -775,7 +788,11 @@ function WeekWorkbench({
         </div>
 
         <aside className="tp-side" aria-label="This week's papers">
-          <p className="tp-side-lead">This week’s papers. Plan, then teach, then the checklist, then the examination.</p>
+          <p className="tp-side-lead">
+            {specificPapers.length > 0
+              ? 'This week’s papers. Plan, then teach, then the checklist, then the examination.'
+              : 'This faculty keeps one binder for the stream. These are not a separate file for this week.'}
+          </p>
           <CyclePapers docs={specificPapers.length > 0 ? specificPapers : stream.docs} />
           {specificPapers.length > 0 ? (
             <details className="tp-all-papers">
@@ -792,16 +809,16 @@ function WeekWorkbench({
             </button>
           ) : null}
           <p className="tp-side-lead">{stream.studentPath}</p>
-          <Link className="btn btn-ghost" to="/journey">
-            Open Student Practice
-          </Link>
         </aside>
       </div>
 
       {feedbackPrompt && (
-        <div className="tp-feedback-prompt panel tp-card" role="dialog" aria-modal="true">
-          <h3>This month is finished</h3>
-          <p>Open the feedback chat if a week in this month needs a review. Or return to the months without a note.</p>
+        <div className="tp-feedback-prompt panel tp-card" role="dialog" aria-modal="true" ref={feedbackRef}>
+          <h3>Month {week.month} is finished</h3>
+          <p>
+            Week {week.n} was the last week of this month. Open the feedback chat if something in the month needs a
+            review, or return to the months without a note.
+          </p>
           <div className="hero-actions">
             <button type="button" className="btn btn-primary" onClick={() => ackFeedback(true)}>
               Open feedback chat
@@ -820,6 +837,9 @@ function WeekWorkbench({
         <button type="button" className="btn btn-ghost" onClick={() => navigate('/')}>
           Done for now · Toolbox
         </button>
+        <Link className="btn btn-ghost" to="/journey">
+          See the student path
+        </Link>
       </div>
     </div>
   )

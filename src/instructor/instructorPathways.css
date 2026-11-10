@@ -639,6 +639,13 @@
   background: #e7edf4;
 }
 
+.tp-phase-rail button strong {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .tp-phase-rail button em {
   font-style: normal;
   color: #24384d;
@@ -706,8 +713,15 @@
 
 .tp-page .nav-arrow,
 .tp-workbench .nav-arrow {
-  color: #7a4e0d;
+  color: #f0d48a;
   text-shadow: none;
+}
+
+.tp-card .nav-arrow,
+.tp-follow .nav-arrow,
+.is-phone-app .tp-page .nav-arrow,
+.is-phone-app .tp-workbench .nav-arrow {
+  color: #7a4e0d;
 }
 
 @container instructor (max-width: 680px) {
@@ -791,4 +805,32 @@
   .tp-month-toggle em {
     grid-column: 2;
   }
+}
+
+.tp-side .tp-cycle {
+  grid-template-columns: 1fr;
+}
+
+/* The phone frame is paper. Night type from the desktop workshop would vanish on it. */
+.is-phone-app .tp-page,
+.is-phone-app .tp-workbench,
+.is-phone-app .shell.is-train .tp-page,
+.is-phone-app .shell.is-train .tp-workbench {
+  color: #10233f;
+}
+
+.is-phone-app .tp-head h1,
+.is-phone-app .tp-workbench > .tp-head h1,
+.is-phone-app .tp-head .lede,
+.is-phone-app .tp-credit.on-dark,
+.is-phone-app .tp-side-lead,
+.is-phone-app .tp-kicker.on-dark,
+.is-phone-app .tp-trail button,
+.is-phone-app .tp-trail strong,
+.is-phone-app .tp-trail-sep {
+  color: #10233f;
+}
+
+.is-phone-app .tp-kicker.on-dark::after {
+  background: #7a4e0d;
 }
