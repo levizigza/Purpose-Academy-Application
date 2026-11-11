@@ -14,7 +14,7 @@ import {
   choiceOrderKey,
   shuffleChoicesFresh,
 } from './vocabDistractors'
-import type { HearLanguage } from './hearLanguages'
+import { findHearLanguage, type HearLanguage } from './hearLanguages'
 import type { UniversalBridge, UniversalHearStatus } from './universalHear'
 import { UniversalHearControl } from './UniversalHearControl'
 
@@ -289,13 +289,39 @@ export function VocabSheetCard({
     return 'Look at the picture. Press a language you know — English included, or More languages. Pick and type it.'
   })()
 
-  const langsToShow = allowSkipKnown
-    ? (['English'] as SupportLang[])
-    : productionPhase && connectedLang
-      ? [connectedLang]
-      : productionPhase
-        ? []
-        : VOCAB_HEAR_LANGS
+  /* Keep every language chip on the card, including after the bridge and on a retake,
+     so the learner can come back and hear just the word in that language. */
+  const langsToShow = VOCAB_HEAR_LANGS
+
+  const languageWord = connectedLang && connectedLang !== 'English'
+    ? { label: connectedLang, word: vocabHearWord(term, connectedLang), play: () => onConnectLang(connectedLang) }
+    : universalBridge
+      ? {
+          label: universalBridge.name,
+          word: universalBridge.translated,
+          play: () => {
+            onUniversalHear(
+              findHearLanguage(universalBridge.code) ?? {
+                code: universalBridge.code,
+                bcp47: universalBridge.code,
+                name: universalBridge.name,
+              },
+            )
+          },
+        }
+      : null
+  const languageReplay = languageWord && (heardEnglish || typedEnglish) ? (
+    <button
+      type="button"
+      className="btn btn-ghost vocab-sheet-type-replay"
+      disabled={speaking || universalBusy}
+      onClick={languageWord.play}
+      aria-label={`Hear ${languageWord.word} in ${languageWord.label}`}
+    >
+      <SpeakerIconSmall />
+      Hear {languageWord.word} in {languageWord.label}
+    </button>
+  ) : null
 
   const typeForm = typingPhase ? (
     <form className="vocab-sheet-type" data-coach="vv-type" onSubmit={checkType}>
@@ -357,6 +383,7 @@ export function VocabSheetCard({
         </button>
       </div>
       <div className="vocab-sheet-type-tools">
+        {languageReplay}
         <button
           type="button"
           className="btn btn-ghost vocab-sheet-type-replay"
@@ -546,10 +573,10 @@ export function VocabSheetCard({
 
         {(() => {
           const showLangCue = !productionPhase && langsToShow.length > 0
-          const universal = !typedEnglish && !allowSkipKnown ? (
+          const universal = (
             <UniversalHearControl
               english={term.english}
-              disabled={alreadyKnown || (productionPhase && !universalBridge)}
+              disabled={speaking}
               bridge={universalBridge}
               busy={universalBusy || speaking}
               status={universalStatus}
@@ -560,7 +587,7 @@ export function VocabSheetCard({
               }}
               onCloseStatus={onClearUniversalStatus}
             />
-          ) : null
+          )
           const langList = (
             <ul
               className={`vocab-sheet-langs${productionPhase ? ' is-collapsed' : ''}`}
@@ -576,7 +603,7 @@ export function VocabSheetCard({
                     <button
                       type="button"
                       className={`vocab-sheet-lang-btn${selected ? ' is-selected' : ''}${enBridge ? ' is-en-hear' : ''}`}
-                      disabled={speaking || alreadyKnown || productionPhase}
+                      disabled={speaking}
                       onClick={() => {
                         markNavCueSeen(NAV_CUE.vocabLang)
                         if (coachFirst) advanceStationCoach('workplace-words')
@@ -584,9 +611,11 @@ export function VocabSheetCard({
                       }}
                       aria-pressed={selected}
                       aria-label={
-                        enBridge
-                          ? `Hear ${hearWord} in English, then pick and type it`
-                          : `Hear ${hearWord} in ${lang}, then hear, pick, and type English`
+                        heardEnglish || typedEnglish
+                          ? `Hear ${hearWord} in ${lang}`
+                          : enBridge
+                            ? `Hear ${hearWord} in English, then pick and type it`
+                            : `Hear ${hearWord} in ${lang}, then hear, pick, and type English`
                       }
                     >
                       <span className="vocab-sheet-flag" aria-hidden>
@@ -598,7 +627,7 @@ export function VocabSheetCard({
                       </span>
                       {selected && (
                         <span className="vocab-sheet-lang-link">
-                          {typedEnglish ? `→ ${term.english}` : speaking ? '→ …' : '→ pick · type'}
+                          {typedEnglish ? `→ ${term.english}` : speaking ? '→ …' : heardEnglish ? '→ hear again' : '→ pick · type'}
                         </span>
                       )}
                     </button>
@@ -638,6 +667,9 @@ export function VocabSheetCard({
           Yes — <strong>{term.english}</strong>.
         </p>
       )}
+      {typedEnglish && languageReplay ? (
+        <div className="vocab-sheet-type-tools">{languageReplay}</div>
+      ) : null}
 
       {typedEnglish && (
         <>

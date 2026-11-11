@@ -1519,23 +1519,30 @@ export function StudentSequencePage() {
   }
 
   async function connectVocabLang(term: (typeof VOCAB_UNIT)[number], lang: SupportLang) {
+    /* After the first bridge, a language tap hears only that word — not English again. */
+    const wordOnly = !!vocabHeard[term.id] && lang !== 'English'
     setVocabConnected((c) => ({ ...c, [term.id]: lang }))
-    setVocabUniversal((u) => {
-      if (!u[term.id]) return u
-      const next = { ...u }
-      delete next[term.id]
-      return next
-    })
-    setVocabUniversalStatus({ kind: 'idle' })
+    if (!wordOnly) {
+      setVocabUniversal((u) => {
+        if (!u[term.id]) return u
+        const next = { ...u }
+        delete next[term.id]
+        return next
+      })
+      setVocabUniversalStatus({ kind: 'idle' })
+    }
     setVocabSpeakingId(term.id)
     stopSpeech()
     /*
      * EN chip: play English once and unlock pick+type (no redundant second Hear English).
-     * Mother-tongue chips: gloss first, then English — same bridge as before.
+     * First mother-tongue press: gloss, then English.
+     * Any later press: the word in that language only, so they can go back to it.
      */
     let heard: boolean
     if (lang === 'English') {
       heard = await speakEnglish(term.english)
+    } else if (wordOnly) {
+      heard = await speakSupport(term.gloss[lang], lang)
     } else {
       await speakSupport(term.gloss[lang], lang)
       await new Promise((r) => setTimeout(r, 220))
@@ -1559,10 +1566,29 @@ export function StudentSequencePage() {
     term: (typeof VOCAB_UNIT)[number],
     lang: HearLanguage,
   ) {
+    const alreadyHeard = !!vocabHeard[term.id]
+    const cached = vocabUniversal[term.id]
     setVocabUniversalBusyId(term.id)
     setVocabSpeakingId(term.id)
-    setVocabUniversalStatus({ kind: 'loading', phase: 'translate' })
     stopSpeech()
+
+    /* Same language again, after the bridge: speak the word only. */
+    if (alreadyHeard && cached && cached.code === lang.code) {
+      setVocabUniversalStatus({ kind: 'loading', phase: 'speak' })
+      const spoken = await speakLangCode(cached.translated, lang.code, lang.bcp47)
+      setVocabUniversalStatus({
+        kind: 'ready',
+        translated: cached.translated,
+        lang,
+        source: cached.source,
+        spoken,
+      })
+      setVocabSpeakingId(null)
+      setVocabUniversalBusyId(null)
+      return
+    }
+
+    setVocabUniversalStatus({ kind: 'loading', phase: 'translate' })
 
     if (lang.code === 'en' || lang.bcp47.toLowerCase().startsWith('en')) {
       setVocabConnected((c) => ({ ...c, [term.id]: 'English' }))
@@ -1601,8 +1627,11 @@ export function StudentSequencePage() {
         delete next[term.id]
         return next
       })
-      await new Promise((r) => setTimeout(r, 220))
-      const heardEn = await speakEnglish(term.english)
+      let heardEn = false
+      if (!alreadyHeard) {
+        await new Promise((r) => setTimeout(r, 220))
+        heardEn = await speakEnglish(term.english)
+      }
       setVocabHeard((h) => ({ ...h, [term.id]: true }))
       setVocabUniversalStatus({
         kind: 'ready',
