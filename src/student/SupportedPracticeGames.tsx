@@ -297,11 +297,23 @@ function CopycatBoard({
 
   useEffect(() => {
     if (!target || watched) return
-    /* Model once after a short beat so the eye lands on the photo, then unlock chips. */
+    /* Model once after a short beat so the eye lands on the photo, then unlock chips.
+       A slow or missing voice must not freeze the round — chips open when the
+       sentence ends, or after a short ceiling if the voice is still working. */
+    let cancelled = false
+    const unlock = window.setTimeout(() => {
+      if (!cancelled) setWatched(true)
+    }, 8000)
     const t = window.setTimeout(() => {
-      void speakEnglish(target.sentence).finally(() => setWatched(true))
+      void speakEnglish(target.sentence).finally(() => {
+        if (!cancelled) setWatched(true)
+      })
     }, 500)
-    return () => window.clearTimeout(t)
+    return () => {
+      cancelled = true
+      window.clearTimeout(t)
+      window.clearTimeout(unlock)
+    }
   }, [target, watched, deal])
 
   function tapChip(word: string, index: number) {

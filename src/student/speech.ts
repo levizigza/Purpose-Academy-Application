@@ -181,7 +181,7 @@ async function speakNeural(text: string, langCode: string): Promise<boolean> {
   if (!url) {
     const endpoint = `${base}/api/enrich/tts?lang=${encodeURIComponent(langCode)}&text=${encodeURIComponent(clean)}`
     try {
-      const res = await fetch(endpoint, { signal: AbortSignal.timeout(12000) })
+      const res = await fetch(endpoint, { signal: AbortSignal.timeout(4500) })
       if (!res.ok) return false
       const blob = await res.blob()
       if (!blob.size) return false

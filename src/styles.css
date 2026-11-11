@@ -15221,12 +15221,12 @@ html.pa-phone-shell .practice-chat.is-open .practice-chat-panel {
 }
 
 .is-phone-app .train-shell.is-sentence-structure .sentence-cloze-photo {
-  max-height: 9.5rem;
-  margin: 0.25rem 0 0.35rem !important;
+  max-height: 4.25rem;
+  margin: 0.15rem 0 0.2rem !important;
 }
 
 .is-phone-app .train-shell.is-sentence-structure .sentence-cloze-photo img {
-  max-height: 9.5rem !important;
+  max-height: 4.25rem !important;
   object-fit: contain !important;
 }
 
