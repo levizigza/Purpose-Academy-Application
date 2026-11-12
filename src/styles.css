@@ -17136,6 +17136,9 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
 .is-phone-app .supported-sent-btn {
   color: #041526;
 }
+.is-phone-app .supported-games-title {
+  display: none;
+}
 .is-phone-app .supported-games-help {
   color: #3d526a;
 }
@@ -17504,7 +17507,36 @@ html.pa-course-shell .instruction-l1-text.is-loading,
   font-size: 0.82rem;
 }
 .is-phone-app .supported-photo-el {
-  height: 8rem;
+  height: 3.4rem;
+}
+.is-phone-app .supported-video-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+.is-phone-app .supported-video-btn {
+  min-height: 0;
+}
+.is-phone-app .supported-station-note,
+.is-phone-app .supported-games-help,
+.is-phone-app .supported-games .play-nearby-objective {
+  display: none;
+}
+.is-phone-app .supported-prompt-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.is-phone-app .supported-prompt-sentence {
+  font-size: 0.88rem;
+  line-height: 1.2;
+}
+.is-phone-app .supported-kind-clear .train-choice {
+  padding: 0.4rem 0.55rem;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+.is-phone-app .supported-kind-clear .train-choice-grid {
+  gap: 0.28rem;
 }
 .is-phone-app .supported-copycat-photo {
   height: 190px;

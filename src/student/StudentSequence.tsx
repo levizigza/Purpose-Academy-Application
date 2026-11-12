@@ -78,6 +78,7 @@ import { FamiliarTheater } from './FamiliarTheater'
 import { PlayClearPulse, SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { SentenceClozeDrill } from './SentenceClozeDrill'
 import { SupportedPracticeGames, type SupportedStationId } from './SupportedPracticeGames'
+import { CommunityVocabGames, type CommunityVocabGameId } from './CommunityVocabGames'
 import { supportedPracticeDeck } from '../pathways/packs/supportedPracticeDeck'
 import { pickOrganizeTerms, VocabOrganizeQuiz } from './VocabOrganizeQuiz'
 import { VocabSheet } from './VocabSheet'
@@ -246,7 +247,7 @@ function LearnCard({ title, body, mark }: { title: string; body: string; mark?: 
 
 /* ─── Step shell — SiteWise-inspired training chrome ─── */
 
-function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, bilingual = false, onOpenHub, onJumpLesson, explainerStationId = null }: {
+function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, bilingual = false, onOpenHub, onJumpLesson, explainerStationId = null, titleOverride, helpOverride }: {
   step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
   transitioning?: boolean; transitionMsg?: string; supportLang?: SupportLang
   /** Chosen language beside English for this step. Later steps stay English. */
@@ -255,14 +256,16 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   onJumpLesson?: (n: number) => void
   /** When step 9 is in Word→Action phase, force that explainer. */
   explainerStationId?: string | null
+  titleOverride?: string
+  helpOverride?: string
 }) {
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
   /* Step 3 is the language picker — stay in English, no Hear buttons yet. */
   const motherTongue = Boolean(bilingual && supportLang && step >= 4 && step <= 5)
   const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 14] : null
-  const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
-  const help = shellCopy ? assessT(shellCopy.help, supportLang!) : base.help
+  const title = titleOverride || (shellCopy ? assessT(shellCopy.title, supportLang!) : base.title)
+  const help = helpOverride || (shellCopy ? assessT(shellCopy.help, supportLang!) : base.help)
   const purpose = shellCopy ? assessT(shellCopy.purpose, supportLang!) : base.purpose
   const unit = unitForStep(step)
   const pct = Math.round((step / JOURNEY_STEP_COUNT) * 100)
@@ -480,7 +483,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         <p className="train-simple-line">{help}</p>
         {step !== 3 && base.help ? (
           <InstructionHearChip
-            english={base.help}
+            english={help}
             auto={false}
             bilingual={bilingual}
             autoKey={`shell-help-${step}`}
@@ -872,6 +875,7 @@ export function StudentSequencePage() {
       return 'video-match'
     }
   })
+  const [communityGame, setCommunityGame] = useState<CommunityVocabGameId | null>(null)
   const [organizeTerms, setOrganizeTerms] = useState<VocabTerm[]>([])
   const [sentenceLevel1, setSentenceLevel1] = useState(false)
   const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
@@ -1060,6 +1064,7 @@ export function StudentSequencePage() {
     setActionAnswer(null)
     setActionCorrect(false)
     setSpStation('video-match')
+    setCommunityGame(null)
     try {
       localStorage.setItem('pa-sp-station-v1', 'video-match')
     } catch {
@@ -1147,6 +1152,7 @@ export function StudentSequencePage() {
     if (target === 10 || target === 11) {
       const station: SupportedStationId = target === 11 ? 'copycat' : 'video-match'
       setSpStation(station)
+      setCommunityGame(null)
       try {
         localStorage.setItem('pa-sp-station-v1', station)
       } catch {
@@ -1267,6 +1273,8 @@ export function StudentSequencePage() {
 
   function Shell(props: {
     step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
+    titleOverride?: string
+    helpOverride?: string
   }) {
     const bilingual =
       props.step === 4 || props.step === 5
@@ -2328,6 +2336,63 @@ export function StudentSequencePage() {
     )
   }
 
+  /* Community vocab games sit beside Picture Match and Copycat. Same step numbers. */
+  if ((step === 10 || step === 11) && pathwayId === 'community' && communityGame) {
+    return (
+      <Shell
+        step={step}
+        titleOverride={communityGame === 'what-helps' ? 'What helps' : 'Kind and clear'}
+        helpOverride={
+          communityGame === 'what-helps'
+            ? 'The sentence names a need. Tap the item that helps.'
+            : 'Tap the line that asks first and keeps privacy.'
+        }
+        onBack={() => {
+          if (communityGame === 'kind-clear') {
+            setCommunityGame('what-helps')
+            return
+          }
+          setCommunityGame(null)
+        }}
+      >
+        <CommunityVocabGames
+          game={communityGame}
+          onOpen={(next) => {
+            if (next === 'video-match') {
+              setCommunityGame(null)
+              go(10, 'Opening Picture Match…')
+              return
+            }
+            if (next === 'copycat') {
+              setCommunityGame(null)
+              go(11, 'Opening Copycat…')
+              return
+            }
+            setCommunityGame(next)
+          }}
+          onComplete={() => {
+            if (communityGame === 'what-helps') {
+              setCommunityGame('kind-clear')
+              return
+            }
+            setCommunityGame(null)
+            requestPracticeAdvance(() => go(12, 'Opening workplace instructions…'))
+          }}
+        />
+        <StationContext>
+          <WhyWork>
+            {communityGame === 'what-helps'
+              ? 'The sentence names a need. Tap the support item that helps.'
+              : 'Two lines. Tap the one that asks first and keeps the talk private.'}
+          </WhyWork>
+          <TeachNote>
+            Community Support practice beside Picture Match and Copycat. A miss shows the calm line, then you try again.
+          </TeachNote>
+        </StationContext>
+      </Shell>
+    )
+  }
+
   /* Step 10: Picture Match — own dropdown station */
   if (step === 10) {
     return (
@@ -2335,12 +2400,17 @@ export function StudentSequencePage() {
         <SupportedPracticeGames
           items={supportedPracticeDeck(pathwayId)}
           station="video-match"
+          communityTabs={pathwayId === 'community'}
           onStationChange={(next) => {
             setSpStation(next)
             try {
               localStorage.setItem('pa-sp-station-v1', next)
             } catch {
               /* ignore */
+            }
+            if (next === 'what-helps' || next === 'kind-clear') {
+              setCommunityGame(next)
+              return
             }
             if (next === 'copycat') go(11, 'Opening Copycat…')
           }}
@@ -2366,6 +2436,10 @@ export function StudentSequencePage() {
         <SupportedPracticeGames
           items={supportedPracticeDeck(pathwayId)}
           station="copycat"
+          communityTabs={pathwayId === 'community'}
+          continueLabel={
+            pathwayId === 'community' ? 'Continue to What helps' : 'Continue to workplace instructions'
+          }
           onStationChange={(next) => {
             setSpStation(next)
             try {
@@ -2373,11 +2447,19 @@ export function StudentSequencePage() {
             } catch {
               /* ignore */
             }
+            if (next === 'what-helps' || next === 'kind-clear') {
+              setCommunityGame(next)
+              return
+            }
             if (next === 'video-match') go(10, 'Opening Picture Match…')
           }}
-          onComplete={() =>
+          onComplete={() => {
+            if (pathwayId === 'community') {
+              setCommunityGame('what-helps')
+              return
+            }
             requestPracticeAdvance(() => go(12, 'Opening workplace instructions…'))
-          }
+          }}
         />
         <StationContext>
           <WhyWork>
@@ -3025,27 +3107,30 @@ export function StudentSequencePage() {
             />
           </>
         ) : (
-          <article className="topic-lesson-card">
-            <p className="section-kicker">Equipment videos</p>
-            <h2>Video section · Equipment</h2>
-            <p className="lede">
-              Community Support does not have machine videos. The 25 picture workbooks stay with the instructor.
-              Construction and Logistics each have fourteen machine lessons. Looking at them keeps you on Community
-              Support.
-            </p>
+          <>
+            <WhyWork>
+              Watch each community lesson, then answer the practice questions. Hear the line, do the task, and check it.
+            </WhyWork>
+            <TeachNote>
+              Fourteen short lessons. Choice questions use the answer key. Say questions ask you to hear an example and say the line. You can still look at Construction or Logistics equipment without leaving Community Support.
+            </TeachNote>
+            <EquipmentVideoDrill
+              pack="community"
+              onComplete={() =>
+                requestPracticeAdvance(() =>
+                  advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
+                )
+              }
+              onSkip={
+                isPracticeMode()
+                  ? () =>
+                      requestPracticeAdvance(() =>
+                        advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
+                      )
+                  : undefined
+              }
+            />
             <div className="hero-actions">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => {
-                  recordSkillAttempt('equipment-videos', true, 15)
-                  requestPracticeAdvance(() =>
-                    advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
-                  )
-                }}
-              >
-                Continue on Community Support
-              </button>
               <button
                 type="button"
                 className="btn btn-secondary on-light"
@@ -3067,7 +3152,7 @@ export function StudentSequencePage() {
                 Look at warehouse equipment
               </button>
             </div>
-          </article>
+          </>
         )}
       </Shell>
     )

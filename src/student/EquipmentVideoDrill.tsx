@@ -27,13 +27,26 @@ import {
   type ConstructionVideoChoiceId,
   type ConstructionVideoQuestion,
 } from '../pathways/packs/constructionEquipmentVideoQuizzes'
+import {
+  COMMUNITY_SUPPORT_FAMILIES,
+  COMMUNITY_SUPPORT_VIDEOS,
+  communitySupportVideoUrl,
+  type CommunitySupportLesson,
+} from '../pathways/packs/communitySupportVideos'
+import {
+  VIDEO_SEGMENT_GATES_ENABLED as COMMUNITY_GATES_ENABLED,
+  isCommunitySupportVideoUnlocked,
+  quizForCommunitySupportLesson,
+  type CommunityVideoChoiceId,
+  type CommunityVideoQuestion,
+} from '../pathways/packs/communitySupportVideoQuizzes'
 import { playFoley } from '../audio/foley'
 import { SOFT_RETRY_LABEL, firePlayClear, softMissLine } from '../practice/PlayClear'
 import { recordSkillAttempt } from './learningMastery'
 import { isPracticeMode } from '../practice/PracticeMode'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { InstructionHearChip } from '../practice/InstructionNarration'
-import { stopSpeech } from './speech'
+import { speakEnglish, stopSpeech } from './speech'
 
 /** Level-4 simple English instruction chrome — translated for L1 narration. */
 const EQUIP_INSTR = {
@@ -41,11 +54,11 @@ const EQUIP_INSTR = {
   answer: 'Answer the practice questions about the video. English choices.',
 } as const
 
-export type EquipmentVideoPack = 'warehouse' | 'construction'
+export type EquipmentVideoPack = 'warehouse' | 'construction' | 'community'
 
-type EquipLesson = WarehouseEquipmentLesson | ConstructionEquipmentLesson
-type EquipChoiceId = WarehouseVideoChoiceId | ConstructionVideoChoiceId
-type EquipQuestion = WarehouseVideoQuestion | ConstructionVideoQuestion
+type EquipLesson = WarehouseEquipmentLesson | ConstructionEquipmentLesson | CommunitySupportLesson
+type EquipChoiceId = WarehouseVideoChoiceId | ConstructionVideoChoiceId | CommunityVideoChoiceId
+type EquipQuestion = WarehouseVideoQuestion | ConstructionVideoQuestion | CommunityVideoQuestion
 
 type Phase = 'watch' | 'answer'
 
@@ -83,6 +96,9 @@ const PACK_META = {
     clearFloor:
       'practice questions done. This video pairs with the warehouse floor — stay clear of powered equipment unless you are certified elsewhere.',
     gatesEnabled: WAREHOUSE_GATES_ENABLED,
+    kip: ['Know', 'Inspect', 'Protect'] as const,
+    itemNoun: 'machine',
+    clearLabel: 'Clear this machine',
   },
   construction: {
     watchedKey: 'pa-construction-equipment-watched-v1',
@@ -91,6 +107,20 @@ const PACK_META = {
     clearFloor:
       'practice questions done. This video pairs with the construction site — stay clear of powered equipment unless you are certified elsewhere.',
     gatesEnabled: CONSTRUCTION_GATES_ENABLED,
+    kip: ['Know', 'Inspect', 'Protect'] as const,
+    itemNoun: 'machine',
+    clearLabel: 'Clear this machine',
+  },
+  community: {
+    watchedKey: 'pa-community-support-watched-v1',
+    clearedKey: 'pa-community-support-cleared-v1',
+    unitKicker: 'Unit 8 · Video · Community Support',
+    clearFloor:
+      'practice questions done. This is beginner support practice — not a licence for clinical work.',
+    gatesEnabled: COMMUNITY_GATES_ENABLED,
+    kip: ['Say', 'Do', 'Check'] as const,
+    itemNoun: 'lesson',
+    clearLabel: 'Clear this lesson',
   },
 } as const
 
@@ -102,9 +132,17 @@ const PACK_META = {
 export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: Props) {
   const meta = PACK_META[pack]
   const lessons: EquipLesson[] =
-    pack === 'construction' ? CONSTRUCTION_EQUIPMENT_VIDEOS : WAREHOUSE_EQUIPMENT_VIDEOS
+    pack === 'construction'
+      ? CONSTRUCTION_EQUIPMENT_VIDEOS
+      : pack === 'community'
+        ? COMMUNITY_SUPPORT_VIDEOS
+        : WAREHOUSE_EQUIPMENT_VIDEOS
   const families =
-    pack === 'construction' ? CONSTRUCTION_EQUIPMENT_FAMILIES : EQUIPMENT_FAMILIES
+    pack === 'construction'
+      ? CONSTRUCTION_EQUIPMENT_FAMILIES
+      : pack === 'community'
+        ? COMMUNITY_SUPPORT_FAMILIES
+        : EQUIPMENT_FAMILIES
   const lessonIds = useMemo(() => lessons.map((l) => l.id), [lessons])
   const [idx, setIdx] = useState(0)
   const [watched, setWatched] = useState<Set<string>>(() => loadSet(meta.watchedKey))
@@ -115,6 +153,7 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
   const [qIdx, setQIdx] = useState(0)
   const [picked, setPicked] = useState<EquipChoiceId | null>(null)
   const [qCorrect, setQCorrect] = useState(false)
+  const [sayHeard, setSayHeard] = useState(false)
   const [setJustCleared, setSetJustCleared] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const replayEndRef = useRef<number | null>(null)
@@ -127,7 +166,9 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
   const quiz =
     pack === 'construction'
       ? quizForConstructionEquipmentLesson(lesson.id)
-      : quizForEquipmentLesson(lesson.id)
+      : pack === 'community'
+        ? quizForCommunitySupportLesson(lesson.id)
+        : quizForEquipmentLesson(lesson.id)
   const questions: EquipQuestion[] = quiz?.questions ?? []
   const question: EquipQuestion | undefined = questions[qIdx]
   const watchedCount = lessons.filter((l) => watched.has(l.id)).length
@@ -142,7 +183,9 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
   function isUnlocked(index: number, clearedIds: ReadonlySet<string>): boolean {
     return pack === 'construction'
       ? isConstructionEquipmentVideoUnlocked(index, clearedIds, lessonIds, gatesOn)
-      : isEquipmentVideoUnlocked(index, clearedIds, lessonIds, gatesOn)
+      : pack === 'community'
+        ? isCommunitySupportVideoUnlocked(index, clearedIds, lessonIds, gatesOn)
+        : isEquipmentVideoUnlocked(index, clearedIds, lessonIds, gatesOn)
   }
 
   function coachWatchDone() {
@@ -158,6 +201,7 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
     setQIdx(0)
     setPicked(null)
     setQCorrect(false)
+    setSayHeard(false)
     setSetJustCleared(false)
     replayEndRef.current = null
     if (idx === 0) watchCoachedRef.current = false
@@ -251,6 +295,7 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
     setQIdx(0)
     setPicked(null)
     setQCorrect(false)
+    setSayHeard(false)
     setSetJustCleared(false)
     playFoley('whoosh')
     advanceStationCoach('equipment-video')
@@ -294,6 +339,7 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
       replayEndRef.current = null
       setPicked(null)
       setQCorrect(false)
+      setSayHeard(false)
       return
     }
     replayEndRef.current = null
@@ -303,6 +349,7 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
       setQIdx((i) => i + 1)
       setPicked(null)
       setQCorrect(false)
+      setSayHeard(false)
       playFoley('whoosh')
       return
     }
@@ -364,7 +411,9 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
   const src =
     pack === 'construction'
       ? constructionEquipmentVideoUrl(lesson.file)
-      : equipmentVideoUrl(lesson.file)
+      : pack === 'community'
+        ? communitySupportVideoUrl(lesson.file)
+        : equipmentVideoUrl(lesson.file)
   const showContinue =
     phase === 'answer' && (setJustCleared || (lessonCleared && qIdx >= questions.length - 1 && qCorrect))
 
@@ -383,7 +432,7 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
           ? `Clear this video · ${lessons.length - idx} left`
           : setJustCleared || (lessonCleared && showContinue)
             ? `Cleared · ${lesson.title}`
-            : `Practice questions · ${Math.max(questions.length - qIdx, 1)} left on this machine`}
+            : `Practice questions · ${Math.max(questions.length - qIdx, 1)} left on this ${meta.itemNoun}`}
       </p>
       {phase === 'answer' && !setJustCleared ? (
         <InstructionHearChip
@@ -492,21 +541,26 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
                 awareness only.
               </p>
             ) : null}
+            {'note' in lesson && lesson.note ? (
+              <p className="equip-video-stayclear" role="note">
+                {lesson.note}
+              </p>
+            ) : null}
           </div>
 
           {phase === 'watch' ? (
             <>
-              <div className="equip-video-kip" aria-label="Know, inspect, protect">
+              <div className="equip-video-kip" aria-label={meta.kip.join(', ')}>
                 <div className="equip-video-kip-item">
-                  <p className="equip-video-kip-label">Know</p>
+                  <p className="equip-video-kip-label">{meta.kip[0]}</p>
                   <p>{lesson.know}</p>
                 </div>
                 <div className="equip-video-kip-item">
-                  <p className="equip-video-kip-label">Inspect</p>
+                  <p className="equip-video-kip-label">{meta.kip[1]}</p>
                   <p>{lesson.inspect}</p>
                 </div>
                 <div className="equip-video-kip-item">
-                  <p className="equip-video-kip-label">Protect</p>
+                  <p className="equip-video-kip-label">{meta.kip[2]}</p>
                   <p>{lesson.protect}</p>
                 </div>
               </div>
@@ -566,26 +620,44 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
                 Question {question.n} of {questions.length}
               </h3>
               <p className="train-check-prompt">{question.prompt}</p>
-              <div className="train-choice-grid">
-                {question.choices.map((opt) => {
-                  let state: 'idle' | 'correct' | 'wrong' = 'idle'
-                  if (picked) {
-                    if (opt.id === question.answer) state = 'correct'
-                    else if (opt.id === picked) state = 'wrong'
-                  }
-                  return (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      className={`train-choice${state !== 'idle' ? ` is-${state}` : ''}`}
-                      disabled={!!picked && opt.id !== picked && opt.id !== question.answer}
-                      onClick={() => pickChoice(opt.id)}
-                    >
-                      <span className="equip-video-choice-id">{opt.id}.</span> {opt.text}
-                    </button>
-                  )
-                })}
-              </div>
+              {'say' in question && question.say ? (
+                <div className="hero-actions equip-video-actions">
+                  <button
+                    type="button"
+                    className="btn btn-secondary on-light"
+                    onClick={() => {
+                      setSayHeard(true)
+                      void speakEnglish(question.say || '')
+                    }}
+                  >
+                    Hear an example
+                  </button>
+                  <button type="button" className="btn btn-ghost" onClick={replayClip}>
+                    Replay that part · {question.replay.label}
+                  </button>
+                </div>
+              ) : (
+                <div className="train-choice-grid">
+                  {question.choices.map((opt) => {
+                    let state: 'idle' | 'correct' | 'wrong' = 'idle'
+                    if (picked) {
+                      if (opt.id === question.answer) state = 'correct'
+                      else if (opt.id === picked) state = 'wrong'
+                    }
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        className={`train-choice${state !== 'idle' ? ` is-${state}` : ''}`}
+                        disabled={!!picked && opt.id !== picked && opt.id !== question.answer}
+                        onClick={() => pickChoice(opt.id)}
+                      >
+                        <span className="equip-video-choice-id">{opt.id}.</span> {opt.text}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
               {picked ? (
                 <>
                   {qCorrect ? (
@@ -609,16 +681,37 @@ export function EquipmentVideoDrill({ pack = 'warehouse', onComplete, onSkip }: 
                     >
                       {qCorrect
                         ? qIdx >= questions.length - 1
-                          ? 'Clear this machine'
+                          ? meta.clearLabel
                           : 'Next question'
                         : SOFT_RETRY_LABEL}
                     </button>
                   </div>
                 </>
               ) : (
-                <p className="equip-video-family-blurb">
-                  Watch first, then choose. Replay a short clip if you need a reminder.
-                </p>
+                <>
+                  <p className="equip-video-family-blurb">
+                    {'say' in question && question.say
+                      ? 'Hear the example. Then say the line in your own words.'
+                      : 'Watch first, then choose. Replay a short clip if you need a reminder.'}
+                  </p>
+                  {'say' in question && question.say ? (
+                    <div className="hero-actions equip-video-actions">
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        disabled={!sayHeard}
+                        onClick={() => {
+                          if (!sayHeard) return
+                          setPicked('A')
+                          setQCorrect(true)
+                          playFoley('correct')
+                        }}
+                      >
+                        {sayHeard ? 'I can say this' : 'Hear the example first'}
+                      </button>
+                    </div>
+                  ) : null}
+                </>
               )}
             </div>
           ) : null}

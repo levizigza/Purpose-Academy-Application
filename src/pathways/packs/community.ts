@@ -63,10 +63,11 @@ export const communityPack: PathwayPack = {
       ],
     },
     8: {
-      goal: 'Video section lives on Construction and Logistics. Community continues to observation.',
+      goal: 'Watch the fourteen Community Support lessons, then answer the matching practice questions.',
       outcomes: [
-        'Know Construction and Logistics each run Unit 8 equipment videos at step 18',
-        'Continue Community into instructor observation when ready',
+        'Watch each lesson before the practice questions',
+        'Choose the support line the video teaches',
+        'Hear an example and say the short line back',
       ],
     },
     9: {
@@ -93,6 +94,11 @@ export const communityPack: PathwayPack = {
       help: 'Community Sentence Practice — pick the full sentence, hear it, then type it. Wrong? Try again.',
       purpose: 'Move from single words into full Community Support sentences — pick · hear · type.',
     },
+    11: {
+      title: 'Copycat',
+      help: 'Look at the picture. Hear the sentence. Tap the words in order. Then try What helps and Kind and clear.',
+      purpose: 'Childhood copycat, then two short community games: match a need to the item, and choose the kind clear line.',
+    },
     12: {
       title: 'Workplace Instructions',
       help: 'Hear the direction in English. Choose what you should do.',
@@ -114,9 +120,9 @@ export const communityPack: PathwayPack = {
       purpose: 'Your task helps people stay safe, informed, and supported with dignity.',
     },
     19: {
-      title: 'Video · Equipment',
-      help: 'Community Support has no machine videos. The picture workbooks stay with the instructor. You can look at Construction or Logistics equipment without leaving this pathway.',
-      purpose: 'Bridge from systems knowledge — Video unit is on Construction / Logistics; Community continues to observation.',
+      title: 'Video · Community Support',
+      help: 'Watch each community lesson. Then answer the practice questions. You can also look at Construction or Logistics equipment without leaving this pathway.',
+      purpose: 'Hear the phrase, see the task, then check it with the matching questions.',
     },
     21: {
       title: 'Placement Training',

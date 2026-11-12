@@ -4,6 +4,7 @@ import {
   supportedPhotoSrc,
   type SupportedPracticeItem,
 } from '../pathways/packs/supportedPracticeDeck'
+import { COMMUNITY_VOCAB_TABS, type CommunityVocabGameId } from './CommunityVocabGames'
 import { playFoley } from '../audio/foley'
 import { firePlayClear, softMissLine, SOFT_RETRY_LABEL } from '../practice/PlayClear'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
@@ -19,10 +20,10 @@ function shuffle<T>(items: T[]): T[] {
   return next
 }
 
-export type SupportedStationId = 'video-match' | 'copycat'
+export type SupportedStationId = 'video-match' | 'copycat' | CommunityVocabGameId
 
 export const SUPPORTED_STATIONS: Record<
-  SupportedStationId,
+  'video-match' | 'copycat',
   { title: string; help: string; nearby: (left: number) => string; childhood: string }
 > = {
   'video-match': {
@@ -47,20 +48,42 @@ type Props = {
   station: SupportedStationId
   onStationChange: (next: SupportedStationId) => void
   onComplete: () => void
+  /** Community Support adds What helps and Kind and clear beside the shared games. */
+  communityTabs?: boolean
+  continueLabel?: string
 }
 
 /**
  * Supported Practice — two switchable stations (Organize / Eye Spy pattern):
  * Picture Match · Copycat. Royalty-free photos · Level-4 English.
  */
-export function SupportedPracticeGames({ items, station, onStationChange, onComplete }: Props) {
+function stationTitle(id: SupportedStationId): string {
+  if (id === 'what-helps' || id === 'kind-clear') {
+    return COMMUNITY_VOCAB_TABS.find((tab) => tab.id === id)?.title ?? id
+  }
+  return SUPPORTED_STATIONS[id].title
+}
+
+export function SupportedPracticeGames({
+  items,
+  station,
+  onStationChange,
+  onComplete,
+  communityTabs = false,
+  continueLabel,
+}: Props) {
   const deck = useMemo(() => (items.length >= PHOTO_CHOICES ? [...items] : [...items]), [items])
-  const meta = SUPPORTED_STATIONS[station]
+  const shared: SupportedStationId[] = ['video-match', 'copycat']
+  const tabs: SupportedStationId[] = communityTabs
+    ? [...shared, 'what-helps', 'kind-clear']
+    : shared
+  const active = station === 'what-helps' || station === 'kind-clear' ? 'video-match' : station
+  const meta = SUPPORTED_STATIONS[active]
 
   return (
-    <article className={`supported-games is-${station}`}>
+    <article className={`supported-games is-${active}`}>
       <nav className="supported-station-switch" aria-label="Supported Practice stations">
-        {(Object.keys(SUPPORTED_STATIONS) as SupportedStationId[]).map((id) => (
+        {tabs.map((id) => (
           <button
             key={id}
             type="button"
@@ -72,16 +95,16 @@ export function SupportedPracticeGames({ items, station, onStationChange, onComp
               onStationChange(id)
             }}
           >
-            {SUPPORTED_STATIONS[id].title}
+            {stationTitle(id)}
           </button>
         ))}
       </nav>
       <p className="supported-station-note muted">{meta.childhood}</p>
 
-      {station === 'video-match' ? (
+      {active === 'video-match' ? (
         <VideoMatchBoard deck={deck} onComplete={onComplete} />
       ) : (
-        <CopycatBoard deck={deck} onComplete={onComplete} />
+        <CopycatBoard deck={deck} onComplete={onComplete} continueLabel={continueLabel} />
       )}
     </article>
   )
@@ -255,9 +278,11 @@ function VideoMatchBoard({
 function CopycatBoard({
   deck,
   onComplete,
+  continueLabel = 'Continue to workplace instructions',
 }: {
   deck: SupportedPracticeItem[]
   onComplete: () => void
+  continueLabel?: string
 }) {
   const meta = SUPPORTED_STATIONS.copycat
   const [cleared, setCleared] = useState(0)
@@ -426,7 +451,7 @@ function CopycatBoard({
         <div className="supported-games-advance">
           <div className="alert ok">Copycat clear. Help is strength — next door can open.</div>
           <button type="button" className="btn btn-primary" onClick={onComplete}>
-            Continue to workplace instructions
+            {continueLabel}
           </button>
         </div>
       ) : (
