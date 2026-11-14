@@ -130,12 +130,15 @@ import {
 import { learnerGet, learnerSet } from '../practice/learnerStore'
 import {
   getLearnerSupportLang,
+  hasLockedLearnerSupportLang,
   isSupportLang,
+  lockLearnerSupportLang,
   setLearnerExtraLang,
   setLearnerSupportLang,
 } from '../practice/learnerLang'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
 import {
+  clearSupplementaryRound,
   markSupplementaryRound,
   supplementaryLanguageOn,
 } from '../practice/supplementaryLanguage'
@@ -888,6 +891,7 @@ export function StudentSequencePage() {
   }, [])
 
   const [supportLang, setSupportLang] = useState<SupportLang>(() => {
+    if (hasLockedLearnerSupportLang()) return getLearnerSupportLang()
     const fromStudent = student?.preferred_language
     if (fromStudent && isSupportLang(fromStudent)) return fromStudent
     return getLearnerSupportLang()
@@ -1052,6 +1056,7 @@ export function StudentSequencePage() {
 
   useEffect(() => { saveStep(step) }, [step])
   useEffect(() => {
+    if (hasLockedLearnerSupportLang()) return
     if (student?.preferred_language && isSupportLang(student.preferred_language)) {
       setSupportLang(student.preferred_language)
     }
@@ -1344,7 +1349,6 @@ export function StudentSequencePage() {
             vocabLanguageStage(
               vocabIdx,
               vocabEnglishCutoff(orderVocabSection(VOCAB_UNIT)),
-              vocabRetake,
             ) === 'wheels'
           : false
     return (
@@ -1577,7 +1581,7 @@ export function StudentSequencePage() {
   function vocabStageFor(term: { id: string }) {
     const section = orderVocabSection(VOCAB_UNIT)
     const index = section.findIndex((item) => item.id === term.id)
-    return vocabLanguageStage(index < 0 ? section.length : index, vocabEnglishCutoff(section), vocabRetake)
+    return vocabLanguageStage(index < 0 ? section.length : index, vocabEnglishCutoff(section))
   }
 
   async function playVocabEnglish(term: (typeof VOCAB_UNIT)[number]) {
@@ -1940,7 +1944,9 @@ export function StudentSequencePage() {
                   onClick={() => {
                     markNavCueSeen(NAV_CUE.langPick)
                     setLearnerExtraLang(null)
+                    lockLearnerSupportLang(l.id)
                     setSupportLang(l.id)
+                    clearSupplementaryRound('opening')
                   }}
                   lang={
                     l.id === 'English'
@@ -1964,8 +1970,10 @@ export function StudentSequencePage() {
                 selected={extraLang}
                 onPick={(lang) => {
                   markNavCueSeen(NAV_CUE.langPick)
+                  lockLearnerSupportLang('English')
                   setSupportLang('English')
                   setLearnerExtraLang(lang)
+                  clearSupplementaryRound('opening')
                 }}
                 onClear={() => setLearnerExtraLang(null)}
               />
@@ -2144,7 +2152,7 @@ export function StudentSequencePage() {
         <p className="train-vocab-counter">
           {ready
             ? `Words practised: ${linkedCount}. Next: Language Organize — match each word to its picture.`
-            : vocabLanguageStage(vocabIdx, englishAt, vocabRetake) === 'english'
+            : vocabLanguageStage(vocabIdx, englishAt) === 'english'
               ? `Words practised: ${linkedCount}. English only from here — hear the word, then pick and type.`
               : firstSpecialtyIdx >= 0 && vocabIdx >= firstSpecialtyIdx
                 ? `Words practised: ${linkedCount}. Workplace words — your language, then English, until halfway.`

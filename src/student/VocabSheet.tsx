@@ -165,6 +165,7 @@ export function VocabSheetCard({
   const inputId = useId()
   const inputRef = useRef<HTMLInputElement>(null)
   const [draft, setDraft] = useState('')
+  const [photoMiss, setPhotoMiss] = useState(false)
   const [feedback, setFeedback] = useState<'ok' | 'retry' | 'need-pick' | null>(null)
   const [options, setOptions] = useState<string[]>([])
   const [picked, setPicked] = useState<string | null>(null)
@@ -186,6 +187,7 @@ export function VocabSheetCard({
 
   useEffect(() => {
     setDraft('')
+    setPhotoMiss(false)
     setFeedback(null)
     setPicked(null)
     setPickMiss(false)
@@ -563,7 +565,7 @@ export function VocabSheetCard({
 
       <div className={`vocab-sheet-body vocab-sheet-body-focus${productionPhase ? ' is-production' : ''}`}>
         <figure className={`vocab-sheet-photo vocab-sheet-photo-focus${studioPhoto ? ' is-studio' : ''}`}>
-          {img ? (
+          {img && !photoMiss ? (
             <img
               src={img}
               alt={
@@ -571,6 +573,7 @@ export function VocabSheetCard({
                   ? `Photo of ${term.english}`
                   : 'Workplace object — hear it, then type the English name'
               }
+              onError={() => setPhotoMiss(true)}
             />
           ) : (
             <span className="vocab-sheet-fallback" aria-hidden>
@@ -810,7 +813,7 @@ export function VocabSheet({
   const universalBridge = universal[term.id] ?? null
   const alreadyKnown = knownSet.has(term.id)
   const cutoff = vocabEnglishCutoff(terms)
-  const stage = vocabLanguageStage(idx, cutoff, allowSkipKnown)
+  const stage = vocabLanguageStage(idx, cutoff)
   const bridged = stage !== 'wheels' || !!connectedLang || !!universalBridge || alreadyKnown
   const workplaceStart = terms.findIndex((item) => !isDailyConversationTerm(item))
   const onWorkplace = workplaceStart >= 0 && !isDailyConversationTerm(term)

@@ -36,6 +36,18 @@ export function markSupplementaryRound(place: SupplementaryPlace) {
   }
 }
 
+/** A new language choice starts the opening questions again in that language. */
+export function clearSupplementaryRound(place: SupplementaryPlace) {
+  const done = readDone()
+  if (!done[place]) return
+  delete done[place]
+  try {
+    learnerSet(KEY, JSON.stringify(done))
+  } catch {
+    /* ignore */
+  }
+}
+
 export function supplementaryLanguageOn(
   place: SupplementaryPlace,
   opts?: { retake?: boolean; toolIndex?: number; toolCount?: number },

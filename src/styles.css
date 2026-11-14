@@ -7751,7 +7751,8 @@ table.data th {
 .vocab-sheet-photo-focus img {
   width: 100%;
   height: auto;
-  max-height: min(78vh, 36rem);
+  min-height: 14rem;
+  max-height: min(68vh, 34rem);
   object-fit: contain;
   object-position: center;
   background: #111820;
@@ -8041,28 +8042,33 @@ table.data th {
 }
 
 .vocab-sheet-body-focus.is-production {
-  grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+  grid-template-columns: 1fr;
   align-items: start;
 }
 
 .vocab-sheet-body-focus.is-production .vocab-sheet-photo-focus {
   grid-column: 1;
-  grid-row: 1 / span 2;
+  grid-row: auto;
 }
 
 .vocab-sheet-body-focus.is-production .vocab-sheet-production {
-  grid-column: 2;
-  grid-row: 1;
+  grid-column: 1;
+  grid-row: auto;
 }
 
 .vocab-sheet-body-focus.is-production .vocab-sheet-langs {
-  grid-column: 2;
-  grid-row: 2;
-  grid-template-columns: 1fr;
+  grid-column: 1;
+  grid-row: auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .vocab-sheet-body-focus .vocab-sheet-langs.is-collapsed {
   grid-template-columns: 1fr;
+}
+
+.course-stage .vocab-sheet-page-label,
+.course-stage .vocab-sheet-page-progress {
+  color: #f4f7fb;
 }
 
 .course-stage .vocab-sheet-listen {
@@ -13909,7 +13915,8 @@ video {
 
 .is-phone-app .vocab-sheet-photo-focus img,
 .is-phone-app .vocab-sheet-photo-focus.is-studio img {
-  max-height: min(42vh, 16rem) !important;
+  min-height: 11rem !important;
+  max-height: min(48vh, 22rem) !important;
   background: #fff !important;
 }
 
@@ -14359,6 +14366,12 @@ video {
 .is-phone-app .train-action-label,
 .is-phone-app .train-quiz-counter {
   color: var(--brand) !important;
+}
+
+.is-phone-app .train-mastery-gate {
+  background: #fff8e8;
+  border-radius: 10px;
+  padding: 0.4rem 0.7rem;
 }
 
 .is-phone-app .shell.is-train .train-actions .btn-ghost:hover,
@@ -14828,6 +14841,70 @@ html.pa-phone-shell .practice-chat.is-open .practice-chat-panel {
   padding-bottom: 0.15rem;
 }
 
+/* The dots, the why line, and the bar are not the next action. On the phone they
+   sit above the lesson and push the choice below the thumb. The station menu
+   still holds the path. */
+.iphone-scroll.is-phone-app.phone-phase-app .train-dots,
+.iphone-scroll.is-phone-app.phone-phase-app .train-why-details,
+.iphone-scroll.is-phone-app.phone-phase-app .train-progress,
+.iphone-scroll.is-phone-app .career-assess-lede,
+.iphone-scroll.is-phone-app .career-assess-kicker,
+.iphone-scroll.is-phone-app .career-assess-head .play-nearby-objective,
+.iphone-scroll.is-phone-app .career-assess-bar,
+.iphone-scroll.is-phone-app .career-assess-progress {
+  display: none;
+}
+
+.iphone-scroll.is-phone-app .career-assess-title {
+  display: none;
+}
+
+.iphone-scroll.is-phone-app .career-assess-prompt {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+}
+
+.iphone-scroll.is-phone-app .career-choice,
+.iphone-scroll.is-phone-app .career-likert-btn {
+  padding: 0.32rem 0.6rem;
+  min-height: 0;
+  font-size: 0.92rem;
+}
+
+/* The profile is long. The continue stays at the top of the phone lesson
+   so the next action is in the thumb before any scroll. */
+.iphone-scroll.is-phone-app .career-result {
+  display: flex;
+  flex-direction: column;
+}
+
+.iphone-scroll.is-phone-app .career-assess-actions {
+  order: -1;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--paper);
+  padding: 0.15rem 0 0.4rem;
+}
+
+.iphone-scroll.is-phone-app .sentence-cloze-help,
+.iphone-scroll.is-phone-app .sentence-cloze-card .play-nearby-objective,
+.iphone-scroll.is-phone-app .sentence-cloze-card .train-vocab-counter {
+  display: none;
+}
+
+.iphone-scroll.is-phone-app .sentence-cloze-photo,
+.iphone-scroll.is-phone-app .sentence-cloze-photo img {
+  min-height: 9rem;
+  max-height: min(40vh, 16rem);
+  object-fit: contain;
+}
+
+.iphone-scroll.is-phone-app .sentence-cloze-chip {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.84rem;
+}
+
 .iphone-scroll.is-phone-app.phone-phase-app .train-station-menu {
   margin: 0.15rem 0 0.2rem !important;
 }
@@ -15133,8 +15210,8 @@ html.pa-phone-shell .practice-chat.is-open .practice-chat-panel {
 }
 
 .is-phone-app .train-shell.is-organize-wide .vocab-organize-pool-grid.is-images {
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 0.3rem !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.45rem !important;
 }
 
 .is-phone-app .train-shell.is-organize-wide .vocab-organize-piece {
@@ -15145,8 +15222,8 @@ html.pa-phone-shell .practice-chat.is-open .practice-chat-panel {
 }
 
 .is-phone-app .train-shell.is-organize-wide .vocab-organize-piece img {
-  max-height: 3.4rem !important;
-  padding: 0.05rem !important;
+  max-height: 8rem !important;
+  padding: 0.15rem !important;
 }
 
 .is-phone-app .train-shell.is-organize-wide .vocab-organize-slot.is-image {
@@ -15221,12 +15298,14 @@ html.pa-phone-shell .practice-chat.is-open .practice-chat-panel {
 }
 
 .is-phone-app .train-shell.is-sentence-structure .sentence-cloze-photo {
-  max-height: 4.25rem;
+  min-height: 9rem;
+  max-height: min(40vh, 16rem);
   margin: 0.15rem 0 0.2rem !important;
 }
 
 .is-phone-app .train-shell.is-sentence-structure .sentence-cloze-photo img {
-  max-height: 4.25rem !important;
+  min-height: 9rem !important;
+  max-height: min(40vh, 16rem) !important;
   object-fit: contain !important;
 }
 
@@ -15397,6 +15476,12 @@ html.pa-phone-shell .practice-chat.is-open .practice-chat-panel {
 .course-stage .play-nearby-objective {
   color: #f5c542;
   background: color-mix(in srgb, #f5c542 14%, rgba(4, 21, 38, 0.35));
+}
+
+.course-stage .vocab-sheet-card .play-nearby-objective {
+  color: #0b2f5c;
+  background: #fff8e8;
+  border-color: color-mix(in srgb, #0b2f5c 22%, #c5d0dc);
 }
 
 /* Phone paper: navy body on cream — beat night amber even inside .course-stage */
@@ -16329,6 +16414,9 @@ html.pa-phone-shell .play-soft-miss {
 
 .toolbox-station.is-in-phone .toolbox-station-hero {
   max-width: none;
+  background: var(--paper);
+  border-radius: 12px;
+  padding: 0.45rem 0.55rem 0.55rem;
 }
 
 .toolbox-station.is-in-phone .toolbox-station-logo {
@@ -16966,10 +17054,10 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
 }
 .supported-video-el {
   width: 100%;
-  height: 100%;
-  min-height: 7.5rem;
-  max-height: 9rem;
-  object-fit: cover;
+  height: auto;
+  min-height: 12rem;
+  max-height: min(42vh, 18rem);
+  object-fit: contain;
   display: block;
   pointer-events: none;
 }
@@ -17025,8 +17113,8 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
   border-color: #f5c542;
 }
 .is-phone-app .supported-video-el {
-  max-height: 8rem;
-  min-height: 6.5rem;
+  max-height: min(36vh, 14rem);
+  min-height: 9rem;
 }
 .is-phone-app .supported-copycat-video {
   max-height: 180px;
@@ -17047,8 +17135,9 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
 .supported-pic-btn:disabled { cursor: default; }
 .supported-pic-btn img {
   width: 100%;
-  height: 100%;
-  max-height: 6.8rem;
+  height: auto;
+  min-height: 8rem;
+  max-height: min(32vh, 14rem);
   object-fit: contain;
 }
 .supported-pic-btn.is-correct,
@@ -17076,20 +17165,23 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
 }
 .supported-game-photo img {
   width: 100%;
-  max-height: 140px;
+  min-height: 10rem;
+  max-height: min(42vh, 18rem);
   object-fit: contain;
 }
 .is-phone-app .supported-pic-btn {
   min-height: 6.4rem;
 }
 .is-phone-app .supported-pic-btn img {
-  max-height: 7.2rem;
+  min-height: 7rem;
+  max-height: min(28vh, 12rem);
 }
 .is-phone-app .supported-game-photo--hero {
   min-height: 110px;
 }
 .is-phone-app .supported-game-photo img {
-  max-height: 130px;
+  min-height: 8rem;
+  max-height: min(32vh, 14rem);
 }
 .supported-game-fallback {
   padding: 1rem;
@@ -17476,7 +17568,9 @@ html.pa-course-shell .instruction-l1-text.is-loading,
 /* Supported Practice — royalty-free photos (Picture Match + Copycat). Whole object visible. */
 .supported-photo-el {
   width: 100%;
-  height: 9.5rem;
+  height: auto;
+  min-height: 12rem;
+  max-height: min(46vh, 22rem);
   object-fit: contain;
   display: block;
   background: #fff;
@@ -17496,7 +17590,9 @@ html.pa-course-shell .instruction-l1-text.is-loading,
 }
 .supported-copycat-photo {
   width: 100%;
-  height: 230px;
+  height: auto;
+  min-height: 12rem;
+  max-height: min(42vh, 20rem);
   object-fit: contain;
   display: block;
   background: #fff;
@@ -17507,7 +17603,9 @@ html.pa-course-shell .instruction-l1-text.is-loading,
   font-size: 0.82rem;
 }
 .is-phone-app .supported-photo-el {
-  height: 3.4rem;
+  height: auto;
+  min-height: 8.5rem;
+  max-height: min(34vh, 14rem);
 }
 .is-phone-app .supported-video-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -17625,6 +17723,19 @@ html.pa-course-shell .instruction-l1-text.is-loading,
   gap: 1.5rem;
 }
 
+.is-phone-app .tp-head {
+  background: var(--paper);
+  color: var(--brand-deep);
+  border-radius: 12px;
+  padding: 0.75rem 0.8rem;
+}
+
+.is-phone-app .tp-head .tp-kicker,
+.is-phone-app .tp-head h1,
+.is-phone-app .tp-head .lede {
+  color: var(--brand-deep);
+}
+
 .tp-head h1,
 .wb-page-head h1 {
   margin-bottom: 0.35rem;
@@ -17732,6 +17843,13 @@ html.pa-course-shell .instruction-l1-text.is-loading,
 .tp-workbench {
   gap: 1rem;
   max-width: 52rem;
+}
+
+.is-phone-app .tp-workbench {
+  background: var(--paper);
+  color: var(--brand-deep);
+  border-radius: 12px;
+  padding: 0.75rem 0.7rem 1rem;
 }
 
 .tp-workbench-head {

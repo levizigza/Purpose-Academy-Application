@@ -11,6 +11,7 @@ import { findHearLanguage, HEAR_LANGUAGES, type HearLanguage } from '../student/
 import { SUPPORT_LANG_CODE, SUPPORT_TTS_LANG } from '../student/speech'
 
 const KEY = 'pa-support-lang-v1'
+const LOCK_KEY = 'pa-support-lang-locked-v1'
 
 const SUPPORT_IDS = new Set(SUPPORT_LANGUAGES.map((l) => l.id))
 
@@ -34,6 +35,25 @@ export function setLearnerSupportLang(lang: SupportLang) {
     window.dispatchEvent(
       new CustomEvent('pa-support-lang-changed', { detail: { lang } }),
     )
+  } catch {
+    /* ignore */
+  }
+}
+
+/** True after the learner presses a language. That choice wins over the account default. */
+export function hasLockedLearnerSupportLang(): boolean {
+  try {
+    return learnerGet(LOCK_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+/** Save the language and keep it for the rest of the path. */
+export function lockLearnerSupportLang(lang: SupportLang) {
+  setLearnerSupportLang(lang)
+  try {
+    learnerSet(LOCK_KEY, '1')
   } catch {
     /* ignore */
   }

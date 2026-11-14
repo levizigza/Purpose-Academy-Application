@@ -30,12 +30,8 @@ export function vocabEnglishCutoff(terms: readonly VocabTerm[]): number {
   return start + Math.floor(workplace / 2)
 }
 
-export function vocabLanguageStage(
-  index: number,
-  cutoff: number,
-  retake = false,
-): VocabLanguageStage {
-  if (retake || index >= cutoff) return 'english'
+export function vocabLanguageStage(index: number, cutoff: number): VocabLanguageStage {
+  if (index >= cutoff) return 'english'
   return 'wheels'
 }
 

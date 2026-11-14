@@ -203,6 +203,7 @@ export function SentenceClozeDrill({
   const [speaking, setSpeaking] = useState(false)
   const [level1Unlocked, setLevel1Unlocked] = useState(false)
   const [draft, setDraft] = useState('')
+  const [photoMiss, setPhotoMiss] = useState(false)
   const [typeFeedback, setTypeFeedback] = useState<'retry' | 'need-pick' | 'need-hear' | null>(null)
   const practice = isPracticeMode()
   const inputId = useId()
@@ -229,6 +230,10 @@ export function SentenceClozeDrill({
       mountedRef.current = false
     }
   }, [])
+
+  useEffect(() => {
+    setPhotoMiss(false)
+  }, [item?.n, item?.answer, page, idx])
 
   function dealSentenceBank(nextItem: SentenceClozeItem, prevKey: string | null) {
     const bankOpts = buildSentenceOptions(nextItem)
@@ -599,8 +604,8 @@ export function SentenceClozeDrill({
         }`}
       >
         <figure className="sentence-cloze-photo">
-          {imageSrc ? (
-            <img src={imageSrc} alt="" />
+          {imageSrc && !photoMiss ? (
+            <img src={imageSrc} alt="" onError={() => setPhotoMiss(true)} />
           ) : (
             <span className="sentence-cloze-photo-fallback">{item.answer}</span>
           )}
