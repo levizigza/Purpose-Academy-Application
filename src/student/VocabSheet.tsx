@@ -12,7 +12,10 @@ import { markNavCueSeen, NAV_CUE } from '../practice/navCues'
 import {
   buildVocabPickBank,
   choiceOrderKey,
+  isDailyConversationTerm,
   shuffleChoicesFresh,
+  vocabEnglishCutoff,
+  vocabLanguageStage,
 } from './vocabDistractors'
 import { findHearLanguage, type HearLanguage } from './hearLanguages'
 import type { UniversalBridge, UniversalHearStatus } from './universalHear'
@@ -114,6 +117,13 @@ type CardProps = {
   onClearUniversalStatus: () => void
   onMarkKnown: () => void
   onTypedCorrect: () => void
+  /**
+   * Where this card sits in the vocabulary section.
+   * Wheels: home language, then English.
+   * English-lead: English plays first; the home language is only a replay.
+   * English: the card is English only.
+   */
+  stage?: 'wheels' | 'english'
 }
 
 /**
@@ -142,9 +152,11 @@ export function VocabSheetCard({
   onClearUniversalStatus,
   onMarkKnown,
   onTypedCorrect,
+  stage = 'wheels',
 }: CardProps) {
   const img = pathwayImage(term.imageKey)
-  const bridged = !!connectedLang || !!universalBridge || alreadyKnown
+  const pureEnglish = stage === 'english'
+  const bridged = pureEnglish || !!connectedLang || !!universalBridge || alreadyKnown
   const ready = bridged && heardEnglish && typedEnglish
   /** After bridge: listen → pick + type. Typing unlocks once English was offered (heard). */
   const listeningPhase = bridged && !heardEnglish && !typedEnglish
@@ -275,6 +287,9 @@ export function VocabSheetCard({
     if (typedEnglish) return `Yes — ${term.english}.`
     if (typingPhase) return 'Look. Hear. Pick the match. Type it.'
     if (listeningPhase) {
+      if (pureEnglish && !speaking) {
+        return 'English only. Hear the word, then pick it and type it.'
+      }
       if (connectedLang === 'English' && !universalBridge) {
         return 'Listening to English… Then pick the match and type it.'
       }
@@ -335,7 +350,7 @@ export function VocabSheetCard({
             : 'Pick the matching English word below, then type it.'
         }
         auto={false}
-        bilingual={!allowSkipKnown}
+        bilingual={stage === 'wheels' && !allowSkipKnown}
         autoKey={`vv-type-${term.id}-${pickReady ? 'type' : 'pick'}`}
         className="vocab-sheet-instr-hear"
       />
@@ -345,14 +360,16 @@ export function VocabSheetCard({
           ? 'Type the English word you picked and heard.'
           : 'Pick the matching English word below, then type it.'}
       </p>
-      <InstructionL1Line
-        english={
-          pickReady
-            ? 'Type the English word you picked and heard.'
-            : 'Pick the matching English word below, then type it.'
-        }
-        compact
-      />
+      {stage === 'wheels' ? (
+        <InstructionL1Line
+          english={
+            pickReady
+              ? 'Type the English word you picked and heard.'
+              : 'Pick the matching English word below, then type it.'
+          }
+          compact
+        />
+      ) : null}
       <div className="vocab-sheet-type-row">
         <label className="sr-only" htmlFor={inputId}>
           English word
@@ -537,7 +554,7 @@ export function VocabSheetCard({
                 : 'Clear this word. Press a language you know — or More languages — then pick and type.'
             }
             auto={false}
-            bilingual={!allowSkipKnown}
+            bilingual={stage === 'wheels' && !allowSkipKnown}
             autoKey={`vv-pre-${term.id}`}
             className="vocab-sheet-instr-hear"
           />
@@ -571,7 +588,7 @@ export function VocabSheetCard({
           </div>
         )}
 
-        {(() => {
+        {pureEnglish && !typedEnglish ? null : (() => {
           const showLangCue = !productionPhase && langsToShow.length > 0
           const universal = (
             <UniversalHearControl
@@ -792,7 +809,13 @@ export function VocabSheet({
   const connectedLang = connected[term.id] ?? null
   const universalBridge = universal[term.id] ?? null
   const alreadyKnown = knownSet.has(term.id)
-  const bridged = !!connectedLang || !!universalBridge || alreadyKnown
+  const cutoff = vocabEnglishCutoff(terms)
+  const stage = vocabLanguageStage(idx, cutoff, allowSkipKnown)
+  const bridged = stage !== 'wheels' || !!connectedLang || !!universalBridge || alreadyKnown
+  const workplaceStart = terms.findIndex((item) => !isDailyConversationTerm(item))
+  const onWorkplace = workplaceStart >= 0 && !isDailyConversationTerm(term)
+  const workplaceCount = terms.filter((item) => !isDailyConversationTerm(item)).length
+  const englishWorkplaceWord = workplaceStart < 0 ? 0 : cutoff - workplaceStart + 1
   const linkedCount = terms.filter((t) =>
     termLinked(t, heard, connected, typed, knownSet, universal),
   ).length
@@ -851,27 +874,41 @@ export function VocabSheet({
         <div className="vocab-retake" role="status">
           <p className="vocab-retake-kicker">Another round</p>
           <p className="vocab-retake-lede">
-            Same words, same steps — hear, hear, pick, type. This time you can mark ones you already know;
+            Same words, same steps — hear English, pick, type. This time you can mark ones you already know;
             you still hear English once, pick the match, and type it so it sticks.
           </p>
         </div>
-      ) : (
+      ) : stage === 'wheels' && onWorkplace ? (
         <>
           <p className="vocab-sheet-lede">
-            One word at a time. Press a language you understand (English is included), or More languages to hear a translation. Pick the match. Type it.
-            Choices switch when you miss — so the word sticks, not the button.
-            {paged
-              ? ` This set has ${terms.length} words in pages of ${VOCAB_PAGE_SIZE}.`
-              : ''}
+            Workplace words keep your language, then English.
+            Halfway through — workplace word {englishWorkplaceWord} of {workplaceCount} — the rest of this set is English only.
           </p>
-          <InstructionL1Line english="One word at a time. Press a language you understand (English is included), or More languages to hear a translation. Pick the match. Type it." />
+          <InstructionL1Line english="Workplace words. Hear your language, then the English word. Halfway through, the rest is English only." />
         </>
+      ) : stage === 'wheels' ? (
+        <>
+          <p className="vocab-sheet-lede">
+            Greetings. Hear your language, then the English word. Pick the match and type it.
+            The workplace words keep this until halfway, then finish in English only.
+          </p>
+          <InstructionL1Line english="Greetings. Hear your language, then the English word. The workplace words keep this until halfway." />
+        </>
+      ) : (
+        <p className="vocab-sheet-lede">
+          English only from here on. Hear the English word, then pick it and type it.
+        </p>
       )}
 
       {paged && (
         <div className="vocab-sheet-pages" role="navigation" aria-label="Vocabulary worksheet pages">
           <p className="vocab-sheet-page-label">
             Page {page + 1} of {pageCount} · Words {pageStart + 1}–{pageEnd}
+            {stage === 'english'
+              ? ' · English only'
+              : onWorkplace
+                ? ' · Workplace words, your language then English'
+                : ' · Greetings, your language then English'}
             {gate > 0 && gate < terms.length
               ? gateReady
                 ? ' · First set done — keep practising pages if you want'
@@ -917,6 +954,7 @@ export function VocabSheet({
         universalStatus={universalStatus}
         alreadyKnown={alreadyKnown}
         allowSkipKnown={allowSkipKnown}
+        stage={stage}
         onPlayEnglish={() => onPlayEnglish(term)}
         onConnectLang={(lang) => onConnectLang(term, lang)}
         onUniversalHear={(lang) => onUniversalHear(term, lang)}

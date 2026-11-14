@@ -1,9 +1,10 @@
 /**
- * One round of the chosen language beside English, then English only.
+ * Training wheels, then English.
  *
- * Window: the opening questions, Workplace Words (not a retake),
- * Language Organize once, and the first half of Tools & Equipment.
- * Later stations, the second half of tools, and every repeat stay in English.
+ * The chosen language sits beside English for the opening questions and the
+ * greetings set in Workplace Words (not a retake). Workplace pictures — the
+ * end of that first vocab station — and every later station are English only.
+ * The coach does not speak a home-language explanation before the action.
  */
 
 import { learnerGet, learnerSet } from './learnerStore'
@@ -40,13 +41,9 @@ export function supplementaryLanguageOn(
   opts?: { retake?: boolean; toolIndex?: number; toolCount?: number },
 ): boolean {
   if (!learnerWantsL1Narration()) return false
+  if (place === 'organize' || place === 'tools') return false
   if (place === 'vocab' && opts?.retake) return false
   if (readDone()[place]) return false
-  if (place === 'tools') {
-    const count = Math.max(1, opts?.toolCount ?? 1)
-    const half = Math.ceil(count / 2)
-    return (opts?.toolIndex ?? 0) < half
-  }
   return true
 }
 
@@ -59,12 +56,11 @@ export function hubSpeaksChosenLanguage(step: number): boolean {
 }
 
 /**
- * First-example coach. Chosen language only on Workplace Words, Language Organize,
- * and the first tool group. Every later station is English.
+ * First-example coach. A written home-language line only on the greetings
+ * example in Workplace Words. Later stations stay in English, and nothing
+ * here speaks that line ahead of the action.
  */
 export function coachSpeaksChosenLanguage(stationId: string): boolean {
   if (stationId === 'workplace-words') return supplementaryLanguageOn('vocab')
-  if (stationId === 'language-organize') return supplementaryLanguageOn('organize')
-  if (stationId === 'tools') return supplementaryLanguageOn('tools', { toolIndex: 0, toolCount: 2 })
   return false
 }

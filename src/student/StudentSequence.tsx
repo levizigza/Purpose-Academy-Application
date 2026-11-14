@@ -33,6 +33,9 @@ import {
 } from './journeyCurriculum'
 import {
   isDailyConversationTerm,
+  orderVocabSection,
+  vocabEnglishCutoff,
+  vocabLanguageStage,
   LEVEL1_PAGE_SIZE,
   pickSpecialtyDistractors,
   sentenceLadderGateTerms,
@@ -121,6 +124,8 @@ import {
   practiceFeedbackKey,
   resetPracticeProgress,
   shouldAskPracticeFeedback,
+  hasOpenedPracticeLesson,
+  markPracticeLessonOpen,
 } from '../practice/PracticeMode'
 import { learnerGet, learnerSet } from '../practice/learnerStore'
 import {
@@ -270,6 +275,37 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const unit = unitForStep(step)
   const pct = Math.round((step / JOURNEY_STEP_COUNT) * 100)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
+  useEffect(() => {
+    let inner = 0
+    const align = () => {
+      const panel = document.querySelector('.iphone-scroll.is-phone-app .reveal.train-panel')
+      if (!(panel instanceof HTMLElement)) return
+      const panelBox = panel.getBoundingClientRect()
+      const nodes = [...panel.querySelectorAll(
+        '.career-choice, .career-likert-btn, .train-choice, .sentence-cloze-chip, .supported-video-btn, .eye-spy-hotspot, .supported-chip-btn, .vocab-organize-piece, .career-assess-actions .btn-primary, .btn-primary',
+      )]
+      const action = nodes.find((el) => {
+        const box = el.getBoundingClientRect()
+        return box.height > 8 && (box.top < panelBox.top - 2 || box.bottom > panelBox.bottom + 2)
+      })
+      if (!(action instanceof HTMLElement)) return
+      const actionBox = action.getBoundingClientRect()
+      panel.scrollTop += actionBox.top - panelBox.top - 8
+    }
+    const outer = window.requestAnimationFrame(() => {
+      inner = window.requestAnimationFrame(align)
+    })
+    const panel = document.querySelector('.iphone-scroll.is-phone-app .reveal.train-panel')
+    const images = panel ? [...panel.querySelectorAll('img')] : []
+    images.forEach((img) => {
+      if (!img.complete) img.addEventListener('load', align, { once: true })
+    })
+    return () => {
+      window.cancelAnimationFrame(outer)
+      window.cancelAnimationFrame(inner)
+      images.forEach((img) => img.removeEventListener('load', align))
+    }
+  }, [step])
   const practice = isPracticeMode()
   const stepSkill = SKILL_BY_STEP[step]
   const stepLevel = stepSkill ? getMasteryLevel(stepSkill) : null
@@ -875,7 +911,26 @@ export function StudentSequencePage() {
       return 'video-match'
     }
   })
-  const [communityGame, setCommunityGame] = useState<CommunityVocabGameId | null>(null)
+  const [communityGame, setCommunityGame] = useState<CommunityVocabGameId | null>(() => {
+    try {
+      const saved = localStorage.getItem('pa-community-game-v1')
+      if (saved === 'what-helps' || saved === 'kind-clear') return saved
+    } catch {
+      /* ignore */
+    }
+    return null
+  })
+  useEffect(() => {
+    try {
+      if (communityGame === 'what-helps' || communityGame === 'kind-clear') {
+        localStorage.setItem('pa-community-game-v1', communityGame)
+      } else {
+        localStorage.removeItem('pa-community-game-v1')
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [communityGame])
   const [organizeTerms, setOrganizeTerms] = useState<VocabTerm[]>([])
   const [sentenceLevel1, setSentenceLevel1] = useState(false)
   const [finalPhase, setFinalPhase] = useState<'eyespy' | 'written' | 'certificate'>('eyespy')
@@ -886,14 +941,19 @@ export function StudentSequencePage() {
   const [practiceAdvancePrompt, setPracticeAdvancePrompt] = useState(false)
   const [advanceGateMsg, setAdvanceGateMsg] = useState<string | null>(null)
   const practiceAdvanceRef = useRef<(() => void) | null>(null)
+  const actionOrderRef = useRef<{ key: string; options: string[] }>({ key: '', options: [] })
   const [practiceView, setPracticeView] = useState<'hub' | 'lesson' | 'passport'>(() => {
     if (!isPracticeMode()) return 'lesson'
     /* Portal School path can open a lesson without showing the hub twice. Peek only — consume once on mount. */
-    return peekForcePracticeLesson() ? 'lesson' : 'hub'
+    if (peekForcePracticeLesson() || hasOpenedPracticeLesson()) return 'lesson'
+    return 'hub'
   })
   useEffect(() => {
     consumeForcePracticeLesson()
   }, [])
+  useEffect(() => {
+    if (isPracticeMode() && practiceView === 'lesson') markPracticeLessonOpen()
+  }, [practiceView])
   const [checkpointUnit, setCheckpointUnit] = useState<number | null>(null)
   const [empDone, setEmpDone] = useState(() => {
     try { return !!learnerGet(EMP_KEY) } catch { return false }
@@ -1280,15 +1340,13 @@ export function StudentSequencePage() {
       props.step === 4 || props.step === 5
         ? supplementaryLanguageOn('opening')
         : props.step === 6
-          ? supplementaryLanguageOn('vocab', { retake: vocabRetake })
-          : props.step === 7
-            ? supplementaryLanguageOn('organize')
-            : props.step === 17
-              ? supplementaryLanguageOn('tools', {
-                  toolIndex: toolIdx,
-                  toolCount: TOOL_CATEGORIES.length,
-                })
-              : false
+          ? supplementaryLanguageOn('vocab', { retake: vocabRetake }) &&
+            vocabLanguageStage(
+              vocabIdx,
+              vocabEnglishCutoff(orderVocabSection(VOCAB_UNIT)),
+              vocabRetake,
+            ) === 'wheels'
+          : false
     return (
       <>
         <StepShell
@@ -1516,9 +1574,19 @@ export function StudentSequencePage() {
     setSpeaking(null)
   }
 
+  function vocabStageFor(term: { id: string }) {
+    const section = orderVocabSection(VOCAB_UNIT)
+    const index = section.findIndex((item) => item.id === term.id)
+    return vocabLanguageStage(index < 0 ? section.length : index, vocabEnglishCutoff(section), vocabRetake)
+  }
+
   async function playVocabEnglish(term: (typeof VOCAB_UNIT)[number]) {
     setVocabSpeakingId(term.id)
     stopSpeech()
+    /* After the halfway workplace word, English is the first hear. */
+    if (vocabStageFor(term) === 'english') {
+      setVocabConnected((c) => (c[term.id] ? c : { ...c, [term.id]: 'English' }))
+    }
     const ok = await speakEnglish(term.english)
     setVocabSpeakingId(null)
     /* Offer unlocks typing even when audio is blocked — Hear again remains. */
@@ -1551,6 +1619,8 @@ export function StudentSequencePage() {
       heard = await speakEnglish(term.english)
     } else if (wordOnly) {
       heard = await speakSupport(term.gloss[lang], lang)
+    } else if (vocabStageFor(term) === 'english') {
+      heard = await speakEnglish(term.english)
     } else {
       await speakSupport(term.gloss[lang], lang)
       await new Promise((r) => setTimeout(r, 220))
@@ -1990,7 +2060,9 @@ export function StudentSequencePage() {
     const specialtyGate = ladderGateTerms.filter((t) => !isDailyConversationTerm(t))
     const dcLinked = dcGate.filter(wordDone).length
     const specialtyLinked = specialtyGate.filter(wordDone).length
-    const firstSpecialtyIdx = VOCAB_UNIT.findIndex((t) => !isDailyConversationTerm(t))
+    const vocabSection = orderVocabSection(VOCAB_UNIT)
+    const firstSpecialtyIdx = vocabSection.findIndex((t) => !isDailyConversationTerm(t))
+    const englishAt = vocabEnglishCutoff(vocabSection)
     const canContinue = ready || isPracticeMode()
 
     return (
@@ -2011,7 +2083,7 @@ export function StudentSequencePage() {
         nextDisabled={!canContinue}
       >
         <VocabSheet
-          terms={VOCAB_UNIT}
+          terms={vocabSection}
           index={vocabIdx}
           speakingId={vocabSpeakingId}
           heard={vocabHeard}
@@ -2072,7 +2144,11 @@ export function StudentSequencePage() {
         <p className="train-vocab-counter">
           {ready
             ? `Words practised: ${linkedCount}. Next: Language Organize — match each word to its picture.`
-            : `Words practised: ${linkedCount}. Keep going — hear, hear, pick, type.`}
+            : vocabLanguageStage(vocabIdx, englishAt, vocabRetake) === 'english'
+              ? `Words practised: ${linkedCount}. English only from here — hear the word, then pick and type.`
+              : firstSpecialtyIdx >= 0 && vocabIdx >= firstSpecialtyIdx
+                ? `Words practised: ${linkedCount}. Workplace words — your language, then English, until halfway.`
+                : `Words practised: ${linkedCount}. Greetings — your language, then English, then pick and type.`}
         </p>
       </Shell>
     )
@@ -2219,15 +2295,22 @@ export function StudentSequencePage() {
     const alreadyKnown = knownSet.has(item.termId)
     const isLast = safeIdx >= safeDeck.length - 1
     const actionTermIds = WORD_ACTIONS.map((a) => a.termId)
-    const options = shuffleChoices([
-      term?.english || item.termId,
-      ...pickSpecialtyDistractors(VOCAB_UNIT, item.termId, 3, actionTermIds).map((t) => t.english),
-    ])
+    const actionKey = `${pathwayId}:${item.termId}`
+    if (actionOrderRef.current.key !== actionKey) {
+      actionOrderRef.current = {
+        key: actionKey,
+        options: shuffleChoices([
+          term?.english || item.termId,
+          ...pickSpecialtyDistractors(VOCAB_UNIT, item.termId, 3, actionTermIds).map((t) => t.english),
+        ]),
+      }
+    }
+    const options = actionOrderRef.current.options
 
     const coachFirst = safeIdx === 0 && !actionAnswer
 
     function pickAction(opt: string) {
-      if (actionAnswer) return
+      if (actionCorrect) return
       const ok = opt === term?.english
       setActionAnswer(opt)
       setActionCorrect(ok)
@@ -2304,27 +2387,24 @@ export function StudentSequencePage() {
               <ChoiceButton
                 key={opt}
                 state={actionAnswer === opt ? (actionCorrect ? 'correct' : 'wrong') : actionAnswer ? (opt === term?.english ? 'correct' : 'idle') : 'idle'}
-                disabled={!!actionAnswer && opt !== actionAnswer && opt !== term?.english}
+                disabled={actionCorrect}
                 onClick={() => pickAction(opt)}
               >
                 {opt}
               </ChoiceButton>
             ))}
           </div>
-          {actionAnswer && (
+          {actionAnswer && !actionCorrect && (
+            <p className="play-soft-miss" role="status">
+              {softMissLine(`This action uses the ${term?.english}.`)}
+            </p>
+          )}
+          {actionCorrect && (
             <>
-              {actionCorrect ? (
-                <div className="alert ok">Yes. Word and action match.</div>
-              ) : (
-                <p className="play-soft-miss" role="status">
-                  {softMissLine(`This action uses the ${term?.english}.`)}
-                </p>
-              )}
+              <div className="alert ok">Yes. Word and action match.</div>
               <AdvanceGateNote />
               <button type="button" className="btn btn-primary" onClick={nextAction}>
-                {actionCorrect
-                  ? (isLast ? 'Continue to supported practice' : 'Next action')
-                  : SOFT_RETRY_LABEL}
+                {isLast ? 'Continue to supported practice' : 'Next action'}
               </button>
             </>
           )}
@@ -2874,26 +2954,13 @@ export function StudentSequencePage() {
           <h3>{cat.title}</h3>
           <p>{cat.why}</p>
           <p className="train-check-prompt">{cat.prompt}</p>
-          {supplementaryLanguageOn('tools', {
-            toolIndex: toolIdx,
-            toolCount: TOOL_CATEGORIES.length,
-          }) ? (
-            <InstructionHearChip
-              english={cat.prompt}
-              bilingual
-              auto={false}
-              autoKey={`tool-${toolIdx}`}
-              className="train-shell-instr-hear"
-            />
-          ) : (
-            <InstructionHearChip
-              english={cat.prompt}
-              bilingual={false}
-              auto={false}
-              autoKey={`tool-en-${toolIdx}`}
-              className="train-shell-instr-hear"
-            />
-          )}
+          <InstructionHearChip
+            english={cat.prompt}
+            bilingual={false}
+            auto={false}
+            autoKey={`tool-en-${toolIdx}`}
+            className="train-shell-instr-hear"
+          />
           <div className="train-choice-grid" data-coach="choice-opt">
             {cat.options.map((opt) => (
               <ChoiceButton

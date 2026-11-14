@@ -234,7 +234,7 @@ export function useAutoInstructionNarration(
     done.current = stamp
     let cancelled = false
     setStatus({ kind: 'loading', phase: 'translate' })
-    void narrateInstruction(english, { lang }).then((next) => {
+    void narrateInstruction(english, { lang, speak: false }).then((next) => {
       if (!cancelled) setStatus(next)
     })
     return () => {

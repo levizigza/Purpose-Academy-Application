@@ -14,11 +14,46 @@ export function specialtyVocabPool(vocab: readonly VocabTerm[]): VocabTerm[] {
   return specialty.length >= 4 ? specialty : [...vocab]
 }
 
+/** Home language through the greetings and the first half of the workplace words, then English only. */
+export type VocabLanguageStage = 'wheels' | 'english'
+
+/** First card that is English only: after the greetings, halfway through the workplace words. */
+export function vocabEnglishCutoff(terms: readonly VocabTerm[]): number {
+  let start = -1
+  let workplace = 0
+  for (let i = 0; i < terms.length; i += 1) {
+    if (isDailyConversationTerm(terms[i])) continue
+    if (start < 0) start = i
+    workplace += 1
+  }
+  if (start < 0 || workplace === 0) return terms.length
+  return start + Math.floor(workplace / 2)
+}
+
+export function vocabLanguageStage(
+  index: number,
+  cutoff: number,
+  retake = false,
+): VocabLanguageStage {
+  if (retake || index >= cutoff) return 'english'
+  return 'wheels'
+}
+
 /**
- * Ladder gate before Construction Sentence Structure:
- * Daily Conversation Level-1 (greetings page) + specialty Visual Vocabulary Level-1
- * (first workplace picture page). Sentences must not unlock on greetings alone.
+ * Student-practice order for every stream.
+ * Greetings first, then the workplace pictures, then any later conversation words.
+ * Halfway through the workplace pictures the cards become English only.
  */
+export function orderVocabSection(vocab: readonly VocabTerm[]): VocabTerm[] {
+  const greetings = vocab.filter(isDailyConversationTerm)
+  const workplace = vocab.filter((term) => !isDailyConversationTerm(term))
+  return [
+    ...greetings.slice(0, LEVEL1_PAGE_SIZE),
+    ...workplace,
+    ...greetings.slice(LEVEL1_PAGE_SIZE),
+  ]
+}
+
 export function sentenceLadderGateTerms(vocab: readonly VocabTerm[]): VocabTerm[] {
   const dc = vocab.filter(isDailyConversationTerm).slice(0, LEVEL1_PAGE_SIZE)
   const specialty = specialtyVocabPool(vocab).slice(0, LEVEL1_PAGE_SIZE)

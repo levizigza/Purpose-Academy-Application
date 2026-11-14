@@ -41,6 +41,8 @@ const PROGRESS_KEYS = [
   'pa-station-explainers-seen-v1',
   'pa-station-coach-seen-v1',
   'pa-sp-station-v1',
+  'pa-community-game-v1',
+  'pa-practice-lesson-open-v1',
 ] as const
 
 function migrateLegacy() {
@@ -153,6 +155,24 @@ export function setPracticeName(fullName: string) {
     learnerSet(NAME_KEY, name)
     learnerSet(FLAG_KEY, '1')
     window.dispatchEvent(new CustomEvent('pa-practice-started', { detail: { name } }))
+  } catch {
+    /* ignore */
+  }
+}
+
+const LESSON_OPEN_KEY = 'pa-practice-lesson-open-v1'
+
+export function hasOpenedPracticeLesson(): boolean {
+  try {
+    return learnerGet(LESSON_OPEN_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+export function markPracticeLessonOpen() {
+  try {
+    learnerSet(LESSON_OPEN_KEY, '1')
   } catch {
     /* ignore */
   }
