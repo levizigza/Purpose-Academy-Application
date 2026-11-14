@@ -70,7 +70,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     steps: [10],
     title: 'Picture Match',
     lede: 'Hear the sentence. Tap the picture that matches. Three photos. Wrong? Try again.',
-    video: 'explainers/video-match.mp4',
+    video: 'explainers/picture-match-station.mp4',
   },
   {
     /* Step 11 — own dropdown station (like Language Organize). */
@@ -78,7 +78,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     steps: [11],
     title: 'Copycat',
     lede: 'Look at the picture. Hear the sentence. Tap the words in order — say it back.',
-    video: 'explainers/copycat.mp4',
+    video: 'explainers/copycat-station.mp4',
   },
   {
     id: 'workplace-instructions',

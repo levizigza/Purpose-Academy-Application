@@ -17136,9 +17136,9 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
 .supported-pic-btn img {
   width: 100%;
   height: auto;
-  min-height: 8rem;
-  max-height: min(32vh, 14rem);
+  max-height: min(36vh, 16rem);
   object-fit: contain;
+  background: #fff;
 }
 .supported-pic-btn.is-correct,
 .supported-sent-btn.is-correct {
@@ -17173,8 +17173,7 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
   min-height: 6.4rem;
 }
 .is-phone-app .supported-pic-btn img {
-  min-height: 7rem;
-  max-height: min(28vh, 12rem);
+  max-height: min(30vh, 12rem);
 }
 .is-phone-app .supported-game-photo--hero {
   min-height: 110px;
@@ -17569,8 +17568,7 @@ html.pa-course-shell .instruction-l1-text.is-loading,
 .supported-photo-el {
   width: 100%;
   height: auto;
-  min-height: 12rem;
-  max-height: min(46vh, 22rem);
+  max-height: min(42vh, 18rem);
   object-fit: contain;
   display: block;
   background: #fff;
@@ -17604,8 +17602,7 @@ html.pa-course-shell .instruction-l1-text.is-loading,
 }
 .is-phone-app .supported-photo-el {
   height: auto;
-  min-height: 8.5rem;
-  max-height: min(34vh, 14rem);
+  max-height: min(32vh, 14rem);
 }
 .is-phone-app .supported-video-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
