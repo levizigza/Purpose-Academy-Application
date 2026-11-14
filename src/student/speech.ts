@@ -1,4 +1,5 @@
 import type { SupportLang } from './journeyCurriculum'
+import { unlockFoley } from '../audio/foley'
 
 /**
  * Speech for Purpose Academy student audio.
@@ -72,12 +73,20 @@ async function loadBakedManifest(): Promise<Record<string, string> | null> {
   }
 }
 
-async function speakBaked(text: string, langCode: string): Promise<boolean> {
+function bakedFile(manifest: Record<string, string>, langCode: string, text: string): string | undefined {
   const clean = text.trim().replace(/\s+/g, ' ')
-  if (!clean) return false
+  if (!clean) return undefined
+  const direct = manifest[`${langCode}::${clean}`]
+  if (direct) return direct
+  const softer = clean.replace(/[.!?…]+$/u, '').trim()
+  if (softer && softer !== clean) return manifest[`${langCode}::${softer}`]
+  return undefined
+}
+
+async function speakBaked(text: string, langCode: string): Promise<boolean> {
   const manifest = await loadBakedManifest()
   if (!manifest) return false
-  const file = manifest[`${langCode}::${clean}`]
+  const file = bakedFile(manifest, langCode, text)
   if (!file) return false
   return playAudioUrl(`${assetBase()}tts/${file}`)
 }
@@ -134,6 +143,42 @@ export function stopSpeech() {
 
 export function primeSpeech() {
   void loadVoices()
+}
+
+/**
+ * A tap has to start sound in the same moment as the click.
+ * Later awaits (the speech file, a translation) are too late for the browser.
+ */
+let gestureAudio: HTMLAudioElement | null = null
+
+export function unlockSpeechPlayback() {
+  if (typeof window === 'undefined') return
+  try {
+    window.speechSynthesis?.getVoices()
+    window.speechSynthesis?.resume()
+  } catch {
+    /* ignore */
+  }
+  try {
+    if (!gestureAudio) {
+      gestureAudio = new Audio()
+      /* A tiny silent wav so the first tap unlocks later lesson audio. */
+      gestureAudio.src =
+        'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA='
+    }
+    void gestureAudio.play().catch(() => {})
+  } catch {
+    /* ignore */
+  }
+}
+
+if (typeof window !== 'undefined') {
+  const onGesture = () => {
+    unlockSpeechPlayback()
+    void unlockFoley()
+  }
+  window.addEventListener('pointerdown', onGesture, { capture: true })
+  window.addEventListener('keydown', onGesture, { capture: true })
 }
 
 function playAudioUrl(url: string): Promise<boolean> {
@@ -247,6 +292,7 @@ function speakBrowser(text: string, lang: string): Promise<boolean> {
       /* Cancel only synthesis — keep baked/neural audio path independent. */
       try {
         window.speechSynthesis.cancel()
+        window.speechSynthesis.resume()
       } catch {
         /* ignore */
       }
@@ -272,23 +318,39 @@ function speakBrowser(text: string, lang: string): Promise<boolean> {
         settled = true
         resolve(ok)
       }
-      u.onend = () => done(true)
-      u.onerror = (e) => done(e.error === 'interrupted' || e.error === 'canceled')
-      /* Some browsers fire neither end nor error after cancel races — time out as success if speaking. */
-      window.setTimeout(() => {
-        if (!settled && window.speechSynthesis.speaking) done(true)
-        else if (!settled) done(false)
-      }, 8000)
-      try {
-        window.speechSynthesis.speak(u)
-      } catch {
-        done(false)
+      const pump = window.setInterval(() => {
+        try {
+          if (window.speechSynthesis.paused) window.speechSynthesis.resume()
+        } catch {
+          /* ignore */
+        }
+      }, 250)
+      const finish = (ok: boolean) => {
+        window.clearInterval(pump)
+        done(ok)
       }
+      u.onend = () => finish(true)
+      u.onerror = (e) => finish(e.error === 'interrupted' || e.error === 'canceled')
+      /* Some browsers fire neither end nor error after cancel races. */
+      window.setTimeout(() => {
+        if (!settled && (window.speechSynthesis.speaking || window.speechSynthesis.pending)) finish(true)
+        else if (!settled) finish(false)
+      }, 12000)
+      /* cancel() in the same turn swallows the next speak. */
+      window.setTimeout(() => {
+        try {
+          window.speechSynthesis.resume()
+          window.speechSynthesis.speak(u)
+        } catch {
+          finish(false)
+        }
+      }, 40)
     })
   })
 }
 
 async function speak(text: string, langCode: string, browserLang: string): Promise<boolean> {
+  unlockSpeechPlayback()
   const bakedOk = await speakBaked(text, langCode)
   if (bakedOk) return true
   const neuralOk = await speakNeural(text, langCode)
