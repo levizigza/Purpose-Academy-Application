@@ -280,32 +280,57 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
   useEffect(() => {
     let inner = 0
+    const timers: number[] = []
     const align = () => {
       const panel = document.querySelector('.iphone-scroll.is-phone-app .reveal.train-panel')
       if (!(panel instanceof HTMLElement)) return
       const panelBox = panel.getBoundingClientRect()
-      const nodes = [...panel.querySelectorAll(
-        '.career-choice, .career-likert-btn, .train-choice, .sentence-cloze-chip, .supported-video-btn, .eye-spy-hotspot, .supported-chip-btn, .vocab-organize-piece, .career-assess-actions .btn-primary, .btn-primary',
-      )]
-      const action = nodes.find((el) => {
+      const choices = [...panel.querySelectorAll(
+        '.career-choice, .career-likert-btn, .train-choice, .sentence-cloze-chip, .supported-video-btn, .eye-spy-hotspot, .supported-chip-btn, .vocab-organize-piece',
+      )].filter((el): el is HTMLElement => el instanceof HTMLElement)
+      const overflowing = choices.find((el) => {
         const box = el.getBoundingClientRect()
-        return box.height > 8 && (box.top < panelBox.top - 2 || box.bottom > panelBox.bottom + 2)
+        return box.height > 8 && box.width > 8 && (box.top < panelBox.top - 2 || box.bottom > panelBox.bottom + 2)
       })
-      if (!(action instanceof HTMLElement)) return
-      const actionBox = action.getBoundingClientRect()
-      panel.scrollTop += actionBox.top - panelBox.top - 8
+      const forward = [...panel.querySelectorAll('.btn-primary')].find((el): el is HTMLElement => {
+        if (!(el instanceof HTMLElement)) return false
+        const box = el.getBoundingClientRect()
+        return box.height > 8 && box.width > 8 && (box.top < panelBox.top - 2 || box.bottom > panelBox.bottom + 2)
+      })
+      const target = overflowing || forward || null
+      if (!target) return
+      const box = target.getBoundingClientRect()
+      /* A short nudge keeps the picture the size it is and still inside the phone panel. */
+      if (box.height > panelBox.height - 16) {
+        panel.scrollTop += box.top - panelBox.top - 8
+        return
+      }
+      if (box.bottom > panelBox.bottom - 2) panel.scrollTop += box.bottom - panelBox.bottom + 8
+      else if (box.top < panelBox.top + 2) panel.scrollTop += box.top - panelBox.top - 8
     }
     const outer = window.requestAnimationFrame(() => {
       inner = window.requestAnimationFrame(align)
     })
+    timers.push(
+      window.setTimeout(align, 0),
+      window.setTimeout(align, 40),
+      window.setTimeout(align, 80),
+      window.setTimeout(align, 280),
+    )
     const panel = document.querySelector('.iphone-scroll.is-phone-app .reveal.train-panel')
     const images = panel ? [...panel.querySelectorAll('img')] : []
     images.forEach((img) => {
       if (!img.complete) img.addEventListener('load', align, { once: true })
     })
+    const watch = typeof ResizeObserver !== 'undefined' && panel instanceof HTMLElement
+      ? new ResizeObserver(() => align())
+      : null
+    if (watch && panel instanceof HTMLElement) watch.observe(panel)
     return () => {
       window.cancelAnimationFrame(outer)
       window.cancelAnimationFrame(inner)
+      timers.forEach((timer) => window.clearTimeout(timer))
+      watch?.disconnect()
       images.forEach((img) => img.removeEventListener('load', align))
     }
   }, [step])
