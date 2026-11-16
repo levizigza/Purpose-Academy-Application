@@ -435,6 +435,12 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-11-16 — Craft lock before Wave 9 (L6)
+
+- **Layers:** L6 systems integrity — freeze before the next usability climb.
+- **Ship:** Splash restore point `v45` + [`docs/CRAFT_LOCK_PRE_WAVE9.md`](CRAFT_LOCK_PRE_WAVE9.md) documenting Modes-first entry, nested Instructor Practice, phone Feedback, learner-fear lexicon, and Pages verify rules.
+- **Critic:** Wave 9 is **not** defined in-repo yet. Do not invent scope. Prior mistakes (splash-before-modes, silent deploy lag) came from climbing without a locked brief.
+
 ### 2026-11-05 — Site-wide craft pass (modes · phone · Pages integrity) (L3 / L4 / L6)
 
 - **Layers:** L3 information display · L4 attention (modes-first integrity) · L6 systems across Desktop/Phone/Instructor Practice.
