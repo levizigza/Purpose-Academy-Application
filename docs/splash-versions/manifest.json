@@ -1,6 +1,18 @@
 {
   "versions": [
     {
+      "id": "v45",
+      "note": "Lock before Wave 9 — modes-first + Instructor Practice nested + phone feedback (2026-11-16)",
+      "sessionKey": "v51",
+      "commit": "9442585b",
+      "createdAt": "2026-11-16T19:03:22.104Z",
+      "files": [
+        "splash.css",
+        "OpeningDoor.tsx",
+        "EntryPages.tsx"
+      ]
+    },
+    {
       "id": "v44",
       "note": "Before phone hammer center + Tap blink (user feedback)",
       "sessionKey": "v43",
@@ -61,5 +73,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-27T22:25:41.610Z"
+  "updatedAt": "2026-11-16T19:03:22.105Z"
 }
