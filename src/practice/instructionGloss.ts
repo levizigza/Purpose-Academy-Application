@@ -49,7 +49,7 @@ const GLOSS: Record<string, Record<string, string>> = {
       'የሚመሳሰለውን የእንግሊዝኛ ቃል ይጫኑ — አብረው ይጠፋሉ።',
     'Pick the full sentence that fits': 'የሚስማማውን ሙሉ ዓረፍተ ነገር ይምረጡ።',
     'Hear the sentence': 'ዓረፍተ ነገሩን ይስሙ።',
-    'Press the answer that fits': 'የሚስማማውን መልስ ይጫኑ።',
+    'Tap the answer that fits': 'የሚስማማውን መልስ ይጫኑ።',
     'Your turn': 'የእርስዎ ተራ',
     'Go': 'ሂድ',
   },

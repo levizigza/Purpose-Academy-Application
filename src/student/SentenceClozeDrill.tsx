@@ -466,7 +466,7 @@ export function SentenceClozeDrill({
   function WorksheetPageJump({ id }: { id: string }) {
     return (
       <label className="sentence-cloze-page-jump" htmlFor={id}>
-        <span>Worksheet page</span>
+        <span>Page</span>
         <select
           id={id}
           value={page}

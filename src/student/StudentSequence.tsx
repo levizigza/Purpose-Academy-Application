@@ -2383,6 +2383,14 @@ export function StudentSequencePage() {
     return (
       <Shell
         step={9}
+        titleOverride="Word and action"
+        helpOverride={
+          pathwayId === 'community'
+            ? 'Look at the picture. Tap the support item for this action.'
+            : pathwayId === 'logistics'
+              ? 'Look at the picture. Tap the warehouse item for this action.'
+              : 'Look at the picture. Tap the tool or material for this action.'
+        }
         onBack={() => {
           if (SENTENCE_CLOZE.length) {
             setStep8Phase('sentences')
@@ -2399,7 +2407,7 @@ export function StudentSequencePage() {
         </p>
         <p className="train-vocab-counter">
           Action {safeIdx + 1} of {safeDeck.length}
-          {knownSet.size ? ` · ${knownSet.size} already known skipped or quick-checked` : ''}
+          {knownSet.size ? ` · ${knownSet.size} already known` : ''}
         </p>
         <article className="word-action-card">
           <PictureCard
@@ -2411,7 +2419,7 @@ export function StudentSequencePage() {
           {alreadyKnown && (
             <p className="vocab-known-note">Already known — quick confirm the action, then continue.</p>
           )}
-          <p className="word-action-cue"><strong>Action cue:</strong> {item.actionCue}</p>
+          <p className="word-action-cue"><strong>What to do:</strong> {item.actionCue}</p>
           <p className="train-check-prompt">
             {pathwayId === 'community'
               ? 'Which support item is this action for?'
