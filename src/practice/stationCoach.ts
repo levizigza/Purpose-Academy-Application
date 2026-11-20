@@ -74,12 +74,12 @@ export const STATION_COACH: Record<string, CoachStep[]> = {
     { target: '[data-coach="vv-type"]', say: 'Type that word · then Go' },
   ],
   'language-organize': [
-    { target: '[data-coach="org-pic"]', say: 'Press a picture' },
-    { target: '[data-coach="org-drop"]', say: 'Drop it on the empty box' },
+    { target: '[data-coach="org-pic"]', say: 'Tap a picture' },
+    { target: '[data-coach="org-drop"]', say: 'Tap the matching word' },
   ],
   'eye-spy': [
-    { target: '[data-coach="spy-pic"]', say: 'Press a picture on the board' },
-    { target: '[data-coach="spy-word"]', say: 'Press the matching English word — they clear together' },
+    { target: '[data-coach="spy-pic"]', say: 'Tap a picture on the board' },
+    { target: '[data-coach="spy-word"]', say: 'Tap the matching English word. They clear together.' },
   ],
   'sentence-structure': [
     { target: '[data-coach="sent-pick"]', say: 'Pick the full sentence that fits' },

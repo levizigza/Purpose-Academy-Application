@@ -42,10 +42,10 @@ const GLOSS: Record<string, Record<string, string>> = {
       'በአንድ ጊዜ አንድ ቃል። የሚረዱትን ቋንቋ ይጫኑ (እንግሊዝኛም አለ)፣ ወይም ትርጉም ለመስማት ተጨማሪ ቋንቋዎች። ተመሳሳዩን ይምረጡ። ይጻፉት።',
     'Press Hear English': 'Hear English ይጫኑ።',
     'Press what you should do': 'ማድረግ ያለብዎትን ይጫኑ።',
-    'Press a picture': 'ስዕል ይጫኑ።',
-    'Drop it on the empty box': 'በባዶ ሳጥኑ ላይ ያስቀምጡት።',
-    'Press a picture on the board': 'በሰሌዳው ላይ ስዕል ይጫኑ።',
-    'Press the matching English word — they clear together':
+    'Tap a picture': 'ስዕል ይጫኑ።',
+    'Tap the matching word': 'የሚመሳሰለውን ቃል ይጫኑ።',
+    'Tap a picture on the board': 'በሰሌዳው ላይ ስዕል ይጫኑ።',
+    'Tap the matching English word. They clear together.':
       'የሚመሳሰለውን የእንግሊዝኛ ቃል ይጫኑ — አብረው ይጠፋሉ።',
     'Pick the full sentence that fits': 'የሚስማማውን ሙሉ ዓረፍተ ነገር ይምረጡ።',
     'Hear the sentence': 'ዓረፍተ ነገሩን ይስሙ።',

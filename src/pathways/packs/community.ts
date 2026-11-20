@@ -73,7 +73,7 @@ export const communityPack: PathwayPack = {
     9: {
       goal: 'Practise with an instructor, then connect to community-support employment.',
       outcomes: [
-        'Complete observation scenarios with dignity and escalate-when-unsure',
+        'Practise the calm order. Ask for help when you are not sure.',
         'Prepare employment materials that lead with privacy and what you practised',
       ],
     },
