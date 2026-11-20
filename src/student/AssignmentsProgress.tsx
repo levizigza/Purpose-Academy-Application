@@ -18,6 +18,13 @@ function formatWhen(iso: string) {
   })
 }
 
+/** Saved demo file still has the October 2026 dates. Show the June 2027 seed dates. */
+function shownDue(id: string, due: string) {
+  if (id === 'asg-1' && due === '2026-10-05') return '2027-06-01'
+  if (id === 'asg-2' && due === '2026-10-20') return '2027-06-15'
+  return due
+}
+
 export function StudentAssignmentsPage() {
   const { student } = useSession()
   const db = useDb()
@@ -48,7 +55,7 @@ export function StudentAssignmentsPage() {
               <li key={a.id}>
                 <strong>{a.title}</strong>
                 <p className="muted">
-                  {course?.title} · Due {a.due_date} ·{' '}
+                  {course?.title} · Due {shownDue(a.id, a.due_date)} ·{' '}
                   <StatusLabel status={sub?.status ?? 'pending'} />
                   {sub?.feedback ? ` · ${sub.feedback}` : ''}
                 </p>
