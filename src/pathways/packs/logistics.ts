@@ -62,7 +62,7 @@ export const logisticsPack: PathwayPack = {
       ],
     },
     7: {
-      goal: 'Build safety, equipment, and systems foundations every warehouse expects.',
+      goal: 'Learn the safety, equipment, and systems a warehouse uses.',
       outcomes: [
         'Finish the safety practice',
         'Name equipment groups and logistics systems (receive → store → pick → ship)',

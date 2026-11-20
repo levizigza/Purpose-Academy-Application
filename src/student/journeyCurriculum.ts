@@ -16,7 +16,7 @@ export const JOURNEY_STEPS = [
   { n: 4, title: 'Work Style', help: 'Ten short questions. Pick what sounds most like you — there is no wrong answer.', purpose: 'A few short questions open Construction, Logistics, or Community Support.', unit: 2 },
   { n: 5, title: 'Your Career Profile', help: 'See the path that fits how you like to work.', purpose: 'Work style → recommended pathway. Later practice, then a deeper “what kind of work feels right?” step.', unit: 2 },
   { n: 6, title: 'Workplace Words', help: 'See the picture. Hear your language. Hear English. Pick the match. Type the word. One word at a time.', purpose: 'Hear it, pick it, then type the English word.', unit: 3 },
-  { n: 7, title: 'Language Organize', help: 'Tap a picture. Then tap the matching word. Five short rounds.', purpose: 'Put each picture on the word you already practiced.', unit: 3 },
+  { n: 7, title: 'Language Organize', help: 'Tap a picture. Then tap the matching word. Five short rounds.', purpose: 'Tap each picture, then tap the word you already practiced.', unit: 3 },
   { n: 8, title: 'English Eye Spy', help: 'Tap a picture, then tap its English name.', purpose: 'See the same words again before you make sentences.', unit: 3 },
   { n: 9, title: 'Sentence Structure → Word → Action', help: 'Read the sentence. Pick the full sentence. Hear it. Type it. Then pick the tool.', purpose: 'Build the sentence, then show which tool does the action.', unit: 4 },
   { n: 10, title: 'Picture Match', help: 'Hear the sentence. Tap the matching workplace picture. Three choices.', purpose: 'Practice short sentences with help. Mistakes teach. No rush.', unit: 4 },

@@ -70,7 +70,7 @@ export const constructionPack: PathwayPack = {
       ],
     },
     7: {
-      goal: 'Build safety, tool, and systems foundations Alberta construction sites expect.',
+      goal: 'Learn the safety, tools, and systems a construction site uses.',
       outcomes: [
         'Finish the safety practice',
         'Name tool groups and construction systems',

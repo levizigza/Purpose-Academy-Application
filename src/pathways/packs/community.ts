@@ -56,7 +56,7 @@ export const communityPack: PathwayPack = {
       ],
     },
     7: {
-      goal: 'Build safety, tool, and systems foundations community support roles expect.',
+      goal: 'Learn the safety, tools, and systems community support uses.',
       outcomes: [
         'Name support tools and community systems',
         'Practise Care Certificate values: dignity, privacy, choice, respect',

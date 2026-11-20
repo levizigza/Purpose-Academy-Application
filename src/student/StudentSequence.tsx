@@ -255,7 +255,7 @@ function LearnCard({ title, body, mark }: { title: string; body: string; mark?: 
 
 /* ─── Step shell — SiteWise-inspired training chrome ─── */
 
-function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, bilingual = false, onOpenHub, onJumpLesson, explainerStationId = null, titleOverride, helpOverride }: {
+function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nextDisabled, transitioning, transitionMsg, supportLang, bilingual = false, onOpenHub, onJumpLesson, explainerStationId = null, titleOverride, helpOverride, purposeOverride }: {
   step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
   transitioning?: boolean; transitionMsg?: string; supportLang?: SupportLang
   /** Chosen language beside English for this step. Later steps stay English. */
@@ -266,6 +266,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   explainerStationId?: string | null
   titleOverride?: string
   helpOverride?: string
+  purposeOverride?: string
 }) {
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
@@ -274,7 +275,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 14] : null
   const title = titleOverride || (shellCopy ? assessT(shellCopy.title, supportLang!) : base.title)
   const help = helpOverride || (shellCopy ? assessT(shellCopy.help, supportLang!) : base.help)
-  const purpose = shellCopy ? assessT(shellCopy.purpose, supportLang!) : base.purpose
+  const purpose = purposeOverride || (shellCopy ? assessT(shellCopy.purpose, supportLang!) : base.purpose)
   const unit = unitForStep(step)
   const pct = Math.round((step / JOURNEY_STEP_COUNT) * 100)
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
@@ -2390,6 +2391,13 @@ export function StudentSequencePage() {
             : pathwayId === 'logistics'
               ? 'Look at the picture. Tap the warehouse item for this action.'
               : 'Look at the picture. Tap the tool or material for this action.'
+        }
+        purposeOverride={
+          pathwayId === 'community'
+            ? 'The picture shows one support action. Tap the item that does it.'
+            : pathwayId === 'logistics'
+              ? 'The picture shows one warehouse action. Tap the item that does it.'
+              : 'The picture shows one job action. Tap the tool or material that does it.'
         }
         onBack={() => {
           if (SENTENCE_CLOZE.length) {
