@@ -10,7 +10,6 @@ import {
 } from '../data/store'
 import { courseIdForPathway, pathwayMeta, setActivePathway } from '../pathways'
 import { openPracticeSpine } from '../practice/PracticeMode'
-import { JOURNEY_STEP_COUNT } from './journeyCurriculum'
 
 function formatWhen(iso: string) {
   return new Date(iso).toLocaleString(undefined, {
