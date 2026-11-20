@@ -39,7 +39,7 @@ export const logisticsPack: PathwayPack = {
     4: {
       goal: 'Put the words into Logistics Questions sentences, then follow workplace instructions.',
       outcomes: [
-        'Complete Logistics English cloze worksheets — one try, correct word slides into the blank',
+        'Pick the full sentence, hear it, then type it',
         'Connect word → floor action',
         'Match pictures to English words',
         'Follow short workplace instructions',

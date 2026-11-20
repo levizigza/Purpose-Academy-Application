@@ -47,7 +47,7 @@ export const constructionPack: PathwayPack = {
     4: {
       goal: 'Put the words into Construction Questions sentences, then follow workplace instructions.',
       outcomes: [
-        'Complete Construction English cloze worksheets — one try, correct word slides into the blank',
+        'Pick the full sentence, hear it, then type it',
         'Connect word → site action',
         'Match pictures to English words',
         'Follow short workplace instructions',
