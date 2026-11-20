@@ -1366,6 +1366,7 @@ export function StudentSequencePage() {
     step: number; children: ReactNode; onBack?: () => void; onNext?: () => void; nextLabel?: string; nextDisabled?: boolean
     titleOverride?: string
     helpOverride?: string
+    purposeOverride?: string
   }) {
     const bilingual =
       props.step === 4 || props.step === 5
