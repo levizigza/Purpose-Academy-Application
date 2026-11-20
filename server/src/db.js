@@ -22,6 +22,24 @@ function hashPasswords(db) {
   return db
 }
 
+/** Demo tasks saved before the June 2027 seed. Lift only these exact old dates. */
+const STALE_DEMO_DUE = {
+  'asg-1': { from: '2026-10-05', to: '2027-06-01' },
+  'asg-2': { from: '2026-10-20', to: '2027-06-15' },
+}
+
+function liftStaleDemoDueDates(db) {
+  let changed = false
+  for (const assignment of db.assignments || []) {
+    const lift = STALE_DEMO_DUE[assignment.id]
+    if (lift && assignment.due_date === lift.from) {
+      assignment.due_date = lift.to
+      changed = true
+    }
+  }
+  return changed
+}
+
 export function loadDb() {
   ensureDir()
   if (!fs.existsSync(DB_PATH)) {
@@ -29,7 +47,9 @@ export function loadDb() {
     fs.writeFileSync(DB_PATH, JSON.stringify(seeded, null, 2))
     return seeded
   }
-  return JSON.parse(fs.readFileSync(DB_PATH, 'utf8'))
+  const db = JSON.parse(fs.readFileSync(DB_PATH, 'utf8'))
+  if (liftStaleDemoDueDates(db)) saveDb(db)
+  return db
 }
 
 export function saveDb(db) {
