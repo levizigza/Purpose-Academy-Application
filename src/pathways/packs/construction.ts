@@ -102,8 +102,8 @@ export const constructionPack: PathwayPack = {
     },
     9: {
       title: 'Sentence Structure',
-      help: 'Incomplete sentence above. Pick the full sentence that fits, hear it, then type it — soft try again if not yet.',
-      purpose: 'Construction Questions mold — pick · hear · type the full sentence (play craft), then Word → Action.',
+      help: 'Pick the full sentence that fits, hear it, then type it. Wrong? Try again.',
+      purpose: 'Pick the full sentence, hear it, then type it. Then match the word to the action.',
     },
     13: {
       title: 'Basic Computer Skills',

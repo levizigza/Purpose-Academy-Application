@@ -37,8 +37,8 @@ export const communityPack: PathwayPack = {
       goal: 'Pick the full sentence, hear it, then type it. Then follow workplace instructions.',
       outcomes: [
         'Pick the full sentence, hear it, then type it',
-        'Follow short workplace instructions with specialty distractors',
-        'Keep dignity, privacy, consent, and escalate-when-unsure in every drill',
+        'Follow short workplace instructions.',
+        'Keep dignity, privacy, and consent. Ask for help when you are not sure.',
       ],
     },
     5: {
@@ -81,8 +81,8 @@ export const communityPack: PathwayPack = {
   stepTitles: {
     6: {
       title: 'Visual Vocabulary',
-      help: 'Daily Conversation (200) then Community Support Visual Vocabulary (499). Link your language → English with pictures.',
-      purpose: 'Mother-tongue bridge into specialty community-support English.',
+      help: 'See the picture. Hear your language. Hear English. Pick the match. Type the word. One word at a time.',
+      purpose: 'Hear your language, then the English word, and match the picture.',
     },
     8: {
       title: 'English Eye Spy',
