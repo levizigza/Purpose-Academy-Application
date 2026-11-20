@@ -527,7 +527,7 @@ export function SentenceClozeDrill({
         <p className="section-kicker">Sentence Structure</p>
         <h2>Keep learning this page</h2>
         <p className="lede">
-          Pick the full sentence, hear it, then type it — soft try again when it is not yet. No rush.
+          Pick the full sentence, hear it, then type it. Wrong? Try again. No rush.
         </p>
         <button type="button" className="btn btn-primary" onClick={retryPage}>
           Not yet · practice this page again
@@ -594,8 +594,7 @@ export function SentenceClozeDrill({
       </p>
       <WorksheetPageJump id="sentence-page-jump-drill" />
       <p className="lede sentence-cloze-help">
-        Incomplete sentence above. Pick the full sentence that fits, hear it, then type it — soft try
-        again if not yet. Take your time — no rush.
+        Pick the full sentence that fits, hear it, then type it. Wrong? Try again. Take your time.
       </p>
 
       <div
