@@ -100,7 +100,7 @@ export function SubmissionPage() {
         title={assignment.title}
         help={assignment.description}
         backTo="/app/student/assignments"
-        backLabel="Assignments"
+        backLabel="Tasks"
       />
       {existing?.status === 'graded' && (
         <div className="alert ok">

@@ -30,13 +30,13 @@ export const SUPPORTED_STATIONS: Record<
     title: 'Picture Match',
     help: 'Hear the sentence. Tap the picture that matches.',
     nearby: (left) => (left <= 0 ? 'Pictures clear' : `${left} left`),
-    childhood: 'Like matching cards — a sentence and a workplace photo.',
+    childhood: 'A sentence and a workplace photo.',
   },
   copycat: {
     title: 'Copycat',
     help: 'Look at the picture. Hear the sentence. Tap the words in order.',
     nearby: (left) => (left <= 0 ? 'Copycat clear' : `${left} left`),
-    childhood: 'Like childhood copycat — hear it, then say it back with taps.',
+    childhood: 'Hear it, then say it back by tapping the words.',
   },
 }
 

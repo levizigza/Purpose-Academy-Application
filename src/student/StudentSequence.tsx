@@ -469,7 +469,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
               </div>
               {practice && <PracticeStatsStrip step={step} />}
               {onJumpLesson && (
-                <nav className="practice-section-skip" aria-label="Skip between sections for quality review">
+                <nav className="practice-section-skip" aria-label="Open another station">
                   <button
                     type="button"
                     className="btn btn-ghost practice-section-skip-btn"
@@ -479,11 +479,11 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
                     Prev section
                   </button>
                   <label className="practice-section-skip-jump">
-                    <span>Jump to section</span>
+                    <span>Station</span>
                     <select
                       value={step}
                       onChange={(e) => onJumpLesson(Number(e.target.value))}
-                      aria-label="Jump to any practice section"
+                      aria-label="Choose a station"
                     >
                       {jumpSteps.map((s) => (
                         <option key={s.n} value={s.n}>
@@ -508,8 +508,8 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
         {/* Desktop review: keep a dedicated jump fold when not using the phone station menu layout */}
         {practice && onJumpLesson && (
           <details className="practice-section-skip-fold">
-            <summary className="practice-section-skip-summary">Jump sections (review)</summary>
-            <nav className="practice-section-skip" aria-label="Skip between sections for quality review">
+            <summary className="practice-section-skip-summary">Open another station</summary>
+            <nav className="practice-section-skip" aria-label="Open another station">
               <button
                 type="button"
                 className="btn btn-ghost practice-section-skip-btn"
@@ -519,11 +519,11 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
                 Prev section
               </button>
               <label className="practice-section-skip-jump">
-                <span>Jump to section</span>
+                <span>Station</span>
                 <select
                   value={step}
                   onChange={(e) => onJumpLesson(Number(e.target.value))}
-                  aria-label="Jump to any practice section"
+                  aria-label="Choose a station"
                 >
                   {jumpSteps.map((s) => (
                     <option key={s.n} value={s.n}>
@@ -2217,12 +2217,14 @@ export function StudentSequencePage() {
         <StationContext>
           <WhyWork>
             {pathwayId === 'logistics'
-              ? 'The same warehouse word has one English name and many home-language names. Hear a language, then drop the picture on that word.'
-              : 'The same tool has one English name and many home-language names. Hear a language, then drop the picture on that word.'}
+              ? 'The same warehouse word has one English name. Hear your language if you want, then tap the picture and tap that word.'
+              : pathwayId === 'community'
+                ? 'The same support word has one English name. Hear your language if you want, then tap the picture and tap that word.'
+                : 'The same tool has one English name. Hear your language if you want, then tap the picture and tap that word.'}
           </WhyWork>
           <TeachNote>
-            Five short boards. Tap a picture, then Drop on the matching word. Clear every picture to finish the
-            round. Hear any language if you want help.
+            Five short boards. Tap a picture, then tap the matching word. Clear every picture to finish the
+            round. Hear your language if you want help.
           </TeachNote>
         </StationContext>
       </Shell>
@@ -2534,8 +2536,7 @@ export function StudentSequencePage() {
             Help is strength. Hear a sentence. Tap the picture that shows it.
           </WhyWork>
           <TeachNote>
-            Three royalty-free workplace photos. Hear the sentence, then tap the match. Wrong? Try
-            again. Jump sections lists Picture Match and Copycat separately.
+            Three workplace photos. Hear the sentence, then tap the match. Wrong? Try again.
           </TeachNote>
         </StationContext>
       </Shell>
@@ -2579,8 +2580,7 @@ export function StudentSequencePage() {
             Look at the picture. Say the sentence back by tapping the words in order.
           </WhyWork>
           <TeachNote>
-            Childhood copycat with a workplace photo. Listen once, then rebuild the line. Wrong
-            order? Soft try again.
+            A workplace photo. Listen once, then tap the words in order. Wrong order? Try again.
           </TeachNote>
         </StationContext>
       </Shell>
@@ -3148,8 +3148,7 @@ export function StudentSequencePage() {
             </WhyWork>
             <TeachNote>
               Fourteen short lessons in equipment families. Watch each video, then answer the practice questions.
-              Powered lift trucks are stay-clear awareness only — not operator certification. Soft-gates stay off for
-              showcase — every video is open.
+              Powered lift trucks are stay-clear awareness only — not operator certification. Every video is open.
             </TeachNote>
             {pathwayId === 'community' ? (
               <button type="button" className="btn btn-ghost" onClick={backToCommunity}>
@@ -3181,8 +3180,7 @@ export function StudentSequencePage() {
             </WhyWork>
             <TeachNote>
               Fourteen short lessons in equipment families. Watch each video, then answer the practice questions.
-              Powered machines are stay-clear awareness only — not operator certification. Soft-gates stay off for
-              showcase — every video is open.
+              Powered machines are stay-clear awareness only — not operator certification. Every video is open.
             </TeachNote>
             {pathwayId === 'community' ? (
               <button type="button" className="btn btn-ghost" onClick={backToCommunity}>
@@ -3212,7 +3210,7 @@ export function StudentSequencePage() {
               Watch each community lesson, then answer the practice questions. Hear the line, do the task, and check it.
             </WhyWork>
             <TeachNote>
-              Fourteen short lessons. Choice questions use the answer key. Say questions ask you to hear an example and say the line. You can still look at Construction or Logistics equipment without leaving Community Support.
+              Fourteen short lessons. Some questions ask you to choose an answer. Some ask you to hear a line and say it. You can also look at Construction or Logistics equipment.
             </TeachNote>
             <EquipmentVideoDrill
               pack="community"

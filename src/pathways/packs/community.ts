@@ -25,11 +25,11 @@ export const communityPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn Daily Conversation Vocabulary (200) and Community Support Visual Vocabulary (499), organize four words across five languages, then find every picture again in Eye Spy.',
+      goal: 'See each picture. Hear your language, then the English word. Then match each picture to its word, and find the pictures again.',
       outcomes: [
         'See a real photo / word card of each word and hear English spoken every time',
         'Connect your language to the English word and a short example sentence',
-        'Match each complete language group (all versions of the word) to its picture',
+        'Match each picture to its English word',
         'Identify every support role and community word in clear Eye Spy boards',
       ],
     },
@@ -49,7 +49,7 @@ export const communityPack: PathwayPack = {
       ],
     },
     6: {
-      goal: 'Unit 6 · Basic Computer Skills (step 13) — same station on Construction, Logistics, and Community.',
+      goal: 'Watch a short computer lesson in English. Try that action. Then answer the practice questions.',
       outcomes: [
         'Turn a computer on and off safely',
         'Use mouse, keyboard, folders, and save with a clear name',
@@ -97,7 +97,7 @@ export const communityPack: PathwayPack = {
     11: {
       title: 'Copycat',
       help: 'Look at the picture. Hear the sentence. Tap the words in order. Then try What helps and Kind and clear.',
-      purpose: 'Childhood copycat, then two short community games: match a need to the item, and choose the kind clear line.',
+      purpose: 'Say the sentence back by tapping the words, then try What helps and Kind and clear.',
     },
     12: {
       title: 'Workplace Instructions',

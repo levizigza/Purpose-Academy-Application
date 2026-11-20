@@ -36,11 +36,11 @@ export const constructionPack: PathwayPack = {
   },
   unitGoals: {
     3: {
-      goal: 'Learn Daily Conversation Vocabulary (200) and Construction Visual Vocabulary (660), organize four words across five languages, then find every picture again in Eye Spy.',
+      goal: 'See each picture. Hear your language, then the English word. Then match each picture to its word, and find the pictures again.',
       outcomes: [
         'See a real photo of each word and hear English spoken every time',
         'Connect your language to the English word and a short example sentence',
-        'Match each complete language group (all versions of the word) to its picture',
+        'Match each picture to its English word',
         'Identify every tool and material in busy shop scenes',
       ],
     },
@@ -62,9 +62,9 @@ export const constructionPack: PathwayPack = {
       ],
     },
     6: {
-      goal: 'Unit 6 · Basic Computer Skills (step 13) — same station on Construction, Logistics, and Community.',
+      goal: 'Watch a short computer lesson in English. Try that action. Then answer the practice questions.',
       outcomes: [
-        'Open Basic Computer Skills at step 13 on this pathway',
+        'Turn the computer on, use the mouse and keyboard, and save your work',
         'Watch, try, and check: power, mouse, folders, save, Word, and email',
         'Use simple English — Watch → Try → Remember → one check',
       ],
@@ -79,7 +79,7 @@ export const constructionPack: PathwayPack = {
     8: {
       goal: 'Video section — watch construction equipment videos before hands-on training.',
       outcomes: [
-        'Open Unit 8: Video · Construction Equipment (step 18)',
+        'Watch each machine video, then answer the questions',
         'Watch each machine lesson: know, inspect, protect',
         'Answer practice questions after each video',
         'Stay clear of powered machines unless certified elsewhere',
@@ -107,7 +107,7 @@ export const constructionPack: PathwayPack = {
     },
     13: {
       title: 'Basic Computer Skills',
-      help: 'Unit 6 · step 13 on every pathway — 5 basic lessons (power, mouse, keyboard, windows, save) + 8 extra. Watch, try, then 10 practice questions.',
+      help: 'Watch the lesson in English. Try that same action. Then answer the practice questions.',
       purpose: 'Dedicated Basic Computer Skills unit. First-computer friendly. Simple English.',
     },
     14: {
