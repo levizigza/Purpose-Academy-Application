@@ -299,22 +299,14 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
           </p>
         ) : null}
         <p className="train-vocab-counter">
-          {phone
-            ? `Tap a picture, then tap Drop on this word · ${matchedCount} of ${page.length}`
-            : `Move each picture into its word box · ${matchedCount} of ${page.length}`}
-          {picked ? (phone ? ' · Picture selected — tap Drop' : ' · Picture selected — drop it on the empty box') : ''}
+          {`Tap a picture. Then tap its word. ${matchedCount} of ${page.length}`}
+          {picked ? ' Picture selected. Tap the word.' : ''}
         </p>
-        <p className="lede vocab-organize-help">
-          {phone
-            ? 'Tap a picture · then Drop on this word.'
-            : 'Tap or drag a picture onto the matching word box. Hear a language if you want help.'}
-        </p>
+        <p className="lede vocab-organize-help">Tap a picture. Then tap the matching word.</p>
       </header>
 
       <section className="vocab-organize-pool" aria-label="Pictures to place">
-        <p className="vocab-organize-pool-label">
-          {phone ? 'Pictures — tap one, then tap Drop on the word' : 'Pictures — drag or tap, then drop on a box'}
-        </p>
+        <p className="vocab-organize-pool-label">Pictures. Tap one.</p>
         {leftoverImages.length ? (
           <div className="vocab-organize-pool-grid is-images">
             {leftoverImages.map((termId) => {
@@ -329,7 +321,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   className={`vocab-organize-piece is-image${active ? ' is-selected' : ''}`}
                   data-term-id={termId}
                   data-coach={termId === leftoverImages[0] ? 'org-pic' : undefined}
-                  draggable={!phone}
+                  draggable={false}
                   onDragStart={(e) => {
                     if (phone) return
                     e.dataTransfer.setData('text/plain', termId)
@@ -403,7 +395,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   )
                 ) : (
                   <span className="vocab-organize-slot-hint">
-                    {picked ? 'Drop here' : 'Empty — needs picture'}
+                    {picked ? 'Tap here' : 'Needs a picture'}
                   </span>
                 )}
               </button>
@@ -446,7 +438,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
             data-coach="org-drop"
             onClick={() => tapBox(focusTerm.id)}
           >
-            Drop on {focusTerm.english}
+            Put it on {focusTerm.english}
           </button>
         </div>
       ) : null}

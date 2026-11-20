@@ -419,7 +419,7 @@ export function createSeedDatabase(): AppDatabase {
         title: 'Introduce yourself at work',
         description:
           'Write 4-6 short sentences introducing yourself, your preferred language, and one safety rule you will always follow.',
-        due_date: '2026-10-05',
+        due_date: '2027-06-01',
         created_by: 'u-instructor',
       },
       {
@@ -427,7 +427,7 @@ export function createSeedDatabase(): AppDatabase {
         course_id: 'course-construction',
         title: 'Tool identification list',
         description: 'List five tools from the Tools and Materials module and one safe use for each.',
-        due_date: '2026-10-20',
+        due_date: '2027-06-15',
         created_by: 'u-instructor',
       },
     ],

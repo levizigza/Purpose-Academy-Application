@@ -31,14 +31,14 @@ export function StudentAssignmentsPage() {
   return (
     <div className="stack">
       <PageHeader
-        title="Assignments"
-        help="Open a task, write your answer, then submit. Your instructor will send feedback."
+        title="Tasks"
+        help="Open a task. Write a short answer. Your teacher will write back."
         backTo="/app/student"
         backLabel="Home"
       />
       {items.length === 0 ? (
         <div className="panel">
-          <p>No assignments yet. Finish more lessons or wait for your instructor to post work.</p>
+          <p>No tasks yet. Your teacher will add one, or keep practicing.</p>
         </div>
       ) : (
         <ul className="list-plain">
@@ -51,7 +51,7 @@ export function StudentAssignmentsPage() {
                 <p className="muted">
                   {course?.title} · Due {a.due_date} ·{' '}
                   <StatusLabel status={sub?.status ?? 'pending'} />
-                  {sub?.grade != null ? ' · Feedback ready' : ''}
+                  {sub?.feedback ? ` · ${sub.feedback}` : ''}
                 </p>
                 <Link className="btn btn-ghost" to={`/app/student/assignments/${a.id}`}>
                   {sub?.status === 'graded' ? 'View feedback' : 'Open assignment'}
@@ -183,8 +183,7 @@ export function StudentProgressPage() {
           {student.pathway && !hasPathwayLessons ? (
             <>
               <p>
-                Learn lessons for {pathwayLabel} are not built yet. Train on the shared {JOURNEY_STEP_COUNT}-step spine under Practice
-                path.
+                Learn on the practice path. That is the training for {pathwayLabel}.
               </p>
               <Link
                 className="btn btn-primary"
@@ -194,7 +193,7 @@ export function StudentProgressPage() {
                   openPracticeSpine(user.full_name)
                 }}
               >
-                Open Student Practice path
+                Open the practice path
               </Link>
             </>
           ) : (

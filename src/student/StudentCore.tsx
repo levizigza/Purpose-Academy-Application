@@ -252,7 +252,7 @@ export function StudentHomePage() {
         <div className="panel stack">
           <h2>This session</h2>
           <p className="muted" style={{ marginTop: 0 }}>
-            Finite checklist — not an endless scroll.
+            Finite list for today.
           </p>
           <ul className="list-plain">
             <li>
@@ -260,7 +260,7 @@ export function StudentHomePage() {
               {upcoming ? `${upcoming.title} · ${formatWhen(upcoming.starts_at)}` : 'None listed'}
             </li>
             <li>
-              Open assignments: {pendingAssignments.length}{' '}
+              Tasks to do: {pendingAssignments.length}{' '}
               <Link className="inline-link" to="/app/student/assignments">
                 View
               </Link>

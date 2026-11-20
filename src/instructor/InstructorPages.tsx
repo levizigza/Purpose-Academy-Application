@@ -24,7 +24,7 @@ export function InstructorDashboardPage() {
       <div>
         <p className="section-kicker">Instructor</p>
         <h1>Today</h1>
-        <p>Help learners move from practice to verified skill: grading, safety, and observation first.</p>
+        <p>Grade student work, check safety, and watch practice.</p>
       </div>
       <div className="grid-3">
         <div className="panel stack">
@@ -107,7 +107,7 @@ export function InstructorAssignmentsPage() {
     <div className="stack">
       <h1>Assignments to review</h1>
       {msg && <div className="alert ok">{msg}</div>}
-      {rows.length === 0 && <p className="muted">No submissions yet.</p>}
+      {rows.length === 0 && <p className="muted">No work to mark yet. Students send answers from Tasks.</p>}
       {rows.map(({ sub, assignment, user: learner }) => (
         <div className="panel stack" key={sub.id}>
           <h2>{assignment?.title}</h2>
@@ -123,8 +123,8 @@ export function InstructorAssignmentsPage() {
                 <input id={`grade-${sub.id}`} name="grade" type="number" min={0} max={100} required />
               </div>
               <div className="field">
-                <label htmlFor={`fb-${sub.id}`}>Feedback</label>
-                <textarea id={`fb-${sub.id}`} name="feedback" required />
+                <label htmlFor={`fb-${sub.id}`}>Note for the student</label>
+                <textarea id={`fb-${sub.id}`} name="feedback" required placeholder="One or two short sentences." />
               </div>
               <button className="btn btn-primary" type="submit">
                 Save grade
