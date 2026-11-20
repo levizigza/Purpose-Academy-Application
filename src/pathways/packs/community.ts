@@ -34,9 +34,9 @@ export const communityPack: PathwayPack = {
       ],
     },
     4: {
-      goal: 'Put the words into Community Sentence Practice cloze items, then follow workplace instructions.',
+      goal: 'Pick the full sentence, hear it, then type it. Then follow workplace instructions.',
       outcomes: [
-        'Complete Community English cloze worksheets — one try, correct word slides into the blank',
+        'Pick the full sentence, hear it, then type it',
         'Follow short workplace instructions with specialty distractors',
         'Keep dignity, privacy, consent, and escalate-when-unsure in every drill',
       ],

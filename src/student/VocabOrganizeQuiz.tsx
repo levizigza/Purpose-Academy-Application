@@ -395,7 +395,7 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
                   )
                 ) : (
                   <span className="vocab-organize-slot-hint">
-                    {picked ? 'Tap here' : 'Needs a picture'}
+                    {picked ? 'Tap here' : 'Tap a picture first'}
                   </span>
                 )}
               </button>

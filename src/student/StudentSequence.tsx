@@ -2259,7 +2259,9 @@ export function StudentSequencePage() {
           <WhyWork>
             {pathwayId === 'logistics'
               ? 'On a real warehouse floor every object sits among other goods and equipment. Name each one until the board is clear.'
-              : 'On a real site every tool sits among other objects. Name each one until the board is clear.'}
+              : pathwayId === 'community'
+                ? 'On a real support team every person has a job. Name each one until the board is clear.'
+                : 'On a real site every tool sits among other objects. Name each one until the board is clear.'}
           </WhyWork>
           <TeachNote>
             Tap a picture, then its English name — the pair clears by itself. Empty the board, then the next
