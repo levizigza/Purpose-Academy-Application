@@ -45,7 +45,7 @@ export const communityPack: PathwayPack = {
       goal: 'Learn support language, then answer more questions about work you like after Community practice.',
       outcomes: [
         'Understand dignity, privacy, and consent phrases for community support',
-        'See how your interests fit Community Support specialization',
+        'See how the work you like fits community support',
       ],
     },
     6: {
@@ -244,7 +244,7 @@ export const communityPack: PathwayPack = {
     },
     {
       en: 'Stop. I need to report a concern.',
-      why: 'Safeguarding and stop-work for people: escalate risk early.',
+      why: 'If someone may be unsafe, stop and tell a supervisor right away.',
       prompt: 'When do you use this phrase?',
       answer: 'When something looks unsafe or wrong',
       options: [
@@ -390,7 +390,7 @@ export const communityPack: PathwayPack = {
         'Social media for advice',
       ],
       answer: 'The first aid kit on the wall (then follow trained steps / get a supervisor if needed)',
-      teachCorrect: 'Know the first aid kit location before you need it. Stay in trained steps and escalate when needed.',
+      teachCorrect: 'Know where the first aid kit is before you need it. Stay in the steps you were taught, and tell a supervisor when you need help.',
       teachWrong: 'Use the marked first aid kit and get help if you are unsure.',
     },
   ],
@@ -413,7 +413,7 @@ export const communityPack: PathwayPack = {
     },
     {
       title: 'Communication',
-      why: 'Work phones keep the team connected for check-ins and escalation.',
+      why: 'Work phones keep the team connected for check-ins and for calling a supervisor.',
       mark: 'CM',
       prompt: 'Work phones belong to which group?',
       answer: 'Communication',
@@ -613,7 +613,7 @@ export const communityPack: PathwayPack = {
         'Film the injury',
       ],
       answer: 'Get the first aid kit and follow trained steps / get a supervisor if needed',
-      teachCorrect: 'Use the marked kit, stay in trained steps, and escalate when needed.',
+      teachCorrect: 'Use the marked kit, stay in the steps you were taught, and tell a supervisor when you need help.',
       teachWrong: 'First aid kit location + trained steps + supervisor if unsure.',
     },
     {
@@ -628,7 +628,7 @@ export const communityPack: PathwayPack = {
         'Repeat it at lunch',
       ],
       answer: 'Do not join in; remind the team about privacy or tell a supervisor',
-      teachCorrect: 'Gossip is a privacy risk. Protect dignity and escalate if needed.',
+      teachCorrect: 'Gossip is a privacy risk. Protect dignity and tell a supervisor if you need help.',
       teachWrong: 'Never join gossip about people you support.',
     },
     {
@@ -644,7 +644,7 @@ export const communityPack: PathwayPack = {
       ],
       answer: 'Respect the refusal, stay calm, and tell your supervisor if needed',
       teachCorrect: 'Choice and respect are person-centred values. "No" is okay.',
-      teachWrong: 'Never force support. Respect choice and escalate if required.',
+      teachWrong: 'Never force support. Respect a no, and tell a supervisor if you are not sure.',
     },
     {
       id: 'end-of-day',
@@ -749,7 +749,7 @@ export const communityPack: PathwayPack = {
       ],
       answer: 'Respect the choice and tell a supervisor if needed',
       teachCorrect: 'Person-centred support respects choice. "No" is okay.',
-      teachWrong: 'Never force support. Respect refusal and escalate if required.',
+      teachWrong: 'Never force support. Respect a no, and tell a supervisor if you are not sure.',
     },
     {
       id: 'cf8',

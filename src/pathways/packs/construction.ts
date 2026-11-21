@@ -58,7 +58,7 @@ export const constructionPack: PathwayPack = {
       outcomes: [
         'Understand common job-site phrases',
         'Answer more questions about work you like',
-        'See how your interests fit Construction specialization',
+        'See how the work you like fits construction',
       ],
     },
     6: {
@@ -98,7 +98,7 @@ export const constructionPack: PathwayPack = {
     8: {
       title: 'English Eye Spy',
       help: 'Ten scenes. Tap a picture and its English name. Correct pairs disappear until the board is empty.',
-      purpose: 'Connect Visual Vocabulary again in a busy scene before Sentence Structure.',
+      purpose: 'See the same words again in a busy picture before you make sentences.',
     },
     9: {
       title: 'Sentence Structure',

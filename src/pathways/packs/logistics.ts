@@ -50,7 +50,7 @@ export const logisticsPack: PathwayPack = {
       outcomes: [
         'Understand common warehouse phrases',
         'Answer more questions about work you like',
-        'See how your interests fit Logistics specialization',
+        'See how the work you like fits a warehouse',
       ],
     },
     6: {
@@ -81,7 +81,7 @@ export const logisticsPack: PathwayPack = {
       goal: 'Practise with an instructor, then connect to logistics employment support.',
       outcomes: [
         'Practise the steps in a calm order',
-        'Make safe floor decisions, including OS&D and stop-work',
+        'Make safe floor decisions, including damaged goods and when to stop work',
         'Finish the last practice stations, then talk about work',
       ],
     },
@@ -90,7 +90,7 @@ export const logisticsPack: PathwayPack = {
     8: {
       title: 'English Eye Spy',
       help: 'Ten scenes. Tap a picture and its English name. Correct pairs disappear until the board is empty.',
-      purpose: 'Connect Visual Vocabulary again in a busy scene before Sentence Structure.',
+      purpose: 'See the same words again in a busy picture before you make sentences.',
     },
     9: {
       title: 'Sentence Structure',
@@ -199,7 +199,7 @@ export const logisticsPack: PathwayPack = {
     },
     {
       en: 'Report OS and D right away.',
-      why: 'Overage, shortage, or damage must be escalated before goods move further.',
+      why: 'Too many, too few, or broken items must be told to a supervisor before the goods move on.',
       prompt: 'What should you do?',
       answer: 'Tell a supervisor about overage, shortage, or damage',
       options: [
@@ -426,9 +426,9 @@ export const logisticsPack: PathwayPack = {
     },
     {
       title: 'Inventory accuracy',
-      why: 'Counts, scans, and OS&D reports keep the system matched to the floor.',
+      why: 'Counts and scans keep the computer list matched to the floor.',
       mark: 'IA',
-      prompt: 'Scan-and-count checks and OS&D reports support…',
+      prompt: 'Scanning, counting, and damage notes support…',
       answer: 'Inventory accuracy',
       options: ['Inventory accuracy', 'Break schedules', 'Parking rules', 'Uniforms'],
     },
@@ -490,14 +490,14 @@ export const logisticsPack: PathwayPack = {
       id: 'receive-osd',
       title: 'Receive against the manifest',
       situation: 'Your supervisor watches you check an inbound shipment.',
-      skill: 'Receiving / OS&D',
+      skill: 'Receiving a shipment',
       steps: [
         { id: 'list', label: 'Open the manifest and identify expected items', correctOrder: 1 },
         { id: 'count', label: 'Count each carton against the list', correctOrder: 2 },
         { id: 'inspect', label: 'Inspect for overage, shortage, or damage (OS&D)', correctOrder: 3 },
-        { id: 'escalate', label: 'Report OS&D to the supervisor before put-away', correctOrder: 4 },
+        { id: 'escalate', label: 'Tell the supervisor before you put the items away', correctOrder: 4 },
       ],
-      passNote: 'Count, inspect, and escalate OS&D — never force a mismatch through.',
+      passNote: 'Count, inspect, and tell a supervisor. Do not force a mismatch through.',
     },
   ],
   siteDecisions: [
@@ -548,18 +548,18 @@ export const logisticsPack: PathwayPack = {
     },
     {
       id: 'mismatch',
-      title: 'Label mismatch / OS&D',
+      title: 'Label mismatch',
       scene: 'The shipping label, the screen destination, and the carton count do not match the manifest.',
       prompt: 'What should you do?',
       options: [
-        'Stop and ask a supervisor before staging (report OS&D)',
+        'Stop and ask a supervisor before you put the goods away',
         'Ship it anyway to save time',
         'Change the label yourself',
         'Hide the package behind the rack',
       ],
-      answer: 'Stop and ask a supervisor before staging (report OS&D)',
-      teachCorrect: 'Overage, shortage, or damage (OS&D) gets escalated — never forced through.',
-      teachWrong: 'Do not stage a mismatch. Report OS&D and wait for direction.',
+      answer: 'Stop and ask a supervisor before you put the goods away',
+      teachCorrect: 'Too many, too few, or damage goes to a supervisor. Do not force it through.',
+      teachWrong: 'Do not put away a mismatch. Tell a supervisor and wait.',
     },
     {
       id: 'missing-vest',
@@ -672,14 +672,14 @@ export const logisticsPack: PathwayPack = {
       emoji: 'MF',
       imageKey: 'log-manifest',
       options: [
-        'Stop and report OS&D to a supervisor',
+        'Stop and tell a supervisor about too many, too few, or damage',
         'Ship it to hit the rate',
         'Change the label yourself',
         'Hide the shortage',
       ],
-      answer: 'Stop and report OS&D to a supervisor',
-      teachCorrect: 'Overage, shortage, or damage (OS&D) is escalated before put-away or ship.',
-      teachWrong: 'Never force a mismatch through. Report OS&D.',
+      answer: 'Stop and tell a supervisor about too many, too few, or damage',
+      teachCorrect: 'Too many, too few, or damage is told to a supervisor before you put goods away or ship them.',
+      teachWrong: 'Do not force a mismatch through. Tell a supervisor.',
     },
     {
       id: 'lf7',
@@ -914,7 +914,7 @@ export const logisticsPack: PathwayPack = {
           'Skip inventory',
         ],
         answer: 'Arrive and get checked against the manifest',
-        teachCorrect: 'Receiving checks inbound goods and notes OS&D.',
+        teachCorrect: 'Receiving checks goods that arrive and notes too many, too few, or damage.',
         teachWrong: 'Receiving is inbound check-in against the list.',
       },
       {
