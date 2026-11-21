@@ -17601,15 +17601,18 @@ html.pa-course-shell .instruction-l1-text.is-loading,
   font-size: 0.82rem;
 }
 .is-phone-app .supported-photo-el {
+  width: 100%;
   height: auto;
+  min-height: 7.5rem;
   max-height: min(32vh, 14rem);
+  object-fit: contain;
 }
 .is-phone-app .supported-video-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.35rem;
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
 }
 .is-phone-app .supported-video-btn {
-  min-height: 0;
+  min-height: 7.5rem;
 }
 .is-phone-app .supported-station-note,
 .is-phone-app .supported-games-help,
