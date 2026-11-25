@@ -402,7 +402,7 @@ export function ProgramSelectionPage() {
     <div className="stack">
       <p className="section-kicker">Pathway</p>
       <h1>Choose your specialization</h1>
-      <p className="lede">After foundation, select one pathway. Construction, Logistics, and Community Support are open to prove.</p>
+      <p className="lede">After foundation, select one pathway. Construction, Logistics, and Community Support are open.</p>
       {!student.foundation_complete && (
         <div className="alert warn">Complete foundation learning before selecting a program.</div>
       )}
