@@ -90,7 +90,7 @@ export function StudentSchoolPathPage() {
             this is training, not a feed.
           </p>
           {!enrolledPathway && (
-            <Link className="btn btn-secondary" to="/app/student/programs">
+            <Link className="btn btn-secondary on-light" to="/app/student/programs">
               Choose your pathway
             </Link>
           )}

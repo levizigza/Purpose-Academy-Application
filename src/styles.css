@@ -136,6 +136,13 @@ body {
   font-weight: 600;
 }
 
+/* Learner name on the app topbar — never wash to ink-soft on a dark chrome pass. */
+.topbar .user-chip,
+.topbar .muted.user-chip {
+  color: var(--brand-deep);
+  opacity: 0.92;
+}
+
 .btn {
   min-height: 48px;
   padding: 0.8rem 1.25rem;
@@ -5753,6 +5760,15 @@ table.data th {
   color: var(--ph-ink);
 }
 
+/* Portal inherits paper tokens — hard-coded night hero was navy-on-navy. */
+.practice-hub.is-portal .ph-hero {
+  background:
+    radial-gradient(ellipse 70% 90% at 100% 0%, rgba(11, 47, 92, 0.08), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #eef3f9 100%);
+  border-color: color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
+  box-shadow: 0 12px 28px rgba(11, 47, 92, 0.08);
+}
+
 .school-path-page {
   display: grid;
   gap: 1.15rem;
@@ -7345,6 +7361,14 @@ table.data th {
   background: rgba(76, 175, 80, 0.14);
   color: #b8f0bb;
   border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+/* Worksheet cards are white paper — night-stage pale green washes out. */
+.shell.is-train .sentence-cloze-card .alert.ok,
+.course-stage .sentence-cloze-card .alert.ok {
+  background: color-mix(in srgb, #2a7a4b 12%, #fff);
+  color: #14532d;
+  border: 1px solid color-mix(in srgb, #2a7a4b 35%, #c9d8e8);
 }
 
 .train-ladder-nudge {
@@ -11707,6 +11731,46 @@ video {
   color: #e8a317;
 }
 
+/*
+  Sentence Structure chips live on a white worksheet card. Night-stage chip
+  tokens (pale text) wash out on hover cream — keep navy ink on paper.
+  Critic (live probe 2026-11-24).
+*/
+.course-stage .sentence-cloze-card .sentence-cloze-chip,
+.sentence-cloze-card .sentence-cloze-chip {
+  background: #fff;
+  border-color: #c9d8e8;
+  color: #041526;
+}
+
+.course-stage .sentence-cloze-card .sentence-cloze-chip:hover:not(:disabled):not(.is-reference),
+.sentence-cloze-card .sentence-cloze-chip:hover:not(:disabled):not(.is-reference) {
+  border-color: #e8a317;
+  background: color-mix(in srgb, #e8a317 14%, #fff);
+  color: #041526;
+}
+
+.course-stage .sentence-cloze-card .sentence-cloze-chip.state-correct,
+.course-stage .sentence-cloze-card .sentence-cloze-chip.is-picked,
+.sentence-cloze-card .sentence-cloze-chip.state-correct,
+.sentence-cloze-card .sentence-cloze-chip.is-picked {
+  border-color: #2a7a4b;
+  background: color-mix(in srgb, #2a7a4b 12%, #fff);
+  color: #041526;
+}
+
+.course-stage .sentence-cloze-card .sentence-cloze-chip.state-wrong,
+.sentence-cloze-card .sentence-cloze-chip.state-wrong {
+  border-color: color-mix(in srgb, #b45309 55%, #c9d8e8);
+  background: color-mix(in srgb, #b45309 10%, #fff);
+  color: #041526;
+}
+
+.course-stage .sentence-cloze-card .sentence-cloze-chip-letter,
+.sentence-cloze-card .sentence-cloze-chip-letter {
+  color: #0b2f5c;
+}
+
 .is-phone-app .sentence-cloze-hear {
   background: #fff6de !important;
   border-color: color-mix(in srgb, var(--accent) 42%, var(--line)) !important;
@@ -14391,7 +14455,15 @@ video {
 .is-phone-app .career-result-badge,
 .is-phone-app .train-action-label,
 .is-phone-app .train-quiz-counter {
-  color: var(--brand) !important;
+  color: var(--brand-deep) !important;
+}
+
+/* Soft-retry line sits under the docked Back bar — paper band, not navy-on-bezel. */
+.is-phone-app .train-mastery-gate {
+  margin: 0 !important;
+  padding: 0.35rem 0.55rem 0.55rem;
+  background: var(--paper, #f4f7fb);
+  border-top: 1px solid color-mix(in srgb, var(--brand) 10%, transparent);
 }
 
 .is-phone-app .shell.is-train .train-actions .btn-ghost:hover,
@@ -14548,7 +14620,11 @@ html.pa-phone-shell .practice-feedback-dock {
   height: auto !important;
 }
 
-.is-phone-app .practice-hub,
+/*
+  Inner hub cards must stay overflow:visible (resume order / media).
+  Do NOT force the outer .practice-hub visible — phone-phase-app needs it
+  to be the scrollport (live probe 2026-11-24).
+*/
 .is-phone-app .ph-video-section,
 .is-phone-app .ph-curriculum {
   overflow: visible !important;
@@ -14798,6 +14874,40 @@ html.pa-phone-shell .practice-feedback-dock {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+/*
+  Hub / enter / portal shells are NOT .train-shell — they never get
+  .reveal.train-panel scroll. Outer overflow:hidden then traps the path.
+  Critic (live probe 2026-11-24): phone hub ~4400px tall, wheel/drag dead.
+  !important beats older `.is-phone-app .practice-hub { overflow: visible }`.
+*/
+.iphone-scroll.is-phone-app.phone-phase-app > .shell-main:not(.train-shell),
+.iphone-scroll.is-phone-app.phone-phase-app > .practice-hub,
+.iphone-scroll.is-phone-app.phone-phase-app > .school-path-page,
+.iphone-scroll.is-phone-app.phone-phase-app > .seq-station,
+.iphone-scroll.is-phone-app.phone-phase-app > .unit-intro,
+.iphone-scroll.is-phone-app.phone-phase-app > .enter-box,
+.iphone-scroll.is-phone-app.phone-phase-app > .panel,
+.iphone-scroll.is-phone-app.phone-phase-app > main,
+.iphone-scroll.is-phone-app.phone-phase-app > .page-motion {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  /* Grid rows must size to content — min-height:0 on children + a fixed
+     scrollport was squashing .ph-hero to ~27px and stacking cards. */
+  align-content: start !important;
+  grid-auto-rows: max-content !important;
+}
+
+.iphone-scroll.is-phone-app.phone-phase-app > .practice-hub > *,
+.iphone-scroll.is-phone-app.phone-phase-app > .shell-main.practice-hub > * {
+  min-height: min-content !important;
+  height: auto !important;
+  flex: none !important;
 }
 
 .iphone-scroll.is-phone-app.phone-phase-app .train-header {
@@ -17169,8 +17279,13 @@ html.pa-phone-shell .station-coach-skip:focus-visible,
 .is-phone-app .supported-copycat-built {
   color: #0b2f5c;
 }
+.is-phone-app .supported-copycat-stage {
+  background: #fff;
+  border-color: color-mix(in srgb, #0b2f5c 18%, #c5d0dc);
+}
 .is-phone-app .supported-copycat-caption {
-  color: color-mix(in srgb, #0b2f5c 78%, transparent);
+  color: #041526;
+  background: #eef3f9;
 }
 .is-phone-app .supported-video-btn {
   border-color: color-mix(in srgb, #0b2f5c 25%, transparent);
@@ -17446,7 +17561,20 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
   font-size: 0.82rem;
 }
 .is-phone-app .supported-photo-el {
-  height: 8rem;
+  width: 100%;
+  height: auto;
+  min-height: 7.5rem;
+  max-height: min(32vh, 14rem);
+  object-fit: contain;
+}
+/* Picture Match choices: one full-width photo each — 3-up made each image ~80px wide. */
+.is-phone-app .supported-video-grid {
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+}
+.is-phone-app .supported-video-btn {
+  min-height: 7.5rem;
+  padding: 0.3rem;
 }
 .is-phone-app .supported-copycat-photo {
   height: 190px;

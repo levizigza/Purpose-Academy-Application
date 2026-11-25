@@ -435,6 +435,19 @@ Revisit when aims change. Ranked by learner / trust harm.
 
 ## 11. Changelog (living)
 
+### 2026-11-24 — Live probe: phone hub scroll + Picture Match size + contrast + Community photos (L3 / L4)
+
+- **Layers:** L3 information display · L4 Practice dual-shell · portal School path coherence.
+- **Live truth:** Student app ships on GitHub Pages (`/Purpose-Academy-Application/`). `purposeacademy.ca` is marketing-only. Pages deploys from `main`.
+- **Critic wins:**
+  - Phone hub could not scroll — `.phone-phase-app` set `overflow:hidden` and only `.reveal.train-panel` scrolled; hub is `.shell-main.practice-hub`. Hub + other non-train shells now scroll inside the frame.
+  - Picture Match phone photos stayed ~80px wide after a merge reverted the 1-column / larger-photo rules — restored and kept single-column choices.
+  - Sentence Structure chips used night-stage pale text on a white worksheet; hover cream washed the answer. Worksheet chips stay navy on paper.
+  - Portal School path hero kept a hard-coded night gradient under paper tokens; “Choose your pathway” used door-light secondary (white on white). Portal hero + `on-light` CTA fixed.
+  - Soft-retry line under phone Back was navy-on-bezel; Copycat caption was navy on a dark stage band — paper bands + readable ink.
+  - Community Picture Match photos mismatched the words (antique chest for first aid, outhouse for keys, handcycle for wheelchair, watermarked gloves). Replaced with clear Commons object photos.
+- **Left as-is (known):** Render free-tier sleep can drop sample grades; week plan is an estimate not a software lock; Wave 9 closed; `purposeacademy.ca` marketing vs Pages app split until Cloudflare hosts the SPA.
+
 ### 2026-11-05 — Teacher Practice + Yonas Community Support workbooks (L2 / L3 / L6)
 
 - **Layers:** L2 source-led content · L3 information display and print/phone reading · L6 instructor-to-student spine.
