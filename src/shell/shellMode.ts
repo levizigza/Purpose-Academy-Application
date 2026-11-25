@@ -2,18 +2,20 @@
  * Presentation shell for demos.
  *
  * Flow:
- * 1. Brand opening (door → logo → Enter) — first screen
- * 2. Mode chooser (Desktop | Phone)
- * 3a. Desktop → toolbox → Student Practice / Student / …
- * 3b. Phone → home with PA icon → toolbox → Student Practice / …
+ * 1. Mode chooser (Desktop | Phone) — first screen
+ * 2a. Desktop → opening animation → toolbox → Student Practice / Instructor Practice / …
+ * 2b. Phone → home with PA icon → opening on device → toolbox → …
  *
  * Shell choice is presentation-only. Learner progress lives in learnerStore
  * (localStorage) and is shared across Desktop and Phone.
+ *
+ * Desktop phase mirrors Phone phase so the opening never plays before a
+ * ModeChooser Desktop press, and never gets skipped by a stale entered flag.
  */
 
 export type ShellMode = 'phone' | 'course'
 export type PhonePhase = 'home' | 'splash' | 'toolbox' | 'app'
-/** Desktop: opening = legacy (pre splash-first); ready = toolbox / course. */
+/** Desktop: opening = threshold splash after ModeChooser; ready = toolbox / course. */
 export type DesktopPhase = 'opening' | 'ready'
 
 const MODE_KEY = 'pa-shell-mode-v2'
@@ -165,26 +167,20 @@ export function setDesktopPhase(phase: DesktopPhase | null) {
 
 /**
  * Cold-load hygiene for Desktop:
+ * - course + opening → replay threshold (refresh mid-open)
  * - course + ready → toolbox
- * - course + opening (legacy) → ready if entered, else clear for splash-first
- * - course with no phase → ready if entered, else clear so ModeChooser can show after splash
+ * - course with no phase (legacy restore) → clear shell so ModeChooser is first
+ *   unless this session already crossed the threshold (then mark ready)
  */
 export function reconcileDesktopShellOnBoot(hasCrossedThreshold: boolean) {
   if (getShellMode() !== 'course') return
   const phase = getDesktopPhase()
-  if (phase === 'ready') return
-  if (phase === 'opening') {
-    if (hasCrossedThreshold) {
-      setDesktopPhase('ready')
-      return
-    }
-    clearShellMode()
-    return
-  }
+  if (phase === 'opening' || phase === 'ready') return
   if (hasCrossedThreshold) {
     setDesktopPhase('ready')
     return
   }
+  /* Stale localStorage course with no Desktop press this session — back to doors. */
   clearShellMode()
 }
 

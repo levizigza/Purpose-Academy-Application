@@ -23,8 +23,7 @@ export function PhoneHomeScreen() {
       playFoley('latch')
       window.setTimeout(() => playFoley('whoosh'), 140)
     })
-    /* Opening already played on the first full-screen; go straight into the app. */
-    setPhonePhase('toolbox')
+    setPhonePhase('splash')
   }
 
   return (

@@ -1694,6 +1694,15 @@ table.data th {
   width: min(86vw, 440px);
 }
 
+/* Milder door→logo zoom so the lockup never feels like a punch-in past the brand */
+.threshold.is-lockup .threshold-brand-zoom.is-closed {
+  transform: scale(1.28);
+}
+
+.threshold.is-lockup .threshold-brand-zoom.is-opening {
+  transform: scale(1.1);
+}
+
 .threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue {
   left: 50%;
   right: auto;
@@ -1721,6 +1730,11 @@ table.data th {
 .threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue .threshold-hammer-hint {
   color: #0b2f5c;
   text-shadow: none;
+}
+
+/* Strike from under the lockup — short rise, never park on the logo */
+.threshold.is-lockup:not(.is-embedded) .threshold-hammer.is-tap-cue.is-smashing {
+  animation: hammer-lockup-strike 0.72s linear forwards;
 }
 
 /* Slot sized so SVG glyph lands on logo-full P ink */
@@ -2877,6 +2891,30 @@ table.data th {
   100% {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes hammer-lockup-strike {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) rotate(6deg) scale(1);
+  }
+  18% {
+    transform: translateX(-50%) translateY(10px) rotate(18deg) scale(1.02);
+  }
+  36% {
+    transform: translateX(-50%) translateY(12px) rotate(28deg) scale(1.04);
+  }
+  52% {
+    /* Soft tap toward the lower lockup edge — not through the wordmark */
+    transform: translateX(-50%) translateY(-18vh) rotate(-12deg) scale(1.08);
+  }
+  68% {
+    transform: translateX(-50%) translateY(-16vh) rotate(-4deg) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8vh) rotate(10deg) scale(0.92);
   }
 }
 
