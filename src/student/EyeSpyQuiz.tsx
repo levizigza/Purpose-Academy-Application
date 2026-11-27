@@ -112,7 +112,8 @@ export function EyeSpyQuiz({
 
   useEffect(() => {
     if (!wrongPair) return
-    const t = window.setTimeout(() => setWrongPair(false), 700)
+    /* Hold long enough that station explainers can show “Wrong? Try again” on screen. */
+    const t = window.setTimeout(() => setWrongPair(false), 2200)
     return () => window.clearTimeout(t)
   }, [wrongPair])
 
@@ -155,7 +156,7 @@ export function EyeSpyQuiz({
     playFoley('wrong')
     setMisses((m) => m + 1)
     setWrongPair(true)
-    window.setTimeout(() => resetPicks(), 650)
+    window.setTimeout(() => resetPicks(), 2100)
   }
 
   function nextAfterSceneClear() {
@@ -296,11 +297,6 @@ export function EyeSpyQuiz({
         {mode === 'exam' && maxAttempts ? ` · Try ${attempt} of ${maxAttempts}` : ' · Practice — take your time'}
       </p>
       <p className="eye-spy-instruction">{CLEAR_ALL_INSTRUCTION}</p>
-      {wrongPair ? (
-        <p className="play-soft-miss" role="status">
-          Not yet · wrong pair — try again. No rush.
-        </p>
-      ) : null}
       <p className="eye-spy-scene-title">{scene.title}</p>
       <p className="eye-spy-progress" aria-live="polite">
         {remaining.length === 0
@@ -366,6 +362,11 @@ export function EyeSpyQuiz({
 
       {phase === 'play' && remaining.length > 0 && (
         <>
+          {wrongPair ? (
+            <p className="play-soft-miss" role="status">
+              Not yet · wrong pair — try again. No rush.
+            </p>
+          ) : null}
           <p className="eye-spy-prompt">{pickedHotspot ? 'Now tap the English name — they clear together' : 'Tap a picture first, then its English name'}</p>
           <div className="train-choice-grid" data-coach="spy-word">
             {nameOptions.map((opt) => {

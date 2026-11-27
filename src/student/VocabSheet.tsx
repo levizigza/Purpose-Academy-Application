@@ -162,13 +162,14 @@ export function VocabSheetCard({
   const pickReady =
     !!picked && normalizeEnglishAnswer(picked) === normalizeEnglishAnswer(term.english)
 
-  function dealPickBank() {
+  function dealPickBank(opts?: { miss?: boolean }) {
     const bank = buildVocabPickBank(term, choicePool, VV_PICK_BANK_SIZE)
     const next = shuffleChoicesFresh(bank, prevOrderKeyRef.current)
     prevOrderKeyRef.current = choiceOrderKey(next)
     setOptions(next)
     setPicked(null)
-    setPickMiss(false)
+    /* Keep soft-miss visible after a wrong pick — choices move AND the tip stays. */
+    setPickMiss(Boolean(opts?.miss))
   }
 
   useEffect(() => {
@@ -220,10 +221,9 @@ export function VocabSheetCard({
     /* Wrong pick: soft miss + reshuffle so position tapping cannot clear. */
     playFoley('wrong')
     setPicked(null)
-    setPickMiss(true)
     setFeedback(null)
     setDraft('')
-    dealPickBank()
+    dealPickBank({ miss: true })
   }
 
   function checkType(e: FormEvent) {

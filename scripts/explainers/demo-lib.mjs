@@ -120,7 +120,39 @@ export async function injectCursor(page) {
     }
     try {
       window.speechSynthesis.cancel()
-      window.speechSynthesis.speak = () => {}
+      /* Complete utterances immediately so Hear English can unlock answer buttons. */
+      window.speechSynthesis.speak = (utterance) => {
+        queueMicrotask(() => {
+          try {
+            utterance.onstart?.(new Event('start'))
+          } catch {
+            /* ignore */
+          }
+          try {
+            utterance.onend?.(new Event('end'))
+          } catch {
+            /* ignore */
+          }
+        })
+      }
+      /* Baked / neural audio should also resolve fast in demos. */
+      const Desc = window.Audio
+      window.Audio = function PatchedAudio(...args) {
+        const a = new Desc(...args)
+        const origPlay = a.play.bind(a)
+        a.play = () => {
+          queueMicrotask(() => {
+            try {
+              a.dispatchEvent(new Event('ended'))
+            } catch {
+              /* ignore */
+            }
+          })
+          return origPlay().catch(() => {})
+        }
+        return a
+      }
+      window.Audio.prototype = Desc.prototype
     } catch {
       /* ignore */
     }
@@ -128,10 +160,15 @@ export async function injectCursor(page) {
 }
 
 export async function moveTo(page, locator, { steps = 28, settle = 350 } = {}) {
+  /* Animated nav arrows never go “stable” — soft-scroll, don’t hang the demo. */
+  await locator.scrollIntoViewIfNeeded({ timeout: 2500 }).catch(async () => {
+    await locator.evaluate((el) => el.scrollIntoView({ block: 'nearest', inline: 'nearest' }))
+  })
   const box = await locator.boundingBox()
   if (!box) throw new Error('moveTo: no box')
-  const x = box.x + box.width / 2
-  const y = box.y + Math.min(box.height / 2, 22)
+  /* Clamp to viewport — off-screen mouse clicks silently miss in Playwright. */
+  const x = Math.min(Math.max(8, box.x + box.width / 2), W - 8)
+  const y = Math.min(Math.max(8, box.y + Math.min(box.height / 2, 22)), H - 8)
   await page.mouse.move(x, y, { steps })
   await page.evaluate(([cx, cy]) => window.__paCursor?.(cx, cy), [x, y])
   await page.waitForTimeout(settle)
@@ -139,15 +176,23 @@ export async function moveTo(page, locator, { steps = 28, settle = 350 } = {}) {
 }
 
 export async function clickAt(page, locator, opts = {}) {
+  await locator.scrollIntoViewIfNeeded({ timeout: 2500 }).catch(async () => {
+    await locator.evaluate((el) => el.scrollIntoView({ block: 'nearest', inline: 'nearest' }))
+  })
   const { x, y } = await moveTo(page, locator, opts)
-  await page.mouse.click(x, y)
+  /* Visual cursor first, then real locator click so UI handlers always fire. */
+  await locator.click({ timeout: 8000, force: true }).catch(async () => {
+    await page.mouse.click(x, y)
+  })
   await page.waitForTimeout(opts.after ?? 500)
   return { x, y }
 }
 
 export async function typeInto(page, locator, text, { delay = 120 } = {}) {
+  await locator.scrollIntoViewIfNeeded()
   await clickAt(page, locator, { steps: 22, settle: 280, after: 300 })
-  await page.keyboard.type(text, { delay })
+  await locator.fill('')
+  await locator.type(text, { delay })
   await page.waitForTimeout(400)
 }
 
