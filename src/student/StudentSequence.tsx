@@ -2354,9 +2354,10 @@ export function StudentSequencePage() {
               disabled={speaking !== null}
               onClick={() => {
                 void (async () => {
-                  await playEnglish(instr.text)
+                  /* Unlock answers even when audio is blocked — Hear again remains. */
                   setInstrHeard(true)
                   if (coachFirst) advanceStationCoach('workplace-instructions')
+                  await playEnglish(instr.text)
                 })()
               }}
             >
@@ -2504,8 +2505,9 @@ export function StudentSequencePage() {
               /* Only the first Hear clears the hear step — Hear again must not skip the choice beat. */
               if (coachFirst && !phraseHeard) advanceStationCoach('site-language')
               void (async () => {
-                await playEnglish(phrase.en)
+                /* Unlock answers even when audio is blocked — same as Workplace Words. */
                 setPhraseHeard(true)
+                await playEnglish(phrase.en)
               })()
             }}
           >

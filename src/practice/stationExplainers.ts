@@ -53,7 +53,7 @@ export const STATION_EXPLAINERS: StationExplainer[] = [
     id: 'sentence-structure',
     steps: [9],
     title: 'Sentence Structure',
-    lede: 'Pick the full sentence. Hear it. Type it.',
+    lede: 'Pick the full sentence. Hear it. Type it. Wrong? Try again.',
     video: 'explainers/sentence-structure.mp4',
   },
   {

@@ -568,6 +568,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Layers:** L2 (honest production reps) + L3 (task / media / pick bank / type result in one beat) + learner-fear (soft miss, no exam chrome).
 - **Customer ask:** Workplace Words must show ~5 shuffled choices; learner picks the correct one **and** types it. Choices switch so tapping until right cannot cheat.
 - **Fix:** `VocabSheet` typing phase adds a same-page 5-option bank under Type/Go. Wrong pick → soft miss + reshuffle (order never repeats twice in a row). Go without a correct pick soft-coaches “pick the matching word…”. Clear still requires typed English (`firePlayClear`). Sentence Structure later moved to full-sentence pick · hear · type (see 2026-10-30).
+- **2026-11-27 critic (video QA):** Wrong pick reshuffled but cleared `pickMiss` in the same tick — tip never stayed on screen while VO said “Wrong? Try again. The choices move.” `dealPickBank({ miss: true })` keeps the soft-miss tip with the reshuffle. Station explainers must show the miss path, not only the happy path (`record-station-demos.mjs`).
 - **Critic:** Pick alone would be shopping; type alone invited guess-from-audio without looking. Dual lock forces looking + producing. Reshuffle is teach, not fear — “choices switched — pick again.”
 - **Law restated (§6.3c):** hear → hear → **pick + type**; shuffle after miss and on card advance.
 

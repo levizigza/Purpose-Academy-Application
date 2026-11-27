@@ -54,9 +54,10 @@ STATIONS: list[dict] = [
         "title": "Workplace Words",
         "beats": [
             (None, "Workplace Words. One picture. One word. No rush."),
-            ("grant_visual_vocab", "Your language starts in English. You can choose another language any time."),
-            ("grant_visual_vocab", "Press the language you understand. Hear it. Then hear the English workplace word."),
-            ("grant_visual_vocab", "Type what you heard. Wrong? Try again. That is all — hear, pick, and type."),
+            ("grant_visual_vocab", "Press the language you understand. Hear it in your tongue."),
+            ("grant_visual_vocab", "Then hear the English workplace word."),
+            ("grant_visual_vocab", "Pick the matching English word. Wrong? Try again. The choices move."),
+            ("grant_visual_vocab", "Type what you picked and heard. Wrong? Try again. That is all — hear, pick, and type."),
         ],
     },
     {
@@ -74,16 +75,16 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "English Eye Spy. Clear the board."),
             ("grant_eye_spy", "Tap a picture on the job site. Then tap its English name."),
-            ("grant_eye_spy", "A correct pair disappears. Wrong? Try again. Clear every pair to continue."),
+            ("grant_eye_spy", "Wrong? Try again. A correct pair disappears. Clear every pair to continue."),
         ],
     },
     {
         "id": "sentence-structure",
         "title": "Sentence Structure",
         "beats": [
-            (None, "Sentence Structure. Four words. Type the match."),
-            ("grant_visual_vocab", "Read the sentence. Look at the four choices at the bottom."),
-            ("grant_visual_vocab", "Type the word that fits the blank. Wrong? Try again."),
+            (None, "Sentence Structure. Pick the full sentence. Hear it. Type it."),
+            ("grant_visual_vocab", "Look at the blank. Pick the matching full sentence below. Wrong? Try again."),
+            ("grant_visual_vocab", "Hear it. Then type the full sentence. Wrong? Try again."),
         ],
     },
     {
@@ -111,7 +112,7 @@ STATIONS: list[dict] = [
         "beats": [
             (None, "Workplace Instructions. Hear a direction. Show you understood."),
             ("grant_practice_hub", "Press Hear English at least once."),
-            ("grant_practice_hub", "Then choose what you should do. Wrong? Try again."),
+            ("grant_practice_hub", "Wrong? Try again. Then choose what you should do."),
         ],
     },
     {

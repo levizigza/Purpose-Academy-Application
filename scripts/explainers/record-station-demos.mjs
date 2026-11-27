@@ -68,16 +68,28 @@ const STATIONS = {
         id: 'mark',
         text: 'See the arrow. It points at the language buttons one time. Stay in English, or press the language you know best.',
         async act(page) {
+          /* Hold on the once-then-quiet nav arrow so “see the arrow” is on screen.
+             Arrow bob animation never goes “stable” — use evaluate scroll, not Playwright’s. */
+          const arrow = page.locator('.train-lang-cue .nav-arrow, .nav-arrow').first()
+          if (await arrow.count()) {
+            await page.evaluate(() => {
+              document.querySelector('.train-lang-cue, .nav-arrow')?.scrollIntoView({
+                block: 'center',
+                behavior: 'instant',
+              })
+            })
+            await page.waitForTimeout(400)
+            await moveTo(page, arrow, { steps: 16, settle: 1100 })
+          }
+          const grid = page.locator('.train-lang-grid, .train-lang-cue').first()
+          await grid.evaluate((el) => el.scrollIntoView({ block: 'nearest' })).catch(() => {})
           const spanish = page.locator('.train-lang').filter({ hasText: /Spanish|Español|ES/i }).first()
-          await spanish.scrollIntoViewIfNeeded()
           await clickAt(page, spanish, { steps: 40, settle: 400, after: 900 })
           const amharic = page.locator('.train-lang').filter({ hasText: /Amharic|አማርኛ|AM/i }).first()
           if (await amharic.isVisible().catch(() => false)) {
-            await amharic.scrollIntoViewIfNeeded()
             await clickAt(page, amharic, { steps: 30, settle: 350, after: 700 })
           }
           const english = page.locator('.train-lang').filter({ hasText: /English|EN/i }).first()
-          await english.scrollIntoViewIfNeeded()
           await clickAt(page, english, { steps: 28, settle: 350, after: 600 })
         },
       },
@@ -85,9 +97,8 @@ const STATIONS = {
         id: 'continue',
         text: 'Then continue. The next path questions speak that language.',
         async act(page) {
-          const cont = page.locator('button.btn-primary, button:has-text("Continue")').first()
+          const cont = page.locator('button.btn-primary, button:has-text("Continue"), button:has-text("NEXT")').first()
           if (await cont.isVisible().catch(() => false)) {
-            await cont.scrollIntoViewIfNeeded()
             await moveTo(page, cont, { steps: 24, settle: 800 })
           } else {
             await page.waitForTimeout(800)
@@ -123,7 +134,6 @@ const STATIONS = {
           await langRow.scrollIntoViewIfNeeded()
           await moveTo(page, langRow, { steps: 24, settle: 500 })
           const langButtons = page.locator('[data-coach="vv-lang"] button, .vocab-sheet-lang-btn')
-          /* Hover a couple languages first so VO can name the row before the press */
           const n = await langButtons.count()
           for (let i = 0; i < Math.min(n, 2); i++) {
             await moveTo(page, langButtons.nth(i), { steps: 14, settle: 280 })
@@ -133,22 +143,34 @@ const STATIONS = {
               ? langButtons.filter({ hasText: /Spanish/i }).first()
               : langButtons.first()
           await pick.scrollIntoViewIfNeeded()
-          /* Short after — keep camera on the language press; bridge audio is silenced in demos */
           await clickAt(page, pick, { steps: 24, settle: 350, after: 450 })
-          await moveTo(page, pick, { steps: 8, settle: 400 })
+          /* Pin the card after bridge — next-door CTA can steal the frame on reflow. */
+          await page.evaluate(() => {
+            document.querySelector('.vocab-sheet-card, .vocab-sheet')?.scrollIntoView({
+              block: 'center',
+              behavior: 'instant',
+            })
+          })
+          const bridge = page.locator('.vocab-sheet-card, .vocab-sheet').first()
+          await moveTo(page, bridge, { steps: 8, settle: 800 })
         },
       },
       {
         id: 'hear',
         text: 'Then hear the English workplace word.',
         async act(page) {
+          await page.evaluate(() => {
+            document.querySelector('.vocab-sheet-card, .vocab-sheet')?.scrollIntoView({
+              block: 'center',
+              behavior: 'instant',
+            })
+          })
           const hear = page.locator('button:has-text("Hear English"), [data-coach="vv-hear"]').first()
           if (await hear.isVisible().catch(() => false)) {
             await hear.scrollIntoViewIfNeeded()
             await clickAt(page, hear, { steps: 22, settle: 350, after: 900 })
           } else {
-            /* English auto-plays after bridge — hold on the card / hear control */
-            const card = page.locator('.vocab-sheet, [data-coach="vv-type"], [data-coach="vv-hear"]').first()
+            const card = page.locator('.vocab-sheet-card, [data-coach="vv-type"], [data-coach="vv-hear"]').first()
             await moveTo(page, card, { steps: 18, settle: 1100 })
           }
         },
@@ -157,34 +179,58 @@ const STATIONS = {
         id: 'pick',
         text: 'Pick the matching English word. Wrong? Try again. The choices move.',
         async act(page) {
-          await page.waitForSelector('[data-coach="vv-pick"] .vocab-sheet-pick-chip, .vocab-sheet-pick-chip', {
-            timeout: 35000,
-          })
-          const bank = page.locator('[data-coach="vv-pick"], .vocab-sheet-pick-bank').first()
+          await page.waitForSelector('.vocab-sheet-pick-chip', { timeout: 35000 })
+          const bank = page.locator('.vocab-sheet-pick-bank, [data-coach="vv-pick"]').first()
           await bank.scrollIntoViewIfNeeded()
           await moveTo(page, bank, { steps: 18, settle: 400 })
-          /* Prefer the word that matches the typed demo (“Hi”); fall back to first chip. */
           const chips = page.locator('.vocab-sheet-pick-chip')
-          const hi = chips.filter({ hasText: /\bHi\b/i }).first()
-          const pick = (await hi.isVisible().catch(() => false)) ? hi : chips.first()
-          await clickAt(page, pick, { steps: 20, settle: 300, after: 700 })
+          const beforeOrder = (await chips.allTextContents()).map((t) => t.trim()).join('|')
+          /* Prefer an obviously wrong greeting — never “Hi”. */
+          let wrongBtn = chips.filter({ hasText: /Good morning|Nice to meet|Not bad|How are you|I'm good|Long time/i }).first()
+          if (!(await wrongBtn.isVisible().catch(() => false))) {
+            wrongBtn = chips.filter({ hasNotText: /\bHi\b/i }).first()
+          }
+          await wrongBtn.scrollIntoViewIfNeeded()
+          await clickAt(page, wrongBtn, { steps: 18, settle: 280, after: 350 })
+          /* Soft miss line is the proof the wrong pick landed. */
+          await page.waitForSelector('.play-soft-miss, .vocab-sheet-type-fb.is-retry', { timeout: 10000 })
+          await page.waitForTimeout(500)
+          /* Wait for reshuffle — order key changes when choices move. */
+          for (let i = 0; i < 12; i++) {
+            const afterOrder = (await chips.allTextContents()).map((t) => t.trim()).join('|')
+            if (afterOrder && afterOrder !== beforeOrder) break
+            await page.waitForTimeout(120)
+          }
+          await bank.scrollIntoViewIfNeeded()
+          await moveTo(page, bank, { steps: 12, settle: 1100 })
         },
       },
       {
         id: 'type',
         text: 'Type what you picked and heard. Wrong? Try again. That is all — hear, pick, and type.',
         async act(page) {
-          await page.waitForSelector('[data-coach="vv-type"] input, .vocab-sheet-type-input', {
-            timeout: 35000,
-          })
+          await page.waitForSelector('.vocab-sheet-pick-chip', { timeout: 35000 })
+          const chips = page.locator('.vocab-sheet-pick-chip')
+          const hi = chips.filter({ hasText: /\bHi\b/i }).first()
+          const correct = (await hi.isVisible().catch(() => false)) ? hi : chips.first()
+          await correct.scrollIntoViewIfNeeded()
+          await clickAt(page, correct, { steps: 18, settle: 280, after: 500 })
+          /* Green picked state must be visible before typing. */
+          await page.waitForSelector('.vocab-sheet-pick-chip.is-picked', { timeout: 8000 }).catch(() => {})
+
           const input = page.locator('[data-coach="vv-type"] input, .vocab-sheet-type-input').first()
-          await input.scrollIntoViewIfNeeded()
-          await typeInto(page, input, 'Hi', { delay: 140 })
-          /* Rest on the filled field so VO can say “type” before Go */
-          await page.waitForTimeout(900)
           const go = page.locator('.vocab-sheet-type-check, button:has-text("Go")').first()
-          await go.scrollIntoViewIfNeeded()
-          await clickAt(page, go, { steps: 20, settle: 300, after: 900 })
+          await input.scrollIntoViewIfNeeded()
+          /* Wrong type first — soft miss on screen while VO says try again. */
+          await typeInto(page, input, 'Hey', { delay: 110 })
+          await clickAt(page, go, { steps: 16, settle: 220, after: 350 })
+          await page.waitForSelector('.play-soft-miss, .vocab-sheet-type-fb.is-retry', { timeout: 10000 })
+          await page.waitForTimeout(800)
+          await input.fill('')
+          await typeInto(page, input, 'Hi', { delay: 120 })
+          await page.waitForTimeout(400)
+          await clickAt(page, go, { steps: 16, settle: 220, after: 1000 })
+          await page.waitForSelector('.vocab-sheet-card.is-typed, text=/DONE|Yes —/i', { timeout: 8000 }).catch(() => {})
         },
       },
     ],
@@ -226,18 +272,22 @@ const STATIONS = {
         text: 'Wrong place? It shakes — try again. Finish this set, then the next.',
         async act(page) {
           const pic2 = page.locator('.vocab-organize-piece.is-image').first()
-          if (await pic2.isVisible().catch(() => false)) {
-            const id2 = await pic2.getAttribute('data-term-id')
-            await clickAt(page, pic2, { steps: 22, settle: 300, after: 500 })
-            const drop2 = id2
-              ? page.locator(`.vocab-organize-slot[data-box-id="${id2}"]`).first()
-              : page.locator('.vocab-organize-slot:not(.is-filled)').first()
-            if (await drop2.isVisible().catch(() => false)) {
-              await clickAt(page, drop2, { steps: 24, settle: 300, after: 1000 })
-            }
-          } else {
+          if (!(await pic2.isVisible().catch(() => false))) {
             await page.waitForTimeout(1200)
+            return
           }
+          const id2 = await pic2.getAttribute('data-term-id')
+          await clickAt(page, pic2, { steps: 12, settle: 150, after: 250 })
+          const wrongDrop = page
+            .locator(`[data-coach="org-drop"]:not([data-box-id="${id2}"])`)
+            .first()
+          await clickAt(page, wrongDrop, { steps: 12, settle: 150, after: 200 })
+          await page.waitForSelector('.play-soft-miss, .vocab-organize-board.is-shake', { timeout: 4000 })
+          await page.waitForTimeout(1600)
+          /* Then the correct place. */
+          await clickAt(page, pic2, { steps: 12, settle: 150, after: 250 })
+          const rightDrop = page.locator(`[data-coach="org-drop"][data-box-id="${id2}"]`).first()
+          await clickAt(page, rightDrop, { steps: 14, settle: 200, after: 900 })
         },
       },
     ],
@@ -265,40 +315,51 @@ const STATIONS = {
         id: 'pic',
         text: 'Tap a picture on the job site. Then tap its English name.',
         async act(page) {
-          const pic = page.locator('[data-coach="spy-pic"]').first()
-          await clickAt(page, pic, { steps: 26, settle: 400, after: 700 })
-          const word = page
-            .locator('[data-coach="spy-word"] button, [data-coach="spy-word"] .choice-btn')
-            .first()
-          const label = ((await pic.getAttribute('aria-label')) || '')
-            .replace(/picture|hotspot|press/gi, '')
-            .trim()
-          let wordBtn = word
-          if (label) {
-            const match = page
-              .locator('[data-coach="spy-word"] button, [data-coach="spy-word"] .choice-btn')
-              .filter({
-                hasText: new RegExp(label.split(/\s+/)[0] || 'Hammer', 'i'),
-              })
-            if (await match.first().isVisible().catch(() => false)) wordBtn = match.first()
-          }
-          const hammer = page
-            .locator('[data-coach="spy-word"] button, [data-coach="spy-word"] .choice-btn')
-            .filter({ hasText: /Hammer/i })
-          if (await hammer.first().isVisible().catch(() => false)) wordBtn = hammer.first()
-          await clickAt(page, wordBtn, { steps: 24, settle: 350, after: 600 })
+          const pic = page.locator('[data-coach="spy-pic"], .eye-spy-hotspot').first()
+          await pic.scrollIntoViewIfNeeded()
+          await clickAt(page, pic, { steps: 26, settle: 400, after: 600 })
+          const words = page.locator('[data-coach="spy-word"]')
+          await words.scrollIntoViewIfNeeded()
+          await page.waitForSelector('[data-coach="spy-word"] button', { timeout: 10000 })
+          await moveTo(page, words, { steps: 18, settle: 700 })
         },
       },
       {
         id: 'match',
-        text: 'A correct pair disappears. Wrong? Try again. Clear every pair to continue.',
+        text: 'Wrong? Try again. A correct pair disappears. Clear every pair to continue.',
         async act(page) {
-          const matchBtn = page.locator('[data-coach="spy-match"], button:has-text("Match")').first()
-          if (await matchBtn.isVisible().catch(() => false)) {
-            await clickAt(page, matchBtn, { steps: 22, settle: 300, after: 1400 })
-          } else {
-            await page.waitForTimeout(1400)
+          const words = page.locator('[data-coach="spy-word"]')
+          await words.scrollIntoViewIfNeeded()
+          const buttons = page.locator('[data-coach="spy-word"] button')
+          await page.waitForSelector('[data-coach="spy-word"] button', { timeout: 10000 })
+          let pic = page.locator('.eye-spy-hotspot.is-selected').first()
+          if (!(await pic.isVisible().catch(() => false))) {
+            pic = page.locator('[data-coach="spy-pic"], .eye-spy-hotspot').first()
+            await clickAt(page, pic, { steps: 14, settle: 200, after: 300 })
           }
+          const label = ((await pic.getAttribute('aria-label')) || '').trim()
+          const labelWord = label.split(/\s+/)[0] || ''
+          /* Wrong name first — must land in the first second of this VO beat. */
+          const wrong = buttons.filter({ hasNotText: new RegExp(labelWord || 'Hammer', 'i') }).first()
+          await clickAt(page, wrong, { steps: 12, settle: 150, after: 200 })
+          await page.waitForSelector('.play-soft-miss', { timeout: 5000 })
+          /* Soft miss sits above the board — bring it into frame for the VO. */
+          await page.locator('.play-soft-miss').first().scrollIntoViewIfNeeded().catch(() => {})
+          await page.evaluate(() => {
+            document.querySelector('.play-soft-miss')?.scrollIntoView({ block: 'center', behavior: 'instant' })
+          })
+          await page.waitForTimeout(1800)
+          /* Re-select picture, then correct name so the pair clears. */
+          pic = page.locator('.eye-spy-hotspot.is-selected, [data-coach="spy-pic"], .eye-spy-hotspot').first()
+          if (!(await page.locator('.eye-spy-hotspot.is-selected').count())) {
+            await clickAt(page, pic, { steps: 12, settle: 180, after: 250 })
+          }
+          const correct = labelWord
+            ? buttons.filter({ hasText: new RegExp(labelWord, 'i') }).first()
+            : buttons.filter({ hasText: /Hammer/i }).first()
+          const right = (await correct.isVisible().catch(() => false)) ? correct : buttons.first()
+          await words.scrollIntoViewIfNeeded()
+          await clickAt(page, right, { steps: 14, settle: 200, after: 1100 })
         },
       },
     ],
@@ -310,7 +371,7 @@ const STATIONS = {
     async setup(page) {
       await gotoStation(page, BASE, { step: 9 })
       await page.waitForSelector(
-        '[data-coach="sent-type"], .sentence-cloze-type, [data-coach="sent-choices"]',
+        '[data-coach="sent-pick"], .sentence-cloze-sentence-chip, .sentence-cloze-card',
         { timeout: 30000 },
       )
       await page.waitForTimeout(500)
@@ -318,57 +379,63 @@ const STATIONS = {
     beats: [
       {
         id: 'intro',
-        text: 'Sentence Structure. Four words. Type the match.',
+        text: 'Sentence Structure. Pick the full sentence. Hear it. Type it.',
         async act(page) {
-          const stage = page
-            .locator('[data-coach="sent-type"], .sentence-cloze-type, .train-panel')
-            .first()
+          const stage = page.locator('.sentence-cloze-card, .train-panel').first()
           await stage.scrollIntoViewIfNeeded()
           await moveTo(page, stage, { steps: 22, settle: 800 })
         },
       },
       {
-        id: 'read',
-        text: 'Read the sentence. Look at the four choices at the bottom.',
+        id: 'pick',
+        text: 'Look at the blank. Pick the matching full sentence below. Wrong? Try again.',
         async act(page) {
-          const choices = page
-            .locator('[data-coach="sent-choices"], .sentence-cloze-choices')
-            .first()
-          if (await choices.isVisible().catch(() => false)) {
-            await moveTo(page, choices, { steps: 22, settle: 900 })
-          } else {
-            await page.waitForTimeout(900)
-          }
+          const bank = page.locator('[data-coach="sent-pick"], .sentence-cloze-choices').first()
+          await bank.scrollIntoViewIfNeeded()
+          const chips = page.locator('.sentence-cloze-sentence-chip, .sentence-cloze-chip')
+          /* Wrong first — soft miss must be on screen as VO says Wrong. */
+          const wrong = chips.nth(1)
+          await clickAt(page, wrong, { steps: 12, settle: 150, after: 200 })
+          await page.waitForSelector('.play-soft-miss', { timeout: 6000 })
+          await page.waitForTimeout(1400)
+          const chips2 = page.locator(
+            '.sentence-cloze-sentence-chip:not(.is-dim), .sentence-cloze-chip:not(.is-dim)',
+          )
+          const prefer = chips2.filter({
+            hasText: /foundation|hammer|drill|hard hat|measure|safety|scaffold|level|tape/i,
+          })
+          const correct = (await prefer.first().isVisible().catch(() => false))
+            ? prefer.first()
+            : chips2.first()
+          await clickAt(page, correct, { steps: 14, settle: 200, after: 900 })
         },
       },
       {
         id: 'type',
-        text: 'Type the word that fits the blank. Wrong? Try again.',
+        text: 'Hear it. Then type the full sentence. Wrong? Try again.',
         async act(page) {
-          const input = page.locator('[data-coach="sent-type"] input, .sentence-cloze-type-input').first()
-          await input.waitFor({ state: 'visible', timeout: 10000 })
-          const chipTexts = await page.locator('.sentence-cloze-chip').allTextContents()
-          const cleaned = chipTexts
-            .map((t) => t.replace(/^[A-D]\.\s*/i, '').trim())
-            .filter((t) => t && !/^[A-D]\.?$/i.test(t))
-          /* Prefer workplace/structure words; Construction Q1 answer is Foundation */
-          let answer =
-            cleaned.find((t) => /foundation|hammer|drill|saw|level|tape|hard|ppe|safety|scaffold/i.test(t)) ||
-            cleaned[1] ||
-            cleaned[0] ||
-            'Foundation'
-          await typeInto(page, input, answer, { delay: 110 })
-          /* Hold on filled blank so mid-beat still shows typing, not the next item */
-          await moveTo(page, input, { steps: 10, settle: 1100 })
-          const go = page.locator('.sentence-cloze-type-go, button:has-text("Go")').first()
-          await clickAt(page, go, { steps: 18, settle: 280, after: 700 })
-          const retry = page.locator('.play-soft-miss').first()
-          if (await retry.isVisible().catch(() => false)) {
-            const alt = cleaned.find((t) => t.toLowerCase() !== answer.toLowerCase()) || 'Foundation'
-            await input.fill('')
-            await typeInto(page, input, alt, { delay: 100 })
-            await clickAt(page, go, { steps: 16, settle: 250, after: 700 })
+          const hear = page.locator('[data-coach="sent-hear"] button, .sentence-cloze-hear-btn').first()
+          if (await hear.isVisible().catch(() => false)) {
+            await clickAt(page, hear, { steps: 12, settle: 150, after: 500 })
           }
+          const input = page.locator('[data-coach="sent-type"] input, .sentence-cloze-type-input').first()
+          await input.waitFor({ state: 'visible', timeout: 15000 })
+          const picked = page
+            .locator('.sentence-cloze-chip.is-picked, .sentence-cloze-sentence-chip.is-picked')
+            .first()
+          const answer =
+            ((await picked.textContent()) || '')
+              .replace(/^[A-D]\.\s*/i, '')
+              .trim() || 'The foundation holds the building.'
+          const go = page.locator('.sentence-cloze-type-go, button:has-text("Go")').first()
+          /* Wrong type immediately so VO “Wrong?” lands on the soft miss. */
+          await input.fill('Wrong sentence here')
+          await clickAt(page, go, { steps: 10, settle: 120, after: 250 })
+          await page.waitForSelector('.play-soft-miss', { timeout: 6000 })
+          await page.waitForTimeout(1600)
+          await input.fill('')
+          await typeInto(page, input, answer, { delay: 35 })
+          await clickAt(page, go, { steps: 12, settle: 180, after: 900 })
         },
       },
     ],
@@ -379,7 +446,10 @@ const STATIONS = {
     step: 9,
     async setup(page) {
       await gotoStation(page, BASE, { step: 9 })
-      await page.waitForSelector('[data-coach="sent-type"], .sentence-cloze-type', { timeout: 30000 })
+      await page.waitForSelector(
+        '.sentence-cloze-card, [data-coach="sent-pick"], button:has-text("Skip to Word")',
+        { timeout: 30000 },
+      )
       await page.waitForTimeout(400)
       /* Skip control lives in a collapsed fold — click via DOM so prep stays silent */
       await page.evaluate(() => {
@@ -414,15 +484,36 @@ const STATIONS = {
         id: 'pick',
         text: 'Pick one answer. Wrong? Try again. Then continue.',
         async act(page) {
-          const hammer = page
-            .locator('[data-coach="choice-opt"] button')
-            .filter({ hasText: /^Hammer$/i })
-          const btn = (await hammer.first().isVisible().catch(() => false))
+          const opts = page.locator('[data-coach="choice-opt"] button')
+          const count = await opts.count()
+          /* Probe until a soft miss appears — never assume index 1 is wrong. */
+          let sawMiss = false
+          for (let i = 0; i < count; i++) {
+            await clickAt(page, opts.nth(i), { steps: 10, settle: 120, after: 250 })
+            if (await page.locator('.play-soft-miss').first().isVisible().catch(() => false)) {
+              sawMiss = true
+              break
+            }
+            /* Accidental correct — soft-retry then try another option. */
+            const retry = page.locator('button.btn-primary', { hasText: /Not yet|Next action|try again/i }).first()
+            if (await retry.isVisible().catch(() => false)) {
+              await clickAt(page, retry, { steps: 10, settle: 120, after: 400 })
+            }
+          }
+          if (sawMiss) {
+            await page.locator('.play-soft-miss').first().scrollIntoViewIfNeeded().catch(() => {})
+            await page.waitForTimeout(1500)
+            const retry = page.locator('button.btn-primary', { hasText: /Not yet/i }).first()
+            if (await retry.isVisible().catch(() => false)) {
+              await clickAt(page, retry, { steps: 10, settle: 120, after: 400 })
+            }
+          }
+          const hammer = opts.filter({ hasText: /^Hammer$/i })
+          const correct = (await hammer.first().isVisible().catch(() => false))
             ? hammer.first()
-            : page.locator('[data-coach="choice-opt"] button').first()
-          await clickAt(page, btn, { steps: 26, settle: 400, after: 800 })
-          /* Stay on the chosen answer — don’t wander during the VO hold */
-          await moveTo(page, btn, { steps: 8, settle: 500 })
+            : opts.first()
+          await clickAt(page, correct, { steps: 12, settle: 180, after: 900 })
+          await moveTo(page, correct, { steps: 8, settle: 400 })
         },
       },
     ],
@@ -479,16 +570,20 @@ const STATIONS = {
         id: 'tap',
         text: 'Three pictures. Tap the one that matches. Wrong? Try again.',
         async act(page) {
-          await page.waitForSelector('.supported-video-btn[data-correct="1"]:not(:disabled)', {
-            timeout: 15000,
-          })
+          await page.waitForSelector('.supported-video-btn', { timeout: 15000 })
+          const grid = page.locator('.supported-video-grid, [data-coach="sp-video"]').first()
+          await grid.scrollIntoViewIfNeeded()
           const wrong = page.locator('.supported-video-btn:not([data-correct="1"]):not(:disabled)').first()
-          if (await wrong.isVisible().catch(() => false)) {
-            await moveTo(page, wrong, { steps: 14, settle: 350 })
-          }
+          await clickAt(page, wrong, { steps: 12, settle: 150, after: 200 })
+          await page.waitForSelector('.play-soft-miss, .supported-video-btn.is-wrong', { timeout: 5000 })
+          await page.waitForTimeout(1400)
+          /* Exact soft-retry label — never match Back / Path home. */
+          const retry = page.locator('button.btn-primary', { hasText: /Not yet/i }).first()
+          await clickAt(page, retry, { steps: 12, settle: 150, after: 500 })
           const btn = page.locator('.supported-video-btn[data-correct="1"]:not(:disabled)').first()
-          await clickAt(page, btn, { steps: 20, settle: 300, after: 1400 })
-          await moveTo(page, btn, { steps: 10, settle: 600 })
+          await btn.waitFor({ state: 'visible', timeout: 10000 })
+          await clickAt(page, btn, { steps: 14, settle: 200, after: 1100 })
+          await moveTo(page, btn, { steps: 8, settle: 500 })
         },
       },
     ],
@@ -539,6 +634,17 @@ const STATIONS = {
         async act(page) {
           await page.waitForSelector('.supported-chip-btn:not(:disabled)', { timeout: 25000 })
           const built = page.locator('.supported-copycat-built').first()
+          const chips = page.locator('.supported-chip-btn:not(:disabled)')
+          await chips.first().scrollIntoViewIfNeeded()
+          /* Wrong chip first — soft miss on screen. */
+          const wrongChip = page.locator('.supported-chip-btn:not([data-correct="1"]):not(:disabled)').first()
+          if (await wrongChip.isVisible().catch(() => false)) {
+            await clickAt(page, wrongChip, { steps: 14, settle: 200, after: 350 })
+            await page.waitForSelector('.play-soft-miss, .supported-chip-btn.is-wrong', {
+              timeout: 5000,
+            }).catch(() => {})
+            await page.waitForTimeout(700)
+          }
           for (let guard = 0; guard < 16; guard += 1) {
             const next = page.locator('.supported-chip-btn[data-correct="1"]:not(:disabled)').first()
             if (!(await next.isVisible().catch(() => false))) break
@@ -574,19 +680,42 @@ const STATIONS = {
         id: 'hear',
         text: 'Press Hear English at least once.',
         async act(page) {
-          const hear = page.locator('button:has-text("Hear English")').first()
-          await clickAt(page, hear, { steps: 24, settle: 350, after: 1400 })
+          /* Must hit the station hear control — chrome also has “Hear English”. */
+          const hear = page.locator('[data-coach="instr-hear"] button, .train-instruction .btn-primary').first()
+          await hear.scrollIntoViewIfNeeded()
+          await clickAt(page, hear, { steps: 18, settle: 250, after: 400 })
+          await page.waitForSelector(
+            '[data-coach="instr-choice"] button:not([disabled])',
+            { timeout: 15000 },
+          )
+          await page.waitForTimeout(500)
         },
       },
       {
         id: 'pick',
-        text: 'Then choose what you should do. Wrong? Try again.',
+        text: 'Wrong? Try again. Then choose what you should do.',
         async act(page) {
-          const correct = page.locator('.train-choice-grid button').filter({ hasText: /tape measure/i })
-          const btn = (await correct.first().isVisible().catch(() => false))
-            ? correct.first()
-            : page.locator('.train-choice-grid button').first()
-          await clickAt(page, btn, { steps: 24, settle: 350, after: 1200 })
+          const grid = page.locator('[data-coach="instr-choice"], .train-choice-grid').first()
+          await grid.scrollIntoViewIfNeeded()
+          await page.waitForSelector(
+            '[data-coach="instr-choice"] button:not([disabled]), .train-choice-grid button:not([disabled])',
+            { timeout: 10000 },
+          )
+          const buttons = page.locator(
+            '[data-coach="instr-choice"] button:not([disabled]), .train-choice-grid button:not([disabled])',
+          )
+          const wrong = buttons.filter({ hasNotText: /tape measure/i }).first()
+          await clickAt(page, wrong, { steps: 12, settle: 150, after: 250 })
+          await page.waitForSelector('.play-soft-miss', { timeout: 8000 })
+          await page.locator('.play-soft-miss').first().scrollIntoViewIfNeeded().catch(() => {})
+          await page.waitForTimeout(1800)
+          const retry = page.locator('button.btn-primary', { hasText: /Not yet/i }).first()
+          if (await retry.isVisible().catch(() => false)) {
+            await clickAt(page, retry, { steps: 10, settle: 120, after: 400 })
+          }
+          const right = buttons.filter({ hasText: /tape measure/i }).first()
+          const correct = (await right.isVisible().catch(() => false)) ? right : buttons.first()
+          await clickAt(page, correct, { steps: 14, settle: 200, after: 1000 })
         },
       },
     ],
@@ -640,13 +769,26 @@ const STATIONS = {
           }
           const tryPanel = page.locator('[data-coach="comp-try"]').first()
           if (await tryPanel.isVisible().catch(() => false)) {
+            await tryPanel.scrollIntoViewIfNeeded()
             await moveTo(page, tryPanel, { steps: 20, settle: 500 })
-            const action = tryPanel.locator('button').first()
-            if (await action.isVisible().catch(() => false)) {
-              await clickAt(page, action, { steps: 18, settle: 300, after: 1000 })
+            const actions = tryPanel.locator('button')
+            const count = await actions.count()
+            for (let i = 0; i < Math.min(count, 3); i++) {
+              const action = actions.nth(i)
+              if (await action.isVisible().catch(() => false)) {
+                await clickAt(page, action, { steps: 16, settle: 220, after: 500 })
+              }
             }
+            await moveTo(page, tryPanel, { steps: 10, settle: 700 })
           } else {
-            await page.waitForTimeout(1000)
+            /* Scroll lesson list so VO topics are on screen even if try panel is gated. */
+            const list = page.locator('.comp-skills, .topic-lesson-card, [data-coach="comp-watch"]').first()
+            if (await list.isVisible().catch(() => false)) {
+              await list.scrollIntoViewIfNeeded()
+              await moveTo(page, list, { steps: 16, settle: 1000 })
+            } else {
+              await page.waitForTimeout(1000)
+            }
           }
         },
       },
@@ -677,21 +819,43 @@ const STATIONS = {
         id: 'hear',
         text: 'Hear a job-site phrase. Choose what it means.',
         async act(page) {
-          const hear = page.locator('[data-coach="phrase-hear"], button:has-text("Hear English")').first()
-          await clickAt(page, hear, { steps: 24, settle: 350, after: 1400 })
+          const hear = page.locator('[data-coach="phrase-hear"]').first()
+          await hear.scrollIntoViewIfNeeded()
+          await clickAt(page, hear, { steps: 18, settle: 250, after: 400 })
+          await page.waitForSelector('[data-coach="choice-opt"] button:not([disabled])', {
+            timeout: 15000,
+          })
+          const grid = page.locator('[data-coach="choice-opt"], .train-choice-grid').first()
+          await grid.scrollIntoViewIfNeeded()
+          await moveTo(page, grid, { steps: 14, settle: 500 })
         },
       },
       {
         id: 'pick',
         text: 'Wrong? Try again. Then move on.',
         async act(page) {
-          const correct = page
-            .locator('[data-coach="choice-opt"] button, .train-choice-grid button')
-            .filter({ hasText: /measurement|hard hat|Check your measurement/i })
-          const btn = (await correct.first().isVisible().catch(() => false))
-            ? correct.first()
-            : page.locator('[data-coach="choice-opt"] button, .train-choice-grid button').first()
-          await clickAt(page, btn, { steps: 24, settle: 350, after: 1200 })
+          await page.waitForSelector('[data-coach="choice-opt"] button:not([disabled])', {
+            timeout: 10000,
+          })
+          const buttons = page.locator('[data-coach="choice-opt"] button:not([disabled])')
+          const wrong = buttons
+            .filter({ hasNotText: /measurement|hard hat|Check your measurement/i })
+            .first()
+          await clickAt(page, wrong, { steps: 12, settle: 150, after: 250 })
+          await page.waitForSelector('.play-soft-miss', { timeout: 8000 })
+          await page.locator('.play-soft-miss').first().scrollIntoViewIfNeeded().catch(() => {})
+          await page.waitForTimeout(1500)
+          const retry = page.locator('button.btn-primary', { hasText: /Not yet/i }).first()
+          if (await retry.isVisible().catch(() => false)) {
+            await clickAt(page, retry, { steps: 10, settle: 120, after: 400 })
+          }
+          const right = buttons.filter({ hasText: /measurement|hard hat|Check your measurement/i }).first()
+          const correct = (await right.isVisible().catch(() => false)) ? right : buttons.first()
+          await clickAt(page, correct, { steps: 14, settle: 200, after: 900 })
+          const next = page.locator('button:has-text("Next"), button:has-text("Continue")').first()
+          if (await next.isVisible().catch(() => false)) {
+            await moveTo(page, next, { steps: 12, settle: 500 })
+          }
         },
       },
     ],
@@ -723,22 +887,27 @@ const STATIONS = {
           if (await img.isVisible().catch(() => false)) {
             await moveTo(page, img, { steps: 20, settle: 700 })
           }
-          const correct = page.locator('button').filter({ hasText: /Safety gear \(PPE\)/i })
-          const btn = (await correct.first().isVisible().catch(() => false))
-            ? correct.first()
-            : page.locator('[data-coach="choice-opt"] button, .train-choice-grid button').first()
-          await moveTo(page, btn, { steps: 22, settle: 700 })
+          const grid = page.locator('[data-coach="choice-opt"], .train-choice-grid').first()
+          await grid.scrollIntoViewIfNeeded()
+          await moveTo(page, grid, { steps: 18, settle: 700 })
         },
       },
       {
         id: 'retry',
         text: 'Wrong? Try again. Safety first — no rush.',
         async act(page) {
-          const correct = page.locator('button').filter({ hasText: /Safety gear \(PPE\)/i })
-          const btn = (await correct.first().isVisible().catch(() => false))
-            ? correct.first()
-            : page.locator('[data-coach="choice-opt"] button, .train-choice-grid button').first()
-          await clickAt(page, btn, { steps: 26, settle: 400, after: 1400 })
+          const buttons = page.locator('[data-coach="choice-opt"] button, .train-choice-grid button')
+          const wrong = buttons.filter({ hasNotText: /Safety gear \(PPE\)/i }).first()
+          await clickAt(page, wrong, { steps: 12, settle: 150, after: 250 })
+          await page.waitForSelector('.play-soft-miss', { timeout: 6000 })
+          await page.locator('.play-soft-miss').first().scrollIntoViewIfNeeded().catch(() => {})
+          await page.waitForTimeout(1500)
+          const retry = page.locator('button.btn-primary', { hasText: /Not yet/i }).first()
+          if (await retry.isVisible().catch(() => false)) {
+            await clickAt(page, retry, { steps: 10, settle: 120, after: 400 })
+          }
+          const right = buttons.filter({ hasText: /Safety gear \(PPE\)/i }).first()
+          await clickAt(page, right, { steps: 14, settle: 200, after: 1000 })
         },
       },
     ],
@@ -766,22 +935,31 @@ const STATIONS = {
         id: 'learn',
         text: 'Learn each tool group. Answer one check.',
         async act(page) {
-          const correct = page.locator('button').filter({ hasText: /^Hand tools$/i })
-          const btn = (await correct.first().isVisible().catch(() => false))
-            ? correct.first()
-            : page.locator('[data-coach="choice-opt"] button').first()
-          await moveTo(page, btn, { steps: 22, settle: 900 })
+          const grid = page.locator('[data-coach="choice-opt"]').first()
+          await grid.scrollIntoViewIfNeeded()
+          await moveTo(page, grid, { steps: 20, settle: 900 })
         },
       },
       {
         id: 'retry',
         text: 'Wrong? Try again. Then continue.',
         async act(page) {
-          const correct = page.locator('button').filter({ hasText: /^Hand tools$/i })
-          const btn = (await correct.first().isVisible().catch(() => false))
-            ? correct.first()
-            : page.locator('[data-coach="choice-opt"] button').first()
-          await clickAt(page, btn, { steps: 26, settle: 400, after: 1400 })
+          const buttons = page.locator('[data-coach="choice-opt"] button')
+          const wrong = buttons.filter({ hasNotText: /^Hand tools$/i }).first()
+          await clickAt(page, wrong, { steps: 12, settle: 150, after: 250 })
+          await page.waitForSelector('.play-soft-miss', { timeout: 6000 })
+          await page.locator('.play-soft-miss').first().scrollIntoViewIfNeeded().catch(() => {})
+          await page.waitForTimeout(1500)
+          const retry = page.locator('button.btn-primary', { hasText: /Not yet/i }).first()
+          if (await retry.isVisible().catch(() => false)) {
+            await clickAt(page, retry, { steps: 10, settle: 120, after: 400 })
+          }
+          const right = buttons.filter({ hasText: /^Hand tools$/i }).first()
+          await clickAt(page, right, { steps: 14, settle: 200, after: 1000 })
+          const next = page.locator('button:has-text("Continue"), button:has-text("Next")').first()
+          if (await next.isVisible().catch(() => false)) {
+            await moveTo(page, next, { steps: 12, settle: 500 })
+          }
         },
       },
     ],
@@ -809,22 +987,27 @@ const STATIONS = {
         id: 'learn',
         text: 'Learn each system. Answer one check.',
         async act(page) {
-          const correct = page.locator('button').filter({ hasText: /^Framing$/i })
-          const btn = (await correct.first().isVisible().catch(() => false))
-            ? correct.first()
-            : page.locator('[data-coach="choice-opt"] button').first()
-          await moveTo(page, btn, { steps: 22, settle: 900 })
+          const grid = page.locator('[data-coach="choice-opt"]').first()
+          await grid.scrollIntoViewIfNeeded()
+          await moveTo(page, grid, { steps: 20, settle: 900 })
         },
       },
       {
         id: 'retry',
         text: 'Wrong? Try again. Your job helps the whole work site.',
         async act(page) {
-          const correct = page.locator('button').filter({ hasText: /^Framing$/i })
-          const btn = (await correct.first().isVisible().catch(() => false))
-            ? correct.first()
-            : page.locator('[data-coach="choice-opt"] button').first()
-          await clickAt(page, btn, { steps: 26, settle: 400, after: 1400 })
+          const buttons = page.locator('[data-coach="choice-opt"] button')
+          const wrong = buttons.filter({ hasNotText: /^Framing$/i }).first()
+          await clickAt(page, wrong, { steps: 12, settle: 150, after: 250 })
+          await page.waitForSelector('.play-soft-miss', { timeout: 6000 })
+          await page.locator('.play-soft-miss').first().scrollIntoViewIfNeeded().catch(() => {})
+          await page.waitForTimeout(1500)
+          const retry = page.locator('button.btn-primary', { hasText: /Not yet/i }).first()
+          if (await retry.isVisible().catch(() => false)) {
+            await clickAt(page, retry, { steps: 10, settle: 120, after: 400 })
+          }
+          const right = buttons.filter({ hasText: /^Framing$/i }).first()
+          await clickAt(page, right, { steps: 14, settle: 200, after: 1000 })
         },
       },
     ],
@@ -881,7 +1064,9 @@ const STATIONS = {
             await page.evaluate(() => {
               document.querySelectorAll('button[disabled]').forEach((b) => b.removeAttribute('disabled'))
             })
-            await moveTo(page, next, { steps: 22, settle: 900 })
+            await next.scrollIntoViewIfNeeded()
+            await moveTo(page, next, { steps: 22, settle: 700 })
+            await clickAt(page, next, { steps: 16, settle: 250, after: 900 })
           } else {
             await page.waitForTimeout(900)
           }

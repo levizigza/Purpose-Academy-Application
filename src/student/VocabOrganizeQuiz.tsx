@@ -146,7 +146,8 @@ export function VocabOrganizeQuiz({ terms, onPassed, onSkip }: Props) {
       setShakeId(wordId)
       playFoley('wrong')
       recordSkillAttempt('vocab-organize', false, 0)
-      window.setTimeout(() => setShakeId(null), 380)
+      /* Hold miss tip + shake class long enough for station explainers. */
+      window.setTimeout(() => setShakeId(null), 2000)
       setPicked(null)
       return
     }
