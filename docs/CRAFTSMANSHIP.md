@@ -584,6 +584,21 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Soft miss moved above pick bank + scroll-into-view + phone sticky tip. VV Next gated on Level-1 clear (Station menu still skips). Course-stage pager light ink; card-surface nearby tips navy/cream; dark panels keep amber. Phone hammer under lockup + navy TAP. Feedback dock bottom-right. `muxSynced` trims Playwright white tail then clones last real frame.
 - **Assumption to challenge next:** whether other Practice stations still flash a premature Next on phone, and whether portal Hear Amharic / toolbox badge need their own climb.
 
+### 2026-11-27 — Restore phone mid-frame Tap (locked intro) (L3 / L6)
+
+- **Layers:** L3 next-action clarity + L6 modes-first phone splash (do not invent a new intro).
+- **Defect:** Site excellence (#62) silently replaced the user-approved mid-frame phone Tap (`2377e530`) with under-lockup desktop grammar. Modes-first Desktop lockup opening (v49→v50) was never touched by #63; the phone Enter cue was.
+- **Restore:** Embedded hammer at mid-frame (`top: 52%`, `hammer-center-in`, mid-cavity strike); pathways under mid (`top: 72%`); foley back to corner. Session key `pa-crossed-threshold-v50`.
+- **Keep (asked enhancements):** navy Tap on paper lockup (cream-on-white failed contrast); Workplace Words soft-miss above pick bank; mother-tongue career continuity; Path/Skills/Safety nav continuity; TP paper ink on night; bottom-nav fixed dock; Learn/Progress lexicon soften.
+- **Critic:** Consistency must not undo locked intro chrome. Desktop lockup under-wordmark Tap stays — that is Modes-first desktop grammar, not the phone mid-frame law.
+
+### 2026-11-27 — Standing bar: enhance for the learner (Jobs taste + Woz depth) (L3)
+
+- **Law:** Improve the product exponentially for the learner. Taste + clarity + locked foundations (Jobs) with technical depth (Woz). Enhance and improve; never regress video/narration/soft-miss/language wins.
+- **Defect:** Portal Learn `Hear Amharic` (and other `.btn-secondary` on `.app-shell` paper) inherited night white ink → ~1:1 on cream.
+- **Enhance:** `.app-shell .btn-secondary` → navy on white paper; train night secondary unchanged. Toolbox `PA` badge optical center (`line-height: 1`).
+- **Do not touch:** explainer MP4s, soft-miss grammar, career mother-tongue lock, Modes-first Desktop lockup.
+
 ### 2026-11-27 — Consistency scrub: advance handoffs + instructor coherence (L2 / L3 / L5)
 
 - **Layers:** L2 spine continuity + L3 instructor info display + L5 portal/public TP.
