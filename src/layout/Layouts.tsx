@@ -258,7 +258,8 @@ function DesktopNav({ role }: { role: Role }) {
         <NavLink to="/app/student" end>
           Home
         </NavLink>
-        <NavLink to="/journey">Guided path</NavLink>
+        {/* Portal Path home — same door as Home CTAs; hub opens /journey for the lesson. */}
+        <NavLink to="/app/student/path">Guided path</NavLink>
         <NavLink to="/app/student/courses">Learn</NavLink>
         <NavLink to="/app/student/assignments">Tasks</NavLink>
         <NavLink to="/app/student/skills">My skills</NavLink>
@@ -302,7 +303,7 @@ function MobileNav({ role }: { role: Role }) {
         <NavLink to="/app/student" end>
           Home
         </NavLink>
-        <NavLink to="/journey">Path</NavLink>
+        <NavLink to="/app/student/path">Path</NavLink>
         <NavLink to="/app/student/courses">Learn</NavLink>
         <NavLink to="/app/student/assignments">Tasks</NavLink>
         {/* Match desktop: Skills must stay reachable on phone (L5 continuity). */}

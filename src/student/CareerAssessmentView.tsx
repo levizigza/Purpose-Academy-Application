@@ -214,7 +214,7 @@ type ResultProps = {
 export function CareerAssessmentResult({
   lang,
   pathway,
-  riasec,
+  riasec: _riasec,
   pathwayScores,
   ranked,
   showRiasec = true,
@@ -226,6 +226,7 @@ export function CareerAssessmentResult({
   onContinue,
   onBack,
 }: ResultProps) {
+  void _riasec
   const result = PATHWAY_RESULT[pathway]
   const top3 = ranked.slice(0, 3)
   const fit = pathwayFitPercent(pathwayScores)
@@ -307,22 +308,10 @@ export function CareerAssessmentResult({
         )}
       </section>
 
-      {showRiasec ? (
-        <section className="career-profile" aria-label={t(ASSESSMENT_COPY.profileAreas, lang)}>
-          <h3 className="career-section-title">{t(ASSESSMENT_COPY.profileAreas, lang)}</h3>
-          {(Object.keys(riasec) as (keyof AssessmentScores)[]).map((area) => (
-            <div key={area} className={`career-profile-row${top3.includes(area) ? ' is-top' : ''}`}>
-              <span className="career-profile-label">{t(RIASEC_LABELS[area], lang)}</span>
-              <div className="career-profile-track">
-                <span style={{ width: `${riasec[area]}%` }} />
-              </div>
-              <span className="career-profile-pct">
-                {top3.includes(area) ? t(ASSESSMENT_COPY.recommended, lang) : ''}
-              </span>
-            </div>
-          ))}
-        </section>
-      ) : null}
+      {/*
+        Critic (consistency): interest % tracks read as inventory theatre after mother-tongue
+        ratings. Top-three list above already carries the guide — no bar chart.
+      */}
 
       <section aria-label={t(ASSESSMENT_COPY.strengthsTitle, lang)}>
         <h3 className="career-section-title">{t(ASSESSMENT_COPY.strengthsTitle, lang)}</h3>
