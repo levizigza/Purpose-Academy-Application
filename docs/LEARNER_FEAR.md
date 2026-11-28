@@ -102,10 +102,10 @@ Run this on every station before merge:
 | 7 | Language Organize | Tap picture · Drop on word — never “quiz” |
 | 8 | English Eye Spy | Tap picture + name; pairs clear; no prove / 100% / exam |
 | 9 | Sentences / Word→Action | Pick full sentence → hear → type it; soft miss + shuffle; hold clear until audio ends |
-| 10 | Supported Practice | Picture Match → Sentence Match (video then play each) — not remediation shame |
-| 11 | Workplace Instructions | Hear + choose what to do |
-| 12 | Computer Skills | 5 Basic + 8 Extra · watch → try → 10 practice questions (miss → watch that part again); first-computer friendly |
-| 13 | Basic Computer Skills | 5 Basic + 8 Extra · soft retry — not an exam |
+| 10 | Picture Match | Hear sentence · tap matching photo — soft retry, not remediation shame |
+| 11 | Copycat | Rebuild the sentence from the photo — say it back |
+| 12 | Workplace Instructions | Hear + choose what to do |
+| 13 | Basic Computer Skills | 5 Basic + 8 Extra · watch → try → soft retry — not an exam |
 | 14 | Site Language | Continue to work-interest questions |
 | 15 | Work Interests | Mother tongue end-to-end; no Holland/RIASEC letter codes |
 | 16–18 | Safety / Tools / Systems | Practice checks, not perfect-score exams |
