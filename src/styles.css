@@ -3329,7 +3329,12 @@ table.data th {
   opacity: 0.22;
 }
 
-.shell > *:not(.ambient):not(.practice-chat),
+/*
+  Critic: .shell.app-shell wraps bottom-nav. Excluding only `.app-shell > …:not(.bottom-nav)`
+  left `.shell > *:not(.ambient):not(.practice-chat)` matching the nav (specificity 0,3,0),
+  which beat `.app-shell .bottom-nav { position: fixed }` (0,2,0) and pinned it at ~y1560.
+*/
+.shell > *:not(.ambient):not(.practice-chat):not(.bottom-nav),
 .app-shell > *:not(.ambient):not(.practice-chat):not(.bottom-nav),
 .shell-main,
 .topbar,
@@ -3338,8 +3343,6 @@ table.data th {
   position: relative;
   z-index: 1;
 }
-
-/* Bottom nav dock is fixed in the ≤820px media query — excluded from stacking rule above. */
 
 .shell > .practice-chat,
 .app-shell > .practice-chat {

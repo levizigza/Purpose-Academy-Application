@@ -590,6 +590,7 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Defects:** (1) `student.preferred_language` effect re-asserted English after Spanish pick — quiz flipped mid-flow. (2) Work Interests shell keyed as step 14 / `supportLang` wired to step 16 while journey step is **15**. (3) Style quiz kicker reused “Work interests.” (4) Shell **Next** sat outside `StationExplainerGate`, so learners could skip language chips entirely.
 - **Fix (targeted):** lock support tongue after chip / More-languages pick; prefer learner-store tongue on init; `ASSESSMENT_SHELL[15]` + pass `supportLang` on steps 3–5 and 15; `part2Kicker` for style; hide shell Next until explainer watched.
 - **Verify:** Spanish + Amharic (+ Arabic smoke) steps 4 / 5 / 15 stay in picked language — no English prompt leak. Do **not** merge #63 until this report stands.
+- **Instructor dock (same scrub):** `.shell > *` stacking still forced `position: relative` on `.bottom-nav` (specificity beat `fixed`) — exclude nav from **both** `.shell` and `.app-shell` child stacking lists so phone Today/Grade/Safety stay on screen.
 - **Assumption to challenge next:** which residual English path-map / “Keep practising” chrome on mother-tongue steps still helps vs confuses — keep distinct jobs, don’t flatten.
 
 ### 2026-11-27 — Dual-role excellence (student + instructor) (L3 / L5 / LEARNER_FEAR)
