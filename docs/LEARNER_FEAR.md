@@ -179,6 +179,11 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 - Customer ask: “I already know this word” does not belong on the first go — every learner should hear → hear → type. After they finish Workplace Words once and come back, a retake section may offer skip-known (still hear English + type).
 - Ship: hide skip on day-one; persist station-cleared per pathway; hub “Workplace words again” + in-deck “Another round” framing (crew tone, no exam/retake-test lexicon).
 
+### 2026-11-27 — Consistency scrub lexicon (Learn / Progress / instructor)
+
+- Foundation Learn + Progress: drop learner-facing `% complete` → Comfortable / Started bars.
+- Instructor Grade: Graded · /100 → Feedback ready; Observe Competent → Checked labels.
+
 ### 2026-11-27 — Career mother-tongue continuity (consistency scrub)
 
 - Spanish (and other support tongues) must stay for Language → Work Style → Career Profile → later Work Interests. Profile hydrate must not flip the quiz back to English mid-flow.

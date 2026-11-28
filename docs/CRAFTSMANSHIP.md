@@ -584,6 +584,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Soft miss moved above pick bank + scroll-into-view + phone sticky tip. VV Next gated on Level-1 clear (Station menu still skips). Course-stage pager light ink; card-surface nearby tips navy/cream; dark panels keep amber. Phone hammer under lockup + navy TAP. Feedback dock bottom-right. `muxSynced` trims Playwright white tail then clones last real frame.
 - **Assumption to challenge next:** whether other Practice stations still flash a premature Next on phone, and whether portal Hear Amharic / toolbox badge need their own climb.
 
+### 2026-11-27 — Consistency scrub: Learn / Progress / instructor lexicon (LEARNER_FEAR / L3)
+
+- **Layers:** LEARNER_FEAR + L3 — % / Graded / Competent chrome that fought the Practice spine.
+- **Defects:** Foundation Learn + Progress still printed `N% complete`; instructor Grade card said Graded · /100; Observe saved “Competent…”.
+- **Fix (targeted):** Comfortable/Started bars-only copy; Feedback ready / Save feedback; Checked outcome labels. Do not flatten instructor comfort marks away — keep the number as instructor-only.
+- **Assumption to challenge next:** whether Learn lesson `quiz_score` internals should rename away from “quiz” in code ids without a product rewrite.
+
 ### 2026-11-27 — Career mother-tongue continuity (consistency scrub) (L2 / L3 / LEARNER_FEAR)
 
 - **Layers:** L2 (mother-tongue intake stays the tongue they picked) + L3 (shell + quiz read as one language in 3s) — **not** a monolithic rewrite; practice path chrome stays English.

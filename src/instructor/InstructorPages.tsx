@@ -129,8 +129,9 @@ export function InstructorAssignmentsPage() {
             <div>
               <h2>{assignment?.title ?? 'Assignment'}</h2>
               <p className="muted" style={{ margin: 0 }}>
-                {learner?.full_name ?? 'Learner'} · {sub.status === 'graded' ? 'Graded' : 'Awaiting review'}
-                {sub.grade != null ? ` · ${sub.grade}/100` : ''}
+                {learner?.full_name ?? 'Learner'} ·{' '}
+                {sub.status === 'graded' ? 'Feedback ready' : 'Awaiting review'}
+                {sub.feedback ? ' · note saved' : ''}
               </p>
             </div>
           </header>
@@ -138,7 +139,7 @@ export function InstructorAssignmentsPage() {
           {sub.status === 'submitted' && (
             <form onSubmit={(e) => grade(sub.id, e)} className="stack instructor-grade-form">
               <div className="field">
-                <label htmlFor={`grade-${sub.id}`}>Score (0–100)</label>
+                <label htmlFor={`grade-${sub.id}`}>Comfort mark (0–100, instructor only)</label>
                 <input id={`grade-${sub.id}`} name="grade" type="number" min={0} max={100} required />
               </div>
               <div className="field">
@@ -146,7 +147,7 @@ export function InstructorAssignmentsPage() {
                 <textarea id={`fb-${sub.id}`} name="feedback" required rows={4} />
               </div>
               <button className="btn btn-primary" type="submit">
-                Save grade
+                Save feedback
               </button>
             </form>
           )}
@@ -320,7 +321,19 @@ export function InstructorObservePage() {
         ratings: complete,
         notes,
       })
-      setMsg(`Observation saved. Outcome: ${outcome}. Competent requires full demonstrated criteria.`)
+      const outcomeLabel =
+        outcome === 'competent'
+          ? 'Checked'
+          : outcome === 'practised'
+            ? 'Practised'
+            : outcome === 'learned'
+              ? 'Learned'
+              : outcome === 'remediation_required'
+                ? 'Needs more practice'
+                : String(outcome)
+      setMsg(
+        `Observation saved. Outcome: ${outcomeLabel}. Checked needs every criterion demonstrated with you watching.`,
+      )
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to record observation')
     }
@@ -332,8 +345,8 @@ export function InstructorObservePage() {
         <p className="section-kicker">Instructor</p>
         <h1>Observe skills</h1>
         <p className="lede">
-          Human assessment only. Watching a video or clearing a practice station is not automatic
-          practical competency.
+          Human check only. Watching a video or clearing a practice station is not an automatic
+          Checked mark.
         </p>
       </div>
       {gate && (
