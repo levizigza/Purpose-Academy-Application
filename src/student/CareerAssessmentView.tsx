@@ -143,7 +143,7 @@ export function CareerStyleAssessment({ lang, onComplete, onBack }: StyleProps) 
   return (
     <div className="career-assess" data-assess-idx={idx}>
       <header className="career-assess-head">
-        <p className="career-assess-kicker">{t(ASSESSMENT_COPY.introTitle, lang)}</p>
+        <p className="career-assess-kicker">{t(ASSESSMENT_COPY.part2Kicker, lang)}</p>
         <p className="play-nearby-objective" aria-live="polite">
           {t(ASSESSMENT_COPY.nearbyStyle, lang)}
           {left > 0 ? ` · ${left}` : ''}

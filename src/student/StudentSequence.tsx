@@ -126,6 +126,7 @@ import {
   setLearnerSupportLang,
 } from '../practice/learnerLang'
 import { StationExplainerGate } from '../practice/StationExplainerGate'
+import { explainerForStep, hasWatchedExplainer } from '../practice/stationExplainers'
 import { StationCoach, advanceStationCoach } from '../practice/StationCoachView'
 import { InstructionHearChip } from '../practice/InstructionNarration'
 import { NavCueTarget, NavGlowRegion, NavGlowWrap } from '../practice/NavCue'
@@ -249,8 +250,9 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
 }) {
   const journeySteps = getPathwayJourneySteps()
   const base = journeySteps[step - 1]
+  /* Steps 3–5 + Work Interests (15) run in mother tongue — shell copy keys match step numbers. */
   const motherTongue = supportLang && ((step >= 3 && step <= 5) || step === 15)
-  const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 14] : null
+  const shellCopy = motherTongue ? ASSESSMENT_SHELL[step as 3 | 4 | 5 | 15] : null
   const title = shellCopy ? assessT(shellCopy.title, supportLang!) : base.title
   const help = shellCopy ? assessT(shellCopy.help, supportLang!) : base.help
   const purpose = shellCopy ? assessT(shellCopy.purpose, supportLang!) : base.purpose
@@ -259,6 +261,28 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
   const [feedbackPrompt, setFeedbackPrompt] = useState(false)
   const practice = isPracticeMode()
   const masteryBlocked = practice ? advanceBlockedReason(step) : null
+  /*
+    Critic (language continuity): shell Next sat outside StationExplainerGate, so
+    learners could skip the language station before chips appeared — supportLang
+    stayed English. Hold Next until the step’s explainer is watched (or absent).
+  */
+  const [explainerReady, setExplainerReady] = useState(() => {
+    const ex = explainerForStep(step, explainerStationId)
+    return ex ? hasWatchedExplainer(ex.id) : true
+  })
+  useEffect(() => {
+    const sync = () => {
+      const ex = explainerForStep(step, explainerStationId)
+      setExplainerReady(ex ? hasWatchedExplainer(ex.id) : true)
+    }
+    sync()
+    window.addEventListener('pa-station-explainers-changed', sync)
+    window.addEventListener('pa-practice-restarted', sync)
+    return () => {
+      window.removeEventListener('pa-station-explainers-changed', sync)
+      window.removeEventListener('pa-practice-restarted', sync)
+    }
+  }, [step, explainerStationId])
   const stepKicker = motherTongue
     ? `${assessT(ASSESSMENT_COPY.stepOf, supportLang!)} ${step} ${assessT(ASSESSMENT_COPY.ofTotal, supportLang!)} ${JOURNEY_STEP_COUNT}`
     : `Unit ${unit.id}: ${unit.label}`
@@ -526,7 +550,7 @@ function StepShell({ step, children, onBack, onNext, nextLabel = 'Continue', nex
             {backLabel}
           </button>
         )}
-        {onNext && (
+        {onNext && explainerReady && (
           <NavCueTarget
             cueId={NAV_CUE.stationContinue(step)}
             arrowLabel="Next door"
@@ -833,10 +857,19 @@ export function StudentSequencePage() {
   }, [])
 
   const [supportLang, setSupportLang] = useState<SupportLang>(() => {
+    /* Learner-store tongue wins over profile so a mid-flow remount keeps Spanish etc. */
+    const fromLs = getLearnerSupportLang()
+    if (fromLs !== 'English') return fromLs
     const fromStudent = student?.preferred_language
     if (fromStudent && isSupportLang(fromStudent)) return fromStudent
-    return getLearnerSupportLang()
+    return fromLs
   })
+  /**
+   * Critic (Spanish flip): student.preferred_language effect re-asserted English
+   * after the learner picked Spanish on step 3 — quiz chrome flipped mid-flow.
+   * Once the learner (or More-languages path) chooses, profile must not override.
+   */
+  const supportLangLockedRef = useRef(false)
   const extraLang = useLearnerExtraLang()
   const [interest, setInterest] = useState<PathwayId | null>(null)
   const [careerInterestDone, setCareerInterestDone] = useState(false)
@@ -972,6 +1005,7 @@ export function StudentSequencePage() {
 
   useEffect(() => { saveStep(step) }, [step])
   useEffect(() => {
+    if (supportLangLockedRef.current) return
     if (student?.preferred_language && isSupportLang(student.preferred_language)) {
       setSupportLang(student.preferred_language)
     }
@@ -1247,7 +1281,7 @@ export function StudentSequencePage() {
           transitioning={transitioning}
           transitionMsg={transitionMsg}
           supportLang={
-            (props.step >= 3 && props.step <= 5) || props.step === 16 ? supportLang : undefined
+            (props.step >= 3 && props.step <= 5) || props.step === 15 ? supportLang : undefined
           }
           onOpenHub={isPracticeMode() ? () => setPracticeView('hub') : undefined}
           onJumpLesson={(n) => go(n, `Opening step ${n}…`)}
@@ -1772,6 +1806,7 @@ export function StudentSequencePage() {
                   onClick={() => {
                     markNavCueSeen(NAV_CUE.langPick)
                     setLearnerExtraLang(null)
+                    supportLangLockedRef.current = true
                     setSupportLang(l.id)
                   }}
                   lang={
@@ -1796,6 +1831,7 @@ export function StudentSequencePage() {
                 selected={extraLang}
                 onPick={(lang) => {
                   markNavCueSeen(NAV_CUE.langPick)
+                  supportLangLockedRef.current = true
                   setSupportLang('English')
                   setLearnerExtraLang(lang)
                 }}
@@ -2558,7 +2594,7 @@ export function StudentSequencePage() {
     )
   }
 
-  /* Step 14: Interest assessment (30) after practice — specialize */
+  /* Step 15: Interest assessment (30) after practice — specialize */
   if (step === 15) {
     if (!careerInterestDone) {
       return (

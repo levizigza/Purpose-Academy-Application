@@ -584,6 +584,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Soft miss moved above pick bank + scroll-into-view + phone sticky tip. VV Next gated on Level-1 clear (Station menu still skips). Course-stage pager light ink; card-surface nearby tips navy/cream; dark panels keep amber. Phone hammer under lockup + navy TAP. Feedback dock bottom-right. `muxSynced` trims Playwright white tail then clones last real frame.
 - **Assumption to challenge next:** whether other Practice stations still flash a premature Next on phone, and whether portal Hear Amharic / toolbox badge need their own climb.
 
+### 2026-11-27 — Career mother-tongue continuity (consistency scrub) (L2 / L3 / LEARNER_FEAR)
+
+- **Layers:** L2 (mother-tongue intake stays the tongue they picked) + L3 (shell + quiz read as one language in 3s) — **not** a monolithic rewrite; practice path chrome stays English.
+- **Defects:** (1) `student.preferred_language` effect re-asserted English after Spanish pick — quiz flipped mid-flow. (2) Work Interests shell keyed as step 14 / `supportLang` wired to step 16 while journey step is **15**. (3) Style quiz kicker reused “Work interests.” (4) Shell **Next** sat outside `StationExplainerGate`, so learners could skip language chips entirely.
+- **Fix (targeted):** lock support tongue after chip / More-languages pick; prefer learner-store tongue on init; `ASSESSMENT_SHELL[15]` + pass `supportLang` on steps 3–5 and 15; `part2Kicker` for style; hide shell Next until explainer watched.
+- **Verify:** Spanish + Amharic (+ Arabic smoke) steps 4 / 5 / 15 stay in picked language — no English prompt leak. Do **not** merge #63 until this report stands.
+- **Assumption to challenge next:** which residual English path-map / “Keep practising” chrome on mother-tongue steps still helps vs confuses — keep distinct jobs, don’t flatten.
+
 ### 2026-11-27 — Dual-role excellence (student + instructor) (L3 / L5 / LEARNER_FEAR)
 
 - **Layers:** L3 portal/Practice first viewport + L5 chrome continuity (desktop ↔ phone) + learner-fear (% theatre).

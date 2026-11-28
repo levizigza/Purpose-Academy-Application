@@ -604,8 +604,18 @@ p {
   .app-shell .desktop-nav {
     display: none;
   }
+  /*
+    Critic (instructor sweep): sticky failed under .app-shell overflow-x:clip —
+    nav sat at page end (~y1560). Fixed dock keeps Today/Grade/Safety on screen.
+  */
   .app-shell .bottom-nav {
     display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    box-shadow: 0 -8px 24px rgba(4, 21, 38, 0.08);
   }
 }
 
@@ -3320,15 +3330,16 @@ table.data th {
 }
 
 .shell > *:not(.ambient):not(.practice-chat),
-.app-shell > *:not(.ambient):not(.practice-chat),
+.app-shell > *:not(.ambient):not(.practice-chat):not(.bottom-nav),
 .shell-main,
 .topbar,
 .footer,
-.bottom-nav,
 .page-motion {
   position: relative;
   z-index: 1;
 }
+
+/* Bottom nav dock is fixed in the ≤820px media query — excluded from stacking rule above. */
 
 .shell > .practice-chat,
 .app-shell > .practice-chat {
@@ -17686,6 +17697,55 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
    Same paper grammar as the portal: navy ink, amber action, community green
    used only as the source-set marker. Instructor surfaces stay calm and dense.
    -------------------------------------------------------------------------- */
+
+/*
+  Critic (instructor sweep): public /teacher-practice sits in .shell.is-train
+  (night chrome) but TP/WB panels are paper. Train light ink made panel h2 /
+  checklist body nearly invisible on cream. Hero on night stays light; paper
+  islands reset to portal navy.
+*/
+.shell.is-train .tp-page,
+.shell.is-train .wb-page {
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 1.15rem;
+}
+
+.shell.is-train .tp-page .panel,
+.shell.is-train .wb-page .panel,
+.shell.is-train .tp-page .tp-session,
+.shell.is-train .tp-page .tp-brief {
+  color: var(--ink);
+}
+
+.shell.is-train .tp-page .panel h1,
+.shell.is-train .tp-page .panel h2,
+.shell.is-train .tp-page .panel h3,
+.shell.is-train .tp-page .tp-session h2,
+.shell.is-train .tp-page .tp-session h3,
+.shell.is-train .tp-page .tp-brief h2,
+.shell.is-train .wb-page .panel h1,
+.shell.is-train .wb-page .panel h2,
+.shell.is-train .wb-page .panel h3,
+.shell.is-train .tp-page .tp-checks li,
+.shell.is-train .tp-page .tp-steps p,
+.shell.is-train .tp-page .tp-goal,
+.shell.is-train .tp-page .tp-source-title {
+  color: var(--brand-deep);
+}
+
+.shell.is-train .tp-page .panel .muted,
+.shell.is-train .tp-page .tp-brief-note,
+.shell.is-train .tp-page .tp-checks li,
+.shell.is-train .wb-page .panel .muted {
+  color: var(--ink-soft);
+}
+
+.shell.is-train .tp-page .panel .section-kicker,
+.shell.is-train .tp-page .tp-session .section-kicker,
+.shell.is-train .wb-page .panel .section-kicker {
+  color: var(--accent);
+}
 
 .tp-head,
 .wb-page-head {

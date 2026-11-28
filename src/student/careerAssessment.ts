@@ -110,6 +110,15 @@ export const ASSESSMENT_COPY = {
     Amharic: 'ይህ ሥራዎ ቢሆን፣ ምን ያህል ማድረግ ይወዱ ነበር?',
     Tigrinya: 'እዚ ስራሕካ እንተኾይኑ፣ ክንደይ ክትገብሮ ትፈቱ?',
   } satisfies LangText,
+  /** Style-quiz kicker — distinct from introTitle (Work interests) used on interest rating. */
+  part2Kicker: {
+    Spanish: 'Estilo de trabajo',
+    English: 'Work style',
+    Arabic: 'أسلوب العمل',
+    Hindi: 'काम करने का अंदाज़',
+    Amharic: 'የሥራ ዘይቤ',
+    Tigrinya: 'ናይ ስራሕ ቅዲ',
+  } satisfies LangText,
   part2Title: {
     Spanish: 'Cómo te gusta trabajar',
       English: 'How you like to work',
@@ -350,7 +359,7 @@ export const LANG_NATIVE: LangText = {
 
 /** Shell chrome for assessment steps — mother tongue only. */
 export const ASSESSMENT_SHELL: Record<
-  3 | 4 | 5 | 14,
+  3 | 4 | 5 | 15,
   { title: LangText; help: LangText; purpose: LangText }
 > = {
   3: {
@@ -431,7 +440,7 @@ export const ASSESSMENT_SHELL: Record<
       Tigrinya: 'ናይ ፍቓድ መግለጺ → ዝምከር መንገዲ። ህንጻ፣ ሎጂስቲክስን ናይ ማሕበረሰብ ድጋፍን ክፉታት እዮም።',
     },
   },
-  14: {
+  15: {
     title: {
       Spanish: 'Intereses de trabajo',
       English: 'Work interests',
