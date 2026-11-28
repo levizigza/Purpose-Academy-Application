@@ -431,7 +431,20 @@ export function createSeedDatabase(): AppDatabase {
         created_by: 'u-instructor',
       },
     ],
-    submissions: [],
+    submissions: [
+      {
+        id: 'sub-1',
+        assignment_id: 'asg-1',
+        student_id: 'st-approved',
+        content:
+          'Hello, my name is Amina. My preferred language is Amharic. I will always wear PPE and ask when a task is unclear. I arrive on time and listen to my supervisor.',
+        status: 'submitted',
+        grade: null,
+        feedback: '',
+        submitted_at: now,
+        graded_at: null,
+      },
+    ],
     lesson_progress: [],
     vocab_terms: [
       {
@@ -676,6 +689,20 @@ export function createSeedDatabase(): AppDatabase {
           'Identifies studs for fastening',
           'Describes joint tape purpose',
           'Measures before cutting',
+        ],
+      },
+      {
+        id: 'comp-community-roles',
+        title: 'Community roles and greetings',
+        description:
+          'Names support roles, introduces self respectfully, and asks when a duty is unclear — matches Instructor Practice Session 1.',
+        category: 'Community Support',
+        safety_critical: false,
+        version: '2026.1',
+        criteria: [
+          'Names common support roles without guessing',
+          'Gives a respectful introduction',
+          'Asks a supervisor when a duty is unclear',
         ],
       },
     ],

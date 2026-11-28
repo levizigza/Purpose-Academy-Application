@@ -102,17 +102,18 @@ Run this on every station before merge:
 | 7 | Language Organize | Tap picture · Drop on word — never “quiz” |
 | 8 | English Eye Spy | Tap picture + name; pairs clear; no prove / 100% / exam |
 | 9 | Sentences / Word→Action | Pick full sentence → hear → type it; soft miss + shuffle; hold clear until audio ends |
-| 10 | Supported Practice | Picture Match → Sentence Match (video then play each) — not remediation shame |
-| 11 | Workplace Instructions | Hear + choose what to do |
-| 12 | Computer Skills | 5 Basic + 8 Extra · watch → try → 10 practice questions (miss → watch that part again); first-computer friendly |
-| 13 | Site Language | Continue to work-interest questions |
-| 14 | Work Interests | No Holland/RIASEC in any language |
-| 15–17 | Safety / Tools / Systems | Practice checks, not perfect-score exams |
-| 18 | Equipment videos | Watch → practice questions (soft retry); never quiz/exam; gates soft-ready only |
-| 19 | Instructor Check | Habit order; Checked not Competent |
-| 20 | On-Site Training | Decisions + log; before last station |
-| 21 | Final Check | Picture practice + written practice; no exam mode |
-| 22 | Employment | Proof → “what you practised” |
+| 10 | Picture Match | Hear sentence · tap matching photo — soft retry, not remediation shame |
+| 11 | Copycat | Rebuild the sentence from the photo — say it back |
+| 12 | Workplace Instructions | Hear + choose what to do |
+| 13 | Basic Computer Skills | 5 Basic + 8 Extra · watch → try → soft retry — not an exam |
+| 14 | Site Language | Continue to work-interest questions |
+| 15 | Work Interests | Mother tongue end-to-end; no Holland/RIASEC letter codes |
+| 16–18 | Safety / Tools / Systems | Practice checks, not perfect-score exams |
+| 19 | Equipment videos | Watch → practice questions (soft retry); never quiz/exam; gates soft-ready only |
+| 20 | Instructor Check | Habit order; Checked not Competent |
+| 21 | On-Site Training | Decisions + log; before last station |
+| 22 | Final Check | Picture practice + written practice; no exam mode |
+| 23 | Employment | Proof → “what you practised” |
 
 Shared: Hub, shell, stats strip, unit intro, Familiar theater, passport, unit review.
 
@@ -149,6 +150,11 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 ## 8. Changelog
 
+### 2026-11-27 — Home next-step % theatre removed
+
+- Critic (dual-role excellence): student Home “Your next step” still said `Foundation progress N%` — banned report-card chrome in the first viewport.
+- Fix: crew copy (“Open this lesson to begin foundation…” / “Foundation is under way…”) with no %. Quiet Progress panel still uses Comfortable / Started / Not started.
+
 ### 2026-10-30 — Sentence Structure pick · hear · type + audio sync
 
 - Customer ask: restore sentence feel (not vocab word chips); after clear, keep the completed sentence on screen while success audio plays, then advance.
@@ -172,6 +178,17 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 - Customer ask: “I already know this word” does not belong on the first go — every learner should hear → hear → type. After they finish Workplace Words once and come back, a retake section may offer skip-known (still hear English + type).
 - Ship: hide skip on day-one; persist station-cleared per pathway; hub “Workplace words again” + in-deck “Another round” framing (crew tone, no exam/retake-test lexicon).
+
+### 2026-11-27 — Consistency scrub lexicon (Learn / Progress / instructor)
+
+- Foundation Learn + Progress: drop learner-facing `% complete` → Comfortable / Started bars.
+- Instructor Grade: Graded · /100 → Feedback ready; Observe Competent → Checked labels.
+
+### 2026-11-27 — Career mother-tongue continuity (consistency scrub)
+
+- Spanish (and other support tongues) must stay for Language → Work Style → Career Profile → later Work Interests. Profile hydrate must not flip the quiz back to English mid-flow.
+- Spine table step numbers aligned to journey (Work Interests = **15**).
+- Do not merge excellence PR until ES + at least one other non-EN verification is reported.
 
 ### 2026-10-26 — Doctrine established + first deep Practice pass
 

@@ -314,6 +314,9 @@ function AppRoutes() {
         <Route path="practice/workbooks" element={<CommunityWorkbooksPage />} />
         <Route path="practice/workbooks/:setNumber" element={<CommunityWorkbooksPage />} />
         <Route path="assignments" element={<InstructorAssignmentsPage />} />
+        {/* Oral/bookmark aliases for phone nav short names */}
+        <Route path="grade" element={<Navigate to="/app/instructor/assignments" replace />} />
+        <Route path="people" element={<Navigate to="/app/instructor/students" replace />} />
         <Route path="observe" element={<InstructorObservePage />} />
         <Route path="safety" element={<InstructorSafetyPage />} />
         <Route path="students" element={<InstructorStudentsPage />} />

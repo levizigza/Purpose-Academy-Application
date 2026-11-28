@@ -89,8 +89,8 @@ export function MoreLanguagesPick({ selected, onPick, onClear }: Props) {
             )}
           </ul>
           <p className="vocab-universal-footnote">
-            Screens stay in simple English. Translations and audio are available for some
-            questions and Workplace Words when the language service supports them.
+            The six languages above run path questions in that tongue. More languages add a
+            translated line under English when the language service can help.
           </p>
           {selected && (
             <button

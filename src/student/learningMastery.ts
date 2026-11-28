@@ -320,15 +320,15 @@ export function masteryLabel(level: MasteryLevel): string {
   }
 }
 
-/** Short station name for Familiar theater / mastery chrome. */
+/** Short station name for Familiar theater / mastery chrome — match journey titles. */
 export function skillStationLabel(id: SkillId): string {
   switch (id) {
     case 'language':
       return 'Your Language'
     case 'career-assessment':
-      return 'Career Path'
+      return 'Work Style'
     case 'vocab':
-      return 'Visual Vocabulary'
+      return 'Workplace Words'
     case 'vocab-organize':
       return 'Language Organize'
     case 'sentence-cloze':
@@ -336,13 +336,13 @@ export function skillStationLabel(id: SkillId): string {
     case 'word-action':
       return 'Word → Action'
     case 'matching':
-      return 'Supported Practice'
+      return 'Picture Match'
     case 'eye-spy':
       return 'English Eye Spy'
     case 'instructions':
       return 'Workplace Instructions'
     case 'site-phrases':
-      return 'Workplace Language'
+      return 'Site Language'
     case 'digital':
       return 'Basic Computer Skills'
     case 'safety':
@@ -350,17 +350,17 @@ export function skillStationLabel(id: SkillId): string {
     case 'tools':
       return 'Tools & Equipment'
     case 'systems':
-      return 'Workplace Systems'
+      return 'Systems'
     case 'equipment-videos':
       return 'Equipment videos'
     case 'observation':
-      return 'Practice for your instructor'
+      return 'Instructor Check'
     case 'site-log':
-      return 'Floor Training'
+      return 'On-Site Training'
     case 'final-exam':
-      return 'Final check'
+      return 'Final Check'
     case 'employment':
-      return 'Employment'
+      return 'Employment Connection'
     case 'unit-checkpoint':
       return 'Unit practice'
     default:

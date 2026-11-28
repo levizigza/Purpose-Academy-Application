@@ -584,6 +584,37 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Soft miss moved above pick bank + scroll-into-view + phone sticky tip. VV Next gated on Level-1 clear (Station menu still skips). Course-stage pager light ink; card-surface nearby tips navy/cream; dark panels keep amber. Phone hammer under lockup + navy TAP. Feedback dock bottom-right. `muxSynced` trims Playwright white tail then clones last real frame.
 - **Assumption to challenge next:** whether other Practice stations still flash a premature Next on phone, and whether portal Hear Amharic / toolbox badge need their own climb.
 
+### 2026-11-27 — Consistency scrub: advance handoffs + instructor coherence (L2 / L3 / L5)
+
+- **Layers:** L2 spine continuity + L3 instructor info display + L5 portal/public TP.
+- **Student P0:** `advanceWithOptionalCheckpoint` off-by-ones stalled Computer Skills→Site Language, Work Interests→Safety, Systems→Equipment, Equipment→Instructor Check; hub Equipment CTA opened step 18.
+- **Instructor (from hunt):** night TP hero ink; People/Safety `StatusLabel`; Community Observe competency; public Observe → login; station chips deep-link; naming Instructor Practice / Learners; `/grade` `/people` aliases; rubric human labels; honest Construction/Logistics binder-in-progress copy.
+- **Also:** Am/Ti shell purpose/help; More-languages footnote; Learn soft complete without 80% hard gate.
+- **Do not merge #63** until scrub close-out. Assumption next: Path nav `/journey` vs portal `/app/student/path` — rename, not merge doors.
+
+### 2026-11-27 — Consistency scrub: Learn / Progress / instructor lexicon (LEARNER_FEAR / L3)
+
+- **Layers:** LEARNER_FEAR + L3 — % / Graded / Competent chrome that fought the Practice spine.
+- **Defects:** Foundation Learn + Progress still printed `N% complete`; instructor Grade card said Graded · /100; Observe saved “Competent…”.
+- **Fix (targeted):** Comfortable/Started bars-only copy; Feedback ready / Save feedback; Checked outcome labels. Do not flatten instructor comfort marks away — keep the number as instructor-only.
+- **Assumption to challenge next:** whether Learn lesson `quiz_score` internals should rename away from “quiz” in code ids without a product rewrite.
+
+### 2026-11-27 — Career mother-tongue continuity (consistency scrub) (L2 / L3 / LEARNER_FEAR)
+
+- **Layers:** L2 (mother-tongue intake stays the tongue they picked) + L3 (shell + quiz read as one language in 3s) — **not** a monolithic rewrite; practice path chrome stays English.
+- **Defects:** (1) `student.preferred_language` effect re-asserted English after Spanish pick — quiz flipped mid-flow. (2) Work Interests shell keyed as step 14 / `supportLang` wired to step 16 while journey step is **15**. (3) Style quiz kicker reused “Work interests.” (4) Shell **Next** sat outside `StationExplainerGate`, so learners could skip language chips entirely.
+- **Fix (targeted):** lock support tongue after chip / More-languages pick; prefer learner-store tongue on init; `ASSESSMENT_SHELL[15]` + pass `supportLang` on steps 3–5 and 15; `part2Kicker` for style; hide shell Next until explainer watched.
+- **Verify:** Spanish + Amharic (+ Arabic smoke) steps 4 / 5 / 15 stay in picked language — no English prompt leak. Do **not** merge #63 until this report stands.
+- **Instructor dock (same scrub):** `.shell > *` stacking still forced `position: relative` on `.bottom-nav` (specificity beat `fixed`) — exclude nav from **both** `.shell` and `.app-shell` child stacking lists so phone Today/Grade/Safety stay on screen.
+- **Assumption to challenge next:** which residual English path-map / “Keep practising” chrome on mother-tongue steps still helps vs confuses — keep distinct jobs, don’t flatten.
+
+### 2026-11-27 — Dual-role excellence (student + instructor) (L3 / L5 / LEARNER_FEAR)
+
+- **Layers:** L3 portal/Practice first viewport + L5 chrome continuity (desktop ↔ phone) + learner-fear (% theatre).
+- **Defects:** Instructor phone nav missing Safety; student phone nav missing Skills; Home “Foundation progress N%”; Practice deep-link without course shell buried drills under unit-intro; Vite `dev:web` login 500 when :8787 down; Grade empty / Learners table unusable on narrow; Today “1 learners”.
+- **Fix:** Mobile nav adds Safety + Skills; Home next-step copy without %; `/journey` always uses DesktopCourseShell when not phone; login falls back to seed auth if API fails + local token stays valid; `.env.development` points Vite at Render; instructor Today/Grade/People/Observe/Safety headers + phone learner cards; seed submission for Grade demo; schedule times without seconds.
+- **Assumption to challenge next:** whether Render-sleep fallback should toast “demo offline mode,” and whether Teacher Practice week sessions need Construction/Logistics binders too.
+
 ### 2026-10-28 — Desktop splash pathways → lower third (L3)
 
 - **Layers:** L1 (three doors visible) + L3 (brand + door hero; pathways don’t steal the title).

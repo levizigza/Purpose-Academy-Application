@@ -365,7 +365,7 @@ export function PracticeHub({
             <button
               type="button"
               className="btn btn-primary ph-video-section-btn"
-              onClick={() => onOpenLesson(18)}
+              onClick={() => onOpenLesson(19)}
             >
               {pathwayId === 'construction'
                 ? 'Open Construction Equipment videos'
@@ -378,7 +378,7 @@ export function PracticeHub({
                 className="btn btn-primary ph-video-section-btn"
                 onClick={() => {
                   setActivePathway('construction')
-                  onOpenLesson(18)
+                  onOpenLesson(19)
                 }}
               >
                 Construction Equipment
@@ -388,7 +388,7 @@ export function PracticeHub({
                 className="btn btn-secondary on-light ph-video-section-btn"
                 onClick={() => {
                   setActivePathway('logistics')
-                  onOpenLesson(18)
+                  onOpenLesson(19)
                 }}
               >
                 Warehouse Equipment

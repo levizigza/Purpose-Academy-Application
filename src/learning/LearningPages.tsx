@@ -339,13 +339,20 @@ export function FoundationPage() {
         <p className="section-kicker">Foundation</p>
         <h1>Language and communication preparation</h1>
         <p className="lede">
-          Every learner starts here. Finish each station with pride — this is a crew path toward verified
-          work readiness, not a feed.
+          Every learner starts here. Finish each station with pride — this is a crew path of practised
+          stations, not a feed.
         </p>
-        <div className="progress" aria-label={`Foundation ${prog}%`}>
+        <div
+          className="progress"
+          aria-label={`Foundation ${prog >= 80 ? 'comfortable' : prog > 0 ? 'started' : 'not started'}`}
+        >
           <span style={{ width: `${prog}%` }} />
         </div>
-        <p className="muted">{prog}% complete</p>
+        <p className="muted">
+          <strong>{prog >= 80 ? 'Comfortable' : prog > 0 ? 'Started' : 'Not started'}</strong>
+          {' · '}
+          bars only, no grades
+        </p>
       </div>
       {modules.map((mod) => {
         const lessons = db.lessons.filter((l) => l.module_id === mod.id).sort((a, b) => a.order - b.order)
@@ -517,7 +524,8 @@ export function LessonViewPage() {
   const quiz = lesson.quiz || []
   const quizDone = quiz.length === 0 || answered >= quiz.length
   const quizPct = quiz.length ? Math.round((score / quiz.length) * 100) : 100
-  const quizPassed = quiz.length === 0 || quizPct >= 80
+  /* Soft station clear — no 80% exam gate; Try again stays available. */
+  const practiceClear = quiz.length === 0 || (quizDone && quizPct >= 80)
 
   function answerQuestion(choiceIndex: number) {
     const q = quiz[quizIndex]
@@ -530,7 +538,7 @@ export function LessonViewPage() {
     setQuizIndex((i) => Math.min(i + 1, quiz.length))
     if (!correct) {
       setMessage(
-        `Not quite. The better answer is “${q.choices[q.answer_index]}”. You can retry the check after this round.`,
+        `Not quite. The better answer is “${q.choices[q.answer_index]}”. You can try again after this round — no rush.`,
       )
     } else {
       setMessage(null)
@@ -539,7 +547,7 @@ export function LessonViewPage() {
       const pct = Math.round((nextScore / quiz.length) * 100)
       if (pct < 80) {
         setMessage(
-          'Not quite finished yet — clear a few more. Tap Try again when you are ready. No rush.',
+          'A few still need another look. Tap Try again, or mark the lesson done when you are ready. No rush.',
         )
       } else {
         setMessage('Practice clear. Tap Mark lesson complete to save your progress.')
@@ -549,15 +557,11 @@ export function LessonViewPage() {
 
   async function finish() {
     const pct = quiz.length ? Math.round((score / quiz.length) * 100) : 100
-    if (quiz.length && pct < 80) {
-      setMessage(
-        'Not quite finished yet — clear a few more. Tap Try again when you are ready. No rush.',
-      )
-      return
-    }
     try {
       await completeLesson(student!.id, lesson!.id, quiz.length ? pct : null)
-      setMessage(`Lesson completed${quiz.length ? ' · practice clear' : ''}.`)
+      setMessage(
+        `Lesson completed${quiz.length ? (pct >= 80 ? ' · practice clear' : ' · keep practising when you want') : ''}.`,
+      )
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Could not save lesson progress.')
     }
@@ -625,13 +629,13 @@ export function LessonViewPage() {
         </div>
       )}
 
-      {!blocked && quiz.length > 0 && quizDone && !quizPassed && (
+      {!blocked && quiz.length > 0 && quizDone && !practiceClear && (
         <button type="button" className="btn btn-ghost" onClick={retryQuiz}>
           Try again
         </button>
       )}
 
-      {!blocked && quizDone && quizPassed && (
+      {!blocked && quizDone && (
         <button type="button" className="btn btn-primary" onClick={finish}>
           Mark lesson complete
         </button>

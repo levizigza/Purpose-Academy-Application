@@ -110,6 +110,15 @@ export const ASSESSMENT_COPY = {
     Amharic: 'ይህ ሥራዎ ቢሆን፣ ምን ያህል ማድረግ ይወዱ ነበር?',
     Tigrinya: 'እዚ ስራሕካ እንተኾይኑ፣ ክንደይ ክትገብሮ ትፈቱ?',
   } satisfies LangText,
+  /** Style-quiz kicker — distinct from introTitle (Work interests) used on interest rating. */
+  part2Kicker: {
+    Spanish: 'Estilo de trabajo',
+    English: 'Work style',
+    Arabic: 'أسلوب العمل',
+    Hindi: 'काम करने का अंदाज़',
+    Amharic: 'የሥራ ዘይቤ',
+    Tigrinya: 'ናይ ስራሕ ቅዲ',
+  } satisfies LangText,
   part2Title: {
     Spanish: 'Cómo te gusta trabajar',
       English: 'How you like to work',
@@ -195,32 +204,36 @@ export const ASSESSMENT_COPY = {
     English: 'Continue to site-ready skills',
     Arabic: 'المتابعة إلى مهارات جاهزية الموقع',
     Hindi: 'साइट के लिए ज़रूरी कौशल पर जाएँ',
-    Amharic: 'ወደ የመንገድዎ ቃላት ቀጥል',
-    Tigrinya: 'ናብ ናይ መንገድካ ቃላት ቀጽል',
+    /* Was wrongly copied from continueVocab (pathway vocabulary). */
+    Amharic: 'ወደ የቦታ ዝግጁ ክህሎቶች ቀጥል',
+    Tigrinya: 'ናብ ናይ ቦታ ድሉው ክእለታት ቀጽል',
   } satisfies LangText,
   specializeLead: {
     Spanish: 'Después de practicar, puedes confirmar tu camino o cambiarlo según tus intereses.',
     English: 'After practice, confirm your path — or switch it based on your interests.',
     Arabic: 'بعد الممارسة، أكّد مسارك أو غيّره حسب اهتماماتك.',
     Hindi: 'अभ्यास के बाद अपना रास्ता पुष्टि करें — या रुचियों के हिसाब से बदलें।',
-    Amharic: 'በመልሶችዎ መሠረት፣ ዛሬ ለእርስዎ የሚስማማው መንገድ ይህ ነው።',
-    Tigrinya: 'ብመሰረት መልስታትካ፣ ሎሚ ዝሰማማዕካ መንገዲ እዚ እዩ።',
+    /* Was wrongly copied from resultLead. */
+    Amharic: 'ከተለማመዱ በኋላ መንገድዎን ያረጋግጡ — ወይም በፍላጎቶችዎ መሠረት ይቀይሩ።',
+    Tigrinya: 'ድሕሪ ልምምድ መንገድካ ኣረጋግጽ — ወይ ብፍቓዳትካ ቀይሮ።',
   } satisfies LangText,
   choosePath: {
     Spanish: 'Elige tu camino',
     English: 'Choose your path',
     Arabic: 'اختر مسارك',
     Hindi: 'अपना रास्ता चुनें',
-    Amharic: 'ከ Purpose Academy መንገዶች ጋር መስማማት',
-    Tigrinya: 'ምስ Purpose Academy መንገድታት ምስማማዕ',
+    /* Was wrongly copied from pathwayFit. */
+    Amharic: 'መንገድዎን ይምረጡ',
+    Tigrinya: 'መንገድካ ምረጽ',
   } satisfies LangText,
   recommended: {
     Spanish: 'Recomendado',
     English: 'Recommended',
     Arabic: 'موصى به',
     Hindi: 'सुझाया गया',
-    Amharic: 'ከ Purpose Academy መንገዶች ጋር መስማማት',
-    Tigrinya: 'ምስ Purpose Academy መንገድታት ምስማማዕ',
+    /* Was wrongly copied from pathwayFit. */
+    Amharic: 'የሚመከር',
+    Tigrinya: 'ዝምከር',
   } satisfies LangText,
 
   yourCode: {
@@ -350,7 +363,7 @@ export const LANG_NATIVE: LangText = {
 
 /** Shell chrome for assessment steps — mother tongue only. */
 export const ASSESSMENT_SHELL: Record<
-  3 | 4 | 5 | 14,
+  3 | 4 | 5 | 15,
   { title: LangText; help: LangText; purpose: LangText }
 > = {
   3: {
@@ -393,8 +406,8 @@ export const ASSESSMENT_SHELL: Record<
       English: 'Ten questions. Choose what sounds most like you to open your path.',
       Arabic: 'عشرة أسئلة. اختر الأقرب إليك لفتح مسارك.',
       Hindi: 'दस प्रश्न। अपना रास्ता खोलने के लिए जो आपसे मिलता हो चुनें।',
-      Amharic: 'እንዴት መሥራት ይወዳሉ. ከእርስዎ ጋር የሚመሳሰለውን ይምረጡ።',
-      Tigrinya: 'ከመይ ጌርካ ክትሰርሕ ትፈቱ. ምስካ ዝመሳሰል ምረጽ።',
+      Amharic: 'አስር ጥያቄዎች። መንገድዎን ለመክፈት ከእርስዎ ጋር የሚመሳሰለውን ይምረጡ።',
+      Tigrinya: 'ዓሰርተ ሕቶታት። መንገድካ ንምኽፋት ምስካ ዝመሳሰል ምረጽ።',
     },
     purpose: {
       Spanish: 'Estas preferencias eligen tu camino de Purpose Academy: Construcción, Logística o Apoyo comunitario.',
@@ -427,11 +440,11 @@ export const ASSESSMENT_SHELL: Record<
       English: 'Work style → recommended pathway. Later, after you practise, more questions about work help you specialize.',
       Arabic: 'أسلوب العمل → المسار الموصى به. لاحقاً بعد الممارسة، المزيد من الأسئلة عن العمل يساعد على التخصص.',
       Hindi: 'वर्क स्टाइल → सुझाया गया मार्ग। अभ्यास के बाद और काम के सवाल विशेषज्ञता में मदद करेंगे।',
-      Amharic: 'የፍላጎት መገለጫ → የሚመከር መንገድ። ግንባታ፣ ሎጂስቲክስ እና የማህበረሰብ ድጋፍ ክፍት ናቸው።',
-      Tigrinya: 'ናይ ፍቓድ መግለጺ → ዝምከር መንገዲ። ህንጻ፣ ሎጂስቲክስን ናይ ማሕበረሰብ ድጋፍን ክፉታት እዮም።',
+      Amharic: 'የሥራ ዘይቤ → የሚመከር መንገድ። በኋላ ከተለማመዱ በኋላ ተጨማሪ የሥራ ጥያቄዎች ስፔሻላይዝ እንዲያደርጉ ይረዳሉ።',
+      Tigrinya: 'ናይ ስራሕ ቅዲ → ዝምከር መንገዲ። ድሕሪ ልምምድ ተወሳኺ ናይ ስራሕ ሕቶታት ንስፔሻላይዝ ይሕግዙካ።',
     },
   },
-  14: {
+  15: {
     title: {
       Spanish: 'Intereses de trabajo',
       English: 'Work interests',

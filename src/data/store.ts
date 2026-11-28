@@ -35,8 +35,18 @@ type Meta = {
   constructionProgress: Record<string, number>
 }
 
-/** GitHub Pages (and any production build without VITE_API_URL) runs fully in-browser. */
+/**
+ * In-browser seed backend when:
+ * - Pages build has no VITE_API_URL, or
+ * - Session fell back to a `local.*` demo token after the hosted API failed (Render sleep).
+ */
 export function isLocalMode() {
+  try {
+    const token = getToken()
+    if (token?.startsWith('local.')) return true
+  } catch {
+    /* ignore */
+  }
   if (import.meta.env.VITE_API_URL) return false
   if (import.meta.env.DEV) return false
   return true
@@ -107,19 +117,34 @@ export async function loginRequest(email: string, password: string) {
     syncFromLocal()
     return data
   }
-  const data = await api<{
-    token: string
-    user: User
-    student: Student | null
-  }>('/api/auth/login', { method: 'POST', json: { email, password } })
-  setToken(data.token)
-  // Auth succeeded — don't fail the whole sign-in if state hydrate blips.
   try {
-    await refreshState()
-  } catch {
-    /* session is still valid; pages that need state will retry */
+    const data = await api<{
+      token: string
+      user: User
+      student: Student | null
+    }>('/api/auth/login', { method: 'POST', json: { email, password } })
+    setToken(data.token)
+    // Auth succeeded — don't fail the whole sign-in if state hydrate blips.
+    try {
+      await refreshState()
+    } catch {
+      /* session is still valid; pages that need state will retry */
+    }
+    return data
+  } catch (err) {
+    /*
+      Excellence: hosted API sleep / missing local :8787 proxy must not block
+      demo doors. Fall back to in-browser seed auth for known demo passwords.
+    */
+    try {
+      const data = localLogin(email, password)
+      setToken(data.token)
+      syncFromLocal()
+      return data
+    } catch {
+      throw err
+    }
   }
-  return data
 }
 
 export async function registerRequest(input: {
@@ -170,8 +195,19 @@ export async function fetchMe() {
     return data
   }
   if (token.startsWith('local.')) {
-    setToken(null)
-    return null
+    /* Demo fallback session (API was down at login) — keep seed portal alive. */
+    const uid = parseLocalToken(token)
+    if (!uid) {
+      setToken(null)
+      return null
+    }
+    const data = localMe(uid)
+    if (!data) {
+      setToken(null)
+      return null
+    }
+    syncFromLocal()
+    return data
   }
   try {
     const data = await api<{ user: User; student: Student | null }>('/api/auth/me')

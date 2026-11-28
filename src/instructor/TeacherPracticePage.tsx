@@ -1,6 +1,16 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { workbookByNumber, workbookImage, workbookSetLabel } from './communityWorkbooks'
 import { useTeacherPracticeBase } from './teacherPracticePaths'
+import { enterPracticeLesson } from '../practice/PracticeMode'
+import { setActivePathway } from '../pathways'
+
+/** Student Practice station names → journey step (Community Support path). */
+const STATION_STEP: Record<string, number> = {
+  'Workplace Words': 6,
+  'Sentence Structure': 9,
+  'Picture Match': 10,
+  'Workplace Instructions': 12,
+}
 
 type Session = {
   n: number
@@ -73,6 +83,16 @@ const sessions: Session[] = [
 /** Three teaching sessions adapted from the draft Community Support instructor binder. */
 export function TeacherPracticePage() {
   const base = useTeacherPracticeBase()
+  const navigate = useNavigate()
+  const portal = base.startsWith('/app/')
+
+  function openStudentStation(station: string) {
+    const step = STATION_STEP[station]
+    if (!step) return
+    setActivePathway('community')
+    enterPracticeLesson('Instructor Practice', step)
+    navigate('/journey')
+  }
 
   return (
     <div className="stack tp-page">
@@ -179,13 +199,18 @@ export function TeacherPracticePage() {
                 <p className="tp-foot-label">Student Practice stations</p>
                 <div className="tp-chips">
                   {session.stations.map((station) => (
-                    <span className="tp-chip" key={station}>
+                    <button
+                      type="button"
+                      className="tp-chip tp-chip-btn"
+                      key={station}
+                      onClick={() => openStudentStation(station)}
+                    >
                       {station}
-                    </span>
+                    </button>
                   ))}
                 </div>
                 <p className="tp-foot-note">
-                  Choose Community Support in the student path, then open these stations together.
+                  Opens Community Support Student Practice at that station — teach beside the learner.
                 </p>
               </div>
               <div>
@@ -222,9 +247,15 @@ export function TeacherPracticePage() {
           learner clicked.
         </p>
         <div className="tp-next-links">
-          <Link className="btn btn-ghost" to="/app/instructor/observe">
-            Record an observation
-          </Link>
+          {portal ? (
+            <Link className="btn btn-ghost" to="/app/instructor/observe">
+              Record an observation
+            </Link>
+          ) : (
+            <Link className="btn btn-ghost" to="/login">
+              Sign in to record an observation
+            </Link>
+          )}
           <Link className="btn btn-ghost" to={`${base}/workbooks`}>
             Browse all workbooks
           </Link>

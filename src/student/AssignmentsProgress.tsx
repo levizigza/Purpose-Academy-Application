@@ -171,11 +171,16 @@ export function StudentProgressPage() {
       <div className="grid-2">
         <div className="panel stack">
           <h2>Foundation</h2>
-          <div className="progress" aria-label={`Foundation ${f}%`}>
+          <div
+            className="progress"
+            aria-label={`Foundation ${f >= 80 ? 'comfortable' : f > 0 ? 'started' : 'not started'}`}
+          >
             <span style={{ width: `${Math.max(f, f > 0 ? f : 0)}%` }} />
           </div>
           <p>
-            <strong>{f}%</strong> complete
+            <strong>{f >= 80 ? 'Comfortable' : f > 0 ? 'Started' : 'Not started'}</strong>
+            {' · '}
+            bars only, no grades
           </p>
         </div>
         <div className="panel stack">
