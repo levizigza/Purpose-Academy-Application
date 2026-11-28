@@ -957,6 +957,23 @@ p {
   background: var(--panel);
 }
 
+/*
+  Critic (excellence): portal paper shells inherited night .btn-secondary
+  (white ink on transparent) — Hear Amharic / support Hear washed out (~1:1).
+  App portal stays navy-on-paper; train night keeps white secondary.
+*/
+.app-shell .btn-secondary {
+  border-color: var(--line);
+  color: var(--brand-deep);
+  background: #fff;
+}
+
+.app-shell .btn-secondary:hover {
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+  border-color: color-mix(in srgb, var(--brand) 28%, var(--line));
+}
+
 .btn-danger {
   background: var(--danger);
   color: #fff;
@@ -3841,10 +3858,13 @@ table.data th {
   border-radius: 50%;
   display: grid;
   place-items: center;
+  align-content: center;
   font-family: var(--display);
   font-weight: 800;
   font-size: 0.72rem;
-  letter-spacing: 0.04em;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-align: center;
   color: #0b2f5c;
   background: radial-gradient(circle at 35% 30%, #ffe08a, #e8a317 65%, #a56b0c);
   border: 1px solid rgba(255, 255, 255, 0.35);

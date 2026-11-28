@@ -592,6 +592,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Keep (asked enhancements):** navy Tap on paper lockup (cream-on-white failed contrast); Workplace Words soft-miss above pick bank; mother-tongue career continuity; Path/Skills/Safety nav continuity; TP paper ink on night; bottom-nav fixed dock; Learn/Progress lexicon soften.
 - **Critic:** Consistency must not undo locked intro chrome. Desktop lockup under-wordmark Tap stays — that is Modes-first desktop grammar, not the phone mid-frame law.
 
+### 2026-11-27 — Standing bar: enhance for the learner (Jobs taste + Woz depth) (L3)
+
+- **Law:** Improve the product exponentially for the learner. Taste + clarity + locked foundations (Jobs) with technical depth (Woz). Enhance and improve; never regress video/narration/soft-miss/language wins.
+- **Defect:** Portal Learn `Hear Amharic` (and other `.btn-secondary` on `.app-shell` paper) inherited night white ink → ~1:1 on cream.
+- **Enhance:** `.app-shell .btn-secondary` → navy on white paper; train night secondary unchanged. Toolbox `PA` badge optical center (`line-height: 1`).
+- **Do not touch:** explainer MP4s, soft-miss grammar, career mother-tongue lock, Modes-first Desktop lockup.
+
 ### 2026-11-27 — Consistency scrub: advance handoffs + instructor coherence (L2 / L3 / L5)
 
 - **Layers:** L2 spine continuity + L3 instructor info display + L5 portal/public TP.
