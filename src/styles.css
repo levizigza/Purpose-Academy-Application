@@ -581,13 +581,18 @@ p {
 }
 
 .bottom-nav a {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   text-align: center;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--ink-soft);
-  padding: 0.35rem;
+  padding: 0.35rem 0.15rem;
   border-radius: 10px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bottom-nav a.active {
@@ -18500,5 +18505,88 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
     width: 100%;
     max-height: 92vh;
     object-fit: contain;
+  }
+}
+
+/* —— Instructor portal excellence (dual-role pass 2026-11-27) —— */
+.instructor-today-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.instructor-today-tile {
+  display: grid;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.instructor-today-tile:hover {
+  border-color: color-mix(in srgb, var(--brand) 35%, var(--line));
+  transform: translateY(-1px);
+}
+
+.instructor-today-kicker {
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.instructor-today-tile strong {
+  font-family: var(--display);
+  font-size: 1.15rem;
+}
+
+.instructor-today-count {
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--brand-deep);
+}
+
+.instructor-grade-card-head h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.2rem;
+}
+
+.instructor-grade-body {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--paper-2) 70%, #fff);
+  border: 1px solid var(--line);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.instructor-grade-saved-fb {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.instructor-people-cards {
+  display: none;
+  gap: 0.75rem;
+}
+
+.instructor-people-card strong {
+  font-size: 1.05rem;
+}
+
+@media (max-width: 820px) {
+  .instructor-today-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .instructor-people-cards {
+    display: grid;
+  }
+
+  .instructor-people-table {
+    display: none;
   }
 }

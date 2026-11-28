@@ -149,6 +149,11 @@ Fail any → fix before merge. Log overturns in Craft §11 and here if the rule 
 
 ## 8. Changelog
 
+### 2026-11-27 — Home next-step % theatre removed
+
+- Critic (dual-role excellence): student Home “Your next step” still said `Foundation progress N%` — banned report-card chrome in the first viewport.
+- Fix: crew copy (“Open this lesson to begin foundation…” / “Foundation is under way…”) with no %. Quiet Progress panel still uses Comfortable / Started / Not started.
+
 ### 2026-10-30 — Sentence Structure pick · hear · type + audio sync
 
 - Customer ask: restore sentence feel (not vocab word chips); after clear, keep the completed sentence on screen while success audio plays, then advance.

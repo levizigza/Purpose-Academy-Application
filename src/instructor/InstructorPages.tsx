@@ -20,34 +20,32 @@ export function InstructorDashboardPage() {
   const approvedStudents = db.students.filter((s) => s.registration_status === 'approved')
 
   return (
-    <div className="stack">
+    <div className="stack instructor-today">
       <div>
         <p className="section-kicker">Instructor</p>
         <h1>Today</h1>
-        <p>Help learners move from practice to verified skill: grading, safety, and observation first.</p>
+        <p className="lede">
+          Grade work, clear safety, observe skill — then teach from Instructor Practice.
+        </p>
       </div>
-      <div className="grid-3">
-        <div className="panel stack">
-          <h2>Awaiting grading</h2>
-          <p style={{ fontSize: '2rem', fontWeight: 700, margin: 0 }}>{pendingSubs.length}</p>
-          <Link className="btn btn-ghost" to="/app/instructor/assignments">
-            Review assignments
-          </Link>
-        </div>
-        <div className="panel stack">
-          <h2>Safety blocks</h2>
-          <p style={{ fontSize: '2rem', fontWeight: 700, margin: 0 }}>{blocked.length}</p>
-          <Link className="btn btn-ghost" to="/app/instructor/safety">
-            Open safety
-          </Link>
-        </div>
-        <div className="panel stack">
-          <h2>Active learners</h2>
-          <p style={{ fontSize: '2rem', fontWeight: 700, margin: 0 }}>{approvedStudents.length}</p>
-          <Link className="btn btn-ghost" to="/app/instructor/students">
-            Learner list
-          </Link>
-        </div>
+      <div className="instructor-today-actions">
+        <Link className="panel instructor-today-tile" to="/app/instructor/assignments">
+          <span className="instructor-today-kicker">First</span>
+          <strong>Grade work</strong>
+          <span className="instructor-today-count">{pendingSubs.length} waiting</span>
+        </Link>
+        <Link className="panel instructor-today-tile" to="/app/instructor/safety">
+          <span className="instructor-today-kicker">Safety</span>
+          <strong>Safety gates</strong>
+          <span className="instructor-today-count">{blocked.length} blocked</span>
+        </Link>
+        <Link className="panel instructor-today-tile" to="/app/instructor/observe">
+          <span className="instructor-today-kicker">Verify</span>
+          <strong>Observe skills</strong>
+          <span className="instructor-today-count">
+            {approvedStudents.length} {approvedStudents.length === 1 ? 'learner' : 'learners'}
+          </span>
+        </Link>
       </div>
       <div className="panel stack">
         <h2>Teacher Practice</h2>
@@ -71,7 +69,12 @@ export function InstructorDashboardPage() {
         <ul className="list-plain">
           {db.schedules.map((s) => (
             <li key={s.id}>
-              {s.title} · {new Date(s.starts_at).toLocaleString()} · {s.location}
+              {s.title} ·{' '}
+              {new Date(s.starts_at).toLocaleString(undefined, {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+              })}{' '}
+              · {s.location}
             </li>
           ))}
         </ul>
@@ -104,34 +107,55 @@ export function InstructorAssignmentsPage() {
   }
 
   return (
-    <div className="stack">
-      <h1>Assignments to review</h1>
+    <div className="stack instructor-grade">
+      <div>
+        <p className="section-kicker">Instructor</p>
+        <h1>Grade work</h1>
+        <p className="lede">
+          Read the learner’s words, leave clear feedback, then save. One submission at a time.
+        </p>
+      </div>
       {msg && <div className="alert ok">{msg}</div>}
-      {rows.length === 0 && <p className="muted">No submissions yet.</p>}
-      {rows.map(({ sub, assignment, user: learner }) => (
-        <div className="panel stack" key={sub.id}>
-          <h2>{assignment?.title}</h2>
-          <p className="muted">
-            {learner?.full_name} · {sub.status}
-            {sub.grade != null ? ` · ${sub.grade}/100` : ''}
+      {rows.length === 0 && (
+        <div className="panel stack">
+          <p className="muted" style={{ margin: 0 }}>
+            No submissions waiting. When a learner turns in a task from their portal, it lands here.
           </p>
-          <p>{sub.content}</p>
+        </div>
+      )}
+      {rows.map(({ sub, assignment, user: learner }) => (
+        <article className="panel stack instructor-grade-card" key={sub.id}>
+          <header className="instructor-grade-card-head">
+            <div>
+              <h2>{assignment?.title ?? 'Assignment'}</h2>
+              <p className="muted" style={{ margin: 0 }}>
+                {learner?.full_name ?? 'Learner'} · {sub.status === 'graded' ? 'Graded' : 'Awaiting review'}
+                {sub.grade != null ? ` · ${sub.grade}/100` : ''}
+              </p>
+            </div>
+          </header>
+          <p className="instructor-grade-body">{sub.content}</p>
           {sub.status === 'submitted' && (
-            <form onSubmit={(e) => grade(sub.id, e)} className="stack">
+            <form onSubmit={(e) => grade(sub.id, e)} className="stack instructor-grade-form">
               <div className="field">
-                <label htmlFor={`grade-${sub.id}`}>Grade (0–100)</label>
+                <label htmlFor={`grade-${sub.id}`}>Score (0–100)</label>
                 <input id={`grade-${sub.id}`} name="grade" type="number" min={0} max={100} required />
               </div>
               <div className="field">
-                <label htmlFor={`fb-${sub.id}`}>Feedback</label>
-                <textarea id={`fb-${sub.id}`} name="feedback" required />
+                <label htmlFor={`fb-${sub.id}`}>Feedback for the learner</label>
+                <textarea id={`fb-${sub.id}`} name="feedback" required rows={4} />
               </div>
               <button className="btn btn-primary" type="submit">
                 Save grade
               </button>
             </form>
           )}
-        </div>
+          {sub.status === 'graded' && sub.feedback && (
+            <p className="instructor-grade-saved-fb">
+              <strong>Feedback saved:</strong> {sub.feedback}
+            </p>
+          )}
+        </article>
       ))}
     </div>
   )
@@ -141,9 +165,37 @@ export function InstructorStudentsPage() {
   const db = useDb()
   const students = db.students.filter((s) => s.registration_status === 'approved')
   return (
-    <div className="stack">
-      <h1>Learners</h1>
-      <div className="table-wrap panel">
+    <div className="stack instructor-people">
+      <div>
+        <p className="section-kicker">Instructor</p>
+        <h1>Learners</h1>
+        <p className="lede">Who is active, which pathway they are on, and whether safety is clear.</p>
+      </div>
+      {/* Card list for phone; table remains for wider screens */}
+      <ul className="instructor-people-cards list-plain">
+        {students.map((s) => {
+          const u = db.users.find((x) => x.uid === s.uid)
+          const gate = getSafetyGate(s.id)
+          const comps = db.learner_competencies.filter((c) => c.student_id === s.id)
+          return (
+            <li className="panel instructor-people-card" key={s.id}>
+              <strong>{u?.full_name}</strong>
+              <p className="muted" style={{ margin: '0.25rem 0 0' }}>
+                {s.preferred_language} · {s.pathway ?? 'foundation'}
+              </p>
+              <p style={{ margin: '0.45rem 0 0' }}>
+                <span className={`badge ${gate?.status === 'PASS' ? 'ok' : 'warn'}`}>
+                  Safety {gate?.status ?? '—'}
+                </span>
+              </p>
+              <p className="muted" style={{ margin: '0.35rem 0 0', fontSize: '0.9rem' }}>
+                Competencies: {comps.map((c) => c.status).join(', ') || 'none yet'}
+              </p>
+            </li>
+          )
+        })}
+      </ul>
+      <div className="table-wrap panel instructor-people-table">
         <table className="data">
           <thead>
             <tr>
@@ -188,8 +240,13 @@ export function InstructorSafetyPage() {
 
   return (
     <div className="stack">
-      <h1>Safety gates</h1>
-      <p>Practical stations stay blocked until prerequisites PASS. Overrides are audited.</p>
+      <div>
+        <p className="section-kicker">Instructor</p>
+        <h1>Safety gates</h1>
+        <p className="lede">
+          Practical stations stay blocked until prerequisites PASS. Overrides are audited.
+        </p>
+      </div>
       {msg && <div className="alert ok">{msg}</div>}
       <ul className="list-plain">
         {db.safety_gate_states.map((g) => {
@@ -271,10 +328,14 @@ export function InstructorObservePage() {
 
   return (
     <div className="stack">
-      <h1>Practical observation</h1>
-      <p>
-        Human assessment only. A video watched or quiz passed is not automatic practical competency.
-      </p>
+      <div>
+        <p className="section-kicker">Instructor</p>
+        <h1>Observe skills</h1>
+        <p className="lede">
+          Human assessment only. Watching a video or clearing a practice station is not automatic
+          practical competency.
+        </p>
+      </div>
       {gate && (
         <div className={`alert ${gate.status === 'PASS' ? 'ok' : 'warn'}`}>
           Safety gate for selected learner: <strong>{gate.status}</strong>. {gate.reason}

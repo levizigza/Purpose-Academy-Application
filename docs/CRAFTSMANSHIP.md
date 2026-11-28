@@ -584,6 +584,13 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Soft miss moved above pick bank + scroll-into-view + phone sticky tip. VV Next gated on Level-1 clear (Station menu still skips). Course-stage pager light ink; card-surface nearby tips navy/cream; dark panels keep amber. Phone hammer under lockup + navy TAP. Feedback dock bottom-right. `muxSynced` trims Playwright white tail then clones last real frame.
 - **Assumption to challenge next:** whether other Practice stations still flash a premature Next on phone, and whether portal Hear Amharic / toolbox badge need their own climb.
 
+### 2026-11-27 — Dual-role excellence (student + instructor) (L3 / L5 / LEARNER_FEAR)
+
+- **Layers:** L3 portal/Practice first viewport + L5 chrome continuity (desktop ↔ phone) + learner-fear (% theatre).
+- **Defects:** Instructor phone nav missing Safety; student phone nav missing Skills; Home “Foundation progress N%”; Practice deep-link without course shell buried drills under unit-intro; Vite `dev:web` login 500 when :8787 down; Grade empty / Learners table unusable on narrow; Today “1 learners”.
+- **Fix:** Mobile nav adds Safety + Skills; Home next-step copy without %; `/journey` always uses DesktopCourseShell when not phone; login falls back to seed auth if API fails + local token stays valid; `.env.development` points Vite at Render; instructor Today/Grade/People/Observe/Safety headers + phone learner cards; seed submission for Grade demo; schedule times without seconds.
+- **Assumption to challenge next:** whether Render-sleep fallback should toast “demo offline mode,” and whether Teacher Practice week sessions need Construction/Logistics binders too.
+
 ### 2026-10-28 — Desktop splash pathways → lower third (L3)
 
 - **Layers:** L1 (three doors visible) + L3 (brand + door hero; pathways don’t steal the title).

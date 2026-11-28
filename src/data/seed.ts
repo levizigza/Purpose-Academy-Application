@@ -431,7 +431,20 @@ export function createSeedDatabase(): AppDatabase {
         created_by: 'u-instructor',
       },
     ],
-    submissions: [],
+    submissions: [
+      {
+        id: 'sub-1',
+        assignment_id: 'asg-1',
+        student_id: 'st-approved',
+        content:
+          'Hello, my name is Amina. My preferred language is Amharic. I will always wear PPE and ask when a task is unclear. I arrive on time and listen to my supervisor.',
+        status: 'submitted',
+        grade: null,
+        feedback: '',
+        submitted_at: now,
+        graded_at: null,
+      },
+    ],
     lesson_progress: [],
     vocab_terms: [
       {

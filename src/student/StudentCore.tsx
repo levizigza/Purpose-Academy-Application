@@ -134,7 +134,10 @@ export function StudentHomePage() {
     ? nextLesson
       ? {
           title: nextLesson.title,
-          body: `Foundation progress ${fProg}%. Open this lesson to continue.`,
+          body:
+            fProg > 0
+              ? 'Foundation is under way. Open this lesson to continue.'
+              : 'Open this lesson to begin foundation — one clear step.',
           to: `/app/student/lessons/${nextLesson.id}`,
           cta: 'Continue lesson',
         }

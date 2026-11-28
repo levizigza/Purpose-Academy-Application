@@ -144,8 +144,14 @@ export function PublicLayout() {
     )
   }
 
-  /* Desktop course wrap for the live journey */
-  if (pathname === '/journey' && shellMode === 'course') {
+  /*
+    Desktop course wrap for the live journey.
+    Critic (dual-role excellence): Practice opened without shellMode (deep link /
+    resume) used the lean support chrome — unit-intro + explainer buried the
+    drill (L3 fail). Phone already returned above; remaining /journey gets the
+    course stage so night task-first CSS applies.
+  */
+  if (pathname === '/journey') {
     return (
       <DesktopCourseShell>
         <Outlet />
@@ -299,6 +305,8 @@ function MobileNav({ role }: { role: Role }) {
         <NavLink to="/journey">Path</NavLink>
         <NavLink to="/app/student/courses">Learn</NavLink>
         <NavLink to="/app/student/assignments">Tasks</NavLink>
+        {/* Match desktop: Skills must stay reachable on phone (L5 continuity). */}
+        <NavLink to="/app/student/skills">Skills</NavLink>
         <NavLink to="/app/student/profile">More</NavLink>
       </>
     )
@@ -312,6 +320,8 @@ function MobileNav({ role }: { role: Role }) {
         <NavLink to="/app/instructor/assignments">Grade</NavLink>
         <NavLink to="/app/instructor/practice">Practice</NavLink>
         <NavLink to="/app/instructor/observe">Observe</NavLink>
+        {/* Critic: Safety lived only in desktop nav — phone instructors could not reach gates. */}
+        <NavLink to="/app/instructor/safety">Safety</NavLink>
         <NavLink to="/app/instructor/students">People</NavLink>
       </>
     )
