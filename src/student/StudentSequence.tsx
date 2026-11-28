@@ -1893,7 +1893,12 @@ export function StudentSequencePage() {
     const dcLinked = dcGate.filter(wordDone).length
     const specialtyLinked = specialtyGate.filter(wordDone).length
     const firstSpecialtyIdx = VOCAB_UNIT.findIndex((t) => !isDailyConversationTerm(t))
-    const canContinue = ready || isPracticeMode()
+    /*
+      Gate Next on the Level-1 clear even in Practice. Always-on "Continue to
+      language organize" crowded the phone sticky footer (soft miss below fold)
+      and flashed during mother-tongue bridge reflow. Skip mid-station via Station menu.
+    */
+    const canContinue = ready
 
     return (
       <Shell
@@ -1903,7 +1908,7 @@ export function StudentSequencePage() {
           canContinue
             ? () => {
                 /* First-set clear → later visits unlock skip-known (retake), not day-one. */
-                if (ready) markVocabStationCleared(pathwayId)
+                markVocabStationCleared(pathwayId)
                 go(7, 'Opening language organize…')
               }
             : undefined

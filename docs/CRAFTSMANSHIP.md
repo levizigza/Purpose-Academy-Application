@@ -572,6 +572,18 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Critic:** Pick alone would be shopping; type alone invited guess-from-audio without looking. Dual lock forces looking + producing. Reshuffle is teach, not fear — “choices switched — pick again.”
 - **Law restated (§6.3c):** hear → hear → **pick + type**; shuffle after miss and on card advance.
 
+### 2026-11-27 — Site excellence pass after #61 (L3 / LEARNER_FEAR / L5)
+
+- **Layers:** L3 information display + LEARNER_FEAR soft miss + L5 systems (demo mux).
+- **Pages:** Deploy for PR #61 confirmed live (`workplace-words.mp4` byte-match; soft-miss copy on product).
+- **Defects found (live desktop + phone):**
+  - Phone WW soft miss buried under sticky “Continue to language organize” (Practice always unlocked Next).
+  - Desktop WW pager “Done on this page” dark-on-navy; nearby objective amber-on-amber over white card.
+  - Phone splash Enter hammer parked on the P door; TAP cream-on-paper.
+  - Feedback tab mid-right covered pick banks; mux teardown white tails on some explainers.
+- **Fix:** Soft miss moved above pick bank + scroll-into-view + phone sticky tip. VV Next gated on Level-1 clear (Station menu still skips). Course-stage pager light ink; card-surface nearby tips navy/cream; dark panels keep amber. Phone hammer under lockup + navy TAP. Feedback dock bottom-right. `muxSynced` trims Playwright white tail then clones last real frame.
+- **Assumption to challenge next:** whether other Practice stations still flash a premature Next on phone, and whether portal Hear Amharic / toolbox badge need their own climb.
+
 ### 2026-10-28 — Desktop splash pathways → lower third (L3)
 
 - **Layers:** L1 (three doors visible) + L3 (brand + door hero; pathways don’t steal the title).

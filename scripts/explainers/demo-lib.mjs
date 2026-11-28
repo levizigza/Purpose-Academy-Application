@@ -352,12 +352,18 @@ export function buildTimelineVo(work, beatFiles, timeline, videoDur) {
 export function muxSynced(work, videoWebm, voMp3, outPath, previewName) {
   mkdirSync(join(outPath, '..'), { recursive: true })
   const silentMp4 = join(work, 'silent.mp4')
+  /*
+    Critic (excellence 2026-11-27): Playwright teardown often ends on a white
+    blank. Trim a short tail before scale/pad, then clone the last real frame
+    when VO needs a hair more length — no white flash at the end.
+  */
+  const TRIM_TAIL = 0.22
   run('ffmpeg', [
     '-y',
     '-i',
     videoWebm,
     '-vf',
-    `scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30`,
+    `scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps=30`,
     '-c:v',
     'libx264',
     '-pix_fmt',
@@ -366,7 +372,24 @@ export function muxSynced(work, videoWebm, voMp3, outPath, previewName) {
     silentMp4,
   ])
 
-  const vDur = durationOf(silentMp4)
+  const rawDur = durationOf(silentMp4)
+  const trimmed = join(work, 'silent-trim.mp4')
+  const keepTo = Math.max(0.4, rawDur - TRIM_TAIL)
+  run('ffmpeg', [
+    '-y',
+    '-i',
+    silentMp4,
+    '-t',
+    keepTo.toFixed(3),
+    '-c:v',
+    'libx264',
+    '-pix_fmt',
+    'yuv420p',
+    '-an',
+    trimmed,
+  ])
+
+  const vDur = durationOf(trimmed)
   const aDur = durationOf(voMp3)
   /* Timeline VO is built to video length — only tiny pad for container safety */
   const target = Math.max(vDur, aDur) + 0.15
@@ -374,7 +397,7 @@ export function muxSynced(work, videoWebm, voMp3, outPath, previewName) {
   run('ffmpeg', [
     '-y',
     '-i',
-    silentMp4,
+    trimmed,
     '-i',
     voMp3,
     '-filter_complex',

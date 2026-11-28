@@ -2964,7 +2964,7 @@ table.data th {
   }
 }
 
-/* Embedded phone: hammer rests mid-frame — strike rises into door at 50% × 42% */
+/* Embedded phone: hammer rests under lockup — strike rises into door cavity */
 .threshold.is-embedded .threshold-hammer.is-smashing {
   animation-name: hammer-door-strike-embedded;
 }
@@ -2972,27 +2972,27 @@ table.data th {
 @keyframes hammer-door-strike-embedded {
   0% {
     opacity: 1;
-    transform: translate(-50%, -50%) rotate(4deg) scale(1);
+    transform: translateX(-50%) translateY(0) rotate(6deg) scale(1);
   }
   12% {
-    transform: translate(-50%, -42%) rotate(18deg) scale(1.04);
+    transform: translateX(-50%) translateY(8px) rotate(18deg) scale(1.04);
   }
   24% {
-    transform: translate(-50%, -38%) rotate(28deg) scale(1.06);
+    transform: translateX(-50%) translateY(10px) rotate(28deg) scale(1.06);
   }
   40% {
-    transform: translate(-50%, -28cqh) rotate(-4deg) scale(1.1);
+    transform: translateX(-50%) translateY(-28cqh) rotate(-4deg) scale(1.1);
   }
   54% {
     /* Contact — head into the glowing doorway cavity mid */
-    transform: translate(-50%, -36cqh) rotate(-22deg) scale(1.16);
+    transform: translateX(-50%) translateY(-40cqh) rotate(-22deg) scale(1.16);
   }
   68% {
-    transform: translate(-50%, -34cqh) rotate(-8deg) scale(1.06);
+    transform: translateX(-50%) translateY(-36cqh) rotate(-8deg) scale(1.06);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -22cqh) rotate(12deg) scale(0.9);
+    transform: translateX(-50%) translateY(-24cqh) rotate(12deg) scale(0.9);
   }
 }
 
@@ -7878,6 +7878,15 @@ table.data th {
   color: var(--ink, #142838);
 }
 
+/* Night course chrome: pager lives on navy, not paper — ink would vanish. */
+.course-stage .vocab-sheet-page-label {
+  color: #9eb0c4;
+}
+
+.course-stage .vocab-sheet-page-progress {
+  color: #e8eef7;
+}
+
 .vocab-sheet-nav {
   display: flex;
   flex-wrap: wrap;
@@ -9908,13 +9917,13 @@ html.pa-course-shell .practice-banner {
   display: none;
 }
 
-/* Side feedback chatbot */
+/* Side feedback chatbot — bottom-right when closed so mid-viewport picks stay clear */
 .practice-chat {
   position: fixed;
   right: 0;
-  top: 50%;
-  bottom: auto;
-  transform: translateY(-50%);
+  top: auto;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  transform: none;
   z-index: 200;
   display: flex;
   flex-direction: column;
@@ -15520,6 +15529,17 @@ html.pa-phone-shell .practice-feedback-dock {
   background: color-mix(in srgb, #f5c542 14%, rgba(4, 21, 38, 0.35));
 }
 
+/*
+  Critic (excellence 2026-11-27): nearby objective was amber-on-amber over
+  paper AND amber-on-slate inside the translucent type panel. Navy/cream tips
+  stay readable on both skins; soft-miss keeps its dual-shell rules below.
+*/
+.course-stage .vocab-sheet-card .play-nearby-objective {
+  color: #0b2f5c;
+  background: color-mix(in srgb, #0b2f5c 8%, #fff8e8);
+  border-color: color-mix(in srgb, #0b2f5c 22%, #c5d0dc);
+}
+
 /* Phone paper: navy body on cream — beat night amber even inside .course-stage */
 .is-phone-app .play-nearby-objective,
 .is-phone-app .course-stage .play-nearby-objective,
@@ -15568,6 +15588,14 @@ html.pa-phone-shell .play-soft-miss {
   color: #0b2f5c;
   background: color-mix(in srgb, #0b2f5c 7%, #fff8e8);
   border-color: color-mix(in srgb, #0b2f5c 20%, #c5d0dc);
+}
+
+/* Phone WW: keep soft miss in the scrollport above the docked Next footer */
+.iphone-scroll.is-phone-app.phone-phase-app .vocab-sheet-type .play-soft-miss {
+  position: sticky;
+  bottom: 0.35rem;
+  z-index: 4;
+  box-shadow: 0 6px 16px rgba(4, 21, 38, 0.12);
 }
 
 .ph-play-loop {
@@ -16320,16 +16348,13 @@ html.pa-phone-shell .play-soft-miss {
 }
 
 /*
-  Critic overturn (user): phone hammer was a quiet corner CTA — next action
-  was unclear. Center it, label Tap, soft blink. Pathways lift above mid so
-  the hammer owns the middle of the phone frame. Desktop night now matches
-  that Tap cue (see .threshold:not(.is-embedded) .is-tap-cue) while keeping
-  amber-on-navy atmosphere.
+  Critic overturn (excellence 2026-11-27): mid-frame hammer parked on the P
+  door + white TAP on paper splash failed brand + contrast. Pathways keep the
+  lower band; hammer sits under the lockup (lockup desktop grammar), Tap in navy.
 */
 .threshold.is-embedded .threshold-pathways {
-  /* Below mid-frame hammer so the Tap CTA owns the middle */
   bottom: auto;
-  top: 72%;
+  top: 58%;
   width: 88%;
   left: 50%;
   transform: translateX(-50%);
@@ -16350,32 +16375,32 @@ html.pa-phone-shell .play-soft-miss {
 .threshold.is-embedded .threshold-hammer.is-phone-tap {
   left: 50%;
   right: auto;
-  top: 52%;
-  bottom: auto;
+  top: auto;
+  bottom: max(1.1rem, env(safe-area-inset-bottom));
   width: auto;
   max-width: none;
   z-index: 12;
   gap: 0.35rem;
   opacity: 0;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   filter: drop-shadow(0 8px 14px rgba(40, 24, 4, 0.42));
 }
 
 .threshold.is-embedded .threshold-hammer.is-visible {
-  animation: hammer-center-in 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
+  animation: hammer-lockup-in 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
 }
 
 .threshold.is-embedded .threshold-hammer:hover:not(:disabled) {
-  transform: translate(-50%, -52%) rotate(2deg);
+  transform: translateX(-50%) translateY(-4px) rotate(-4deg);
   filter: drop-shadow(0 14px 22px rgba(90, 55, 8, 0.55));
 }
 
 .threshold.is-embedded .threshold-hammer:active:not(:disabled) {
-  transform: translate(-50%, -50%) rotate(0deg) scale(0.97);
+  transform: translateX(-50%) translateY(1px) scale(0.97);
 }
 
 .threshold.is-embedded .threshold-hammer-icon {
-  width: clamp(3.6rem, 28cqi, 5.2rem);
+  width: clamp(3.2rem, 24cqi, 4.6rem);
   height: auto;
 }
 
@@ -16383,8 +16408,9 @@ html.pa-phone-shell .play-soft-miss {
   font-size: clamp(0.85rem, 6.5cqi, 1.05rem);
   font-weight: 800;
   letter-spacing: 0.28em;
-  color: rgba(255, 244, 210, 0.98);
-  text-shadow: 0 1px 3px rgba(4, 21, 38, 0.65);
+  /* Paper phone splash — navy Tap, not cream-on-white */
+  color: #0b2f5c;
+  text-shadow: none;
   opacity: 1;
   animation: none;
 }
@@ -16407,7 +16433,8 @@ html.pa-phone-shell .play-soft-miss {
 
 .threshold.is-embedded .threshold-foley {
   right: 0.35rem;
-  bottom: 0.35rem;
+  /* Clear of bottom-centered Tap hammer */
+  bottom: max(5.25rem, calc(env(safe-area-inset-bottom) + 4.5rem));
   transform: scale(0.85);
   transform-origin: bottom right;
 }
