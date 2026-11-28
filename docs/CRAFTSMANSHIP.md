@@ -584,6 +584,14 @@ Revisit when aims change. Ranked by learner / trust harm.
 - **Fix:** Soft miss moved above pick bank + scroll-into-view + phone sticky tip. VV Next gated on Level-1 clear (Station menu still skips). Course-stage pager light ink; card-surface nearby tips navy/cream; dark panels keep amber. Phone hammer under lockup + navy TAP. Feedback dock bottom-right. `muxSynced` trims Playwright white tail then clones last real frame.
 - **Assumption to challenge next:** whether other Practice stations still flash a premature Next on phone, and whether portal Hear Amharic / toolbox badge need their own climb.
 
+### 2026-11-27 — Consistency scrub: advance handoffs + instructor coherence (L2 / L3 / L5)
+
+- **Layers:** L2 spine continuity + L3 instructor info display + L5 portal/public TP.
+- **Student P0:** `advanceWithOptionalCheckpoint` off-by-ones stalled Computer Skills→Site Language, Work Interests→Safety, Systems→Equipment, Equipment→Instructor Check; hub Equipment CTA opened step 18.
+- **Instructor (from hunt):** night TP hero ink; People/Safety `StatusLabel`; Community Observe competency; public Observe → login; station chips deep-link; naming Instructor Practice / Learners; `/grade` `/people` aliases; rubric human labels; honest Construction/Logistics binder-in-progress copy.
+- **Also:** Am/Ti shell purpose/help; More-languages footnote; Learn soft complete without 80% hard gate.
+- **Do not merge #63** until scrub close-out. Assumption next: Path nav `/journey` vs portal `/app/student/path` — rename, not merge doors.
+
 ### 2026-11-27 — Consistency scrub: Learn / Progress / instructor lexicon (LEARNER_FEAR / L3)
 
 - **Layers:** LEARNER_FEAR + L3 — % / Graded / Competent chrome that fought the Practice spine.

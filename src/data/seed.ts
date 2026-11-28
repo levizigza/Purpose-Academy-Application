@@ -691,6 +691,20 @@ export function createSeedDatabase(): AppDatabase {
           'Measures before cutting',
         ],
       },
+      {
+        id: 'comp-community-roles',
+        title: 'Community roles and greetings',
+        description:
+          'Names support roles, introduces self respectfully, and asks when a duty is unclear — matches Instructor Practice Session 1.',
+        category: 'Community Support',
+        safety_critical: false,
+        version: '2026.1',
+        criteria: [
+          'Names common support roles without guessing',
+          'Gives a respectful introduction',
+          'Asks a supervisor when a duty is unclear',
+        ],
+      },
     ],
     learner_competencies: [],
     evidence_records: [],

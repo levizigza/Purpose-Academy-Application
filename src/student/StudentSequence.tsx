@@ -2462,14 +2462,14 @@ export function StudentSequencePage() {
         <ComputerSkillsDrill
           onComplete={() =>
             requestPracticeAdvance(() =>
-              advanceWithOptionalCheckpoint(12, 13, 'Opening site language…'),
+              advanceWithOptionalCheckpoint(13, 14, 'Opening site language…'),
             )
           }
           onSkip={
             isPracticeMode()
               ? () =>
                   requestPracticeAdvance(() =>
-                    advanceWithOptionalCheckpoint(12, 13, 'Opening site language…'),
+                    advanceWithOptionalCheckpoint(13, 14, 'Opening site language…'),
                   )
               : undefined
           }
@@ -2664,7 +2664,7 @@ export function StudentSequencePage() {
               }
               setBusy(false)
               requestPracticeAdvance(() =>
-                advanceWithOptionalCheckpoint(14, 15, 'Opening safety…'),
+                advanceWithOptionalCheckpoint(15, 16, 'Opening safety…'),
               )
             })()
           }}
@@ -2808,9 +2808,9 @@ export function StudentSequencePage() {
         return
       }
       if (isLast) {
-        requestPracticeAdvance(() => advanceWithOptionalCheckpoint(
-              17,
-              18, 'Opening equipment videos…'))
+        requestPracticeAdvance(() =>
+          advanceWithOptionalCheckpoint(18, 19, 'Opening equipment videos…'),
+        )
         return
       }
       setSysIdx((i) => i + 1)
@@ -2852,7 +2852,7 @@ export function StudentSequencePage() {
               )}
               <button type="button" className="btn btn-primary" onClick={nextSys}>
                 {sysCorrect
-                  ? (isLast ? 'Continue to instructor check' : 'Next system')
+                  ? (isLast ? 'Continue to equipment videos' : 'Next system')
                   : SOFT_RETRY_LABEL}
               </button>
             </>
@@ -2889,14 +2889,14 @@ export function StudentSequencePage() {
               pack="warehouse"
               onComplete={() =>
                 requestPracticeAdvance(() =>
-                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                  advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                 )
               }
               onSkip={
                 isPracticeMode()
                   ? () =>
                       requestPracticeAdvance(() =>
-                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                        advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                       )
                   : undefined
               }
@@ -2917,14 +2917,14 @@ export function StudentSequencePage() {
               pack="construction"
               onComplete={() =>
                 requestPracticeAdvance(() =>
-                  advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                  advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                 )
               }
               onSkip={
                 isPracticeMode()
                   ? () =>
                       requestPracticeAdvance(() =>
-                        advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                        advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                       )
                   : undefined
               }
@@ -2968,7 +2968,7 @@ export function StudentSequencePage() {
                 onClick={() => {
                   recordSkillAttempt('equipment-videos', true, 15)
                   requestPracticeAdvance(() =>
-                    advanceWithOptionalCheckpoint(18, 19, 'Opening instructor check…'),
+                    advanceWithOptionalCheckpoint(19, 20, 'Opening instructor check…'),
                   )
                 }}
               >

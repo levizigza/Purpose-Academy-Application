@@ -406,8 +406,8 @@ export const ASSESSMENT_SHELL: Record<
       English: 'Ten questions. Choose what sounds most like you to open your path.',
       Arabic: 'عشرة أسئلة. اختر الأقرب إليك لفتح مسارك.',
       Hindi: 'दस प्रश्न। अपना रास्ता खोलने के लिए जो आपसे मिलता हो चुनें।',
-      Amharic: 'እንዴት መሥራት ይወዳሉ. ከእርስዎ ጋር የሚመሳሰለውን ይምረጡ።',
-      Tigrinya: 'ከመይ ጌርካ ክትሰርሕ ትፈቱ. ምስካ ዝመሳሰል ምረጽ።',
+      Amharic: 'አስር ጥያቄዎች። መንገድዎን ለመክፈት ከእርስዎ ጋር የሚመሳሰለውን ይምረጡ።',
+      Tigrinya: 'ዓሰርተ ሕቶታት። መንገድካ ንምኽፋት ምስካ ዝመሳሰል ምረጽ።',
     },
     purpose: {
       Spanish: 'Estas preferencias eligen tu camino de Purpose Academy: Construcción, Logística o Apoyo comunitario.',
@@ -440,8 +440,8 @@ export const ASSESSMENT_SHELL: Record<
       English: 'Work style → recommended pathway. Later, after you practise, more questions about work help you specialize.',
       Arabic: 'أسلوب العمل → المسار الموصى به. لاحقاً بعد الممارسة، المزيد من الأسئلة عن العمل يساعد على التخصص.',
       Hindi: 'वर्क स्टाइल → सुझाया गया मार्ग। अभ्यास के बाद और काम के सवाल विशेषज्ञता में मदद करेंगे।',
-      Amharic: 'የፍላጎት መገለጫ → የሚመከር መንገድ። ግንባታ፣ ሎጂስቲክስ እና የማህበረሰብ ድጋፍ ክፍት ናቸው።',
-      Tigrinya: 'ናይ ፍቓድ መግለጺ → ዝምከር መንገዲ። ህንጻ፣ ሎጂስቲክስን ናይ ማሕበረሰብ ድጋፍን ክፉታት እዮም።',
+      Amharic: 'የሥራ ዘይቤ → የሚመከር መንገድ። በኋላ ከተለማመዱ በኋላ ተጨማሪ የሥራ ጥያቄዎች ስፔሻላይዝ እንዲያደርጉ ይረዳሉ።',
+      Tigrinya: 'ናይ ስራሕ ቅዲ → ዝምከር መንገዲ። ድሕሪ ልምምድ ተወሳኺ ናይ ስራሕ ሕቶታት ንስፔሻላይዝ ይሕግዙካ።',
     },
   },
   15: {

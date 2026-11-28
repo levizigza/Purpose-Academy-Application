@@ -1,6 +1,7 @@
 import { FormEvent, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSession } from '../auth/Session'
+import { StatusLabel } from '../components/Ui'
 import {
   useDb,
   getSafetyGate,
@@ -9,6 +10,28 @@ import {
   setSafetyGate,
 } from '../data/store'
 import type { RubricRating } from '../data/types'
+import { pathwayMeta } from '../pathways'
+
+function pathwayLabel(id: string | null | undefined): string {
+  if (!id) return 'Foundation'
+  if (id === 'construction' || id === 'logistics' || id === 'community') {
+    return pathwayMeta(id).label
+  }
+  return id
+}
+
+function gateKeyLabel(key: string): string {
+  if (key === 'workshop_practical') return 'Workshop practical'
+  return key.replaceAll('_', ' ')
+}
+
+const RUBRIC_LABELS: Record<RubricRating, string> = {
+  demonstrated: 'Shown clearly',
+  partially_demonstrated: 'Partly shown',
+  not_demonstrated: 'Not shown yet',
+  critical_safety_error: 'Safety concern — stop and coach',
+  not_observed: 'Not observed yet',
+}
 
 export function InstructorDashboardPage() {
   const { user } = useSession()
@@ -48,20 +71,26 @@ export function InstructorDashboardPage() {
         </Link>
       </div>
       <div className="panel stack">
-        <h2>Teacher Practice</h2>
-        <p>Prepare a Community Support session and connect it to the student path.</p>
+        <h2>Instructor Practice</h2>
         <p>
-          <Link className="btn btn-ghost" to="/app/instructor/practice">Open Teacher Practice</Link>
-          {' '}
-          <Link className="inline-link" to="/app/instructor/practice/workbooks">25 workbooks</Link>
+          Community Support Month 1 sessions are ready (Yonas). Construction and Logistics binders
+          stay with ChuChu and Kinfe until those Instructor Practice packs ship.
+        </p>
+        <p>
+          <Link className="btn btn-ghost" to="/app/instructor/practice">
+            Open Instructor Practice
+          </Link>{' '}
+          <Link className="inline-link" to="/app/instructor/practice/workbooks">
+            25 workbooks
+          </Link>
         </p>
       </div>
       <div className="panel stack">
         <h2>Program instructors</h2>
         <ul className="list-plain">
-          <li>ChuChu Asemelash · Construction</li>
-          <li>Kinfe Desta · Logistics</li>
-          <li>Yonas Tesfagabr · Community Support</li>
+          <li>ChuChu Asemelash · Construction (binder in progress)</li>
+          <li>Kinfe Desta · Logistics (binder in progress)</li>
+          <li>Yonas Tesfagabr · Community Support (sessions live)</li>
         </ul>
       </div>
       <div className="panel stack">
@@ -103,7 +132,9 @@ export function InstructorAssignmentsPage() {
     const data = new FormData(e.currentTarget)
     const gradeVal = Number(data.get('grade'))
     const feedback = String(data.get('feedback') || '')
-    void gradeSubmission(user!.uid, submissionId, gradeVal, feedback).then(() => setMsg('Grade saved.'))
+    void gradeSubmission(user!.uid, submissionId, gradeVal, feedback).then(() =>
+      setMsg('Feedback saved.'),
+    )
   }
 
   return (
@@ -182,15 +213,21 @@ export function InstructorStudentsPage() {
             <li className="panel instructor-people-card" key={s.id}>
               <strong>{u?.full_name}</strong>
               <p className="muted" style={{ margin: '0.25rem 0 0' }}>
-                {s.preferred_language} · {s.pathway ?? 'foundation'}
+                {s.preferred_language} · {pathwayLabel(s.pathway)}
               </p>
               <p style={{ margin: '0.45rem 0 0' }}>
-                <span className={`badge ${gate?.status === 'PASS' ? 'ok' : 'warn'}`}>
-                  Safety {gate?.status ?? '—'}
-                </span>
+                {gate ? <StatusLabel status={gate.status} /> : <span className="badge brand">Safety not checked</span>}
               </p>
               <p className="muted" style={{ margin: '0.35rem 0 0', fontSize: '0.9rem' }}>
-                Competencies: {comps.map((c) => c.status).join(', ') || 'none yet'}
+                Skills:{' '}
+                {comps.length
+                  ? comps.map((c, i) => (
+                      <span key={c.id}>
+                        {i > 0 ? ' · ' : ''}
+                        <StatusLabel status={c.status} />
+                      </span>
+                    ))
+                  : 'none yet'}
               </p>
             </li>
           )
@@ -216,13 +253,18 @@ export function InstructorStudentsPage() {
                 <tr key={s.id}>
                   <td>{u?.full_name}</td>
                   <td>{s.preferred_language}</td>
-                  <td>{s.pathway ?? 'foundation'}</td>
+                  <td>{pathwayLabel(s.pathway)}</td>
+                  <td>{gate ? <StatusLabel status={gate.status} /> : '—'}</td>
                   <td>
-                    <span className={`badge ${gate?.status === 'PASS' ? 'ok' : 'warn'}`}>
-                      {gate?.status ?? '—'}
-                    </span>
+                    {comps.length
+                      ? comps.map((c, i) => (
+                          <span key={c.id}>
+                            {i > 0 ? ' · ' : ''}
+                            <StatusLabel status={c.status} />
+                          </span>
+                        ))
+                      : '—'}
                   </td>
-                  <td>{comps.map((c) => c.status).join(', ') || '—'}</td>
                 </tr>
               )
             })}
@@ -255,8 +297,8 @@ export function InstructorSafetyPage() {
           const learner = db.users.find((u) => u.uid === student?.uid)
           return (
             <li key={g.id}>
-              <strong>{learner?.full_name}</strong> · {g.gate_key} ·{' '}
-              <span className={`badge ${g.status === 'PASS' ? 'ok' : 'warn'}`}>{g.status}</span>
+              <strong>{learner?.full_name}</strong> · {gateKeyLabel(g.gate_key)} ·{' '}
+              <StatusLabel status={g.status} />
               <p className="muted">{g.reason}</p>
               {g.status !== 'PASS' && (
                 <button
@@ -351,10 +393,10 @@ export function InstructorObservePage() {
       </div>
       {gate && (
         <div className={`alert ${gate.status === 'PASS' ? 'ok' : 'warn'}`}>
-          Safety gate for selected learner: <strong>{gate.status}</strong>. {gate.reason}
+          Safety for selected learner: <StatusLabel status={gate.status} />. {gate.reason}
           {gate.status !== 'PASS' && (
             <p style={{ margin: '0.5rem 0 0' }}>
-              Set the gate to PASS on Safety gates before you can finalize an observation.
+              Clear Safety gates before you can finalize an observation.
             </p>
           )}
         </div>
@@ -376,11 +418,11 @@ export function InstructorObservePage() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor="comp">Competency</label>
+          <label htmlFor="comp">Skill to check</label>
           <select id="comp" value={competencyId} onChange={(e) => setCompetencyId(e.target.value)}>
             {db.competencies.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.title}
+                {c.title} · {c.category}
               </option>
             ))}
           </select>
@@ -398,7 +440,7 @@ export function InstructorObservePage() {
             >
               {RATINGS.map((r) => (
                 <option key={r} value={r}>
-                  {r.replaceAll('_', ' ')}
+                  {RUBRIC_LABELS[r]}
                 </option>
               ))}
             </select>

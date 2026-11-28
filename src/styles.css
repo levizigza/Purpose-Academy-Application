@@ -17750,6 +17750,33 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
   color: var(--accent);
 }
 
+/*
+  Critic (instructor hunt): TP/WB hero sits on night train outside paper panels.
+  Global .lede / .tp-credit used paper ink (~1.8:1 / ~1.02:1 on --train-bg).
+*/
+.shell.is-train .tp-page > .tp-head,
+.shell.is-train .wb-page > .wb-page-head {
+  color: var(--train-text);
+}
+
+.shell.is-train .tp-page > .tp-head h1,
+.shell.is-train .wb-page > .wb-page-head h1,
+.shell.is-train .tp-page > .tp-head .section-kicker,
+.shell.is-train .wb-page > .wb-page-head .section-kicker {
+  color: var(--train-text);
+}
+
+.shell.is-train .tp-page > .tp-head .lede,
+.shell.is-train .wb-page > .wb-page-head .lede,
+.shell.is-train .tp-page > .tp-head .tp-credit,
+.shell.is-train .wb-page > .wb-page-head .wb-draft-note {
+  color: var(--train-text-muted);
+}
+
+.shell.is-train .tp-page > .tp-head .tp-credit strong {
+  color: var(--train-text);
+}
+
 .tp-head,
 .wb-page-head {
   display: flex;
@@ -17956,6 +17983,19 @@ html.pa-course-shell .equip-video-instr-hear .instr-narration-hear,
   color: var(--brand-deep);
   font-size: 0.82rem;
   font-weight: 700;
+}
+
+button.tp-chip-btn {
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+button.tp-chip-btn:hover,
+button.tp-chip-btn:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  outline-offset: 2px;
 }
 
 .tp-foot-note {
