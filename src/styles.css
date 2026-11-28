@@ -2979,7 +2979,7 @@ table.data th {
   }
 }
 
-/* Embedded phone: hammer rests under lockup — strike rises into door cavity */
+/* Embedded phone: hammer rests mid-frame — strike rises into door at 50% × 42% */
 .threshold.is-embedded .threshold-hammer.is-smashing {
   animation-name: hammer-door-strike-embedded;
 }
@@ -2987,27 +2987,27 @@ table.data th {
 @keyframes hammer-door-strike-embedded {
   0% {
     opacity: 1;
-    transform: translateX(-50%) translateY(0) rotate(6deg) scale(1);
+    transform: translate(-50%, -50%) rotate(4deg) scale(1);
   }
   12% {
-    transform: translateX(-50%) translateY(8px) rotate(18deg) scale(1.04);
+    transform: translate(-50%, -42%) rotate(18deg) scale(1.04);
   }
   24% {
-    transform: translateX(-50%) translateY(10px) rotate(28deg) scale(1.06);
+    transform: translate(-50%, -38%) rotate(28deg) scale(1.06);
   }
   40% {
-    transform: translateX(-50%) translateY(-28cqh) rotate(-4deg) scale(1.1);
+    transform: translate(-50%, -28cqh) rotate(-4deg) scale(1.1);
   }
   54% {
     /* Contact — head into the glowing doorway cavity mid */
-    transform: translateX(-50%) translateY(-40cqh) rotate(-22deg) scale(1.16);
+    transform: translate(-50%, -36cqh) rotate(-22deg) scale(1.16);
   }
   68% {
-    transform: translateX(-50%) translateY(-36cqh) rotate(-8deg) scale(1.06);
+    transform: translate(-50%, -34cqh) rotate(-8deg) scale(1.06);
   }
   100% {
     opacity: 0;
-    transform: translateX(-50%) translateY(-24cqh) rotate(12deg) scale(0.9);
+    transform: translate(-50%, -22cqh) rotate(12deg) scale(0.9);
   }
 }
 
@@ -16367,13 +16367,15 @@ html.pa-phone-shell .play-soft-miss {
 }
 
 /*
-  Critic overturn (excellence 2026-11-27): mid-frame hammer parked on the P
-  door + white TAP on paper splash failed brand + contrast. Pathways keep the
-  lower band; hammer sits under the lockup (lockup desktop grammar), Tap in navy.
+  Restore (2026-11-27): #62 excellence silently replaced the locked phone
+  mid-frame Tap (user feedback 2377e530) with under-lockup desktop grammar.
+  Foundation: hammer owns the middle; pathways sit below mid. Keep navy Tap
+  only — paper lockup needs contrast (cream-on-white failed L3).
 */
 .threshold.is-embedded .threshold-pathways {
+  /* Below mid-frame hammer so the Tap CTA owns the middle */
   bottom: auto;
-  top: 58%;
+  top: 72%;
   width: 88%;
   left: 50%;
   transform: translateX(-50%);
@@ -16394,32 +16396,32 @@ html.pa-phone-shell .play-soft-miss {
 .threshold.is-embedded .threshold-hammer.is-phone-tap {
   left: 50%;
   right: auto;
-  top: auto;
-  bottom: max(1.1rem, env(safe-area-inset-bottom));
+  top: 52%;
+  bottom: auto;
   width: auto;
   max-width: none;
   z-index: 12;
   gap: 0.35rem;
   opacity: 0;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   filter: drop-shadow(0 8px 14px rgba(40, 24, 4, 0.42));
 }
 
 .threshold.is-embedded .threshold-hammer.is-visible {
-  animation: hammer-lockup-in 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
+  animation: hammer-center-in 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
 }
 
 .threshold.is-embedded .threshold-hammer:hover:not(:disabled) {
-  transform: translateX(-50%) translateY(-4px) rotate(-4deg);
+  transform: translate(-50%, -52%) rotate(2deg);
   filter: drop-shadow(0 14px 22px rgba(90, 55, 8, 0.55));
 }
 
 .threshold.is-embedded .threshold-hammer:active:not(:disabled) {
-  transform: translateX(-50%) translateY(1px) scale(0.97);
+  transform: translate(-50%, -50%) rotate(0deg) scale(0.97);
 }
 
 .threshold.is-embedded .threshold-hammer-icon {
-  width: clamp(3.2rem, 24cqi, 4.6rem);
+  width: clamp(3.6rem, 28cqi, 5.2rem);
   height: auto;
 }
 
@@ -16427,7 +16429,7 @@ html.pa-phone-shell .play-soft-miss {
   font-size: clamp(0.85rem, 6.5cqi, 1.05rem);
   font-weight: 800;
   letter-spacing: 0.28em;
-  /* Paper phone splash — navy Tap, not cream-on-white */
+  /* Paper phone splash — navy Tap (keep #62 contrast; restore mid-frame pose) */
   color: #0b2f5c;
   text-shadow: none;
   opacity: 1;
@@ -16452,8 +16454,7 @@ html.pa-phone-shell .play-soft-miss {
 
 .threshold.is-embedded .threshold-foley {
   right: 0.35rem;
-  /* Clear of bottom-centered Tap hammer */
-  bottom: max(5.25rem, calc(env(safe-area-inset-bottom) + 4.5rem));
+  bottom: 0.35rem;
   transform: scale(0.85);
   transform-origin: bottom right;
 }
