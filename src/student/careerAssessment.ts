@@ -204,32 +204,36 @@ export const ASSESSMENT_COPY = {
     English: 'Continue to site-ready skills',
     Arabic: 'المتابعة إلى مهارات جاهزية الموقع',
     Hindi: 'साइट के लिए ज़रूरी कौशल पर जाएँ',
-    Amharic: 'ወደ የመንገድዎ ቃላት ቀጥል',
-    Tigrinya: 'ናብ ናይ መንገድካ ቃላት ቀጽል',
+    /* Was wrongly copied from continueVocab (pathway vocabulary). */
+    Amharic: 'ወደ የቦታ ዝግጁ ክህሎቶች ቀጥል',
+    Tigrinya: 'ናብ ናይ ቦታ ድሉው ክእለታት ቀጽል',
   } satisfies LangText,
   specializeLead: {
     Spanish: 'Después de practicar, puedes confirmar tu camino o cambiarlo según tus intereses.',
     English: 'After practice, confirm your path — or switch it based on your interests.',
     Arabic: 'بعد الممارسة، أكّد مسارك أو غيّره حسب اهتماماتك.',
     Hindi: 'अभ्यास के बाद अपना रास्ता पुष्टि करें — या रुचियों के हिसाब से बदलें।',
-    Amharic: 'በመልሶችዎ መሠረት፣ ዛሬ ለእርስዎ የሚስማማው መንገድ ይህ ነው።',
-    Tigrinya: 'ብመሰረት መልስታትካ፣ ሎሚ ዝሰማማዕካ መንገዲ እዚ እዩ።',
+    /* Was wrongly copied from resultLead. */
+    Amharic: 'ከተለማመዱ በኋላ መንገድዎን ያረጋግጡ — ወይም በፍላጎቶችዎ መሠረት ይቀይሩ።',
+    Tigrinya: 'ድሕሪ ልምምድ መንገድካ ኣረጋግጽ — ወይ ብፍቓዳትካ ቀይሮ።',
   } satisfies LangText,
   choosePath: {
     Spanish: 'Elige tu camino',
     English: 'Choose your path',
     Arabic: 'اختر مسارك',
     Hindi: 'अपना रास्ता चुनें',
-    Amharic: 'ከ Purpose Academy መንገዶች ጋር መስማማት',
-    Tigrinya: 'ምስ Purpose Academy መንገድታት ምስማማዕ',
+    /* Was wrongly copied from pathwayFit. */
+    Amharic: 'መንገድዎን ይምረጡ',
+    Tigrinya: 'መንገድካ ምረጽ',
   } satisfies LangText,
   recommended: {
     Spanish: 'Recomendado',
     English: 'Recommended',
     Arabic: 'موصى به',
     Hindi: 'सुझाया गया',
-    Amharic: 'ከ Purpose Academy መንገዶች ጋር መስማማት',
-    Tigrinya: 'ምስ Purpose Academy መንገድታት ምስማማዕ',
+    /* Was wrongly copied from pathwayFit. */
+    Amharic: 'የሚመከር',
+    Tigrinya: 'ዝምከር',
   } satisfies LangText,
 
   yourCode: {
