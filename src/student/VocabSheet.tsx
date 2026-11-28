@@ -156,6 +156,7 @@ export function VocabSheetCard({
   const [options, setOptions] = useState<string[]>([])
   const [picked, setPicked] = useState<string | null>(null)
   const [pickMiss, setPickMiss] = useState(false)
+  const softMissRef = useRef<HTMLParagraphElement | null>(null)
   const prevOrderKeyRef = useRef<string | null>(null)
   const coachFirst = index === 1
   const pickLetters = ['A', 'B', 'C', 'D', 'E'] as const
@@ -171,6 +172,17 @@ export function VocabSheetCard({
     /* Keep soft-miss visible after a wrong pick — choices move AND the tip stays. */
     setPickMiss(Boolean(opts?.miss))
   }
+
+  /* Soft miss must clear the 3-second read — phone sticky footer used to bury it. */
+  useEffect(() => {
+    if (!pickMiss && feedback !== 'need-pick' && feedback !== 'retry') return
+    const el = softMissRef.current
+    if (!el) return
+    const id = window.requestAnimationFrame(() => {
+      el.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [pickMiss, feedback])
 
   useEffect(() => {
     setDraft('')
@@ -356,6 +368,32 @@ export function VocabSheetCard({
           Hear English again
         </button>
       </div>
+      {/* Soft miss sits ABOVE the pick bank so phone sticky Next cannot bury it. */}
+      {feedback === 'need-pick' && (
+        <p
+          ref={softMissRef}
+          id={`${inputId}-fb`}
+          className="play-soft-miss vocab-sheet-type-fb is-retry"
+          role="status"
+        >
+          {softMissLine('pick the matching word below, then type it. No rush.')}
+        </p>
+      )}
+      {feedback === 'retry' && (
+        <p
+          ref={softMissRef}
+          id={`${inputId}-fb`}
+          className="play-soft-miss vocab-sheet-type-fb is-retry"
+          role="status"
+        >
+          Not yet — hear it again, then type what you heard. No rush.
+        </p>
+      )}
+      {pickMiss && feedback !== 'need-pick' && feedback !== 'retry' && (
+        <p ref={softMissRef} className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
+          {softMissLine('not that one. Choices switched — pick again. No rush.')}
+        </p>
+      )}
       {options.length > 0 && (
         <div
           className="train-choice-grid vocab-sheet-pick-bank"
@@ -386,21 +424,6 @@ export function VocabSheetCard({
             )
           })}
         </div>
-      )}
-      {feedback === 'need-pick' && (
-        <p id={`${inputId}-fb`} className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
-          {softMissLine('pick the matching word below, then type it. No rush.')}
-        </p>
-      )}
-      {feedback === 'retry' && (
-        <p id={`${inputId}-fb`} className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
-          Not yet — hear it again, then type what you heard. No rush.
-        </p>
-      )}
-      {pickMiss && feedback !== 'need-pick' && feedback !== 'retry' && (
-        <p className="play-soft-miss vocab-sheet-type-fb is-retry" role="status">
-          {softMissLine('not that one. Choices switched — pick again. No rush.')}
-        </p>
       )}
     </form>
   ) : null
